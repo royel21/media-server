@@ -1,4 +1,6 @@
 node_modules/
 client/public
-
-.DS_Store
+*.db
+files*
+*.log
+*.lock
