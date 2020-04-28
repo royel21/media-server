@@ -1,0 +1,7 @@
+{
+  "verbose": false,
+  "ignore": ["files*", "images/covers/**/*.jpg", "src/**/*", "script.js"],
+  "env": {
+    "NODE_ENV": "production"
+  }
+}
