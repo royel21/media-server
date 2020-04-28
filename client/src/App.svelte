@@ -35,7 +35,6 @@
   };
   const logIn = _user => {
     user = _user.detail;
-    console.log(user);
   };
   window.addEventListener("beforeunload", () => {
     if (socket) socket.close();
