@@ -89,7 +89,7 @@ module.exports.genScreenShot = async (id) => {
 module.exports.foldersThumbNails = async (folders) => {
   for (let s of folders) {
     try {
-      if (!s.isManga) {
+      if (!s.FileTypes.includes("mangas")) {
         let duration = getVideoDuration(s.filePath);
         if (isNaN(duration)) continue;
         await getScreenShot(s.filePath, s.coverPath, duration);

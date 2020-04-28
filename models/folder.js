@@ -12,6 +12,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(7),
         defaultValue: "Folder",
       },
+      FilesType: {
+        type: DataTypes.STRING(10),
+      },
       Name: {
         type: DataTypes.STRING(100),
         unique: true,
@@ -38,7 +41,10 @@ module.exports = (sequelize, DataTypes) => {
         beforeBulkCreate: (instances, options) => {
           for (var item of instances) {
             item.Id = Math.random().toString(36).slice(-5);
-            item.Cover = `/covers/${item.Type}/${item.Name.replace("#", "%23")}.jpg`;
+            item.Cover = `/covers/${item.Type}/${item.Name.replace(
+              "#",
+              "%23"
+            )}.jpg`;
           }
         },
       },

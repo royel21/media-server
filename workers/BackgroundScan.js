@@ -25,6 +25,9 @@ const createFolderAndCover = async (dir, files, fd) => {
   if (!firstFile) return "";
   let Name = path.basename(dir);
   let FolderCover = path.join(coverPath, Name + ".jpg");
+
+  let FileTypes = /rar|zip/gi.test(firstFile.FileName) ? "mangas" : "videos";
+
   if (!fs.existsSync(FolderCover)) {
     let img = files.find((a) => /\.(jpg|jpeg|png|gif|webp)/i.test(a.FileName));
     if (img) {
@@ -42,7 +45,7 @@ const createFolderAndCover = async (dir, files, fd) => {
           folder: true,
           filePath: path.join(dir, firstFile.FileName),
           coverPath: FolderCover,
-          isManga: /rar|zip/gi.test(firstFile.FileName),
+          FileTypes,
         });
       }
     }
@@ -51,6 +54,7 @@ const createFolderAndCover = async (dir, files, fd) => {
   let folder = await db.folder.findOne({ where: { Name } });
 
   let FileCount = files.filter((f) => allExt.test(f.FileName)).length;
+
   if (!folder) {
     let CreatedAt = fd.LastModified;
     folder = await db.folder.create({
@@ -59,6 +63,7 @@ const createFolderAndCover = async (dir, files, fd) => {
       Cover: FolderCover,
       CreatedAt,
       FileCount,
+      FileTypes,
     });
   }
 

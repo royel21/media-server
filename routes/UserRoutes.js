@@ -11,10 +11,6 @@ const sendUser = (res, user = { UserConfig: { dataValues: {} } }) => {
     Config: user.UserConfig.dataValues.Config,
   });
 };
-Router.get("/getuser", (req, res) => {
-  if (!req.user) return res.send({});
-  sendUser(res, req.user);
-});
 
 Router.post("/login", (req, res, next) => {
   return passport.authenticate("local", (err, user, info) => {
@@ -31,15 +27,20 @@ Router.post("/login", (req, res, next) => {
   })(req, res, next);
 });
 
-Router.post("/logout", (req, res) => {
+Router.get("/logout", (req, res) => {
   req.session.destroy();
-  return res.send("ok");
+  return res.send({ success: true });
 });
 
 Router.get("/userconfig", (req, res) => {
   if (!req.user) return res.send({});
   let config = req.user.UserConfig.Config;
   return res.send(config);
+});
+
+Router.get("/", (req, res) => {
+  if (!req.user) return res.send({});
+  sendUser(res, req.user);
 });
 
 module.exports = Router;

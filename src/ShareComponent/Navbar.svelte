@@ -1,5 +1,6 @@
 <script>
   import { Link, navigate } from "svelte-routing";
+  export let navItems;
 </script>
 
 <style>
@@ -28,30 +29,14 @@
 
 <nav id="menu" class="navbar">
   <ul class="navbar-nav">
-    <li class="nav-item">
-      <Link to="/">
-        <i class="fas fa-home" />
-        Home
-      </Link>
-    </li>
-    <li class="nav-item">
-      <Link to="/videos">
-        <i class="fas fa-film" />
-        Videos
-      </Link>
-    </li>
-    <li class="nav-item">
-      <Link to="/mangas">
-        <i class="fas fa-book" />
-        Mangas
-      </Link>
-    </li>
-    <li class="nav-item">
-      <Link to="/favorites">
-        <i class="fas fa-heart" />
-        Favorites
-      </Link>
-    </li>
+    {#each navItems as item}
+      <li class="nav-item">
+        <Link to={item.path}>
+          <i class={'fas fa-' + item.class} />
+          {item.title}
+        </Link>
+      </li>
+    {/each}
   </ul>
   <ul class="navbar-nav">
     <li class="nav-item" on:click>

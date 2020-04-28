@@ -6,15 +6,15 @@
   const dispatch = createEventDispatcher();
 
   let user = {
-    Name: "",
-    Password: ""
+    username: "",
+    password: ""
   };
   let error = { name: "", password: "" };
   const onSubmit = event => {
     event.preventDefault();
     Axios.post("/api/users/login", user).then(({ data }) => {
       if (data.isAutenticated) {
-        dispatch("login", { Name: data.Name });
+        dispatch("login", { ...data, Id: "" });
       } else {
         if (name) {
           error.name = "User can't be empty";
@@ -44,7 +44,7 @@
 
   #login-container label {
     padding: 0 15px;
-    min-width: 60px;
+    min-width: 28px;
   }
 
   #login-container label i {
@@ -76,7 +76,7 @@
         class="form-control"
         name="username"
         placeholder="Name"
-        bind:value={user.Name}
+        bind:value={user.username}
         tabindex="0" />
     </div>
     <div id="name-errors" class="error text-left text-danger">{error.name}</div>
@@ -92,7 +92,7 @@
         class="form-control"
         name="Password"
         placeholder="Password"
-        bind:value={user.Password}
+        bind:value={user.password}
         autocomplete="on"
         tabindex="0" />
     </div>
