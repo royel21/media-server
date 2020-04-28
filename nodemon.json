@@ -1,0 +1,7 @@
+{
+  "verbose": false,
+  "ignore": ["client/**/*"],
+  "env": {
+    "NODE_ENV": "production"
+  }
+}
