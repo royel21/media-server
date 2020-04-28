@@ -74,7 +74,7 @@
         id="name"
         type="text"
         class="form-control"
-        name="Name"
+        name="username"
         placeholder="Name"
         bind:value={user.Name}
         tabindex="0" />

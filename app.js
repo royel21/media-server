@@ -1,62 +1,101 @@
 const https = require("http");
 const express = require("express");
 const path = require("path");
-// const db = require("./models");
+const db = require("./models");
 const session = require("express-session");
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
-const app = express();
+require("dotenv").config();
+require("./helpers/passport")(passport);
+
+var app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use(express.static(__dirname + "/client/public"));
+app.use(express.static(__dirname + "/images"));
+app.use(express.static(__dirname + "/public"));
 
-app.use(
-  session({
-    name: "rcm",
-    secret: "2491eb2c-595d-4dc8-8427",
-    resave: true,
-    saveUninitialized: false,
-    maxAge: 60000,
-  })
-);
+const userRoutes = require("./routes/UserRoutes");
+const filesRoutes = require("./routes/FilesRoutes");
+const favoriteRoutes = require("./routes/FavoriteRoutes");
+const ViewerRoutes = require("./routes/ViewerRoutes");
 
-// app.use(passport.initialize());
-// app.use(passport.session());
-let auth = false;
-app.post("/api/users/login", (req, res) => {
-  let { Name, Password } = req.body;
-  console.log(req.body);
-  auth = true;
-  res.send({ Name, Password, isAutenticated: auth });
+// Administrator
+const UsersManagerRoute = require("./routes/admin/UsersManagerRoute");
+const DirectoriesRoute = require("./routes/admin/DirectoriesRoute");
+const FilesManagerRoute = require("./routes/admin/FilesManagerRoute");
+const FoldersRoute = require("./routes/admin/FoldersRoute");
+const sessionMeddle = session({
+  name: "rcm",
+  secret: "2491eb2c-595d-4dc8-8427",
+  resave: true,
+  saveUninitialized: false,
+  maxAge: 60000,
+});
+app.use(sessionMeddle);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+// it is here because is needed for login before access the other routes;
+app.use("/api/users", userRoutes);
+
+app.use((req, res, next) => {
+  console.log(req.url);
+  if (!/login|api\/users\/login/gi.test(req.url) && !req.user) {
+    console.log("not user");
+    return res.redirect("/login");
+  }
+  return next();
 });
 
-app.get("/api/users/logout", (req, res) => {
-  auth = false;
-  res.send({ success: true });
+app.use("/api/files/favorites", favoriteRoutes);
+app.use("/api/files", filesRoutes);
+app.use("/api/viewer", ViewerRoutes);
+
+app.use("/api/admin", (req, res, next) => {
+  if (!req.user.Role.includes("Administrator")) {
+    return res.redirect("/notfound");
+  }
+  next();
 });
 
-app.get("/api/users", (req, res) => {
-  res.send({ Name: "Royel", isAutenticated: auth });
-});
+app.use("/api/admin/users", UsersManagerRoute);
+app.use("/api/admin/directories", DirectoriesRoute);
+app.use("/api/admin/files", FilesManagerRoute);
+app.use("/api/admin/folders", FoldersRoute);
 
 app.get("/*", (req, res) => {
-  return res.sendFile(path.join(__dirname + "/client/public/index.html"));
+  console.log("data");
+  return res.sendFile(path.join(__dirname + "/public/index.html"));
 });
-const port = 3100;
 
-let server = https
-  .createServer(
-    // {
-    //   key: fs.readFileSync("./cert/server.key"),
-    //   cert: fs.readFileSync("./cert/server.cert")
-    // },
-    app
-  )
-  .listen(port);
-require("./socket-server/socketio-server")(server);
-console.log("Node server is running.. at http://localhost:" + port);
+app.use((e, req, res, next) => {
+  if (e.message.includes("Failed to decode param")) {
+    return res.redirect("/notfound");
+  }
+});
+
+const port = 3001;
+
+db.init().then(() => {
+  let server = https
+    .createServer(
+      // {
+      //   key: fs.readFileSync("./cert/server.key"),
+      //   cert: fs.readFileSync("./cert/server.cert")
+      // },
+      app
+    )
+    .listen(port);
+
+  console.log("Node server is running.. at http://localhost:" + port);
+
+  return require("./modules/socketio-server")(server, sessionMeddle);
+});
+
+console.log(process.env.NODE_ENV, process.env.PORT);

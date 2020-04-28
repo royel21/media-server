@@ -35,12 +35,6 @@
       </Link>
     </li>
     <li class="nav-item">
-      <Link to="/folders">
-        <i class="fas fa-folder" />
-        Folders
-      </Link>
-    </li>
-    <li class="nav-item">
       <Link to="/videos">
         <i class="fas fa-film" />
         Videos
@@ -50,6 +44,12 @@
       <Link to="/mangas">
         <i class="fas fa-book" />
         Mangas
+      </Link>
+    </li>
+    <li class="nav-item">
+      <Link to="/favorites">
+        <i class="fas fa-heart" />
+        Favorites
       </Link>
     </li>
   </ul>

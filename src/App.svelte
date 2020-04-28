@@ -3,14 +3,17 @@
   import { onMount } from "svelte";
   import Axios from "Axios";
   import { tick } from "svelte";
+  import socketClient from "socket.io-client";
 
   import Navbar from "./Component/Navbar.svelte";
+  //Pages
   import Home from "./Pages/Home.svelte";
   import Folders from "./Pages/Folders.svelte";
   import Login from "./Pages/Login.svelte";
   import Mangas from "./Pages/Mangas.svelte";
   import Videos from "./Pages/Videos.svelte";
-  import socketClient from "socket.io-client";
+  import Favorites from "./Pages/Favorites.svelte";
+
   var socket;
   let user = { Name: "" };
   let isAuthenticating = true;
@@ -54,6 +57,7 @@
       <Route path="/folders" component={Folders} />
       <Route path="/videos" component={Videos} />
       <Route path="/mangas" component={Mangas} />
+      <Route path="/favorites" component={Favorites} />
       <Route path="/">
         <Home {socket} />
       </Route>
