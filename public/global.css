@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   position: absolute;
   top: 0;
   left: 0;
@@ -8,6 +9,14 @@ html, body {
   background-color: #14243d;
   background: radial-gradient(ellipse at center, #14243d 0, #030611 100%);
   color: white;
+
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: left;
 }
 
 #root {
@@ -15,9 +24,12 @@ html, body {
   width: 100%;
 }
 
-* {
+*,
+*::before,
+*::after {
   padding: 0;
   margin: 0;
+  box-sizing: border-box;
 }
 
 a {
@@ -74,23 +86,24 @@ li {
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
-
 /* Clear input text icon*/
 
-input, button {
+input,
+button {
   overflow: visible;
 }
 
-input[type="text"]+span {
+input[type="text"] + span {
   display: none !important;
   position: absolute;
-  right: 4px;
+  top: 2px;
+  right: 6px;
   z-index: 99;
   color: darkgray;
   font-size: 20px;
 }
 
-input[type="text"]:not(:placeholder-shown)+span {
+input[type="text"]:not(:placeholder-shown) + span {
   display: initial !important;
 }
 
@@ -102,7 +115,6 @@ input[type="text"]:not(:placeholder-shown)+span {
   flex-wrap: wrap;
   -ms-flex-align: stretch;
   align-items: stretch;
-  width: 100%;
 }
 
 .input-group-prepend {
@@ -195,9 +207,9 @@ input[type="text"]:not(:placeholder-shown)+span {
   min-width: 0;
   background-color: #fff;
   background-clip: border-box;
-  border: 1px solid rgba(0, 0, 0, .125);
-  border-radius: .25rem;
-  border: 2px solid white;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
+  border: 1px solid white;
   padding: 10px;
 }
 
@@ -206,3 +218,230 @@ input[type="text"]:not(:placeholder-shown)+span {
     width: 0;
   }
 }
+
+.table {
+  margin: 0;
+}
+
+.table thead {
+  user-select: none;
+}
+
+.table th,
+.table td {
+  padding: 0.5rem 1rem;
+}
+
+.table td:only-child {
+  text-align: center;
+}
+
+.table td:first-child,
+.table th:first-child {
+  width: 100px;
+  padding: 0.4rem 0.8rem;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.table {
+  width: 100%;
+  margin-bottom: 1rem;
+  border-collapse: collapse;
+}
+/* Directory Style */
+i,
+span i,
+label i {
+  cursor: pointer;
+  font-size: 20px;
+  user-select: none;
+}
+i:active,
+a:active i,
+label:active i,
+span:active i,
+.page-link:active i {
+  transform: scale(1.2);
+}
+
+.table tr {
+  border: 2px solid #444444;
+}
+
+h4 {
+  font-size: 1.35rem;
+}
+
+h3 {
+  font-size: 1.75rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.table-bordered thead th,
+.table-bordered thead td {
+  border-bottom-width: 2px;
+}
+.table-bordered th,
+.table-bordered td {
+  border: 1px solid #dee2e6;
+}
+
+.table-dark th,
+.table-dark td,
+.table-dark thead th {
+  border-color: #454d55;
+  border-top-color: rgb(69, 77, 85);
+  border-right-color: rgb(69, 77, 85);
+  border-bottom-color: rgb(69, 77, 85);
+  border-left-color: rgb(69, 77, 85);
+}
+
+.table span:last-child {
+  margin-left: 0.5rem;
+}
+
+.fa-folder-open,
+.fa-folder {
+  color: rgb(250, 183, 15);
+}
+.fa-book {
+  color: rgb(202, 48, 48);
+}
+.fa-home {
+  color: rgb(17, 218, 201);
+}
+.fa-sync,
+.fa-edit,
+.fa-film {
+  color: rgb(37, 140, 209);
+}
+.fa-heart {
+  color: rgba(248, 224, 6, 0.952);
+}
+
+.fa-trash-alt {
+  color: rgba(252, 1, 1, 0.856);
+}
+.fa-folder-open + .file-progress {
+  background-color: rgba(252, 1, 1, 0.856);
+}
+
+.list-group {
+  display: flex;
+  flex-direction: column;
+  padding-left: 0;
+  margin-bottom: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.list-group-item {
+  position: relative;
+  display: block;
+  padding: 0.35rem 0.4rem;
+  color: #343a40;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.list-group-item:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.list-group-item.active {
+  z-index: 2;
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+}
+.list-group-item.active .fa-edit {
+  color: white;
+}
+.list-group-item:first-child {
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+}
+
+.list-group-item:last-child {
+  border-bottom-right-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
+
+.page-link:first-child {
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
+
+.page-link:last-child {
+  border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+}
+
+#current-page input {
+  height: 30px;
+}
+/*************Modal*************************/
+
+.modal-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 99;
+}
+.modal {
+  display: block;
+  position: fixed;
+  top: calc(50% - 150px);
+  left: calc(50% - 175px);
+  z-index: 99;
+  min-height: initial;
+  min-width: initial;
+  height: max-content;
+  width: 350px;
+  background-color: cadetblue;
+}
+.modal-header h3 {
+  text-align: center;
+  user-select: none;
+}
+.modal .errors {
+  color: rgb(226, 35, 35);
+  font-size: 20px;
+}
+.modal label,
+.modal .form-control {
+  padding: 5px;
+  margin: 4px 0;
+}
+
+.modal label {
+  width: 55px;
+  justify-content: space-evenly;
+  user-select: none;
+  font-weight: 600;
+}
+
+.modal label i {
+  font-size: 20px;
+}
+.modal-header h3 {
+  margin-bottom: 0;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: center;
+  padding: 5px;
+}
+
+.modal-footer .btn {
+  min-width: 75px;
+  margin: 0 10%;
+}
+/*************************************************************/

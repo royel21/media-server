@@ -1,8 +1,8 @@
 <script>
-  import Axios from "Axios";
   import { createEventDispatcher } from "svelte";
-  export let foundUser;
-  export let users;
+  import { fade } from "svelte/transition";
+  import Axios from "Axios";
+  export let foundUser = { AdultPass: false, Password: "" };
 
   const dispatch = createEventDispatcher();
   let error = "";
@@ -12,54 +12,27 @@
 
     Axios.post("/api/admin/users/add-edit", foundUser).then(({ data }) => {
       if (!data.fail) {
-        let tusers = [...users.filter(u => u.Id !== foundUser.Id), data.user];
-
-        tusers.sort((a, b) => {
-          return a.Name.localeCompare(b.Name);
-        });
-
-        dispatch("updateuser", tusers);
+        dispatch("updateusers", data.user);
       } else {
         error = data.msg;
+        console.log(data);
       }
     });
   };
 
   const closeModal = () => {
-    dispatch("closemodal");
+    dispatch("closeModal");
   };
 </script>
 
 <style>
-  .modal {
-    display: block;
-    position: fixed;
-    top: calc(50% - 150px);
-    left: calc(50% - 175px);
-    z-index: 99;
-    min-height: initial;
-    min-width: initial;
-    height: max-content;
-    width: 350px;
-    background-color: cadetblue;
-  }
-  .modal .errors {
-    color: rgb(226, 35, 35);
-    font-size: 20px;
-  }
-  .modal label,
-  .modal .form-control {
-    padding: 5px;
-    margin: 4px 0;
-  }
-
-  .modal label {
-    width: 55px;
+  .input-grouping {
+    display: flex;
     justify-content: space-evenly;
-    user-select: none;
-    font-weight: 600;
   }
-
+  .input-grouping .input-group {
+    width: 100%;
+  }
   .modal .second-ctrl input {
     display: none;
   }
@@ -67,46 +40,16 @@
     text-align: center;
     cursor: pointer;
   }
-
-  .modal label i {
-    font-size: 20px;
-  }
   .second-ctrl input:checked + label i:before {
     content: "\f00c";
-  }
-
-  .modal-header {
-    display: flex;
-    padding: 5px;
-    justify-content: center;
-    user-select: none;
-  }
-  .modal-header h3 {
-    margin-bottom: 0;
-  }
-
-  .input-grouping {
-    display: flex;
-    justify-content: space-evenly;
   }
   .input-grouping .second-ctrl {
     margin-left: 5px;
   }
-
-  .modal-footer {
-    display: flex;
-    justify-content: center;
-    padding: 5px;
-  }
-
-  .modal-footer .btn {
-    min-width: 75px;
-    margin: 0 10%;
-  }
 </style>
 
 <div class="modal-container">
-  <div class="modal card">
+  <div class="modal card" transition:fade={{ duration: 200 }}>
     <div class="modal-header">
       <h3>{foundUser.Id ? 'Edit' : 'Create'}</h3>
     </div>
@@ -114,7 +57,7 @@
       <input type="hidden" name="Id" bind:value={foundUser.Id} />
       <div class="input-group">
         <div class="input-group-prepend">
-          <label htmlFor="Name" class="input-group-text">
+          <label for="Name" class="input-group-text">
             <i class="fas fa-user" />
           </label>
         </div>
@@ -126,19 +69,19 @@
       </div>
       <div class="input-group">
         <div class="input-group-prepend">
-          <label htmlFor="Password" class="input-group-text">
+          <label for="Password" class="input-group-text">
             <i class="fas fa-key" />
           </label>
         </div>
         <input
           class="form-control"
           type="password"
-          name="Password"
+          bind:value={foundUser.Password}
           autoComplete="new-password" />
       </div>
       <div class="input-group">
         <div class="input-group-prepend">
-          <label htmlFor="Role" class="input-group-text">Role</label>
+          <label for="Role" class="input-group-text">Role</label>
         </div>
         <select class="form-control" name="Role" bind:value={foundUser.Role}>
           <option value="User">User</option>
@@ -149,7 +92,7 @@
       <div class="input-grouping">
         <div class="first-ctrl input-group">
           <div class="input-group-prepend">
-            <label htmlFor="State" class="input-group-text">Status</label>
+            <label for="State" class="input-group-text">Status</label>
           </div>
           <select
             class="form-control"
@@ -163,8 +106,11 @@
           <div class="input-group-prepend">
             <label class="input-group-text">Adult</label>
           </div>
-          <input id="Adult" type="checkbox" checked={foundUser.AdultPass} />
-          <label htmlFor="Adult" class="form-control checkadult">
+          <input
+            id="Adult"
+            type="checkbox"
+            bind:checked={foundUser.AdultPass} />
+          <label for="Adult" class="form-control checkadult">
             <i class="fas fa-times" />
           </label>
         </div>

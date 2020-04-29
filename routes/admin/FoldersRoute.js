@@ -20,26 +20,11 @@ const getData = async (req, res) => {
     },
   });
 
-  let files = { rows: [], count: 0 };
-  if (folders.rows.length > 0) {
-    files = await db.file.findAndCountAll({
-      order: [db.sqlze.literal(`REPLACE(Name, '[','0')`)],
-      offset: 0,
-      limit,
-      where: {
-        FolderId: folders.rows[0].Id,
-      },
-    });
-  }
-  let totalFolderPages = Math.ceil(folders.count / items);
-  let totalFilePages = Math.ceil(files.count / items);
+  let totalPages = Math.ceil(folders.count / items);
   res.send({
     folders: folders.rows,
-    totalFolderPages,
-    totalFolders: folders.count,
-    files: files.rows,
-    totalFilePages,
-    totalFiles: files.count,
+    totalPages,
+    totalItems: folders.count,
   });
 };
 
@@ -68,8 +53,8 @@ Router.get("/files/:folderId/:page/:items/:filter?", (req, res) => {
     .then((result) => {
       res.send({
         files: result.rows,
-        totalFilePages: Math.ceil(result.count / items),
-        totalFiles: result.count,
+        totalPages: Math.ceil(result.count / items),
+        totalItems: result.count,
       });
     });
 });

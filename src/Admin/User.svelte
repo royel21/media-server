@@ -5,14 +5,19 @@
   import ModalUser from "./Component/ModalUser.svelte";
 
   let users = [];
-  let foundUser = {};
+  let foundUser = { AdultPass: false };
   let error = "";
   let showModal = false;
+
+  const hideModal = () => {
+    showModal = false;
+    foundUser = { AdultPass: false };
+  };
 
   const saveEdit = e => {
     let tr = e.target.closest("tr");
     if (tr) {
-      foundUser = usersData.users.find(u => u.Id === tr.id) || {};
+      foundUser = users.find(u => u.Id === tr.id) || {};
     }
     showModal = true;
   };
@@ -25,7 +30,7 @@
         data: { Id: tr.id, Role }
       }).then(({ data }) => {
         if (data.removed) {
-          users = data;
+          users = users.filter(u => u.Id !== tr.id);
         } else {
           error = data.msg;
         }
@@ -33,6 +38,16 @@
     }
   };
 
+  const updateUsers = event => {
+    let user = event.detail;
+    //Filter users
+    let filteredUsers = users.filter(u => u.Id !== user.Id);
+    //Add and sort users
+    users = [...filteredUsers, user].sort((a, b) => {
+      return a.Name.localeCompare(b.Name);
+    });
+    hideModal();
+  };
   onMount(async () => {
     Axios.get("/api/admin/users").then(({ data }) => {
       if (data.users) {
@@ -40,15 +55,46 @@
       }
     });
   });
-  const hideModal = () => (showModal = false);
 </script>
 
 <style>
+  .manager {
+    height: 100%;
+    padding: 0;
+  }
+  .controls {
+    padding: 5px;
+  }
+  #u-manager .controls .btn {
+    position: absolute;
+    left: 10px;
+    font-size: initial;
+    padding: 0.4rem 0.6rem;
+    line-height: 1.6;
+  }
 
+  #u-manager .controls .btn i {
+    font-size: 20px;
+  }
+  .controls {
+    border-bottom: 1px solid;
+  }
+
+  .table td:first-child,
+  .table th:first-child {
+    width: 100px;
+    padding: 0.4rem 0.8rem;
+    vertical-align: middle;
+    text-align: center;
+  }
 </style>
 
 {#if showModal}
-  <ModalUser {users} {foundUser} on:closeModal={hideModal} />
+  <ModalUser
+    {users}
+    {foundUser}
+    on:closeModal={hideModal}
+    on:updateusers={updateUsers} />
 {/if}
 <div id="u-manager" class="card bg-dark manager">
   <div class="remove-error">{error}</div>
@@ -73,10 +119,10 @@
         {#each users as user}
           <tr id={user.Id} key={user.Name}>
             <td>
-              <span class="u-edit" onClick={saveEdit}>
+              <span class="u-edit" on:click={saveEdit}>
                 <i class="fas fa-edit" />
               </span>
-              <span class="u-remove ml-2" onClick={removeUser}>
+              <span class="u-remove ml-2" on:click={removeUser}>
                 <i class="fas fa-trash-alt" />
               </span>
             </td>

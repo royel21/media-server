@@ -41,10 +41,7 @@ module.exports = (sequelize, DataTypes) => {
         beforeBulkCreate: (instances, options) => {
           for (var item of instances) {
             item.Id = Math.random().toString(36).slice(-5);
-            item.Cover = `/covers/${item.Type}/${item.Name.replace(
-              "#",
-              "%23"
-            )}.jpg`;
+            item.Cover = `/covers/${item.Type}/${item.Name.replace("#", "%23")}.jpg`;
           }
         },
       },

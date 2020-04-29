@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from "svelte";
+  import { onMount, setContext } from "svelte";
   import Axios from "Axios";
   import { tick } from "svelte";
   import socketClient from "socket.io-client";
@@ -18,13 +18,6 @@
       user = resp.data;
     }
     isAuthenticating = false;
-    socket = socketClient("/");
-    socket.on("connect", () => {
-      console.log("connected");
-      socket.emit("message", "testing");
-    });
-
-    console.log(user);
   });
 
   const logout = async () => {
@@ -41,6 +34,13 @@
   window.addEventListener("beforeunload", () => {
     if (socket) socket.close();
   });
+
+  socket = socketClient("/");
+  socket.on("connect", () => {
+    console.log("connected");
+    socket.emit("message", "testing");
+  });
+  setContext("socket", socket);
 </script>
 
 <div id="root">
