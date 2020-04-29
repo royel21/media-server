@@ -14,12 +14,11 @@ const paginationInput = (li, page, totalPages, dispatch) => {
 
     newInput.onkeydown = (event) => {
       if (event.keyCode === 13) {
-        let pg = parseInt(newInput.value) - 1;
+        let pg = parseInt(newInput.value);
         if (!isNaN(pg)) {
           page = pg < 1 ? 1 : pg > totalPages ? totalPages : pg;
-          dispatch("goToPage", page);
         }
-        li.textContent = `${page} / ${totalPages}`;
+        dispatch("gotopage", page);
         newInput = null;
       }
     };

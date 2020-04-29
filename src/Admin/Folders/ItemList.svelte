@@ -51,6 +51,9 @@
     font-size: 20px;
     margin-right: 6px;
   }
+  h4 {
+    user-select: none;
+  }
 </style>
 
 <div id={title} class="file-list col-6">

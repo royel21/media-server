@@ -81,6 +81,9 @@
   .fas {
     pointer-events: none;
   }
+  #current-page {
+    user-select: none;
+  }
 </style>
 
 {#if totalPages > 1}
