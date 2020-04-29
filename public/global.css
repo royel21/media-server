@@ -1,5 +1,4 @@
-html,
-body {
+html, body {
   position: absolute;
   top: 0;
   left: 0;
@@ -9,10 +8,7 @@ body {
   background-color: #14243d;
   background: radial-gradient(ellipse at center, #14243d 0, #030611 100%);
   color: white;
-
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
-    Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol", "Noto Color Emoji";
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
@@ -24,9 +20,7 @@ body {
   width: 100%;
 }
 
-*,
-*::before,
-*::after {
+*, *::before, *::after {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -86,14 +80,14 @@ li {
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
+
 /* Clear input text icon*/
 
-input,
-button {
+input, button {
   overflow: visible;
 }
 
-input[type="text"] + span {
+input[type="text"]+span {
   display: none !important;
   position: absolute;
   top: 2px;
@@ -103,7 +97,7 @@ input[type="text"] + span {
   font-size: 20px;
 }
 
-input[type="text"]:not(:placeholder-shown) + span {
+input[type="text"]:not(:placeholder-shown)+span {
   display: initial !important;
 }
 
@@ -227,8 +221,7 @@ input[type="text"]:not(:placeholder-shown) + span {
   user-select: none;
 }
 
-.table th,
-.table td {
+.table th, .table td {
   padding: 0.5rem 1rem;
 }
 
@@ -236,8 +229,7 @@ input[type="text"]:not(:placeholder-shown) + span {
   text-align: center;
 }
 
-.table td:first-child,
-.table th:first-child {
+.table td:first-child, .table th:first-child {
   width: 100px;
   padding: 0.4rem 0.8rem;
   vertical-align: middle;
@@ -249,19 +241,16 @@ input[type="text"]:not(:placeholder-shown) + span {
   margin-bottom: 1rem;
   border-collapse: collapse;
 }
+
 /* Directory Style */
-i,
-span i,
-label i {
+
+i, span i, label i {
   cursor: pointer;
   font-size: 20px;
   user-select: none;
 }
-i:active,
-a:active i,
-label:active i,
-span:active i,
-.page-link:active i {
+
+i:active, a:active i, label:active i, span:active i, .page-link:active i {
   transform: scale(1.2);
 }
 
@@ -281,18 +270,15 @@ h3 {
   text-align: center;
 }
 
-.table-bordered thead th,
-.table-bordered thead td {
+.table-bordered thead th, .table-bordered thead td {
   border-bottom-width: 2px;
 }
-.table-bordered th,
-.table-bordered td {
+
+.table-bordered th, .table-bordered td {
   border: 1px solid #dee2e6;
 }
 
-.table-dark th,
-.table-dark td,
-.table-dark thead th {
+.table-dark th, .table-dark td, .table-dark thead th {
   border-color: #454d55;
   border-top-color: rgb(69, 77, 85);
   border-right-color: rgb(69, 77, 85);
@@ -304,21 +290,26 @@ h3 {
   margin-left: 0.5rem;
 }
 
-.fa-folder-open,
-.fa-folder {
+.fa, .fas, .far {
+  user-select: none;
+}
+
+.fa-folder-open, .fa-folder {
   color: rgb(250, 183, 15);
 }
+
 .fa-book {
   color: rgb(202, 48, 48);
 }
+
 .fa-home {
   color: rgb(17, 218, 201);
 }
-.fa-sync,
-.fa-edit,
-.fa-film {
+
+.fa-sync, .fa-edit, .fa-film {
   color: rgb(37, 140, 209);
 }
+
 .fa-heart {
   color: rgba(248, 224, 6, 0.952);
 }
@@ -326,7 +317,8 @@ h3 {
 .fa-trash-alt {
   color: rgba(252, 1, 1, 0.856);
 }
-.fa-folder-open + .file-progress {
+
+.fa-folder-open+.file-progress {
   background-color: rgba(252, 1, 1, 0.856);
 }
 
@@ -358,9 +350,11 @@ h3 {
   background-color: #007bff;
   border-color: #007bff;
 }
+
 .list-group-item.active .fa-edit {
   color: white;
 }
+
 .list-group-item:first-child {
   border-top-left-radius: 0.25rem;
   border-top-right-radius: 0.25rem;
@@ -384,6 +378,7 @@ h3 {
 #current-page input {
   height: 30px;
 }
+
 /*************Modal*************************/
 
 .modal-container {
@@ -394,6 +389,7 @@ h3 {
   width: 100%;
   z-index: 99;
 }
+
 .modal {
   display: block;
   position: fixed;
@@ -406,16 +402,18 @@ h3 {
   width: 350px;
   background-color: cadetblue;
 }
+
 .modal-header h3 {
   text-align: center;
   user-select: none;
 }
+
 .modal .errors {
   color: rgb(226, 35, 35);
   font-size: 20px;
 }
-.modal label,
-.modal .form-control {
+
+.modal label, .modal .form-control {
   padding: 5px;
   margin: 4px 0;
 }
@@ -430,6 +428,7 @@ h3 {
 .modal label i {
   font-size: 20px;
 }
+
 .modal-header h3 {
   margin-bottom: 0;
 }
@@ -444,4 +443,5 @@ h3 {
   min-width: 75px;
   margin: 0 10%;
 }
+
 /*************************************************************/

@@ -24,10 +24,24 @@
 </script>
 
 <style>
+  #filter-control {
+    position: relative;
+    flex-shrink: 1;
+  }
   .filter-file {
     padding: 2px 5px;
     border-top-right-radius: 0.25rem;
     border-bottom-right-radius: 0.25rem;
+  }
+  .filter-file:not(:placeholder-shown),
+  .filter-file:focus {
+    position: absolute;
+    left: 46px;
+    width: 266px;
+    height: 100%;
+  }
+  .filter-file:not(:placeholder-shown) + span {
+    right: -258px;
   }
 </style>
 

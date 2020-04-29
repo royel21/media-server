@@ -6,7 +6,7 @@
   export let fId;
   export let page = 1;
   export let totalPages = 0;
-  export let totalItems;
+  export let totalItems = 0;
 </script>
 
 <style>
@@ -22,8 +22,9 @@
     height: 45px;
   }
   .controls h4 {
-    width: 50%;
     flex-grow: 1;
+    width: 100%;
+    user-select: none;
   }
   .col-6 {
     flex-grow: 1;
@@ -50,9 +51,6 @@
   i {
     font-size: 20px;
     margin-right: 6px;
-  }
-  h4 {
-    user-select: none;
   }
 </style>
 

@@ -35,12 +35,10 @@
     if (socket) socket.close();
   });
 
-  socket = socketClient("/");
-  socket.on("connect", () => {
-    console.log("connected");
-    socket.emit("message", "testing");
-  });
-  setContext("socket", socket);
+  $: if (user.isAutenticated) {
+    socket = socketClient("/");
+    setContext("socket", socket);
+  }
 </script>
 
 <div id="root">
@@ -48,9 +46,9 @@
     <div>Loading</div>
   {:else if user.username}
     {#if user.role.includes('Admin')}
-      <AdminRoutes on:click={logout} />
+      <AdminRoutes {socket} on:click={logout} />
     {:else}
-      <UserRoutes on:click={logout} />
+      <UserRoutes {socket} on:click={logout} />
     {/if}
   {:else}
     <Login on:login={logIn} />

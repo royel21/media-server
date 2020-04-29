@@ -12,6 +12,7 @@ module.exports = (server, sessionMeddle) => {
 
   io.on("connection", async (socket) => {
     let isAuth = socket.request.session.passport;
+    console.log("socket", socket.request.session);
     if (isAuth) {
       const user = await db.user.findOne({
         where: { Name: isAuth.user },
@@ -44,7 +45,7 @@ module.exports = (server, sessionMeddle) => {
           console.log("load-image");
           mloader.loadZipImages(data, socket);
         });
-        socket.on("message", (data) => console.log(data));
+        socket.on("message", (data) => console.log("socket", data));
       }
 
       socket.on("disconnect", () => {

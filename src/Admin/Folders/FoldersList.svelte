@@ -1,7 +1,7 @@
 <script>
   import { onMount, onDestroy, createEventDispatcher } from "svelte";
   import ItemList from "./ItemList.svelte";
-  import ModalEdit from "./ModalEdit.svelte";
+  import Modal from "./Modal.svelte";
   import Axios from "Axios";
   import { calRows } from "./Utils";
   const dispatch = createEventDispatcher();
@@ -12,8 +12,8 @@
   let totalItems = 0;
   let items = [];
   let folder = {};
-  let EditModal = false;
-  let DeleteModal = false;
+  let showModal = false;
+  let modalType = {};
 
   const loadFolders = async pg => {
     let resp = await Axios.get(
@@ -43,7 +43,9 @@
 
   const gotopage = pg => {
     pg = parseInt(pg.detail);
+    if (pg < 1 || pg > totalPages) return;
     page = pg < 1 ? 1 : pg > totalPages ? totalPages : pg;
+
     loadFolders(pg);
   };
 
@@ -56,26 +58,26 @@
       folder = items.find(f => f.Id === el.closest("li").id);
       let cList = el.classList.toString();
       if (/fa-edit/gi.test(cList)) {
-        EditModal = true;
+        modalType = { title: "Edit Folder", Del: false };
       } else {
-        DeleteModal = true;
+        modalType = { title: "Remove Folder", Del: true };
       }
+      showModal = true;
     }
   };
+
   const handleSubmit = event => {
     event.preventDefault();
-    console.log(event.target.querySelector("input").value);
   };
   const hideModal = () => {
-    EditModal = false;
-    DeleteModal = false;
+    showModal = false;
   };
 </script>
 
-{#if EditModal}
-  <ModalEdit
+{#if showModal}
+  <Modal
     file={folder}
-    title="Folder"
+    {modalType}
     on:submit={handleSubmit}
     on:click={hideModal} />
 {/if}

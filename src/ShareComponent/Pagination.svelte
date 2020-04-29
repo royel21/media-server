@@ -6,6 +6,7 @@
 
   export let page = 1;
   export let totalPages = 0;
+  let showinput = false;
 
   const pagerClick = e => {
     window.localStorage.setItem("selected", 0);
@@ -33,6 +34,23 @@
       }
       default: {
       }
+    }
+  };
+  const onShowinput = () => {
+    showinput = true;
+  };
+
+  const hideInput = () => {
+    showinput = false;
+  };
+  const init = el => {
+    el.focus();
+  };
+  const handleChange = event => {
+    let pg = parseInt(event.target.value);
+    if (!isNaN(pg)) {
+      pg = pg < 1 ? 1 : pg > totalPages ? totalPages : pg;
+      dispatch("gotopage", pg);
     }
   };
 </script>
@@ -95,7 +113,17 @@
       <li id="prev-page" class="page-link">
         <i class="fas fa-angle-left" />
       </li>
-      <li id="current-page" class="page-link">{page + '/' + totalPages}</li>
+      <li id="current-page" class="page-link" on:click={onShowinput}>
+        {#if showinput}
+          <input
+            on:blur={hideInput}
+            type="text"
+            value={page}
+            class="form-control"
+            on:change={handleChange}
+            use:init />
+        {:else}{page + '/' + totalPages}{/if}
+      </li>
       <li id="next-page" class="page-link">
         <i class="fas fa-angle-right" />
       </li>
