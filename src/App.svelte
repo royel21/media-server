@@ -48,9 +48,9 @@
     <div>Loading</div>
   {:else if user.username}
     {#if user.role.includes('Admin')}
-      <AdminRoutes {socket} on:click={logout} />
+      <AdminRoutes on:click={logout} />
     {:else}
-      <UserRoutes {socket} on:click={logout} />
+      <UserRoutes on:click={logout} />
     {/if}
   {:else}
     <Login on:login={logIn} />
