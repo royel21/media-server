@@ -1,5 +1,6 @@
 <script>
   import { onMount, setContext } from "svelte";
+  import { navigate } from "svelte-routing";
   import Axios from "Axios";
   import { tick } from "svelte";
   import socketClient from "socket.io-client";
@@ -11,6 +12,13 @@
   var socket;
   let user = { username: "" };
   let isAuthenticating = true;
+
+  function isPwa() {
+    return ["fullscreen", "standalone", "minimal-ui"].some(
+      displayMode =>
+        window.matchMedia("(display-mode: " + displayMode + ")").matches
+    );
+  }
 
   onMount(async () => {
     let resp = await Axios.get("/api/users");
@@ -24,11 +32,16 @@
     Axios.get("/api/users/logout").then(({ data }) => {
       if (data.success) {
         user = {};
+        navigate("/login", { replace: true });
+        if (isPwa()) {
+          history.go(-(history.length - 2));
+        }
       }
     });
   };
   const logIn = _user => {
     user = _user.detail;
+    navigate("/", { replace: true });
   };
 
   window.addEventListener("beforeunload", () => {

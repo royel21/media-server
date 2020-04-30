@@ -27,6 +27,7 @@
   #filter-control {
     position: relative;
     flex-shrink: 1;
+    width: 100%;
   }
   .filter-file {
     padding: 2px 5px;
@@ -37,11 +38,11 @@
   .filter-file:focus {
     position: absolute;
     left: 46px;
-    width: 266px;
     height: 100%;
+    width: 100%;
   }
   .filter-file:not(:placeholder-shown) + span {
-    right: -258px;
+    right: -40px;
   }
 </style>
 

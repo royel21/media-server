@@ -28,7 +28,12 @@ module.exports = (server, sessionMeddle) => {
         socket.on("load-disks", FileManager.diskLoader);
         socket.on("load-content", FileManager.loadContent);
         socket.on("scan-dir", FileManager.scanDir);
+
+        socket.on("rename-file", FileManager.renameFile);
         socket.on("remove-file", FileManager.removeFile);
+
+        socket.on("rename-folder", FileManager.renameFolder);
+        socket.on("remove-folder", FileManager.removeFolder);
       } else {
         // socket.on("file-update-view", FileManager.updateFileView);
         socket.on("file-update-pos", (data) => {

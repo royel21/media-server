@@ -21,6 +21,13 @@
   label {
     text-align: center;
   }
+  .error:empty {
+    display: none;
+  }
+  .error {
+    color: red;
+    font-weight: 600;
+  }
 </style>
 
 <div class="modal-container">
@@ -39,7 +46,7 @@
               type="text"
               name="Name"
               class="form-control"
-              bind:value={file.Name} />
+              value={file.Name} />
           </div>
         {:else}
           <p>
@@ -61,6 +68,7 @@
           {/if}
         {/if}
       </div>
+      <div class="error">{modalType.error || ''}</div>
       <div class="modal-footer">
         <button type="button" class="btn" on:click>Cancel</button>
         <button type="submit" class="btn">

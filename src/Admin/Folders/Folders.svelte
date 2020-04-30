@@ -13,15 +13,20 @@
     display: flex;
     flex-direction: row;
     height: 100%;
+    min-width: 630px;
   }
   .card {
     padding: 0;
     height: 100%;
-    min-width: 565px;
+  }
+  @media screen and (max-width: 630px) {
+    .admin-manager {
+      overflow-x: auto;
+    }
   }
 </style>
 
-<div id="fd-manager" class="card bg-dark manager">
+<div class="card bg-dark admin-manager ">
   <div class="rows">
     <FolderList on:folderid={folderid} />
     <FilesList {fId} />

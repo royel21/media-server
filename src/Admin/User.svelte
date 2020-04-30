@@ -61,6 +61,8 @@
   .manager {
     height: 100%;
     padding: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
   }
   .controls {
     padding: 5px;
@@ -75,9 +77,6 @@
 
   #u-manager .controls .btn i {
     font-size: 20px;
-  }
-  .controls {
-    border-bottom: 1px solid;
   }
 
   .table td:first-child,

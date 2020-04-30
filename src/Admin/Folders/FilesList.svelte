@@ -12,6 +12,8 @@
   import Modal from "./Modal.svelte";
 
   const dispatch = createEventDispatcher();
+  const socket = getContext("socket");
+
   export let fId;
 
   let page = 1;
@@ -23,11 +25,9 @@
   let showModal = false;
   let modalType = {};
 
-  let socket = getContext("socket");
-
-  const loadFiles = async folderId => {
+  const loadFiles = async pg => {
     let resp = await Axios.get(
-      `api/admin/folders/files/${folderId}/${page}/${calRows(
+      `api/admin/folders/files/${fId}/${pg}/${calRows(
         ".list-container"
       )}/${filter || ""}`
     );
@@ -40,33 +40,48 @@
   };
 
   onMount(async () => {
-    socket.on("file-removed", data => {
-      if (data.removed) {
-        dispatch("loadFiles", 1);
+    socket.on("file-renamed", data => {
+      if (data.success) {
+        file.Name = data.Name;
+        items = items;
+        hideModal();
       }
+      console.log("rename: ", data.msg);
+    });
+
+    socket.on("file-removed", data => {
+      if (data.success) {
+        if (page === totalPages && items.length > 1) {
+          items = items.filter(f => f.Id !== file.Id);
+        } else {
+          page -= 1;
+          loadFiles(page);
+        }
+        hideModal();
+      }
+      console.log("remove:", data.msg);
     });
   });
 
   onDestroy(() => {
+    delete socket._callbacks["$file-renamed"];
     delete socket._callbacks["$file-removed"];
   });
 
-  const removeFile = systemDel => {
-    socket.emit("remove-file", { Id: localFile.Id, Del: systemDel });
+  const onFilter = event => {
+    filter = event.detail;
+    loadFiles(1);
   };
-
-  const onFilter = flt => (filter = flt);
 
   const goToPage = pg => {
     pg = parseInt(pg.detail);
     if (pg < 1 || pg > totalPages) return;
     page = pg < 1 ? 1 : pg > totalPages ? totalPages : pg;
-    loadFiles(fId);
+    loadFiles(page);
   };
 
   $: if (fId) {
-    page = 1;
-    loadFiles(fId);
+    loadFiles(1);
   }
 
   const itemClick = event => {
@@ -79,16 +94,28 @@
       } else {
         modalType = { title: "Remove File", Del: true, isFile: true };
       }
+      showModal = true;
     }
-    showModal = true;
   };
 
   const handleSubmit = event => {
     event.preventDefault();
+    if (modalType.Del) {
+      let Del = event.target.querySelector("input").checked;
+      socket.emit("remove-file", { Id: file.Id, Del });
+    } else {
+      let Name = event.target.querySelector("input").value;
+      if (!Name) {
+        modalType.error = "Name Can't be empty";
+      } else {
+        socket.emit("rename-file", { Id: file.Id, Name });
+      }
+    }
   };
 
   const hideModal = () => {
     showModal = false;
+    file = {};
   };
 </script>
 

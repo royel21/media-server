@@ -1,10 +1,17 @@
 <script>
-  import { onMount, onDestroy, createEventDispatcher } from "svelte";
+  import {
+    onMount,
+    onDestroy,
+    getContext,
+    createEventDispatcher
+  } from "svelte";
   import ItemList from "./ItemList.svelte";
   import Modal from "./Modal.svelte";
   import Axios from "Axios";
   import { calRows } from "./Utils";
   const dispatch = createEventDispatcher();
+  const socket = getContext("socket");
+
   let page = 1;
   let totalPages = 1;
   let filter = "";
@@ -34,6 +41,33 @@
 
   onMount(() => {
     loadFolders(1);
+    socket.on("folder-renamed", data => {
+      if (data.success) {
+        folder.Name = data.Name;
+        console.log(items);
+        items = items;
+        hideModal();
+      }
+      console.log("rename: ", data.msg);
+    });
+
+    socket.on("folder-removed", data => {
+      if (data.success) {
+        if (page === totalPages && items.length > 1) {
+          items = items.filter(f => f.Id !== folder.Id);
+        } else {
+          page -= 1;
+          loadFolders(page);
+        }
+        hideModal();
+      }
+      console.log("remove:", data.msg);
+    });
+  });
+
+  onDestroy(() => {
+    delete socket._callbacks["$folder-renamed"];
+    delete socket._callbacks["$folder-removed"];
   });
 
   const onFilter = flt => {
@@ -68,9 +102,21 @@
 
   const handleSubmit = event => {
     event.preventDefault();
+    if (modalType.Del) {
+      socket.emit("remove-folder", { Id: folder.Id });
+    } else {
+      let Name = event.target.querySelector("input").value;
+      if (!Name) {
+        modalType.error = "Name Can't be empty";
+      } else {
+        socket.emit("rename-folder", { Id: folder.Id, Name });
+      }
+    }
   };
+
   const hideModal = () => {
     showModal = false;
+    folder = {};
   };
 </script>
 

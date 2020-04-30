@@ -1,11 +1,13 @@
 <script>
   import Tree from "./Tree.svelte";
   import Directories from "./Directories.svelte";
+  import { fly } from "svelte/transition";
   let tab = "tab-1";
 </script>
 
 <style>
-  #d-manager {
+  .admin-manager {
+    position: relative;
     height: 100%;
     padding: 10px 0 0 0;
   }
@@ -15,7 +17,7 @@
     border-bottom: 1px solid;
   }
   .nav-link {
-    padding: 5px;
+    padding: 5px 10px;
     border-radius: 0.25rem 0.25rem 0 0;
   }
 
@@ -25,57 +27,80 @@
   .controls.nav label {
     display: inline-block;
     margin: 0;
-    border-bottom: 1px solid;
     cursor: pointer;
-    padding-bottom: 0.2rem;
+    color: white;
   }
   .controls .nav-link .fas {
     font-size: 30px;
   }
-  .controls.nav label:hover {
+  .nav-link span {
+    position: relative;
+    top: -4px;
+    font-size: 20px;
+  }
+  .nav input[type="radio"]:not(:checked) label:hover {
     background-color: #007bff27;
   }
   .nav input[type="radio"]:checked + label:hover,
   .nav input[type="radio"]:checked + label {
-    background-color: #007bff;
-    border-color: #007bff;
-    color: white;
+    position: relative;
+    font-weight: 600;
     border: 1px solid;
+    border-bottom: transparent;
+  }
+  .nav input[type="radio"]:checked + label:after {
+    position: absolute;
+    content: " ";
+    bottom: -1px;
+    left: 0;
+    height: 1px;
+    width: 100%;
+    background-color: #343a40 !important;
   }
   input[type="radio"]:checked + label span {
     display: inline-block;
-    border-bottom: 1px solid;
-    padding-bottom: 2px;
   }
   #tabs-content {
-    height: 100%;
-    padding: 0 8px;
+    position: absolute;
+    top: 60px;
+    width: 100%;
+    height: calc(100% - 62px);
+    padding: 5px 8px;
     overflow-y: auto;
+    overflow-x: hidden;
   }
 </style>
 
-<div id="d-manager" class="card bg-dark text-light manager">
+<div class="card bg-dark text-light admin-manager">
   <div class="nav nav-tabs controls">
     <div class="nav-item">
       <input type="radio" bind:group={tab} value="tab-1" id="tab1" />
       <label class="nav-link" for="tab1">
         <i class="fas fa-folder" />
-        <span id="dirs">Directory List</span>
+        <span id="dirs">Directories</span>
       </label>
     </div>
     <div class="nav-item">
       <input type="radio" bind:group={tab} value="tab-2" id="tab2" />
       <label class="nav-link" for="tab2">
         <div class="fas fa-hdd" />
-        <span id="disks">Server Disks</span>
+        <span id="disks">Server</span>
       </label>
     </div>
   </div>
-  <div id="tabs-content">
-    {#if tab.includes('tab-1')}
+  {#if tab.includes('tab-1')}
+    <div
+      id="tabs-content"
+      in:fly={{ y: 200, duration: 200 }}
+      out:fly={{ y: 200, duration: 200 }}>
       <Directories />
-    {:else}
+    </div>
+  {:else}
+    <div
+      id="tabs-content"
+      in:fly={{ y: 200, duration: 200 }}
+      out:fly={{ y: 200, duration: 200 }}>
       <Tree />
-    {/if}
-  </div>
+    </div>
+  {/if}
 </div>

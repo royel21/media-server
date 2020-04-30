@@ -17,7 +17,7 @@
 
 <style>
   ul {
-    margin-left: 20px;
+    margin-left: 40px;
     user-select: none;
     padding-bottom: 5px;
   }
