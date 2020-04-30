@@ -3,65 +3,68 @@
 const bcrypt = require("bcrypt");
 
 module.exports = (sequelize, DataTypes) => {
+  const encriptPass = (user) => {
+    user.Password = bcrypt.hashSync(user.Password, bcrypt.genSaltSync(8), null);
+  };
   const User = sequelize.define(
     "User",
     {
       Id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
-        primaryKey: true
+        primaryKey: true,
       },
       Name: {
         type: DataTypes.STRING(100),
         unique: true,
-        allowNull: false
+        allowNull: false,
       },
       Password: {
         type: DataTypes.STRING(32),
-        allowNull: false
+        allowNull: false,
       },
       Role: {
         type: DataTypes.STRING(20),
         defaultValue: "User",
-        allowNull: false
+        allowNull: false,
       },
       State: {
         type: DataTypes.STRING(12),
         defaultValue: "Activo",
-        allowNull: false
+        allowNull: false,
       },
       AdultPass: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
-        allowNull: false
+        allowNull: false,
       },
       CreatedAt: {
-        type: DataTypes.DATE
-      }
+        type: DataTypes.DATE,
+      },
     },
     {
       timestamps: false,
       hooks: {
-        beforeCreate: (user, options) => {
-          user.Password = bcrypt.hashSync(user.Password, bcrypt.genSaltSync(8), null);
+        beforeValidate: (user) => {
           user.CreatedAt = new Date();
         },
-        beforeUpdate: (user, options) => {
-          if (user.Password) {
-            user.Password = bcrypt.hashSync(user.Password, bcrypt.genSaltSync(8), null);
-          }
-        },
-        beforeBulkCreate: (users, options) => {
+        beforeCreate: encriptPass,
+        beforeUpdate: encriptPass,
+        beforeBulkCreate: (users) => {
           for (var user of users) {
-            user.Password = bcrypt.hashSync(user.Password, bcrypt.genSaltSync(8), null);
+            user.Password = bcrypt.hashSync(
+              user.Password,
+              bcrypt.genSaltSync(8),
+              null
+            );
             user.CreatedAt = new Date();
           }
-        }
-      }
+        },
+      },
     }
   );
 
-  User.prototype.validPassword = function(password) {
+  User.prototype.validPassword = function (password) {
     return new Promise((resolve, rejected) => {
       bcrypt.compare(password, this.Password, (err, result) => {
         if (err) rejected(err);
