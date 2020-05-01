@@ -4,9 +4,9 @@
   import { fileKeypress } from "../FileEvents";
   import Axios from "axios";
   import FilesList from "../Component/FilesList.svelte";
-
-  let pageData = { files: [], Page: 1, totalPages: 0, totalFiles: 0 };
-  let filter = "";
+  export let page = 1;
+  export let filter = "";
+  let pageData = { files: [], Page: page, totalPages: 0, totalFiles: 0 };
 
   const loadContent = async (pg = 1, flt = "") => {
     let url = genUrl(pg, { order: "nu", items: 0 }, flt, "mangas");
@@ -38,6 +38,8 @@
     filter = event.detail;
     loadContent(1, filter);
   };
+
+  $: console.log("params:", page);
 </script>
 
 <FilesList

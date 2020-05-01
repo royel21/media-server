@@ -2,15 +2,14 @@
   import { Router, Route } from "svelte-routing";
   import Navbar from "../ShareComponent/Navbar.svelte";
   import Home from "./Pages/Home.svelte";
-  import Folders from "./Pages/Folders.svelte";
   import Mangas from "./Pages/Mangas.svelte";
   import Videos from "./Pages/Videos.svelte";
   import Favorites from "./Pages/Favorites.svelte";
   const navItems = [
     { title: "Home", path: "/", class: "home" },
-    { title: "Videos", path: "/videos/nu", class: "film" },
-    { title: "Mangas", path: "/mangas/nu", class: "book" },
-    { title: "Favorites", path: "/favorites/nu", class: "heart" }
+    { title: "Videos", path: "/videos", class: "film" },
+    { title: "Mangas", path: "/mangas", class: "book" },
+    { title: "Favorites", path: "/favorites", class: "heart" }
   ];
 </script>
 
@@ -20,11 +19,13 @@
 
 <Router>
   <Navbar on:click {navItems} />
-  <Route path="/videos/:order/:page?/*" component={Videos} />
-  <Route path="/mangas/:order" component={Mangas} />
-  <Route path="/favorites/id?" component={Favorites} />
-  <!-- <Route path="/content" component={} /> -->
+  <Route path="/videos/:page/:filter" component={Videos} />
+  <Route path="/mangas/:page/:filter" component={Mangas} />
+  <Route path="/favorites/:id/:page/:filter" component={Favorites} />
   <Route exact path="/">
     <Home />
+  </Route>
+  <Route path="*">
+    <div>Not found</div>
   </Route>
 </Router>

@@ -90,7 +90,6 @@
 
 {#if showModal}
   <ModalUser
-    {users}
     {foundUser}
     on:closeModal={hideModal}
     on:updateusers={updateUsers} />

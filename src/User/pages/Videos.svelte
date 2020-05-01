@@ -8,7 +8,7 @@
   let pageData = { files: [], Page: 1, totalPages: 0, totalFiles: 0 };
   let filter = "";
   export let params;
-  console.log(params);
+  console.log("params:", params);
   onMount(async () => {
     let items = getFilesPerPage(3);
     let url = genUrl(1, { order: "nu", items }, "", "videos");

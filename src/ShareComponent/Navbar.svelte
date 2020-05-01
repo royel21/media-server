@@ -1,6 +1,7 @@
 <script>
   import { getContext } from "svelte";
   import { Link, navigate } from "svelte-routing";
+  import Config from "./Config.svelte";
   const User = getContext("User");
   export let navItems;
 
@@ -34,10 +35,9 @@
   .nav-item {
     font-size: 1.2rem;
   }
-  #p-config label {
-    line-height: 1.8;
-    padding: 0px 10px;
-    cursor: pointer;
+  #p-config {
+    position: relative;
+    color: white;
   }
 </style>
 
@@ -54,10 +54,7 @@
   </ul>
   <ul class="navbar-nav">
     <li id="p-config" class="nav-item">
-      <label for="show-config">
-        <i class="fas fa-user-cog" />
-        <span>{User.username}</span>
-      </label>
+      <Config {User} on:click />
     </li>
   </ul>
 </nav>

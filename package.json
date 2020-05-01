@@ -40,7 +40,7 @@
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
     "sqlite3": "^4.1.1",
-    "svelte-routing": "^1.4.2",
+    "svelte-routing": "file:modules/svelte-routing",
     "win-explorer": "file:modules/win-explorer"
   }
 }
