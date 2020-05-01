@@ -6,8 +6,6 @@
 
   function getProps({ location, href, isPartiallyCurrent, isCurrent }) {
     const isActive = href === "/" ? isCurrent : isPartiallyCurrent || isCurrent;
-
-    console.log("nav", href, isPartiallyCurrent, isCurrent);
     if (isActive) {
       return { class: "active" };
     }

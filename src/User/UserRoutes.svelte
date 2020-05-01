@@ -20,7 +20,7 @@
 
 <Router>
   <Navbar on:click {navItems} />
-  <Route path="/videos/:order?" component={Videos} />
+  <Route path="/videos/:order/:page?/*" component={Videos} />
   <Route path="/mangas/:order" component={Mangas} />
   <Route path="/favorites/id?" component={Favorites} />
   <!-- <Route path="/content" component={} /> -->
