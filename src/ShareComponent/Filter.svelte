@@ -10,7 +10,6 @@
   };
 
   const submitFilter = e => {
-    console.log(e.keyCode);
     if (e.keyCode === 13) {
       dispatch("filter", filter);
     }
@@ -27,22 +26,31 @@
   #filter-control {
     position: relative;
     flex-shrink: 1;
-    width: 100%;
+    width: 250px;
+  }
+  #filter-control > * {
+    height: 32px;
   }
   .filter-file {
     padding: 2px 5px;
     border-top-right-radius: 0.25rem;
     border-bottom-right-radius: 0.25rem;
   }
-  .filter-file:not(:placeholder-shown),
-  .filter-file:focus {
-    position: absolute;
-    left: 46px;
-    height: 100%;
-    width: 100%;
-  }
-  .filter-file:not(:placeholder-shown) + span {
-    right: -40px;
+  @media screen and (max-width: 600px) {
+    #filter-control {
+      width: 150px;
+    }
+    .filter-file:not(:placeholder-shown),
+    .filter-file:focus {
+      position: absolute;
+      left: 46px;
+      height: 100%;
+      width: calc(100% * 1.2);
+      z-index: 1;
+    }
+    .filter-file:not(:placeholder-shown) + span {
+      right: -70px;
+    }
   }
 </style>
 

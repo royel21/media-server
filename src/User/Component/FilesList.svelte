@@ -1,8 +1,15 @@
 <script>
+  import Pagination from "../../ShareComponent/Pagination.svelte";
+  import Filter from "../../ShareComponent/Filter.svelte";
   import { FileTypes, ProcessFile } from "../Utils";
   import { fileClicks } from "../FileEvents";
   export let type;
   export let files;
+  export let page;
+  export let totalPages;
+  export let totalFiles;
+  export let filter;
+
   let active = false;
   const handleClick = event => {
     console.log(event.target);
@@ -12,6 +19,33 @@
 </script>
 
 <style>
+  .files-list {
+    display: flex;
+    flex-wrap: wrap;
+    height: calc(100% - 38px);
+    overflow-y: auto;
+    padding-bottom: 50px;
+  }
+
+  .controls {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 5px 4px 5px;
+    z-index: 1;
+  }
+  .items {
+    color: #fff;
+    background-color: #007bff;
+    padding: 0.25em 0.7em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 2;
+    border-radius: 0.25rem;
+  }
   .file {
     position: relative;
     outline: none;
@@ -85,7 +119,6 @@
     height: 183px;
     overflow: hidden;
   }
-
   .file-cover img {
     max-width: 190px;
     max-height: 180px;
@@ -95,8 +128,8 @@
   }
 
   .file-cover:hover > img {
-    max-width: initial;
-    max-height: initial;
+    max-width: none;
+    max-height: none;
   }
 
   .file-cover img[alt]:after {
@@ -129,8 +162,10 @@
   .file-btns i:active {
     transform: scale(1.3);
   }
-
   @media screen and (max-width: 420px) {
+    .files-list {
+      padding-bottom: 70px;
+    }
     .file {
       width: 185px;
       min-width: 185px;
@@ -141,39 +176,46 @@
   }
 </style>
 
-{#each files as { Id, Name, Type, Cover, CurrentPos, Duration, isFav, FileCount }}
-  <div
-    class="file"
-    id={Id}
-    data-type={Type}
-    tabIndex="0"
-    on:click={handleClick}>
-    <div class="file-info">
-      <div class="file-btns">
-        <span class="file-btn-left">
-          <i class={'fas fa-' + FileTypes[Type].class} />
-        </span>
-        <span class="file-progress">
-          {#if Type.includes('Folder')}
-            {FileCount}
-          {:else}{FileTypes[Type].formatter(CurrentPos || 0, Duration)}{/if}
-        </span>
-        <span class="file-btn-left">
-          {#if Type !== 'Folder'}
-            {#if type === 'favorites'}
-              <i class="fas fa-trash-alt text-danger" />
-            {:else if isFav}
-              <i class="fas fa-star text-warning" />
-            {:else}
-              <i class="far fa-star" />
+<div class="files-list" on:keydown>
+  {#each files as { Id, Name, Type, Cover, CurrentPos, Duration, isFav, FileCount }}
+    <div
+      class="file"
+      id={Id}
+      data-type={Type}
+      tabIndex="0"
+      on:click={handleClick}>
+      <div class="file-info">
+        <div class="file-btns">
+          <span class="file-btn-left">
+            <i class={'fas fa-' + FileTypes[Type].class} />
+          </span>
+          <span class="file-progress">
+            {#if Type.includes('Folder')}
+              {FileCount}
+            {:else}{FileTypes[Type].formatter(CurrentPos || 0, Duration)}{/if}
+          </span>
+          <span class="file-btn-left">
+            {#if Type !== 'Folder'}
+              {#if type === 'favorites'}
+                <i class="fas fa-trash-alt text-danger" />
+              {:else if isFav}
+                <i class="fas fa-star text-warning" />
+              {:else}
+                <i class="far fa-star" />
+              {/if}
             {/if}
-          {/if}
-        </span>
+          </span>
+        </div>
+        <div class="file-cover">
+          <img src={Cover} alt="No Cover Found" />
+        </div>
+        <div class="file-name">{Name}</div>
       </div>
-      <div class="file-cover">
-        <img src={Cover} alt="No Cover Found" />
-      </div>
-      <div class="file-name">{Name}</div>
     </div>
-  </div>
-{/each}
+  {/each}
+</div>
+<div class="controls">
+  <Filter {filter} on:filter />
+  <Pagination {page} {totalPages} on:gotopage />
+  <span class="items">{totalFiles}</span>
+</div>

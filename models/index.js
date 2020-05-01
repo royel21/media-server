@@ -12,6 +12,7 @@ const sequelize = new Sequelize("sqlite:./" + dbPath, {
 });
 
 db.Op = Op;
+db.sqlze = sequelize;
 
 db.user = require("./user")(sequelize, DataTypes);
 db.file = require("./file")(sequelize, DataTypes);
@@ -20,16 +21,14 @@ db.folder = require("./folder")(sequelize, DataTypes);
 db.favorite = require("./favorites")(sequelize, DataTypes);
 db.recent = require("./recents")(sequelize, DataTypes);
 db.userConfig = require("./userconfig")(sequelize, DataTypes);
-
 db.directory = require("./directories")(sequelize, DataTypes);
 
 db.recentFile = require("./recent-file")(sequelize, DataTypes);
 db.favoriteFile = require("./favorite-file")(sequelize, DataTypes);
 db.fileCategory = require("./file-category")(sequelize, DataTypes);
 
-db.sqlze = sequelize;
-
 db.category.belongsToMany(db.file, { through: { model: db.fileCategory } });
+
 db.file.belongsToMany(db.category, {
   through: { model: db.fileCategory, onDelete: "cascade" },
 });

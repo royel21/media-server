@@ -103,7 +103,7 @@
   const handleSubmit = event => {
     event.preventDefault();
     if (modalType.Del) {
-      socket.emit("remove-folder", { Id: folder.Id });
+      socket.emit("remove-folder", folder.Id);
     } else {
       let Name = event.target.querySelector("input").value;
       if (!Name) {

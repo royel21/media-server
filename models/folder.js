@@ -1,47 +1,53 @@
+const { nanoid } = require("nanoid");
 module.exports = (sequelize, DataTypes) => {
+  const { INTEGER, STRING, DATE } = DataTypes;
   const Folder = sequelize.define(
     "Folders",
     {
       Id: {
-        type: DataTypes.STRING(10),
+        type: STRING(6),
         primaryKey: true,
         unique: true,
         allowNull: false,
       },
       Type: {
-        type: DataTypes.STRING(7),
+        type: STRING(7),
         defaultValue: "Folder",
       },
       FilesType: {
-        type: DataTypes.STRING(10),
+        type: STRING(10),
       },
       Name: {
-        type: DataTypes.STRING(100),
+        type: STRING(100),
         unique: true,
       },
       Cover: {
-        type: DataTypes.STRING,
+        type: STRING,
       },
       CreatedAt: {
-        type: DataTypes.DATE,
+        type: DATE,
         allowNull: false,
       },
       FileCount: {
-        type: DataTypes.INTEGER,
+        type: INTEGER,
         defaultValue: 0,
+      },
+      Path: {
+        type: STRING,
+        unique: true,
       },
     },
     {
       timestamps: false,
       hooks: {
-        beforeValidate: function (item, options) {
-          item.Id = Math.random().toString(36).slice(-5);
-          item.Cover = `/covers/${item.Type}/${encodeURI(item.Name)}.jpg`;
+        beforeValidate: function (item) {
+          item.Id = nanoid(6);
+          item.Cover = `/${item.Type}/${encodeURI(item.Name)}.jpg`;
         },
-        beforeBulkCreate: (instances, options) => {
+        beforeBulkCreate: (instances) => {
           for (var item of instances) {
-            item.Id = Math.random().toString(36).slice(-5);
-            item.Cover = `/covers/${item.Type}/${item.Name.replace("#", "%23")}.jpg`;
+            item.Id = nanoid(6);
+            item.Cover = `/${item.Type}/${item.Name.replace("#", "%23")}.jpg`;
           }
         },
       },

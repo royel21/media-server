@@ -55,14 +55,15 @@ export default {
 };
 
 function serve() {
-  let started = true;
+  let started = false;
 
   return {
     writeBundle() {
+      console.log("started", started);
       if (!started) {
         started = true;
-
-        require("child_process").spawn("npm", ["run", "start", "--", "--dev"], {
+        console.log("express started");
+        require("child_process").spawn("npm", ["run", "express"], {
           stdio: ["ignore", "inherit", "inherit"],
           shell: true,
         });

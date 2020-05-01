@@ -19,6 +19,7 @@
   .nav-link {
     padding: 5px 10px;
     border-radius: 0.25rem 0.25rem 0 0;
+    user-select: none;
   }
 
   input[type="radio"] {

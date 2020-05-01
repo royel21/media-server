@@ -1,62 +1,64 @@
 "use strict";
 
 const bcrypt = require("bcrypt");
-
+const { nanoid } = require("nanoid");
 module.exports = (sequelize, DataTypes) => {
-  const encriptPass = (user) => {
-    user.Password = bcrypt.hashSync(user.Password, bcrypt.genSaltSync(8), null);
-  };
+  const { STRING, DATE, BOOLEAN } = DataTypes;
   const User = sequelize.define(
     "User",
     {
       Id: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
+        type: STRING(10),
         primaryKey: true,
       },
       Name: {
-        type: DataTypes.STRING(100),
+        type: STRING(100),
         unique: true,
         allowNull: false,
       },
       Password: {
-        type: DataTypes.STRING(32),
+        type: STRING(32),
         allowNull: false,
       },
       Role: {
-        type: DataTypes.STRING(20),
+        type: STRING(20),
         defaultValue: "User",
         allowNull: false,
       },
       State: {
-        type: DataTypes.STRING(12),
+        type: STRING(12),
         defaultValue: "Activo",
         allowNull: false,
       },
       AdultPass: {
-        type: DataTypes.BOOLEAN,
+        type: BOOLEAN,
         defaultValue: false,
         allowNull: false,
       },
       CreatedAt: {
-        type: DataTypes.DATE,
+        type: DATE,
       },
     },
     {
       timestamps: false,
       hooks: {
         beforeValidate: (user) => {
+          if (!user.Id) {
+            user.Id = nanoid(10);
+          }
+        },
+        beforeCreate: (user) => {
+          user.Password = bcrypt.hashSync(user.Password, bcrypt.genSaltSync(8), null);
           user.CreatedAt = new Date();
         },
-        beforeCreate: encriptPass,
-        beforeUpdate: encriptPass,
+        beforeUpdate: () => {
+          if (user.Password)
+            user.Password = bcrypt.hashSync(user.Password, bcrypt.genSaltSync(8), null);
+        },
         beforeBulkCreate: (users) => {
           for (var user of users) {
-            user.Password = bcrypt.hashSync(
-              user.Password,
-              bcrypt.genSaltSync(8),
-              null
-            );
+            user.Id = nanoid(10);
+            user.Password = bcrypt.hashSync(user.Password, bcrypt.genSaltSync(8), null);
             user.CreatedAt = new Date();
           }
         },

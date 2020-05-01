@@ -11,13 +11,12 @@ var WinExplore = {};
 if (os.platform().includes("win32")) {
   WinExplore = require("./build/Release/win_explorer");
 } else if (os.platform().includes("linux")) {
-  WinExplore.ListFiles = dir => {
+  WinExplore.ListFiles = (dir) => {
     var foundFiles = fs.readdirSync(dir);
     var tempFiles = [];
     var i = 0;
     for (let f of foundFiles) {
-      if (["$"].includes(f[0]) || f.includes("System Volume Information"))
-        continue;
+      if (["$"].includes(f[0]) || f.includes("System Volume Information")) continue;
 
       let data = fs.statSync(path.join(dir, f));
       tempFiles[i] = {
@@ -25,7 +24,8 @@ if (os.platform().includes("win32")) {
         FileName: f,
         Size: data.size,
         isHidden: f[0] == ".",
-        extension: ""
+        extension: "",
+        LastModified: data.mtime,
       };
 
       if (data.isDirectory()) {
@@ -54,7 +54,7 @@ ListFiles = (dir, options) => {
 
   var files = WinExplore.ListFiles(d, false).sort(sortFiles);
 
-  const checkFiles = f => {
+  const checkFiles = (f) => {
     if (f.isHidden) {
       return !opts.hidden ? false : opts.hidden;
     }
@@ -71,7 +71,7 @@ ListFiles = (dir, options) => {
   };
 
   if (options && options.file && options.filters.length) {
-    return files.filter(v => {
+    return files.filter((v) => {
       if (options.filters.includes(v.extension.toLowerCase())) {
         return checkFiles(f);
       } else {
@@ -83,10 +83,10 @@ ListFiles = (dir, options) => {
   }
 };
 
-ListFilesR = dir => {
+ListFilesR = (dir) => {
   var temp = path.resolve(dir);
   var files = [];
-  listAll = d => {
+  listAll = (d) => {
     let fs1 = WinExplore.ListFiles(d);
     for (f of fs1) {
       if (f.isDirectory) {
@@ -102,9 +102,9 @@ ListFilesR = dir => {
   return files;
 };
 
-ListFilesRO = dir => {
+ListFilesRO = (dir) => {
   var temp = path.resolve(dir);
-  listAll = d => {
+  listAll = (d) => {
     let fs1 = WinExplore.ListFiles(d);
     let files = [];
     for (f of fs1) {
@@ -113,7 +113,8 @@ ListFilesRO = dir => {
           FileName: path.join(d, f.FileName),
           Files: listAll(path.join(d, f.FileName)),
           isDirectory: true,
-          Size: 0
+          Size: 0,
+          LastModified: f.LastModified,
         };
         files.push(f2);
       } else {
@@ -128,5 +129,5 @@ ListFilesRO = dir => {
 module.exports = {
   ListFiles,
   ListFilesR,
-  ListFilesRO
+  ListFilesRO,
 };

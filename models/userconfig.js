@@ -1,39 +1,36 @@
+const { nanoid } = require("nanoid");
 module.exports = (sequelize, DataTypes) => {
   const UserConfig = sequelize.define(
     "UserConfigs",
     {
       Id: {
-        type: DataTypes.STRING(10),
+        type: DataTypes.STRING(6),
         primaryKey: true,
         unique: true,
-        allowNull: false
+        allowNull: false,
       },
       Name: {
         type: DataTypes.STRING(100),
         unique: true,
-        allowNull: false
+        allowNull: false,
       },
       Config: {
         type: DataTypes.JSON,
-        allowNull: true
-      }
+        allowNull: true,
+      },
     },
     {
       timestamps: false,
       hooks: {
-        beforeValidate: function(item, options) {
-          item.Id = Math.random()
-            .toString(36)
-            .slice(-5);
+        beforeValidate: function (item, options) {
+          if (!item.Id) item.Id = nanoid(10);
         },
         beforeBulkCreate: (instances, options) => {
           for (var item of instances) {
-            item.Id = Math.random()
-              .toString(36)
-              .slice(-5);
+            item.Id = nanoid(10);
           }
-        }
-      }
+        },
+      },
     }
   );
 

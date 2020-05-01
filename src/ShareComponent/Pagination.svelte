@@ -102,6 +102,21 @@
   #current-page {
     user-select: none;
   }
+  @media screen and (max-width: 600px) {
+    #last-page,
+    #first-page {
+      display: none;
+    }
+    #prev-page {
+      border-top-left-radius: 0.25rem;
+      border-bottom-left-radius: 0.25rem;
+    }
+
+    #next-page {
+      border-top-right-radius: 0.25rem;
+      border-bottom-right-radius: 0.25rem;
+    }
+  }
 </style>
 
 {#if totalPages > 1}

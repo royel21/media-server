@@ -1,25 +1,30 @@
 <script>
-  import { onMount } from "svelte";
+  import { onMount, createEventDispatcher } from "svelte";
   import Axios from "Axios";
   export let items = [];
   export let type;
-  //   export let socket;
-  const scanDir = () => {};
+
+  const dispatch = createEventDispatcher();
+
   const expandFolder = event => {
     let li = event.target.closest("li");
-    let tempData = [...items];
-    let item = tempData.find(d => d.Id.toString() === li.id);
+    let item = items.find(d => d.Id.toString() === li.id);
     if (item.Content.length === 0) {
       Axios.post("/api/admin/directories/Content", { Path: item.Path }).then(
         ({ data }) => {
           item.Content = data.data;
-          items = tempData;
+          items = items;
         }
       );
     } else {
       item.Content = [];
-      items = tempData;
+      items = items;
     }
+  };
+  const scanDirectory = event => {
+    let li = event.target.closest("li");
+    let item = items.find(d => d.Id.toString() === li.id);
+    dispatch("scanDir", item);
   };
 </script>
 
@@ -31,11 +36,16 @@
     margin-left: 29px;
     user-select: none;
   }
+  li {
+    min-height: 30px;
+  }
+  li:hover > span:first-child {
+    text-decoration: underline;
+  }
   .caret {
     position: absolute;
-    left: -20px;
+    left: -25px;
     font-family: "Helvetica Neue", Arial, sans-serif;
-    margin-right: 5px;
     cursor: pointer;
     font-size: 1.1rem;
     transform: rotate(90deg);
@@ -52,10 +62,11 @@
     white-space: nowrap;
     text-overflow: ellipsis;
   }
-  .fa {
+  .dir {
     position: relative;
+    cursor: pointer;
   }
-  .fa:hover:after {
+  .dir:hover:after {
     content: "Click To Add";
     position: absolute;
     top: -28px;
@@ -68,12 +79,14 @@
 
 {#each items as { Content, Id, Name }}
   <li id={Id} class="tree-item">
-    <i class={`fa fa-${type} mr-1`} />
-    <span class="dir" on:click={scanDir}>{Name}</span>
+    <span class="dir" on:click={scanDirectory}>
+      <i class={`fa fa-${type} mr-1`} />
+      {Name}
+    </span>
     <span class="caret" on:click={expandFolder}>▶</span>
     {#if Content.length > 0}
       <ul class="tree-node">
-        <svelte:self type="folder" items={Content} />
+        <svelte:self type="folder" items={Content} on:scanDir />
       </ul>
     {/if}
   </li>

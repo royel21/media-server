@@ -1,37 +1,38 @@
+const { nanoid } = require("nanoid");
 module.exports = (sequelize, DataTypes) => {
+  const { STRING, BOOLEAN } = DataTypes;
+
   const Directory = sequelize.define(
     "Directory",
     {
       Id: {
-        type: DataTypes.STRING(20),
+        type: STRING(6),
         unique: true,
         primaryKey: true,
-        allowNull: false
+        allowNull: false,
       },
       Name: {
-        type: DataTypes.STRING(50),
+        type: STRING,
         unique: true,
-        allowNull: false
+        allowNull: false,
       },
       FullPath: {
-        type: DataTypes.STRING,
+        type: STRING,
         unique: true,
-        allowNull: false
+        allowNull: false,
       },
       IsLoading: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false
-      }
+        type: BOOLEAN,
+        defaultValue: false,
+      },
     },
     {
       hooks: {
         beforeValidate(item, options) {
-          item.Id = Math.random()
-            .toString(36)
-            .slice(-5);
-        }
+          item.Id = nanoid(6);
+        },
       },
-      timestamps: false
+      timestamps: false,
     }
   );
 

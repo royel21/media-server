@@ -1,69 +1,59 @@
+const { nanoid } = require("nanoid");
 module.exports = (sequelize, DataTypes) => {
+  const { INTEGER, STRING, DATE, FLOAT } = DataTypes;
   const File = sequelize.define(
     "File",
     {
       Id: {
-        type: DataTypes.STRING(10),
+        type: STRING(10),
         primaryKey: true,
         unique: true,
         allowNull: false,
       },
       Name: {
-        type: DataTypes.STRING(150),
+        type: STRING(150),
       },
       Duration: {
-        type: DataTypes.FLOAT(8, 2).UNSIGNED,
+        type: FLOAT(8, 2).UNSIGNED,
         defaultValue: 0,
       },
-      FullPath: {
-        type: DataTypes.STRING,
-        defaultValue: "",
-        allowNull: false,
-      },
       Type: {
-        type: DataTypes.STRING(25),
+        type: STRING(25),
         defaultValue: "",
         allowNull: false,
       },
       Size: {
-        type: DataTypes.INTEGER,
+        type: INTEGER,
         allowNull: true,
       },
       CreatedAt: {
-        type: DataTypes.DATE,
+        type: DATE,
       },
       ViewCount: {
-        type: DataTypes.INTEGER,
+        type: INTEGER,
         defaultValue: 0,
       },
       Cover: {
-        type: DataTypes.STRING,
+        type: STRING,
       },
     },
     {
       timestamps: false,
       hooks: {
-        beforeValidate: function (item, options) {
-          item.Id = Math.random().toString(36).slice(-5);
+        beforeValidate: function (item) {
+          item.Id = nanoid(10);
           if (item.Name && item.Type)
-            item.Cover = `/covers/${item.Type}/${item.Name.replace(/#|%/gi, "")}.jpg`;
+            item.Cover = `/${item.Type}/${item.Name.replace(/#|%/gi, "")}.jpg`;
         },
-        beforeBulkCreate(instances, options) {
+        beforeBulkCreate(instances) {
           for (var item of instances) {
-            item.Cover = `/covers/${item.Type}/${item.Name.replace(/#|%/gi, "")}.jpg`;
+            item.Id = nanoid(10);
+            item.Cover = `/${item.Type}/${item.Name.replace(/#|%/gi, "")}.jpg`;
           }
         },
       },
     }
   );
-
-  File.findByName = (name) => {
-    return File.findOne({
-      where: {
-        Name: name,
-      },
-    });
-  };
 
   return File;
 };

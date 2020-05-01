@@ -44,7 +44,7 @@
   const rescan = e => {
     let tr = e.target.closest("tr");
     let dir = dirs.find(d => d.Id === tr.id);
-    socket.emit("scan-dir", { Id: tr.id });
+    socket.emit("scan-dir", { Id: dir.Id });
     dir.IsLoading = true;
     dirs = dirs;
   };

@@ -1,6 +1,13 @@
 {
   "verbose": false,
-  "ignore": ["files*", "images/covers/**/*.jpg", "src/**/*", "script.js"],
+  "ignore": [
+    "files*",
+    "images/covers/**/*.jpg",
+    "src/**/*",
+    "script.js",
+    "/workers/*",
+    "/test.js"
+  ],
   "env": {
     "NODE_ENV": "production"
   }

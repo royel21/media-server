@@ -1,6 +1,18 @@
 <script>
+  import { getContext } from "svelte";
   import { Link, navigate } from "svelte-routing";
+  const User = getContext("User");
   export let navItems;
+
+  function getProps({ location, href, isPartiallyCurrent, isCurrent }) {
+    const isActive = href === "/" ? isCurrent : isPartiallyCurrent || isCurrent;
+
+    console.log("nav", href, isPartiallyCurrent, isCurrent);
+    if (isActive) {
+      return { class: "active" };
+    }
+    return {};
+  }
 </script>
 
 <style>
@@ -22,8 +34,12 @@
   }
 
   .nav-item {
-    padding: 5px;
     font-size: 1.2rem;
+  }
+  #p-config label {
+    line-height: 1.8;
+    padding: 0px 10px;
+    cursor: pointer;
   }
 </style>
 
@@ -31,7 +47,7 @@
   <ul class="navbar-nav">
     {#each navItems as item}
       <li class="nav-item">
-        <Link to={item.path}>
+        <Link to={item.path} {getProps}>
           <i class={'fas fa-' + item.class} />
           {item.title}
         </Link>
@@ -39,8 +55,11 @@
     {/each}
   </ul>
   <ul class="navbar-nav">
-    <li class="nav-item" on:click>
-      <i class="fas fa-sign-out-alt" />
+    <li id="p-config" class="nav-item">
+      <label for="show-config">
+        <i class="fas fa-user-cog" />
+        <span>{User.username}</span>
+      </label>
     </li>
   </ul>
 </nav>

@@ -127,13 +127,14 @@ exports.getFilesList = async (user, res, type, params, model) => {
 };
 
 exports.getFolders = async (req, res) => {
-  const { order, page, items, search } = req.params;
+  const { filetype, order, page, items, search } = req.params;
 
   let result = await db.folder.findAndCountAll({
     where: {
       Name: {
         [db.Op.like]: `%${search || ""}%`,
       },
+      FilesType: filetype,
     },
     order: getOrderBy(order, true),
     offset: (page - 1) * items,

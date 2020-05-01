@@ -4,6 +4,10 @@
   const socket = getContext("socket");
   let content = [];
 
+  const scanDir = event => {
+    socket.emit("scan-dir", { Path: event.detail.Path });
+  };
+
   onMount(() => {
     socket.on("disk-loaded", data => {
       content = data;
@@ -28,5 +32,5 @@
   <span class="tree-name">Server</span>
 </div>
 <ul class="tree-view">
-  <TreeItem type="hdd" items={content} />
+  <TreeItem type="hdd" items={content} on:scanDir={scanDir} />
 </ul>

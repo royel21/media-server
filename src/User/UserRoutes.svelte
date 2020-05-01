@@ -6,12 +6,11 @@
   import Mangas from "./Pages/Mangas.svelte";
   import Videos from "./Pages/Videos.svelte";
   import Favorites from "./Pages/Favorites.svelte";
-  export let socket;
   const navItems = [
     { title: "Home", path: "/", class: "home" },
-    { title: "Videos", path: "/videos", class: "film" },
-    { title: "Mangas", path: "/mangas", class: "book" },
-    { title: "Favorites", path: "/favorites", class: "heart" }
+    { title: "Videos", path: "/videos/nu", class: "film" },
+    { title: "Mangas", path: "/mangas/nu", class: "book" },
+    { title: "Favorites", path: "/favorites/nu", class: "heart" }
   ];
 </script>
 
@@ -21,11 +20,11 @@
 
 <Router>
   <Navbar on:click {navItems} />
-  <Route path="/folders" component={Folders} />
-  <Route path="/videos" component={Videos} />
-  <Route path="/mangas" component={Mangas} />
-  <Route path="/favorites" component={Favorites} />
-  <Route path="/">
-    <Home {socket} />
+  <Route path="/videos/:order?" component={Videos} />
+  <Route path="/mangas/:order" component={Mangas} />
+  <Route path="/favorites/id?" component={Favorites} />
+  <!-- <Route path="/content" component={} /> -->
+  <Route exact path="/">
+    <Home />
   </Route>
 </Router>

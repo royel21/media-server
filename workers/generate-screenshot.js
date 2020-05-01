@@ -13,16 +13,7 @@ const getVideoDuration = async (vPath) => {
   try {
     let tempVal = execFileSync(
       ffprobe,
-      [
-        "-i",
-        vPath,
-        "-show_entries",
-        "format=duration",
-        "-v",
-        "quiet",
-        "-of",
-        "csv=p=0",
-      ],
+      ["-i", vPath, "-show_entries", "format=duration", "-v", "quiet", "-of", "csv=p=0"],
       {
         timeout: 1000 * 60 * 10,
       }
@@ -54,6 +45,7 @@ const getScreenShot = async (video, toPath, duration) => {
 module.exports.genScreenShot = async (id) => {
   let files = await db.file.findAll({
     where: { DirectoryId: id, Duration: 0 },
+    include: { model: db.folder },
   });
   console.log("Creating Thumbnails");
   for (let f of files) {
@@ -62,7 +54,7 @@ module.exports.genScreenShot = async (id) => {
     let exist = fs.existsSync(coverPath);
     if (exist && f.Duration > 0) continue;
 
-    let fullPath = path.join(f.FullPath, f.Name);
+    let fullPath = path.join(f.Folder.Path, f.Name);
 
     if (f.Type.includes("Manga")) {
       if (/zip/gi.test(f.Name)) {
@@ -89,7 +81,7 @@ module.exports.genScreenShot = async (id) => {
 module.exports.foldersThumbNails = async (folders) => {
   for (let s of folders) {
     try {
-      if (!s.FileTypes.includes("mangas")) {
+      if (!s.FilesType.includes("mangas")) {
         let duration = getVideoDuration(s.filePath);
         if (isNaN(duration)) continue;
         await getScreenShot(s.filePath, s.coverPath, duration);
