@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       hooks: {
-        beforeValidate(item, options) {
+        beforeValidate: (item) => {
           item.Id = nanoid(6);
         },
       },

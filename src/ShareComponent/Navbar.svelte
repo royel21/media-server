@@ -2,11 +2,19 @@
   import { getContext } from "svelte";
   import { Link, navigate } from "svelte-routing";
   import Config from "./Config.svelte";
-  const User = getContext("User");
+
   export let navItems;
 
+  const User = getContext("User");
+
   function getProps({ location, href, isPartiallyCurrent, isCurrent }) {
-    const isActive = href === "/" ? isCurrent : isPartiallyCurrent || isCurrent;
+    let isActive = false;
+    if (href === "/" && location.pathname === "/") isActive = true;
+
+    if (href !== "/" && isPartiallyCurrent) {
+      isActive = true;
+    }
+
     if (isActive) {
       return { class: "active" };
     }

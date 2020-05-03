@@ -4,6 +4,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import livereload from "rollup-plugin-livereload";
 import { terser } from "rollup-plugin-terser";
 import css from "rollup-plugin-css-only";
+import dev from "rollup-plugin-dev";
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -48,6 +49,11 @@ export default {
     // If we're building for production (npm run build
     // instead of npm run dev), minify
     production && terser(),
+    dev({
+      proxy: {
+        "/*": "http://localhost:3001",
+      },
+    }),
   ],
   watch: {
     clearScreen: false,
@@ -62,11 +68,15 @@ function serve() {
       console.log("started", started);
       if (!started) {
         started = true;
-        console.log("express started");
+        // console.log("express started");
         require("child_process").spawn("npm", ["run", "express"], {
           stdio: ["ignore", "inherit", "inherit"],
           shell: true,
         });
+        // require("child_process").spawn("npm", ["run", "start", "--", "--dev"], {
+        //   stdio: ["ignore", "inherit", "inherit"],
+        //   shell: true,
+        // });
       }
     },
   };

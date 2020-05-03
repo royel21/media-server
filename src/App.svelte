@@ -52,6 +52,9 @@
     socket = socketClient("/");
     setContext("socket", socket);
     setContext("User", user);
+    socket.on("error", error => {
+      console.log(error);
+    });
   }
 </script>
 

@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const FavoriteFile = sequelize.define(
-    "FavoriteFile",
+    "FavoriteFolder",
     {
       Id: {
         type: DataTypes.INTEGER,
@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
       uniqueKeys: {
         FavoriteFile_unique: {
-          fields: ["FavoriteId", "FileId"],
+          fields: ["FavoriteId", "FolderId"],
         },
       },
     }

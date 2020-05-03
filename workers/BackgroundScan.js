@@ -56,7 +56,6 @@ const createFolderAndCover = async (dir, files, fd) => {
   let FileCount = files.filter((f) => allExt.test(f.FileName)).length;
 
   if (!folder) {
-    console.log(dir, fd);
     let CreatedAt = fd.LastModified;
     folder = await db.folder.create({
       Name,
@@ -156,10 +155,7 @@ const processJobs = async () => {
     try {
       let data = pendingJobs.pop();
       await scanDirectory(data);
-      await db.directory.update(
-        { IsLoading: false },
-        { where: { Id: data.id } }
-      );
+      await db.directory.update({ IsLoading: false }, { where: { Id: data.id } });
       process.send(data);
     } catch (err) {
       console.log("folder-scan line:135", err);

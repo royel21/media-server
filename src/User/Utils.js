@@ -25,21 +25,14 @@ export const getFilesPerPage = (i) => {
   return items * i;
 };
 
-export const genUrl = (page, { order, items }, filter, type, notApi, id) => {
+export const genUrl = (page, { order, items }, filter, type, id) => {
   let itemsperpage = (items || 0) === 0 ? getFilesPerPage(3) : items;
   if (["favorites", "folder-content"].includes(type) || id) {
-    type =
-      type === "favorites" ? `favorites/${id || "0"}` : `folder-content/${id}`;
+    type = type.includes("favorites") ? `favorites/${id || "0"}` : `folder-content/${id}`;
   }
 
   filter = (filter || "").replace("%", " ");
-  if (notApi) {
-    return `/${type}/${page || 1}/${filter}`;
-  } else {
-    return `/api/files/${type}/${order || "nu"}/${
-      page || 1
-    }/${itemsperpage}/${filter}`;
-  }
+  return `/api/files/${type}/${order || "nu"}/${page || 1}/${itemsperpage}/${filter}`;
 };
 
 export const PageTitles = {
@@ -105,32 +98,37 @@ export const setfullscreen = (element) => {
 export const map = function (value, in_min, in_max, out_min, out_max) {
   return ((value - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min;
 };
+import { navigate } from "svelte-routing";
 
 export const ProcessFile = (file, history) => {
+  console.log(file);
+  let Type = location.pathname.replace(/(^\/+|\/+$)/g, "").split("/")[0];
   switch (file.dataset.type) {
     case "Manga":
     case "Video": {
-      localStorage.setItem("lastLoc", history.location.pathname);
-      let tdata = history.location.pathname.split("/");
-      let playType = tdata[1];
-      let id = tdata[2];
+      // navigate(`/content/`);
+      // localStorage.setItem("lastLoc", history.location.pathname);
+      // let tdata = history.location.pathname.split("/");
+      // let playType = tdata[1];
+      // let id = tdata[2];
 
-      let url = `/viewer/`;
-      if (id) {
-        url += `${playType.replace("-content", "")}/${id}/${file.id}`;
-      } else {
-        url += `file/${file.id}`;
-      }
+      // let url = `/viewer/`;
+      // if (id) {
+      //   url += `${playType.replace("-content", "")}/${id}/${file.id}`;
+      // } else {
+      //   url += `file/${file.id}`;
+      // }
 
-      history.push(url);
+      // history.push(url);
       break;
     }
     default: {
-      window.local.setObject("folder", {
+      window.localStorage.setObject("folder", {
         folder: file.id,
-        pathname: window.location.pathname,
+        pathname: location.pathname,
       });
-      history.push(`/folder-content/${file.id}/1`);
+      navigate(`/${Type}/content/${file.id}/`);
+      // history.push(`/folder-content/${file.id}/1`);
     }
   }
 };

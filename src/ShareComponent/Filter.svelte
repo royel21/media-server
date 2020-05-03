@@ -1,8 +1,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
-  let filter = "";
-  let showBack = false;
+  export let filter = "";
 
   const ClearFilter = () => {
     dispatch("filter", "");
@@ -11,15 +10,13 @@
 
   const submitFilter = e => {
     if (e.keyCode === 13) {
-      dispatch("filter", filter);
+      dispatch("filter", (filter || "").replace(/%|\?/, ""));
     }
   };
 
   const btnFilter = () => {
-    dispatch("filter", filter);
+    dispatch("filter", (filter || "").replace(/%|\?/, ""));
   };
-
-  const exitFolder = () => dispatch("exitFolder");
 </script>
 
 <style>
@@ -27,6 +24,7 @@
     position: relative;
     flex-shrink: 1;
     width: 250px;
+    pointer-events: all;
   }
   #filter-control > * {
     height: 32px;
@@ -55,11 +53,6 @@
 </style>
 
 <div id="filter-control" class="input-group">
-  {#if showBack}
-    <span className="badge badge-secondary mx-2" on:click={exitFolder}>
-      <i className="fas fa-arrow-circle-left" />
-    </span>
-  {/if}
   <div class="input-group-prepend">
     <span class="btn-filter input-group-text" on:click={btnFilter}>
       <i class="fas fa-search" />

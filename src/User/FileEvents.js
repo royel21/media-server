@@ -24,7 +24,6 @@ const getElementIndex = (element) => {
 const selectItem = (index) => {
   selectedIndex = index;
   let nextEl = getElByIndex(index);
-
   if (nextEl) {
     let itemContainer = nextEl.parentElement;
     let scrollElement = itemContainer.parentElement;
@@ -47,10 +46,11 @@ const selectItem = (index) => {
 
     scrollElement.scroll({
       top: scroll,
-      behavior: "auto",
+      behavior: "smooth",
     });
 
     let activeEl = document.querySelector(".file.active");
+
     if (activeEl) activeEl.classList.remove("active");
 
     nextEl.classList.add("active");
@@ -60,25 +60,19 @@ const selectItem = (index) => {
   return nextEl;
 };
 
-const fileClicks = (element, processFile) => {
-  if (element.classList.contains("fa-star")) return;
-  let file = element.closest(".file");
-  if (element.id === "process-file") {
-    processFile(file);
-  } else {
-    selectItem(getElementIndex(file));
-  }
+const fileClicks = (event) => {
+  let file = event.target.closest(".file");
+  selectItem(getElementIndex(file));
 };
 
 const fileKeypress = (e, page, goToPage, processFile) => {
   let file = document.querySelector(".file");
+  let selected = 0;
   if (file) {
     let wasProcesed = false;
     let colNum = calCol();
     let totalitem = document.querySelectorAll(".file").length;
-    selectedIndex = getElementIndex(
-      file.parentElement.querySelector(".active")
-    );
+    selectedIndex = getElementIndex(file.parentElement.querySelector(".active"));
     switch (e.keyCode) {
       case ENTER: {
         processFile(e);
@@ -88,8 +82,8 @@ const fileKeypress = (e, page, goToPage, processFile) => {
         if (selectedIndex > 0) {
           selectItem(selectedIndex - 1);
         } else if (goToPage) {
-          window.localStorage.setItem("selected", getFilesPerPage(3) - 1);
-          goToPage(page - 1);
+          selected = getFilesPerPage(3) - 1;
+          goToPage({ detail: page - 1 }, selected);
         }
 
         wasProcesed = true;
@@ -97,8 +91,8 @@ const fileKeypress = (e, page, goToPage, processFile) => {
       }
       case UP: {
         if (goToPage && e.ctrlKey) {
-          window.localStorage.setItem("selected", getFilesPerPage(3) - 1);
-          goToPage(page - 1);
+          selected = getFilesPerPage(3) - 1;
+          goToPage({ detail: page - 1 }, selected);
         } else if (selectedIndex - colNum >= 0) {
           selectItem(selectedIndex - colNum);
         }
@@ -109,8 +103,7 @@ const fileKeypress = (e, page, goToPage, processFile) => {
         if (selectedIndex < totalitem - 1) {
           selectItem(selectedIndex + 1);
         } else if (goToPage) {
-          window.localStorage.setItem("selected", 0);
-          goToPage(parseInt(page) + 1);
+          goToPage({ detail: parseInt(page) + 1 }, 0);
         }
 
         wasProcesed = true;
@@ -119,8 +112,7 @@ const fileKeypress = (e, page, goToPage, processFile) => {
 
       case DOWN: {
         if (goToPage && e.ctrlKey) {
-          window.localStorage.setItem("selected", 0);
-          goToPage(parseInt(page) + 1);
+          goToPage({ detail: parseInt(page) + 1 }, 0);
         } else if (selectedIndex + colNum < totalitem) {
           selectItem(selectedIndex + colNum);
         }
@@ -147,4 +139,4 @@ const fileKeypress = (e, page, goToPage, processFile) => {
   }
 };
 
-export { fileClicks, fileKeypress };
+export { fileClicks, fileKeypress, selectItem, getElementIndex };

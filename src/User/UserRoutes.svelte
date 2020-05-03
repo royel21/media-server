@@ -1,25 +1,29 @@
 <script>
   import { Router, Route } from "svelte-routing";
+  import { getContext, onMount } from "svelte";
+  import { FavoritesStores } from "./Stores/FavoritesStores";
+
   import Navbar from "../ShareComponent/Navbar.svelte";
   import Home from "./Pages/Home.svelte";
   import Mangas from "./Pages/Mangas.svelte";
   import Videos from "./Pages/Videos.svelte";
   import Favorites from "./Pages/Favorites.svelte";
+  import Content from "./Pages/Content.svelte";
+
   const navItems = [
     { title: "Home", path: "/", class: "home" },
     { title: "Videos", path: "/videos", class: "film" },
     { title: "Mangas", path: "/mangas", class: "book" },
     { title: "Favorites", path: "/favorites", class: "heart" }
   ];
+  FavoritesStores.set(getContext("User").favorites);
 </script>
-
-<style>
-
-</style>
 
 <Router>
   <Navbar on:click {navItems} />
+  <Route path="/videos/content/:id/:page/:filter" component={Content} />
   <Route path="/videos/:page/:filter" component={Videos} />
+  <Route path="/mangas/content/:id/:page/:filter" component={Content} />
   <Route path="/mangas/:page/:filter" component={Mangas} />
   <Route path="/favorites/:id/:page/:filter" component={Favorites} />
   <Route exact path="/">

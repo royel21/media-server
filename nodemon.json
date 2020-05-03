@@ -6,7 +6,8 @@
     "src/**/*",
     "script.js",
     "/workers/*",
-    "/test.js"
+    "/test.js",
+    "/public/**/*"
   ],
   "env": {
     "NODE_ENV": "production"

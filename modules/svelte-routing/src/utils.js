@@ -155,7 +155,7 @@ function pick(routes, uri) {
       default_ = {
         route,
         params: {},
-        uri
+        uri,
       };
       continue;
     }
@@ -175,18 +175,18 @@ function pick(routes, uri) {
         // route: /files/* or /files/*splatname
         const splatName = routeSegment === "*" ? "*" : routeSegment.slice(1);
 
-        params[splatName] = uriSegments
-          .slice(index)
-          .map(decodeURIComponent)
-          .join("/");
+        params[splatName] = uriSegments.slice(index).map(decodeURIComponent).join("/");
         break;
       }
-
+      if (!routeSegment.includes(":") && routeSegment !== uriSegment) {
+        missed = true;
+        break;
+      }
       let dynamicMatch = paramRe.exec(routeSegment);
 
       if (dynamicMatch && !isRootUri) {
         const value = decodeURIComponent(uriSegment);
-        params[dynamicMatch[1]] = value;
+        params[dynamicMatch[1]] = value === "undefined" ? undefined : value;
       } else if (routeSegment !== uriSegment) {
         // Current segments don't match, not dynamic, not splat, so no match
         // uri:   /users/123/settings
@@ -200,7 +200,7 @@ function pick(routes, uri) {
       match = {
         route,
         params,
-        uri: "/" + uriSegments.slice(0, index).join("/")
+        uri: "/" + uriSegments.slice(0, index).join("/"),
       };
       break;
     }
@@ -288,7 +288,7 @@ function resolve(to, base) {
   const allSegments = baseSegments.concat(toSegments);
   const segments = [];
 
-  allSegments.forEach(segment => {
+  allSegments.forEach((segment) => {
     if (segment === "..") {
       segments.pop();
     } else if (segment !== ".") {
@@ -323,13 +323,13 @@ function shouldNavigate(event) {
 }
 
 function hostMatches(anchor) {
-  const host = location.host
+  const host = location.host;
   return (
     anchor.host == host ||
     // svelte seems to kill anchor.host value in ie11, so fall back to checking href
     anchor.href.indexOf(`https://${host}`) === 0 ||
     anchor.href.indexOf(`http://${host}`) === 0
-  )
+  );
 }
 
 export { stripSlashes, pick, match, resolve, combinePaths, shouldNavigate, hostMatches };

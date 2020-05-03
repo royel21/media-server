@@ -39,8 +39,12 @@
 
 {#if $activeRoute !== null && $activeRoute.route === route}
   {#if component !== null}
-    <svelte:component this="{component}" location={$location} {...routeParams} {...routeProps}  />
+    <svelte:component
+      this={component}
+      location={$location}
+      {...routeParams}
+      {...routeProps} />
   {:else}
-    <slot params="{routeParams}" location={$location}></slot>
+    <slot params={routeParams} location={$location} />
   {/if}
 {/if}

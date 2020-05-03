@@ -60,6 +60,7 @@
     display: inline-block;
     width: fit-content;
     padding: 0;
+    pointer-events: all;
   }
   .pagination {
     display: flex;

@@ -18,10 +18,10 @@ module.exports = (sequelize, DataTypes) => {
     {
       timestamps: false,
       hooks: {
-        beforeValidate: function (item, options) {
+        beforeValidate: function (item) {
           item.Id = nanoid(6);
         },
-        beforeBulkCreate: (instances, options) => {
+        beforeBulkCreate: (instances) => {
           for (var item of instances) {
             item.Id = nanoid(6);
           }

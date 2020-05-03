@@ -1,9 +1,7 @@
 const db = require("../models");
 
-const getOrderBy = (orderby, isFolder) => {
-  let nameOrder = db.sqlze.literal(
-    `REPLACE(${isFolder ? "Name" : "File.Name"}, '[','0')`
-  );
+const getOrderBy = (orderby, table = "") => {
+  let nameOrder = db.sqlze.literal(`REPLACE("${table}Name", '[','0')`);
   let order = [];
   switch (orderby) {
     case "nd": {
@@ -37,13 +35,6 @@ const getFiles = async (user, data, model) => {
       },
     });
   }
-  user = user
-    ? user
-    : await db.user.findOne({ where: { Name: "Royel" }, include: db.recent });
-
-  let favs = (await user.getFavorites({ attributes: ["Id", "Name"] })).map(
-    (f) => f.dataValues
-  );
 
   let query = {
     attributes: [
@@ -70,7 +61,7 @@ const getFiles = async (user, data, model) => {
         "LastRead",
       ],
     ],
-    order: getOrderBy(data.order),
+    order: getOrderBy(data.order, "File."),
     offset: (data.page - 1) * data.items,
     limit: data.items,
     where: {
@@ -82,18 +73,8 @@ const getFiles = async (user, data, model) => {
     query.where.Type = {
       [db.Op.like]: `%${data.type || ""}%`,
     };
-  // if we are getting files favorite, if favorite
-  if (model !== db.favorite) {
-    query.attributes.push([
-      db.sqlze.literal(
-        "(Select FileId from FavoriteFiles where FileId == File.Id and FavoriteId IN ('" +
-          favs.map((i) => i.Id).join("','") +
-          "'))"
-      ),
-      "isFav",
-    ]);
-  }
-  // if we are getting files from a model (favorite or folder-content)
+
+  // if we are getting files from a model folder-content include in the result
   if (model) {
     query.include = [
       {
@@ -128,15 +109,28 @@ exports.getFilesList = async (user, res, type, params, model) => {
 
 exports.getFolders = async (req, res) => {
   const { filetype, order, page, items, search } = req.params;
-
+  let favs = req.user.Favorites.map((f) => f.Id).join("','");
+  console.log(favs);
+  let favSelect =
+    "Select FolderId from FavoriteFolders where FolderId == Id and FavoriteId IN";
   let result = await db.folder.findAndCountAll({
+    attributes: [
+      "Id",
+      "Name",
+      "Cover",
+      "Type",
+      "FilesType",
+      "CreatedAt",
+      "FileCount",
+      [db.sqlze.literal(`( ${favSelect} ('${favs}'))`), "isFav"],
+    ],
     where: {
       Name: {
         [db.Op.like]: `%${search || ""}%`,
       },
       FilesType: filetype,
     },
-    order: getOrderBy(order, true),
+    order: getOrderBy(order, "Files."),
     offset: (page - 1) * items,
     limit: items,
   });
@@ -167,3 +161,5 @@ exports.getFolderContent = async (req) => {
     totalPages: result.count / items,
   };
 };
+
+exports.getOrderBy = getOrderBy;

@@ -6,9 +6,9 @@
 
 <style>
   #user-label {
-    line-height: 1.8;
-    padding: 0px 10px;
     cursor: pointer;
+    align-self: center;
+    margin-right: 5px;
   }
   #show-config:checked + #user-config {
     visibility: visible;
@@ -24,7 +24,7 @@
     opacity: 0;
     position: absolute;
     top: 44px;
-    right: calc(100% - 46px);
+    right: calc(100% - 36px);
     width: max-content;
     border-radius: 0.25rem;
     border: 1px solid;
@@ -42,7 +42,7 @@
     font-size: 0.95rem;
   }
   #user-config > div:first-child {
-    padding-top: 5px;
+    padding: 5px;
     text-align: center;
   }
 
@@ -116,7 +116,7 @@
 
 <label id="user-label" for="show-config">
   <i class="fas fa-user-cog" />
-  <span>{User.username}</span>
+  {User.username}
 </label>
 <input type="checkbox" name="" id="show-config" />
 <div id="user-config">
@@ -126,33 +126,35 @@
       Log out
     </span>
   </div>
-  <div id="config-content">
-    <div class="input-group">
-      <div class="input-group-prepend">
-        <label class="input-group-text">Sort By:</label>
+  {#if !User.role.includes('Administrator')}
+    <div id="config-content">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <label class="input-group-text">Sort By:</label>
+        </div>
+        <select id="orderby" class="form-control fa" bind:value={Config.order}>
+          <option value="nu">&#xf15d; Name</option>
+          <option value="nd">&#xf15e; Name</option>
+          <option value="du">&#xf162; Date</option>
+          <option value="dd">&#xf163; Date</option>
+        </select>
       </div>
-      <select id="orderby" class="form-control fa" bind:value={Config.order}>
-        <option value="nu">&#xf15d; Name</option>
-        <option value="nd">&#xf15e; Name</option>
-        <option value="du">&#xf162; Date</option>
-        <option value="dd">&#xf163; Date</option>
-      </select>
-    </div>
-    <div class="input-group">
-      <div class="input-group-prepend">
-        <label class="input-group-text">File per Page:</label>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <label class="input-group-text">File per Page:</label>
+        </div>
+        <input
+          id="items"
+          type="number"
+          min="0"
+          max="500"
+          bin:value={Config.items}
+          class="form-control" />
+        <span id="fpp-tips">0 = auto, max 500</span>
       </div>
-      <input
-        id="items"
-        type="number"
-        min="0"
-        max="500"
-        bin:value={Config.items}
-        class="form-control" />
-      <span id="fpp-tips">0 = auto, max 500</span>
+      <div class="bottom-controls">
+        <span id="btn-save" class="btn" on:click={applyChanges}>Save</span>
+      </div>
     </div>
-    <div class="bottom-controls">
-      <span id="btn-save" class="btn" on:click={applyChanges}>Save</span>
-    </div>
-  </div>
+  {/if}
 </div>

@@ -1,11 +1,7 @@
 const Router = require("express").Router();
 
 const db = require("../models");
-const { getFilesList, getFolders } = require("../helpers/query-helper");
-
-// Router.get("/mangas/:order/:page?/:items?/:search?", (req, res) => {
-//   getFilesList(req.user, res, "Manga", req.params);
-// });
+const { getFilesList, getFolders } = require("./query-helper");
 
 Router.get("/folders/:order/:page?/:items?/:search?", getFolders);
 
