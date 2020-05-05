@@ -91,11 +91,11 @@
     images = [];
     lastfId = file.Id;
     console.time("emit");
-    // socket.emit("loadzip-image", {
-    //   Id: file.Id,
-    //   fromPage: file.CurrentPos - 5 < 0 ? 0 : file.CurrentPos - 5,
-    //   toPage: 10
-    // });
+    socket.emit("loadzip-image", {
+      Id: file.Id,
+      fromPage: file.CurrentPos - 5 < 0 ? 0 : file.CurrentPos - 5,
+      toPage: 10
+    });
   }
 
   $: if (webtoon) {
