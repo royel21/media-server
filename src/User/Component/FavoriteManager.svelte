@@ -7,43 +7,51 @@
   import { navigate } from "svelte-routing";
   import { onDestroy } from "svelte";
 
-  export let favId = "";
+  export let id = "";
   let currentFav = {};
   let error;
 
   const saveFavorite = event => {
     currentFav.Type == "";
     addUpdateFavorite(currentFav).then(result => {
-      if (result.Id !== favId) {
+      if (result.Id !== id) {
         navigate(`/favorites/${result.Id}`);
         console.log("navegate", result.Id);
       }
     });
+    error = "";
   };
 
   const clearFavorite = () => {
     currentFav = { Name: "", Type: "Manga" };
+    error = "";
   };
 
   const editFavorite = e => {
     currentFav = $FavoritesStores.find(f => f.Id === e.target.closest("tr").id);
+    error = "";
   };
 
   const removeFav = e => {
     let tr = e.target.closest("tr");
     let type = tr.querySelector("td:nth-child(2)").textContent;
     // Clear input delete is currentFav
-    removeFavorite(tr.id, type).then(() => {
+    removeFavorite(tr.id, type).then(data => {
       //Navegate to first favorite
-      navigate(`/favorites/${$FavoritesStores[0].Id}`);
+      if (data.removed) {
+        navigate(`/favorites/${$FavoritesStores[0].Id}`);
+      } else {
+        error = data.msg;
+      }
     });
   };
 
   const loadFavorite = event => {
     navigate(`/favorites/${event.target.closest("tr").id}`);
+    error = "";
   };
 
-  $: favId, (currentFav = { Name: "", Type: "Manga" });
+  $: id, (currentFav = { Name: "", Type: "Manga" });
 </script>
 
 <style>
@@ -69,15 +77,13 @@
   .table tr th:first-child {
     white-space: nowrap;
     text-align: left;
-    max-width: 50px;
     overflow: hidden;
     text-overflow: ellipsis;
+    width: 200px;
   }
 
-  #fav-manager td:nth-child(2),
-  #fav-manager th:nth-child(2),
-  #fav-manager td:nth-child(3),
-  #fav-manager th:nth-child(3) {
+  #fav-manager td:last-child,
+  #fav-manager th:last-child {
     width: 50px;
   }
   #fav-manager .active td {
@@ -128,9 +134,6 @@
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
   }
-  select {
-    width: fit-content;
-  }
   .errors {
     color: red;
     font-weight: 600;
@@ -171,10 +174,6 @@
             <i class="fas fa-times-circle" />
           </span>
         </div>
-        <select class="form-control" bind:value={currentFav.Type}>
-          <option>Manga</option>
-          <option>Video</option>
-        </select>
       </div>
     </div>
     <div class="text-danger" />
@@ -185,15 +184,13 @@
       <thead>
         <tr>
           <th>Name</th>
-          <th>Type</th>
           <th>Action</th>
         </tr>
       </thead>
       <tbody>
         {#each $FavoritesStores as fav}
-          <tr id={fav.Id} class={fav.Id === favId ? 'active' : ''}>
+          <tr id={fav.Id} class={fav.Id === id ? 'active' : ''}>
             <td on:click={loadFavorite} data-title={fav.Name}>{fav.Name}</td>
-            <td>{fav.Type}</td>
             <td>
               <span on:click={editFavorite}>
                 <i class="fas fa-edit" />

@@ -112,7 +112,7 @@ exports.getFolders = async (req, res) => {
   let favs = req.user.Favorites.map((f) => f.Id).join("','");
   console.log(favs);
   let favSelect =
-    "Select FolderId from FavoriteFolders where FolderId == Id and FavoriteId IN";
+    "Select FolderId from FavoriteFolders where `Folders`.`Id` == FolderId and FavoriteId IN";
   let result = await db.folder.findAndCountAll({
     attributes: [
       "Id",

@@ -42,11 +42,7 @@ module.exports.loadZipImages = async (data, socket) => {
       let totalPage = fromPage + toPage;
       let size = user.entries.length;
 
-      for (
-        let i = fromPage < 0 ? 0 : fromPage;
-        i < totalPage && i < size;
-        i++
-      ) {
+      for (let i = fromPage < 0 ? 0 : fromPage; i < totalPage && i < size; i++) {
         let entry = user.entries[i];
         if (entry) {
           try {
@@ -63,16 +59,17 @@ module.exports.loadZipImages = async (data, socket) => {
     socket.emit("m-finish", { last: true });
   } else {
     let file = await db.file.findOne({
-      attributes: ["FullPath", "Name"],
+      attributes: ["Id", "Name"],
       where: { Id },
+      include: { model: db.folder },
     });
     if (file) {
       user.lastId = Id;
-      let filePath = path.resolve(file.FullPath, file.Name);
+      let filePath = path.resolve(file.Folder.Path, file.Name);
       if (fs.existsSync(filePath)) {
         console.log("newZip");
         user.zip = new StreamZip({
-          file: path.resolve(file.FullPath, file.Name),
+          file: filePath,
           storeEntries: true,
         });
 

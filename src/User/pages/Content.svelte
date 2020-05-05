@@ -9,7 +9,6 @@
 
   let segment = location.pathname.replace(/(^\/+|\/+$)/g, "").split("/");
   let type = `${segment[0]}/${segment[1]}/${id}`;
-  console.log(type, id);
 
   const exitFolder = () => {
     let folder = localStorage.getObject("folder");
@@ -28,7 +27,7 @@
   }
 </style>
 
-<FilesList title={'Mangas Content'} {type} {filter} {page} {id}>
+<FilesList title={'Content'} {type} {filter} {page} {id}>
   <div class="first-controls" on:click={exitFolder}>
     <i class="fas fa-arrow-circle-up" />
   </div>

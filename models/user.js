@@ -51,9 +51,10 @@ module.exports = (sequelize, DataTypes) => {
           user.Password = bcrypt.hashSync(user.Password, bcrypt.genSaltSync(8), null);
           user.CreatedAt = new Date();
         },
-        beforeUpdate: (user) => {
-          if (user.Password)
+        beforeUpdate: (user, opt) => {
+          if (opt.fields.includes("Password")) {
             user.Password = bcrypt.hashSync(user.Password, bcrypt.genSaltSync(8), null);
+          }
         },
         beforeBulkCreate: (users) => {
           for (var user of users) {

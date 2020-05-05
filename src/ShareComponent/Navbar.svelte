@@ -47,6 +47,13 @@
     position: relative;
     color: white;
   }
+  @media screen and (max-width: 460px) {
+    #p-config {
+      display: inline-block;
+      text-align: center;
+      align-self: center;
+    }
+  }
 </style>
 
 <nav id="menu" class="navbar">

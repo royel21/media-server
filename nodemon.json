@@ -1,13 +1,14 @@
 {
   "verbose": false,
   "ignore": [
-    "files*",
+    "./files*",
     "images/covers/**/*.jpg",
     "src/**/*",
     "script.js",
     "/workers/*",
     "/test.js",
-    "/public/**/*"
+    "/public/**/*",
+    "./query"
   ],
   "env": {
     "NODE_ENV": "production"

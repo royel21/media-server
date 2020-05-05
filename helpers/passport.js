@@ -15,7 +15,7 @@ module.exports = (passport) => {
         include: [
           { model: db.userConfig },
           { model: db.recent },
-          { model: db.favorite, attributes: ["Id", "Name", "Type"] },
+          { model: db.favorite, attributes: ["Id", "Name"] },
         ],
       })
       .then((user) => {
@@ -50,7 +50,7 @@ module.exports = (passport) => {
             include: [
               { model: db.userConfig },
               { model: db.recent },
-              { model: db.favorite, attributes: ["Id", "Name", "Type"] },
+              { model: db.favorite, attributes: ["Id", "Name"] },
             ],
           })
           .then((user) => {

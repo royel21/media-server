@@ -35,10 +35,7 @@ const addEdit = async (req, res) => {
     let user = {
       ...req.body,
       CreatedAt: new Date(),
-      Favorites: [
-        { Name: "Mangas", Type: "Manga" },
-        { Name: "Videos", Type: "Video" },
-      ],
+      Favorites: [{ Name: "Default" }],
       Recent: {
         Name,
       },
@@ -68,7 +65,6 @@ const addEdit = async (req, res) => {
       if (valid.user) {
         let data = { Id: "", ...req.body };
         if (!data.Password) delete data.Password;
-
         await valid.user.update(data);
         return res.send({ fail: false, user: req.body });
       } else {

@@ -1,10 +1,15 @@
 <script>
-  import { onMount, tick, afterUpdate } from "svelte";
+  import { tick, afterUpdate } from "svelte";
   import { navigate } from "svelte-routing";
   import Axios from "axios";
 
-  import { genUrl, getFilesPerPage, FileTypes, ProcessFile } from "../Utils";
-  import { fileKeypress, selectItem, getElementIndex } from "../FileEvents";
+  import { genUrl, getFilesPerPage, FileTypes, ProcessFile } from "./Utils";
+  import {
+    fileKeypress,
+    selectItem,
+    getElIndex,
+    fileClicks
+  } from "./FileEvents";
 
   import Pagination from "../../ShareComponent/Pagination.svelte";
   import Filter from "../../ShareComponent/Filter.svelte";
@@ -15,26 +20,26 @@
   export let filter = "";
   export let type = "";
   export let title = "";
-  let selected = 0;
-
-  let Mount = false;
   let pageData = { files: [], totalPages: 0, totalFiles: 0 };
+  let selected = 0;
+  let favClicked = null;
+  let Mount = false;
 
   const cancelToken = Axios.CancelToken;
-  var cancel;
+  let cancel;
 
-  const loadContent = async (pg = 1, flt = "", favId = "") => {
+  const loadContent = async (pg = 1, flt = "", curId = "") => {
     try {
       if (cancel) {
         cancel();
       }
-      let url = genUrl(pg, { order: "nu", items: 0 }, flt, type, favId);
-      let resp = await Axios.get(url, {
+      let url = genUrl(pg, { order: "nu", items: 0 }, flt, type, curId);
+      let { data } = await Axios.get(url, {
         cancelToken: new cancelToken(function executor(c) {
           cancel = c;
         })
       });
-      pageData = resp.data;
+      pageData = data;
     } catch (error) {}
   };
 
@@ -43,12 +48,8 @@
     let { totalPages } = pageData;
     if (pg < 1 || pg > totalPages || isNaN(pg)) return;
     pg = pg < 1 ? 1 : pg > totalPages ? totalPages : pg;
-
     navigate(`/${type}/${pg}/${filter || ""}`);
-    if (sel !== undefined) {
-      await tick();
-      selected = sel;
-    }
+    selected = sel || 0;
   };
   const fileFilter = event => {
     filter = event.detail;
@@ -63,40 +64,57 @@
     ProcessFile(event.target.closest(".file"));
   };
 
-  onMount(async () => {
-    loadContent(page || 1, filter || "");
-    Mount = true;
-  });
+  const favClick = event => {
+    let { target } = event;
+    if (target.tagName !== "I") {
+      fileClicks(event);
+      selected = getElIndex(target.closest(".file"));
+    }
+    favClicked = target;
+  };
+
+  const removeFile = event => {
+    pageData.files = pageData.files.filter(f => f.Id !== event.detail);
+    if (pageData.totalPages > 1) {
+      if (pageData.files.length === 0) {
+        page -= 1;
+      }
+      loadContent(page, filter || "");
+    } else {
+      pageData = pageData;
+    }
+  };
 
   afterUpdate(() => {
     let sel = selected;
     let id = localStorage.getItem("fileId");
     let el = document.getElementById(id);
-    if (["mangas", "videos"].includes(type)) {
-      if (id && el) {
-        sel = getElementIndex(el);
-        localStorage.removeItem("fileId");
-      }
+    if (id && el) {
+      sel = getElIndex(el);
+      localStorage.removeItem("fileId");
     }
+
     selectItem(sel);
   });
 
-  let favClicked = null;
-  const favClick = event => {
-    favClicked = event.target;
-    if (favClicked.tagName !== "I") {
-      selected = getElementIndex(favClicked.closest(".file"));
-    }
-  };
-  const removeFile = event => {
-    pageData.files = pageData.files.filter(f => f.Id !== event.detail);
-    pageData = pageData;
-  };
   $: document.title = `${title} Page ${page}`;
-  $: if (Mount) loadContent(page || 1, filter || "", id);
+  $: loadContent(page, filter, id);
 </script>
 
 <style>
+  .scroll-container {
+    height: calc(100% - 38px);
+    min-height: calc(100% - 38px);
+    overflow-y: auto;
+  }
+
+  .files-list {
+    display: flex;
+    align-items: flex-start;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    padding-bottom: 50px;
+  }
   .controls {
     position: absolute;
     right: 0;
@@ -115,36 +133,43 @@
   .file-btn-left i {
     pointer-events: none;
   }
+  @media screen and (max-width: 420px) {
+    .files-list {
+      padding-bottom: 70px;
+    }
+  }
 </style>
 
-<div class="files-list" on:keydown={handleKeydown} on:click={favClick}>
-  {#each pageData.files as { Id, Name, Type, Cover, CurrentPos, Duration, isFav, FileCount }, i}
-    <div class="file" id={Id} data-type={Type} tabIndex="0">
-      <div class="file-info">
-        <div class="file-btns">
-          <span class="file-btn-left" on:click|stopPropagation={openFile}>
-            <i class={'fas fa-' + FileTypes[Type].class} />
-          </span>
-          <span class="file-progress">
-            {#if Type.includes('Folder')}
-              {FileCount}
-            {:else}{FileTypes[Type].formatter(CurrentPos || 0, Duration)}{/if}
-          </span>
-          <FavoriteList
-            {isFav}
-            type={'Mangas'}
-            {Type}
-            {favClicked}
-            favId={id}
-            on:removeFile />
+<div class="scroll-container">
+  <div class="files-list" on:keydown={handleKeydown} on:click={favClick}>
+    {#each pageData.files as { Id, Name, Type, Cover, CurrentPos, Duration, isFav, FileCount }, i}
+      <div class="file" id={Id} data-type={Type} tabIndex="0">
+        <div class="file-info">
+          <div class="file-btns">
+            <span class="file-btn-left" on:click|stopPropagation={openFile}>
+              <i class={'fas fa-' + FileTypes[Type].class} />
+            </span>
+            <span class="file-progress">
+              {#if Type.includes('Folder')}
+                {FileCount}
+              {:else}{FileTypes[Type].formatter(CurrentPos, Duration)}{/if}
+            </span>
+            <FavoriteList
+              {isFav}
+              {type}
+              {Type}
+              {favClicked}
+              favId={id}
+              on:removeFile={removeFile} />
+          </div>
+          <div class="file-cover" on:dblclick|stopPropagation={openFile}>
+            <img src={Cover} alt="No Cover Found" />
+          </div>
+          <div class="file-name">{Name}</div>
         </div>
-        <div class="file-cover" on:dblclick|stopPropagation={openFile}>
-          <img src={Cover} alt="No Cover Found" />
-        </div>
-        <div class="file-name">{Name}</div>
       </div>
-    </div>
-  {/each}
+    {/each}
+  </div>
 </div>
 <div class="controls">
   <slot />

@@ -53,7 +53,6 @@ module.exports.genScreenShot = async (id) => {
 
     let exist = fs.existsSync(coverPath);
     if (exist && f.Duration > 0) continue;
-
     let fullPath = path.join(f.Folder.Path, f.Name);
 
     if (f.Type.includes("Manga")) {

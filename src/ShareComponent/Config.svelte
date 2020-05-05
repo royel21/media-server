@@ -9,6 +9,7 @@
     cursor: pointer;
     align-self: center;
     margin-right: 5px;
+    height: 32px;
   }
   #show-config:checked + #user-config {
     visibility: visible;
@@ -112,14 +113,50 @@
     font-family: "Font Awesome 5 Free", "sans-serif";
     font-weight: 600;
   }
+  @media screen and (max-width: 480px) {
+    #user-config.user-config {
+      top: 73px;
+      right: 23px;
+    }
+    #user-label.User {
+      height: initial;
+      text-align: center;
+    }
+
+    #user-label span {
+      display: inline-block;
+      height: 26px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    #user-label.User {
+      max-width: 100px;
+    }
+
+    #user-label.Administrator span {
+      width: 120px;
+      height: 22px;
+    }
+
+    @media screen and (max-width: 430px) {
+      #user-config.admin-config {
+        top: 71px;
+        left: 0;
+      }
+    }
+  }
 </style>
 
-<label id="user-label" for="show-config">
+<label id="user-label" class={User.role} for="show-config">
   <i class="fas fa-user-cog" />
-  {User.username}
+  <span>{User.username}</span>
 </label>
 <input type="checkbox" name="" id="show-config" />
-<div id="user-config">
+<div
+  id="user-config"
+  class={User.role.includes('User') ? 'user-config' : 'admin-config'}>
   <div>
     <span on:click>
       <i class="fas fa-sign-out-alt" />

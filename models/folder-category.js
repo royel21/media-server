@@ -1,19 +1,22 @@
 module.exports = (sequelize, DataTypes) => {
+  const FolderCategory = sequelize.define(
+    "FolderCategories",
+    {
+      Id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+    },
+    {
+      timestamps: false,
+      uniqueKeys: {
+        FolderCategory_unique: {
+          fields: ["CategoryId", "FolderId"],
+        },
+      },
+    }
+  );
 
-    const FileCategory = sequelize.define('FileCategory', {
-        Id:{
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true
-        }
-    }, {
-            timestamps: false,
-            uniqueKeys: {
-                FileCategory_unique: {
-                    fields: ['CategoryId', 'FileId']
-                }
-            }
-        });
-
-    return FileCategory;
-}
+  return FolderCategory;
+};

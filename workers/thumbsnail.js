@@ -25,6 +25,25 @@ const images = /jpg|jpeg|png|gif|webp/i;
 //         });
 //     });
 // }
+
+const resize = async (coverP, buffer) => {
+  let sharData = sharp(buffer);
+  let meta = await sharData.metadata();
+  if (meta.height > 1650) {
+    sharData = await sharData.extract({
+      height: 1200,
+      width: meta.width,
+      top: 0,
+      left: 0,
+    });
+  }
+  await sharData
+    .jpeg({
+      quality: 75,
+    })
+    .resize(240)
+    .toFile(coverP);
+};
 var buff;
 module.exports.ZipCover = (file, coverP, exist) => {
   var zip = new StreamZip({
@@ -52,21 +71,23 @@ module.exports.ZipCover = (file, coverP, exist) => {
         zip.close();
       } else {
         buff = zip.entryDataSync(firstImg);
-        try {
-          sharp(buff)
-            .jpeg({
-              quality: 80,
-            })
-            .resize(240)
-            .toFile(coverP, () => {
-              resolve(entries.length);
-              zip.close();
-              buff = [];
-            });
-        } catch (err) {
-          console.log(err);
-          resolve(0);
-        }
+        resize(coverP, buff)
+          .then(() => {
+            resolve(entries.length);
+            zip.close();
+            buff = [];
+          })
+          .catch((err) => {
+            console.log(err);
+            resolve(0);
+          });
+
+        sharp(buff)
+          .jpeg({
+            quality: 80,
+          })
+          .resize(240)
+          .toFile(coverP, () => {});
       }
     });
     zip.on("error", (error) => {

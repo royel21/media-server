@@ -14,27 +14,31 @@
   const addToFav = async event => {
     let FolderId = event.target.closest(".file").id;
     let FavoriteId = event.target.id;
-    const { data } = axios.post("/api/files/favorites/add-folder", {
+    const { data } = await axios.post("/api/files/favorites/add-folder", {
       FolderId,
       FavoriteId
     });
+
     if (data.success) {
-      favClicked.find("i").className = "fas fa-star text-warning";
+      thisEl.className = "fas fa-star";
     }
   };
 
   const removeFile = async FolderId => {
-    let { data } = await Axios.post("/api/files/favorites/remove-folder", {
+    let { data } = await axios.post("/api/files/favorites/remove-folder", {
       id: favId,
       fid: FolderId
     });
     if (data.removed) {
-      dispath("removefile", FolderId);
+      dispath("removeFile", FolderId);
     }
   };
 
-  $: if (favClicked === thisEl) {
-    showList = true;
+  $: if (favClicked === thisEl && thisEl) {
+    showList = thisEl.classList.contains("far");
+    if (thisEl.classList.contains("fa-trash-alt")) {
+      removeFile(thisEl.closest(".file").id);
+    }
   } else {
     showList = false;
   }
@@ -51,6 +55,7 @@
     z-index: 1;
     background: rgb(3, 162, 236);
     border-radius: 0.25rem;
+    width: max-content;
   }
   li {
     padding: 2px 8px;
@@ -80,7 +85,7 @@
       {#if type.startsWith('favorites')}
         <i class="fas fa-trash-alt text-danger" bind:this={thisEl} />
       {:else if isFav}
-        <i class="fas fa-star text-warning" />
+        <i class="fas fa-star" />
       {:else}
         <i class="far fa-star" bind:this={thisEl} />
       {/if}

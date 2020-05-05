@@ -19,17 +19,12 @@ module.exports = (sequelize, DataTypes) => {
         type: STRING(6),
         unique: "compositeIndex",
       },
-      Type: {
-        type: STRING(8),
-        default: "Manga",
-      },
     },
     {
       timestamps: false,
       hooks: {
         beforeValidate: (item) => {
           item.Id = nanoid(6);
-          console.log("create", item.Id);
         },
         beforeBulkCreate: (instances) => {
           for (var item of instances) {

@@ -41,15 +41,15 @@ Router.get("/:id/:order/:page/:items/:search?", (req, res) => {
 });
 
 const saveEdit = async (req, res) => {
-  let { Id = "", Name, Type } = req.body;
+  let { Id = "", Name } = req.body;
   let fav = await db.favorite.findOne({ where: { Id } });
   if (!fav) {
-    fav = await db.favorite.create({ Name, Type, UserId: req.user.Id });
+    fav = await db.favorite.create({ Name, UserId: req.user.Id });
   } else {
     await fav.update({ Name });
   }
 
-  res.json({ Id: fav.Id, Name, Type });
+  res.json({ Id: fav.Id, Name });
 };
 
 Router.post("/add-edit", (req, res) => {
@@ -66,24 +66,21 @@ Router.post("/add-edit", (req, res) => {
     });
 });
 
-const removeFav = async (req) => {
-  let { Id, Type } = req.body;
-  let favs = await req.user.getFavorites({ where: { Type } });
+const removeFav = async (req, res) => {
+  let { Id } = req.body;
+  let favs = await req.user.getFavorites();
+  let result = { removed: false, msg: `Can't Delete the last favorite` };
   if (favs.length > 1) {
     let fav = favs.find((f) => f.Id === Id);
-    if (fav) {
-      await req.user.removeFavorite(fav);
-      result = await fav.destroy();
-      return { removed: result !== null };
-    }
-  } else {
-    return { removed: false, msg: "Can't delete last favorite Type " + Type };
+    result = await req.user.removeFavorite(fav);
+    result = { removed: result !== null };
   }
-  return { removed: false, msg: `Favorite Id:${Id} not found` };
+
+  res.send(result);
 };
 
 Router.delete("/remove", (req, res) => {
-  removeFav(req)
+  removeFav(req, res)
     .then((result) => {
       return res.send(result);
     })

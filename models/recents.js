@@ -1,16 +1,16 @@
 const { nanoid } = require("nanoid");
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize, { STRING }) => {
   const Recent = sequelize.define(
     "Recents",
     {
       Id: {
-        type: DataTypes.STRING(6),
+        type: STRING(6),
         primaryKey: true,
         unique: true,
         allowNull: false,
       },
       Name: {
-        type: DataTypes.STRING(100),
+        type: STRING(100),
         unique: true,
         allowNull: false,
       },

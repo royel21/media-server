@@ -17,7 +17,7 @@ const getElByIndex = (index) => {
   return [...document.querySelectorAll(".file")][index];
 };
 
-const getElementIndex = (element) => {
+const getElIndex = (element) => {
   return [...document.querySelectorAll(".file")].indexOf(element);
 };
 
@@ -62,7 +62,7 @@ const selectItem = (index) => {
 
 const fileClicks = (event) => {
   let file = event.target.closest(".file");
-  selectItem(getElementIndex(file));
+  selectItem(getElIndex(file));
 };
 
 const fileKeypress = (e, page, goToPage, processFile) => {
@@ -72,10 +72,11 @@ const fileKeypress = (e, page, goToPage, processFile) => {
     let wasProcesed = false;
     let colNum = calCol();
     let totalitem = document.querySelectorAll(".file").length;
-    selectedIndex = getElementIndex(file.parentElement.querySelector(".active"));
+    selectedIndex = getElIndex(file.parentElement.querySelector(".active"));
     switch (e.keyCode) {
       case ENTER: {
-        processFile(e);
+        console.log("file", e.target);
+        processFile(e.target);
         break;
       }
       case LEFT: {
@@ -139,4 +140,4 @@ const fileKeypress = (e, page, goToPage, processFile) => {
   }
 };
 
-export { fileClicks, fileKeypress, selectItem, getElementIndex };
+export { fileClicks, fileKeypress, selectItem, getElIndex };

@@ -1,24 +1,20 @@
-module.exports = (sequelize, DataTypes) => {
-  const RecentFile = sequelize.define(
-    "RecentFoldels",
+module.exports = (sequelize, { STRING, INTEGER }) => {
+  const RecentFolder = sequelize.define(
+    "RecentFolders",
     {
       Id: {
-        type: DataTypes.INTEGER,
+        type: INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      LastRead: {
-        type: DataTypes.DATE,
-      },
-      LastPos: {
-        type: DataTypes.FLOAT(8, 2).UNSIGNED,
-        defaultValue: 0,
+      CurrentFile: {
+        type: STRING(10),
       },
     },
     {
       timestamps: false,
       uniqueKeys: {
-        RecentFile_unique: {
+        RecentFolder_unique: {
           fields: ["RecentId", "FolderId"],
         },
       },
@@ -30,5 +26,5 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  return RecentFile;
+  return RecentFolder;
 };

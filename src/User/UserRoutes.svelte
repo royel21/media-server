@@ -9,6 +9,7 @@
   import Videos from "./Pages/Videos.svelte";
   import Favorites from "./Pages/Favorites.svelte";
   import Content from "./Pages/Content.svelte";
+  import Viewer from "./Pages/Viewer.svelte";
 
   const navItems = [
     { title: "Home", path: "/", class: "home" },
@@ -22,10 +23,17 @@
 <Router>
   <Navbar on:click {navItems} />
   <Route path="/videos/content/:id/:page/:filter" component={Content} />
+  <Route path="/videos/viewer/:folderId/:fileId" component={Viewer} />
   <Route path="/videos/:page/:filter" component={Videos} />
+
   <Route path="/mangas/content/:id/:page/:filter" component={Content} />
+  <Route path="/mangas/viewer/:folderId/:fileId" component={Viewer} />
   <Route path="/mangas/:page/:filter" component={Mangas} />
+
+  <Route path="/favorites/content/:id/:page/:filter" component={Content} />
   <Route path="/favorites/:id/:page/:filter" component={Favorites} />
+  <Route path="/favorites/viewer/:folderId/:fileId" component={Viewer} />
+
   <Route exact path="/">
     <Home />
   </Route>
