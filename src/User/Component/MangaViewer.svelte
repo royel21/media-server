@@ -5,9 +5,10 @@
     getContext,
     createEventDispatcher
   } from "svelte";
-  import { IndexOfUndefined, KeyMap } from "../pages/Util";
+  import { IndexOfUndefined } from "../pages/Util";
 
   export let file;
+  export let KeyMap;
   const { NextFile, PrevFile, Fullscreen, SkipForward, SkipBack } = KeyMap;
   const socket = getContext("socket");
   const dispatch = createEventDispatcher();
@@ -90,11 +91,11 @@
     images = [];
     lastfId = file.Id;
     console.time("emit");
-    socket.emit("loadzip-image", {
-      Id: file.Id,
-      fromPage: file.CurrentPos - 5 < 0 ? 0 : file.CurrentPos - 5,
-      toPage: 10
-    });
+    // socket.emit("loadzip-image", {
+    //   Id: file.Id,
+    //   fromPage: file.CurrentPos - 5 < 0 ? 0 : file.CurrentPos - 5,
+    //   toPage: 10
+    // });
   }
 
   $: if (webtoon) {
@@ -125,6 +126,10 @@
     transition: 0.3s all;
   }
 
+  #manga-viewer .webtoon-img {
+    min-height: 100%;
+  }
+
   #manga-viewer .img-current img {
     height: 100%;
   }
@@ -134,13 +139,8 @@
     min-height: 100%;
   }
 
-  #manga-viewer .webtoon-img .empty-img {
-    min-height: calc(100%);
-  }
-
   #manga-viewer .empty-img {
     position: relative;
-    background-color: rgba(255, 255, 255, 0.7);
     color: black;
   }
   .empty-img:before {
@@ -151,8 +151,8 @@
     content: " ";
     height: 100%;
     width: 100%;
-    background-color: rgba(255, 255, 255, 0.7);
     z-index: 1;
+    background-color: rgb(218, 214, 214);
   }
   #manga-viewer .empty-img:after {
     content: "Loading Images";
@@ -279,8 +279,9 @@
     <div class={'img-current ' + (webtoon ? 'webtoon-img' : '')}>
       {#if !webtoon}
         <img
+          class:empty-img={!images[file.CurrentPos]}
           src={images[file.CurrentPos] && 'data:img/jpeg;base64, ' + images[file.CurrentPos]}
-          alt="" />
+          alt="Loading Image" />
       {:else}
         {#each Array(file.Duration).fill() as _, i}
           <img
@@ -288,8 +289,7 @@
             class:empty-img={!images[i]}
             id={i}
             src={images[i] ? 'data:img/jpeg;base64, ' + images[i] : ''}
-            alt="
-            " />
+            alt="Loading Image" />
         {/each}
       {/if}
     </div>

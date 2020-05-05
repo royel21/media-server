@@ -120,7 +120,11 @@
   </div>
   <PlayList {fileId} {files} on:click={selectFile} />
   {#if file.Type.includes('Manga')}
-    <MangaViewer {file} on:changefile={changeFile} on:returnBack={returnBack} />
+    <MangaViewer
+      {file}
+      on:changefile={changeFile}
+      on:returnBack={returnBack}
+      {KeyMap} />
   {:else}
     <div />
   {/if}
