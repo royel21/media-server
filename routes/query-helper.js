@@ -130,7 +130,7 @@ exports.getFolders = async (req, res) => {
       },
       FilesType: filetype,
     },
-    order: getOrderBy(order, "Files."),
+    order: getOrderBy(order, ""),
     offset: (page - 1) * items,
     limit: items,
   });

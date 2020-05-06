@@ -1,11 +1,18 @@
 <script>
   import {
     beforeUpdate,
+    afterUpdate,
     onDestroy,
     getContext,
     createEventDispatcher
   } from "svelte";
   import { IndexOfUndefined } from "../pages/Util";
+  import { scrollInView } from "./Utils";
+  import {
+    PageObserver,
+    disconnectObvrs,
+    scrollImageLoader
+  } from "./Observers";
 
   export let file;
   export let KeyMap;
@@ -19,6 +26,12 @@
   let tempImages = [];
   let loading = false;
   let lastfId;
+  let imgContainer;
+  let isObserver = false;
+
+  //emptyImage observer
+  let imageObserver;
+
   const loadImages = (pg, toPage, dir = 1) => {
     loading = true;
     let i = IndexOfUndefined(images, pg, dir, file.Duration);
@@ -46,12 +59,15 @@
   const prevPage = () => {
     let pg = file.CurrentPos - 1;
     if (pg > -1) {
-      file.CurrentPos = pg;
-      if (!images[pg - 10] && !loading) {
-        loadImages(pg, 10, -1);
+      if (webtoon) {
+        scrollInView(pg);
+      } else {
+        if (!images[pg - 10] && !loading) {
+          loadImages(pg, 10, -1);
+        }
       }
+      file.CurrentPos = pg;
     } else {
-      images = [];
       PrevFile.action();
     }
   };
@@ -59,12 +75,16 @@
   const nextPage = () => {
     let pg = file.CurrentPos + 1;
     if (pg < file.Duration) {
-      file.CurrentPos = pg;
-      if (!images[pg + 10] && !loading) {
-        loadImages(pg, 10);
+      if (webtoon) {
+        console.log("scroll", pg);
+        scrollInView(pg);
+      } else {
+        if (!images[pg + 10] && !loading) {
+          loadImages(pg, 10);
+        }
       }
+      file.CurrentPos = pg;
     } else {
-      images = [];
       NextFile.action();
     }
   };
@@ -97,9 +117,25 @@
       toPage: 10
     });
   }
-
+  const setPage = pg => {
+    file.CurrentPos = pg;
+    console.log("setPage");
+  };
   $: if (webtoon) {
-    // console.log(images, file.Duration);
+    if (!isObserver) {
+      isObserver = true;
+      console.log("tout", webtoon);
+      let tout = setTimeout(() => {
+        scrollInView(file.CurrentPos);
+        PageObserver(setPage, imgContainer);
+        scrollImageLoader(loadImages, imgContainer, file.CurrentPos);
+        clearTimeout(tout);
+      }, 0);
+    }
+  } else {
+    isObserver = false;
+    disconnectObvrs();
+    console.log("clear obvs");
   }
 </script>
 
@@ -124,10 +160,7 @@
     outline: none;
     height: calc(100% - 34px);
     transition: 0.3s all;
-  }
-
-  #manga-viewer .webtoon-img {
-    min-height: 100%;
+    height: 100%;
   }
 
   #manga-viewer .img-current img {
@@ -136,12 +169,13 @@
 
   #manga-viewer .webtoon-img img {
     height: auto;
-    min-height: 100%;
+    width: auto;
   }
 
   #manga-viewer .empty-img {
     position: relative;
     color: black;
+    min-height: 100%;
   }
   .empty-img:before {
     display: inline-block;
@@ -276,7 +310,9 @@
 <div id="manga-viewer" tabIndex="0">
   <span class="fullscreen-progress">{progress}</span>
   <div class="viewer">
-    <div class={'img-current ' + (webtoon ? 'webtoon-img' : '')}>
+    <div
+      class={'img-current ' + (webtoon ? 'webtoon-img' : '')}
+      bind:this={imgContainer}>
       {#if !webtoon}
         <img
           class:empty-img={!images[file.CurrentPos]}

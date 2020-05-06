@@ -95,3 +95,10 @@ export const ProcessFile = (file) => {
     }
   }
 };
+
+export const scrollInView = (num) => {
+  let currentimg = document.querySelectorAll(".img-current img")[num];
+  if (currentimg) {
+    currentimg.scrollIntoView();
+  }
+};

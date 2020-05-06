@@ -41,7 +41,7 @@
 
   const saveFile = () => {
     socket.emit("file-update-pos", file);
-    console.log("file save", file.Id, file.CurrentPos);
+    // console.log("file save", file.Id, file.CurrentPos);
   };
 
   const selectFile = ({ target: { id } }) => {
@@ -51,9 +51,10 @@
   };
 
   const changeFile = (dir = 0) => {
-    saveFile();
     let fileIndex = files.findIndex(f => f.Id === fileId) + dir;
+
     if (fileIndex > -1 && fileIndex < files.length) {
+      saveFile();
       navigate(`/${basePath}/${files[fileIndex].Id}`);
     }
   };
