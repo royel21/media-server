@@ -1,39 +1,60 @@
-/**
- * Welcome to your Workbox-powered service worker!
- *
- * You'll need to register this file in your web app and you should
- * disable HTTP caching for this file too.
- * See https://goo.gl/nhQhGp
- *
- * The rest of the code is auto-generated. Please don't update this file
- * directly; instead, make changes to your Workbox build configuration
- * and re-run your build process.
- * See https://goo.gl/2aRDsh
- */
+const cacheName = "media-v1";
+const staticAssets = [
+  "./",
+  "./index.html",
+  "./global.css",
+  "./fa-regular-400.woff",
+  "./fa-regular-400.woff2",
+  "./fa-solid-900.woff",
+  "./fa-solid-900.woff2",
+  "./home.png",
+  "./home.ico",
+  "./all.min.css",
+  "./bundle.css",
+  "./bundle.css.map",
+  "./bundle.js",
+  "./bundle.js.map",
+];
 
-importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
+self.addEventListener("install", async (e) => {
+  const cache = await caches.open(cacheName);
+  await cache.addAll(staticAssets);
+  return self.skipWaiting();
+});
 
-importScripts("/precache-manifest.ad02a3a06c9b5d9bcf8d7d4e72f828ff.js");
+self.addEventListener("activate", (e) => {
+  self.clients.claim();
+});
 
-self.addEventListener("message", (event) => {
-  if (event.data && event.data.type === "SKIP_WAITING") {
-    self.skipWaiting();
+self.addEventListener("fetch", async (e) => {
+  const req = e.request;
+  const url = new URL(req.url);
+
+  // e.respondWith(fetch(req));
+  if (url.origin === location.origin) {
+    e.respondWith(fromCache(req));
+  } else {
+    e.respondWith(fromServer(req));
   }
 });
 
-workbox.core.clientsClaim();
+const fromCache = async (req) => {
+  const cache = await caches.open(cacheName);
+  const cached = await cache.match(req);
+  return cached || fetch(req);
+};
 
-/**
- * The workboxSW.precacheAndRoute() method efficiently caches and responds to
- * requests for URLs in the manifest.
- * See https://goo.gl/S9QRab
- */
-self.__precacheManifest = [].concat(self.__precacheManifest || []);
-workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
-
-workbox.routing.registerNavigationRoute(
-  workbox.precaching.getCacheKeyForURL("/index.html"),
-  {
-    blacklist: [/^\/_/, /\/[^/?]+\.[^/]+$/],
+const fromServer = async (req) => {
+  const cache = await caches.open(cacheName);
+  try {
+    const fresh = await fetch(req);
+    if (/^http?$/i.test(new URL(req.url).protocol)) {
+      await cache.put(req, fresh.clone());
+    }
+    return fresh;
+  } catch (error) {
+    const cached = await cache.match(req);
+    console.log(error);
+    return cached;
   }
-);
+};

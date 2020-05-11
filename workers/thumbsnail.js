@@ -44,6 +44,7 @@ const resize = async (coverP, buffer) => {
     .resize(240)
     .toFile(coverP);
 };
+
 var buff;
 module.exports.ZipCover = (file, coverP, exist) => {
   var zip = new StreamZip({
@@ -81,13 +82,6 @@ module.exports.ZipCover = (file, coverP, exist) => {
             console.log(err);
             resolve(0);
           });
-
-        sharp(buff)
-          .jpeg({
-            quality: 80,
-          })
-          .resize(240)
-          .toFile(coverP, () => {});
       }
     });
     zip.on("error", (error) => {

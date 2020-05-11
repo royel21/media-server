@@ -1,9 +1,24 @@
-// const db = require("./models");
+const db = require("./models");
+db.sqlze.options.logging = console.log;
 
-// const testDb = async () => {
-//   let file = await db.file.getFile("Administrator");
-// };
+const testDb = async () => {
+  console.time("time");
+  let user = await db.user.findOne({
+    where: { Name: "Royel" },
+    include: { model: db.recent },
+  });
 
+  let folders = await user.Recent.getFolders({
+    limit: 20,
+    order: [[db.sqlze.literal("RecentFolders.LastRead"), "DESC"]],
+  });
+  let result = folders.map((f) => {
+    return { ...f.dataValues, RecentFolders: "", ...f.RecentFolders.dataValues };
+  });
+  console.timeEnd("time");
+  console.log(result);
+};
+testDb();
 // db.init().then(testDb);
 // const db = require("./models");
 // const { getOrderBy } = require("./routes/query-helper");
@@ -63,53 +78,53 @@
 
 // test();
 
-const sharp = require("sharp");
-const StreamZip = require("node-stream-zip");
-const images = /jpg|jpeg|png|gif|webp/i;
+// const sharp = require("sharp");
+// const StreamZip = require("node-stream-zip");
+// const images = /jpg|jpeg|png|gif|webp/i;
 
-var zip = new StreamZip({
-  file: "./zip.zip",
-  storeEntries: true,
-});
+// var zip = new StreamZip({
+//   file: "./zip.zip",
+//   storeEntries: true,
+// });
 
-zip.on("ready", async () => {
-  var entries = Object.values(zip.entries())
-    .sort((a, b) => {
-      return String(a.name).localeCompare(String(b.name));
-    })
-    .filter((entry) => {
-      return !entry.isDirectory;
-    });
+// zip.on("ready", async () => {
+//   var entries = Object.values(zip.entries())
+//     .sort((a, b) => {
+//       return String(a.name).localeCompare(String(b.name));
+//     })
+//     .filter((entry) => {
+//       return !entry.isDirectory;
+//     });
 
-  var firstImg = entries.find((e) => {
-    return images.test(e.name.split(".").pop()) && e.size > 1024 * 30;
-  });
+//   var firstImg = entries.find((e) => {
+//     return images.test(e.name.split(".").pop()) && e.size > 1024 * 30;
+//   });
 
-  let buff = zip.entryDataSync(firstImg);
-  try {
-    let sharData = sharp(buff);
-    let meta = await sharData.metadata();
-    console.log(meta);
-    if (meta.height > 1024) {
-      sharData = await sharData.extract({
-        height: 1024,
-        width: meta.width,
-        top: 0,
-        left: 0,
-      });
-    }
+//   let buff = zip.entryDataSync(firstImg);
+//   try {
+//     let sharData = sharp(buff);
+//     let meta = await sharData.metadata();
+//     console.log(meta);
+//     if (meta.height > 1024) {
+//       sharData = await sharData.extract({
+//         height: 1024,
+//         width: meta.width,
+//         top: 0,
+//         left: 0,
+//       });
+//     }
 
-    sharData
-      .jpeg({
-        quality: 100,
-      })
-      .resize(240)
-      .toFile("./test3.jpg", () => {
-        zip.close();
-        buff = [];
-      });
-  } catch (err) {
-    console.log(err);
-    resolve(0);
-  }
-});
+//     sharData
+//       .jpeg({
+//         quality: 100,
+//       })
+//       .resize(240)
+//       .toFile("./test3.jpg", () => {
+//         zip.close();
+//         buff = [];
+//       });
+//   } catch (err) {
+//     console.log(err);
+//     resolve(0);
+//   }
+// });

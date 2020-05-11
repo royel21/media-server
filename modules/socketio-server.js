@@ -39,8 +39,8 @@ module.exports = (server, sessionMeddle) => {
         socket.on("file-update-pos", (data) => {
           userUpdate.updateFilePos(data, user);
         });
-        socket.on("update-recentf", (data) => {
-          userUpdate.updateRecentFolders(data, user);
+        socket.on("recent-folder", (data) => {
+          userUpdate.recentFolder(data, user);
         });
         socket.on("video-config", (data) => {
           userUpdate.updateConfig(data, user);

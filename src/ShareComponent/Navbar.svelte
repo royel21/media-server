@@ -1,7 +1,8 @@
 <script>
-  import { getContext } from "svelte";
+  import { getContext, onDestroy } from "svelte";
   import { Link, navigate } from "svelte-routing";
   import Config from "./Config.svelte";
+  import { ToggleMenu } from "./ToggleMenu";
 
   export let navItems;
 
@@ -20,12 +21,17 @@
     }
     return {};
   }
+  let menuToggle = false;
+  let unSubscribe = ToggleMenu.subscribe(value => {
+    menuToggle = value;
+  });
+  onDestroy(unSubscribe);
 </script>
 
 <style>
   #menu {
     display: flex;
-    position: sticky;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -34,6 +40,10 @@
     padding: 0;
     user-select: none;
     background-color: #343a40;
+    transition: 0.3s all;
+  }
+  #menu.hide {
+    top: -66px;
   }
   .navbar-nav {
     display: flex;
@@ -56,7 +66,7 @@
   }
 </style>
 
-<nav id="menu" class="navbar">
+<nav id="menu" class="navbar" class:hide={menuToggle}>
   <ul class="navbar-nav">
     {#each navItems as item}
       <li class="nav-item">

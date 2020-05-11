@@ -1,5 +1,6 @@
 <script>
   import { onMount, afterUpdate } from "svelte";
+  import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
   import { formatTime } from "./Utils";
   export let files = [];
   export let fileId;
@@ -7,8 +8,7 @@
   let observer;
   let playList;
   let hideList = true;
-
-  afterUpdate(() => {
+  const setObserver = () => {
     if (observer) {
       observer.disconnect();
     }
@@ -36,7 +36,23 @@
         observer.observe(lazyImg);
       });
     }
-  });
+  };
+  // afterUpdate(() => {});
+  $: if (!hideList) {
+    if (playList) {
+      let current = document.querySelector("#play-list .active");
+      console.log(current.offsetTop, playList.offsetTop);
+      playList.scroll({
+        top: current.offsetTop - 250
+      });
+      setObserver();
+      setTimeout(() => {
+        playList.scroll({
+          top: current.offsetTop - 250
+        });
+      }, 300);
+    }
+  }
 </script>
 
 <style>
@@ -75,7 +91,9 @@
     z-index: 11;
     overflow: hidden;
   }
-
+  #play-list.move {
+    top: 34px;
+  }
   #p-list {
     overflow-y: auto;
     height: calc(100% - 40px);
@@ -206,17 +224,24 @@
       width: 0;
       height: 0;
     }
+
+    #play-list.move {
+      top: 66px;
+    }
   }
 </style>
 
-<label class={'show-list' + (!hideList ? ' move' : '')} for="p-hide">
+<label
+  class={'show-list' + (!hideList ? ' move' : '')}
+  for="p-hide"
+  style="bottom: 35px">
   <span class="p-sort">
     <i class="fas fa-list" />
   </span>
 </label>
 
 <input type="checkbox" id="p-hide" bind:checked={hideList} />
-<div id="play-list">
+<div id="play-list" class:move={!$ToggleMenu}>
   <div id="p-list" bind:this={playList}>
     <ul>
       {#each files as { Id, Name, Cover, CurrentPos, Duration, Type }, i}

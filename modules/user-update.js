@@ -10,18 +10,18 @@ module.exports.updateFileView = async (data) => {
   }
 };
 
-module.exports.updateRecentFolder = async (data, user) => {
+module.exports.recentFolder = async ({ FolderId, CurrentFile }, user) => {
   // console.log("file-update", data, user && user.Name);
-  console.log("folder update", data);
-  let recent = await db.recentFolders.findOrCreate({
-    where: { FileId: data.Id, RecentId: user.RecentFolder.Id },
+  console.log("folder update", FolderId, CurrentFile);
+  let recent = await db.recentFolder.findOrCreate({
+    where: { FolderId, RecentId: user.Recent.Id },
   });
-  await recent[0].update({ LastRead: new Date(), CurrentFile: data.FileId || "" });
+  await recent[0].update({ LastRead: new Date(), CurrentFile: CurrentFile });
 };
 
 module.exports.updateFilePos = async (data, user) => {
   // console.log("file-update", data, user && user.Name);
-  console.log("file update", data);
+  console.log("recent-folder", data);
   let recent = await db.recentFile.findOrCreate({
     where: { FileId: data.Id, RecentId: user.Recent.Id },
   });

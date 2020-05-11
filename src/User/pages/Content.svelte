@@ -5,9 +5,8 @@
   export let page = 1;
   export let filter = "";
   export let id = "";
-  export let location;
 
-  let segment = location.pathname.replace(/(^\/+|\/+$)/g, "").split("/");
+  let segment = window.location.pathname.replace(/(^\/+|\/+$)/g, "").split("/");
   let type = `${segment[0]}/${segment[1]}/${id}`;
 
   const exitFolder = () => {

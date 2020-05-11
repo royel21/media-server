@@ -1,8 +1,13 @@
 <script>
+  import { navigate } from "svelte-routing";
   import Tree from "./Tree.svelte";
   import Directories from "./Directories.svelte";
   import { fly } from "svelte/transition";
-  let tab = "tab-1";
+  export let tab = "tab-1";
+  $: {
+    navigate(`/content-manager/${tab}`, { replace: true });
+    console.log(tab);
+  }
 </script>
 
 <style>

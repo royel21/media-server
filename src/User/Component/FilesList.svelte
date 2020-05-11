@@ -1,5 +1,6 @@
 <script>
-  import { tick, afterUpdate } from "svelte";
+  import { tick, afterUpdate, getContext } from "svelte";
+  import { fade } from "svelte/transition";
   import { navigate } from "svelte-routing";
   import Axios from "axios";
 
@@ -20,6 +21,7 @@
   export let filter = "";
   export let type = "";
   export let title = "";
+  const socket = getContext("socket");
   let pageData = { files: [], totalPages: 0, totalFiles: 0 };
   let selected = 0;
   let favClicked = null;
@@ -61,7 +63,7 @@
   };
 
   const openFile = event => {
-    ProcessFile(event.target.closest(".file"));
+    ProcessFile(event.target.closest(".file"), socket);
   };
 
   const favClick = event => {
@@ -99,18 +101,22 @@
 
   $: document.title = `${title} Page ${page}`;
   $: loadContent(page, filter, id);
+  $: if (pageData.totalPages && parseInt(page) > pageData.totalPages) {
+    navigate(`/${type}/${page - 1}/${filter || ""}`);
+  }
 </script>
 
 <style>
   .scroll-container {
-    height: calc(100% - 38px);
-    min-height: calc(100% - 38px);
+    position: relative;
+    height: 100%;
+    min-height: 100%;
     overflow-y: auto;
+    padding-top: 39px;
   }
 
   .files-list {
     display: flex;
-    align-items: flex-start;
     align-content: flex-start;
     flex-wrap: wrap;
     padding-bottom: 50px;
@@ -137,13 +143,16 @@
     .files-list {
       padding-bottom: 70px;
     }
+    .scroll-container {
+      padding-top: 71px;
+    }
   }
 </style>
 
 <div class="scroll-container">
   <div class="files-list" on:keydown={handleKeydown} on:click={favClick}>
     {#each pageData.files as { Id, Name, Type, Cover, CurrentPos, Duration, isFav, FileCount }, i}
-      <div class="file" id={Id} data-type={Type} tabIndex="0">
+      <div class="file" id={Id} data-type={Type} tabIndex="0" in:fade>
         <div class="file-info">
           <div class="file-btns">
             <span class="file-btn-left" on:click|stopPropagation={openFile}>

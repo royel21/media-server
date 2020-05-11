@@ -8,14 +8,20 @@
   const navItems = [
     { title: "Users", path: "/", class: "users" },
     { title: "Folders", path: "/folders", class: "folder" },
-    { title: "Disks", path: "/disks", class: "sitemap" }
+    { title: "Content Manager", path: "/content-manager", class: "sitemap" },
   ];
 </script>
 
 <style>
   .content {
-    height: calc(100% - 32px);
+    height: 100%;
     padding: 10px;
+    padding-top: 45px;
+  }
+  @media screen and (max-width: 432px) {
+    .content {
+      padding-top: 71px;
+    }
   }
 </style>
 
@@ -23,7 +29,7 @@
   <Navbar on:click {navItems} />
   <div class="content">
     <Route path="/folders" component={Folders} />
-    <Route path="/disks" component={DiskManager} />
+    <Route path="/content-manager/:tab" component={DiskManager} />
     <Route path="/" component={User} />
   </div>
 </Router>

@@ -5,7 +5,7 @@
 
   import PlayList from "../Component/PlayList.svelte";
   import MangaViewer from "../Component/MangaViewer.svelte";
-  import { KeyMap, handleKeyboard, setfullscreen } from "./Util";
+  import { KeyMap, handleKeyboard } from "./Util";
 
   export let folderId;
   export let fileId;
@@ -22,13 +22,13 @@
   let file = { Type: "" };
   let fileName;
   let viewer;
+  let fileIndex = 1;
 
   onMount(async () => {
     let { data } = await axios.post(`/api/viewer/folder`, { id: folderId });
-    if (data.fail) {
-      console.log(data.msg);
-    } else {
+    if (!data.fail) {
       files = data.files;
+      fileIndex = files.findIndex(f => f.Id === fileId);
     }
     window.addEventListener("beforeunload", saveFile);
     return () => {
@@ -40,8 +40,8 @@
   });
 
   const saveFile = () => {
-    socket.emit("file-update-pos", file);
-    // console.log("file save", file.Id, file.CurrentPos);
+    let { Id, CurrentPos } = file;
+    socket.emit("file-update-pos", { Id, CurrentPos });
   };
 
   const selectFile = ({ target: { id } }) => {
@@ -51,7 +51,7 @@
   };
 
   const changeFile = (dir = 0) => {
-    let fileIndex = files.findIndex(f => f.Id === fileId) + dir;
+    fileIndex = files.findIndex(f => f.Id === fileId) + dir;
 
     if (fileIndex > -1 && fileIndex < files.length) {
       saveFile();
@@ -65,7 +65,6 @@
     localStorage.setItem("fileId", file.Id);
     navigate(pathname);
   };
-  Fullscreen.action = () => setfullscreen(viewer);
   NextFile.action = () => changeFile(1);
   PrevFile.action = () => changeFile(-1);
 
@@ -83,12 +82,27 @@
   $: if (files.length > 0) {
     file = files.find(f => f.Id === fileId) || files[0];
   }
+
+  let runningClock;
+  window.addEventListener("fullscreenchange", e => {
+    if (document.fullscreenElement) {
+      const clock = document.getElementById("clock");
+      if (clock) {
+        clock.innerText = new Date().toLocaleTimeString("en-US");
+        runningClock = setInterval(() => {
+          clock.innerText = new Date().toLocaleTimeString("en-US");
+        }, 1000);
+      }
+    } else {
+      clearInterval(runningClock);
+    }
+  });
 </script>
 
 <style>
   .viewer {
-    height: calc(100% - 37px);
     position: relative;
+    height: 100%;
   }
   .f-name {
     position: absolute;
@@ -107,21 +121,42 @@
     background-color: rgba(0, 0, 0, 0.7);
     border-radius: 0.25rem;
   }
-  @media screen and (max-width: 600px) {
-    .viewer {
-      height: calc(100% - 66px);
-      position: relative;
-    }
+  #clock {
+    display: none;
+    position: fixed;
+    right: 0px;
+    bottom: -2px;
+    z-index: 1;
+    pointer-events: none;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 2px 5px;
+    border-radius: 0.25rem;
+  }
+  #files-prog {
+    display: none;
+    position: fixed;
+    left: calc(50% - 20px);
+    bottom: -2px;
+    padding: 0 5px;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1;
+  }
+  :fullscreen #files-prog,
+  :fullscreen #clock {
+    display: inline-block;
   }
 </style>
 
 <div class="viewer" bind:this={viewer} on:keydown={handleKeyboard}>
+  <span id="files-prog">{`${fileIndex + 1} / ${files.length}`}</span>
   <div class="f-name" bind:this={fileName}>
     <span>{file.Name}</span>
   </div>
+  <div id="clock" />
   <PlayList {fileId} {files} on:click={selectFile} />
   {#if file.Type.includes('Manga')}
     <MangaViewer
+      {viewer}
       {file}
       on:changefile={changeFile}
       on:returnBack={returnBack}

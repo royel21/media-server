@@ -1,3 +1,35 @@
+export const IndexOfUndefined = function (arr, from, dir) {
+  var i = from < 0 ? 0 : from;
+  while (true) {
+    if (!arr[i]) {
+      return i;
+    }
+    i += dir > 0 ? 1 : -1;
+  }
+};
+
+export const scrollInView = (num) => {
+  let currentimg = document.querySelectorAll(".img-current img")[num];
+  if (currentimg) {
+    currentimg.scrollIntoView();
+  }
+};
+
+export const getEmptyIndex = function (arr, from, to, dir, size, indices = []) {
+  var i = from < 0 ? 0 : from;
+  let items = [];
+  while (items.length < to) {
+    if (i > size - 1 || i < 0) break;
+
+    if (!arr[i] && !indices.find((ind) => ind === i)) {
+      items.push(i);
+    }
+
+    i += dir > 0 ? 1 : -1;
+  }
+  return items;
+};
+
 export function formatTime(time) {
   if (time === 0) return "00:00";
 
@@ -44,16 +76,12 @@ export const FileTypes = {
   Manga: {
     type: "mangas",
     class: "book-open",
-    formatter(a, b) {
-      return `${parseInt(a || 0) + 1}/${b}`;
-    },
+    formatter: (a, b) => `${parseInt(a || 0) + 1}/${b}`,
   },
   Video: {
     type: "videos",
     class: "play-circle",
-    formatter(a, b) {
-      return `${formatTime(a)}/${formatTime(b)}`;
-    },
+    formatter: (a, b) => `${formatTime(a)}/${formatTime(b)}`,
   },
   Folder: {
     type: "folders",
@@ -67,9 +95,10 @@ export const FileTypes = {
 export const map = function (value, in_min, in_max, out_min, out_max) {
   return ((value - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min;
 };
+
 import { navigate } from "svelte-routing";
 
-export const ProcessFile = (file) => {
+export const ProcessFile = (file, socket, type) => {
   const curPath = location.pathname;
   let Type = curPath.replace(/(^\/+|\/+$)/g, "").split("/")[0];
   switch (file.dataset.type) {
@@ -84,6 +113,9 @@ export const ProcessFile = (file) => {
       localStorage.setItem("content", curPath);
       localStorage.setItem("fileId", file.Id);
       navigate(url);
+      console.log(segment[2]);
+      if (socket)
+        socket.emit("recent-folder", { CurrentFile: file.id, FolderId: segment[2] });
       break;
     }
     default: {
@@ -91,14 +123,7 @@ export const ProcessFile = (file) => {
         folder: file.id,
         pathname: curPath,
       });
-      navigate(`/${Type}/content/${file.id}/`);
+      navigate(`/${type || Type}/content/${file.id}/`);
     }
-  }
-};
-
-export const scrollInView = (num) => {
-  let currentimg = document.querySelectorAll(".img-current img")[num];
-  if (currentimg) {
-    currentimg.scrollIntoView();
   }
 };

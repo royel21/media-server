@@ -14,9 +14,8 @@ module.exports.setDb = (_db) => {
 };
 
 module.exports.loadZipImages = async (data, socket) => {
-  let { Id, fromPage, toPage } = data;
+  let { Id, indices } = data;
   //get last user or create
-  console.log("data;", data);
   if (!users[socket.id]) {
     users[socket.id] = iUser;
   }
@@ -24,39 +23,16 @@ module.exports.loadZipImages = async (data, socket) => {
   let user = users[socket.id];
 
   if (user.lastId === Id) {
-    if (data.range) {
-      for (let i of data.range) {
-        let entry = user.entries[i];
-        if (entry) {
-          try {
-            socket.emit("image-loaded", {
-              page: i,
-              img: user.zip.entryDataSync(entry).toString("base64"),
-            });
-          } catch (err) {
-            console.log(err);
-          }
-        }
-      }
-    } else {
-      let totalPage = fromPage + toPage;
-      let size = user.entries.length;
-
-      for (let i = fromPage < 0 ? 0 : fromPage; i < totalPage && i < size; i++) {
-        let entry = user.entries[i];
-        if (entry) {
-          try {
-            socket.emit("image-loaded", {
-              page: i,
-              img: user.zip.entryDataSync(entry).toString("base64"),
-            });
-          } catch (err) {
-            console.log(err);
-          }
-        }
+    for (let i of indices) {
+      let entry = user.entries[i];
+      if (entry) {
+        socket.emit("image-loaded", {
+          page: i,
+          img: user.zip.entryDataSync(entry).toString("base64"),
+        });
       }
     }
-    socket.emit("m-finish", { last: true });
+    socket.emit("image-loaded", { last: true });
   } else {
     let file = await db.file.findOne({
       attributes: ["Id", "Name"],
@@ -67,7 +43,6 @@ module.exports.loadZipImages = async (data, socket) => {
       user.lastId = Id;
       let filePath = path.resolve(file.Folder.Path, file.Name);
       if (fs.existsSync(filePath)) {
-        console.log("newZip");
         user.zip = new StreamZip({
           file: filePath,
           storeEntries: true,
@@ -84,19 +59,13 @@ module.exports.loadZipImages = async (data, socket) => {
 
           user.entries = entries;
 
-          let totalPage = fromPage + toPage;
-
-          for (
-            let i = fromPage < 0 ? 0 : fromPage;
-            i < totalPage && i < entries.length;
-            i++
-          ) {
+          for (let i of indices) {
             socket.emit("image-loaded", {
               page: i,
-              img: user.zip.entryDataSync(entries[i]).toString("base64"),
+              img: user.zip.entryDataSync(user.entries[i]).toString("base64"),
             });
           }
-          socket.emit("m-finish", { last: true });
+          socket.emit("image-loaded", { last: true });
         });
 
         user.zip.on("error", (err) => {

@@ -33,6 +33,7 @@
       if (data.success) {
         user = {};
         navigate("/login", { replace: true });
+        if (socket) socket.close();
         if (isPwa()) {
           history.go(-(history.length - 2));
         }
@@ -44,9 +45,9 @@
     navigate("/", { replace: true });
   };
 
-  window.addEventListener("beforeunload", () => {
-    if (socket) socket.close();
-  });
+  // window.addEventListener("beforeunload", () => {
+  //   if (socket) socket.close();
+  // });
 
   $: if (user.isAutenticated) {
     socket = socketClient("/");

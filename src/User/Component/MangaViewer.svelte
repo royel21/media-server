@@ -4,18 +4,28 @@
     afterUpdate,
     onDestroy,
     getContext,
-    createEventDispatcher
+    createEventDispatcher,
   } from "svelte";
-  import { IndexOfUndefined } from "../pages/Util";
-  import { scrollInView } from "./Utils";
   import {
     PageObserver,
     disconnectObvrs,
-    scrollImageLoader
+    scrollImageLoader,
   } from "./Observers";
+  import { setfullscreen } from "../pages/Util";
+  import { scrollInView, IndexOfUndefined, getEmptyIndex } from "./Utils";
+  import {
+    onTouchStart,
+    onTouchEnd,
+    onTouchMove,
+    default as controls,
+  } from "./MangaTouch";
+
+  import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
+  import MangaConfig from "../Component/MangaConfig.svelte";
 
   export let file;
   export let KeyMap;
+  export let viewer;
   const { NextFile, PrevFile, Fullscreen, SkipForward, SkipBack } = KeyMap;
   const socket = getContext("socket");
   const dispatch = createEventDispatcher();
@@ -28,32 +38,36 @@
   let lastfId;
   let imgContainer;
   let isObserver = false;
-
+  let inputPage;
+  let jumping = false;
+  let config = { width: window.innerWidth < 600 ? 100 : 65, imgAbjust: "fill" };
   //emptyImage observer
   let imageObserver;
-
+  let indices = [];
   const loadImages = (pg, toPage, dir = 1) => {
-    loading = true;
-    let i = IndexOfUndefined(images, pg, dir, file.Duration);
-    if (i >= file.Duration || i <= -1) return;
-    if (dir < 0) {
-      i = i - toPage;
-      toPage = pg;
+    if (loading) return;
+    indices = getEmptyIndex(images, pg, toPage, dir, file.Duration, indices);
+    if (indices.length > 0) {
+      console.time("emit");
+      socket.emit("loadzip-image", { Id: file.Id, indices });
+      loading = true;
+    } else if (jumping) {
+      scrollInViewAndSetObserver();
     }
-    i = i < 0 ? 0 : i;
-    console.time("emit");
-    socket.emit("loadzip-image", { Id: file.Id, fromPage: i, toPage });
   };
 
-  socket.on("image-loaded", data => {
-    if (!data.error) {
+  socket.on("image-loaded", (data) => {
+    if (!data.last) {
       images[data.page] = data.img;
+    } else {
+      loading = false;
+      console.timeEnd("emit");
+      indices = [];
+      if (jumping && webtoon) {
+        jumping = false;
+        scrollInViewAndSetObserver(100);
+      }
     }
-  });
-
-  socket.on("m-finish", () => {
-    loading = false;
-    console.timeEnd("emit");
   });
 
   const prevPage = () => {
@@ -62,12 +76,13 @@
       if (webtoon) {
         scrollInView(pg);
       } else {
-        if (!images[pg - 10] && !loading) {
-          loadImages(pg, 10, -1);
+        if (!images[pg - 2] && !loading) {
+          loadImages(pg, 2, -1);
         }
       }
       file.CurrentPos = pg;
     } else {
+      jumping = true;
       PrevFile.action();
     }
   };
@@ -76,127 +91,119 @@
     let pg = file.CurrentPos + 1;
     if (pg < file.Duration) {
       if (webtoon) {
-        console.log("scroll", pg);
         scrollInView(pg);
       } else {
-        if (!images[pg + 10] && !loading) {
-          loadImages(pg, 10);
+        if (!images[pg + 2] && !loading) {
+          loadImages(pg, 2);
         }
       }
       file.CurrentPos = pg;
     } else {
+      jumping = true;
+      disconnectObvrs(imgContainer);
       NextFile.action();
     }
   };
 
-  const jumpToPage = () => {};
+  const onInputFocus = () => {
+    inputPage.value = file.CurrentPos + 1;
+  };
 
+  const onInputBlur = () => {
+    inputPage.value = "";
+  };
+  const jumpToPage = (event) => {
+    let val = parseInt(inputPage.value);
+    if (isNaN(val)) return onInputFocus();
+    val < 0 ? 0 : val >= file.Duration ? file.Duration - 1 : val;
+    file.CurrentPos = val - 1;
+    if (webtoon) {
+      jumping = true;
+      disconnectObvrs(imgContainer);
+    }
+    loadImages(val - 5, 10);
+    onInputBlur();
+  };
   const returnTo = () => dispatch("returnBack");
-
-  onDestroy(() => {
-    console.log("destroy");
-    delete socket._callbacks["$image-loaded"];
-    delete socket._callbacks["$m-finish"];
-  });
 
   SkipForward.action = nextPage;
   SkipBack.action = prevPage;
-  const onCancelContextM = e => {
+  const onCancelContextM = (e) => {
     e.preventDefault();
     return false;
   };
 
+  const setPage = (pg) => {
+    file.CurrentPos = pg;
+  };
+
+  let scrollInViewAndSetObserver = (delay = 0) => {
+    let tout = setTimeout(() => {
+      scrollInView(file.CurrentPos);
+      PageObserver(setPage, imgContainer, loadImages);
+      scrollImageLoader(loadImages, imgContainer, file.CurrentPos);
+      clearTimeout(tout);
+    }, delay);
+  };
+
+  Fullscreen.action = () => {
+    if (webtoon) {
+      disconnectObvrs(imgContainer);
+      setfullscreen(viewer);
+      scrollInViewAndSetObserver(200);
+    } else {
+      setfullscreen(viewer);
+    }
+  };
+
+  const onConfig = ({ detail }) => {
+    config = detail;
+  };
+
   $: progress = `${parseInt(file.CurrentPos) + 1}/${file.Duration}`;
+
   $: if (file.Id !== lastfId) {
+    jumping = true;
     images = [];
     lastfId = file.Id;
+    if (imgContainer) {
+      disconnectObvrs(imgContainer);
+    }
+    indices = getEmptyIndex(images, file.CurrentPos - 2, 8, 1, file.Duration);
     console.time("emit");
     socket.emit("loadzip-image", {
       Id: file.Id,
-      fromPage: file.CurrentPos - 5 < 0 ? 0 : file.CurrentPos - 5,
-      toPage: 10
+      indices,
     });
+
+    controls.file = file;
   }
-  const setPage = pg => {
-    file.CurrentPos = pg;
-    console.log("setPage");
-  };
+
   $: if (webtoon) {
+    controls.webtoon = webtoon;
     if (!isObserver) {
       isObserver = true;
-      console.log("tout", webtoon);
-      let tout = setTimeout(() => {
-        scrollInView(file.CurrentPos);
-        PageObserver(setPage, imgContainer);
-        scrollImageLoader(loadImages, imgContainer, file.CurrentPos);
-        clearTimeout(tout);
-      }, 0);
+      scrollInViewAndSetObserver();
     }
-  } else {
+  } else if (isObserver) {
+    controls.webtoon = webtoon;
     isObserver = false;
-    disconnectObvrs();
-    console.log("clear obvs");
+    disconnectObvrs(imgContainer);
   }
+
+  controls.prevPage = prevPage;
+  controls.nextPage = nextPage;
+  controls.fullScreen = Fullscreen.action;
+  controls.nextFile = NextFile.action;
+  controls.prevFile = PrevFile.action;
+  controls.file = file;
+  onDestroy(() => {
+    delete socket._callbacks["$image-loaded"];
+    disconnectObvrs(imgContainer);
+  });
 </script>
 
 <style>
-  #manga-viewer {
-    position: relative;
-    height: 100%;
-    width: 100%;
-    outline: none;
-  }
-  #manga-viewer .img-current,
-  #manga-viewer .viewer {
-    height: 100%;
-    width: 100%;
-  }
-
-  #manga-viewer .img-current {
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    transform: scaleX(0.65);
-    outline: none;
-    height: calc(100% - 34px);
-    transition: 0.3s all;
-    height: 100%;
-  }
-
-  #manga-viewer .img-current img {
-    height: 100%;
-  }
-
-  #manga-viewer .webtoon-img img {
-    height: auto;
-    width: auto;
-  }
-
-  #manga-viewer .empty-img {
-    position: relative;
-    color: black;
-    min-height: 100%;
-  }
-  .empty-img:before {
-    display: inline-block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    content: " ";
-    height: 100%;
-    width: 100%;
-    z-index: 1;
-    background-color: rgb(218, 214, 214);
-  }
-  #manga-viewer .empty-img:after {
-    content: "Loading Images";
-    position: absolute;
-    top: 46%;
-    left: calc(50% - 108px);
-    font-size: 30px;
-    z-index: 2;
-  }
-
   .controls {
     position: fixed;
     right: 0px;
@@ -210,57 +217,7 @@
     transition: 0.3s all;
     z-index: 1;
     pointer-events: all;
-  }
-
-  .fullscreen-progress {
-    display: none;
-    position: absolute;
-    opacity: 0;
-    bottom: 0;
-    left: 5px;
-    padding: 2px 8px;
-    border-top-right-radius: 0.25rem;
-    background-color: rgba(0, 0, 0, 0.8);
-    opacity: 1;
-    transition: 0.5s all;
-    font-size: 16px;
-  }
-
-  :fullscreen #manga-viewer .controls {
-    opacity: 0;
-  }
-
-  :fullscreen #manga-viewer .controls span {
-    transform: translateY(34px);
-    transition: 0.3s all;
-  }
-
-  :fullscreen #manga-viewer .controls:hover span {
-    transform: translateY(0px);
-  }
-
-  :fullscreen #manga-viewer .controls:hover {
-    opacity: 1;
-  }
-  :fullscreen .fullscreen-progress {
-    display: inline-block;
-  }
-  #manga-viewer .controls > span {
-    padding: 4px 8px;
-    max-height: initial;
-  }
-
-  #manga-viewer i {
-    font-size: 25px;
-    transition: 0.1s all;
-  }
-
-  #manga-viewer .current-page {
-    max-width: 90px;
-  }
-
-  #manga-viewer .current-page input {
-    height: 25px;
+    user-select: none;
   }
 
   #webtoon {
@@ -290,40 +247,36 @@
     font-size: 16px;
     font-weight: 600;
   }
-
-  @media screen and (max-width: 600px) {
-    #manga-viewer .img-current {
-      transform: initial;
-    }
-    #manga-viewer .controls > span {
-      padding: 4px 5px;
-    }
-    #manga-viewer .img-current:not(.webtoon-img) img,
-    #manga-viewer .img-current img {
-      height: 100%;
-      min-height: initial;
-      color: white;
-    }
+  .config {
+    position: relative;
   }
 </style>
 
-<div id="manga-viewer" tabIndex="0">
+<div id="manga-viewer" tabIndex="0" class:hide={$ToggleMenu}>
   <span class="fullscreen-progress">{progress}</span>
   <div class="viewer">
     <div
-      class={'img-current ' + (webtoon ? 'webtoon-img' : '')}
-      bind:this={imgContainer}>
+      on:touchstart={onTouchStart}
+      on:touchend={onTouchEnd}
+      on:mousedown={onTouchStart}
+      on:mouseup={onTouchEnd}
+      on:touchmove={onTouchMove}
+      class={'img-current' + (webtoon ? ' webtoon-img' : '')}
+      bind:this={imgContainer}
+      style="width: {config.width}%;"
+      tabindex="0">
       {#if !webtoon}
         <img
           class:empty-img={!images[file.CurrentPos]}
+          style="object-fit: {config.imgAbjust}"
           src={images[file.CurrentPos] && 'data:img/jpeg;base64, ' + images[file.CurrentPos]}
           alt="Loading Image" />
       {:else}
         {#each Array(file.Duration).fill() as _, i}
           <img
-            class:current-image={i === file.CurrentPos}
             class:empty-img={!images[i]}
             id={i}
+            style="object-fit: {config.imgAbjust}"
             src={images[i] ? 'data:img/jpeg;base64, ' + images[i] : ''}
             alt="Loading Image" />
         {/each}
@@ -344,9 +297,23 @@
     <span class="prev-page" on:click={prevPage}>
       <i class="fa fa-arrow-circle-left" />
     </span>
-    <span class="current-page" on:click={jumpToPage}>{progress}</span>
+    <span class="current-page">
+      <form action="" on:submit|preventDefault={jumpToPage}>
+        <input
+          type="text"
+          bind:this={inputPage}
+          value={''}
+          placeholder={progress}
+          on:focus={onInputFocus}
+          on:blur={onInputBlur}
+          on:keydown|stopPropagation />
+      </form>
+    </span>
     <span class="next-page" on:click={nextPage}>
       <i class="fa fa-arrow-circle-right" />
+    </span>
+    <span class="config">
+      <MangaConfig {config} on:mconfig={onConfig} {ToggleMenu} />
     </span>
     <span class="btn-fullscr" on:click={Fullscreen.action}>
       <i class="fas fa-expand-arrows-alt popup-msg" data-title="Full Screen" />

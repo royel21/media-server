@@ -1,13 +1,3 @@
-export const IndexOfUndefined = function (arr, from, dir) {
-  var i = from < 0 ? 0 : from;
-  while (true) {
-    if (!arr[i]) {
-      return i;
-    }
-    i += dir;
-  }
-};
-
 var lastEl = null;
 export const setfullscreen = (element) => {
   try {

@@ -1,58 +1,91 @@
 var pageObserver;
 var imgObserver;
 let imgs;
-
-export const PageObserver = (setPage, container) => {
+let currentPage;
+import { scrollInView } from "./Utils";
+export const PageObserver = (setPage, container, loadImages) => {
   imgs = container.querySelectorAll("img");
-  pageObserver = new IntersectionObserver(
-    (entries) => {
-      if (entries.length < imgs.length) {
-        for (let entry of entries) {
-          let img = entry.target;
-          if (entry.isIntersecting) {
-            setPage(parseInt(img.id));
+  if (!pageObserver) {
+    pageObserver = new IntersectionObserver(
+      (entries) => {
+        if (entries.length < imgs.length) {
+          for (let entry of entries) {
+            let img = entry.target;
+            if (entry.isIntersecting) {
+              setPage(parseInt(img.id));
+              currentPage = img.id;
+              let timg = imgs[currentPage];
+              if (timg && !timg.src.includes("data:img")) {
+                loadImages(currentPage - 3, 6, 1);
+              }
+            }
           }
         }
-      }
-    },
-    { root: container }
-  );
+      },
+      { root: container }
+    );
 
-  imgs.forEach((lazyImg) => {
-    pageObserver.observe(lazyImg);
-  });
+    imgs.forEach((lazyImg) => {
+      pageObserver.observe(lazyImg);
+    });
+  }
 
   return pageObserver;
 };
 
-export const scrollImageLoader = (loadImages, container, page) => {
+let mDown = false;
+const onmousedown = () => {
+  mDown = true;
+};
+
+const onmouseup = () => {
+  const curPage = currentPage;
+  if (imgs[curPage] && !imgs[curPage].src) {
+    loadImages(curPage - 1, 2);
+    setTimeout(() => {
+      scrollInView(curPage);
+      setTimeout(() => {
+        clearTimeout(tout);
+        mDown = false;
+      }, 100);
+    }, 500);
+  } else {
+    mDown = false;
+  }
+};
+
+let tout;
+let load = false;
+export const scrollImageLoader = (loadImages, container) => {
+  container.onmouseup = onmouseup;
+  container.onmousedown = onmousedown;
+
   if (!imgObserver) {
-    console.log("set img observer");
     imgObserver = new IntersectionObserver(
       (entries) => {
-        if (entries.length < imgs.length) {
-          let pg;
-          let dir;
-          for (let entry of entries) {
-            if (entry.isIntersecting) {
-              pg = parseInt(entry.target.id);
-              if (pg < page) {
-                dir = -5;
-              } else {
-                dir = 5;
-              }
-              let pos = dir + pg;
-              if (!imgs[pos].src) {
-                console.log("empty src: ", imgs[pos].src, pos, dir, pg);
-                loadImages(pos, dir);
+        if (!mDown) {
+          if (entries.length < imgs.length) {
+            let pg, dir;
+            for (let entry of entries) {
+              if (entry.isIntersecting) {
+                pg = parseInt(entry.target.id);
+                dir = pg < currentPage ? -1 : 1;
+
+                const img = imgs[dir + pg];
+                if (img && !img.src.includes("data:img")) {
+                  load = true;
+                }
               }
             }
+            if (load) {
+              load = false;
+              if (tout) clearTimeout(tout);
+              tout = setTimeout(() => {
+                loadImages(pg, 4, dir);
+                clearTimeout(tout);
+              }, 50);
+            }
           }
-          //   if (pg) {
-          //     if (pg < size && pg > 0 && !contentRef.current[pg + dir]) {
-          //       loadImages(pg + dir, 5, dir);
-          //     }
-          //   }
         }
       },
       {
@@ -68,8 +101,14 @@ export const scrollImageLoader = (loadImages, container, page) => {
   });
 };
 
-export const disconnectObvrs = () => {
+export const disconnectObvrs = (container) => {
+  container.onmousedown = null;
+  container.onmouseup = null;
   pageObserver && pageObserver.disconnect();
   imgObserver && imgObserver.disconnect();
+  imgs = [];
+  pageObserver = null;
+  imgObserver = null;
   imgs = null;
+  currentPage = null;
 };

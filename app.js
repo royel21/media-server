@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use(express.static(__dirname + "/images"));
+app.use(express.static("../images"));
 app.use(express.static(__dirname + "/public"));
 
 const userRoutes = require("./routes/UserRoutes");
@@ -45,9 +45,7 @@ app.use(passport.session());
 app.use("/api/users", userRoutes);
 
 app.use((req, res, next) => {
-  console.log(req.url);
   if (!/login|api\/users\/login/gi.test(req.url) && !req.user) {
-    console.log("not user");
     return res.redirect("/login");
   }
   return next();
@@ -70,7 +68,6 @@ app.use("/api/admin/files", FilesManagerRoute);
 app.use("/api/admin/folders", FoldersRoute);
 
 app.get("/*", (req, res) => {
-  console.log("data");
   return res.sendFile(path.join(__dirname + "/public/index.html"));
 });
 
