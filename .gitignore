@@ -13,3 +13,4 @@ public/build/*
 *.log
 *.lock
 *.env
+*.db-journal
