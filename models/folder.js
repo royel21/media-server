@@ -19,7 +19,6 @@ module.exports = (sequelize, DataTypes) => {
       },
       Name: {
         type: STRING(100),
-        unique: true,
       },
       Cover: {
         type: STRING,
@@ -39,6 +38,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       timestamps: false,
+      uniqueKeys: {
+        RecentFolder_unique: {
+          fields: ["Name", "FilesType"],
+        },
+      },
       hooks: {
         beforeValidate: function (item) {
           item.Id = nanoid(6);
