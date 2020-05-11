@@ -79,6 +79,7 @@ module.exports.ZipCover = (file, coverP, exist) => {
             buff = [];
           })
           .catch((err) => {
+            zip.close();
             console.log(err);
             resolve(0);
           });
