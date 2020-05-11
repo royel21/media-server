@@ -77,7 +77,7 @@ app.use((e, req, res, next) => {
   }
 });
 
-const port = 3001;
+const port = process.env.PORT;
 
 db.init().then(() => {
   let server = https
@@ -95,4 +95,4 @@ db.init().then(() => {
   return require("./modules/socketio-server")(server, sessionMeddle);
 });
 
-console.log(process.env.NODE_ENV, process.env.PORT);
+console.log(process.env.NODE_ENV, port);
