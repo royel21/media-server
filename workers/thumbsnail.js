@@ -68,8 +68,8 @@ module.exports.ZipCover = (file, coverP, exist) => {
       if (exist) return resolve(entries.length);
 
       if (firstImg === undefined) {
-        resolve(0);
         zip.close();
+        resolve(0);
       } else {
         buff = zip.entryDataSync(firstImg);
         resize(coverP, buff)
@@ -80,13 +80,13 @@ module.exports.ZipCover = (file, coverP, exist) => {
           })
           .catch((err) => {
             zip.close();
-            console.log(err);
+            console.log("thumbnail error", err);
             resolve(0);
           });
       }
     });
     zip.on("error", (error) => {
-      console.log(file, error);
+      console.log("thumbnail error", file, error);
       zip.close();
       resolve(0);
     });
