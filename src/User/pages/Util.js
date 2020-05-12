@@ -83,7 +83,6 @@ export const KeyMap = {
 };
 
 export const handleKeyboard = (e) => {
-  console.log(e.keyCode);
   for (let key of Object.keys(KeyMap)) {
     if (KeyMap[key].keyCode === e.keyCode) {
       let action = KeyMap[key].action;

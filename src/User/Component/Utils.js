@@ -92,10 +92,6 @@ export const FileTypes = {
   },
 };
 
-export const map = function (value, in_min, in_max, out_min, out_max) {
-  return ((value - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min;
-};
-
 import { navigate } from "svelte-routing";
 
 export const ProcessFile = (file, socket, type) => {
@@ -126,4 +122,8 @@ export const ProcessFile = (file, socket, type) => {
       navigate(`/${type || Type}/content/${file.id}/`);
     }
   }
+};
+
+export const map = function (value, in_min, in_max, out_min, out_max) {
+  return ((value - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min;
 };

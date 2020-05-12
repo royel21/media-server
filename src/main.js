@@ -16,6 +16,7 @@ Storage.prototype.getObject = function (key) {
   }
   return value;
 };
+
 window.addEventListener("load", () => {
   if ("serviceWorker" in navigator) {
     try {
@@ -25,6 +26,7 @@ window.addEventListener("load", () => {
     }
   }
 });
+
 const app = new App({
   target: document.body,
 });

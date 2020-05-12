@@ -21,7 +21,7 @@ module.exports.recentFolder = async ({ FolderId, CurrentFile }, user) => {
 
 module.exports.updateFilePos = async (data, user) => {
   // console.log("file-update", data, user && user.Name);
-  console.log("recent-folder", data);
+  console.log("recent-file", data);
   let recent = await db.recentFile.findOrCreate({
     where: { FileId: data.Id, RecentId: user.Recent.Id },
   });

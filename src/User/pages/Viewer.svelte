@@ -5,6 +5,7 @@
 
   import PlayList from "../Component/PlayList.svelte";
   import MangaViewer from "../Component/MangaViewer.svelte";
+  import VideoPLayer from "../Component/VideoPlayer.svelte";
   import { KeyMap, handleKeyboard } from "./Util";
 
   export let folderId;
@@ -28,7 +29,7 @@
     let { data } = await axios.post(`/api/viewer/folder`, { id: folderId });
     if (!data.fail) {
       files = data.files;
-      fileIndex = files.findIndex(f => f.Id === fileId);
+      fileIndex = files.findIndex((f) => f.Id === fileId);
     }
     window.addEventListener("beforeunload", saveFile);
     return () => {
@@ -51,7 +52,7 @@
   };
 
   const changeFile = (dir = 0) => {
-    fileIndex = files.findIndex(f => f.Id === fileId) + dir;
+    fileIndex = files.findIndex((f) => f.Id === fileId) + dir;
 
     if (fileIndex > -1 && fileIndex < files.length) {
       saveFile();
@@ -80,11 +81,11 @@
   }
 
   $: if (files.length > 0) {
-    file = files.find(f => f.Id === fileId) || files[0];
+    file = files.find((f) => f.Id === fileId) || files[0];
   }
 
   let runningClock;
-  window.addEventListener("fullscreenchange", e => {
+  window.addEventListener("fullscreenchange", (e) => {
     if (document.fullscreenElement) {
       const clock = document.getElementById("clock");
       if (clock) {
@@ -95,6 +96,18 @@
       }
     } else {
       clearInterval(runningClock);
+    }
+    if (
+      /(android)|(iphone)/i.test(navigator.userAgent) &&
+      file.Type.includes("Video")
+    ) {
+      if (document.fullscreenElement) {
+        window.screen.orientation.lock("landscape");
+        console.log("isAndroid");
+      } else {
+        window.screen.orientation.unlock();
+        console.log("isAndroid not");
+      }
     }
   });
 </script>
@@ -161,7 +174,7 @@
       on:changefile={changeFile}
       on:returnBack={returnBack}
       {KeyMap} />
-  {:else}
-    <div />
+  {:else if file.Type.includes('Video')}
+    <VideoPLayer {file} {KeyMap} on:returnBack={returnBack} {viewer} />
   {/if}
 </div>

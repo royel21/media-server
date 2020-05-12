@@ -66,22 +66,25 @@ Router.post("/favorites/", (req, res) => {
 Router.get("/:id", (req, res) => {
   db.file
     .findOne({
-      attributes: ["FullPath", "Name", "Size"],
+      attributes: ["Id", "Name", "Size"],
       where: { Id: req.params.id },
+      include: { model: db.folder },
     })
     .then((file) => {
       if (file) {
+        let filePath = path.join(file.Folder.Path, file.Name);
         var total = file.Size;
         var range = req.headers.range;
         if (!range) {
           // 416 Wrong range
           return res.sendStatus(416);
         }
+
         var positions = range.replace(/bytes=/, "").split("-");
         var start = parseInt(positions[0], 10);
+
         if (start === 0) {
-          if (!fs.existsSync(path.join(file.FullPath, file.Name)))
-            return res.sendStatus(404);
+          if (!fs.existsSync(filePath)) return res.sendStatus(404);
         }
 
         // same code as accepted answer
@@ -89,10 +92,12 @@ Router.get("/:id", (req, res) => {
         var chunksize = end - start + 1;
         // poor hack to send smaller chunks to the browser
         var maxChunk = 1024 * 1024; // 1MB at a time
+
         if (chunksize > maxChunk) {
           end = start + maxChunk - 1;
           chunksize = end - start + 1;
         }
+
         res.writeHead(206, {
           "Content-Range": "bytes " + start + "-" + end + "/" + total,
           "Accept-Ranges": "bytes",
@@ -101,7 +106,7 @@ Router.get("/:id", (req, res) => {
         });
 
         var stream = fs
-          .createReadStream(path.join(file.FullPath, file.Name), {
+          .createReadStream(filePath, {
             start: start,
             end: end,
           })

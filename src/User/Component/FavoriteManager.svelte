@@ -2,18 +2,19 @@
   import {
     FavoritesStores,
     addUpdateFavorite,
-    removeFavorite
+    removeFavorite,
   } from "../Stores/FavoritesStores";
   import { navigate } from "svelte-routing";
   import { onDestroy } from "svelte";
+  let show;
 
   export let id = "";
   let currentFav = {};
   let error;
 
-  const saveFavorite = event => {
+  const saveFavorite = (event) => {
     currentFav.Type == "";
-    addUpdateFavorite(currentFav).then(result => {
+    addUpdateFavorite(currentFav).then((result) => {
       if (result.Id !== id) {
         navigate(`/favorites/${result.Id}`);
         console.log("navegate", result.Id);
@@ -27,16 +28,18 @@
     error = "";
   };
 
-  const editFavorite = e => {
-    currentFav = $FavoritesStores.find(f => f.Id === e.target.closest("tr").id);
+  const editFavorite = (e) => {
+    currentFav = $FavoritesStores.find(
+      (f) => f.Id === e.target.closest("tr").id
+    );
     error = "";
   };
 
-  const removeFav = e => {
+  const removeFav = (e) => {
     let tr = e.target.closest("tr");
     let type = tr.querySelector("td:nth-child(2)").textContent;
     // Clear input delete is currentFav
-    removeFavorite(tr.id, type).then(data => {
+    removeFavorite(tr.id, type).then((data) => {
       //Navegate to first favorite
       if (data.removed) {
         navigate(`/favorites/${$FavoritesStores[0].Id}`);
@@ -46,7 +49,7 @@
     });
   };
 
-  const loadFavorite = event => {
+  const loadFavorite = (event) => {
     navigate(`/favorites/${event.target.closest("tr").id}`);
     error = "";
   };
@@ -55,20 +58,38 @@
 </script>
 
 <style>
+  .first-controls {
+    position: absolute;
+    z-index: 99;
+    pointer-events: all;
+  }
+  .fas {
+    font-size: 30px;
+  }
+  #show-favs[type="checkbox"] {
+    display: none;
+  }
   #fav-manager {
     position: absolute;
+    visibility: hidden;
     color: black;
     background: white;
     height: max-content;
     width: 300px;
-    bottom: 38px;
-    left: 0px;
+    bottom: -121px;
+    left: -138px;
     padding: 5px;
     border-radius: 0.25rem;
     min-height: 240px;
     background: rgb(221, 170, 94);
-    transition: 0.3s all;
+    pointer-events: none;
+    transform: scaleX(0) scaleY(0);
+    transition: 0.3s all ease-out;
+  }
+  #show-favs:checked + div {
+    visibility: visible;
     pointer-events: all;
+    transform: scaleX(1) scaleY(1) translateX(150px) translateY(-161px);
   }
   tr {
     position: relative;
@@ -157,51 +178,57 @@
   }
 </style>
 
-<div id="fav-manager" class="card text-light">
-  <div class="modal-title">
-    <div id="fav-controls">
-      <div class="input-group-prepend">
-        <label id="addfav" class="input-group-text" on:click={saveFavorite}>
-          <i class="fas fa-save" />
-        </label>
-        <div class="i-control">
-          <input
-            type="text"
-            class="form-control"
-            bind:value={currentFav.Name}
-            placeholder="New Favorite" />
-          <span on:click={clearFavorite}>
-            <i class="fas fa-times-circle" />
-          </span>
+<div class="first-controls">
+  <label for="show-favs">
+    <i class="fas fa-heart" />
+  </label>
+  <input type="checkbox" id="show-favs" />
+  <div id="fav-manager" class="card text-light">
+    <div class="modal-title">
+      <div id="fav-controls">
+        <div class="input-group-prepend">
+          <label id="addfav" class="input-group-text" on:click={saveFavorite}>
+            <i class="fas fa-save" />
+          </label>
+          <div class="i-control">
+            <input
+              type="text"
+              class="form-control"
+              bind:value={currentFav.Name}
+              placeholder="New Favorite" />
+            <span on:click={clearFavorite}>
+              <i class="fas fa-times-circle" />
+            </span>
+          </div>
         </div>
       </div>
+      <div class="text-danger" />
     </div>
-    <div class="text-danger" />
-  </div>
-  <div class="errors">{error || ''}</div>
-  <div class="modal-body">
-    <table class="table table-bordered bg-light table-hover">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {#each $FavoritesStores as fav}
-          <tr id={fav.Id} class={fav.Id === id ? 'active' : ''}>
-            <td on:click={loadFavorite} data-title={fav.Name}>{fav.Name}</td>
-            <td>
-              <span on:click={editFavorite}>
-                <i class="fas fa-edit" />
-              </span>
-              <span on:click={removeFav}>
-                <i class="fas fa-trash-alt" />
-              </span>
-            </td>
+    <div class="errors">{error || ''}</div>
+    <div class="modal-body">
+      <table class="table table-bordered bg-light table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Action</th>
           </tr>
-        {/each}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {#each $FavoritesStores as fav}
+            <tr id={fav.Id} class={fav.Id === id ? 'active' : ''}>
+              <td on:click={loadFavorite} data-title={fav.Name}>{fav.Name}</td>
+              <td>
+                <span on:click={editFavorite}>
+                  <i class="fas fa-edit" />
+                </span>
+                <span on:click={removeFav}>
+                  <i class="fas fa-trash-alt" />
+                </span>
+              </td>
+            </tr>
+          {/each}
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

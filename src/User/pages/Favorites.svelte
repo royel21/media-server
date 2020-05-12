@@ -27,35 +27,18 @@
       page: nextPage,
       order: config.order,
       items,
-      search: filter
+      search: filter,
     });
 
     if (data.removed) {
       navigate(`/favorites/${id}/${nextPage}/${filter}`, { replace: true });
     }
   };
-  const favClick = event => {
+  const favClick = (event) => {
     console.log(event);
   };
 </script>
 
-<style>
-  .first-controls {
-    position: absolute;
-    z-index: 99;
-    pointer-events: all;
-  }
-  input[type="checkbox"] {
-    display: none;
-  }
-</style>
-
 <FilesList title="Favorites" {type} {filter} {page} {id}>
-  <div class="first-controls">
-    <label for="show-favs">
-      <i class="fas fa-heart" />
-    </label>
-    <input type="checkbox" id="show-favs" />
-    <FavoriteManager {id} />
-  </div>
+  <FavoriteManager {id} />
 </FilesList>

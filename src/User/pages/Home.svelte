@@ -1,5 +1,5 @@
 <script>
-  import { afterUpdate, onDestroy } from "svelte";
+  import { afterUpdate, onDestroy, onMount } from "svelte";
   import { navigate } from "svelte-routing";
   import axios from "axios";
   import { ProcessFile } from "../Component/Utils";
@@ -7,6 +7,7 @@
   let current = 0;
   let move = {};
   let container;
+  let count;
 
   axios.get("/api/files/recents").then(({ data }) => {
     files = data;
@@ -48,16 +49,21 @@
       });
     }, 50);
   };
-  const onRelease = () => {
-    // let el = document.querySelector(".file");
-    // console.log(el);
-    // if (el) {
-    //   container.scroll({
-    //     left: current * el.offsetWidth,
-    //     behavior: "smooth",
-    //   });
-    // }
+
+  const resize = () => {
+    if (container) {
+      let tFile = document.querySelector(".file");
+      if (tFile) count = container.offsetWidth / tFile.offsetWidth;
+      console.log("count", count);
+    }
   };
+  onMount(() => {
+    resize();
+    window.onresize = resize;
+    return () => {
+      window.onresize = null;
+    };
+  });
 </script>
 
 <style>
@@ -115,6 +121,7 @@
     border-radius: 0.25rem;
     font-family: monospace;
   }
+
   @media screen and (max-width: 1600px) {
     .carousel {
       width: 1200px;
@@ -166,12 +173,11 @@
       class="carousel"
       bind:this={container}
       on:scroll={onScroll}
-      on:touchEnd={onRelease}
-      on:mouseup={onRelease}
       tabIndex="0">
       {#each files as { Id, Name, Type, Cover, CurrentPos, Duration, isFav, FileCount, FilesType }, i}
         <div
           class="file"
+          class:current={i === current}
           id={Id}
           data-type={Type}
           data-types={FilesType}

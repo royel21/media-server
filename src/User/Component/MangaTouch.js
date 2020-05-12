@@ -27,7 +27,6 @@ export const onTouchMove = (e) => {
 
 export const onTouchEnd = (e) => {
   touching = false;
-  console.log(controls);
   let {
     file: { CurrentPos, Duration },
     webtoon,
