@@ -3,11 +3,11 @@
     onMount,
     onDestroy,
     getContext,
-    createEventDispatcher
+    createEventDispatcher,
   } from "svelte";
   import ItemList from "./ItemList.svelte";
   import Modal from "./Modal.svelte";
-  import Axios from "Axios";
+  import axios from "axios";
   import { calRows } from "./Utils";
   const dispatch = createEventDispatcher();
   const socket = getContext("socket");
@@ -22,8 +22,8 @@
   let showModal = false;
   let modalType = {};
 
-  const loadFolders = async pg => {
-    let resp = await Axios.get(
+  const loadFolders = async (pg) => {
+    let resp = await axios.get(
       `/api/admin/folders/${page}/${calRows()}/${filter || ""}`
     );
 
@@ -41,7 +41,7 @@
 
   onMount(() => {
     loadFolders(1);
-    socket.on("folder-renamed", data => {
+    socket.on("folder-renamed", (data) => {
       if (data.success) {
         folder.Name = data.Name;
         console.log(items);
@@ -51,10 +51,10 @@
       console.log("rename: ", data.msg);
     });
 
-    socket.on("folder-removed", data => {
+    socket.on("folder-removed", (data) => {
       if (data.success) {
         if (page === totalPages && items.length > 1) {
-          items = items.filter(f => f.Id !== folder.Id);
+          items = items.filter((f) => f.Id !== folder.Id);
         } else {
           page -= 1;
           loadFolders(page);
@@ -70,12 +70,12 @@
     delete socket._callbacks["$folder-removed"];
   });
 
-  const onFilter = flt => {
+  const onFilter = (flt) => {
     filter = flt.detail;
     loadFolders(1);
   };
 
-  const gotopage = pg => {
+  const gotopage = (pg) => {
     pg = parseInt(pg.detail);
     if (pg < 1 || pg > totalPages) return;
     page = pg < 1 ? 1 : pg > totalPages ? totalPages : pg;
@@ -83,13 +83,13 @@
     loadFolders(pg);
   };
 
-  const itemClick = event => {
+  const itemClick = (event) => {
     let el = event.target;
     if (el.tagName === "LI") {
       fId = el.id;
       dispatch("folderid", fId);
     } else {
-      folder = items.find(f => f.Id === el.closest("li").id);
+      folder = items.find((f) => f.Id === el.closest("li").id);
       let cList = el.classList.toString();
       if (/fa-edit/gi.test(cList)) {
         modalType = { title: "Edit Folder", Del: false };
@@ -100,7 +100,7 @@
     }
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     if (modalType.Del) {
       socket.emit("remove-folder", folder.Id);

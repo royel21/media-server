@@ -1,22 +1,22 @@
 <script>
   import { onDestroy, onMount, getContext } from "svelte";
-  import Axios from "axios";
+  import axios from "axios";
 
   const socket = getContext("socket");
   let dirs = [];
   let msg = "";
   onMount(async () => {
-    let resp = await Axios.get("/api/admin/directories");
+    let resp = await axios.get("/api/admin/directories");
     dirs = resp.data;
     socket.on("scan-finish", ({ id }) => {
       if (id) {
-        let dir = dirs.find(d => d.Id === id);
+        let dir = dirs.find((d) => d.Id === id);
         dir.IsLoading = false;
         dirs = dirs;
       }
     });
 
-    socket.on("scan-info", info => {
+    socket.on("scan-info", (info) => {
       console.log(info);
     });
   });
@@ -25,25 +25,27 @@
     delete socket._callbacks["$scan-info"];
   });
 
-  const removeDir = e => {
+  const removeDir = (e) => {
     let tr = e.target.closest("tr");
     if (tr) {
-      Axios.delete("/api/admin/directories/remove", {
-        data: { Id: tr.id }
-      }).then(({ data }) => {
-        if (data.removed) {
-          dirs = dirs.filter(d => d.Id !== tr.id);
-          dirs = dirs;
-        } else {
-          msg = data.msg;
-        }
-      });
+      axios
+        .delete("/api/admin/directories/remove", {
+          data: { Id: tr.id },
+        })
+        .then(({ data }) => {
+          if (data.removed) {
+            dirs = dirs.filter((d) => d.Id !== tr.id);
+            dirs = dirs;
+          } else {
+            msg = data.msg;
+          }
+        });
     }
   };
 
-  const rescan = e => {
+  const rescan = (e) => {
     let tr = e.target.closest("tr");
-    let dir = dirs.find(d => d.Id === tr.id);
+    let dir = dirs.find((d) => d.Id === tr.id);
     socket.emit("scan-dir", { Id: dir.Id });
     dir.IsLoading = true;
     dirs = dirs;

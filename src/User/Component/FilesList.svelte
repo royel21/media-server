@@ -2,14 +2,14 @@
   import { tick, afterUpdate, getContext } from "svelte";
   import { fade } from "svelte/transition";
   import { navigate } from "svelte-routing";
-  import Axios from "axios";
+  import axios from "axios";
 
   import { genUrl, getFilesPerPage, FileTypes, ProcessFile } from "./Utils";
   import {
     fileKeypress,
     selectItem,
     getElIndex,
-    fileClicks
+    fileClicks,
   } from "./FileEvents";
 
   import Pagination from "../../ShareComponent/Pagination.svelte";
@@ -27,7 +27,7 @@
   let favClicked = null;
   let Mount = false;
 
-  const cancelToken = Axios.CancelToken;
+  const cancelToken = axios.CancelToken;
   let cancel;
 
   const loadContent = async (pg = 1, flt = "", curId = "") => {
@@ -36,10 +36,10 @@
         cancel();
       }
       let url = genUrl(pg, { order: "nu", items: 0 }, flt, type, curId);
-      let { data } = await Axios.get(url, {
+      let { data } = await axios.get(url, {
         cancelToken: new cancelToken(function executor(c) {
           cancel = c;
-        })
+        }),
       });
       pageData = data;
     } catch (error) {}
@@ -53,20 +53,20 @@
     navigate(`/${type}/${pg}/${filter || ""}`);
     selected = sel || 0;
   };
-  const fileFilter = event => {
+  const fileFilter = (event) => {
     filter = event.detail;
     navigate(`/${type}/${1}/${filter || ""}`);
   };
 
-  const handleKeydown = event => {
+  const handleKeydown = (event) => {
     fileKeypress(event, page, goToPage, ProcessFile, selected);
   };
 
-  const openFile = event => {
+  const openFile = (event) => {
     ProcessFile(event.target.closest(".file"), socket);
   };
 
-  const favClick = event => {
+  const favClick = (event) => {
     let { target } = event;
     if (target.tagName !== "I") {
       fileClicks(event);
@@ -75,8 +75,8 @@
     favClicked = target;
   };
 
-  const removeFile = event => {
-    pageData.files = pageData.files.filter(f => f.Id !== event.detail);
+  const removeFile = (event) => {
+    pageData.files = pageData.files.filter((f) => f.Id !== event.detail);
     if (pageData.totalPages > 1) {
       if (pageData.files.length === 0) {
         page -= 1;

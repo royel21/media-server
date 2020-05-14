@@ -1,7 +1,7 @@
 <script>
   import { onMount, setContext } from "svelte";
   import { navigate } from "svelte-routing";
-  import Axios from "Axios";
+  import axios from "axios";
   import { tick } from "svelte";
   import socketClient from "socket.io-client";
   //Pages
@@ -15,13 +15,13 @@
 
   function isPwa() {
     return ["fullscreen", "standalone", "minimal-ui"].some(
-      displayMode =>
+      (displayMode) =>
         window.matchMedia("(display-mode: " + displayMode + ")").matches
     );
   }
 
   onMount(async () => {
-    let resp = await Axios.get("/api/users");
+    let resp = await axios.get("/api/users");
     if (resp.data.isAutenticated) {
       user = resp.data;
     }
@@ -29,7 +29,7 @@
   });
 
   const logout = async () => {
-    Axios.get("/api/users/logout").then(({ data }) => {
+    axios.get("/api/users/logout").then(({ data }) => {
       if (data.success) {
         user = {};
         navigate("/login", { replace: true });
@@ -40,7 +40,7 @@
       }
     });
   };
-  const logIn = _user => {
+  const logIn = (_user) => {
     user = _user.detail;
     navigate("/", { replace: true });
   };
@@ -53,7 +53,7 @@
     socket = socketClient("/");
     setContext("socket", socket);
     setContext("User", user);
-    socket.on("error", error => {
+    socket.on("error", (error) => {
       console.log(error);
     });
   }

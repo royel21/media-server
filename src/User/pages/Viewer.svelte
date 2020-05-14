@@ -103,10 +103,8 @@
     ) {
       if (document.fullscreenElement) {
         window.screen.orientation.lock("landscape");
-        console.log("isAndroid");
       } else {
         window.screen.orientation.unlock();
-        console.log("isAndroid not");
       }
     }
   });

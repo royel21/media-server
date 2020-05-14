@@ -1,29 +1,29 @@
 <script>
   import { onMount, createEventDispatcher } from "svelte";
-  import Axios from "Axios";
+  import axios from "axios";
   export let items = [];
   export let type;
 
   const dispatch = createEventDispatcher();
 
-  const expandFolder = event => {
+  const expandFolder = (event) => {
     let li = event.target.closest("li");
-    let item = items.find(d => d.Id.toString() === li.id);
+    let item = items.find((d) => d.Id.toString() === li.id);
     if (item.Content.length === 0) {
-      Axios.post("/api/admin/directories/Content", { Path: item.Path }).then(
-        ({ data }) => {
+      axios
+        .post("/api/admin/directories/Content", { Path: item.Path })
+        .then(({ data }) => {
           item.Content = data.data;
           items = items;
-        }
-      );
+        });
     } else {
       item.Content = [];
       items = items;
     }
   };
-  const scanDirectory = event => {
+  const scanDirectory = (event) => {
     let li = event.target.closest("li");
-    let item = items.find(d => d.Id.toString() === li.id);
+    let item = items.find((d) => d.Id.toString() === li.id);
     dispatch("scanDir", item);
   };
 </script>

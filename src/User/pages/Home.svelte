@@ -54,7 +54,6 @@
     if (container) {
       let tFile = document.querySelector(".file");
       if (tFile) count = container.offsetWidth / tFile.offsetWidth;
-      console.log("count", count);
     }
   };
   onMount(() => {

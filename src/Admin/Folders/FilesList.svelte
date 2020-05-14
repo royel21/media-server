@@ -3,9 +3,9 @@
     onMount,
     onDestroy,
     getContext,
-    createEventDispatcher
+    createEventDispatcher,
   } from "svelte";
-  import Axios from "Axios";
+  import axios from "axios";
   import { calRows } from "./Utils";
 
   import ItemList from "./ItemList.svelte";
@@ -25,11 +25,11 @@
   let showModal = false;
   let modalType = {};
 
-  const loadFiles = async pg => {
-    let resp = await Axios.get(
-      `api/admin/folders/files/${fId}/${pg}/${calRows(
-        ".list-container"
-      )}/${filter || ""}`
+  const loadFiles = async (pg) => {
+    let resp = await axios.get(
+      `api/admin/folders/files/${fId}/${pg}/${calRows(".list-container")}/${
+        filter || ""
+      }`
     );
     if (resp.data.files) {
       let data = resp.data;
@@ -40,7 +40,7 @@
   };
 
   onMount(async () => {
-    socket.on("file-renamed", data => {
+    socket.on("file-renamed", (data) => {
       if (data.success) {
         file.Name = data.Name;
         items = items;
@@ -49,10 +49,10 @@
       console.log("rename: ", data.msg);
     });
 
-    socket.on("file-removed", data => {
+    socket.on("file-removed", (data) => {
       if (data.success) {
         if (page === totalPages && items.length > 1) {
-          items = items.filter(f => f.Id !== file.Id);
+          items = items.filter((f) => f.Id !== file.Id);
         } else {
           page -= 1;
           loadFiles(page);
@@ -68,12 +68,12 @@
     delete socket._callbacks["$file-removed"];
   });
 
-  const onFilter = event => {
+  const onFilter = (event) => {
     filter = event.detail;
     loadFiles(1);
   };
 
-  const goToPage = pg => {
+  const goToPage = (pg) => {
     pg = parseInt(pg.detail);
     if (pg < 1 || pg > totalPages) return;
     page = pg < 1 ? 1 : pg > totalPages ? totalPages : pg;
@@ -84,10 +84,10 @@
     loadFiles(1);
   }
 
-  const itemClick = event => {
+  const itemClick = (event) => {
     let el = event.target;
     if (el.tagName !== "LI") {
-      file = items.find(f => f.Id === el.closest("li").id);
+      file = items.find((f) => f.Id === el.closest("li").id);
       let cList = el.classList.toString();
       if (/fa-edit/gi.test(cList)) {
         modalType = { title: "Edit File", Del: false, isFile: true };
@@ -98,7 +98,7 @@
     }
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     if (modalType.Del) {
       let Del = event.target.querySelector("input").checked;

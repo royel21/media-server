@@ -1,5 +1,5 @@
 <script>
-  import Axios from "Axios";
+  import axios from "axios";
   import { navigate } from "svelte-routing";
   import { createEventDispatcher } from "svelte";
 
@@ -7,12 +7,12 @@
 
   let user = {
     username: "",
-    password: ""
+    password: "",
   };
   let error = { name: "", password: "" };
-  const onSubmit = event => {
+  const onSubmit = (event) => {
     event.preventDefault();
-    Axios.post("/api/users/login", user).then(({ data }) => {
+    axios.post("/api/users/login", user).then(({ data }) => {
       if (data.isAutenticated) {
         dispatch("login", { ...data, Id: "" });
       } else {

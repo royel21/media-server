@@ -11,12 +11,12 @@
   let thisEl;
   let showList = false;
 
-  const addToFav = async event => {
+  const addToFav = async (event) => {
     let FolderId = event.target.closest(".file").id;
     let FavoriteId = event.target.id;
     const { data } = await axios.post("/api/files/favorites/add-folder", {
       FolderId,
-      FavoriteId
+      FavoriteId,
     });
 
     if (data.success) {
@@ -24,10 +24,10 @@
     }
   };
 
-  const removeFile = async FolderId => {
+  const removeFile = async (FolderId) => {
     let { data } = await axios.post("/api/files/favorites/remove-folder", {
       id: favId,
-      fid: FolderId
+      fid: FolderId,
     });
     if (data.removed) {
       dispath("removeFile", FolderId);

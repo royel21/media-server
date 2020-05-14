@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import Axios from "Axios";
+  import axios from "axios";
 
   import ModalUser from "./Component/ModalUser.svelte";
 
@@ -14,34 +14,36 @@
     foundUser = { AdultPass: false };
   };
 
-  const saveEdit = e => {
+  const saveEdit = (e) => {
     let tr = e.target.closest("tr");
     if (tr) {
-      foundUser = users.find(u => u.Id === tr.id) || {};
+      foundUser = users.find((u) => u.Id === tr.id) || {};
     }
     showModal = true;
   };
 
-  const removeUser = e => {
+  const removeUser = (e) => {
     let tr = e.target.closest("tr");
     let Role = tr.children[1].innerText;
     if (tr) {
-      Axios.delete("/api/admin/users/remove", {
-        data: { Id: tr.id, Role }
-      }).then(({ data }) => {
-        if (data.removed) {
-          users = users.filter(u => u.Id !== tr.id);
-        } else {
-          error = data.msg;
-        }
-      });
+      axios
+        .delete("/api/admin/users/remove", {
+          data: { Id: tr.id, Role },
+        })
+        .then(({ data }) => {
+          if (data.removed) {
+            users = users.filter((u) => u.Id !== tr.id);
+          } else {
+            error = data.msg;
+          }
+        });
     }
   };
 
-  const updateUsers = event => {
+  const updateUsers = (event) => {
     let user = event.detail;
     //Filter users
-    let filteredUsers = users.filter(u => u.Id !== user.Id);
+    let filteredUsers = users.filter((u) => u.Id !== user.Id);
     //Add and sort users
     users = [...filteredUsers, user].sort((a, b) => {
       return a.Name.localeCompare(b.Name);
@@ -49,7 +51,7 @@
     hideModal();
   };
   onMount(async () => {
-    Axios.get("/api/admin/users").then(({ data }) => {
+    axios.get("/api/admin/users").then(({ data }) => {
       if (data.users) {
         users = data.users;
       }

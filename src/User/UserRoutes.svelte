@@ -4,18 +4,18 @@
   import { FavoritesStores } from "./Stores/FavoritesStores";
 
   import Navbar from "../ShareComponent/Navbar.svelte";
-  import Home from "./Pages/Home.svelte";
-  import Mangas from "./Pages/Mangas.svelte";
-  import Videos from "./Pages/Videos.svelte";
-  import Favorites from "./Pages/Favorites.svelte";
-  import Content from "./Pages/Content.svelte";
-  import Viewer from "./Pages/Viewer.svelte";
+  import Home from "./pages/Home.svelte";
+  import Mangas from "./pages/Mangas.svelte";
+  import Videos from "./pages/Videos.svelte";
+  import Favorites from "./pages/Favorites.svelte";
+  import Content from "./pages/Content.svelte";
+  import Viewer from "./pages/Viewer.svelte";
 
   const navItems = [
     { title: "Home", path: "/", class: "home" },
     { title: "Videos", path: "/videos", class: "film" },
     { title: "Mangas", path: "/mangas", class: "book" },
-    { title: "Favorites", path: "/favorites", class: "heart" }
+    { title: "Favorites", path: "/favorites", class: "heart" },
   ];
   FavoritesStores.set(getContext("User").favorites);
 </script>

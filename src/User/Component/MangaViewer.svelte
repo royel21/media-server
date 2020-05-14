@@ -270,7 +270,7 @@
           class:empty-img={!images[file.CurrentPos]}
           style="object-fit: {config.imgAbjust}"
           src={images[file.CurrentPos] && 'data:img/jpeg;base64, ' + images[file.CurrentPos]}
-          alt="Loading Image" />
+          alt="Loading..." />
       {:else}
         {#each Array(file.Duration).fill() as _, i}
           <img
@@ -278,7 +278,7 @@
             id={i}
             style="object-fit: {config.imgAbjust}"
             src={images[i] ? 'data:img/jpeg;base64, ' + images[i] : ''}
-            alt="Loading Image" />
+            alt="Loading...r" />
         {/each}
       {/if}
     </div>
