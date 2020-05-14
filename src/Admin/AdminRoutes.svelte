@@ -8,7 +8,11 @@
   const navItems = [
     { title: "Users", path: "/", class: "users" },
     { title: "Folders", path: "/folders", class: "folder" },
-    { title: "Content Manager", path: "/content-manager", class: "sitemap" },
+    {
+      title: "Content Manager",
+      path: "/content-manager/tab-1",
+      class: "sitemap",
+    },
   ];
 </script>
 

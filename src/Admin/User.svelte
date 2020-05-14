@@ -17,7 +17,7 @@
   const saveEdit = (e) => {
     let tr = e.target.closest("tr");
     if (tr) {
-      foundUser = users.find((u) => u.Id === tr.id) || {};
+      foundUser = { ...users.find((u) => u.Id === tr.id) } || {};
     }
     showModal = true;
   };
@@ -48,8 +48,10 @@
     users = [...filteredUsers, user].sort((a, b) => {
       return a.Name.localeCompare(b.Name);
     });
+    user.Password = "";
     hideModal();
   };
+
   onMount(async () => {
     axios.get("/api/admin/users").then(({ data }) => {
       if (data.users) {

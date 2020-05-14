@@ -10,7 +10,6 @@
 
   const submit = (e) => {
     if (!foundUser.Name) return (error = "Name Can't be empty");
-
     axios.post("/api/admin/users/add-edit", foundUser).then(({ data }) => {
       if (!data.fail) {
         dispatch("updateusers", data.user);

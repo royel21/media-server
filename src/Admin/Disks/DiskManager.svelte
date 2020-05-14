@@ -5,8 +5,7 @@
   import { fly } from "svelte/transition";
   export let tab = "tab-1";
   $: {
-    navigate(`/content-manager/${tab}`, { replace: true });
-    console.log(tab);
+    navigate(`/content-manager/${tab || "tab-1"}`, { replace: true });
   }
 </script>
 

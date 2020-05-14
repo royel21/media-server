@@ -1,24 +1,24 @@
-const db = require("./models");
-db.sqlze.options.logging = console.log;
+// const db = require("./models");
+// db.sqlze.options.logging = console.log;
 
-const testDb = async () => {
-  console.time("time");
-  let user = await db.user.findOne({
-    where: { Name: "Royel" },
-    include: { model: db.recent },
-  });
+// const testDb = async () => {
+//   console.time("time");
+//   let user = await db.user.findOne({
+//     where: { Name: "Royel" },
+//     include: { model: db.recent },
+//   });
 
-  let folders = await user.Recent.getFolders({
-    limit: 20,
-    order: [[db.sqlze.literal("RecentFolders.LastRead"), "DESC"]],
-  });
-  let result = folders.map((f) => {
-    return { ...f.dataValues, RecentFolders: "", ...f.RecentFolders.dataValues };
-  });
-  console.timeEnd("time");
-  console.log(result);
-};
-testDb();
+//   let folders = await user.Recent.getFolders({
+//     limit: 20,
+//     order: [[db.sqlze.literal("RecentFolders.LastRead"), "DESC"]],
+//   });
+//   let result = folders.map((f) => {
+//     return { ...f.dataValues, RecentFolders: "", ...f.RecentFolders.dataValues };
+//   });
+//   console.timeEnd("time");
+//   console.log(result);
+// };
+// testDb();
 // db.init().then(testDb);
 // const db = require("./models");
 // const { getOrderBy } = require("./routes/query-helper");
@@ -128,3 +128,12 @@ testDb();
 //     resolve(0);
 //   }
 // });
+
+const { nanoid } = require("nanoid");
+const os = require("os");
+const fs = require("fs-extra");
+const path = require("path");
+const drivelist = require("drivelist");
+const windir = require("win-explorer");
+let file = windir.ListFiles("E:/Anime1/", { oneFile: true });
+console.log(file);
