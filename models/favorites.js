@@ -1,39 +1,39 @@
 const { nanoid } = require("nanoid");
 module.exports = (sequelize, DataTypes) => {
-  const { STRING } = DataTypes;
-  const Favorite = sequelize.define(
-    "Favorite",
-    {
-      Id: {
-        type: STRING(6),
-        primaryKey: true,
-        unique: true,
-        allowNull: false,
-      },
-      Name: {
-        type: STRING(100),
-        unique: "compositeIndex",
-        allowNull: false,
-      },
-      UserId: {
-        type: STRING(6),
-        unique: "compositeIndex",
-      },
-    },
-    {
-      timestamps: false,
-      hooks: {
-        beforeValidate: (item) => {
-          item.Id = nanoid(6);
+    const { STRING } = DataTypes;
+    const Favorite = sequelize.define(
+        "Favorite",
+        {
+            Id: {
+                type: STRING(6),
+                primaryKey: true,
+                unique: true,
+                allowNull: false,
+            },
+            Name: {
+                type: STRING(100),
+                unique: "compositeIndex",
+                allowNull: false,
+            },
+            UserId: {
+                type: STRING(10),
+                unique: "compositeIndex",
+            },
         },
-        beforeBulkCreate: (instances) => {
-          for (var item of instances) {
-            item.Id = nanoid(6);
-          }
-        },
-      },
-    }
-  );
+        {
+            timestamps: false,
+            hooks: {
+                beforeValidate: (item) => {
+                    item.Id = nanoid(6);
+                },
+                beforeBulkCreate: (instances) => {
+                    for (var item of instances) {
+                        item.Id = nanoid(6);
+                    }
+                },
+            },
+        }
+    );
 
-  return Favorite;
+    return Favorite;
 };
