@@ -14,3 +14,4 @@ public/build/*
 *.lock
 *.env
 *.db-journal
+rollup.config.js
