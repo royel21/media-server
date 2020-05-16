@@ -9,7 +9,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const production = !process.env.ROLLUP_WATCH;
-const { PORT, DEV_PORT, NODE_ENV, HOST } = process.env;
+const { PORT, DEV_PORT } = process.env;
 
 export default {
     input: "src/main.js",
@@ -41,7 +41,7 @@ export default {
         }),
         commonjs(),
 
-        // In dev mode, call `npm run start` once
+        // In dev mode, call `npm run express` once
         // the bundle has been generated
         !production && serve(),
 
@@ -72,15 +72,10 @@ function serve() {
             console.log("started", started);
             if (!started) {
                 started = true;
-                // console.log("express started");
                 require("child_process").spawn("npm", ["run", "express"], {
                     stdio: ["ignore", "inherit", "inherit"],
                     shell: true,
                 });
-                // require("child_process").spawn("npm", ["run", "start", "--", "--dev"], {
-                //   stdio: ["ignore", "inherit", "inherit"],
-                //   shell: true,
-                // });
             }
         },
     };
