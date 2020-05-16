@@ -10,7 +10,6 @@ dotenv.config();
 
 const production = !process.env.ROLLUP_WATCH;
 const { PORT, DEV_PORT, NODE_ENV, HOST } = process.env;
-console.log("PORT: ", PORT, DEV_PORT, NODE_ENV, HOST);
 
 export default {
     input: "src/main.js",
