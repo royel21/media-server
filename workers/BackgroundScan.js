@@ -66,6 +66,8 @@ const createFolderAndCover = async (dir, files, fd) => {
             FilesType,
             Path: dir,
         });
+    } else {
+        await folder.update({ Cover: FolderCover, FileCount });
     }
 
     return folder.Id;
@@ -152,6 +154,7 @@ const scanDirectory = async ({ id, dir, isFolder }) => {
         folderId = await createFolderAndCover(dir, fis, folder);
     } else {
         folderId = id;
+        await createFolderAndCover(dir, fis);
     }
     try {
         await PopulateDB(fis, folderId);
