@@ -59,19 +59,15 @@ db.file.belongsToMany(db.recent, {
     through: { model: db.recentFile, onDelete: "cascade" },
 });
 
-db.directory.hasMany(db.file, { onDelete: "cascade" });
-db.directory.hasMany(db.folder, { onDelete: "cascade" });
+db.folder.belongsTo(db.directory, { onDelete: "cascade" });
+db.directory.hasMany(db.folder);
 
-db.folder.belongsTo(db.directory);
-
-db.file.belongsTo(db.directory);
-db.file.belongsTo(db.folder);
+db.file.belongsTo(db.folder, { onDelete: "cascade" });
+db.folder.hasMany(db.file);
 
 db.user.hasMany(db.favorite, { onDelete: "cascade" });
 db.user.hasOne(db.recent, { onDelete: "cascade" });
 db.user.hasOne(db.userConfig, { onDelete: "cascade" });
-
-db.folder.hasMany(db.file, { onDelete: "cascade" });
 
 db.init = async (force) => {
     await sequelize.sync({ force });

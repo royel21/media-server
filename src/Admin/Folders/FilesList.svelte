@@ -26,13 +26,13 @@
   let modalType = {};
 
   const loadFiles = async (pg) => {
-    let resp = await axios.get(
+    let { data } = await axios.get(
       `api/admin/folders/files/${fId}/${pg}/${calRows(".list-container")}/${
         filter || ""
       }`
     );
-    if (resp.data.files) {
-      let data = resp.data;
+    console.log("data", data);
+    if (data.files) {
       items = data.files;
       totalPages = data.totalPages;
       totalItems = data.totalItems;
@@ -54,10 +54,8 @@
       if (data.success) {
         if (page === totalPages && items.length > 1) {
           items = items.filter((f) => f.Id !== file.Id);
-        } else if (page < totalPages) {
-          loadFiles(page);
         } else {
-          page -= 1;
+          page = page > 1 ? page - 1 : page;
           loadFiles(page);
         }
         hideModal();

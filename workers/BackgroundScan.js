@@ -76,6 +76,7 @@ const PopulateDB = async (files, FolderId) => {
     let filteredFile = files.filter(
         (f) => f.isDirectory || (allExt.test(f.FileName) && !f.isHidden)
     );
+
     for (let f of filteredFile) {
         try {
             if (!f.isDirectory) {
@@ -88,7 +89,6 @@ const PopulateDB = async (files, FolderId) => {
                     tempFiles.push({
                         Name: f.FileName,
                         Type: /rar|zip/gi.test(f.extension) ? "Manga" : "Video",
-                        DirectoryId,
                         FolderId,
                         Size: f.Size,
                         CreatedAt: f.LastModified,
@@ -117,8 +117,7 @@ const PopulateDB = async (files, FolderId) => {
 
 const removeOrphanFiles = async (DirId) => {
     let files = await db.file.findAll({
-        where: { DirectoryId: DirId },
-        include: { model: db.folder },
+        include: { model: db.folder, where: { DirectoryId: DirId }, required: true },
     });
     for (let f of files) {
         if (!fs.existsSync(path.join(f.Folder.Path, f.Name))) await f.destroy();

@@ -51,8 +51,12 @@ const getScreenShot = async (video, toPath, duration) => {
 
 module.exports.genScreenShot = async (id) => {
     let files = await db.file.findAll({
-        where: { DirectoryId: id, Duration: 0 },
-        include: { model: db.folder },
+        where: { Duration: 0 },
+        include: {
+            model: db.folder,
+            where: { DirectoryId: id },
+            required: true,
+        },
     });
     console.log("Creating Thumbnails");
     let size = files.length;

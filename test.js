@@ -2,7 +2,6 @@ require("dotenv").config();
 const db = require("./models");
 db.sqlze.options.logging = console.log;
 // const test = async () => {
-//     await db.init();
 
 //     const folders = await db.folder.findAndCountAll({ order: ["Name"] });
 //     console.log(folders.count);
@@ -12,27 +11,28 @@ db.sqlze.options.logging = console.log;
 // };
 
 // test();
-const { getFolders } = require("./routes/query-helper");
+// const { getFolders } = require("./routes/query-helper");
 const testDb = async () => {
-    console.time("time");
-    let user = await db.user.findOne({
-        where: { Name: "Royel" },
-        include: [{ model: db.recent }, { model: db.favorite }],
-    });
+    await db.init(true);
+    // console.time("time");
+    // let user = await db.user.findOne({
+    //     where: { Name: "Royel" },
+    //     include: [{ model: db.recent }, { model: db.favorite }],
+    // });
 
-    const req = {
-        user,
-        params: { filetype: "videos", order: "nu", page: 1, items: 10, search: "" },
-    };
-    const res = {
-        json: (data) => {
-            for (let f of data.files) {
-                console.log(f.dataValues.Name);
-            }
-        },
-    };
-    await getFolders(req, res);
-    console.timeEnd("time");
+    // const req = {
+    //     user,
+    //     params: { filetype: "videos", order: "nu", page: 1, items: 10, search: "" },
+    // };
+    // const res = {
+    //     json: (data) => {
+    //         for (let f of data.files) {
+    //             console.log(f.dataValues.Name);
+    //         }
+    //     },
+    // };
+    // await getFolders(req, res);
+    // console.timeEnd("time");
 };
 testDb();
 // db.init().then(testDb);

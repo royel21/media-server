@@ -23,14 +23,14 @@
   let modalType = {};
 
   const loadFolders = async (pg) => {
-    let resp = await axios.get(
+    let { data } = await axios.get(
       `/api/admin/folders/${page}/${calRows()}/${filter || ""}`
     );
 
-    if (resp.data.folders.length > 0) {
-      let data = resp.data;
-
-      fId = data.folders[0].Id;
+    console.log("data", data);
+    if (data.folders) {
+      let folder2 = data.folders[0];
+      fId = (folder2 && folder2.Id) || "";
       items = data.folders;
       totalPages = data.totalPages;
       totalItems = data.totalItems;
@@ -55,8 +55,12 @@
       if (data.success) {
         if (page === totalPages && items.length > 1) {
           items = items.filter((f) => f.Id !== folder.Id);
+          if (folder.Id === fId) {
+            fId = items[0].Id;
+            dispatch("folderid", fId);
+          }
         } else {
-          page -= 1;
+          page = page > 1 ? page - 1 : page;
           loadFolders(page);
         }
         hideModal();
