@@ -47,7 +47,6 @@
         items = items;
         hideModal();
       }
-      console.log("rename: ", data.msg);
     });
 
     socket.on("file-removed", (data) => {
@@ -60,7 +59,6 @@
         }
         hideModal();
       }
-      console.log("remove:", data.msg);
     });
   });
 
@@ -83,7 +81,6 @@
 
   $: if (fId) {
     loadFiles(1);
-    console.log("new folder", fId);
   }
 
   const itemClick = (event) => {
