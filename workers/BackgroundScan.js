@@ -96,6 +96,7 @@ const PopulateDB = async (files, FolderId) => {
                 }
             } else {
                 if (f.Files.length > 0) {
+                    console.log("folder: ", f.FileName);
                     let fId = await createFolderAndCover(f.FileName, f.Files, f);
                     if (fId) {
                         await PopulateDB(f.Files, fId);
