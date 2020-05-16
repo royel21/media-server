@@ -16,7 +16,7 @@ module.exports.setSocket = (_io, _socket, _db) => {
 };
 
 var worker = null;
-const startWork = (model) => {
+const startWork = (model, isFolder) => {
     if (!worker) {
         worker = fork("./workers/BackgroundScan.js");
 
@@ -34,7 +34,7 @@ const startWork = (model) => {
                 });
         });
     }
-    let data = { id: model.Id, dir: model.FullPath };
+    let data = { id: model.Id, dir: isFolder ? model.Path : model.FullPath, isFolder };
     worker.send(data);
 };
 // List all hdd
@@ -77,7 +77,7 @@ module.exports.loadContent = (data) => {
     }
 };
 //Scan all files of a direcotry
-module.exports.scanDir = async ({ Id, Path }) => {
+module.exports.scanDir = async ({ Id, Path, isFolder }) => {
     //If is it root of disk return;
     if (!Id && !Path) return socket.emit("scan-info", "Id And Path both can't be null");
 
@@ -95,9 +95,11 @@ module.exports.scanDir = async ({ Id, Path }) => {
                 });
             }
         } else {
-            model = await db.directory.findOne({
-                where: { Id },
-            });
+            if (!isFolder) {
+                model = await db.directory.findOne({ where: { Id } });
+            } else {
+                model = await db.folder.findOne({ where: { Id } });
+            }
         }
 
         if (model) {
@@ -105,7 +107,7 @@ module.exports.scanDir = async ({ Id, Path }) => {
                 msg = `Directory ${model.Name} is already scanning content`;
             } else {
                 msg = `Directory ${model.Name} scanning content`;
-                startWork(model);
+                startWork(model, isFolder);
             }
         } else {
             msg = "directory don't exist or can't add root of a disk";

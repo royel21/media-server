@@ -52,6 +52,9 @@
     font-size: 20px;
     margin-right: 6px;
   }
+  .active i:not(.fa-trash-alt) {
+    color: white;
+  }
 </style>
 
 <div id={title} class="file-list col-6">
@@ -64,12 +67,16 @@
       {#if items.length < 1}
         <li class="list-group-item empty-list">{`Not ${title} Found`}</li>
       {:else}
-        {#each items as { Id, Name }}
+        {#each items as { Id, Name, Type }}
           <li
             id={Id}
             title={Name}
-            class={'list-group-item' + (folderId === Id ? ' active' : '')}
+            class="list-group-item"
+            class:active={folderId === Id}
             on:click>
+            {#if Type.includes('Folder')}
+              <i class="fas fa-sync" />
+            {/if}
             <i class="fas fa-edit" />
             <i class="fas fa-trash-alt" />
             {Name}

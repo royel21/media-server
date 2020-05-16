@@ -98,10 +98,13 @@
       let cList = el.classList.toString();
       if (/fa-edit/gi.test(cList)) {
         modalType = { title: "Edit Folder", Del: false };
-      } else {
+        showModal = true;
+      } else if (/fa-trash-alt/gi.test(cList)) {
         modalType = { title: "Remove Folder", Del: true };
+        showModal = true;
+      } else {
+        socket.emit("scan-dir", { Id: folderId, isFolder: true });
       }
-      showModal = true;
     }
   };
 

@@ -49,15 +49,22 @@ const getScreenShot = async (video, toPath, duration) => {
     });
 };
 
-module.exports.genScreenShot = async (id) => {
-    let files = await db.file.findAll({
-        where: { Duration: 0 },
-        include: {
-            model: db.folder,
-            where: { DirectoryId: id },
-            required: true,
-        },
-    });
+module.exports.genScreenShot = async (id, isFolder) => {
+    let files = [];
+    if (isFolder) {
+        files = await db.file.findAll({
+            include: { model: db.folder, where: { Id: id }, required: true },
+        });
+    } else {
+        files = await db.file.findAll({
+            where: { Duration: 0 },
+            include: {
+                model: db.folder,
+                where: { DirectoryId: id },
+                required: true,
+            },
+        });
+    }
     console.log("Creating Thumbnails");
     let size = files.length;
     let progress = 0.01;

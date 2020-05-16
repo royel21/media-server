@@ -116,34 +116,50 @@ const PopulateDB = async (files, FolderId) => {
     }
 };
 
-const removeOrphanFiles = async (DirId) => {
-    let files = await db.file.findAll({
-        include: { model: db.folder, where: { DirectoryId: DirId }, required: true },
-    });
+const removeOrphanFiles = async (Id, isFolder) => {
+    let files;
+    let dir = "";
+    if (isFolder) {
+        let folder = await db.folder.findOne({
+            where: { Id },
+            include: { model: db.file },
+        });
+        files = await folder.Files;
+        dir = folder.Path;
+    } else {
+        files = await db.file.findAll({
+            include: { model: db.folder, where: { DirectoryId: Id }, required: true },
+        });
+        let file = files[0];
+        if (!file) return;
+        dir = files[0].Folder.Path;
+    }
     for (let f of files) {
-        if (!fs.existsSync(path.join(f.Folder.Path, f.Name))) await f.destroy();
+        if (!fs.existsSync(path.join(dir, f.Name))) await f.destroy();
     }
 };
 
-const scanDirectory = async (data) => {
-    await removeOrphanFiles(data.id);
+const scanDirectory = async ({ id, dir, isFolder }) => {
+    await removeOrphanFiles(id, isFolder);
 
-    DirectoryId = data.id;
+    DirectoryId = id;
 
-    var fis = WinDrive.ListFilesRO(data.dir);
+    var fis = WinDrive.ListFilesRO(dir);
     let folderId;
 
-    if (fis.filter((f) => !f.isDirectory).length > 0) {
-        let folder = WinDrive.ListFiles(data.dir, { oneFile: true });
-        folderId = await createFolderAndCover(data.dir, fis, folder);
+    if (!isFolder && fis.filter((f) => !f.isDirectory).length > 0) {
+        let folder = WinDrive.ListFiles(dir, { oneFile: true });
+        folderId = await createFolderAndCover(dir, fis, folder);
+    } else {
+        folderId = id;
     }
     try {
         await PopulateDB(fis, folderId);
-        console.log("job db end: ", data.id);
+        console.log("job db end: ", id);
         await foldersThumbNails(folderCovers);
-        console.log("job folder end:", data.id);
-        await genScreenShot(data.id);
-        console.log("job screenshot end: ", data.id);
+        console.log("job folder end:", id);
+        await genScreenShot(id, isFolder);
+        console.log("job screenshot end: ", id);
     } catch (err) {
         console.log("line 14:", err);
     }
