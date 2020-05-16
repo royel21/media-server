@@ -25,7 +25,6 @@ const createFolderAndCover = async (dir, files, fd) => {
     if (!firstFile) return "";
     let Name = path.basename(dir);
     let FolderCover = path.join(coverPath, Name + ".jpg");
-
     let FilesType = /\.(rar|zip)/gi.test(firstFile.FileName) ? "mangas" : "videos";
 
     if (!fs.existsSync(FolderCover)) {

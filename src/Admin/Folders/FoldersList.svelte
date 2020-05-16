@@ -88,8 +88,8 @@
     loadFolders(pg);
   };
 
-  const itemClick = (event) => {
-    let el = event.target;
+  const itemClick = ({ target }) => {
+    let el = target;
     if (el.tagName === "LI") {
       folderId = el.id;
       dispatch("folderid", folderId);
@@ -103,7 +103,7 @@
         modalType = { title: "Remove Folder", Del: true };
         showModal = true;
       } else {
-        socket.emit("scan-dir", { Id: folderId, isFolder: true });
+        socket.emit("scan-dir", { Id: folder.Id, isFolder: true });
       }
     }
   };
