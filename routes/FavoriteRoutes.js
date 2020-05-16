@@ -92,7 +92,6 @@ Router.delete("/remove", (req, res) => {
 
 Router.post("/add-folder", (req, res) => {
     const { FavoriteId, FolderId } = req.body;
-    console.log("addFolder:", req.body);
     db.favoriteFolder
         .create({ FolderId, FavoriteId })
         .then((result) => {
