@@ -6,8 +6,8 @@ const db = {};
 const { dialect, pool } = require("./config");
 const Op = Sequelize.Op;
 const DataTypes = Sequelize.DataTypes;
-const { HOST, USER, PASSWORD, DB } = process.env;
-const sequelize = new Sequelize(DB, USER, PASSWORD, {
+const { HOST, DB_USER, PASSWORD, DB } = process.env;
+const sequelize = new Sequelize(DB, DB_USER, PASSWORD, {
     host: HOST,
     dialect,
     pool,
