@@ -1,7 +1,7 @@
 const db = require("../models");
 
 const getOrderBy = (orderby, table = "") => {
-    let nameOrder = db.sqlze.literal(`REPLACE("${table}Name", '[','0')`);
+    let nameOrder = db.sqlze.literal("REPLACE(" + table + "Name, '[','0')");
     let order = [];
     switch (orderby) {
         case "nd": {
@@ -130,7 +130,7 @@ exports.getFolders = async (req, res) => {
             },
             FilesType: filetype,
         },
-        order: getOrderBy(order, ""),
+        order: getOrderBy(order, "Folders."),
         offset: (page - 1) * items,
         limit: parseInt(items),
     });

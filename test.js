@@ -1,37 +1,40 @@
 require("dotenv").config();
 const db = require("./models");
 db.sqlze.options.logging = console.log;
-const test = async () => {
-    await db.init(true);
+// const test = async () => {
+//     await db.init();
+
+//     const folders = await db.folder.findAndCountAll({ order: ["Name"] });
+//     console.log(folders.count);
+//     for (let f of folders.rows) {
+//         console.log(f.Name);
+//     }
+// };
+
+// test();
+const { getFolders } = require("./routes/query-helper");
+const testDb = async () => {
+    console.time("time");
     let user = await db.user.findOne({
         where: { Name: "Royel" },
-        include: { model: db.favorite },
+        include: [{ model: db.recent }, { model: db.favorite }],
     });
-    console.log(user.Name, await user.validPassword("842764"));
 
-    //   await getFolders(req, res);
+    const req = {
+        user,
+        params: { filetype: "videos", order: "nu", page: 1, items: 10, search: "" },
+    };
+    const res = {
+        json: (data) => {
+            for (let f of data.files) {
+                console.log(f.dataValues.Name);
+            }
+        },
+    };
+    await getFolders(req, res);
+    console.timeEnd("time");
 };
-
-test();
-
-// const testDb = async () => {
-//   console.time("time");
-//   let user = await db.user.findOne({
-//     where: { Name: "Royel" },
-//     include: { model: db.recent },
-//   });
-
-//   let folders = await user.Recent.getFolders({
-//     limit: 20,
-//     order: [[db.sqlze.literal("RecentFolders.LastRead"), "DESC"]],
-//   });
-//   let result = folders.map((f) => {
-//     return { ...f.dataValues, RecentFolders: "", ...f.RecentFolders.dataValues };
-//   });
-//   console.timeEnd("time");
-//   console.log(result);
-// };
-// testDb();
+testDb();
 // db.init().then(testDb);
 // const db = require("./models");
 // const { getOrderBy } = require("./routes/query-helper");
@@ -68,15 +71,6 @@ test();
 //     totalFiles: result.count,
 //     totalPages: Math.ceil(result.count / items),
 //   });
-// };
-
-// const req = {
-//   params: { filetype: "mangas", order: "nu", page: 1, items: 10, search: "" },
-// };
-// const res = {
-//   json: (data) => {
-//     for (let f of data.files) console.log(f.dataValues);
-//   },
 // };
 
 // const sharp = require("sharp");
