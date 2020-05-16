@@ -14,7 +14,7 @@
   const dispatch = createEventDispatcher();
   const socket = getContext("socket");
 
-  export let fId;
+  export let folderId;
 
   let page = 1;
   let totalPages;
@@ -27,11 +27,11 @@
 
   const loadFiles = async (pg) => {
     let { data } = await axios.get(
-      `api/admin/folders/files/${fId}/${pg}/${calRows(".list-container")}/${
-        filter || ""
-      }`
+      `/api/admin/folders/files/${folderId}/${pg}/${calRows(
+        ".list-container"
+      )}/${filter || ""}`
     );
-    console.log("data", data);
+
     if (data.files) {
       items = data.files;
       totalPages = data.totalPages;
@@ -80,7 +80,7 @@
     loadFiles(page);
   };
 
-  $: if (fId) {
+  $: if (folderId) {
     loadFiles(1);
   }
 
@@ -125,7 +125,7 @@
 
 <ItemList
   title="Files"
-  fId=""
+  folderId=""
   {items}
   {page}
   {totalPages}

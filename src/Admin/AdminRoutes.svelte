@@ -32,7 +32,7 @@
 <Router>
   <Navbar on:click {navItems} />
   <div class="content">
-    <Route path="/folders/:page/:filter" component={Folders} />
+    <Route path="/folders/:folderId/:page/:filter" component={Folders} />
     <Route path="/content-manager/:tab" component={DiskManager} />
     <Route path="/" component={User} />
   </div>

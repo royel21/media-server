@@ -5,6 +5,8 @@
     getContext,
     createEventDispatcher,
   } from "svelte";
+  import { navigate } from "svelte-routing";
+
   import ItemList from "./ItemList.svelte";
   import Modal from "./Modal.svelte";
   import axios from "axios";
@@ -12,10 +14,10 @@
   const dispatch = createEventDispatcher();
   const socket = getContext("socket");
 
-  let page = 1;
+  export let page = 1;
+  export let filter = "";
+  export let folderId;
   let totalPages = 1;
-  let filter = "";
-  let fId = "";
   let totalItems = 0;
   let items = [];
   let folder = {};
@@ -27,15 +29,16 @@
       `/api/admin/folders/${page}/${calRows()}/${filter || ""}`
     );
 
-    console.log("data", data);
+    // console.log("data", data);
     if (data.folders) {
       let folder2 = data.folders[0];
-      fId = (folder2 && folder2.Id) || "";
+      folderId = (folder2 && folder2.Id) || "";
       items = data.folders;
       totalPages = data.totalPages;
       totalItems = data.totalItems;
       page = pg || 1;
-      dispatch("folderid", fId);
+      dispatch("folderid", folderId);
+      navigate(`/folders/${folderId}/${pg}/${filter || ""}`);
     }
   };
 
@@ -44,7 +47,6 @@
     socket.on("folder-renamed", (data) => {
       if (data.success) {
         folder.Name = data.Name;
-        console.log(items);
         items = items;
         hideModal();
       }
@@ -55,9 +57,9 @@
       if (data.success) {
         if (page === totalPages && items.length > 1) {
           items = items.filter((f) => f.Id !== folder.Id);
-          if (folder.Id === fId) {
-            fId = items[0].Id;
-            dispatch("folderid", fId);
+          if (folder.Id === folderId) {
+            folderId = items[0].Id;
+            dispatch("folderid", folderId);
           }
         } else {
           page = page > 1 ? page - 1 : page;
@@ -90,8 +92,8 @@
   const itemClick = (event) => {
     let el = event.target;
     if (el.tagName === "LI") {
-      fId = el.id;
-      dispatch("folderid", fId);
+      folderId = el.id;
+      dispatch("folderid", folderId);
     } else {
       folder = items.find((f) => f.Id === el.closest("li").id);
       let cList = el.classList.toString();
@@ -134,7 +136,7 @@
 
 <ItemList
   title="Folders"
-  {fId}
+  {folderId}
   {items}
   {page}
   {totalPages}

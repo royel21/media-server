@@ -2,9 +2,11 @@
   import FolderList from "./FoldersList.svelte";
   import FilesList from "./FilesList.svelte";
 
-  let fId = "";
+  export let page;
+  export let filter;
+  export let folderId;
   const folderid = (event) => {
-    fId = event.detail;
+    folderId = event.detail;
   };
 </script>
 
@@ -28,7 +30,11 @@
 
 <div class="card bg-dark admin-manager ">
   <div class="rows">
-    <FolderList on:folderid={folderid} />
-    <FilesList {fId} />
+    <FolderList
+      on:folderid={folderid}
+      page={parseInt(page) || 1}
+      {folderId}
+      {filter} />
+    <FilesList {folderId} />
   </div>
 </div>

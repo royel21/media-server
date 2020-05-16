@@ -3,7 +3,7 @@
   import Pagination from "../../ShareComponent/Pagination.svelte";
   export let title;
   export let items;
-  export let fId;
+  export let folderId;
   export let page = 1;
   export let totalPages = 0;
   export let totalItems = 0;
@@ -68,7 +68,7 @@
           <li
             id={Id}
             title={Name}
-            class={'list-group-item' + (fId === Id ? ' active' : '')}
+            class={'list-group-item' + (folderId === Id ? ' active' : '')}
             on:click>
             <i class="fas fa-edit" />
             <i class="fas fa-trash-alt" />
