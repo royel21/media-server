@@ -21,7 +21,7 @@ const getFolders = async (req, res) => {
                 },
             },
         ],
-        order: getOrderBy(order, "Folder."),
+        order: getOrderBy(order, "Folders."),
         offset: (page - 1) * items,
         limit: parseInt(items),
     });
