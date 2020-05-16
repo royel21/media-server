@@ -31,6 +31,7 @@ Router.get("/:page/:items/:filter?", (req, res) => {
 Router.get("/files/:folderId/:page/:items/:filter?", (req, res) => {
     let { folderId, page, items, filter } = req.params;
     let offset = (page - 1) * items || 0;
+    console.log(offset, page, items);
     let limit = parseInt(items) || 10;
     db.file
         .findAndCountAll({

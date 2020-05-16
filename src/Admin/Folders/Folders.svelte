@@ -3,7 +3,7 @@
   import FilesList from "./FilesList.svelte";
 
   let fId = "";
-  const folderid = event => {
+  const folderid = (event) => {
     fId = event.detail;
   };
 </script>

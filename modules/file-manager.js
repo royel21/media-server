@@ -3,6 +3,7 @@ const drivelist = require("drivelist");
 const fs = require("fs-extra");
 const path = require("path");
 const winEx = require("win-explorer");
+const { nanoid } = require("nanoid");
 
 var io;
 var socket;
@@ -12,10 +13,6 @@ module.exports.setSocket = (_io, _socket, _db) => {
     io = _io;
     socket = _socket;
     db = _db;
-};
-
-const getNewId = () => {
-    return Math.random().toString(36).slice(-5);
 };
 
 var worker = null;
@@ -50,7 +47,7 @@ module.exports.diskLoader = () => {
                     let mp = drive.mountpoints[0].path;
                     mp = mp === "/" ? "/home" : mp;
                     disks.push({
-                        Id: getNewId(),
+                        Id: nanoid(5),
                         Name: mp,
                         Path: mp,
                         Content: [],
@@ -70,7 +67,7 @@ module.exports.loadContent = (data) => {
         let tdata = [];
         for (let d of dirs) {
             tdata.push({
-                Id: getNewId(),
+                Id: nanoid(5),
                 Name: d.FileName,
                 Path: path.join(data.Path, d.FileName),
                 Content: [],
@@ -164,7 +161,7 @@ module.exports.renameFile = async ({ Id, Name }) => {
 /************ Remove file from db and system ***********************/
 
 module.exports.removeFile = async ({ Id, Del }) => {
-    let file = await db.file.findByPk(Id);
+    let file = await db.file.findOne({ where: { Id }, include: { model: db.folder } });
     const message = { success: false, msg: "" };
     if (file) {
         try {
@@ -179,7 +176,7 @@ module.exports.removeFile = async ({ Id, Del }) => {
                     file.Name + ".jpg"
                 );
                 if (fs.existsSync(cover)) fs.removeSync(cover);
-                let fPath = path.join(file.FullPath, file.Name);
+                let fPath = path.join(file.Folder.Path, file.Name);
                 if (fs.existsSync(fPath)) {
                     fs.removeSync(fPath);
                     message.msg = `File ${file.Name} removed from server`;
@@ -219,7 +216,6 @@ module.exports.renameFolder = async ({ Id, Name }) => {
             if (fs.existsSync(oldPath)) {
                 fs.moveSync(oldPath, FullPath);
                 msg = "Folder Rename Successfully";
-                db.file.update({ FullPath }, { where: { FolderId: Id } });
 
                 let oldCover = getCoverPath(folder.Name);
                 if (fs.existsSync(oldCover)) fs.moveSync(oldCover, getCoverPath(Name));

@@ -50,9 +50,12 @@
     });
 
     socket.on("file-removed", (data) => {
+      console.log(page, totalPages);
       if (data.success) {
         if (page === totalPages && items.length > 1) {
           items = items.filter((f) => f.Id !== file.Id);
+        } else if (page < totalPages) {
+          loadFiles(page);
         } else {
           page -= 1;
           loadFiles(page);

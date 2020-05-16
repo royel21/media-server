@@ -16,6 +16,9 @@ const sequelize = new Sequelize(DB, DB_USER, PASSWORD, {
         collate: "utf8_general_ci",
     },
     logging: false,
+    dialectOptions: {
+        timezone: "Etc/GMT-4",
+    },
 });
 
 db.Op = Op;
