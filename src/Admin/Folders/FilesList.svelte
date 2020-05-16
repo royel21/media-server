@@ -36,6 +36,7 @@
       items = data.files;
       totalPages = data.totalPages;
       totalItems = data.totalItems;
+      page = pg;
     }
   };
 
@@ -82,6 +83,7 @@
 
   $: if (fId) {
     loadFiles(1);
+    console.log("new folder", fId);
   }
 
   const itemClick = (event) => {
