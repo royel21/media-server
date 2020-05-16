@@ -132,7 +132,7 @@ module.exports.renameFile = async ({ Id, Name }) => {
         let fromFile = path.join(file.FullPath, file.Name);
         let toFile = path.join(file.FullPath, Name);
 
-        let fromCover = path.join("./images", file.Cover);
+        let fromCover = path.join("../images", file.Cover);
         let toCover = path.join(path.dirname(fromCover), Name + ".jpg");
 
         try {
@@ -168,13 +168,7 @@ module.exports.removeFile = async ({ Id, Del }) => {
             await file.destroy();
             message.success = true;
             if (Del) {
-                let cover = path.join(
-                    process.cwd(),
-                    "images",
-                    "covers",
-                    file.Type,
-                    file.Name + ".jpg"
-                );
+                let cover = path.join("../images", file.Type, file.Name + ".jpg");
                 if (fs.existsSync(cover)) fs.removeSync(cover);
                 let fPath = path.join(file.Folder.Path, file.Name);
                 if (fs.existsSync(fPath)) {
@@ -197,7 +191,7 @@ module.exports.removeFile = async ({ Id, Del }) => {
 };
 
 const getCoverPath = (name) => {
-    return path.join(process.cwd(), "images", "covers", "folder", name + ".jpg");
+    return path.join("../images", "Folder", name + ".jpg");
 };
 
 module.exports.renameFolder = async ({ Id, Name }) => {

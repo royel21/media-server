@@ -8,7 +8,7 @@ const db = require("../models");
 
 const { genScreenShot, foldersThumbNails } = require("./generate-screenshot");
 
-const allExt = /.(avi|avi2|mp4|mkv|ogg|webm|rar|zip)/i;
+const allExt = /\.(avi|avi2|mp4|mkv|ogg|webm|rar|zip)/i;
 
 //Create all Folders Needed
 const coverPath = path.join("../images", "Folder");
@@ -26,7 +26,7 @@ const createFolderAndCover = async (dir, files, fd) => {
     let Name = path.basename(dir);
     let FolderCover = path.join(coverPath, Name + ".jpg");
 
-    let FilesType = /.(rar|zip)/gi.test(firstFile.FileName) ? "mangas" : "videos";
+    let FilesType = /\.(rar|zip)/gi.test(firstFile.FileName) ? "mangas" : "videos";
 
     if (!fs.existsSync(FolderCover)) {
         let img = files.find((a) => /\.(jpg|jpeg|png|gif|webp)/i.test(a.FileName));
