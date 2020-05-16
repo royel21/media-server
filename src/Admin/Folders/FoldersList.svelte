@@ -67,7 +67,6 @@
         }
         hideModal();
       }
-      console.log("remove:", data.msg);
     });
   });
 

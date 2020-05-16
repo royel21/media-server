@@ -2,7 +2,6 @@
   import { fade } from "svelte/transition";
   export let file;
   export let modalType;
-  console.log("Del", modalType);
 </script>
 
 <style>
