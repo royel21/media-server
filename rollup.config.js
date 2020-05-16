@@ -5,8 +5,12 @@ import livereload from "rollup-plugin-livereload";
 import { terser } from "rollup-plugin-terser";
 import css from "rollup-plugin-css-only";
 import dev from "rollup-plugin-dev";
+import dotenv from "dotenv";
+dotenv.config();
 
 const production = !process.env.ROLLUP_WATCH;
+const { PORT, DEV_PORT, NODE_ENV, HOST } = process.env;
+console.log("PORT: ", PORT, DEV_PORT, NODE_ENV, HOST);
 
 export default {
     input: "src/main.js",
@@ -50,9 +54,9 @@ export default {
         // instead of npm run dev), minify
         production && terser(),
         dev({
-            port: 8081,
+            port: DEV_PORT,
             proxy: {
-                "/*": "http://localhost:8427",
+                "/*": "http://localhost:" + PORT,
             },
         }),
     ],

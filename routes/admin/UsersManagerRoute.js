@@ -47,13 +47,13 @@ const addEdit = async (req, res) => {
             },
             UserConfig: {
                 Name,
-                Config: {
+                Config: JSON.stringify({
                     order: "nu",
                     items: 0,
                     recentFolders: [],
                     video: { KeysMap, volume: 0.3, pause: true, mute: false },
                     manga: { KeysMap, scaleX: 0.6, scaleY: 1, aniDuration: 300 },
-                },
+                }),
             },
         };
         delete user.Id;

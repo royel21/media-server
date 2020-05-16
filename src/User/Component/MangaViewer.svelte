@@ -48,7 +48,6 @@
     if (loading) return;
     indices = getEmptyIndex(images, pg, toPage, dir, file.Duration, indices);
     if (indices.length > 0) {
-      console.time("emit");
       socket.emit("loadzip-image", { Id: file.Id, indices });
       loading = true;
     } else if (jumping) {
@@ -61,7 +60,6 @@
       images[data.page] = data.img;
     } else {
       loading = false;
-      console.timeEnd("emit");
       indices = [];
       if (jumping && webtoon) {
         jumping = false;

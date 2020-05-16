@@ -1,5 +1,18 @@
-// const db = require("./models");
-// db.sqlze.options.logging = console.log;
+require("dotenv").config();
+const db = require("./models");
+db.sqlze.options.logging = console.log;
+const test = async () => {
+    await db.init(true);
+    let user = await db.user.findOne({
+        where: { Name: "Royel" },
+        include: { model: db.favorite },
+    });
+    console.log(user.Name, await user.validPassword("842764"));
+
+    //   await getFolders(req, res);
+};
+
+test();
 
 // const testDb = async () => {
 //   console.time("time");
@@ -65,18 +78,6 @@
 //     for (let f of data.files) console.log(f.dataValues);
 //   },
 // };
-// const test = async () => {
-//   await db.init();
-//   let user = await db.user.findOne({
-//     where: { Name: "Royel" },
-//     include: { model: db.favorite },
-//   });
-//   req.user = user;
-
-//   await getFolders(req, res);
-// };
-
-// test();
 
 // const sharp = require("sharp");
 // const StreamZip = require("node-stream-zip");
@@ -129,11 +130,11 @@
 //   }
 // });
 
-const { nanoid } = require("nanoid");
-const os = require("os");
-const fs = require("fs-extra");
-const path = require("path");
-const drivelist = require("drivelist");
-const windir = require("win-explorer");
-let file = windir.ListFiles("E:/Anime1/", { oneFile: true });
-console.log(file);
+// const { nanoid } = require("nanoid");
+// const os = require("os");
+// const fs = require("fs-extra");
+// const path = require("path");
+// const drivelist = require("drivelist");
+// const windir = require("win-explorer");
+// let file = windir.ListFiles("E:/Anime1/", { oneFile: true });
+// console.log(file);
