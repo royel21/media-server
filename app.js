@@ -5,7 +5,6 @@ const session = require("express-session");
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-const os = require("os");
 
 require("dotenv").config();
 const db = require("./models");
@@ -16,12 +15,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-if (os.platform() === "linux") {
-    app.use(express.static("/mnt/5TBHDD/images"));
-} else {
-    app.use(express.static("../images"));
-}
 
+app.use(express.static(process.env.IMAGES));
 app.use(express.static(__dirname + "/public"));
 
 const userRoutes = require("./routes/UserRoutes");
