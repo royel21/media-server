@@ -1,6 +1,6 @@
 const { nanoid } = require("nanoid");
 module.exports = (sequelize, DataTypes) => {
-    const { INTEGER, STRING, DATE } = DataTypes;
+    const { INTEGER, STRING, DATE, TEXT } = DataTypes;
     const Folder = sequelize.define(
         "Folders",
         {
@@ -34,6 +34,9 @@ module.exports = (sequelize, DataTypes) => {
             Path: {
                 type: STRING,
                 unique: true,
+            },
+            Description: {
+                type: TEXT,
             },
         },
         {
