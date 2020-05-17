@@ -9,12 +9,12 @@ const db = require("../models");
 const { genScreenShot, foldersThumbNails } = require("./generate-screenshot");
 
 const allExt = /\.(avi|avi2|mp4|mkv|ogg|webm|rar|zip)/i;
-
+const imgPath = process.env.IMAGES;
 //Create all Folders Needed
-const coverPath = path.join("../images", "Folder");
+const coverPath = path.join(imgPath, "Folder");
 fs.mkdirsSync(coverPath);
-fs.mkdirsSync(path.resolve("../images", "Manga"));
-fs.mkdirsSync(path.resolve("../images", "Video"));
+fs.mkdirsSync(path.resolve(imgPath, "Manga"));
+fs.mkdirsSync(path.resolve(imgPath, "Video"));
 
 var DirectoryId;
 
