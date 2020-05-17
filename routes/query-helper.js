@@ -110,7 +110,6 @@ exports.getFilesList = async (user, res, type, params, model) => {
 exports.getFolders = async (req, res) => {
     const { filetype, order, page, items, search } = req.params;
     let favs = req.user.Favorites.map((f) => f.Id).join("','");
-    console.log(favs);
     let favSelect =
         "Select FolderId from FavoriteFolders where `Folders`.`Id` = FolderId and FavoriteId IN";
     let result = await db.folder.findAndCountAll({
