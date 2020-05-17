@@ -29,16 +29,13 @@
   });
 
   const logout = async () => {
-    axios.get("/api/users/logout").then(({ data }) => {
-      if (data.success) {
-        user = {};
-        navigate("/login", { replace: true });
-        if (socket) socket.close();
-        if (isPwa()) {
-          history.go(-(history.length - 2));
-        }
-      }
-    });
+    axios.get("/api/users/logout");
+    user = {};
+    navigate("/login", { replace: true });
+    if (socket) socket.close();
+    if (isPwa()) {
+      history.go(-(history.length - 2));
+    }
   };
   const logIn = (_user) => {
     user = _user.detail;

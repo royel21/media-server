@@ -12,17 +12,26 @@
   let error = { name: "", password: "" };
   const onSubmit = (event) => {
     event.preventDefault();
-    axios.post("/api/users/login", user).then(({ data }) => {
-      if (data.isAutenticated) {
-        dispatch("login", { ...data, Id: "" });
-      } else {
-        if (name) {
-          error.name = "User can't be empty";
+    axios
+      .post("/api/users/login", user)
+      .then(({ data }) => {
+        if (data.isAutenticated) {
+          dispatch("login", { ...data, Id: "" });
         } else {
-          error.password = "Password can't be empty";
+          if (name) {
+            error.name = "User can't be empty";
+          } else {
+            error.password = "Password can't be empty";
+          }
         }
-      }
-    });
+      })
+      .catch((err) => {
+        if (err.toString().includes("Network Error")) {
+          error.password = "server offline";
+        } else {
+          error.password = "Server Error";
+        }
+      });
   };
 </script>
 
@@ -53,6 +62,8 @@
 
   #login-container .error {
     padding: 8px 0;
+    color: firebrick;
+    font-weight: 600;
   }
 
   h3 {
