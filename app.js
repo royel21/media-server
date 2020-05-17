@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use(express.static("../images"));
+app.use(express.static(process.env.IMAGES));
 app.use(express.static(__dirname + "/public"));
 
 const userRoutes = require("./routes/UserRoutes");
