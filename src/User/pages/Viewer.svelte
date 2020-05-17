@@ -161,7 +161,7 @@
 </style>
 
 <div class="viewer" bind:this={viewer} on:keydown={handleKeyboard}>
-  <span id="files-prog">{`${fileIndex + 1} / ${files.length}`}</span>
+  <span id="files-prog">{`${fileIndex} / ${files.length}`}</span>
   <div class="f-name" bind:this={fileName}>
     <span>{file.Name}</span>
   </div>
