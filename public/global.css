@@ -1,251 +1,251 @@
 html,
 body {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background-color: #14243d;
-  background: radial-gradient(ellipse at center, #14243d 0, #030611 100%);
-  color: white;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
-    Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol", "Noto Color Emoji";
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  text-align: left;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #14243d;
+    background: radial-gradient(ellipse at center, #14243d 0, #030611 100%);
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+        Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+        "Segoe UI Symbol", "Noto Color Emoji";
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: left;
 }
 
 #root {
-  height: 100%;
-  width: 100%;
+    height: 100%;
+    width: 100%;
 }
 
 *,
 *::before,
 *::after {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
 }
 
 a {
-  color: white;
-  text-decoration: none;
+    color: white;
+    text-decoration: none;
 }
 
 li {
-  list-style: none;
+    list-style: none;
 }
 
 .nav-item a:active {
-  transition: 0.1s all;
-  transform: scale(1.2);
+    transition: 0.1s all;
+    transform: scale(1.2);
 }
 
 .nav-item .active {
-  border-bottom: 1px solid;
+    border-bottom: 1px solid;
 }
 
 #menu a {
-  padding: 4px 6px;
-  cursor: pointer;
+    padding: 4px 6px;
+    cursor: pointer;
 }
 
 #menu .nav-item {
-  display: inherit;
+    display: inherit;
 }
 
 .btn {
-  display: inline-block;
-  font-weight: 400;
-  color: #212529;
-  text-align: center;
-  vertical-align: middle;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  border: 1px solid transparent;
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  line-height: 1.5;
-  border-radius: 0.25rem;
-  color: white;
-  transition: 0.3s all;
-  background-color: grey;
-  background-image: linear-gradient(-120deg, #888888, #555555, #888888);
+    display: inline-block;
+    font-weight: 400;
+    color: #212529;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    color: white;
+    transition: 0.3s all;
+    background-color: grey;
+    background-image: linear-gradient(-120deg, #888888, #555555, #888888);
 }
 
 .btn:hover {
-  color: white;
-  background-image: linear-gradient(-160deg, #888888, #555555, #444444);
+    color: white;
+    background-image: linear-gradient(-160deg, #888888, #555555, #444444);
 }
 
 .btn:focus {
-  outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
 /* Clear input text icon*/
 
 input,
 button {
-  overflow: visible;
+    overflow: visible;
 }
 
 input[type="text"] + span {
-  display: none !important;
-  position: absolute;
-  top: 0px;
-  right: 6px;
-  z-index: 99;
-  color: darkgray;
-  font-size: 20px;
+    display: none !important;
+    position: absolute;
+    top: 0px;
+    right: 6px;
+    z-index: 99;
+    color: darkgray;
+    font-size: 20px;
 }
 
 input[type="text"]:not(:placeholder-shown) + span {
-  display: initial !important;
+    display: initial !important;
 }
 
 .input-group {
-  position: relative;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  -ms-flex-align: stretch;
-  align-items: stretch;
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -ms-flex-align: stretch;
+    align-items: stretch;
 }
 
 .input-group-prepend {
-  display: -ms-flexbox;
-  display: flex;
+    display: -ms-flexbox;
+    display: flex;
 }
 
 .input-group-text {
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-align: center;
-  align-items: center;
-  padding: 0.375rem 0.75rem;
-  margin-bottom: 0;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #495057;
-  text-align: center;
-  white-space: nowrap;
-  background-color: #e9ecef;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 0.375rem 0.75rem;
+    margin-bottom: 0;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    text-align: center;
+    white-space: nowrap;
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
 .form-control {
-  display: block;
-  width: 100%;
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  line-height: 1.5;
-  color: #495057;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
 .input-group .form-control {
-  position: relative;
-  -ms-flex: 1 1 auto;
-  flex: 1 1 auto;
-  width: 1%;
-  margin-bottom: 0;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
+    position: relative;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    width: 1%;
+    margin-bottom: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 .p-3 {
-  padding: 1rem;
+    padding: 1rem;
 }
 
 .bg-dark {
-  background-color: #343a40 !important;
+    background-color: #343a40 !important;
 }
 
 .form-control:focus {
-  color: #495057;
-  background-color: #fff;
-  border-color: #80bdff;
-  outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    color: #495057;
+    background-color: #fff;
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
 /*************************Scrollbar Style********************************/
 
 ::-webkit-scrollbar {
-  width: 15px;
+    width: 15px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 123, 255, 0.95);
-  box-shadow: inset 0 0 6px rgba(15, 1, 228, 0.9);
+    background-color: rgba(0, 123, 255, 0.95);
+    box-shadow: inset 0 0 6px rgba(15, 1, 228, 0.9);
 }
 
 .file.active .file-info {
-  background-color: rgba(0, 15, 150) !important;
-  box-shadow: 0 0 10px;
+    background-color: rgba(0, 15, 150) !important;
+    box-shadow: 0 0 10px;
 }
 
 .card {
-  position: relative;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  min-width: 0;
-  background-color: #fff;
-  background-clip: border-box;
-  border: 1px solid rgba(0, 0, 0, 0.125);
-  border-radius: 0.25rem;
-  border: 1px solid white;
-  padding: 10px;
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
+    border: 1px solid white;
+    padding: 10px;
 }
 
 .table {
-  margin: 0;
+    margin: 0;
 }
 
 .table thead {
-  user-select: none;
+    user-select: none;
 }
 
 .table th,
 .table td {
-  padding: 0.5rem 1rem;
+    padding: 0.5rem 1rem;
 }
 
 .table td:only-child {
-  text-align: center;
+    text-align: center;
 }
 
 .table td:first-child,
 .table th:first-child {
-  width: 100px;
-  padding: 0.4rem 0.8rem;
-  vertical-align: middle;
-  text-align: center;
+    width: 100px;
+    padding: 0.4rem 0.8rem;
+    vertical-align: middle;
+    text-align: center;
 }
 
 .table {
-  width: 100%;
-  margin-bottom: 1rem;
-  border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 1rem;
+    border-collapse: collapse;
 }
 
 /* Directory Style */
@@ -253,9 +253,9 @@ input[type="text"]:not(:placeholder-shown) + span {
 i,
 span i,
 label i {
-  cursor: pointer;
-  font-size: 20px;
-  user-select: none;
+    cursor: pointer;
+    font-size: 20px;
+    user-select: none;
 }
 
 i:active,
@@ -263,524 +263,506 @@ a:active i,
 label:active i,
 span:active i,
 .page-link:active i {
-  transform: scale(1.2);
+    transform: scale(1.2);
 }
 
 .table tr {
-  border: 2px solid #444444;
+    border: 2px solid #444444;
 }
 
 h4 {
-  font-size: 1.35rem;
+    font-size: 1.35rem;
 }
 
 h3 {
-  font-size: 1.75rem;
+    font-size: 1.75rem;
 }
 
 .text-center {
-  text-align: center;
+    text-align: center;
 }
 
 .table-bordered thead th,
 .table-bordered thead td {
-  border-bottom-width: 2px;
+    border-bottom-width: 2px;
 }
 
 .table-bordered th,
 .table-bordered td {
-  border: 1px solid #dee2e6;
+    border: 1px solid #dee2e6;
 }
 
 .table-dark th,
 .table-dark td,
 .table-dark thead th {
-  border-color: #454d55;
-  border-top-color: rgb(69, 77, 85);
-  border-right-color: rgb(69, 77, 85);
-  border-bottom-color: rgb(69, 77, 85);
-  border-left-color: rgb(69, 77, 85);
+    border-color: #454d55;
+    border-top-color: rgb(69, 77, 85);
+    border-right-color: rgb(69, 77, 85);
+    border-bottom-color: rgb(69, 77, 85);
+    border-left-color: rgb(69, 77, 85);
 }
 
 .table span:last-child {
-  margin-left: 0.5rem;
+    margin-left: 0.5rem;
 }
 
 .fa,
 .fas,
 .far {
-  user-select: none;
+    user-select: none;
 }
 
 .fa-folder-open,
 .fa-folder {
-  color: rgb(250, 183, 15);
+    color: rgb(250, 183, 15);
 }
 
 .fa-book {
-  color: rgb(202, 48, 48);
+    color: rgb(202, 48, 48);
 }
 
 .fa-home {
-  color: rgb(17, 218, 201);
+    color: rgb(17, 218, 201);
 }
 
 .fa-sync,
 .fa-edit,
 .fa-film {
-  color: rgb(37, 140, 209);
+    color: rgb(37, 140, 209);
 }
 
 .fa-heart {
-  color: rgba(248, 224, 6, 0.952);
+    color: rgba(248, 224, 6, 0.952);
 }
 
 .fa-trash-alt {
-  color: rgba(252, 1, 1, 0.856);
+    color: rgba(252, 1, 1, 0.856);
 }
 
 .fa-folder-open + .file-progress {
-  background-color: rgba(252, 1, 1, 0.856);
+    background-color: rgba(252, 1, 1, 0.856);
 }
 
 .list-group {
-  display: flex;
-  flex-direction: column;
-  padding-left: 0;
-  margin-bottom: 0;
-  font-size: 16px;
-  font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    padding-left: 0;
+    margin-bottom: 0;
+    font-size: 16px;
+    font-weight: 600;
 }
 
 .list-group-item {
-  position: relative;
-  display: block;
-  padding: 0.35rem 0.4rem;
-  color: #343a40;
-  background-color: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.125);
+    position: relative;
+    display: block;
+    padding: 0.35rem 0.4rem;
+    color: #343a40;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.125);
 }
 
 .list-group-item:hover {
-  background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.8);
 }
 
 .list-group-item.active {
-  z-index: 2;
-  color: #fff;
-  background-color: #007bff;
-  border-color: #007bff;
+    z-index: 2;
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
 }
 
 .list-group-item.active .fa-edit {
-  color: white;
+    color: white;
 }
 
 .list-group-item:first-child {
-  border-top-left-radius: 0.25rem;
-  border-top-right-radius: 0.25rem;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
 }
 
 .list-group-item:last-child {
-  border-bottom-right-radius: 0.25rem;
-  border-bottom-left-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
 }
 
 .page-link:first-child {
-  border-top-left-radius: 0.25rem;
-  border-bottom-left-radius: 0.25rem;
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
 }
 
 .page-link:last-child {
-  border-top-right-radius: 0.25rem;
-  border-bottom-right-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
 }
 
 #current-page input {
-  height: 30px;
+    height: 30px;
 }
 
 /*************Modal*************************/
 
 .modal-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  z-index: 99;
-  background-color: rgba(0, 0, 0, 0.3);
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 99;
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 .modal {
-  display: block;
-  position: fixed;
-  top: calc(50% - 150px);
-  left: calc(50% - 175px);
-  z-index: 99;
-  min-height: initial;
-  min-width: initial;
-  height: max-content;
-  width: 350px;
-  background-color: cadetblue;
+    display: block;
+    position: fixed;
+    top: calc(50% - 150px);
+    left: calc(50% - 175px);
+    z-index: 99;
+    min-height: initial;
+    min-width: initial;
+    height: max-content;
+    width: 350px;
+    background-color: cadetblue;
 }
 
 .modal-header h3 {
-  text-align: center;
-  user-select: none;
+    text-align: center;
+    user-select: none;
 }
 
 .modal .errors {
-  color: rgb(226, 35, 35);
-  font-size: 20px;
+    color: rgb(226, 35, 35);
+    font-size: 20px;
 }
 
 .modal label,
 .modal .form-control {
-  padding: 5px;
-  margin: 4px 0;
+    padding: 5px;
+    margin: 4px 0;
 }
 
 .modal label {
-  width: 55px;
-  justify-content: space-evenly;
-  user-select: none;
-  font-weight: 600;
+    width: 55px;
+    justify-content: space-evenly;
+    user-select: none;
+    font-weight: 600;
 }
 
 .modal label i {
-  font-size: 20px;
+    font-size: 20px;
 }
 
 .modal-header h3 {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 .modal-footer {
-  display: flex;
-  justify-content: center;
-  padding: 5px;
+    display: flex;
+    justify-content: center;
+    padding: 5px;
 }
 
 .modal-footer .btn {
-  min-width: 75px;
-  margin: 0 10%;
+    min-width: 75px;
+    margin: 0 10%;
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 /***************File Style****************************/
 
 .items {
-  color: #fff;
-  background-color: #007bff;
-  padding: 0.25em 0.7em;
-  font-size: 75%;
-  font-weight: 700;
-  line-height: 2;
-  border-radius: 0.25rem;
+    color: #fff;
+    background-color: #007bff;
+    padding: 0.25em 0.7em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 2;
+    border-radius: 0.25rem;
 }
 .file {
-  position: relative;
-  outline: none;
-  background-color: transparent;
-  padding: 5px;
-  width: 200px;
-  min-width: 200px;
-  height: 270px;
-  transition: 0.2s all;
+    position: relative;
+    outline: none;
+    background-color: transparent;
+    padding: 5px;
+    width: 200px;
+    min-width: 200px;
+    height: 270px;
+    transition: 0.2s all;
 }
 
 .file-info {
-  text-align: center;
-  width: 190px;
-  height: 260px;
-  min-height: 260px;
-  padding: 5px;
-  background-color: rgba(52, 58, 64, 0.99);
-  border-radius: 5px;
-  cursor: pointer;
-  overflow: hidden;
+    text-align: center;
+    width: 190px;
+    height: 260px;
+    min-height: 260px;
+    padding: 5px;
+    background-color: rgba(52, 58, 64, 0.99);
+    border-radius: 5px;
+    cursor: pointer;
+    overflow: hidden;
 }
 
 .file-info:hover {
-  position: absolute;
-  height: fit-content;
-  box-shadow: 0 0 10px;
-  z-index: 1;
+    position: absolute;
+    height: fit-content;
+    box-shadow: 0 0 10px;
+    z-index: 1;
 }
 
 .file-btns {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 1.4em;
-  height: 26px;
-  z-index: 1;
-  user-select: none;
-  cursor: initial;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.4em;
+    height: 26px;
+    z-index: 1;
+    user-select: none;
+    cursor: initial;
 }
 
 .file-progress {
-  font-size: 14px;
-  font-family: monospace;
-  font-weight: 600;
-  pointer-events: none;
-  height: fit-content;
+    font-size: 14px;
+    font-family: monospace;
+    font-weight: 600;
+    pointer-events: none;
+    height: fit-content;
 }
 
 .file-btn-left:empty {
-  display: none;
+    display: none;
 }
 .file-btns i {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .file-del {
-  color: brown;
+    color: brown;
 }
 
 .file-cover {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 180px;
-  overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 180px;
+    overflow: hidden;
 }
 .file-cover img {
-  max-width: 190px;
-  max-height: 170px;
-  pointer-events: none;
-  position: relative;
-  user-select: none;
+    max-width: 190px;
+    max-height: 170px;
+    pointer-events: none;
+    position: relative;
+    user-select: none;
 }
 
 .file-cover:hover > img {
-  max-width: none;
-  max-height: none;
+    max-width: none;
+    max-height: none;
 }
 
 .file-cover img[alt]:after {
-  position: absolute;
-  top: -3px;
-  left: -1px;
-  background-color: rgba(52, 58, 64, 0.99);
-  font-family: "Helvetica";
-  font-weight: 300;
-  content: attr(alt);
-  border-radius: 5px;
-  padding: 2px 5px;
-  min-width: 100%;
+    position: absolute;
+    top: -3px;
+    left: -1px;
+    background-color: rgba(52, 58, 64, 0.99);
+    font-family: "Helvetica";
+    font-weight: 300;
+    content: attr(alt);
+    border-radius: 5px;
+    padding: 2px 5px;
+    min-width: 100%;
 }
 
 .file-name {
-  position: relative;
-  text-align: center;
-  user-select: text;
+    position: relative;
+    text-align: center;
+    user-select: text;
 }
 
 .file-name:hover,
 .file-info:hover .file-name {
-  display: inline-block;
-  z-index: 999;
-  top: 5px;
-  line-height: 1.5;
+    display: inline-block;
+    z-index: 999;
+    top: 5px;
+    line-height: 1.5;
 }
 
 .file-btns i:active {
-  transform: scale(1.3);
+    transform: scale(1.3);
 }
 
 .fas.fa-star {
-  color: rgb(255, 238, 0);
+    color: rgb(255, 238, 0);
 }
 /************************/
 .first-controls {
-  position: absolute;
-  z-index: 99;
+    position: absolute;
+    z-index: 99;
 }
 .first-controls input[type="checkbox"]:not(:checked) + div {
-  visibility: hidden;
-  opacity: 0;
-  pointer-events: none;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
 }
 .first-controls .fas {
-  font-size: 30px;
+    font-size: 30px;
 }
 .first-controls + div {
-  margin-left: 40px;
+    margin-left: 40px;
 }
 /***************************Manga Viewer**************************************/
 
 #manga-viewer {
-  position: relative;
-  height: 100%;
-  width: 100%;
-  outline: none;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    outline: none;
 }
 #manga-viewer .viewer {
-  display: flex;
-  justify-content: center;
-  height: 100%;
-  width: 100%;
-  padding-top: 37px;
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    padding-top: 37px;
 }
 
 #manga-viewer .img-current {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 65%;
-  min-height: 100%;
-  height: 100%;
-  outline: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 65%;
+    min-height: 100%;
+    height: 100%;
+    outline: none;
 }
 #manga-viewer .img-current img {
-  -webkit-user-drag: none;
-  width: fit-content;
-  max-height: 100%;
-  max-width: 100%;
-  position: relative;
-  object-fit: cover;
+    -webkit-user-drag: none;
+    width: fit-content;
+    max-height: 100%;
+    max-width: 100%;
+    position: relative;
+    object-fit: cover;
 }
 #manga-viewer .webtoon-img {
-  display: flex;
-  flex-direction: column;
-  justify-content: initial;
-  overflow-y: auto;
-  overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: initial;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 #manga-viewer .webtoon-img img {
-  height: auto;
-  width: 100%;
-  max-height: initial;
+    height: auto;
+    width: 100%;
+    max-height: initial;
 }
 
 #manga-viewer .img-current .empty-img {
-  position: relative;
-  color: black;
-  min-height: 100%;
-  min-width: 600px;
+    position: relative;
+    color: black;
+    min-height: 100%;
+    min-width: 600px;
 }
 #manga-viewer .empty-img:before {
-  display: inline-block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  content: " ";
-  height: 100%;
-  width: 100%;
-  z-index: 1;
-  background-color: rgb(218, 214, 214);
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: " ";
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+    background-color: rgb(218, 214, 214);
 }
 #manga-viewer .empty-img:after {
-  content: "Loading Images";
-  position: absolute;
-  top: 46%;
-  left: calc(50% - 108px);
-  font-size: 30px;
-  z-index: 2;
+    content: "Loading Images";
+    position: absolute;
+    top: 46%;
+    left: calc(50% - 108px);
+    font-size: 30px;
+    z-index: 2;
 }
 #manga-viewer .controls > span {
-  padding: 4px 8px;
-  max-height: initial;
+    padding: 4px 8px;
+    max-height: initial;
 }
 
 #manga-viewer i {
-  font-size: 25px;
-  transition: 0.1s all;
+    font-size: 25px;
+    transition: 0.1s all;
 }
 
 #manga-viewer .current-page input {
-  position: relative;
-  top: -1px;
-  height: 26px;
-  max-width: 80px;
-  text-align: center;
-  min-width: 70px;
-  outline: none;
-  border: none;
-  border-radius: 0.25rem;
+    position: relative;
+    top: -1px;
+    height: 26px;
+    max-width: 80px;
+    text-align: center;
+    min-width: 70px;
+    outline: none;
+    border: none;
+    border-radius: 0.25rem;
 }
 :fullscreen #manga-viewer .viewer {
-  padding: 0;
+    padding: 0;
 }
 :fullscreen #manga-viewer.hide .controls {
-  opacity: 0;
+    opacity: 0;
 }
 
 :fullscreen #manga-viewer.hide .controls span {
-  transform: translateY(34px);
-  transition: 0.3s all;
-}
-
-.fullscreen-progress {
-  display: none;
-  position: absolute;
-  opacity: 0;
-  bottom: 0;
-  left: 0px;
-  padding: 2px 8px;
-  border-top-right-radius: 0.25rem;
-  background-color: rgba(0, 0, 0, 0.8);
-  opacity: 1;
-  transition: 0.5s all;
-  font-size: 16px;
-}
-:fullscreen .fullscreen-progress {
-  display: inline-block;
-  z-index: 1;
+    transform: translateY(34px);
+    transition: 0.3s all;
 }
 
 @media screen and (max-width: 600px) {
-  #manga-viewer .img-current {
-    transform: initial;
-    width: 100%;
-  }
+    #manga-viewer .img-current {
+        transform: initial;
+        width: 100%;
+    }
 
-  #manga-viewer .controls > span {
-    padding: 4px 5px;
-  }
+    #manga-viewer .controls > span {
+        padding: 4px 5px;
+    }
 
-  #manga-viewer .img-current .empty-img {
-    height: 227px;
-    min-height: 227px;
-    width: 100%;
-  }
-  #manga-viewer .img-current.webtoon-img img:not(.empty-img) {
-    height: auto;
-  }
+    #manga-viewer .img-current .empty-img {
+        height: 227px;
+        min-height: 227px;
+        width: 100%;
+    }
+    #manga-viewer .img-current.webtoon-img img:not(.empty-img) {
+        height: auto;
+    }
 }
 #manga-viewer.hide .controls {
-  bottom: -34px;
+    bottom: -34px;
 }
 #manga-viewer.hide .viewer {
-  padding: 0;
+    padding: 0;
 }
 /****************************************************************/
 @media screen and (max-width: 420px) {
-  .file {
-    width: 185px;
-    min-width: 185px;
-  }
-  .file-info {
-    width: 175px;
-  }
+    .file {
+        width: 185px;
+        min-width: 185px;
+    }
+    .file-info {
+        width: 175px;
+    }
 }
 /*************************************************/
 @media screen and (max-width: 480px) {
-  #menu a {
-    display: inline-block;
-    text-align: center;
-  }
-  ::-webkit-scrollbar {
-    width: 0;
-  }
+    #menu a {
+        display: inline-block;
+        text-align: center;
+    }
+    ::-webkit-scrollbar {
+        width: 0;
+    }
 }
 
 /*************************************************************/

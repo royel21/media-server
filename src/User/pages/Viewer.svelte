@@ -96,6 +96,7 @@
       }
     } else {
       clearInterval(runningClock);
+      clock.innerText = "";
     }
     if (
       /(android)|(iphone)/i.test(navigator.userAgent) &&
@@ -133,24 +134,25 @@
     border-radius: 0.25rem;
   }
   #clock {
-    display: none;
-    position: fixed;
+    display: block;
+    position: absolute;
     right: 0px;
-    bottom: -2px;
-    z-index: 1;
+    bottom: 0px;
     pointer-events: none;
     background-color: rgba(0, 0, 0, 0.8);
     padding: 2px 5px;
-    border-radius: 0.25rem;
+    border-radius: 0.25rem 0 0 0;
+    z-index: 1;
   }
   #files-prog {
-    display: none;
-    position: fixed;
+    display: block;
+    position: absolute;
     left: calc(50% - 20px);
-    bottom: -2px;
+    bottom: 0px;
     padding: 0 5px;
     background-color: rgba(0, 0, 0, 0.7);
     z-index: 1;
+    border-radius: 0.25rem 0.25rem 0 0;
   }
   :fullscreen #files-prog,
   :fullscreen #clock {

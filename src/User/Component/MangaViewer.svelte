@@ -248,6 +248,20 @@
   .config {
     position: relative;
   }
+  .fullscreen-progress {
+    display: block;
+    position: absolute;
+    opacity: 0;
+    bottom: 0;
+    left: 0px;
+    padding: 2px 8px;
+    border-top-right-radius: 0.25rem;
+    background-color: rgba(0, 0, 0, 0.8);
+    opacity: 1;
+    transition: 0.5s all;
+    font-size: 16px;
+    z-index: 1;
+  }
 </style>
 
 <div id="manga-viewer" tabIndex="0" class:hide={$ToggleMenu}>
