@@ -48,7 +48,7 @@
   });
   let tout;
   const hideControls = () => {
-    if (isFullScreen && window.innerWidth > 600) {
+    if (isFullScreen && window.innerWidth > 1000) {
       controls.style.bottom = 0;
       clearTimeout(tout);
       tout = setTimeout(() => {
@@ -66,9 +66,10 @@
   };
   const onPlay = ({ target: { checked } }) =>
     !checked ? player.play() : player.pause();
+
   const hideControlsOnCLick = () => {
     if (isFullScreen) {
-      if (controls.style.bottom == "0") {
+      if (controls.style.bottom == "0px") {
         controls.style.bottom = -controls.offsetHeight + "px";
       } else {
         controls.style.bottom = 0;
@@ -192,8 +193,7 @@
     class="player-container"
     class:isFullScreen
     on:mousemove={hideControls}
-    on:wheel={onWheel}
-    on:click={hideControlsOnCLick}>
+    on:wheel={onWheel}>
     <div class="player-content">
       <video
         class="player"
@@ -208,7 +208,8 @@
         poster={file.Cover}
         loop={false}
         on:loadedmetadata={onMeta}
-        on:timeupdate={updateTime} />
+        on:timeupdate={updateTime}
+        on:click={hideControlsOnCLick} />
       <div
         class="player-controls"
         on:mousedown|stopPropagation
