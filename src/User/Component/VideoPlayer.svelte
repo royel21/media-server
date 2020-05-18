@@ -48,7 +48,7 @@
   });
   let tout;
   const hideControls = () => {
-    if (isFullScreen) {
+    if (isFullScreen && window.innerWidth > 600) {
       controls.style.bottom = 0;
       clearTimeout(tout);
       tout = setTimeout(() => {
@@ -66,6 +66,15 @@
   };
   const onPlay = ({ target: { checked } }) =>
     !checked ? player.play() : player.pause();
+  const hideControlsOnCLick = () => {
+    if (isFullScreen) {
+      if (controls.style.bottom == "0") {
+        controls.style.bottom = -controls.offsetHeight + "px";
+      } else {
+        controls.style.bottom = 0;
+      }
+    }
+  };
 </script>
 
 <style>
@@ -183,7 +192,8 @@
     class="player-container"
     class:isFullScreen
     on:mousemove={hideControls}
-    on:wheel={onWheel}>
+    on:wheel={onWheel}
+    on:click={hideControlsOnCLick}>
     <div class="player-content">
       <video
         class="player"
