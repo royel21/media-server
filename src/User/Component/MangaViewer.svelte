@@ -168,7 +168,6 @@
       disconnectObvrs(imgContainer);
     }
     indices = getEmptyIndex(images, file.CurrentPos - 2, 8, 1, file.Duration);
-    console.time("emit");
     socket.emit("loadzip-image", {
       Id: file.Id,
       indices,
