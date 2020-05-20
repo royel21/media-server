@@ -15,7 +15,7 @@
     if (playList) {
       let imgs = document.querySelectorAll("#play-list li img");
       observer = new IntersectionObserver(
-        entries => {
+        (entries) => {
           for (let entry of entries) {
             let img = entry.target;
             if (entry.isIntersecting) {
@@ -28,11 +28,11 @@
         {
           root: playList,
           rootMargin: "1000px",
-          threshold: 0
+          threshold: 0,
         }
       );
 
-      imgs.forEach(lazyImg => {
+      imgs.forEach((lazyImg) => {
         observer.observe(lazyImg);
       });
     }
@@ -43,12 +43,12 @@
       let current = document.querySelector("#play-list .active");
       console.log(current.offsetTop, playList.offsetTop);
       playList.scroll({
-        top: current.offsetTop - 250
+        top: current.offsetTop - 250,
       });
       setObserver();
       setTimeout(() => {
         playList.scroll({
-          top: current.offsetTop - 250
+          top: current.offsetTop - 250,
         });
       }, 300);
     }
@@ -213,7 +213,7 @@
   }
   li > span:last-child {
     display: inline-block;
-    height: 45px;
+    height: max-content;
     overflow: hidden;
     text-overflow: ellipsis;
     line-height: 1.625;
@@ -265,7 +265,7 @@
       </span>
     </div>
     <span id="p-items">
-      {`${files.findIndex(i => i.Id === fileId) + 1}/${files.length}`}
+      {`${files.findIndex((i) => i.Id === fileId) + 1}/${files.length}`}
     </span>
   </div>
 </div>
