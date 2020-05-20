@@ -29,7 +29,6 @@
     let { data } = await axios.post(`/api/viewer/folder`, { id: folderId });
     if (!data.fail) {
       files = data.files;
-      fileIndex = files.findIndex((f) => f.Id === fileId);
     }
     window.addEventListener("beforeunload", saveFile);
     return () => {
@@ -82,6 +81,7 @@
 
   $: if (files.length > 0) {
     file = files.find((f) => f.Id === fileId) || files[0];
+    fileIndex = files.findIndex((f) => f.Id === fileId);
   }
 
   let runningClock;
@@ -117,55 +117,65 @@
     height: 100%;
   }
   .f-name {
-    position: absolute;
-    top: 5px;
+    display: inline-block;
+    position: fixed;
+    top: 44px;
     opacity: 0;
     text-align: center;
     pointer-events: none;
-    transition: 1s;
     z-index: 99;
     width: 100%;
-  }
-  span {
-    display: inline-block;
     transition: 5s all;
-    max-width: 400px;
-    background-color: rgba(0, 0, 0, 0.7);
-    border-radius: 0.25rem;
   }
-  #clock {
-    display: block;
-    position: absolute;
+  :fullscreen .f-name {
+    top: 5px;
+  }
+  .f-name span {
+    max-width: 400px;
+    border-radius: 0.25rem;
+    padding: 4px 10px;
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  .info {
+    display: inline-block;
+    position: fixed;
     right: 0px;
     bottom: 0px;
     pointer-events: none;
-    background-color: rgba(0, 0, 0, 0.8);
-    padding: 2px 5px;
     border-radius: 0.25rem 0 0 0;
     z-index: 1;
+    padding: 2px 5px;
+    background-color: rgba(0, 0, 0, 0.8);
   }
-  #files-prog {
-    display: block;
-    position: absolute;
-    left: calc(50% - 20px);
-    bottom: 0px;
-    padding: 0 5px;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: 1;
-    border-radius: 0.25rem 0.25rem 0 0;
-  }
-  :fullscreen #files-prog,
-  :fullscreen #clock {
+  #clock {
     display: inline-block;
+    border-left: 1px solid;
+    padding-left: 5px;
+  }
+  #clock:empty {
+    display: none;
+  }
+  @media screen and (max-width: 600px) {
+    .info * {
+      font-size: 14px;
+    }
+    .f-name {
+      top: 80px;
+    }
   }
 </style>
 
 <div class="viewer" bind:this={viewer} on:keydown={handleKeyboard}>
-  <span id="files-prog">{`${fileIndex} / ${files.length}`}</span>
   <div class="f-name" bind:this={fileName}>
     <span>{file.Name}</span>
   </div>
-  <div id="clock" />
+  <span class="info">
+    <span id="files-prog">
+      <i class="fas fa-file" />
+      {`${fileIndex + 1} / ${files.length}`}
+    </span>
+    <div id="clock" />
+  </span>
   <PlayList {fileId} {files} on:click={selectFile} />
   {#if file.Type.includes('Manga')}
     <MangaViewer

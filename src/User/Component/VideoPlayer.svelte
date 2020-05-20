@@ -242,9 +242,9 @@
               type="range"
               min={0}
               max={1}
-              step={0.1}
+              step={0.05}
               value={mConfig.volume}
-              on:change={volChange} />
+              on:input={volChange} />
             <label for="v-mute">
               <input
                 id="v-mute"
