@@ -157,7 +157,7 @@
   }
 
   #play-list #p-list li:hover {
-    background-color: rgba(26, 151, 179, 0.5);
+    background-color: rgba(20, 101, 50, 0.5);
   }
 
   .active {

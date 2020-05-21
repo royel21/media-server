@@ -109,6 +109,11 @@
       }
     }
   });
+
+  $: if (fileId) {
+    if (socket)
+      socket.emit("recent-folder", { CurrentFile: fileId, FolderId: folderId });
+  }
 </script>
 
 <style>
