@@ -163,6 +163,9 @@
   @media screen and (max-width: 600px) {
     .info * {
       font-size: 14px;
+      bottom: initial;
+      top: 0;
+      border-radius: 0 0 0 0.25rem;
     }
     .f-name {
       top: 80px;
