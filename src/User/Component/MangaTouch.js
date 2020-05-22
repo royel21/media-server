@@ -55,12 +55,14 @@ export const onTouchEnd = (e) => {
             } else if (point.y < wh * 0.8) {
                 if (point.x < ww * 0.33) {
                     console.log("left Y50%");
+                    nextPage();
                 } else if (point.x < ww * 0.66) {
                     fullScreen();
                     console.log("center Y50%");
                 } else {
                     // right
                     console.log("right Y50%");
+                    nextPage();
                 }
                 // 25% from the bottom
             } else {
