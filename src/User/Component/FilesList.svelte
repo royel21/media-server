@@ -35,7 +35,7 @@
       if (cancel) {
         cancel();
       }
-      let url = genUrl(pg, { order: "DD", items: 0 }, flt, type, curId);
+      let url = genUrl(pg, { order: "dd", items: 0 }, flt, type, curId);
       let { data } = await axios.get(url, {
         cancelToken: new cancelToken(function executor(c) {
           cancel = c;
