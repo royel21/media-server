@@ -100,13 +100,12 @@
     }
     if (
       /(android)|(iphone)/i.test(navigator.userAgent) &&
-      file.Type.includes("Video")
+      file.Type.includes("Video") &&
+      document.fullscreenElement
     ) {
-      if (document.fullscreenElement) {
-        window.screen.orientation.lock("landscape");
-      } else {
-        window.screen.orientation.unlock();
-      }
+      window.screen.orientation.lock("landscape");
+    } else {
+      window.screen.orientation.unlock();
     }
   });
 
