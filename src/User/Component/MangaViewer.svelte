@@ -252,7 +252,7 @@
     position: absolute;
     opacity: 0;
     bottom: 0;
-    left: 0px;
+    left: 4px;
     padding: 2px 8px;
     border-top-right-radius: 0.25rem;
     background-color: rgba(0, 0, 0, 0.8);
@@ -261,10 +261,16 @@
     font-size: 16px;
     z-index: 1;
   }
+  #manga-viewer .fa-sticky-note {
+    font-size: 16px;
+  }
 </style>
 
 <div id="manga-viewer" tabIndex="0" class:hide={$ToggleMenu}>
-  <span class="fullscreen-progress">{progress}</span>
+  <span class="fullscreen-progress">
+    <i class="fas fa-sticky-note" />
+    {progress}
+  </span>
   <div class="viewer">
     <div
       on:touchstart={onTouchStart}
