@@ -20,7 +20,7 @@
 
   const calRows = () => {
     let container = document.querySelector(".list-container") || {};
-    return parseInt(container.offsetHeight / 66.19) - 1;
+    return parseInt(container.offsetHeight / 45) - 1;
   };
 
   const loadFiles = async (pg) => {
