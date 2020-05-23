@@ -18,12 +18,13 @@ Router.get("/:page/:items/:filter?", (req, res) => {
                     [db.Op.like]: "%" + (filter || "") + "%",
                 },
             },
+            include: { model: db.folder },
         })
         .then((files) => {
             let data = {
                 files: [],
                 totalPages: Math.ceil(files.count / items),
-                totalFiles: files.count,
+                totalItems: files.count,
             };
 
             data.files = files.rows.map((f) => f.dataValues);

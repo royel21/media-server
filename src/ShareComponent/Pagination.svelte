@@ -8,7 +8,7 @@
   export let totalPages = 0;
   let showinput = false;
 
-  const pagerClick = e => {
+  const pagerClick = (e) => {
     window.localStorage.setItem("selected", 0);
     let li = e.target;
     switch (e.target.id) {
@@ -43,10 +43,10 @@
   const hideInput = () => {
     showinput = false;
   };
-  const init = el => {
+  const init = (el) => {
     el.focus();
   };
-  const handleChange = event => {
+  const handleChange = (event) => {
     let pg = parseInt(event.target.value);
     if (!isNaN(pg)) {
       pg = pg < 1 ? 1 : pg > totalPages ? totalPages : pg;
@@ -61,6 +61,7 @@
     width: fit-content;
     padding: 0;
     pointer-events: all;
+    user-select: none;
   }
   .pagination {
     display: flex;

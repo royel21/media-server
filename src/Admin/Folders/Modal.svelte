@@ -34,7 +34,7 @@
     <div class="modal-header">
       <h3>{modalType.title}</h3>
     </div>
-    <form action="#" on:submit>
+    <form action="#" on:submit|preventDefault>
       <div class="modal-body">
         {#if !modalType.Del}
           <div class="input-group">

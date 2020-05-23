@@ -1,17 +1,11 @@
 <script>
-  import {
-    onMount,
-    onDestroy,
-    getContext,
-    createEventDispatcher,
-  } from "svelte";
+  import { onMount, onDestroy, getContext } from "svelte";
   import axios from "axios";
   import { calRows } from "./Utils";
 
   import ItemList from "./ItemList.svelte";
   import Modal from "./Modal.svelte";
 
-  const dispatch = createEventDispatcher();
   const socket = getContext("socket");
 
   export let folderId;
@@ -98,7 +92,6 @@
   };
 
   const handleSubmit = (event) => {
-    event.preventDefault();
     if (modalType.Del) {
       let Del = event.target.querySelector("input").checked;
       socket.emit("remove-file", { Id: file.Id, Del });
