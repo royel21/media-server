@@ -4,6 +4,8 @@
   import { navigate } from "svelte-routing";
   import axios from "axios";
 
+  import { PageConfig } from "../Stores/PageConfigStore";
+
   import { genUrl, getFilesPerPage, FileTypes, ProcessFile } from "./Utils";
   import {
     fileKeypress,
@@ -30,12 +32,12 @@
   const cancelToken = axios.CancelToken;
   let cancel;
 
-  const loadContent = async (pg = 1, flt = "", curId = "") => {
+  const loadContent = async (pg = 1, flt = "", curId = "", config) => {
     try {
       if (cancel) {
         cancel();
       }
-      let url = genUrl(pg, { order: "dd", items: 0 }, flt, type, curId);
+      let url = genUrl(pg, config, flt, type, curId);
       let { data } = await axios.get(url, {
         cancelToken: new cancelToken(function executor(c) {
           cancel = c;
@@ -81,7 +83,7 @@
       if (pageData.files.length === 0) {
         page -= 1;
       }
-      loadContent(page, filter || "");
+      loadContent(page, filter || "", $PageConfig);
     } else {
       pageData = pageData;
     }
@@ -100,7 +102,7 @@
   });
 
   $: document.title = `${title} Page ${page}`;
-  $: loadContent(page, filter, id);
+  $: loadContent(page, filter, id, $PageConfig);
   $: if (pageData.totalPages && parseInt(page) > pageData.totalPages) {
     navigate(`/${type}/${page - 1}/${filter || ""}`);
   }

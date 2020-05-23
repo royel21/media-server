@@ -1,7 +1,11 @@
 <script>
+  import { PageConfig, updateConfig } from "../User/Stores/PageConfigStore";
   export let User;
-  const { Config } = User;
-  const applyChanges = () => {};
+  const Config = { ...$PageConfig };
+  const applyChanges = () => {
+    updateConfig(Config);
+    console.log(Config);
+  };
 </script>
 
 <style>
@@ -185,7 +189,7 @@
           type="number"
           min="0"
           max="500"
-          bin:value={Config.items}
+          bind:value={Config.items}
           class="form-control" />
         <span id="fpp-tips">0 = auto, max 500</span>
       </div>
