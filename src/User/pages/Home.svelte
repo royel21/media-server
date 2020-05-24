@@ -47,7 +47,7 @@
         left: current * el.offsetWidth,
         behavior: "smooth",
       });
-    }, 50);
+    }, 100);
   };
 
   const resize = () => {
