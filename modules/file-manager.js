@@ -127,12 +127,12 @@ module.exports.scanDir = async ({ Id, Path, isFolder }) => {
 };
 /****************** Rename File *******************/
 module.exports.renameFile = async ({ Id, Name }) => {
-    let file = await db.file.findByPk(Id);
+    let file = await db.file.findOne({ where: { Id }, include: { model: db.folder } });
     let success = false;
     let msg = "File was not found";
     if (file) {
-        let fromFile = path.join(file.FullPath, file.Name);
-        let toFile = path.join(file.FullPath, Name);
+        let fromFile = path.join(file.Folder.Path, file.Name);
+        let toFile = path.join(file.Folder.Path, Name);
 
         let fromCover = path.join("../images", file.Cover);
         let toCover = path.join(path.dirname(fromCover), Name + ".jpg");
