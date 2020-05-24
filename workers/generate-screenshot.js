@@ -108,14 +108,16 @@ module.exports.genScreenShot = async (id, isFolder) => {
 module.exports.foldersThumbNails = async (folders) => {
     for (let s of folders) {
         try {
-            if (!s.FilesType.includes("mangas")) {
-                let duration = getVideoDuration(s.filePath);
-                if (isNaN(duration)) continue;
-                await getScreenShot(s.filePath, s.coverPath, duration);
-            } else {
+            if (s.FilesType.includes("mangas")) {
                 if (/zip/gi.test(s.filePath)) {
                     await thumbnails.ZipCover(s.filePath, s.coverPath);
                 }
+            } else {
+                console.log("s:", s);
+                let duration = await getVideoDuration(s.filePath);
+                console.log("Du", duration);
+                if (isNaN(duration)) continue;
+                await getScreenShot(s.filePath, s.coverPath, duration);
             }
         } catch (err) {
             console.log(err);
