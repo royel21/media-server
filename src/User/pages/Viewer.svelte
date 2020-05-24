@@ -2,6 +2,7 @@
   import axios from "axios";
   import { onMount, afterUpdate, getContext } from "svelte";
   import { navigate } from "svelte-routing";
+  import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
 
   import PlayList from "../Component/PlayList.svelte";
   import MangaViewer from "../Component/MangaViewer.svelte";
@@ -129,7 +130,7 @@
     pointer-events: none;
     z-index: 99;
     width: 100%;
-    transition: 5s all;
+    transition: 5s opacity;
   }
   :fullscreen .f-name {
     top: 5px;
@@ -151,6 +152,15 @@
     padding: 2px 5px;
     background-color: rgba(0, 0, 0, 0.8);
   }
+  :fullscreen .top {
+    font-size: 12px;
+    bottom: initial;
+    top: 0;
+    border-radius: 0 0 0 0.25rem;
+  }
+  :fullscreen .top .fas {
+    font-size: 16px;
+  }
   #clock {
     display: inline-block;
     border-left: 1px solid;
@@ -160,23 +170,20 @@
     display: none;
   }
   @media screen and (max-width: 600px) {
-    .info * {
-      font-size: 14px;
-      bottom: initial;
-      top: 0;
-      border-radius: 0 0 0 0.25rem;
-    }
     .f-name {
       top: 80px;
+    }
+    .f-name.nomenu {
+      top: 10px;
     }
   }
 </style>
 
 <div class="viewer" bind:this={viewer} on:keydown={handleKeyboard}>
-  <div class="f-name" bind:this={fileName}>
+  <div class="f-name" bind:this={fileName} class:nomenu={$ToggleMenu}>
     <span>{file.Name}</span>
   </div>
-  <span class="info">
+  <span class="info" class:top={file.Type.includes('Video')}>
     <span id="files-prog">
       <i class="fas fa-file" />
       {`${fileIndex + 1} / ${files.length}`}
