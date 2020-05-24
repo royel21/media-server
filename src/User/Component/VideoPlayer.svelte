@@ -3,6 +3,7 @@
   import Slider from "./Slider.svelte";
   import { setfullscreen } from "../pages/Util";
   import { formatTime } from "../Component/Utils";
+  import { setGesture } from "./VideoTouch";
 
   export let KeyMap;
   export let file;
@@ -43,6 +44,7 @@
     (isFullScreen = document.fullscreenElement !== null);
 
   onMount(() => {
+    setGesture(player);
     window.addEventListener("fullscreenchange", onFullscreen);
     return () => window.removeEventListener("fullscreenchange", onFullscreen);
   });
@@ -71,8 +73,10 @@
     if (isFullScreen) {
       if (controls.style.bottom == "0px") {
         controls.style.bottom = -controls.offsetHeight + "px";
+        player.play();
       } else {
         controls.style.bottom = 0;
+        player.pause();
       }
     }
   };
