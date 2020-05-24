@@ -37,11 +37,12 @@ const getScreenShot = async (video, toPath, duration) => {
     let pos = (duration * 0.237).toFixed(2);
     let cmd =
         ffmpeg +
-        ` -ss ${pos} -i "${video}" -y -vframes 1 -q:v 0 -vf scale=240:-1 "${toPath}"`;
+        ` -ss ${pos} -i '${video}' -y -vframes 1 -q:v 0 -vf scale=240:-1 '${toPath}'`;
     return await new Promise((resolve, reject) => {
         exec(cmd, (err, stdout, stderr) => {
             if (err) {
                 resolve(false);
+                console.log(err);
                 return;
             }
             resolve(true);
