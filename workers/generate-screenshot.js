@@ -73,7 +73,7 @@ module.exports.genScreenShot = async (id, isFolder) => {
     for (let f of files) {
         let pgr = i / size;
         if (pgr > progress || i == size) {
-            console.log(parseFloat(pgr * 100).toFixed(2) + "%");
+            process.stdout.write(`\t${parseFloat(pgr * 100).toFixed(2)}% `);
             progress += 0.01;
         }
         let coverPath = path.join(vCover, f.Cover);
