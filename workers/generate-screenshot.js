@@ -113,9 +113,7 @@ module.exports.foldersThumbNails = async (folders) => {
                     await thumbnails.ZipCover(s.filePath, s.coverPath);
                 }
             } else {
-                console.log("s:", s);
                 let duration = await getVideoDuration(s.filePath);
-                console.log("Du", duration);
                 if (isNaN(duration)) continue;
                 await getScreenShot(s.filePath, s.coverPath, duration);
             }
