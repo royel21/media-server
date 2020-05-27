@@ -75,7 +75,7 @@
         scrollInView(pg);
       } else {
         if (!images[pg - 2] && !loading) {
-          loadImages(pg, 2, -1);
+          loadImages(pg, 8, -1);
         }
       }
       file.CurrentPos = pg;
@@ -92,7 +92,7 @@
         scrollInView(pg);
       } else {
         if (!images[pg + 2] && !loading) {
-          loadImages(pg, 2);
+          loadImages(pg, 8);
         }
       }
       file.CurrentPos = pg;
