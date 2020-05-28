@@ -74,7 +74,7 @@
       if (webtoon) {
         scrollInView(pg);
       } else {
-        if (!images[pg - 2] && !loading) {
+        if (!images[pg - 7] && !loading) {
           loadImages(pg, 8, -1);
         }
       }
@@ -91,7 +91,7 @@
       if (webtoon) {
         scrollInView(pg);
       } else {
-        if (!images[pg + 2] && !loading) {
+        if (!images[pg + 7] && !loading) {
           loadImages(pg, 8);
         }
       }
