@@ -80,6 +80,17 @@
       }
     }
   };
+
+  const keydown = ({ keyCode }) => {
+    switch (keyCode) {
+      case 39: {
+        player.currentTime += 5;
+      }
+      case 37: {
+        player.currentTime -= 5;
+      }
+    }
+  };
 </script>
 
 <style>
@@ -197,6 +208,7 @@
     class="player-container"
     class:isFullScreen
     on:mousemove={hideControls}
+    on:keydown={keydown}
     on:wheel={onWheel}>
     <div class="player-content">
       <video
