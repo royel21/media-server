@@ -80,14 +80,14 @@
       }
     }
   };
-  const handleKeyboard = ({ keyCode }) => {
+  const handleKeyboard = ({ keyCode, ctrlKey }) => {
     switch (keyCode) {
       case 39: {
-        player.currentTime += 5;
+        player.currentTime += ctrlKey ? 10 : 5;
         break;
       }
       case 37: {
-        player.currentTime -= 5;
+        player.currentTime -= ctrlKey ? 10 : 5;
         break;
       }
       case 38: {

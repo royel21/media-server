@@ -17,6 +17,7 @@
   let change = () => {
     tWidth = width < 30 ? 30 : width > 100 ? 100 : width;
     width = tWidth;
+    localStorage.setItem("mWith", width);
   };
 
   $: dispatch("mconfig", { width: tWidth, imgAbjust });

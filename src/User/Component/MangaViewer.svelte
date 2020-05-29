@@ -40,7 +40,10 @@
   let isObserver = false;
   let inputPage;
   let jumping = false;
-  let config = { width: window.innerWidth < 600 ? 100 : 65, imgAbjust: "fill" };
+  let config = {
+    width: window.innerWidth < 600 ? 100 : localStorage.getItem("mWidth") || 65,
+    imgAbjust: "fill",
+  };
   //emptyImage observer
   let imageObserver;
   let indices = [];
