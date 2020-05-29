@@ -80,16 +80,28 @@
       }
     }
   };
-
-  const keydown = ({ keyCode }) => {
+  const handleKeyboard = ({ keyCode }) => {
     switch (keyCode) {
       case 39: {
         player.currentTime += 5;
+        break;
       }
       case 37: {
         player.currentTime -= 5;
+        break;
+      }
+      case 38: {
+        let newVol = player.volume + 0.05;
+        if (newVol < 1) player.volume = newVol;
+        break;
+      }
+      case 40: {
+        let newVol = player.volume - 0.05;
+        if (newVol > 0) player.volume = newVol;
+        break;
       }
     }
+    console.log(keyCode);
   };
 </script>
 
@@ -208,7 +220,8 @@
     class="player-container"
     class:isFullScreen
     on:mousemove={hideControls}
-    on:keydown={keydown}
+    tabindex="0"
+    on:keydown={handleKeyboard}
     on:wheel={onWheel}>
     <div class="player-content">
       <video
