@@ -125,6 +125,7 @@
     justify-content: center;
     width: 100%;
     max-width: 1280px;
+    max-height: 720px;
     margin: 10px;
     padding: 5px;
     border: 1px solid;
