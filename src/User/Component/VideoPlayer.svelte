@@ -82,6 +82,9 @@
   };
   const handleKeyboard = ({ keyCode, ctrlKey }) => {
     switch (keyCode) {
+      case 13: {
+        fullScreen();
+      }
       case 39: {
         player.currentTime += ctrlKey ? 10 : 5;
         break;

@@ -6,23 +6,22 @@ const initialData = {
     time: 0,
 };
 
-var startClick = 0;
-
 var touching = false;
 var gestureDir = 0;
 var touchData = { ...initialData };
-
+let time = 0;
 export const setGesture = (player) => {
-    console.log(player);
     //   const [touchData, setTouchData] = useState(initialData);
     if (player) {
-        player.ontouchstart = (e) => {
+        player.onmousedown = player.ontouchstart = (e) => {
             touching = true;
-            let time = e.timeStamp;
+            time = e.timeStamp;
 
             if (e.type !== "mousedown") {
                 let { pageX, pageY } = e.touches[0];
                 touchData = { time, startX: pageX, startY: pageY };
+            } else if (e.which === 1) {
+                player.paused ? player.play() : player.pause();
             }
         };
 
@@ -33,7 +32,6 @@ export const setGesture = (player) => {
                 let { startX, startY } = touchData;
                 let deltaX = pageX - startX;
                 let deltaY = pageY - startY;
-                console.log(pageY);
 
                 if (gestureDir === 0 && (deltaX > 10 || deltaX < -10)) {
                     gestureDir = 1;
@@ -59,11 +57,9 @@ export const setGesture = (player) => {
             }
         };
 
-        player.ontouchend = (e) => {
+        player.onmouseup = player.ontouchend = (e) => {
             touching = false;
-            if (e.type === "touchend") {
-            }
-            // setTouchData(initialData);
+
             touchData = { initialData };
             gestureDir = 0;
         };
