@@ -103,7 +103,7 @@
         if (newVol > 0) player.volume = newVol;
         break;
       }
-      case 40: {
+      case 32: {
         player.paused ? player.play() : player.pause();
         break;
       }
