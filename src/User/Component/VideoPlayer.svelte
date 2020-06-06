@@ -103,6 +103,10 @@
         if (newVol > 0) player.volume = newVol;
         break;
       }
+      case 40: {
+        player.paused ? player.play() : player.pause();
+        break;
+      }
     }
     console.log(keyCode);
   };
