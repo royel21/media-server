@@ -267,15 +267,15 @@
           <span on:click={onReturn}>
             <i class="far fa-times-circle" />
           </span>
-          <span class="prev-page" on:click={PrevFile}>
-            <i class="fa fa-arrow-circle-left" />
+          <span class="prev-page" on:click={PrevFile.action}>
+            <i class="far fa-arrow-circle-left" />
           </span>
           <label for="v-play">
             <input type="checkbox" id="v-play" on:change={onPlay} />
             <i class={`far fa-${mConfig.pause ? 'play' : 'pause'}-circle`} />
           </label>
-          <span class="next-page" on:click={NextFile}>
-            <i class="fa fa-arrow-circle-right" />
+          <span class="next-page" on:click={NextFile.action}>
+            <i class="far fa-arrow-circle-right" />
           </span>
           <span on:click={fullScreen}>
             <i class="fas fa-expand-arrows-alt" />
