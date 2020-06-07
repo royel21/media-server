@@ -95,12 +95,12 @@
       }
       case 38: {
         let newVol = player.volume + 0.05;
-        if (newVol < 1) player.volume = newVol;
+        player.volume = newVol > 1.0 ? 1 : newVol;
         break;
       }
       case 40: {
         let newVol = player.volume - 0.05;
-        if (newVol > 0) player.volume = newVol;
+        player.volume = newVol < 0 ? 0 : newVol;
         break;
       }
       case 32: {
@@ -132,7 +132,7 @@
     justify-content: center;
     width: 100%;
     max-width: 1280px;
-    max-height: 720px;
+    max-height: 780px;
     margin: 10px;
     padding: 5px;
     border: 1px solid;
@@ -267,16 +267,10 @@
           <span on:click={onReturn}>
             <i class="far fa-times-circle" />
           </span>
-          <span class="prev-page" on:click={PrevFile}>
-            <i class="fa fa-arrow-circle-left" />
-          </span>
           <label for="v-play">
             <input type="checkbox" id="v-play" on:change={onPlay} />
             <i class={`far fa-${mConfig.pause ? 'play' : 'pause'}-circle`} />
           </label>
-          <span class="next-page" on:click={NextFile}>
-            <i class="fa fa-arrow-circle-right" />
-          </span>
           <span on:click={fullScreen}>
             <i class="fas fa-expand-arrows-alt" />
           </span>
