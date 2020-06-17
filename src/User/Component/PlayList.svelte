@@ -41,16 +41,17 @@
   $: if (!hideList) {
     if (playList) {
       let current = document.querySelector("#play-list .active");
-      console.log(current.offsetTop, playList.offsetTop);
-      playList.scroll({
-        top: current.offsetTop - 250,
-      });
-      setObserver();
-      setTimeout(() => {
+      if (current) {
         playList.scroll({
           top: current.offsetTop - 250,
         });
-      }, 300);
+        setObserver();
+        setTimeout(() => {
+          playList.scroll({
+            top: current.offsetTop - 250,
+          });
+        }, 300);
+      }
     }
   }
 </script>

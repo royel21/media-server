@@ -117,14 +117,18 @@ const PopulateDB = async (files, FolderId) => {
 
 const removeOrphanFiles = async (Id, isFolder) => {
     let files;
-    let dir = "";
     if (isFolder) {
         let folder = await db.folder.findOne({
             where: { Id },
             include: { model: db.file },
         });
         files = await folder.Files;
-        dir = folder.Path;
+        let dir = folder.Path;
+        for (let f of files) {
+            if (!fs.existsSync(path.join(dir, f.Name))) {
+                await f.destroy();
+            }
+        }
     } else {
         files = await db.file.findAll({
             include: {
@@ -135,15 +139,13 @@ const removeOrphanFiles = async (Id, isFolder) => {
         });
         let file = files[0];
         if (!file) return;
-        dir = files[0].Folder.Path;
-    }
-    for (let f of files) {
-        if (!fs.existsSync(path.join(f.Folder.Path, f.Name))) {
-            await f.destroy();
+        for (let f of files) {
+            if (!fs.existsSync(path.join(f.Folder.Path, f.Name))) {
+                await f.destroy();
+            }
         }
     }
 };
-
 const scanDirectory = async ({ id, dir, isFolder }) => {
     await removeOrphanFiles(id, isFolder);
 

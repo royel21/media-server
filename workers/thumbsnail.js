@@ -53,51 +53,45 @@ module.exports.ZipCover = (file, coverP, exist) => {
         storeEntries: true,
     });
     return new Promise((resolve, reject) => {
-        try {
-            zip.on("ready", () => {
-                var entries = Object.values(zip.entries())
-                    .sort((a, b) => {
-                        return String(a.name).localeCompare(String(b.name));
-                    })
-                    .filter((entry) => {
-                        return !entry.isDirectory;
-                    });
-
-                var firstImg = entries.find((e) => {
-                    return (
-                        images.test(e.name.split(".").pop()) &&
-                        e.size > 1024 * 30
-                    );
+        zip.on("ready", () => {
+            var entries = Object.values(zip.entries())
+                .sort((a, b) => {
+                    return String(a.name).localeCompare(String(b.name));
+                })
+                .filter((entry) => {
+                    return !entry.isDirectory;
                 });
 
-                if (exist) return resolve(entries.length);
-
-                if (firstImg === undefined) {
-                    zip.close();
-                    resolve(0);
-                } else {
-                    buff = zip.entryDataSync(firstImg);
-                    resize(coverP, buff)
-                        .then(() => {
-                            resolve(entries.length);
-                            zip.close();
-                            buff = [];
-                        })
-                        .catch((err) => {
-                            zip.close();
-                            console.log(
-                                "thumbnail error",
-                                path.basename(file),
-                                err
-                            );
-                            resolve(0);
-                        });
-                }
+            var firstImg = entries.find((e) => {
+                return images.test(e.name.split(".").pop()) && e.size > 1024 * 30;
             });
-        } catch (error) {
-            console.log(error);
-            resolve(0);
+
+            if (exist) return resolve(entries.length);
+
+            if (firstImg === undefined) {
+                zip.close();
+                resolve(0);
+            } else {
+                buff = zip.entryDataSync(firstImg);
+                resize(coverP, buff)
+                    .then(() => {
+                        resolve(entries.length);
+                        zip.close();
+                        buff = [];
+                    })
+                    .catch((err) => {
+                        zip.close();
+                        console.log("thumbnail error", path.basename(file), err);
+                        resolve(0);
+                    });
+            }
+        });
+        zip.on("error", (error) => {
+            console.log(file, error);
             zip.close();
-        }
+            resolve(0);
+        });
     });
 };
+//Seirei Gensouki – Konna Sekai De Deaeta Kimi Ni (Novel)
+//Seirei Gensouki – Konna Sekai De Deaeta Kimi Ni (novel)
