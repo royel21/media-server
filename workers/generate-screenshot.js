@@ -71,27 +71,27 @@ module.exports.genScreenShot = async (id, isFolder) => {
     let progress = 0.01;
     let i = 1;
     for (let f of files) {
-        let pgr = i / size;
-        if (pgr > progress || i == size) {
-            process.stdout.write(`\t${parseFloat(pgr * 100).toFixed(2)}% `);
-            progress += 0.01;
-        }
-        let coverPath = path.join(vCover, f.Cover);
-
-        let exist = fs.existsSync(coverPath);
-        i++;
-        if (exist && f.Duration > 0) continue;
-        let fullPath = path.join(f.Folder.Path, f.Name);
-
-        if (f.Type.includes("Manga")) {
-            if (/zip/gi.test(f.Name)) {
-                let total = await thumbnails.ZipCover(fullPath, coverPath, exist);
-                await f.update({ Duration: total });
-            } else if (/rar/gi.test(f.filePath)) {
-                await thumbnails.RarCover(fullPath, coverPath);
+        try {
+            let pgr = i / size;
+            if (pgr > progress || i == size) {
+                process.stdout.write(`\t${parseFloat(pgr * 100).toFixed(2)}% `);
+                progress += 0.01;
             }
-        } else {
-            try {
+            let coverPath = path.join(vCover, f.Cover);
+
+            let exist = fs.existsSync(coverPath);
+            i++;
+            if (exist && f.Duration > 0) continue;
+            let fullPath = path.join(f.Folder.Path, f.Name);
+
+            if (f.Type.includes("Manga")) {
+                if (/zip/gi.test(f.Name)) {
+                    let total = await thumbnails.ZipCover(fullPath, coverPath, exist);
+                    await f.update({ Duration: total });
+                } else if (/rar/gi.test(f.filePath)) {
+                    await thumbnails.RarCover(fullPath, coverPath);
+                }
+            } else {
                 let Duration = await getVideoDuration(fullPath);
                 if (Duration && f.Duration === 0) {
                     await f.update({ Duration });
@@ -99,9 +99,9 @@ module.exports.genScreenShot = async (id, isFolder) => {
 
                 if (!exist && Duration)
                     await getScreenShot(fullPath, coverPath, Duration);
-            } catch (err) {
-                console.log("some-video-error", err);
             }
+        } catch (err) {
+            console.log(f.Name, err);
         }
     }
 };
