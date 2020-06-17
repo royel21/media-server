@@ -139,7 +139,6 @@ const removeOrphanFiles = async (Id, isFolder) => {
     }
     for (let f of files) {
         if (!fs.existsSync(path.join(f.Folder.Path, f.Name))) {
-            console.log("Removing: ", f.Name);
             await f.destroy();
         }
     }
