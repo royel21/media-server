@@ -6,7 +6,7 @@ modules/win-explorer/test
 modules/win-explorer/build
 modules/win-explorer/bin
 public/build/*
-/images/
+images/
 ./files*
 
 *.db

@@ -25,10 +25,14 @@ const createFolderAndCover = async (dir, files, fd) => {
     if (!firstFile) return "";
     let Name = path.basename(dir);
     let FolderCover = path.join(coverPath, Name + ".jpg");
-    let FilesType = /\.(rar|zip)/gi.test(firstFile.FileName) ? "mangas" : "videos";
+    let FilesType = /\.(rar|zip)/gi.test(firstFile.FileName)
+        ? "mangas"
+        : "videos";
 
     if (!fs.existsSync(FolderCover)) {
-        let img = files.find((a) => /\.(jpg|jpeg|png|gif|webp)/i.test(a.FileName));
+        let img = files.find((a) =>
+            /\.(jpg|jpeg|png|gif|webp)/i.test(a.FileName)
+        );
         if (img) {
             try {
                 await sharp(path.join(dir, img.FileName))
@@ -77,16 +81,14 @@ const PopulateDB = async (files, FolderId) => {
     let filteredFile = files.filter(
         (f) => f.isDirectory || (allExt.test(f.FileName) && !f.isHidden)
     );
-
+    let folderFiles = await db.file.findAll({ where: { FolderId } });
     for (let f of filteredFile) {
         try {
             if (!f.isDirectory) {
                 let found = tempFiles.filter((v) => v.Name === f.FileName);
-                let vfound = await db.file.findAll({
-                    where: { Name: f.FileName },
-                });
+                let vfound = folderFiles.find((fd) => fd.Name === f.FileName);
 
-                if (found.length === 0 && vfound.length === 0) {
+                if (found.length === 0 && !vfound) {
                     tempFiles.push({
                         Name: f.FileName,
                         Type: /rar|zip/gi.test(f.extension) ? "Manga" : "Video",
@@ -98,7 +100,11 @@ const PopulateDB = async (files, FolderId) => {
             } else {
                 if (f.Files.length > 0) {
                     console.log("folder: ", f.FileName);
-                    let fId = await createFolderAndCover(f.FileName, f.Files, f);
+                    let fId = await createFolderAndCover(
+                        f.FileName,
+                        f.Files,
+                        f
+                    );
                     if (fId) {
                         await PopulateDB(f.Files, fId);
                     }
@@ -129,7 +135,11 @@ const removeOrphanFiles = async (Id, isFolder) => {
         dir = folder.Path;
     } else {
         files = await db.file.findAll({
-            include: { model: db.folder, where: { DirectoryId: Id }, required: true },
+            include: {
+                model: db.folder,
+                where: { DirectoryId: Id },
+                required: true,
+            },
         });
         let file = files[0];
         if (!file) return;
@@ -173,7 +183,10 @@ const processJobs = async () => {
         try {
             let data = pendingJobs.pop();
             await scanDirectory(data);
-            await db.directory.update({ IsLoading: false }, { where: { Id: data.id } });
+            await db.directory.update(
+                { IsLoading: false },
+                { where: { Id: data.id } }
+            );
             process.send(data);
         } catch (err) {
             console.log("folder-scan line:135", err);

@@ -1,6 +1,5 @@
 const Sequelize = require("sequelize");
 const path = require("path");
-var dbPath = path.join("./files.db");
 
 const db = {};
 const { dialect, pool } = require("./config");
@@ -88,8 +87,18 @@ db.init = async (force) => {
                         order: "nu",
                         items: 0,
                         recentFolders: [],
-                        video: { KeysMap: {}, volume: 0.3, pause: true, mute: false },
-                        manga: { KeysMap: {}, scaleX: 0.6, scaleY: 1, aniDuration: 300 },
+                        video: {
+                            KeysMap: {},
+                            volume: 0.3,
+                            pause: true,
+                            mute: false,
+                        },
+                        manga: {
+                            KeysMap: {},
+                            scaleX: 0.6,
+                            scaleY: 1,
+                            aniDuration: 300,
+                        },
                     }),
                 },
             },
