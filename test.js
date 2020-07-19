@@ -1,6 +1,6 @@
-require("dotenv").config();
-const db = require("./models");
-db.sqlze.options.logging = console.log;
+// require("dotenv").config();
+// const db = require("./models");
+// db.sqlze.options.logging = console.log;
 // const test = async () => {
 
 //     const folders = await db.folder.findAndCountAll({ order: ["Name"] });
@@ -13,13 +13,12 @@ db.sqlze.options.logging = console.log;
 // test();
 // const { getFolders } = require("./routes/query-helper");
 const testDb = async () => {
-    await db.init(true);
+    // await db.init(true);
     // console.time("time");
     // let user = await db.user.findOne({
     //     where: { Name: "Royel" },
     //     include: [{ model: db.recent }, { model: db.favorite }],
     // });
-
     // const req = {
     //     user,
     //     params: { filetype: "videos", order: "nu", page: 1, items: 10, search: "" },
@@ -34,7 +33,7 @@ const testDb = async () => {
     // await getFolders(req, res);
     // console.timeEnd("time");
 };
-testDb();
+// testDb();
 // db.init().then(testDb);
 // const db = require("./models");
 // const { getOrderBy } = require("./routes/query-helper");
@@ -132,3 +131,25 @@ testDb();
 // const windir = require("win-explorer");
 // let file = windir.ListFiles("E:/Anime1/", { oneFile: true });
 // console.log(file);
+const fs = require("fs-extra");
+const path = require("path");
+const rename = (dir) => {
+    let files = fs.readdirSync(dir);
+    for (let f of files) {
+        let file = path.join(dir, f);
+        if (fs.statSync(file).isDirectory()) {
+            console.log(file);
+            rename(file);
+        } else if (f.includes(".zip")) {
+            let baseDir = path.basename(dir);
+
+            let old = path.join(dir, f);
+            let newF = path.join(dir, f.replace("Chapter", baseDir));
+            if (!fs.existsSync(newF)) fs.moveSync(old, newF);
+            // console.log(old, newF);
+        }
+    }
+};
+
+rename("M:\\mangas");
+//.replace(/[A-Za-z]+/ig,"Chapter ")

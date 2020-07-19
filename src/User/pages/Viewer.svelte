@@ -52,9 +52,9 @@
   };
 
   const changeFile = (dir = 0) => {
-    let temp = files.findIndex((f) => f.Id === fileId) + dir;
+    let temp = files.findIndex(f => f.Id === fileId) + dir;
 
-    if (fileIndex > -1 && fileIndex < files.length) {
+    if (fileIndex > -1 && fileIndex < files.length - 1) {
       fileIndex = temp;
       saveFile();
       navigate(`/${basePath}/${files[fileIndex].Id}`);
@@ -82,12 +82,12 @@
   }
 
   $: if (files.length > 0) {
-    file = files.find((f) => f.Id === fileId) || files[0];
-    fileIndex = files.findIndex((f) => f.Id === fileId);
+    file = files.find(f => f.Id === fileId) || files[0];
+    fileIndex = files.findIndex(f => f.Id === fileId);
   }
 
   let runningClock;
-  window.addEventListener("fullscreenchange", (e) => {
+  window.addEventListener("fullscreenchange", e => {
     if (document.fullscreenElement) {
       const clock = document.getElementById("clock");
       if (clock) {

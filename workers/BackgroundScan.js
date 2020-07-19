@@ -25,10 +25,14 @@ const createFolderAndCover = async (dir, files, fd) => {
     if (!firstFile) return "";
     let Name = path.basename(dir);
     let FolderCover = path.join(coverPath, Name + ".jpg");
-    let FilesType = /\.(rar|zip)/gi.test(firstFile.FileName) ? "mangas" : "videos";
+    let FilesType = /\.(rar|zip)/gi.test(firstFile.FileName)
+        ? "mangas"
+        : "videos";
 
     if (!fs.existsSync(FolderCover)) {
-        let img = files.find((a) => /\.(jpg|jpeg|png|gif|webp)/i.test(a.FileName));
+        let img = files.find((a) =>
+            /\.(jpg|jpeg|png|gif|webp)/i.test(a.FileName)
+        );
         if (img) {
             try {
                 await sharp(path.join(dir, img.FileName))
@@ -69,11 +73,11 @@ const createFolderAndCover = async (dir, files, fd) => {
         await folder.update({ Cover: FolderCover, FileCount });
     }
 
-    return folder.Id;
+    return { Id: folder.Id, folder };
 };
 
 var tempFiles = [];
-const PopulateDB = async (files, FolderId) => {
+const PopulateDB = async (files, FolderId, folder) => {
     let filteredFile = files.filter(
         (f) => f.isDirectory || (allExt.test(f.FileName) && !f.isHidden)
     );
@@ -96,9 +100,13 @@ const PopulateDB = async (files, FolderId) => {
             } else {
                 if (f.Files.length > 0) {
                     console.log("folder: ", f.FileName);
-                    let fId = await createFolderAndCover(f.FileName, f.Files, f);
-                    if (fId) {
-                        await PopulateDB(f.Files, fId);
+                    let result = await createFolderAndCover(
+                        f.FileName,
+                        f.Files,
+                        f
+                    );
+                    if (result.Id) {
+                        await PopulateDB(f.Files, result.Id, result.folder);
                     }
                 }
             }
@@ -108,7 +116,12 @@ const PopulateDB = async (files, FolderId) => {
         }
     }
     try {
-        if (tempFiles.length > 0) await db.file.bulkCreate(tempFiles);
+        if (tempFiles.length > 0) {
+            await db.file.bulkCreate(tempFiles);
+            if (folder) {
+                await folder.update({ CreatedAt: new Date() });
+            }
+        }
         tempFiles = [];
     } catch (err) {
         console.log("folder-scan line:102", err);
@@ -116,6 +129,7 @@ const PopulateDB = async (files, FolderId) => {
 };
 
 const removeOrphanFiles = async (Id, isFolder) => {
+    console.log("remove olfan");
     let files;
     if (isFolder) {
         let folder = await db.folder.findOne({
@@ -152,22 +166,22 @@ const scanDirectory = async ({ id, dir, isFolder }) => {
     DirectoryId = id;
 
     var fis = WinDrive.ListFilesRO(dir);
-    let folderId;
+    let result = {};
 
     if (!isFolder && fis.filter((f) => !f.isDirectory).length > 0) {
         let folder = WinDrive.ListFiles(dir, { oneFile: true });
-        folderId = await createFolderAndCover(dir, fis, folder);
+        result = await createFolderAndCover(dir, fis, folder);
     } else {
-        folderId = id;
         await createFolderAndCover(dir, fis);
+        result.Id = id;
     }
     try {
-        await PopulateDB(fis, folderId);
+        await PopulateDB(fis, result.Id);
         console.log("job db end: ", id);
         await foldersThumbNails(folderCovers);
         console.log("job folder end:", id);
         await genScreenShot(id, isFolder);
-        console.log("job screenshot end: ", id);
+        console.log("job screenshot end: ", result);
     } catch (err) {
         console.log("line 14:", err);
     }
@@ -179,7 +193,10 @@ const processJobs = async () => {
         try {
             let data = pendingJobs.pop();
             await scanDirectory(data);
-            await db.directory.update({ IsLoading: false }, { where: { Id: data.id } });
+            await db.directory.update(
+                { IsLoading: false },
+                { where: { Id: data.id } }
+            );
             process.send(data);
         } catch (err) {
             console.log("folder-scan line:135", err);

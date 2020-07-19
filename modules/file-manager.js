@@ -34,7 +34,11 @@ const startWork = (model, isFolder) => {
                 });
         });
     }
-    let data = { id: model.Id, dir: isFolder ? model.Path : model.FullPath, isFolder };
+    let data = {
+        id: model.Id,
+        dir: isFolder ? model.Path : model.FullPath,
+        isFolder,
+    };
     worker.send(data);
 };
 // List all hdd
@@ -77,9 +81,10 @@ module.exports.loadContent = (data) => {
     }
 };
 //Scan all files of a direcotry
-module.exports.scanDir = async ({ Id, Path, isFolder }) => {
+module.exports.scanDir = async ({ Id, Path, Type, isFolder }) => {
     //If is it root of disk return;
-    if (!Id && !Path) return socket.emit("scan-info", "Id And Path both can't be null");
+    if (!Id && !Path)
+        return socket.emit("scan-info", "Id And Path both can't be null");
 
     let msg;
     try {
@@ -92,6 +97,7 @@ module.exports.scanDir = async ({ Id, Path, isFolder }) => {
                 model = await db.directory.create({
                     FullPath: Path,
                     Name: dirInfo.FileName,
+                    Type,
                 });
             }
         } else {
@@ -127,7 +133,10 @@ module.exports.scanDir = async ({ Id, Path, isFolder }) => {
 };
 /****************** Rename File *******************/
 module.exports.renameFile = async ({ Id, Name }) => {
-    let file = await db.file.findOne({ where: { Id }, include: { model: db.folder } });
+    let file = await db.file.findOne({
+        where: { Id },
+        include: { model: db.folder },
+    });
     let success = false;
     let msg = "File was not found";
     if (file) {
@@ -163,14 +172,21 @@ module.exports.renameFile = async ({ Id, Name }) => {
 /************ Remove file from db and system ***********************/
 
 module.exports.removeFile = async ({ Id, Del }) => {
-    let file = await db.file.findOne({ where: { Id }, include: { model: db.folder } });
+    let file = await db.file.findOne({
+        where: { Id },
+        include: { model: db.folder },
+    });
     const message = { success: false, msg: "" };
     if (file) {
         try {
             await file.destroy();
             message.success = true;
             if (Del) {
-                let cover = path.join("../images", file.Type, file.Name + ".jpg");
+                let cover = path.join(
+                    "../images",
+                    file.Type,
+                    file.Name + ".jpg"
+                );
                 if (fs.existsSync(cover)) fs.removeSync(cover);
                 let fPath = path.join(file.Folder.Path, file.Name);
                 if (fs.existsSync(fPath)) {
@@ -214,7 +230,8 @@ module.exports.renameFolder = async ({ Id, Name }) => {
                 msg = "Folder Rename Successfully";
 
                 let oldCover = getCoverPath(folder.Name);
-                if (fs.existsSync(oldCover)) fs.moveSync(oldCover, getCoverPath(Name));
+                if (fs.existsSync(oldCover))
+                    fs.moveSync(oldCover, getCoverPath(Name));
             }
 
             await folder.update({ Name });
