@@ -9,8 +9,19 @@
     let observer;
     let playList;
     let hideList = true;
-    let totalPages = Math.ceil(files.length / 100);
+    let totalPages = 0;
     let page = 1;
+    let filter = "";
+    let toLoad = 0;
+    let filesFiltered = [];
+
+    const getPage = () => {
+        let i = files.findIndex((f) => f.Id === fileId);
+        let pg = 1;
+        while (pg * 20 < i && pg < totalPages) pg++;
+        return pg;
+    };
+
     const setObserver = () => {
         if (observer) {
             observer.disconnect();
@@ -62,7 +73,25 @@
         pg = parseInt(pg.detail);
         if (pg < 1 || pg > totalPages || isNaN(pg)) return;
         page = pg < 1 ? 1 : pg > totalPages ? totalPages : pg;
+        setObserver();
     };
+
+    $: if (files.length > 100 && totalPages === 0) {
+        totalPages = Math.ceil(files.length / 100);
+        page = getPage();
+    }
+
+    $: {
+        filesFiltered = files.filter((f) =>
+            f.Name.toLowerCase().includes(filter.toLowerCase())
+        );
+        let start = (page - 1) * 100;
+        if (start < filesFiltered.length) {
+            toLoad = start;
+        } else {
+            toLoad = 0;
+        }
+    }
 </script>
 
 <style>
@@ -200,7 +229,11 @@
     #play-list #v-filter {
         flex-grow: 1;
     }
-
+    #play-list #v-filter .form-control {
+        border-radius: 0;
+        padding: 0.2rem 0.5rem;
+        margin-top: 3px;
+    }
     #play-list .clear-filter {
         right: 14px;
     }
@@ -218,6 +251,12 @@
         overflow: hidden;
         text-overflow: ellipsis;
         line-height: 1.625;
+    }
+    .b-control {
+        text-align: center;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
     }
     @media screen and (max-width: 600px) {
         #p-list::-webkit-scrollbar {
@@ -241,14 +280,18 @@
 <input type="checkbox" id="p-hide" bind:checked={hideList} />
 <div id="play-list" class:move={!$ToggleMenu}>
     <div id="v-filter">
-        <input type="text" placeholder="Filter" class="form-control" />
+        <input
+            type="text"
+            bind:value={filter}
+            placeholder="Filter"
+            class="form-control" />
         <span class="clear-filter">
             <i class="fas fa-times-circle" />
         </span>
     </div>
     <div id="p-list" bind:this={playList}>
         <ul>
-            {#each files.slice(page * 100, 100) as { Id, Name, Cover, CurrentPos, Duration, Type }, i}
+            {#each filesFiltered.slice(toLoad, toLoad + 100) as { Id, Name, Cover, CurrentPos, Duration, Type }}
                 <li id={Id} class={Id === fileId ? 'active' : ''} on:click>
                     <span class="cover">
                         <img data-src={Cover} src="" alt="" />
@@ -261,5 +304,13 @@
             {/each}
         </ul>
     </div>
-    <Pagination page={parseInt(page || 1)} {totalPages} on:gotopage={goToPage} />
+    {#if totalPages > 1}
+        <div class="b-control">
+            <Pagination
+                page={parseInt(page || 1)}
+                {totalPages}
+                on:gotopage={goToPage}
+                hideFL={true} />
+        </div>
+    {/if}
 </div>
