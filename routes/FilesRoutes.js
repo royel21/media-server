@@ -16,12 +16,22 @@ Router.get("/recents", (req, res) => {
             order: [[db.sqlze.literal("RecentFolders.LastRead"), "DESC"]],
         });
         let result = folders.map((f) => {
-            return { ...f.RecentFolders.dataValues, ...f.dataValues, RecentFolders: "" };
+            return {
+                ...f.RecentFolders.dataValues,
+                ...f.dataValues,
+                RecentFolders: "",
+            };
         });
         res.send(result);
     })();
 });
 
-Router.get("/:filetype/:order/:page?/:items?/:search?", getFolders);
+Router.get("/dirs", (req, res) => {
+    db.directory.findAll().then((dirs) => {
+        return res.send(dirs);
+    });
+});
+
+Router.get("/:filetype/:dirid/:order/:page?/:items?/:search?", getFolders);
 
 module.exports = Router;

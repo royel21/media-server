@@ -11,7 +11,7 @@
     fileKeypress,
     selectItem,
     getElIndex,
-    fileClicks,
+    fileClicks
   } from "./FileEvents";
 
   import Pagination from "../../ShareComponent/Pagination.svelte";
@@ -23,6 +23,8 @@
   export let filter = "";
   export let type = "";
   export let title = "";
+  export let dir = "";
+
   const socket = getContext("socket");
   let pageData = { files: [], totalPages: 0, totalFiles: 0 };
   let selected = 0;
@@ -32,16 +34,17 @@
   const cancelToken = axios.CancelToken;
   let cancel;
 
-  const loadContent = async (pg = 1, flt = "", curId = "", config) => {
+  const loadContent = async (pg = 1, flt = "", curId = "", config, curDir) => {
     try {
       if (cancel) {
         cancel();
       }
-      let url = genUrl(pg, config, flt, type, curId);
+      let url = genUrl(pg, config, flt, type, curId, curDir);
+      console.log(url);
       let { data } = await axios.get(url, {
         cancelToken: new cancelToken(function executor(c) {
           cancel = c;
-        }),
+        })
       });
       pageData = data;
     } catch (error) {}
@@ -55,20 +58,20 @@
     navigate(`/${type}/${pg}/${filter || ""}`);
     selected = sel || 0;
   };
-  const fileFilter = (event) => {
+  const fileFilter = event => {
     filter = event.detail;
     navigate(`/${type}/${1}/${filter || ""}`);
   };
 
-  const handleKeydown = (event) => {
+  const handleKeydown = event => {
     fileKeypress(event, page, goToPage, ProcessFile, selected);
   };
 
-  const openFile = (event) => {
+  const openFile = event => {
     ProcessFile(event.target.closest(".file"), socket);
   };
 
-  const favClick = (event) => {
+  const favClick = event => {
     let { target } = event;
     if (target.tagName !== "I") {
       fileClicks(event);
@@ -77,8 +80,8 @@
     favClicked = target;
   };
 
-  const removeFile = (event) => {
-    pageData.files = pageData.files.filter((f) => f.Id !== event.detail);
+  const removeFile = event => {
+    pageData.files = pageData.files.filter(f => f.Id !== event.detail);
     if (pageData.totalPages > 1) {
       if (pageData.files.length === 0) {
         page -= 1;
@@ -102,10 +105,12 @@
   });
 
   $: document.title = `${title} Page ${page}`;
-  $: loadContent(page, filter, id, $PageConfig);
+  $: loadContent(page, filter, id, $PageConfig, dir);
   $: if (pageData.totalPages && parseInt(page) > pageData.totalPages) {
     navigate(`/${type}/${page - 1}/${filter || ""}`);
   }
+
+  $: console.log(dir);
 </script>
 
 <style>

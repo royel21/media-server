@@ -15,7 +15,7 @@
     { title: "Home", path: "/", class: "home" },
     { title: "Videos", path: "/videos", class: "film" },
     { title: "Mangas", path: "/mangas", class: "book" },
-    { title: "Favorites", path: "/favorites", class: "heart" },
+    { title: "Favorites", path: "/favorites", class: "heart" }
   ];
   FavoritesStores.set(getContext("User").favorites);
 </script>
@@ -24,11 +24,11 @@
   <Navbar on:click {navItems} />
   <Route path="/videos/content/:id/:page/:filter" component={Content} />
   <Route path="/videos/viewer/:folderId/:fileId" component={Viewer} />
-  <Route path="/videos/:page/:filter" component={Videos} />
+  <Route path="/videos/:dir/:page/:filter" component={Videos} />
 
   <Route path="/mangas/content/:id/:page/:filter" component={Content} />
   <Route path="/mangas/viewer/:folderId/:fileId" component={Viewer} />
-  <Route path="/mangas/:page/:filter" component={Mangas} />
+  <Route path="/mangas/:dir/:page/:filter" component={Mangas} />
 
   <Route path="/favorites/content/:id/:page/:filter" component={Content} />
   <Route path="/favorites/:id/:page/:filter" component={Favorites} />

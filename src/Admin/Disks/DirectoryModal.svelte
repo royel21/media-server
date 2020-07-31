@@ -29,8 +29,8 @@
           <label for="Name" class="input-group-text">Type</label>
         </div>
         <select class="form-control" name="Type" bind:value={Type}>
-          <option value="Manga">Manga</option>
-          <option value="Video">Video</option>
+          <option value="Mangas">Mangas</option>
+          <option value="Videos">Videos</option>
         </select>
       </div>
     </div>

@@ -9,13 +9,13 @@
   import UserRoutes from "./User/UserRoutes.svelte";
   import Login from "./Login.svelte";
 
-  var socket;
+  let socket;
   let user = { username: "" };
   let isAuthenticating = true;
 
   function isPwa() {
     return ["fullscreen", "standalone", "minimal-ui"].some(
-      (displayMode) =>
+      displayMode =>
         window.matchMedia("(display-mode: " + displayMode + ")").matches
     );
   }
@@ -29,15 +29,20 @@
   });
 
   const logout = async () => {
-    axios.get("/api/users/logout");
     user = {};
     navigate("/login", { replace: true });
     if (socket) socket.close();
     if (isPwa()) {
       history.go(-(history.length - 2));
     }
+    try {
+      axios.get("/api/users/logout");
+    } catch (error) {
+      console.log(error);
+    }
   };
-  const logIn = (_user) => {
+
+  const logIn = _user => {
     user = _user.detail;
     navigate("/", { replace: true });
   };
@@ -50,7 +55,7 @@
     socket = socketClient("/");
     setContext("socket", socket);
     setContext("User", user);
-    socket.on("error", (error) => {
+    socket.on("error", error => {
       console.log(error);
     });
   }
