@@ -11,6 +11,8 @@
 
     export let navItems;
 
+    const sortName = (a, b) => a.Name.localeCompare(b.Name);
+
     const User = getContext("User");
     let dirs;
     let selected = { Mangas: "", Videos: "" };
@@ -37,8 +39,8 @@
     $: if (!dirs) {
         axios.get("/api/files/dirs/").then(({ data }) => {
             if (data) {
-                let Mangas = data.filter((d) => d.Type === "Mangas");
-                let Videos = data.filter((d) => d.Type === "Videos");
+                let Mangas = data.filter((d) => d.Type === "Mangas").sort(sortName);
+                let Videos = data.filter((d) => d.Type === "Videos").sort(sortName);
                 dirs = { Mangas, Videos };
                 selected = {
                     Mangas: Mangas[0] ? Mangas[0].Id : "",
