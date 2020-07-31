@@ -54,17 +54,6 @@
     const changeFile = (dir = 0) => {
         let temp = files.findIndex((f) => f.Id === fileId) + dir;
 
-<<<<<<< HEAD
-  const changeFile = (dir = 0) => {
-    let temp = files.findIndex(f => f.Id === fileId) + dir;
-
-    if (fileIndex > -1 && fileIndex < files.length - 1) {
-      fileIndex = temp;
-      saveFile();
-      navigate(`/${basePath}/${files[fileIndex].Id}`);
-    }
-  };
-=======
         if (fileIndex > -1 && fileIndex < files.length) {
             fileIndex = temp;
             saveFile();
@@ -82,7 +71,6 @@
     NextFile.isctrl = true;
     PrevFile.action = () => changeFile(-1);
     PrevFile.isctrl = true;
->>>>>>> 085197c68f4a3c982f06d588d8b69f293be60a37
 
     let lastId;
     let tout;
@@ -100,35 +88,6 @@
         fileIndex = files.findIndex((f) => f.Id === fileId);
     }
 
-<<<<<<< HEAD
-  $: if (files.length > 0) {
-    file = files.find(f => f.Id === fileId) || files[0];
-    fileIndex = files.findIndex(f => f.Id === fileId);
-  }
-
-  let runningClock;
-  window.addEventListener("fullscreenchange", e => {
-    if (document.fullscreenElement) {
-      const clock = document.getElementById("clock");
-      if (clock) {
-        clock.innerText = new Date().toLocaleTimeString("en-US");
-        runningClock = setInterval(() => {
-          clock.innerText = new Date().toLocaleTimeString("en-US");
-        }, 1000);
-      }
-    } else {
-      clearInterval(runningClock);
-      clock.innerText = "";
-    }
-    if (
-      /(android)|(iphone)/i.test(navigator.userAgent) &&
-      file.Type.includes("Video") &&
-      document.fullscreenElement
-    ) {
-      window.screen.orientation.lock("landscape");
-    } else {
-      window.screen.orientation.unlock();
-=======
     let runningClock;
     window.addEventListener("fullscreenchange", (e) => {
         if (document.fullscreenElement) {
@@ -157,7 +116,6 @@
     $: if (fileId) {
         if (socket)
             socket.emit("recent-folder", { CurrentFile: fileId, FolderId: folderId });
->>>>>>> 085197c68f4a3c982f06d588d8b69f293be60a37
     }
 </script>
 
