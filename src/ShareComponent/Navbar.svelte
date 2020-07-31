@@ -6,12 +6,14 @@
     import Config from "./Config.svelte";
     import { ToggleMenu } from "./ToggleMenu";
     import { DirId, updateDirId } from "../User/Stores/DirectoryStore";
+    import Mangas from "../User/pages/Mangas.svelte";
+    import Videos from "../User/pages/Videos.svelte";
 
     export let navItems;
 
     const User = getContext("User");
-    let directories;
-    let route = location.pathname.split("/")[1];
+    let dirs;
+    let selected = { Mangas: "", Videos: "" };
 
     function getProps({ location, href, isPartiallyCurrent, isCurrent }) {
         let isActive = false;
@@ -32,26 +34,21 @@
     });
     onDestroy(unSubscribe);
 
-    $: if (["mangas", "videos"].includes(route) && !directories) {
-        axios.get("/api/files/dirs/" + route).then(({ data }) => {
-            if (data.length) {
-                directories = data;
-                selected = data[0].Id;
-            } else {
-                selected = "";
-                directories = null;
+    $: if (!dirs) {
+        axios.get("/api/files/dirs/").then(({ data }) => {
+            if (data) {
+                let Mangas = data.filter((d) => d.Type === "Mangas");
+                let Videos = data.filter((d) => d.Type === "Videos");
+                dirs = { Mangas, Videos };
+                selected = {
+                    Mangas: Mangas[0] ? Mangas[0].Id : "",
+                    Videos: Videos[0] ? Videos[0].Id : "",
+                };
             }
         });
     }
-
-    let selected = "";
-    let unSubscribeDir = DirId.subscribe((value) => {
-        selected = value[location.pathname.split("/")[1]];
-    });
-    onDestroy(unSubscribeDir);
-
-    const selectDir = ({ target: { id } }) => {
-        updateDirId(id, route);
+    const selectDir = ({ target: { id, title } }) => {
+        selected[title] = id;
     };
 </script>
 
@@ -96,7 +93,7 @@
         left: 0;
         min-width: 100%;
         text-align: left;
-        background-color: #317ac4;
+        background-color: #1ad2df;
         border-radius: 0 0 0.25rem 0.25rem;
     }
     .nav-item:hover ul {
@@ -114,15 +111,15 @@
         border-bottom: 1px solid;
     }
     .down-list li:hover {
-        background-color: rgba(0, 0, 0, 0.7);
+        background-color: rgba(0, 0, 0, 0.3);
     }
 
-    .down-list li:last-child:hover {
+    .down-list li:last-child {
         border-radius: 0 0 0.25rem 0.25rem;
     }
 
     .selected {
-        background-color: rgba(0, 0, 0, 0.3);
+        background-color: rgb(11 61 201 / 71%);
     }
     @media screen and (max-width: 460px) {
         #p-config {
@@ -136,29 +133,29 @@
 <nav id="menu" class="navbar" class:hide={menuToggle}>
     <ul class="navbar-nav">
         {#each navItems as item}
-            {#if ['Mangas', 'Videos'].includes(item.title) && directories}
-                <li class="nav-item">
-                    <Link
-                        to={item.path + '/' + (selected || directories[0].Id)}
-                        {getProps}>
-                        <label>
-                            <i class={'fas fa-' + item.class} />
-                            {item.title}
-                            <ul class="down-list">
-                                {#each directories.filter((d) => d.Type === item.title) as { Id, Name }}
-                                    <li
-                                        class="list-item"
-                                        id={Id}
-                                        class:selected={Id === selected}
-                                        on:click={selectDir}
-                                        title={item.title.toLocaleLowerCase()}>
-                                        {Name}
-                                    </li>
-                                {/each}
-                            </ul>
-                        </label>
-                    </Link>
-                </li>
+            {#if ['Mangas', 'Videos'].includes(item.title)}
+                {#if dirs}
+                    <li class="nav-item">
+                        <Link to={item.path + '/' + selected[item.title]} {getProps}>
+                            <label>
+                                <i class={'fas fa-' + item.class} />
+                                {item.title}
+                                <ul class="down-list">
+                                    {#each dirs[item.title].filter((d) => d.Type === item.title) as { Id, Name }}
+                                        <li
+                                            class="list-item"
+                                            id={Id}
+                                            class:selected={Id === selected[item.title]}
+                                            on:click={selectDir}
+                                            title={item.title}>
+                                            {Name}
+                                        </li>
+                                    {/each}
+                                </ul>
+                            </label>
+                        </Link>
+                    </li>
+                {/if}
             {:else}
                 <li class="nav-item">
                     <Link to={item.path} {getProps}>
