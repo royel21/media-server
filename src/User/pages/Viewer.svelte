@@ -54,7 +54,7 @@
     const changeFile = (dir = 0) => {
         let temp = files.findIndex((f) => f.Id === fileId) + dir;
 
-        if (fileIndex > -1 && fileIndex < files.length) {
+        if (fileIndex > -1 && fileIndex < files.length - 1) {
             fileIndex = temp;
             saveFile();
             navigate(`/${basePath}/${files[fileIndex].Id}`);
