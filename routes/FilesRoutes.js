@@ -26,9 +26,7 @@ Router.get("/recents", (req, res) => {
     })();
 });
 
-Router.get("/dirs/:type?", (req, res) => {
-    const { type } = req.params;
-    console.log(type);
+Router.get("/dirs", (req, res) => {
     db.directory.findAll().then((dirs) => {
         return res.send(dirs);
     });

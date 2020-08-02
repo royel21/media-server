@@ -95,7 +95,7 @@
         left: 0;
         min-width: 100%;
         text-align: left;
-        background-color: #1ad2df;
+        background-color: #343a40;
         border-radius: 0 0 0.25rem 0.25rem;
     }
     .nav-item:hover ul {
@@ -106,7 +106,8 @@
     }
     .down-list li {
         padding: 8px;
-        font-size: 16px;
+        font-weight: bold;
+        font-size: 12px;
     }
 
     .down-list li:not(:last-child) {
