@@ -58,7 +58,6 @@ module.exports.genScreenShot = async (id, isFolder) => {
         });
     } else {
         files = await db.file.findAll({
-            where: { Duration: 0 },
             include: {
                 model: db.folder,
                 where: { DirectoryId: id },

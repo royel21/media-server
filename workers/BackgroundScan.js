@@ -121,7 +121,7 @@ const PopulateDB = async (files, FolderId, folder) => {
 };
 
 const removeOrphanFiles = async (Id, isFolder) => {
-    console.log("remove olfanv ");
+    console.log("remove olphan ");
     let files;
     if (isFolder) {
         let folder = await db.folder.findOne({
