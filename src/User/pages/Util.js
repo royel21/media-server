@@ -27,14 +27,14 @@ export const setfullscreen = (element) => {
 
 export const KeyMap = {
     PrevFile: {
-        name: "PageUp",
-        keyCode: 33,
+        name: "Ins",
+        keyCode: 45,
         isctrl: true,
         action: null,
     },
     NextFile: {
-        name: "PageDown",
-        keyCode: 34,
+        name: "Del",
+        keyCode: 46,
         isctrl: true,
         action: null,
     },
