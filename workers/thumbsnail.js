@@ -64,7 +64,10 @@ module.exports.ZipCover = (file, coverP, exist) => {
                     });
 
                 var firstImg = entries.find((e) => {
-                    return images.test(e.name.split(".").pop()) && e.size > 1024 * 30;
+                    return (
+                        images.test(e.name.split(".").pop()) &&
+                        e.size > 1024 * 30
+                    );
                 });
 
                 if (exist) return resolve(entries.length);
@@ -76,13 +79,17 @@ module.exports.ZipCover = (file, coverP, exist) => {
                     buff = zip.entryDataSync(firstImg);
                     resize(coverP, buff)
                         .then(() => {
-                            resolve(entries.length);
                             zip.close();
+                            resolve(entries.length);
                             buff = [];
                         })
                         .catch((err) => {
                             zip.close();
-                            console.log("thumbnail error", path.basename(file), err);
+                            console.log(
+                                "thumbnail error",
+                                path.basename(file),
+                                err
+                            );
                             resolve(0);
                         });
                 }
