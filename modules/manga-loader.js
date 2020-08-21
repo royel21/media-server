@@ -36,8 +36,8 @@ const loadZipImages = async (data, socket) => {
             }
             socket.emit("image-loaded", { last: true });
         } catch (error) {
-            console.log(error);
-            users[socket.id] = null;
+            console.log("mReading: ", error);
+            users[socket.id].lastId = "";
             loadZipImages(data, socket);
         }
     } else {
