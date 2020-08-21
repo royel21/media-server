@@ -7,13 +7,14 @@ const iUser = { lastId: "" };
 
 module.exports.removeZip = (id) => {
     delete users[id];
+    console.log(users);
 };
 
 module.exports.setDb = (_db) => {
     db = _db;
 };
 
-module.exports.loadZipImages = async (data, socket) => {
+const loadZipImages = async (data, socket) => {
     let { Id, indices } = data;
     //get last user or create
     if (!users[socket.id]) {
@@ -23,16 +24,22 @@ module.exports.loadZipImages = async (data, socket) => {
     let user = users[socket.id];
 
     if (user.lastId === Id) {
-        for (let i of indices) {
-            let entry = user.entries[i];
-            if (entry) {
-                socket.emit("image-loaded", {
-                    page: i,
-                    img: user.zip.entryDataSync(entry).toString("base64"),
-                });
+        try {
+            for (let i of indices) {
+                let entry = user.entries[i];
+                if (entry) {
+                    socket.emit("image-loaded", {
+                        page: i,
+                        img: user.zip.entryDataSync(entry).toString("base64"),
+                    });
+                }
             }
+            socket.emit("image-loaded", { last: true });
+        } catch (error) {
+            console.log(error);
+            users[socket.id] = null;
+            loadZipImages(data, socket);
         }
-        socket.emit("image-loaded", { last: true });
     } else {
         let file = await db.file.findOne({
             attributes: ["Id", "Name"],
@@ -82,3 +89,5 @@ module.exports.loadZipImages = async (data, socket) => {
         }
     }
 };
+
+module.exports.loadZipImages = loadZipImages;
