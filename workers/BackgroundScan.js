@@ -25,10 +25,14 @@ const createFolderAndCover = async (dir, files, fd) => {
     if (!firstFile) return "";
     let Name = path.basename(dir);
     let FolderCover = path.join(coverPath, Name + ".jpg");
-    let FilesType = /\.(rar|zip)/gi.test(firstFile.FileName) ? "mangas" : "videos";
+    let FilesType = /\.(rar|zip)/gi.test(firstFile.FileName)
+        ? "mangas"
+        : "videos";
 
     if (!fs.existsSync(FolderCover)) {
-        let img = files.find((a) => /\.(jpg|jpeg|png|gif|webp)/i.test(a.FileName));
+        let img = files.find((a) =>
+            /\.(jpg|jpeg|png|gif|webp)/i.test(a.FileName)
+        );
         if (img) {
             try {
                 await sharp(path.join(dir, img.FileName))
@@ -96,7 +100,11 @@ const PopulateDB = async (files, FolderId, folder) => {
             } else {
                 if (f.Files.length > 0) {
                     console.log("folder: ", f.FileName);
-                    let result = await createFolderAndCover(f.FileName, f.Files, f);
+                    let result = await createFolderAndCover(
+                        f.FileName,
+                        f.Files,
+                        f
+                    );
                     if (result.Id) {
                         await PopulateDB(f.Files, result.Id, result.folder);
                     }
@@ -120,47 +128,39 @@ const PopulateDB = async (files, FolderId, folder) => {
     }
 };
 
-const removeOrphanFiles = async (Id, isFolder) => {
-    console.log("remove olphan ");
-    let files;
-    if (isFolder) {
-        let folder = await db.folder.findOne({
-            where: { Id },
-            include: { model: db.file },
-        });
-        files = await folder.Files;
-        let dir = folder.Path;
-        for (let f of files) {
-            if (!fs.existsSync(path.join(dir, f.Name))) {
-                await f.destroy();
-            }
-        }
-    } else {
-        files = await db.file.findAll({
-            include: {
-                model: db.folder,
-                where: { DirectoryId: Id },
-                required: true,
-            },
-        });
-        let file = files[0];
-        if (!file) return;
-        for (let f of files) {
-            if (!fs.existsSync(path.join(f.Folder.Path, f.Name))) {
-                await f.destroy();
-            }
-        }
-    }
-
-    let folders = await db.folder.findAll();
-    for (let f of folders) {
-        if (!fs.existsSync(f.Path)) {
-            await f.destroy();
+const rmOrpFiles = async (folder) => {
+    const files = await folder.getFiles();
+    for (const file of files) {
+        if (!fs.existsSync(path.join(folder.Path, file.Name))) {
+            await file.destroy();
         }
     }
 };
+
+const rmOrphanFiles = async (Id, isFolder) => {
+    console.log("remove olphan ");
+    if (isFolder) {
+        const folder = await db.folder.findByPk(Id);
+        if (fs.existsSync(folder.Path)) {
+            await rmOrpFiles(folder);
+        } else {
+            return true;
+        }
+    } else {
+        const directory = await db.directory.findByPk(Id);
+        if (fs.existsSync(directory.FullPath)) {
+            const folders = await directory.getFolders();
+            for (const folder of folders) {
+                await rmOrpFiles(folder);
+            }
+        } else {
+            return true;
+        }
+    }
+};
+
 const scanDirectory = async ({ id, dir, isFolder }) => {
-    await removeOrphanFiles(id, isFolder);
+    if (await rmOrphanFiles(id, isFolder)) return;
 
     DirectoryId = id;
 
@@ -192,7 +192,10 @@ const processJobs = async () => {
         try {
             let data = pendingJobs.pop();
             await scanDirectory(data);
-            await db.directory.update({ IsLoading: false }, { where: { Id: data.id } });
+            await db.directory.update(
+                { IsLoading: false },
+                { where: { Id: data.id } }
+            );
             process.send(data);
         } catch (err) {
             console.log("folder-scan line:135", err);

@@ -47,13 +47,16 @@ const resize = async (coverP, buffer) => {
 };
 
 var buff;
+var i = 0;
 module.exports.ZipCover = (file, coverP, exist) => {
     try {
-        var zip = new StreamZip({
-            file,
-            storeEntries: true,
-        });
         return new Promise((resolve, reject) => {
+            i++;
+            const zip = new StreamZip({
+                file,
+                storeEntries: true,
+            });
+
             zip.on("ready", () => {
                 var entries = Object.values(zip.entries())
                     .sort((a, b) => {
@@ -70,7 +73,10 @@ module.exports.ZipCover = (file, coverP, exist) => {
                     );
                 });
 
-                if (exist) return resolve(entries.length);
+                if (exist) {
+                    zip.close();
+                    return resolve(entries.length);
+                }
 
                 if (firstImg === undefined) {
                     zip.close();
@@ -95,13 +101,13 @@ module.exports.ZipCover = (file, coverP, exist) => {
                 }
             });
             zip.on("error", (error) => {
-                console.log(file, error);
+                console.log("\nZip: ", i, file, error);
                 zip.close();
                 resolve(0);
             });
         });
     } catch (error) {
-        console.log(file, error);
+        console.log("ZipCover: ", file, error);
     }
 };
 //Seirei Gensouki – Konna Sekai De Deaeta Kimi Ni (Novel)

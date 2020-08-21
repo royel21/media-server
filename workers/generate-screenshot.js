@@ -73,7 +73,9 @@ module.exports.genScreenShot = async (id, isFolder) => {
         try {
             let pgr = i / size;
             if (pgr > progress || i == size) {
-                process.stdout.write(`\t${parseFloat(pgr * 100).toFixed(2)}% `);
+                process.stdout.write(
+                    `\t${parseFloat(pgr * 100).toFixed(2)}%\r`
+                );
                 progress += 0.01;
             }
             let coverPath = path.join(vCover, f.Cover);
@@ -85,7 +87,11 @@ module.exports.genScreenShot = async (id, isFolder) => {
 
             if (f.Type.includes("Manga")) {
                 if (/zip/gi.test(f.Name)) {
-                    let total = await thumbnails.ZipCover(fullPath, coverPath, exist);
+                    let total = await thumbnails.ZipCover(
+                        fullPath,
+                        coverPath,
+                        exist
+                    );
                     await f.update({ Duration: total });
                 } else if (/rar/gi.test(f.filePath)) {
                     await thumbnails.RarCover(fullPath, coverPath);

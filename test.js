@@ -1,5 +1,5 @@
-// require("dotenv").config();
-// const db = require("./models");
+require("dotenv").config();
+const db = require("./models");
 // db.sqlze.options.logging = console.log;
 // const test = async () => {
 
@@ -133,23 +133,50 @@ const testDb = async () => {
 // console.log(file);
 const fs = require("fs-extra");
 const path = require("path");
-const rename = (dir) => {
-    let files = fs.readdirSync(dir);
-    for (let f of files) {
-        let file = path.join(dir, f);
-        if (fs.statSync(file).isDirectory()) {
-            console.log(file);
-            rename(file);
-        } else if (f.includes(".zip")) {
-            let baseDir = path.basename(dir);
+// const rename = (dir) => {
+//     let files = fs.readdirSync(dir);
+//     for (let f of files) {
+//         let file = path.join(dir, f);
+//         if (fs.statSync(file).isDirectory()) {
+//             console.log(file);
+//             rename(file);
+//         } else if (f.includes(".zip")) {
+//             let baseDir = path.basename(dir);
 
-            let old = path.join(dir, f);
-            let newF = path.join(dir, f.replace("Chapter", baseDir));
-            if (!fs.existsSync(newF)) fs.moveSync(old, newF);
-            // console.log(old, newF);
+//             let old = path.join(dir, f);
+//             let newF = path.join(dir, f.replace("Chapter", baseDir));
+//             if (!fs.existsSync(newF)) fs.moveSync(old, newF);
+//             // console.log(old, newF);
+//         }
+//     }
+// };
+
+// rename("M:\\mangas");
+//.replace(/[A-Za-z]+/ig,"Chapter ")
+
+const rmOrpFiles = async (folder) => {
+    const files = await folder.getFiles();
+    for (const file of files) {
+        if (!fs.existsSync(path.join(folder.Path, file.Name))) {
+            await file.destroy();
         }
     }
 };
 
-rename("M:\\mangas");
-//.replace(/[A-Za-z]+/ig,"Chapter ")
+const rmOrphanFiles = async (Id, isFolder) => {
+    console.log("remove olphan ");
+    if (isFolder) {
+        const folder = await db.folder.findByPk(Id);
+        if (fs.existsSync(folder.Path)) await rmOrpFiles(folder);
+    } else {
+        const directory = await db.directory.findByPk(Id);
+        if (fs.existsSync(directory.FullPath)) {
+            const folders = await directory.getFolders();
+            for (const folder of folders) {
+                await rmOrpFiles(folder);
+            }
+        }
+    }
+};
+
+rmOrphanFiles();
