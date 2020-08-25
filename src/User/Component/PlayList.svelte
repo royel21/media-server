@@ -5,7 +5,7 @@
     import Pagination from "../../ShareComponent/Pagination.svelte";
     export let files = [];
     export let fileId;
-
+    const filePerPage = 100;
     let observer;
     let playList;
     let hideList = true;
@@ -18,7 +18,7 @@
     const getPage = () => {
         let i = files.findIndex((f) => f.Id === fileId);
         let pg = 1;
-        while (pg * 20 < i && pg < totalPages) pg++;
+        while (pg * filePerPage < i && pg < totalPages) pg++;
         return pg;
     };
 
@@ -77,7 +77,7 @@
     };
 
     $: if (files.length > 100 && totalPages === 0) {
-        totalPages = Math.ceil(files.length / 100);
+        totalPages = Math.ceil(files.length / filePerPage);
         page = getPage();
     }
 
@@ -85,7 +85,7 @@
         filesFiltered = files.filter((f) =>
             f.Name.toLowerCase().includes(filter.toLowerCase())
         );
-        let start = (page - 1) * 100;
+        let start = (page - 1) * filePerPage;
         if (start < filesFiltered.length) {
             toLoad = start;
         } else {
@@ -292,7 +292,7 @@
     </div>
     <div id="p-list" bind:this={playList}>
         <ul>
-            {#each filesFiltered.slice(toLoad, toLoad + 100) as { Id, Name, Cover, CurrentPos, Duration, Type }}
+            {#each filesFiltered.slice(toLoad, toLoad + filePerPage) as { Id, Name, Cover, CurrentPos, Duration, Type }}
                 <li id={Id} class={Id === fileId ? 'active' : ''} on:click>
                     <span class="cover">
                         <img data-src={Cover} src="" alt="" />
