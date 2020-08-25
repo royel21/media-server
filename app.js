@@ -30,7 +30,7 @@ const DirectoriesRoute = require("./routes/admin/DirectoriesRoute");
 const FilesManagerRoute = require("./routes/admin/FilesManagerRoute");
 const FoldersRoute = require("./routes/admin/FoldersRoute");
 const sessionMeddle = session({
-    name: "rcm",
+    name: process.env.SESSION,
     secret: "2491eb2c-595d-4dc8-8427",
     resave: true,
     saveUninitialized: false,
