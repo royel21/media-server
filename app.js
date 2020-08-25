@@ -34,6 +34,7 @@ const sessionMeddle = session({
     secret: "2491eb2c-595d-4dc8-8427",
     resave: true,
     saveUninitialized: false,
+    maxAge: 24 * 60 * 60 * 1000 * 30,
 });
 app.use(sessionMeddle);
 
