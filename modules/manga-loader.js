@@ -82,6 +82,7 @@ const loadZipImages = async (data, socket) => {
                 user.zip.on("error", (err) => {
                     socket.emit("image-loaded", { error: "some error" });
                     console.log(err);
+                    user.zip.close();
                 });
             } else {
                 socket.emit("manga-error", { error: "File Not Found" });

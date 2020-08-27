@@ -5,4 +5,4 @@
     export let dir = "";
 </script>
 
-<FilesList title={'Videos'} type={`videos/${dir}`} {filter} {page} />
+<FilesList title={'Videos'} type={`videos/${dir || '0'}`} {filter} {page} />

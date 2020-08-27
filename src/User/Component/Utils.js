@@ -54,14 +54,7 @@ export const getFilesPerPage = (i) => {
     return items * i;
 };
 
-export const genUrl = (
-    page = 1,
-    { order = "nu", items },
-    filter,
-    type,
-    id,
-    dir
-) => {
+export const genUrl = (page = 1, { order = "nu", items }, filter, type, id, dir) => {
     let itemsperpage = (items || 0) === 0 ? getFilesPerPage(3) : items;
     if (type.includes("content")) {
         type = `folder-content/${id}`;
@@ -141,7 +134,5 @@ export const ProcessFile = (file, socket, type) => {
 };
 
 export const map = function (value, in_min, in_max, out_min, out_max) {
-    return (
-        ((value - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min
-    );
+    return ((value - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min;
 };

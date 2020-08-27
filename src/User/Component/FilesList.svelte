@@ -20,6 +20,7 @@
     export let title = "";
 
     const socket = getContext("socket");
+    const logout = getContext("logout");
     const baseData = { files: [], totalPages: 0, totalFiles: 0 };
     let pageData = baseData;
     let selected = 0;
@@ -42,6 +43,8 @@
             });
             if (typeof data === "object") {
                 pageData = data;
+            } else {
+                logout();
             }
         } catch (error) {
             console.log(error);
@@ -102,7 +105,7 @@
         selectItem(sel);
     });
 
-    $: document.title = `${title} Page ${page}`;
+    $: document.title = `${title} Page ${page || ""}`;
 
     $: loadContent(page, filter, id, $PageConfig, type);
 

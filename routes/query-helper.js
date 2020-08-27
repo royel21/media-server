@@ -109,7 +109,6 @@ exports.getFilesList = async (user, res, type, params, model) => {
 
 exports.getFolders = async (req, res) => {
     const { filetype, dirid, order, page, items, search } = req.params;
-    console.log(req.params);
     let favs = req.user.Favorites.map((f) => f.Id).join("','");
     let favSelect =
         "Select FolderId from FavoriteFolders where `Folders`.`Id` = FolderId and FavoriteId IN";

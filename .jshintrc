@@ -2,5 +2,5 @@
     "undef": true,
     "unused": true,
     "node": true,
-    "esversion": 8
+    "esversion": 9
 }
