@@ -138,7 +138,6 @@ exports.getFolders = async (req, res) => {
         query.where.DirectoryId = dirid;
     }
     let result = await db.folder.findAndCountAll(query);
-
     return res.json({
         files: result.rows,
         totalFiles: result.count,
