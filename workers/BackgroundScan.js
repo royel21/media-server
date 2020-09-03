@@ -2,6 +2,7 @@ const WinDrive = require("win-explorer");
 const fs = require("fs-extra");
 const path = require("path");
 const sharp = require("sharp");
+require("dotenv").config();
 // const { NormalizeName, Capitalize } = require("../Utils/StringUtil");
 
 const db = require("../models");
@@ -148,7 +149,12 @@ const rmOrphanFiles = async (Id, isFolder) => {
         if (fs.existsSync(directory.FullPath)) {
             const folders = await directory.getFolders();
             for (const folder of folders) {
-                await rmOrpFiles(folder);
+                if (fs.existsSync(folder.Path)) {
+                    await rmOrpFiles(folder);
+                } else {
+                    await folder.destroy();
+                    console.log("Remove", folder.Name);
+                }
             }
         } else {
             return true;
