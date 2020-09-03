@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
             hooks: {
                 beforeValidate: function (item) {
                     item.Id = nanoid(10);
-                    if (item.Name && item.Type)
+                    if (item.Name && item.Type && item.Type === "Video")
                         item.Cover = `/${item.Type}/${item.Name.replace(
                             /#|%/gi,
                             ""
@@ -51,10 +51,11 @@ module.exports = (sequelize, DataTypes) => {
                 beforeBulkCreate(instances) {
                     for (var item of instances) {
                         item.Id = nanoid(10);
-                        item.Cover = `/${item.Type}/${item.Name.replace(
-                            /#|%/gi,
-                            ""
-                        )}.jpg`;
+                        if (item.Name && item.Type && item.Type === "Video")
+                            item.Cover = `/${item.Type}/${item.Name.replace(
+                                /#|%/gi,
+                                ""
+                            )}.jpg`;
                     }
                 },
             },

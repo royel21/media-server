@@ -58,6 +58,7 @@ module.exports.genScreenShot = async (id, isFolder) => {
         });
     } else {
         files = await db.file.findAll({
+            order: ["$Folder.Name"],
             include: {
                 model: db.folder,
                 where: { DirectoryId: id },
@@ -73,12 +74,10 @@ module.exports.genScreenShot = async (id, isFolder) => {
         try {
             let pgr = i / size;
             if (pgr > progress || i == size) {
-                process.stdout.write(
-                    `\t${parseFloat(pgr * 100).toFixed(2)}%\r`
-                );
+                process.stdout.write(`\t${parseFloat(pgr * 100).toFixed(2)}%\r`);
                 progress += 0.01;
             }
-            let coverPath = path.join(vCover, f.Cover);
+            let coverPath = path.join(vCover, f.Cover || "");
 
             let exist = fs.existsSync(coverPath);
             i++;
@@ -87,12 +86,17 @@ module.exports.genScreenShot = async (id, isFolder) => {
 
             if (f.Type.includes("Manga")) {
                 if (/zip/gi.test(f.Name)) {
-                    let total = await thumbnails.ZipCover(
-                        fullPath,
-                        coverPath,
-                        exist
+                    coverPath = path.join(
+                        vCover,
+                        "Manga",
+                        f.Folder.Name,
+                        f.Name + ".jpg"
                     );
-                    await f.update({ Duration: total });
+                    let total = await thumbnails.ZipCover(fullPath, coverPath, exist);
+                    await f.update({
+                        Duration: total,
+                        Cover: "/" + path.join("Manga", f.Folder.Name, f.Name + ".jpg"),
+                    });
                 } else if (/rar/gi.test(f.filePath)) {
                     await thumbnails.RarCover(fullPath, coverPath);
                 }

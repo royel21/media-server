@@ -25,14 +25,10 @@ const createFolderAndCover = async (dir, files, fd) => {
     if (!firstFile) return "";
     let Name = path.basename(dir);
     let FolderCover = path.join(coverPath, Name + ".jpg");
-    let FilesType = /\.(rar|zip)/gi.test(firstFile.FileName)
-        ? "mangas"
-        : "videos";
+    let FilesType = /\.(rar|zip)/gi.test(firstFile.FileName) ? "mangas" : "videos";
 
     if (!fs.existsSync(FolderCover)) {
-        let img = files.find((a) =>
-            /\.(jpg|jpeg|png|gif|webp)/i.test(a.FileName)
-        );
+        let img = files.find((a) => /\.(jpg|jpeg|png|gif|webp)/i.test(a.FileName));
         if (img) {
             try {
                 await sharp(path.join(dir, img.FileName))
@@ -73,6 +69,11 @@ const createFolderAndCover = async (dir, files, fd) => {
         await folder.update({ Cover: FolderCover, FileCount });
     }
 
+    if (FilesType === "mangas") {
+        let imgDir = path.join(imgPath, "Manga", Name);
+        if (!fs.existsSync(imgDir)) fs.mkdirsSync(imgDir);
+    }
+
     return { Id: folder.Id, folder };
 };
 
@@ -100,11 +101,7 @@ const PopulateDB = async (files, FolderId, folder) => {
             } else {
                 if (f.Files.length > 0) {
                     console.log("folder: ", f.FileName);
-                    let result = await createFolderAndCover(
-                        f.FileName,
-                        f.Files,
-                        f
-                    );
+                    let result = await createFolderAndCover(f.FileName, f.Files, f);
                     if (result.Id) {
                         await PopulateDB(f.Files, result.Id, result.folder);
                     }
@@ -192,10 +189,7 @@ const processJobs = async () => {
         try {
             let data = pendingJobs.pop();
             await scanDirectory(data);
-            await db.directory.update(
-                { IsLoading: false },
-                { where: { Id: data.id } }
-            );
+            await db.directory.update({ IsLoading: false }, { where: { Id: data.id } });
             process.send(data);
         } catch (err) {
             console.log("folder-scan line:135", err);
