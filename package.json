@@ -7,7 +7,8 @@
         "start": "sirv public",
         "express": "nodemon app",
         "production": "node app",
-        "test": "node test"
+        "test": "node test",
+        "mplayer": "cd ../WinMusicPlayer/ && npm start"
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^11.0.0",
