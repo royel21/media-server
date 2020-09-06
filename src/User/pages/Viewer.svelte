@@ -29,7 +29,9 @@
     onMount(async () => {
         let { data } = await axios.post(`/api/viewer/folder`, { id: folderId });
         if (!data.fail) {
-            files = data.files;
+            files = data.files.sort((a, b) =>
+                a.Name.replace("-", "Z").localeCompare(b.Name.replace("-", "Z"))
+            );
         }
         window.addEventListener("beforeunload", saveFile);
         return () => {
