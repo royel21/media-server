@@ -144,25 +144,18 @@ const rename = (basepath) => {
 
         if (fs.statSync(file).isDirectory()) {
             rename(file);
-        } else if (f.includes(".zip")) {
-            let baseDir = path.basename(basepath);
-
-            let old = path.join(basepath, f);
-            let newF = path.join(
-                basepath,
-                f.replace(
-                    /^ |Chapter | - Chapter \d+|- Ch- \d+| - Ch-\d+| -\d+| - \d+| - Vol- \d+ \d+| - Vol- \d+-\d+| - Vol- \d+| Ch- \d+| - Vol-\d+| Ch-\d+ - $| Ch-\d+| -\d+/gi,
-                    ""
-                )
-            );
-            if (!fs.existsSync(newF)) fs.moveSync(old, newF);
-            // console.log(old);
+        } else if (f.includes(".zip") && f.replace(".zip", "").match(/^[a-zA-Z]/gi)) {
+            // let baseDir = path.basename(basepath);
+            // let old = path.join(basepath, f);
+            // let newF = path.join(basepath, f.replace(img + " ", ""));
+            // if (!fs.existsSync(newF)) fs.moveSync(old, newF);
+            console.log(f);
             // console.log(newF, "\n");
         }
     }
 };
 
-rename("/mnt/5TBHDD/mangas");
+rename("/mnt/SSD-Samsung/webtoon");
 // .replace(/[A-Za-z]+/ig,"Chapter ")
 
 // const rmOrpFiles = async (folder) => {

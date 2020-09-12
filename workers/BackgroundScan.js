@@ -51,7 +51,7 @@ const createFolderAndCover = async (dir, files, fd) => {
         }
     }
     //Create Folder
-    let folder = await db.folder.findOne({ where: { Name, FilesType } });
+    let folder = await db.folder.findOne({ where: { Name, FilesType, DirectoryId } });
 
     let FileCount = files.filter((f) => allExt.test(f.FileName)).length;
 
