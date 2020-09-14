@@ -14,14 +14,14 @@ module.exports.setDb = (_db) => {
     db = _db;
 };
 
-const loadZipImages = async (data, socket) => {
+const loadZipImages = async (data, socket, curUser) => {
     let { Id, indices } = data;
     //get last user or create
-    if (!users[socket.id]) {
-        users[socket.id] = iUser;
+    if (!users[curUser.Id]) {
+        users[curUser.Id] = iUser;
     }
 
-    let user = users[socket.id];
+    let user = users[curUser.Id];
 
     if (user.lastId === Id) {
         try {
