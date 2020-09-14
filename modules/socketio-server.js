@@ -46,7 +46,7 @@ module.exports = (server, sessionMeddle) => {
                 });
 
                 socket.on("loadzip-image", (data) => {
-                    mloader.loadZipImages(data, socket);
+                    mloader.loadZipImages(data, socket, user);
                 });
                 socket.on("message", (data) => console.log("socket", data));
             }
