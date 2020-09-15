@@ -21,7 +21,7 @@ var DirectoryId;
 
 var folderCovers = [];
 
-const createFolderAndCover = async (dir, files, fd) => {
+const createFolderAndCover = async (dir, files, fd, isFolder) => {
     let firstFile = files.find((a) => allExt.test(a.FileName));
     if (!firstFile) return "";
     let Name = path.basename(dir);
@@ -51,23 +51,26 @@ const createFolderAndCover = async (dir, files, fd) => {
         }
     }
     //Create Folder
-    let folder = await db.folder.findOne({ where: { Name, FilesType, DirectoryId } });
+    let query = { where: { Name, FilesType } };
+    if (!isFolder) {
+        query.where.DirectoryId = DirectoryId;
+    }
+    let folder = await db.folder.findOne();
 
     let FileCount = files.filter((f) => allExt.test(f.FileName)).length;
-
     if (!folder) {
         let CreatedAt = fd.LastModified;
         folder = await db.folder.create({
             Name,
             DirectoryId,
-            Cover: FolderCover,
+            Cover: "/Folder/" + Name + ".jpg",
             CreatedAt,
             FileCount,
             FilesType,
             Path: dir,
         });
     } else {
-        await folder.update({ Cover: FolderCover, FileCount });
+        await folder.update({ Cover: "/Folder/" + Name + ".jpg", FileCount });
     }
 
     if (FilesType === "mangas") {
@@ -170,14 +173,15 @@ const scanDirectory = async ({ id, dir, isFolder }) => {
     var fis = WinDrive.ListFilesRO(dir);
     let result = {};
 
-    if (!isFolder && fis.filter((f) => !f.isDirectory).length > 0) {
-        let folder = WinDrive.ListFiles(dir, { oneFile: true });
-        result = await createFolderAndCover(dir, fis, folder);
-    } else {
-        await createFolderAndCover(dir, fis);
-        result.Id = id;
-    }
+    let folder = WinDrive.ListFiles(dir, { oneFile: true });
+
     try {
+        if (!isFolder && fis.filter((f) => !f.isDirectory).length > 0) {
+            result = await createFolderAndCover(dir, fis, folder);
+        } else {
+            await createFolderAndCover(dir, fis, folder, true);
+            result.Id = id;
+        }
         await PopulateDB(fis, result.Id);
         console.log("job db end: ", id);
         await foldersThumbNails(folderCovers);

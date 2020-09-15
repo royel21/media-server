@@ -7,7 +7,6 @@ const iUser = { lastId: "" };
 
 module.exports.removeZip = (id) => {
     delete users[id];
-    console.log(users);
 };
 
 module.exports.setDb = (_db) => {
