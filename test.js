@@ -125,37 +125,38 @@ const testDb = async () => {
 
 // const { nanoid } = require("nanoid");
 // const os = require("os");
-// const fs = require("fs-extra");
-// const path = require("path");
+const fs = require("fs-extra");
+const path = require("path");
 // const drivelist = require("drivelist");
 // const windir = require("win-explorer");
 // let file = windir.ListFiles("E:/Anime1/", { oneFile: true });
 // console.log(file);
-const fs = require("fs-extra");
-const path = require("path");
-const rename = (basepath) => {
-    //get all files
-    console.log("Dir: ", basepath);
-    let files = fs.readdirSync(basepath);
-    let img = files.find((f) => f.includes(".jpg"));
-    if (img) img = img.replace(".jpg", "");
-    for (let f of files) {
-        let file = path.join(basepath, f);
+// const fs = require("fs-extra");
+// const path = require("path");
+// const rename = (basepath) => {
+//     //get all files
+//     console.log("Dir: ", basepath);
+//     let files = fs.readdirSync(basepath);
+//     let img = files.find((f) => f.includes(".jpg"));
+//     if (img) img = img.replace(".jpg", "");
+//     for (let f of files) {
+//         let file = path.join(basepath, f);
 
-        if (fs.statSync(file).isDirectory()) {
-            rename(file);
-        } else if (f.includes(".zip") && f.replace(".zip", "").match(/^[a-zA-Z]/gi)) {
-            // let baseDir = path.basename(basepath);
-            // let old = path.join(basepath, f);
-            // let newF = path.join(basepath, f.replace(img + " ", ""));
-            // if (!fs.existsSync(newF)) fs.moveSync(old, newF);
-            console.log(f);
-            // console.log(newF, "\n");
-        }
-    }
-};
+//         if (fs.statSync(file).isDirectory()) {
+//             rename(file);
+//         } else if (f.includes(".zip")) {
+//             let old = path.join(basepath, f);
+//             let regex = new RegExp(`${img} `, "ig");
 
-rename("/mnt/SSD-Samsung/webtoon");
+//             let newF = path.join(basepath, f.replace(regex, ""));
+//             if (!fs.existsSync(newF)) fs.moveSync(old, newF);
+//             // console.log("1: ", old);
+//             // console.log("2: ", newF, "\n");
+//         }
+//     }
+// };
+
+// rename("M:/webtoon");
 // .replace(/[A-Za-z]+/ig,"Chapter ")
 
 // const rmOrpFiles = async (folder) => {
@@ -184,3 +185,30 @@ rename("/mnt/SSD-Samsung/webtoon");
 // };
 
 // rmOrphanFiles();
+const basedir = "M:\\webtoon";
+
+const removeFiles = (filePath) => {
+    console.log(filePath);
+    const files = fs.readdirSync(filePath);
+    for (let f of files.filter((f) => !f.includes(".jpg"))) {
+        let file = path.join(filePath, f);
+        if (fs.statSync(file).isDirectory()) {
+            removeFiles(file);
+        } else if (f.match(/^[A-Za-z]/)) {
+            // fs.removeSync(path.join(dir, f));
+            console.log(f.replace(/^[A-Za-z -!\'.]+/i, ""));
+
+            let oldF = path.join(filePath, f);
+            let newF = path.join(filePath, f.replace(/^[A-Za-z -!’\'.]+/i, ""));
+
+            try {
+                fs.moveSync(oldF, newF);
+            } catch (error) {
+                console.log(error);
+                return;
+            }
+        }
+    }
+};
+
+removeFiles(basedir);

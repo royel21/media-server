@@ -8,6 +8,7 @@ modules/win-explorer/bin
 public/build/*
 images/
 ./files*
+./test.js
 
 *.db
 *.log

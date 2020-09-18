@@ -3,6 +3,7 @@ const db = require("../models");
 const path = require("path");
 const fs = require("fs-extra");
 const thumbnails = require("./thumbsnail");
+const os = require("os");
 
 var ffmpeg = "ffmpeg";
 var ffprobe = "ffprobe";
@@ -92,10 +93,12 @@ module.exports.genScreenShot = async (id, isFolder) => {
                         f.Folder.Name,
                         f.Name + ".jpg"
                     );
+
                     let total = await thumbnails.ZipCover(fullPath, coverPath, exist);
                     await f.update({
                         Duration: total,
-                        Cover: "/" + path.join("Manga", f.Folder.Name, f.Name + ".jpg"),
+                        Cover:
+                            path.sep + path.join("Manga", f.Folder.Name, f.Name + ".jpg"),
                     });
                 } else if (/rar/gi.test(f.filePath)) {
                     await thumbnails.RarCover(fullPath, coverPath);
