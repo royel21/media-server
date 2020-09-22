@@ -38,40 +38,21 @@ const testDb = async () => {
 // const db = require("./models");
 // const { getOrderBy } = require("./routes/query-helper");
 // db.sqlze.options.logging = console.log;
-// const getFolders = async (req, res) => {
-//   const { filetype, order, page, items, search } = req.params;
-//   let favs = req.user.Favorites.map((f) => f.Id).join("','");
-//   console.log(favs);
-//   let favSelect =
-//     "Select FolderId from FavoriteFolders where `Folders`.`Id` == Id and FavoriteId IN";
-//   let result = await db.folder.findAndCountAll({
-//     attributes: [
-//       "Id",
-//       "Name",
-//       "Cover",
-//       "Type",
-//       "FilesType",
-//       "CreatedAt",
-//       "FileCount",
-//       [db.sqlze.literal(`( ${favSelect} ('${favs}'))`), "isFav"],
-//     ],
-//     where: {
-//       Name: {
-//         [db.Op.like]: `%${search || ""}%`,
-//       },
-//       FilesType: filetype,
-//     },
-//     order: getOrderBy(order, "Files."),
-//     offset: (page - 1) * items,
-//     limit: items,
-//   });
-//   return res.json({
-//     files: result.rows,
-//     totalFiles: result.count,
-//     totalPages: Math.ceil(result.count / items),
-//   });
-// };
-
+const getFolders = async (req, res) => {
+    const folders = await db.folder.findAll({
+        where: {
+            [db.Op.and]: {
+                Name: { [db.Op.like]: "% raw%" },
+                path: { [db.Op.notLike]: "%Webtoon Raw%" },
+            },
+        },
+    });
+    folders.forEach(async (f) => {
+        await f.update({ Path: f.Path.replace(/\/\//gi, "/Webtoon Raw/") });
+        console.log(f.Path, f.Path.replace(/\/\//gi, "/Webtoon Raw/"));
+    });
+};
+getFolders();
 // const sharp = require("sharp");
 // const StreamZip = require("node-stream-zip");
 // const images = /jpg|jpeg|png|gif|webp/i;
@@ -131,31 +112,31 @@ const testDb = async () => {
 // const windir = require("win-explorer");
 // let file = windir.ListFiles("E:/Anime1/", { oneFile: true });
 // console.log(file);
-const fs = require("fs-extra");
-const path = require("path");
-const rename = (basepath) => {
-    //get all files
-    console.log("Dir: ", basepath);
-    let files = fs.readdirSync(basepath);
-    let img = files.find((f) => f.includes(".jpg"));
-    if (img) img = img.replace(".jpg", "");
-    for (let f of files) {
-        let file = path.join(basepath, f);
+// const fs = require("fs-extra");
+// const path = require("path");
+// const rename = (basepath) => {
+//     //get all files
+//     console.log("Dir: ", basepath);
+//     let files = fs.readdirSync(basepath);
+//     let img = files.find((f) => f.includes(".jpg"));
+//     if (img) img = img.replace(".jpg", "");
+//     for (let f of files) {
+//         let file = path.join(basepath, f);
 
-        if (fs.statSync(file).isDirectory()) {
-            rename(file);
-        } else if (f.includes(".zip") && f.replace(".zip", "").match(/^[a-zA-Z]/gi)) {
-            // let baseDir = path.basename(basepath);
-            // let old = path.join(basepath, f);
-            // let newF = path.join(basepath, f.replace(img + " ", ""));
-            // if (!fs.existsSync(newF)) fs.moveSync(old, newF);
-            console.log(f);
-            // console.log(newF, "\n");
-        }
-    }
-};
+//         if (fs.statSync(file).isDirectory()) {
+//             rename(file);
+//         } else if (f.includes(".zip") && f.replace(".zip", "").match(/^[a-zA-Z]/gi)) {
+//             // let baseDir = path.basename(basepath);
+//             // let old = path.join(basepath, f);
+//             // let newF = path.join(basepath, f.replace(img + " ", ""));
+//             // if (!fs.existsSync(newF)) fs.moveSync(old, newF);
+//             console.log(f);
+//             // console.log(newF, "\n");
+//         }
+//     }
+// };
 
-rename("/mnt/SSD-Samsung/webtoon");
+// rename("/mnt/SSD-Samsung/webtoon");
 // .replace(/[A-Za-z]+/ig,"Chapter ")
 
 // const rmOrpFiles = async (folder) => {
