@@ -83,6 +83,7 @@
         switch (keyCode) {
             case 13: {
                 fullScreen();
+                break;
             }
             case 39: {
                 player.currentTime += ctrlKey ? 10 : 5;
