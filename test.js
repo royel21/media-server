@@ -38,40 +38,21 @@ const testDb = async () => {
 // const db = require("./models");
 // const { getOrderBy } = require("./routes/query-helper");
 // db.sqlze.options.logging = console.log;
-// const getFolders = async (req, res) => {
-//   const { filetype, order, page, items, search } = req.params;
-//   let favs = req.user.Favorites.map((f) => f.Id).join("','");
-//   console.log(favs);
-//   let favSelect =
-//     "Select FolderId from FavoriteFolders where `Folders`.`Id` == Id and FavoriteId IN";
-//   let result = await db.folder.findAndCountAll({
-//     attributes: [
-//       "Id",
-//       "Name",
-//       "Cover",
-//       "Type",
-//       "FilesType",
-//       "CreatedAt",
-//       "FileCount",
-//       [db.sqlze.literal(`( ${favSelect} ('${favs}'))`), "isFav"],
-//     ],
-//     where: {
-//       Name: {
-//         [db.Op.like]: `%${search || ""}%`,
-//       },
-//       FilesType: filetype,
-//     },
-//     order: getOrderBy(order, "Files."),
-//     offset: (page - 1) * items,
-//     limit: items,
-//   });
-//   return res.json({
-//     files: result.rows,
-//     totalFiles: result.count,
-//     totalPages: Math.ceil(result.count / items),
-//   });
-// };
-
+const getFolders = async (req, res) => {
+    const folders = await db.folder.findAll({
+        where: {
+            [db.Op.and]: {
+                Name: { [db.Op.like]: "% raw%" },
+                path: { [db.Op.notLike]: "%Webtoon Raw%" },
+            },
+        },
+    });
+    folders.forEach(async (f) => {
+        await f.update({ Path: f.Path.replace(/\/\//gi, "/Webtoon Raw/") });
+        console.log(f.Path, f.Path.replace(/\/\//gi, "/Webtoon Raw/"));
+    });
+};
+getFolders();
 // const sharp = require("sharp");
 // const StreamZip = require("node-stream-zip");
 // const images = /jpg|jpeg|png|gif|webp/i;

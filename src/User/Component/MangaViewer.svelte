@@ -26,7 +26,7 @@
     const socket = getContext("socket");
     const dispatch = createEventDispatcher();
 
-    let webtoon;
+    let webtoon = localStorage.getItem("webtoon");
     let progress = `${file.CurrentPos + 1}/${file.Duration}`;
     let images = [file.Duration];
     let tempImages = [];
@@ -181,6 +181,7 @@
             isObserver = true;
             scrollInViewAndSetObserver();
         }
+        localStorage.setItem("webtoon", webtoon);
     } else if (isObserver) {
         controls.webtoon = webtoon;
         isObserver = false;
@@ -266,10 +267,7 @@
 </style>
 
 <div id="manga-viewer" tabIndex="0" class:hide={$ToggleMenu}>
-    <span class="fullscreen-progress">
-        <i class="fas fa-sticky-note" />
-        {progress}
-    </span>
+    <span class="fullscreen-progress"> <i class="fas fa-sticky-note" /> {progress} </span>
     <div class="viewer">
         <div
             on:touchstart={onTouchStart}
