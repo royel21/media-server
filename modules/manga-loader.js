@@ -84,6 +84,7 @@ const loadZipImages = async (data, socket, curUser) => {
                     user.zip.close();
                 });
             } else {
+                console.log("file no found", file && file.Name);
                 socket.emit("manga-error", { error: "File Not Found" });
             }
         }
