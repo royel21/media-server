@@ -74,10 +74,8 @@
 
     const favClick = (event) => {
         let { target } = event;
-        if (target.tagName !== "I") {
-            fileClicks(event);
-            selected = getElIndex(target.closest(".file"));
-        }
+        fileClicks(event);
+        selected = getElIndex(target.closest(".file"));
         favClicked = target;
     };
 
