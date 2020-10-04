@@ -55,7 +55,7 @@ const createFolderAndCover = async (dir, files, fd, isFolder) => {
     if (!isFolder) {
         query.where.DirectoryId = DirectoryId;
     }
-    let folder = await db.folder.findOne();
+    let folder = await db.folder.findOne({ where: { Name, DirectoryId } });
 
     let FileCount = files.filter((f) => allExt.test(f.FileName)).length;
     if (!folder) {
@@ -69,8 +69,6 @@ const createFolderAndCover = async (dir, files, fd, isFolder) => {
             FilesType,
             Path: dir,
         });
-    } else {
-        await folder.update({ Cover: "/Folder/" + Name + ".jpg", FileCount });
     }
 
     if (FilesType === "mangas") {
