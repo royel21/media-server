@@ -247,7 +247,9 @@
                 loop={false}
                 on:loadedmetadata={onMeta}
                 on:timeupdate={updateTime}
-                on:click={hideControlsOnCLick} />
+                on:click={hideControlsOnCLick}>
+                <track kind="captions" />
+            </video>
             <div
                 class="player-controls"
                 on:mousedown|stopPropagation
