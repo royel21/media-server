@@ -58,6 +58,7 @@ export const genUrl = (page = 1, { order = "nu", items }, filter, type, id, dir)
     let itemsperpage = (items || 0) === 0 ? getFilesPerPage(3) : items;
     if (type.includes("content")) {
         type = `folder-content/${id}`;
+        order = localStorage.getItem("content-order") || "nu";
     }
 
     filter = (filter || "").replace("%", " ");

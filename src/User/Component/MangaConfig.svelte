@@ -7,6 +7,8 @@
   let width = "";
   let tWidth = config.width;
   let imgAbjust = config.imgAbjust || "";
+  let isFromStart = false;
+
   const blur = () => {
     width = "";
   };
@@ -19,6 +21,11 @@
     width = tWidth;
     localStorage.setItem("mWidth", width);
   };
+
+  $: {
+    console.log("isF", isFromStart);
+    dispatch("fromStart", isFromStart);
+  }
 
   $: dispatch("mconfig", { width: tWidth, imgAbjust });
   $: if ($ToggleMenu) {
@@ -70,26 +77,21 @@
   }
 </style>
 
-<label for="show">
-  <i class="fas fa-cog" />
-</label>
+<label for="show"> <i class="fas fa-cog" /> </label>
 <input type="checkbox" name="" id="show" bind:checked={show} />
 <div id="content" class:show on:click|stopPropagation|preventDefault>
   <div class="input-group">
-    <div class="input-group-prepend">
-      <label class="input-group-text">Ajust Image:</label>
-    </div>
-    <select class="form-control" bind:value={imgAbjust}>
+    <div class="input-group-prepend"><label for="img-fill" class="input-group-text">Ajust Image:</label></div>
+    <select id="img-fill" class="form-control" bind:value={imgAbjust}>
       <option value="fill">fill</option>
       <option value="cover">cover</option>
       <option value="contain">contain</option>
     </select>
   </div>
   <div class="input-group">
-    <div class="input-group-prepend">
-      <label class="input-group-text">Width</label>
-    </div>
+    <div class="input-group-prepend"><label for="img-width" class="input-group-text">Width</label></div>
     <input
+      id="img-width"
       type="number"
       min="30"
       max="100"
@@ -99,7 +101,10 @@
       on:keydown|stopPropagation
       class="form-control"
       bind:value={width}
-      placeholder={config.width + '%'}
-      on />
+      placeholder={config.width + '%'} />
+  </div>
+  <div class="input-group">
+    <div class="input-group-prepend"><label for="from-start" class="input-group-text">From Start</label></div>
+    <input id="from-start" type="checkbox" class="form-control" bind:checked={isFromStart} />
   </div>
 </div>

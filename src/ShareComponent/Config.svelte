@@ -158,17 +158,12 @@
 </label>
 <input type="checkbox" name="" id="show-config" />
 <div id="user-config" class={User.role.includes('User') ? 'user-config' : 'admin-config'}>
-    <div>
-        <span on:click>
-            <i class="fas fa-sign-out-alt" />
-            Log out
-        </span>
-    </div>
+    <div><span on:click> <i class="fas fa-sign-out-alt" /> Log out </span></div>
     {#if !User.role.includes('Administrator')}
         <div id="config-content">
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <label class="input-group-text">Sort By:</label>
+                    <label for="orderby" class="input-group-text">Sort By:</label>
                 </div>
                 <select id="orderby" class="form-control fa" bind:value={Config.order}>
                     <option value="nu">&#xf15d; Name</option>
@@ -179,7 +174,7 @@
             </div>
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <label class="input-group-text">File per Page:</label>
+                    <label for="items" class="input-group-text">File per Page:</label>
                 </div>
                 <input
                     id="items"

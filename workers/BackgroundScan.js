@@ -55,20 +55,25 @@ const createFolderAndCover = async (dir, files, fd, isFolder) => {
     if (!isFolder) {
         query.where.DirectoryId = DirectoryId;
     }
-    let folder = await db.folder.findOne({ where: { Name, DirectoryId } });
+    let folder = await db.folder.findOne(query);
 
     let FileCount = files.filter((f) => allExt.test(f.FileName)).length;
     if (!folder) {
-        let CreatedAt = fd.LastModified;
-        folder = await db.folder.create({
-            Name,
-            DirectoryId,
-            Cover: "/Folder/" + Name + ".jpg",
-            CreatedAt,
-            FileCount,
-            FilesType,
-            Path: dir,
-        });
+        try {
+            let CreatedAt = fd.LastModified;
+            folder = await db.folder.create({
+                Name,
+                DirectoryId,
+                Cover: "/Folder/" + Name + ".jpg",
+                CreatedAt,
+                FileCount,
+                FilesType,
+                Path: dir,
+            });
+        } catch (error) {
+            console.log("line 74 create folder: ", Name, DirectoryId, folder, dir)
+        }
+        
     }
 
     if (FilesType === "mangas") {

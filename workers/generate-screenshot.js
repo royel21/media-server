@@ -82,7 +82,6 @@ module.exports.genScreenShot = async (id, isFolder) => {
             let exist = fs.existsSync(coverPath);
             i++;
             if (exist && f.Duration > 0) continue;
-            console.log("File", exist, f.Duration, f.Name);
             let fullPath = path.join(f.Folder.Path, f.Name);
 
             if (f.Type.includes("Manga")) {
