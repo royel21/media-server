@@ -1,10 +1,15 @@
 <script>
-  import { onMount, afterUpdate } from "svelte";
+  import { createEventDispatcher } from "svelte";
   import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
   import { formatTime } from "./Utils";
   import Pagination from "../../ShareComponent/Pagination.svelte";
+
+  const dispatch = createEventDispatcher();
+
   export let files = [];
   export let fileId;
+  export let filters = { filter: "" };
+
   const filePerPage = 100;
   let observer;
   let playList;
@@ -12,9 +17,10 @@
   let totalPages = 0;
   let page = 1;
   let toLoad = 0;
+  let filtered = [];
 
   const getPage = () => {
-    let i = files.findIndex((f) => f.Id === fileId);
+    let i = filtered.findIndex((f) => f.Id === fileId);
     let pg = 1;
     while (pg * filePerPage < i && pg < totalPages) pg++;
     return pg;
@@ -50,7 +56,7 @@
     }
   };
   // afterUpdate(() => {});
-  $: if (!hideList && page) {
+  $: if (!hideList) {
     if (playList) {
       let current = document.querySelector("#play-list .active");
       if (current) {
@@ -63,13 +69,6 @@
             top: current.offsetTop - 250,
           });
         }, 300);
-      } else {
-        setTimeout(() => {
-          playList.scroll({
-            top: 0,
-          });
-          console.log("scroll To 0");
-        }, 300);
       }
     }
   }
@@ -81,14 +80,31 @@
     setObserver();
   };
 
+  const clearFilter = () => {
+    console.log("dispath-clear");
+    filters.filter = "";
+    dispatch("clearfilter");
+  };
+
   $: if (files.length > 100 && totalPages === 0) {
-    totalPages = Math.ceil(files.length / filePerPage);
+    totalPages = Math.ceil(filtered.length / filePerPage);
     page = getPage();
   }
+  $: {
+    if (filters.filter) {
+      filtered = files.filter((f) => f.Name.toLocaleLowerCase().includes(filters.filter.toLocaleLowerCase()));
+    } else {
+      filtered = files;
+    }
 
+    const tout = setTimeout(() => {
+      setObserver();
+      clearTimeout(tout);
+    }, 50);
+  }
   $: {
     let start = (page - 1) * filePerPage;
-    if (start < files.length) {
+    if (start < filtered.length) {
       toLoad = start;
     } else {
       toLoad = 0;
@@ -97,18 +113,22 @@
 </script>
 
 <label class={"show-list" + (!hideList ? " move" : "")} for="p-hide" style="bottom: 35px">
-  <span class="p-sort"> <i class="fas fa-list" /> </span>
+  <span class="p-sort">
+    <i class="fas fa-list" />
+  </span>
 </label>
 
 <input type="checkbox" id="p-hide" bind:checked={hideList} />
 <div id="play-list" class:move={!$ToggleMenu}>
   <div id="v-filter">
-    <input type="text" on:change placeholder="Filter" class="form-control" />
-    <span class="clear-filter"> <i class="fas fa-times-circle" /> </span>
+    <input type="text" bind:value={filters.filter} placeholder="Filter" class="form-control" />
+    <span class="clear-filter" on:click={clearFilter}>
+      <i class="fas fa-times-circle" />
+    </span>
   </div>
   <div id="p-list" bind:this={playList}>
     <ul>
-      {#each files.slice(toLoad, toLoad + filePerPage) as { Id, Name, Cover, CurrentPos, Duration, Type }}
+      {#each filtered.slice(toLoad, toLoad + filePerPage) as { Id, Name, Cover, CurrentPos, Duration, Type }}
         <li id={Id} class={Id === fileId ? "active" : ""} on:click>
           <span class="cover">
             <img data-src={Cover} src="" alt="" />
@@ -212,7 +232,7 @@
     flex-direction: column;
     padding: 4px;
     border-bottom: 1px solid;
-    min-height: 100px;
+    height: 225px;
     cursor: pointer;
     user-select: none;
   }
@@ -240,6 +260,7 @@
     display: inline-block;
     padding-left: 5px;
     font-size: 14px;
+    text-align: center;
   }
 
   #play-list .duration {
@@ -270,7 +291,8 @@
     margin-top: 3px;
   }
   #play-list .clear-filter {
-    right: 14px;
+    right: 6px;
+    top: 3px;
   }
 
   #p-items {

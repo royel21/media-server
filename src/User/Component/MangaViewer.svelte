@@ -18,6 +18,7 @@
   let webtoon = localStorage.getItem("webtoon") === "true";
   let progress = `${file.CurrentPos + 1}/${file.Duration}`;
   let images = [file.Duration];
+  let tempImages = [];
   let loading = false;
   let lastfId;
   let imgContainer;
@@ -44,15 +45,13 @@
 
   socket.on("image-loaded", (data) => {
     if (!data.last) {
-      if (data.id === file.Id) {
-        images[data.page] = data.img;
-      }
+      images[data.page] = data.img;
     } else {
       loading = false;
       indices = [];
       if (jumping && webtoon) {
         jumping = false;
-        scrollInViewAndSetObserver(200);
+        scrollInViewAndSetObserver(100);
       }
     }
   });
@@ -147,16 +146,9 @@
     config = detail;
   };
 
-  const webtoonChange = ({ target: { checked } }) => {
-    localStorage.setItem("webtoon", checked);
-  };
-  const fromStart = (data) => {
-    console.log(data);
-  };
   $: progress = `${parseInt(file.CurrentPos) + 1}/${file.Duration}`;
 
   $: if (file.Id !== lastfId) {
-    file.CurrentPos = 0;
     jumping = true;
     images = [];
     lastfId = file.Id;
@@ -170,6 +162,10 @@
     });
 
     controls.file = file;
+  }
+
+  $: {
+    localStorage.setItem("webtoon", webtoon);
   }
 
   $: if (webtoon) {
@@ -231,12 +227,19 @@
     </div>
   </div>
   <div class="controls">
-    <span id="hide-player" on:click={returnTo}> <i class="far fa-times-circle popup-msg" data-title="Close" /> </span>
-    <span class="web-toon">
-      <input type="checkbox" name="" id="webtoon" bind:checked={webtoon} on:change={webtoonChange} />
-      <label for="webtoon"> {webtoon ? "List" : "Pages"} <i class="fas fa-eye" /> </label>
+    <span id="hide-player" on:click={returnTo}>
+      <i class="far fa-times-circle popup-msg" data-title="Close" />
     </span>
-    <span class="prev-page" on:click={prevPage}> <i class="fa fa-arrow-circle-left" /> </span>
+    <span class="web-toon">
+      <input type="checkbox" name="" id="webtoon" bind:checked={webtoon} />
+      <label for="webtoon">
+        {webtoon ? "List" : "Pages"}
+        <i class="fas fa-eye" />
+      </label>
+    </span>
+    <span class="prev-page" on:click={prevPage}>
+      <i class="fa fa-arrow-circle-left" />
+    </span>
     <span class="current-page">
       <form action="" on:submit|preventDefault={jumpToPage}>
         <input
@@ -250,9 +253,11 @@
         />
       </form>
     </span>
-    <span class="next-page" on:click={nextPage}> <i class="fa fa-arrow-circle-right" /> </span>
+    <span class="next-page" on:click={nextPage}>
+      <i class="fa fa-arrow-circle-right" />
+    </span>
     <span class="config">
-      <MangaConfig {config} on:mconfig={onConfig} {ToggleMenu} on:fromStart={fromStart} />
+      <MangaConfig {config} on:mconfig={onConfig} {ToggleMenu} />
     </span>
     <span class="btn-fullscr" on:click={Fullscreen.action}>
       <i class="fas fa-expand-arrows-alt popup-msg" data-title="Full Screen" />

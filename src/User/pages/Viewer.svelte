@@ -25,11 +25,12 @@
   let fileName;
   let viewer;
   let fileIndex = 1;
+  let filters = { filter: "" };
 
   onMount(async () => {
     let { data } = await axios.post(`/api/viewer/folder`, { id: folderId });
     if (!data.fail) {
-      files = data.files.sort((a, b) => {
+      playList = files = data.files.sort((a, b) => {
         let n1 = a.Name.replace("-", ".").match(/\d+.\d+|\d+/);
         let n2 = b.Name.replace("-", ".").match(/\d+.\d+|\d+/);
 
@@ -56,7 +57,13 @@
 
   const selectFile = ({ target: { id } }) => {
     saveFile();
-    playList = playList;
+    console.log("filter: ", filters.filter);
+    if (filters.filter) {
+      playList = files.filter((f) => f.Name.toLocaleLowerCase().includes(filters.filter.toLocaleLowerCase()));
+    } else {
+      playList = files;
+    }
+
     navigate(`/${basePath}/${id}`);
   };
 
@@ -77,10 +84,6 @@
     navigate(pathname);
   };
 
-  const filterfiles = ({ target: { value } }) => {
-    playList = files.filter((f) => f.Name.toLowerCase().includes(value.toLowerCase()));
-  };
-
   NextFile.action = () => changeFile(1);
   NextFile.isctrl = true;
   PrevFile.action = () => changeFile(-1);
@@ -96,6 +99,11 @@
       if (fileName) fileName.style.opacity = 0;
     }, 5000);
   }
+
+  const clearFilter = () => {
+    console.log("clearfilter");
+    playList = files;
+  };
 
   $: if (playList.length > 0) {
     file = playList.find((f) => f.Id === fileId) || playList[0];
@@ -139,7 +147,7 @@
     </span>
     <div id="clock" />
   </span>
-  <PlayList {fileId} files={playList} on:click={selectFile} on:change={filterfiles} />
+  <PlayList {fileId} files={playList} on:click={selectFile} {filters} on:clearfilter={clearFilter} />
   {#if file.Type.includes("Manga")}
     <MangaViewer {viewer} {file} on:changefile={changeFile} on:returnBack={returnBack} {KeyMap} />
   {:else if file.Type.includes("Video")}
