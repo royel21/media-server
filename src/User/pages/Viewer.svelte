@@ -20,16 +20,17 @@
   const { Fullscreen, NextFile, PrevFile } = KeyMap;
   let files = [];
   let observer;
-  let playList;
+  let playList = [];
   let file = { Type: "" };
   let fileName;
   let viewer;
   let fileIndex = 1;
+  let filters = { filter: "" };
 
   onMount(async () => {
     let { data } = await axios.post(`/api/viewer/folder`, { id: folderId });
     if (!data.fail) {
-      files = data.files.sort((a, b) => {
+      playList = files = data.files.sort((a, b) => {
         let n1 = a.Name.replace("-", ".").match(/\d+.\d+|\d+/);
         let n2 = b.Name.replace("-", ".").match(/\d+.\d+|\d+/);
 
@@ -56,17 +57,23 @@
 
   const selectFile = ({ target: { id } }) => {
     saveFile();
-    files = files;
+    console.log("filter: ", filters.filter);
+    if (filters.filter) {
+      playList = files.filter((f) => f.Name.toLocaleLowerCase().includes(filters.filter.toLocaleLowerCase()));
+    } else {
+      playList = files;
+    }
+
     navigate(`/${basePath}/${id}`);
   };
 
   const changeFile = (dir = 0) => {
-    let temp = files.findIndex((f) => f.Id === fileId) + dir;
+    let temp = playList.findIndex((f) => f.Id === fileId) + dir;
 
-    if (fileIndex > -1 && fileIndex < files.length - 1) {
+    if (fileIndex > -1 && fileIndex < playList.length - 1) {
       fileIndex = temp;
       saveFile();
-      navigate(`/${basePath}/${files[fileIndex].Id}`);
+      navigate(`/${basePath}/${playList[fileIndex].Id}`);
     }
   };
 
@@ -76,6 +83,7 @@
     localStorage.setItem("fileId", file.Id);
     navigate(pathname);
   };
+
   NextFile.action = () => changeFile(1);
   NextFile.isctrl = true;
   PrevFile.action = () => changeFile(-1);
@@ -92,9 +100,14 @@
     }, 5000);
   }
 
-  $: if (files.length > 0) {
-    file = files.find((f) => f.Id === fileId) || files[0];
-    fileIndex = files.findIndex((f) => f.Id === fileId);
+  const clearFilter = () => {
+    console.log("clearfilter");
+    playList = files;
+  };
+
+  $: if (playList.length > 0) {
+    file = playList.find((f) => f.Id === fileId) || playList[0];
+    fileIndex = playList.findIndex((f) => f.Id === fileId);
   }
 
   let runningClock;
@@ -130,11 +143,11 @@
   <span class="info" class:top={file.Type.includes("Video")}>
     <span id="files-prog">
       <i class="fas fa-file" />
-      {`${fileIndex + 1} / ${files.length}`}
+      {`${fileIndex + 1} / ${playList.length}`}
     </span>
     <div id="clock" />
   </span>
-  <PlayList {fileId} {files} on:click={selectFile} />
+  <PlayList {fileId} files={playList} on:click={selectFile} {filters} on:clearfilter={clearFilter} />
   {#if file.Type.includes("Manga")}
     <MangaViewer {viewer} {file} on:changefile={changeFile} on:returnBack={returnBack} {KeyMap} />
   {:else if file.Type.includes("Video")}
