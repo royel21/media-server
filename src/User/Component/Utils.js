@@ -113,7 +113,7 @@ export const ProcessFile = (file, socket, type) => {
             segment[1] = "viewer";
             let url = `/${segment.join("/")}/${file.id}`;
             localStorage.setItem("content", curPath);
-            localStorage.setItem("fileId", file.Id);
+            localStorage.setItem("fileId", file.id);
             navigate(url);
             console.log(segment[2]);
             if (socket)

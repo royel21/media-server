@@ -16,18 +16,19 @@
   };
 </script>
 
+<FilesList title={"Content"} {type} {filter} {page} {id}>
+  <div class="first-controls" on:click={exitFolder}>
+    <i class="fas fa-arrow-circle-up" />
+  </div>
+</FilesList>
+
 <style>
   div {
     pointer-events: all;
   }
+
   i {
     background-color: black;
     border-radius: 50%;
   }
 </style>
-
-<FilesList title={'Content'} {type} {filter} {page} {id}>
-  <div class="first-controls" on:click={exitFolder}>
-    <i class="fas fa-arrow-circle-up" />
-  </div>
-</FilesList>
