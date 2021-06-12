@@ -52,7 +52,7 @@ const getFolders = async (req, res) => {
         console.log(f.Path, f.Path.replace(/\/\//gi, "/Webtoon Raw/"));
     });
 };
-getFolders();
+// getFolders();
 // const sharp = require("sharp");
 // const StreamZip = require("node-stream-zip");
 // const images = /jpg|jpeg|png|gif|webp/i;
@@ -108,6 +108,11 @@ getFolders();
 // const os = require("os");
 const fs = require("fs-extra");
 const path = require("path");
+
+const bpath = "/mnt/5TBHDD/R18/HMangas/HMangas I-J";
+const from = path.join(bpath, "[Ishiba Yoshikazu, Rohgun] Sengoku Academy Fighting Maiden Nobunaga! ~Lewd Flower Profusion, The Great Swimsuit War~ [English] [Kizlan].zip");
+console.log(fs.existsSync(from));
+console.log(from)
 // const drivelist = require("drivelist");
 // const windir = require("win-explorer");
 // let file = windir.ListFiles("E:/Anime1/", { oneFile: true });
@@ -166,30 +171,30 @@ const path = require("path");
 // };
 
 // rmOrphanFiles();
-const basedir = "M:\\webtoon";
+// const basedir = "M:\\webtoon";
 
-const removeFiles = (filePath) => {
-    console.log(filePath);
-    const files = fs.readdirSync(filePath);
-    for (let f of files.filter((f) => !f.includes(".jpg"))) {
-        let file = path.join(filePath, f);
-        if (fs.statSync(file).isDirectory()) {
-            removeFiles(file);
-        } else if (f.match(/^[A-Za-z]/)) {
-            // fs.removeSync(path.join(dir, f));
-            console.log(f.replace(/^[A-Za-z -!\'.]+/i, ""));
+// const removeFiles = (filePath) => {
+//     console.log(filePath);
+//     const files = fs.readdirSync(filePath);
+//     for (let f of files.filter((f) => !f.includes(".jpg"))) {
+//         let file = path.join(filePath, f);
+//         if (fs.statSync(file).isDirectory()) {
+//             removeFiles(file);
+//         } else if (f.match(/^[A-Za-z]/)) {
+//             // fs.removeSync(path.join(dir, f));
+//             console.log(f.replace(/^[A-Za-z -!\'.]+/i, ""));
 
-            let oldF = path.join(filePath, f);
-            let newF = path.join(filePath, f.replace(/^[A-Za-z -!’\'.]+/i, ""));
+//             let oldF = path.join(filePath, f);
+//             let newF = path.join(filePath, f.replace(/^[A-Za-z -!’\'.]+/i, ""));
 
-            try {
-                fs.moveSync(oldF, newF);
-            } catch (error) {
-                console.log(error);
-                return;
-            }
-        }
-    }
-};
+//             try {
+//                 fs.moveSync(oldF, newF);
+//             } catch (error) {
+//                 console.log(error);
+//                 return;
+//             }
+//         }
+//     }
+// };
 
-removeFiles(basedir);
+// removeFiles(basedir);

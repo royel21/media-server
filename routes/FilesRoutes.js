@@ -32,6 +32,30 @@ Router.get("/dirs", (req, res) => {
     });
 });
 
+
+const resetRecents = async ({ folderid }) =>{
+    const files = await db.file.findAll({where: { FolderId: folderid }});
+    const result = await db.recentFile.update({LastPos: 0}, {where: {FileId: files.map(f=> f.Id)}});
+    console.log("folder reseted", result)
+}
+
+Router.get("/reset-recents/:folderid", (req, res) => {
+        resetRecents(req.params).then(()=>{
+            res.send("done");
+        });
+
+});
+
+Router.get("/first-last/:isfirst/:folderid", (req, res) => {
+    db.file.findAll({order: ["Name"], where: {FolderId: req.params.folderid}, include:[{ model: db.folder }]}).then(files=>{
+        if(req.params.isfirst === "first"){
+            res.send(files[0]);
+        }else{
+        res.send(files[files.length-1]);
+        }
+    });
+});
+
 Router.get("/:filetype/:dirid/:order/:page?/:items?/:search?", getFolders);
 
 module.exports = Router;

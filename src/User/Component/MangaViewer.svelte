@@ -14,11 +14,12 @@
   const { NextFile, PrevFile, Fullscreen, SkipForward, SkipBack } = KeyMap;
   const socket = getContext("socket");
   const dispatch = createEventDispatcher();
-
+  //Reset progress
+  file.CurrentPos = 0;
   let webtoon = localStorage.getItem("webtoon") === "true";
-  let progress = `${file.CurrentPos + 1}/${file.Duration}`;
+  // let progress = `${file.CurrentPos + 1}/${file.Duration}`;
+  let progress = `1/${file.Duration}`;
   let images = [file.Duration];
-  let tempImages = [];
   let loading = false;
   let lastfId;
   let imgContainer;
@@ -114,10 +115,6 @@
 
   SkipForward.action = nextPage;
   SkipBack.action = prevPage;
-  const onCancelContextM = (e) => {
-    e.preventDefault();
-    return false;
-  };
 
   const setPage = (pg) => {
     file.CurrentPos = pg;
