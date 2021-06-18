@@ -329,4 +329,12 @@
   #manga-viewer .fa-sticky-note {
     font-size: 16px;
   }
+  @media screen and (max-width: 600px) {
+    .f-name {
+      top: 80px;
+    }
+    .f-name.nomenu {
+      top: 10px;
+    }
+  }
 </style>

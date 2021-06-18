@@ -40,6 +40,10 @@
           return a.Name.replace("-", "Z").localeCompare(b.Name.replace("-", "Z"));
         }
       });
+      const first = playList[0];
+      if (first) {
+        window.title = first.Cover.split("/")[2];
+      }
     }
     window.addEventListener("beforeunload", saveFile);
     return () => {
