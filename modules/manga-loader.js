@@ -21,7 +21,6 @@ const loadZipImages = async (data, socket, curUser) => {
     }
 
     let user = users[curUser.Id];
-    console.log("current Id", user.lastId);
     if (user.lastId === Id) {
         try {
             for (let i of indices) {
@@ -30,12 +29,12 @@ const loadZipImages = async (data, socket, curUser) => {
                     socket.emit("image-loaded", {
                         page: i,
                         img: user.zip.entryDataSync(entry).toString("base64"),
+                        id: data.Id
                     });
                 }
             }
             socket.emit("image-loaded", { last: true });
         } catch (error) {
-            console.log("mReading: ", error);
             users[curUser.Id].lastId = "";
             loadZipImages(data, socket);
         }
@@ -72,6 +71,7 @@ const loadZipImages = async (data, socket, curUser) => {
                                 img: user.zip
                                     .entryDataSync(user.entries[i])
                                     .toString("base64"),
+                                id: file.Id
                             });
                         }
                     }
@@ -86,7 +86,6 @@ const loadZipImages = async (data, socket, curUser) => {
             } else {
                 console.log("file no found", file && file.Name);
                 socket.emit("manga-error", { error: "File Not Found" });
-                console.log("not found: ", filePath);
             }
         }
     }
