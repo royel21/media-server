@@ -47,13 +47,16 @@ const resize = async (coverP, buffer) => {
 };
 
 var buff;
+var i = 0;
 module.exports.ZipCover = (file, coverP, exist) => {
     try {
-        var zip = new StreamZip({
-            file,
-            storeEntries: true,
-        });
         return new Promise((resolve, reject) => {
+            i++;
+            const zip = new StreamZip({
+                file,
+                storeEntries: true,
+            });
+
             zip.on("ready", () => {
                 var entries = Object.values(zip.entries())
                     .sort((a, b) => {
@@ -64,10 +67,16 @@ module.exports.ZipCover = (file, coverP, exist) => {
                     });
 
                 var firstImg = entries.find((e) => {
-                    return images.test(e.name.split(".").pop()) && e.size > 1024 * 30;
+                    return (
+                        images.test(e.name.split(".").pop()) &&
+                        e.size > 1024 * 30
+                    );
                 });
 
-                if (exist) return resolve(entries.length);
+                if (exist) {
+                    zip.close();
+                    return resolve(entries.length);
+                }
 
                 if (firstImg === undefined) {
                     zip.close();
@@ -76,25 +85,29 @@ module.exports.ZipCover = (file, coverP, exist) => {
                     buff = zip.entryDataSync(firstImg);
                     resize(coverP, buff)
                         .then(() => {
-                            resolve(entries.length);
                             zip.close();
+                            resolve(entries.length);
                             buff = [];
                         })
                         .catch((err) => {
                             zip.close();
-                            console.log("thumbnail error", path.basename(file), err);
+                            console.log(
+                                "thumbnail error",
+                                path.basename(file),
+                                err
+                            );
                             resolve(0);
                         });
                 }
             });
             zip.on("error", (error) => {
-                console.log(file, error);
+                console.log("\nZip: ", i, file, error);
                 zip.close();
                 resolve(0);
             });
         });
     } catch (error) {
-        console.log(file, error);
+        console.log("ZipCover: ", file, error);
     }
 };
 //Seirei Gensouki – Konna Sekai De Deaeta Kimi Ni (Novel)

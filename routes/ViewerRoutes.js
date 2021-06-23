@@ -4,8 +4,8 @@ const fs = require("fs");
 const path = require("path");
 const db = require("../models");
 
-getAttributes = (user, file) => {
-    return (attributes = [
+const getAttributes = (user, file) => {
+    return [
         "Id",
         "Name",
         "Type",
@@ -19,7 +19,7 @@ getAttributes = (user, file) => {
             ),
             "CurrentPos",
         ],
-    ]);
+    ];
 };
 
 const getFiles = async (req, res, type) => {

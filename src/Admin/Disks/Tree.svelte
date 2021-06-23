@@ -1,13 +1,26 @@
 <script>
   import { onDestroy, onMount, getContext } from "svelte";
   import TreeItem from "./TreeItem.svelte";
+  import DirectoryModal from "./DirectoryModal.svelte";
+
   const socket = getContext("socket");
   let content = [];
+  let showModal = false;
+  let item = {};
 
-  const scanDir = event => {
-    socket.emit("scan-dir", { Path: event.detail.Path });
+  const scanDir = ({ detail }) => {
+    item = detail;
+    showModal = true;
+  };
+  const createDirectory = Type => {
+    socket.emit("scan-dir", { Path: item.Path, Type });
+    hideModal();
   };
 
+  const hideModal = () => {
+    showModal = false;
+    item = {};
+  };
   onMount(() => {
     socket.on("disk-loaded", data => {
       content = data;
@@ -26,6 +39,10 @@
     padding-bottom: 5px;
   }
 </style>
+
+{#if showModal}
+  <DirectoryModal {createDirectory} {hideModal} />
+{/if}
 
 <div class="tree-title">
   <i class="fas fa-server" />

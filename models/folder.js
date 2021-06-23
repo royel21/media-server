@@ -45,8 +45,8 @@ module.exports = (sequelize, DataTypes) => {
         {
             timestamps: false,
             uniqueKeys: {
-                RecentFolder_unique: {
-                    fields: ["Name", "FilesType"],
+                folder_unique: {
+                    fields: ["Name", "DirectoryId"],
                 },
             },
             hooks: {

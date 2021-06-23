@@ -15,17 +15,17 @@ export const scrollInView = (num) => {
     }
 };
 
-export const getEmptyIndex = function (arr, from, to, dir, size, indices = []) {
-    var i = from < 0 ? 0 : from;
+// get a list of index of empty place of the array
+export const getEmptyIndex = function (arr, from, to, dir, size) {
+    let index = from < 0 ? 0 : from;
     let items = [];
     while (items.length < to) {
-        if (i > size - 1 || i < 0) break;
-
-        if (!arr[i] && !indices.find((ind) => ind === i)) {
-            items.push(i);
-        }
-
-        i += dir > 0 ? 1 : -1;
+        //check if is out of bound
+        if (index > size - 1 || index < 0) break;
+        // if is empty add index
+        if (!arr[index]) items.push(index);
+        //increase or decrease depending on direction
+        index += dir > 0 ? 1 : -1;
     }
     return items;
 };
@@ -54,14 +54,20 @@ export const getFilesPerPage = (i) => {
     return items * i;
 };
 
-export const genUrl = (page, { order, items }, filter, type, id) => {
+export const genUrl = (page = 1, { order = "nu", items }, filter, type, id, dir) => {
     let itemsperpage = (items || 0) === 0 ? getFilesPerPage(3) : items;
     if (type.includes("content")) {
         type = `folder-content/${id}`;
     }
 
     filter = (filter || "").replace("%", " ");
-    return `/api/files/${type}/${order || "nu"}/${page || 1}/${itemsperpage}/${filter}`;
+    let url = "";
+    if (["mangas", "videos"].includes(type)) {
+        url = `/api/files/${type}/${dir}/${order}/${page}/${itemsperpage}/${filter}`;
+    } else {
+        url = `/api/files/${type}/${order}/${page}/${itemsperpage}/${filter}`;
+    }
+    return url;
 };
 
 export const PageTitles = {

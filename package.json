@@ -7,7 +7,8 @@
         "start": "sirv public",
         "express": "nodemon app",
         "production": "node app",
-        "test": "node test"
+        "test": "node test",
+        "mplayer": "cd ../WinMusicPlayer/ && npm start"
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^11.0.0",
@@ -31,6 +32,7 @@
         "express": "^4.17.1",
         "express-session": "^1.17.0",
         "fs-extra": "^9.0.0",
+        "jshint": "^2.12.0",
         "mariadb": "^2.4.0",
         "nanoid": "^3.1.3",
         "node-stream-zip": "^1.9.1",

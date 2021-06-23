@@ -3,12 +3,13 @@
   import axios from "axios";
   export let items = [];
   export let type;
+  let item = {};
 
   const dispatch = createEventDispatcher();
 
-  const expandFolder = (event) => {
+  const expandFolder = event => {
     let li = event.target.closest("li");
-    let item = items.find((d) => d.Id.toString() === li.id);
+    let item = items.find(d => d.Id.toString() === li.id);
     if (item.Content.length === 0) {
       axios
         .post("/api/admin/directories/Content", { Path: item.Path })
@@ -21,10 +22,15 @@
       items = items;
     }
   };
-  const scanDirectory = (event) => {
+  const scanDirectory = event => {
     let li = event.target.closest("li");
-    let item = items.find((d) => d.Id.toString() === li.id);
+    item = items.find(d => d.Id.toString() === li.id);
     dispatch("scanDir", item);
+  };
+
+  const hideModal = () => {
+    item = {};
+    showModal = false;
   };
 </script>
 

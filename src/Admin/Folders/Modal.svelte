@@ -1,79 +1,76 @@
 <script>
-  import { fade } from "svelte/transition";
-  export let file;
-  export let modalType;
+    import { fade } from "svelte/transition";
+    export let file;
+    export let modalType;
 </script>
 
 <style>
-  .del-label {
-    width: fit-content;
-  }
-  strong {
-    color: red;
-  }
-  input[type="checkbox"] {
-    display: none;
-  }
-  input[type="checkbox"]:checked + label i:before {
-    content: "\f00c";
-  }
-  label {
-    text-align: center;
-  }
-  .error:empty {
-    display: none;
-  }
-  .error {
-    color: red;
-    font-weight: 600;
-  }
+    .del-label {
+        width: fit-content;
+    }
+    strong {
+        color: red;
+    }
+    input[type="checkbox"] {
+        display: none;
+    }
+    input[type="checkbox"]:checked + label i:before {
+        content: "\f00c";
+    }
+    label {
+        text-align: center;
+    }
+    .error:empty {
+        display: none;
+    }
+    .error {
+        color: red;
+        font-weight: 600;
+    }
 </style>
 
 <div class="modal-container">
-  <div class="modal card" transition:fade={{ duration: 200 }}>
-    <div class="modal-header">
-      <h3>{modalType.title}</h3>
+    <div class="modal card" transition:fade={{ duration: 200 }}>
+        <div class="modal-header">
+            <h3>{modalType.title}</h3>
+        </div>
+        <form action="#" on:submit|preventDefault>
+            <div class="modal-body">
+                {#if !modalType.Del}
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <label for="Name" class="input-group-text">Name</label>
+                        </div>
+                        <input
+                            type="text"
+                            name="Name"
+                            class="form-control"
+                            value={file.Name} />
+                    </div>
+                {:else}
+                    <p>Are you sure you want to remove <strong>{file.Name}</strong></p>
+                    {#if modalType.isFile}
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <label for="sysdel" class="input-group-text del-label">
+                                    Delete From System
+                                </label>
+                            </div>
+                            <input id="sysdel" type="checkbox" />
+                            <label for="sysdel" class="form-control">
+                                <i class="fas fa-times" />
+                            </label>
+                        </div>
+                    {/if}
+                {/if}
+            </div>
+            <div class="error">{modalType.error || ''}</div>
+            <div class="modal-footer">
+                <button type="button" class="btn" on:click>Cancel</button>
+                <button type="submit" class="btn">
+                    {modalType.Del ? 'Remove' : 'Update'}
+                </button>
+            </div>
+        </form>
     </div>
-    <form action="#" on:submit|preventDefault>
-      <div class="modal-body">
-        {#if !modalType.Del}
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <label class="input-group-text">Name</label>
-            </div>
-            <input
-              type="text"
-              name="Name"
-              class="form-control"
-              value={file.Name} />
-          </div>
-        {:else}
-          <p>
-            Are you sure you want to remove
-            <strong>{file.Name}</strong>
-          </p>
-          {#if modalType.isFile}
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <label class="input-group-text del-label">
-                  Delete From System
-                </label>
-              </div>
-              <input id="sysdel" type="checkbox" />
-              <label for="sysdel" class="form-control">
-                <i class="fas fa-times" />
-              </label>
-            </div>
-          {/if}
-        {/if}
-      </div>
-      <div class="error">{modalType.error || ''}</div>
-      <div class="modal-footer">
-        <button type="button" class="btn" on:click>Cancel</button>
-        <button type="submit" class="btn">
-          {modalType.Del ? 'Remove' : 'Update'}
-        </button>
-      </div>
-    </form>
-  </div>
 </div>
