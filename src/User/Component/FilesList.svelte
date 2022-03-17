@@ -1,5 +1,5 @@
 <script>
-  import { tick, afterUpdate, getContext } from "svelte";
+  import { afterUpdate, getContext } from "svelte";
   import { fade } from "svelte/transition";
   import { navigate } from "svelte-routing";
   import axios from "axios";
@@ -35,7 +35,9 @@
       if (cancel) {
         cancel();
       }
-      let url = genUrl(pg, config, flt, nType || type, curId);
+      console.log(title);
+
+      let url = genUrl(pg, { items: config.items, order: config.order[title] }, flt, nType || type, curId);
 
       let { data } = await axios.get(url, {
         cancelToken: new cancelToken(function executor(c) {
@@ -132,11 +134,13 @@
   {#if isContent}
     <div id="info">
       <div id="img-info"><img src={folder.Cover} alt="Place Holder" /></div>
-      <h4>{folder.Name}</h4>
-      <div id="btn-bar">
-        <button id="first" class="btn btn-secondary" on:click={openFirstLast}>First</button>
-        <button id="last" class="btn btn-secondary" on:click={openFirstLast}>Last</button>
-        <button class="btn btn-secondary" on:click={onResetFiles}>Reset All</button>
+      <div id="side">
+        <h4>{folder.Name}</h4>
+        <div id="btn-bar">
+          <button id="first" class="btn btn-secondary" on:click={openFirstLast}>First</button>
+          <button id="last" class="btn btn-secondary" on:click={openFirstLast}>Last</button>
+          <button class="btn btn-secondary" on:click={onResetFiles}>Reset All</button>
+        </div>
       </div>
     </div>
   {/if}
@@ -205,8 +209,12 @@
     pointer-events: none;
   }
   #info {
+    display: flex;
+    justify-content: center;
     padding: 10px;
     text-align: center;
+    max-width: 1200px;
+    margin: 0 auto;
   }
   #img-info {
     padding: 5px;
@@ -217,14 +225,27 @@
   #info h4 {
     font-family: "Comic Sans MS", cursive;
     font-size: 2.4rem;
+    flex-grow: 1;
   }
-
+  #side {
+    display: flex;
+    flex-direction: column;
+    padding: 0 15px;
+  }
+  @media screen and (max-width: 850px) {
+    #info {
+      flex-direction: column;
+    }
+  }
   @media screen and (max-width: 420px) {
     .files-list {
       padding-bottom: 70px;
     }
     .scroll-container {
       padding-top: 70px;
+    }
+    #info h4 {
+      font-size: 1.8rem;
     }
   }
 </style>

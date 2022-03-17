@@ -35,9 +35,9 @@
 
   $: if (!dirs) {
     axios.get("/api/files/dirs/").then(({ data }) => {
-      if (data) {
-        let Mangas = data.filter((d) => d.Type === "Mangas").sort(sortName);
-        let Videos = data.filter((d) => d.Type === "Videos").sort(sortName);
+      if (data instanceof Array) {
+        let Mangas = (data || []).filter((d) => d.Type === "Mangas").sort(sortName);
+        let Videos = (data || []).filter((d) => d.Type === "Videos").sort(sortName);
         dirs = { Mangas, Videos };
         selected = {
           Mangas: Mangas[0] ? Mangas[0].Id : "",

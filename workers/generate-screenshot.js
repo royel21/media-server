@@ -29,7 +29,6 @@ const getScreenShot = async (video, toPath, duration) => {
   let cmd = ffmpeg + ` -ss ${pos} -i "${video}" -y -vframes 1 -q:v 0 -vf scale=240:-1 "${toPath}"`;
 
   const result = await new Promise((resolve, reject) => {
-
     exec(cmd, (err, stdout, stderr) => {
       if (err) {
         resolve(false);
@@ -58,7 +57,7 @@ module.exports.genScreenShot = async (id, isFolder) => {
       },
     });
   }
-  
+
   let size = files.length;
   let progress = 0.01;
   let i = 1;
@@ -69,11 +68,10 @@ module.exports.genScreenShot = async (id, isFolder) => {
         process.stdout.write(`\t${parseFloat(pgr * 100).toFixed(2)}%\r`);
         progress += 0.01;
       }
+
       let coverPath = path.join(vCover, f.Cover || "");
-        process.stdout.write(`\t${parseFloat(pgr * 100).toFixed(2)}% `);
-        progress += 0.01;
-      }
-      let coverPath = path.join(vCover, f.Cover);
+      process.stdout.write(`\t${parseFloat(pgr * 100).toFixed(2)}% `);
+      progress += 0.01;
 
       let exist = fs.existsSync(coverPath);
       i++;
@@ -82,22 +80,12 @@ module.exports.genScreenShot = async (id, isFolder) => {
       let fullPath = path.join(f.Folder.Path, f.Name);
 
       if (f.Type.includes("Manga")) {
-        if (/zip/gi.test(f.Name)) {
-          coverPath = path.join(vCover, "Manga", f.Folder.Name, f.Name + ".jpg");
-          let total = await thumbnails.ZipCover(fullPath, coverPath, exist);
-          await f.update({
-            Duration: total,
-            Cover: "/" + path.join("Manga", f.Folder.Name, f.Name + ".jpg"),
-          });
-      let fullPath = path.join(f.Folder.Path, f.Name);
-
-      if (f.Type.includes("Manga")) {
-        if (/zip/gi.test(f.Name)) {
-          let total = await thumbnails.ZipCover(fullPath, coverPath, exist);
-          await f.update({ Duration: total });
-        } else if (/rar/gi.test(f.filePath)) {
-          await thumbnails.RarCover(fullPath, coverPath);
-        }
+        coverPath = path.join(vCover, "Manga", f.Folder.Name, f.Name + ".jpg");
+        let total = await thumbnails.ZipCover(fullPath, coverPath, exist);
+        await f.update({
+          Duration: total,
+          Cover: "/" + path.join("Manga", f.Folder.Name, f.Name + ".jpg"),
+        });
       } else {
         let Duration = await getVideoDuration(fullPath);
         if (Duration && f.Duration === 0) {

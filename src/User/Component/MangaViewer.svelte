@@ -15,7 +15,7 @@
   const socket = getContext("socket");
   const dispatch = createEventDispatcher();
 
-  let webtoon = localStorage.getItem("webtoon") === "true";
+  let webtoon;
   let progress = `${file.CurrentPos + 1}/${file.Duration}`;
   let images = [file.Duration];
   let tempImages = [];
@@ -64,74 +64,6 @@
       } else {
         if (!images[pg - 7] && !loading) {
           loadImages(pg, 8, -1);
-  //Reset progress
-  file.CurrentPos = 0;
-  let webtoon = localStorage.getItem("webtoon") === "true";
-  // let progress = `${file.CurrentPos + 1}/${file.Duration}`;
-  let progress = `1/${file.Duration}`;
-  let images = [file.Duration];
-  let loading = false;
-  let lastfId;
-  let imgContainer;
-  let isObserver = false;
-  let inputPage;
-  let jumping = false;
-  let config = {
-    width: window.innerWidth < 600 ? 100 : localStorage.getItem("mWidth") || 65,
-    imgAbjust: "fill",
-  };
-  //emptyImage observer
-  let imageObserver;
-  let indices = [];
-  const loadImages = (pg, toPage, dir = 1) => {
-    if (loading) return;
-    indices = getEmptyIndex(images, pg, toPage, dir, file.Duration, indices);
-    if (indices.length > 0) {
-      socket.emit("loadzip-image", { Id: file.Id, indices });
-      loading = true;
-    } else if (jumping) {
-      scrollInViewAndSetObserver();
-    }
-  };
-
-  socket.on("image-loaded", (data) => {
-    if (!data.last) {
-      images[data.page] = data.img;
-    } else {
-      loading = false;
-      indices = [];
-      if (jumping && webtoon) {
-        jumping = false;
-        scrollInViewAndSetObserver(100);
-      }
-    }
-  });
-
-  const prevPage = () => {
-    let pg = file.CurrentPos - 1;
-    if (pg > -1) {
-      if (webtoon) {
-        scrollInView(pg);
-      } else {
-        if (!images[pg - 7] && !loading) {
-          loadImages(pg, 8, -1);
-        }
-      }
-      file.CurrentPos = pg;
-    } else {
-      jumping = true;
-      PrevFile.action();
-    }
-  };
-
-  const nextPage = () => {
-    let pg = file.CurrentPos + 1;
-    if (pg < file.Duration) {
-      if (webtoon) {
-        scrollInView(pg);
-      } else {
-        if (!images[pg + 7] && !loading) {
-          loadImages(pg, 8);
         }
       }
       file.CurrentPos = pg;
@@ -232,87 +164,6 @@
     controls.file = file;
   }
 
-  $: {
-    localStorage.setItem("webtoon", webtoon);
-  }
-      disconnectObvrs(imgContainer);
-      NextFile.action();
-    }
-  };
-
-  const onInputFocus = () => {
-    inputPage.value = file.CurrentPos + 1;
-  };
-
-  const onInputBlur = () => {
-    inputPage.value = "";
-  };
-  const jumpToPage = (event) => {
-    let val = parseInt(inputPage.value);
-    if (isNaN(val)) return onInputFocus();
-    val < 0 ? 0 : val >= file.Duration ? file.Duration - 1 : val;
-    file.CurrentPos = val - 1;
-    if (webtoon) {
-      jumping = true;
-      disconnectObvrs(imgContainer);
-    }
-    loadImages(val - 5, 10);
-    onInputBlur();
-  };
-  const returnTo = () => dispatch("returnBack");
-
-  SkipForward.action = nextPage;
-  SkipBack.action = prevPage;
-
-  const setPage = (pg) => {
-    file.CurrentPos = pg;
-  };
-
-  let scrollInViewAndSetObserver = (delay = 0) => {
-    let tout = setTimeout(() => {
-      scrollInView(file.CurrentPos);
-      PageObserver(setPage, imgContainer, loadImages);
-      scrollImageLoader(loadImages, imgContainer, file.CurrentPos);
-      clearTimeout(tout);
-    }, delay);
-  };
-
-  Fullscreen.action = () => {
-    if (webtoon) {
-      disconnectObvrs(imgContainer);
-      setfullscreen(viewer);
-      scrollInViewAndSetObserver(200);
-    } else {
-      setfullscreen(viewer);
-    }
-  };
-
-  const onConfig = ({ detail }) => {
-    config = detail;
-  };
-
-  $: progress = `${parseInt(file.CurrentPos) + 1}/${file.Duration}`;
-
-  $: if (file.Id !== lastfId) {
-    jumping = true;
-    images = [];
-    lastfId = file.Id;
-    if (imgContainer) {
-      disconnectObvrs(imgContainer);
-    }
-    indices = getEmptyIndex(images, file.CurrentPos - 2, 8, 1, file.Duration);
-    socket.emit("loadzip-image", {
-      Id: file.Id,
-      indices,
-    });
-
-    controls.file = file;
-  }
-
-  $: {
-    localStorage.setItem("webtoon", webtoon);
-  }
-
   $: if (webtoon) {
     controls.webtoon = webtoon;
     if (!isObserver) {
@@ -338,7 +189,10 @@
 </script>
 
 <div id="manga-viewer" tabIndex="0" class:hide={$ToggleMenu}>
-  <span class="fullscreen-progress"> <i class="fas fa-sticky-note" /> {progress} </span>
+  <span class="fullscreen-progress">
+    <i class="fas fa-sticky-note" />
+    {progress}
+  </span>
   <div class="viewer">
     <div
       on:touchstart={onTouchStart}
@@ -473,14 +327,5 @@
   }
   #manga-viewer .fa-sticky-note {
     font-size: 16px;
-  }
-  
-  @media screen and (max-width: 600px) {
-    .f-name {
-      top: 80px;
-    }
-    .f-name.nomenu {
-      top: 10px;
-    }
   }
 </style>
