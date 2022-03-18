@@ -37,13 +37,14 @@
       }
       console.log(title);
 
-      let url = genUrl(pg, { items: config.items, order: config.order[title] }, flt, nType || type, curId);
+      let url = genUrl(pg, { items: config.items, order: config.order[title] || "nu" }, flt, nType || type, curId);
 
       let { data } = await axios.get(url, {
         cancelToken: new cancelToken(function executor(c) {
           cancel = c;
         }),
       });
+      console.log(data);
 
       if (typeof data === "object") {
         pageData = data;
