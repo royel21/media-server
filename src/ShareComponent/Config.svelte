@@ -5,7 +5,6 @@
   const applyChanges = () => {
     updateConfig(Config);
   };
-  console.log("title:", document.title.split(" ")[0]);
 </script>
 
 <label id="user-label" class={User.role} for="show-config">
@@ -21,7 +20,7 @@
         <div class="input-group-prepend">
           <label for="orderby" class="input-group-text">Sort By:</label>
         </div>
-        <select id="orderby" class="form-control fa" bind:value={Config.order}>
+        <select id="orderby" class="form-control fa" bind:value={Config.order[document.title.split(" ")[0]]}>
           <option value="nu">&#xf15d; Name</option>
           <option value="nd">&#xf15e; Name</option>
           <option value="du">&#xf162; Date</option>
