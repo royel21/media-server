@@ -10,31 +10,32 @@
     dirs = resp.data;
     socket.on("scan-finish", ({ id }) => {
       if (id) {
-        let dir = dirs.find(d => d.Id === id);
+        let dir = dirs.find((d) => d.Id === id);
         dir.IsLoading = false;
         dirs = dirs;
       }
     });
 
-    socket.on("scan-info", info => {
+    socket.on("scan-info", (info) => {
       console.log(info);
     });
   });
+
   onDestroy(() => {
     delete socket._callbacks["$scan-finish"];
     delete socket._callbacks["$scan-info"];
   });
 
-  const removeDir = e => {
+  const removeDir = (e) => {
     let tr = e.target.closest("tr");
     if (tr) {
       axios
         .delete("/api/admin/directories/remove", {
-          data: { Id: tr.id }
+          data: { Id: tr.id },
         })
         .then(({ data }) => {
           if (data.removed) {
-            dirs = dirs.filter(d => d.Id !== tr.id);
+            dirs = dirs.filter((d) => d.Id !== tr.id);
             dirs = dirs;
           } else {
             msg = data.msg;
@@ -43,24 +44,14 @@
     }
   };
 
-  const rescan = e => {
+  const rescan = (e) => {
     let tr = e.target.closest("tr");
-    let dir = dirs.find(d => d.Id === tr.id);
+    let dir = dirs.find((d) => d.Id === tr.id);
     socket.emit("scan-dir", { Id: dir.Id });
     dir.IsLoading = true;
     dirs = dirs;
   };
 </script>
-
-<style>
-  .message {
-    display: none;
-  }
-  .message:not(:empty) {
-    display: block;
-    color: red;
-  }
-</style>
 
 <div class="message">{msg}</div>
 <table id="dir-list" class="table table-dark table-hover table-bordered">
@@ -82,7 +73,7 @@
         <tr id={Id} key={Id}>
           <td>
             <span class="dir-sync" on:click={rescan}>
-              <i class={'fas fa-sync' + (IsLoading ? ' fa-spin' : '')} />
+              <i class={"fas fa-sync" + (IsLoading ? " fa-spin" : "")} />
             </span>
             <span class="dir-remove ml-2" on:click={removeDir}>
               <i class="fas fa-trash-alt" />
@@ -96,3 +87,13 @@
     {/if}
   </tbody>
 </table>
+
+<style>
+  .message {
+    display: none;
+  }
+  .message:not(:empty) {
+    display: block;
+    color: red;
+  }
+</style>

@@ -1,22 +1,13 @@
 <script>
-  import { createEventDispatcher } from "svelte";
   import { fade } from "svelte/transition";
-  import axios from "axios";
   export let createDirectory;
   export let hideModal;
-  let Type;
-  console.log(hideModal, createDirectory, Type);
+  let Type = "Mangas";
 
   const create = () => {
     createDirectory(Type);
   };
 </script>
-
-<style>
-  .modal {
-    width: 250px;
-  }
-</style>
 
 <div class="modal-container">
   <div class="modal card" transition:fade={{ duration: 200 }}>
@@ -40,3 +31,9 @@
     </div>
   </div>
 </div>
+
+<style>
+  .modal {
+    width: 250px;
+  }
+</style>

@@ -2,7 +2,6 @@
     import { onMount, setContext } from "svelte";
     import { navigate } from "svelte-routing";
     import axios from "axios";
-    import { tick } from "svelte";
     import socketClient from "socket.io-client";
     //Pages
     import AdminRoutes from "./Admin/AdminRoutes.svelte";

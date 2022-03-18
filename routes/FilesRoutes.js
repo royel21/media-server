@@ -32,7 +32,6 @@ Router.get("/dirs", (req, res) => {
     });
 });
 
-
 const resetRecents = async ({ folderid }) =>{
     const files = await db.file.findAll({where: { FolderId: folderid }});
     const result = await db.recentFile.update({LastPos: 0}, {where: {FileId: files.map(f=> f.Id)}});

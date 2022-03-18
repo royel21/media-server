@@ -14,12 +14,11 @@
   const { NextFile, PrevFile, Fullscreen, SkipForward, SkipBack } = KeyMap;
   const socket = getContext("socket");
   const dispatch = createEventDispatcher();
-  //Reset progress
-  file.CurrentPos = 0;
-  let webtoon = localStorage.getItem("webtoon") === "true";
-  // let progress = `${file.CurrentPos + 1}/${file.Duration}`;
-  let progress = `1/${file.Duration}`;
+
+  let webtoon;
+  let progress = `${file.CurrentPos + 1}/${file.Duration}`;
   let images = [file.Duration];
+  let tempImages = [];
   let loading = false;
   let lastfId;
   let imgContainer;
@@ -115,6 +114,10 @@
 
   SkipForward.action = nextPage;
   SkipBack.action = prevPage;
+  const onCancelContextM = (e) => {
+    e.preventDefault();
+    return false;
+  };
 
   const setPage = (pg) => {
     file.CurrentPos = pg;
@@ -161,10 +164,6 @@
     controls.file = file;
   }
 
-  $: {
-    localStorage.setItem("webtoon", webtoon);
-  }
-
   $: if (webtoon) {
     controls.webtoon = webtoon;
     if (!isObserver) {
@@ -190,7 +189,10 @@
 </script>
 
 <div id="manga-viewer" tabIndex="0" class:hide={$ToggleMenu}>
-  <span class="fullscreen-progress"> <i class="fas fa-sticky-note" /> {progress} </span>
+  <span class="fullscreen-progress">
+    <i class="fas fa-sticky-note" />
+    {progress}
+  </span>
   <div class="viewer">
     <div
       on:touchstart={onTouchStart}
