@@ -1,10 +1,18 @@
 <script>
   import { PageConfig, updateConfig } from "../User/Stores/PageConfigStore";
   export let User;
+  let title = document.title.split(" ")[0];
+
   const Config = { ...$PageConfig };
   const applyChanges = () => {
     updateConfig(Config);
   };
+
+  const observer = new MutationObserver(([{ target }]) => (title = document.title.split(" ")[0]));
+
+  observer.observe(document.querySelector("title"), {
+    childList: true,
+  });
 </script>
 
 <label id="user-label" class={User.role} for="show-config">
@@ -13,14 +21,14 @@
 </label>
 <input type="checkbox" name="" id="show-config" />
 <div id="user-config" class={User.role.includes("User") ? "user-config" : "admin-config"}>
-  <div><span on:click> <i class="fas fa-sign-out-alt" /> Log out </span></div>
+  <div id="sep"><span on:click> <i class="fas fa-sign-out-alt" /> Log out </span></div>
   {#if !User.role.includes("Administrator")}
     <div id="config-content">
       <div class="input-group">
         <div class="input-group-prepend">
           <label for="orderby" class="input-group-text">Sort By:</label>
         </div>
-        <select id="orderby" class="form-control fa" bind:value={Config.order[document.title.split(" ")[0]]}>
+        <select id="orderby" class="form-control fa" bind:value={Config.order[title]}>
           <option value="nu">&#xf15d; Name</option>
           <option value="nd">&#xf15e; Name</option>
           <option value="du">&#xf162; Date</option>
@@ -42,6 +50,9 @@
 </div>
 
 <style>
+  #sep {
+    border-bottom: 1px solid;
+  }
   #user-label {
     cursor: pointer;
     align-self: center;

@@ -1,6 +1,6 @@
 <script>
   import { Router, Route } from "svelte-routing";
-  import { getContext, onMount } from "svelte";
+  import { getContext } from "svelte";
   import { FavoritesStores } from "./Stores/FavoritesStores";
 
   import Navbar from "../ShareComponent/Navbar.svelte";
@@ -15,7 +15,7 @@
     { title: "Home", path: "/", class: "home" },
     { title: "Videos", path: "/videos", class: "film" },
     { title: "Mangas", path: "/mangas", class: "book" },
-    { title: "Favorites", path: "/favorites", class: "heart" }
+    { title: "Favorites", path: "/favorites", class: "heart" },
   ];
   FavoritesStores.set(getContext("User").favorites);
 </script>

@@ -35,7 +35,6 @@
       if (cancel) {
         cancel();
       }
-      console.log(title);
 
       let url = genUrl(pg, { items: config.items, order: config.order[title] || "nu" }, flt, nType || type, curId);
 
@@ -44,7 +43,6 @@
           cancel = c;
         }),
       });
-      console.log(data);
 
       if (typeof data === "object") {
         pageData = data;
