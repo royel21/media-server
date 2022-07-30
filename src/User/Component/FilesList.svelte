@@ -107,6 +107,10 @@
     }
   };
 
+  const scanfiles = () => {
+    socket.emit("scan-dir", { Id: folder.Id, isFolder: true });
+  };
+
   afterUpdate(() => {
     let sel = selected;
     let id = localStorage.getItem("fileId");
@@ -146,6 +150,7 @@
         <button id="first" class="btn btn-secondary" on:click={openFirstLast}>First</button>
         <button id="last" class="btn btn-secondary" on:click={openFirstLast}>Last</button>
         <button class="btn btn-secondary" on:click={onResetFiles}>Reset All</button>
+        <button class="btn btn-secondary" on:click={scanfiles}>Update</button>
       </div>
     </div>
   {/if}

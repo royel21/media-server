@@ -76,6 +76,10 @@ module.exports.genScreenShot = async (id, isFolder) => {
       let exist = fs.existsSync(coverPath);
       i++;
       if (exist && f.Duration > 0) continue;
+      if (!f.Folder.Path || !f.Name) {
+        console.log(f.Folder.Path, f.Name);
+        continue;
+      }
 
       let fullPath = path.join(f.Folder.Path, f.Name);
 
