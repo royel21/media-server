@@ -38,6 +38,11 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
+      uniqueKeys: {
+        name_folderid_unique: {
+          fields: ["Name", "FolderId"],
+        },
+      },
       timestamps: false,
       hooks: {
         beforeValidate: function (item) {
