@@ -9,7 +9,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const production = !process.env.ROLLUP_WATCH;
-const { PORT, DEV_PORT } = process.env;
+const { PORT } = process.env;
 
 export default {
   input: "src/main.js",
@@ -22,11 +22,6 @@ export default {
   plugins: [
     svelte(),
     css({ output: "css/extra.css" }),
-    // If you have external dependencies installed from
-    // npm, you'll most likely need these plugins. In
-    // some cases you'll need additional configuration -
-    // consult the documentation for details:
-    // https://github.com/rollup/plugins/tree/master/packages/commonjs
     resolve({
       browser: true,
       dedupe: ["svelte"],

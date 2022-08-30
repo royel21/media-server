@@ -17,3 +17,5 @@ images/
 *.db-journal
 ./rollup.config.js
 ./images
+bundle.js
+extra.css

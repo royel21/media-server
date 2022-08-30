@@ -1,1 +1,19963 @@
-var app=function(){"use strict";function e(){}const t=e=>e;function n(e,t){for(const n in t)e[n]=t[n];return e}function s(e){return e()}function r(){return Object.create(null)}function i(e){e.forEach(s)}function o(e){return"function"==typeof e}function a(e,t){return e!=e?t==t:e!==t||e&&"object"==typeof e||"function"==typeof e}let l;function c(e,t){return l||(l=document.createElement("a")),l.href=t,e===l.href}function u(t,...n){if(null==t)return e;const s=t.subscribe(...n);return s.unsubscribe?()=>s.unsubscribe():s}function d(e,t,n){e.$$.on_destroy.push(u(t,n))}function f(e,t,n,s){if(e){const r=p(e,t,n,s);return e[0](r)}}function p(e,t,s,r){return e[1]&&r?n(s.ctx.slice(),e[1](r(t))):s.ctx}function h(e,t,n,s){if(e[2]&&s){const r=e[2](s(n));if(void 0===t.dirty)return r;if("object"==typeof r){const e=[],n=Math.max(t.dirty.length,r.length);for(let s=0;s<n;s+=1)e[s]=t.dirty[s]|r[s];return e}return t.dirty|r}return t.dirty}function m(e,t,n,s,r,i){if(r){const o=p(t,n,s,i);e.p(o,r)}}function g(e){if(e.ctx.length>32){const t=[],n=e.ctx.length/32;for(let e=0;e<n;e++)t[e]=-1;return t}return-1}function v(e){const t={};for(const n in e)"$"!==n[0]&&(t[n]=e[n]);return t}function y(e){return null==e?"":e}const $="undefined"!=typeof window;let b=$?()=>window.performance.now():()=>Date.now(),w=$?e=>requestAnimationFrame(e):e;const k=new Set;function x(e){k.forEach((t=>{t.c(e)||(k.delete(t),t.f())})),0!==k.size&&w(x)}function _(e){let t;return 0===k.size&&w(x),{promise:new Promise((n=>{k.add(t={c:e,f:n})})),abort(){k.delete(t)}}}function I(e,t){e.appendChild(t)}function T(e){if(!e)return document;const t=e.getRootNode?e.getRootNode():e.ownerDocument;return t&&t.host?t:e.ownerDocument}function C(e){const t=A("style");return function(e,t){I(e.head||e,t)}(T(e),t),t.sheet}function E(e,t,n){e.insertBefore(t,n||null)}function N(e){e.parentNode.removeChild(e)}function S(e,t){for(let n=0;n<e.length;n+=1)e[n]&&e[n].d(t)}function A(e){return document.createElement(e)}function L(e){return document.createTextNode(e)}function R(){return L(" ")}function O(){return L("")}function P(e,t,n,s){return e.addEventListener(t,n,s),()=>e.removeEventListener(t,n,s)}function j(e){return function(t){return t.preventDefault(),e.call(this,t)}}function M(e){return function(t){return t.stopPropagation(),e.call(this,t)}}function q(e,t,n){null==n?e.removeAttribute(t):e.getAttribute(t)!==n&&e.setAttribute(t,n)}function F(e,t){const n=Object.getOwnPropertyDescriptors(e.__proto__);for(const s in t)null==t[s]?e.removeAttribute(s):"style"===s?e.style.cssText=t[s]:"__value"===s?e.value=e[s]=t[s]:n[s]&&n[s].set?e[s]=t[s]:q(e,s,t[s])}function B(e){return""===e?null:+e}function D(e,t){t=""+t,e.wholeText!==t&&(e.data=t)}function H(e,t){e.value=null==t?"":t}function U(e,t,n,s){null===n?e.style.removeProperty(t):e.style.setProperty(t,n,s?"important":"")}function z(e,t){for(let n=0;n<e.options.length;n+=1){const s=e.options[n];if(s.__value===t)return void(s.selected=!0)}e.selectedIndex=-1}function V(e){const t=e.querySelector(":checked")||e.options[0];return t&&t.__value}function W(e,t,n){e.classList[n?"add":"remove"](t)}function K(e,t,{bubbles:n=!1,cancelable:s=!1}={}){const r=document.createEvent("CustomEvent");return r.initCustomEvent(e,n,s,t),r}const Y=new Map;let X,J=0;function Q(e,t,n,s,r,i,o,a=0){const l=16.666/s;let c="{\n";for(let e=0;e<=1;e+=l){const s=t+(n-t)*i(e);c+=100*e+`%{${o(s,1-s)}}\n`}const u=c+`100% {${o(n,1-n)}}\n}`,d=`__svelte_${function(e){let t=5381,n=e.length;for(;n--;)t=(t<<5)-t^e.charCodeAt(n);return t>>>0}(u)}_${a}`,f=T(e),{stylesheet:p,rules:h}=Y.get(f)||function(e,t){const n={stylesheet:C(t),rules:{}};return Y.set(e,n),n}(f,e);h[d]||(h[d]=!0,p.insertRule(`@keyframes ${d} ${u}`,p.cssRules.length));const m=e.style.animation||"";return e.style.animation=`${m?`${m}, `:""}${d} ${s}ms linear ${r}ms 1 both`,J+=1,d}function G(e,t){const n=(e.style.animation||"").split(", "),s=n.filter(t?e=>e.indexOf(t)<0:e=>-1===e.indexOf("__svelte")),r=n.length-s.length;r&&(e.style.animation=s.join(", "),J-=r,J||w((()=>{J||(Y.forEach((e=>{const{stylesheet:t}=e;let n=t.cssRules.length;for(;n--;)t.deleteRule(n);e.rules={}})),Y.clear())})))}function Z(e){X=e}function ee(){if(!X)throw new Error("Function called outside component initialization");return X}function te(e){ee().$$.on_mount.push(e)}function ne(e){ee().$$.on_destroy.push(e)}function se(){const e=ee();return(t,n,{cancelable:s=!1}={})=>{const r=e.$$.callbacks[t];if(r){const i=K(t,n,{cancelable:s});return r.slice().forEach((t=>{t.call(e,i)})),!i.defaultPrevented}return!0}}function re(e,t){return ee().$$.context.set(e,t),t}function ie(e){return ee().$$.context.get(e)}function oe(e,t){const n=e.$$.callbacks[t.type];n&&n.slice().forEach((e=>e.call(this,t)))}const ae=[],le=[],ce=[],ue=[],de=Promise.resolve();let fe=!1;function pe(e){ce.push(e)}const he=new Set;let me,ge=0;function ve(){const e=X;do{for(;ge<ae.length;){const e=ae[ge];ge++,Z(e),ye(e.$$)}for(Z(null),ae.length=0,ge=0;le.length;)le.pop()();for(let e=0;e<ce.length;e+=1){const t=ce[e];he.has(t)||(he.add(t),t())}ce.length=0}while(ae.length);for(;ue.length;)ue.pop()();fe=!1,he.clear(),Z(e)}function ye(e){if(null!==e.fragment){e.update(),i(e.before_update);const t=e.dirty;e.dirty=[-1],e.fragment&&e.fragment.p(e.ctx,t),e.after_update.forEach(pe)}}function $e(){return me||(me=Promise.resolve(),me.then((()=>{me=null}))),me}function be(e,t,n){e.dispatchEvent(K(`${t?"intro":"outro"}${n}`))}const we=new Set;let ke;function xe(){ke={r:0,c:[],p:ke}}function _e(){ke.r||i(ke.c),ke=ke.p}function Ie(e,t){e&&e.i&&(we.delete(e),e.i(t))}function Te(e,t,n,s){if(e&&e.o){if(we.has(e))return;we.add(e),ke.c.push((()=>{we.delete(e),s&&(n&&e.d(1),s())})),e.o(t)}else s&&s()}const Ce={duration:0};function Ee(n,s,r){let i,a,l=s(n,r),c=!1,u=0;function d(){i&&G(n,i)}function f(){const{delay:s=0,duration:r=300,easing:o=t,tick:f=e,css:p}=l||Ce;p&&(i=Q(n,0,1,r,s,o,p,u++)),f(0,1);const h=b()+s,m=h+r;a&&a.abort(),c=!0,pe((()=>be(n,!0,"start"))),a=_((e=>{if(c){if(e>=m)return f(1,0),be(n,!0,"end"),d(),c=!1;if(e>=h){const t=o((e-h)/r);f(t,1-t)}}return c}))}let p=!1;return{start(){p||(p=!0,G(n),o(l)?(l=l(),$e().then(f)):f())},invalidate(){p=!1},end(){c&&(d(),c=!1)}}}function Ne(n,s,r){let a,l=s(n,r),c=!0;const u=ke;function d(){const{delay:s=0,duration:r=300,easing:o=t,tick:d=e,css:f}=l||Ce;f&&(a=Q(n,1,0,r,s,o,f));const p=b()+s,h=p+r;pe((()=>be(n,!1,"start"))),_((e=>{if(c){if(e>=h)return d(0,1),be(n,!1,"end"),--u.r||i(u.c),!1;if(e>=p){const t=o((e-p)/r);d(1-t,t)}}return c}))}return u.r+=1,o(l)?$e().then((()=>{l=l(),d()})):d(),{end(e){e&&l.tick&&l.tick(1,0),c&&(a&&G(n,a),c=!1)}}}function Se(n,s,r,a){let l=s(n,r),c=a?0:1,u=null,d=null,f=null;function p(){f&&G(n,f)}function h(e,t){const n=e.b-c;return t*=Math.abs(n),{a:c,b:e.b,d:n,duration:t,start:e.start,end:e.start+t,group:e.group}}function m(s){const{delay:r=0,duration:o=300,easing:a=t,tick:m=e,css:g}=l||Ce,v={start:b()+r,b:s};s||(v.group=ke,ke.r+=1),u||d?d=v:(g&&(p(),f=Q(n,c,s,o,r,a,g)),s&&m(0,1),u=h(v,o),pe((()=>be(n,s,"start"))),_((e=>{if(d&&e>d.start&&(u=h(d,o),d=null,be(n,u.b,"start"),g&&(p(),f=Q(n,c,u.b,u.duration,0,a,l.css))),u)if(e>=u.end)m(c=u.b,1-c),be(n,u.b,"end"),d||(u.b?p():--u.group.r||i(u.group.c)),u=null;else if(e>=u.start){const t=e-u.start;c=u.a+u.d*a(t/u.duration),m(c,1-c)}return!(!u&&!d)})))}return{run(e){o(l)?$e().then((()=>{l=l(),m(e)})):m(e)},end(){p(),u=d=null}}}function Ae(e,t){const n={},s={},r={$$scope:1};let i=e.length;for(;i--;){const o=e[i],a=t[i];if(a){for(const e in o)e in a||(s[e]=1);for(const e in a)r[e]||(n[e]=a[e],r[e]=1);e[i]=a}else for(const e in o)r[e]=1}for(const e in s)e in n||(n[e]=void 0);return n}function Le(e){return"object"==typeof e&&null!==e?e:{}}function Re(e){e&&e.c()}function Oe(e,t,n,r){const{fragment:a,on_mount:l,on_destroy:c,after_update:u}=e.$$;a&&a.m(t,n),r||pe((()=>{const t=l.map(s).filter(o);c?c.push(...t):i(t),e.$$.on_mount=[]})),u.forEach(pe)}function Pe(e,t){const n=e.$$;null!==n.fragment&&(i(n.on_destroy),n.fragment&&n.fragment.d(t),n.on_destroy=n.fragment=null,n.ctx=[])}function je(e,t){-1===e.$$.dirty[0]&&(ae.push(e),fe||(fe=!0,de.then(ve)),e.$$.dirty.fill(0)),e.$$.dirty[t/31|0]|=1<<t%31}function Me(t,n,s,o,a,l,c,u=[-1]){const d=X;Z(t);const f=t.$$={fragment:null,ctx:null,props:l,update:e,not_equal:a,bound:r(),on_mount:[],on_destroy:[],on_disconnect:[],before_update:[],after_update:[],context:new Map(n.context||(d?d.$$.context:[])),callbacks:r(),dirty:u,skip_bound:!1,root:n.target||d.$$.root};c&&c(f.root);let p=!1;if(f.ctx=s?s(t,n.props||{},((e,n,...s)=>{const r=s.length?s[0]:n;return f.ctx&&a(f.ctx[e],f.ctx[e]=r)&&(!f.skip_bound&&f.bound[e]&&f.bound[e](r),p&&je(t,e)),n})):[],f.update(),p=!0,i(f.before_update),f.fragment=!!o&&o(f.ctx),n.target){if(n.hydrate){const e=function(e){return Array.from(e.childNodes)}(n.target);f.fragment&&f.fragment.l(e),e.forEach(N)}else f.fragment&&f.fragment.c();n.intro&&Ie(t.$$.fragment),Oe(t,n.target,n.anchor,n.customElement),ve()}Z(d)}class qe{$destroy(){Pe(this,1),this.$destroy=e}$on(e,t){const n=this.$$.callbacks[e]||(this.$$.callbacks[e]=[]);return n.push(t),()=>{const e=n.indexOf(t);-1!==e&&n.splice(e,1)}}$set(e){var t;this.$$set&&(t=e,0!==Object.keys(t).length)&&(this.$$.skip_bound=!0,this.$$set(e),this.$$.skip_bound=!1)}}const Fe=[];function Be(t,n=e){let s;const r=new Set;function i(e){if(a(t,e)&&(t=e,s)){const e=!Fe.length;for(const e of r)e[1](),Fe.push(e,t);if(e){for(let e=0;e<Fe.length;e+=2)Fe[e][0](Fe[e+1]);Fe.length=0}}}return{set:i,update:function(e){i(e(t))},subscribe:function(o,a=e){const l=[o,a];return r.add(l),1===r.size&&(s=n(i)||e),o(t),()=>{r.delete(l),0===r.size&&(s(),s=null)}}}}function De(t,n,s){const r=!Array.isArray(t),a=r?[t]:t,l=n.length<2;return function(e,t){return{subscribe:Be(e,t).subscribe}}(s,(t=>{let s=!1;const c=[];let d=0,f=e;const p=()=>{if(d)return;f();const s=n(r?c[0]:c,t);l?t(s):f=o(s)?s:e},h=a.map(((e,t)=>u(e,(e=>{c[t]=e,d&=~(1<<t),s&&p()}),(()=>{d|=1<<t}))));return s=!0,p(),function(){i(h),f()}}))}const He={},Ue={};function ze(e){return{...e.location,state:e.history.state,key:e.history.state&&e.history.state.key||"initial"}}const Ve=function(e,t){const n=[];let s=ze(e);return{get location(){return s},listen(t){n.push(t);const r=()=>{s=ze(e),t({location:s,action:"POP"})};return e.addEventListener("popstate",r),()=>{e.removeEventListener("popstate",r);const s=n.indexOf(t);n.splice(s,1)}},navigate(t,{state:r,replace:i=!1}={}){r={...r,key:Date.now()+""};try{i?e.history.replaceState(r,null,t):e.history.pushState(r,null,t)}catch(n){e.location[i?"replace":"assign"](t)}s=ze(e),n.forEach((e=>e({location:s,action:"PUSH"})))}}}(Boolean("undefined"!=typeof window&&window.document&&window.document.createElement)?window:function(e="/"){let t=0;const n=[{pathname:e,search:""}],s=[];return{get location(){return n[t]},addEventListener(e,t){},removeEventListener(e,t){},history:{get entries(){return n},get index(){return t},get state(){return s[t]},pushState(e,r,i){const[o,a=""]=i.split("?");t++,n.push({pathname:o,search:a}),s.push(e)},replaceState(e,r,i){const[o,a=""]=i.split("?");n[t]={pathname:o,search:a},s[t]=e}}}}()),{navigate:We}=Ve,Ke=/^:(.+)/;function Ye(e,t){return e.substr(0,t.length)===t}function Xe(e){return"*"===e[0]}function Je(e){return e.replace(/(^\/+|\/+$)/g,"").split("/")}function Qe(e){return e.replace(/(^\/+|\/+$)/g,"")}function Ge(e,t){return{route:e,score:e.default?0:Je(e.path).reduce(((e,t)=>(e+=4,!function(e){return""===e}(t)?!function(e){return Ke.test(e)}(t)?Xe(t)?e-=5:e+=3:e+=2:e+=1,e)),0),index:t}}function Ze(e,t){let n,s;const[r]=t.split("?"),i=Je(r),o=""===i[0],a=function(e){return e.map(Ge).sort(((e,t)=>e.score<t.score?1:e.score>t.score?-1:e.index-t.index))}(e);for(let e=0,r=a.length;e<r;e++){const r=a[e].route;let l=!1;if(r.default){s={route:r,params:{},uri:t};continue}const c=Je(r.path),u={},d=Math.max(i.length,c.length);let f=0;for(;f<d;f++){const e=c[f],t=i[f];if(void 0!==e&&Xe(e)){u["*"===e?"*":e.slice(1)]=i.slice(f).map(decodeURIComponent).join("/");break}if(!e.includes(":")&&e!==t){l=!0;break}let n=Ke.exec(e);if(n&&!o){const e=decodeURIComponent(t);u[n[1]]="undefined"===e?void 0:e}else if(e!==t){l=!0;break}}if(!l){n={route:r,params:u,uri:"/"+i.slice(0,f).join("/")};break}}return n||s||null}function et(e,t){return e+(t?`?${t}`:"")}function tt(e,t){return`${Qe("/"===t?e:`${Qe(e)}/${Qe(t)}`)}/`}function nt(e){let t;const n=e[9].default,s=f(n,e,e[8],null);return{c(){s&&s.c()},m(e,n){s&&s.m(e,n),t=!0},p(e,[r]){s&&s.p&&(!t||256&r)&&m(s,n,e,e[8],t?h(n,e[8],r,null):g(e[8]),null)},i(e){t||(Ie(s,e),t=!0)},o(e){Te(s,e),t=!1},d(e){s&&s.d(e)}}}function st(e,t,n){let s,r,i,{$$slots:o={},$$scope:a}=t,{basepath:l="/"}=t,{url:c=null}=t;const u=ie(He),f=ie(Ue),p=Be([]);d(e,p,(e=>n(6,r=e)));const h=Be(null);let m=!1;const g=u||Be(c?{pathname:c}:Ve.location);d(e,g,(e=>n(5,s=e)));const v=f?f.routerBase:Be({path:l,uri:l});d(e,v,(e=>n(7,i=e)));const y=De([v,h],(([e,t])=>{if(null===t)return e;const{path:n}=e,{route:s,uri:r}=t;return{path:s.default?n:s.path.replace(/\*.*$/,""),uri:r}}));return u||(te((()=>Ve.listen((e=>{g.set(e.location)})))),re(He,g)),re(Ue,{activeRoute:h,base:v,routerBase:y,registerRoute:function(e){const{path:t}=i;let{path:n}=e;if(e._path=n,e.path=tt(t,n),"undefined"==typeof window){if(m)return;const t=function(e,t){return Ze([e],t)}(e,s.pathname);t&&(h.set(t),m=!0)}else p.update((t=>(t.push(e),t)))},unregisterRoute:function(e){p.update((t=>{const n=t.indexOf(e);return t.splice(n,1),t}))}}),e.$$set=e=>{"basepath"in e&&n(3,l=e.basepath),"url"in e&&n(4,c=e.url),"$$scope"in e&&n(8,a=e.$$scope)},e.$$.update=()=>{if(128&e.$$.dirty){const{path:e}=i;p.update((t=>(t.forEach((t=>t.path=tt(e,t._path))),t)))}if(96&e.$$.dirty){const e=Ze(r,s.pathname);h.set(e)}},[p,g,v,l,c,s,r,i,a,o]}class rt extends qe{constructor(e){super(),Me(this,e,st,nt,a,{basepath:3,url:4})}}const it=e=>({params:4&e,location:16&e}),ot=e=>({params:e[2],location:e[4]});function at(e){let t,n,s,r;const i=[ct,lt],o=[];function a(e,t){return null!==e[0]?0:1}return t=a(e),n=o[t]=i[t](e),{c(){n.c(),s=O()},m(e,n){o[t].m(e,n),E(e,s,n),r=!0},p(e,r){let l=t;t=a(e),t===l?o[t].p(e,r):(xe(),Te(o[l],1,1,(()=>{o[l]=null})),_e(),n=o[t],n?n.p(e,r):(n=o[t]=i[t](e),n.c()),Ie(n,1),n.m(s.parentNode,s))},i(e){r||(Ie(n),r=!0)},o(e){Te(n),r=!1},d(e){o[t].d(e),e&&N(s)}}}function lt(e){let t;const n=e[10].default,s=f(n,e,e[9],ot);return{c(){s&&s.c()},m(e,n){s&&s.m(e,n),t=!0},p(e,r){s&&s.p&&(!t||532&r)&&m(s,n,e,e[9],t?h(n,e[9],r,it):g(e[9]),ot)},i(e){t||(Ie(s,e),t=!0)},o(e){Te(s,e),t=!1},d(e){s&&s.d(e)}}}function ct(e){let t,s,r;const i=[e[2],e[3]];var o=e[0];function a(e){let t={};for(let e=0;e<i.length;e+=1)t=n(t,i[e]);return{props:t}}return o&&(t=new o(a())),{c(){t&&Re(t.$$.fragment),s=O()},m(e,n){t&&Oe(t,e,n),E(e,s,n),r=!0},p(e,n){const r=12&n?Ae(i,[4&n&&Le(e[2]),8&n&&Le(e[3])]):{};if(o!==(o=e[0])){if(t){xe();const e=t;Te(e.$$.fragment,1,0,(()=>{Pe(e,1)})),_e()}o?(t=new o(a()),Re(t.$$.fragment),Ie(t.$$.fragment,1),Oe(t,s.parentNode,s)):t=null}else o&&t.$set(r)},i(e){r||(t&&Ie(t.$$.fragment,e),r=!0)},o(e){t&&Te(t.$$.fragment,e),r=!1},d(e){e&&N(s),t&&Pe(t,e)}}}function ut(e){let t,n,s=null!==e[1]&&e[1].route===e[7]&&at(e);return{c(){s&&s.c(),t=O()},m(e,r){s&&s.m(e,r),E(e,t,r),n=!0},p(e,[n]){null!==e[1]&&e[1].route===e[7]?s?(s.p(e,n),2&n&&Ie(s,1)):(s=at(e),s.c(),Ie(s,1),s.m(t.parentNode,t)):s&&(xe(),Te(s,1,1,(()=>{s=null})),_e())},i(e){n||(Ie(s),n=!0)},o(e){Te(s),n=!1},d(e){s&&s.d(e),e&&N(t)}}}function dt(e,t,s){let r,i,{$$slots:o={},$$scope:a}=t,{path:l=""}=t,{component:c=null}=t;const{registerRoute:u,unregisterRoute:f,activeRoute:p}=ie(Ue);d(e,p,(e=>s(1,r=e)));const h=ie(He);d(e,h,(e=>s(4,i=e)));const m={path:l,default:""===l};let g={},y={};return u(m),"undefined"!=typeof window&&ne((()=>{f(m)})),e.$$set=e=>{s(13,t=n(n({},t),v(e))),"path"in e&&s(8,l=e.path),"component"in e&&s(0,c=e.component),"$$scope"in e&&s(9,a=e.$$scope)},e.$$.update=()=>{2&e.$$.dirty&&r&&r.route===m&&s(2,g=r.params);{const{path:e,component:n,...r}=t;s(3,y=r)}},t=v(t),[c,r,g,y,i,p,h,m,l,a,o]}class ft extends qe{constructor(e){super(),Me(this,e,dt,ut,a,{path:8,component:0})}}function pt(e){let t,s,r,i;const o=e[15].default,a=f(o,e,e[14],null);let l=[{href:e[0]},{"aria-current":e[2]},e[1]],c={};for(let e=0;e<l.length;e+=1)c=n(c,l[e]);return{c(){t=A("a"),a&&a.c(),F(t,c)},m(n,o){E(n,t,o),a&&a.m(t,null),s=!0,r||(i=P(t,"click",e[5]),r=!0)},p(e,[n]){a&&a.p&&(!s||16384&n)&&m(a,o,e,e[14],s?h(o,e[14],n,null):g(e[14]),null),F(t,c=Ae(l,[(!s||1&n)&&{href:e[0]},(!s||4&n)&&{"aria-current":e[2]},2&n&&e[1]]))},i(e){s||(Ie(a,e),s=!0)},o(e){Te(a,e),s=!1},d(e){e&&N(t),a&&a.d(e),r=!1,i()}}}function ht(e,t,n){let s,r,i,{$$slots:o={},$$scope:a}=t,{to:l="#"}=t,{replace:c=!1}=t,{state:u={}}=t,{getProps:f=(()=>({}))}=t;const{base:p}=ie(Ue);d(e,p,(e=>n(13,i=e)));const h=ie(He);d(e,h,(e=>n(12,r=e)));const m=se();let g,v,y,$;return e.$$set=e=>{"to"in e&&n(6,l=e.to),"replace"in e&&n(7,c=e.replace),"state"in e&&n(8,u=e.state),"getProps"in e&&n(9,f=e.getProps),"$$scope"in e&&n(14,a=e.$$scope)},e.$$.update=()=>{8256&e.$$.dirty&&n(0,g="/"===l?i.uri:function(e,t){if(Ye(e,"/"))return e;const[n,s]=e.split("?"),[r]=t.split("?"),i=Je(n),o=Je(r);if(""===i[0])return et(r,s);if(!Ye(i[0],"."))return et(("/"===r?"":"/")+o.concat(i).join("/"),s);const a=o.concat(i),l=[];return a.forEach((e=>{".."===e?l.pop():"."!==e&&l.push(e)})),et("/"+l.join("/"),s)}(l,i.uri)),4097&e.$$.dirty&&n(10,v=Ye(r.pathname,g)),4097&e.$$.dirty&&n(11,y=g===r.pathname),2048&e.$$.dirty&&n(2,s=y?"page":void 0),7681&e.$$.dirty&&n(1,$=f({location:r,href:g,isPartiallyCurrent:v,isCurrent:y}))},[g,$,s,p,h,function(e){if(m("click",e),function(e){return!e.defaultPrevented&&0===e.button&&!(e.metaKey||e.altKey||e.ctrlKey||e.shiftKey)}(e)){e.preventDefault();const t=r.pathname===g||c;We(g,{state:u,replace:t})}},l,c,u,f,v,y,r,i,a,o]}class mt extends qe{constructor(e){super(),Me(this,e,ht,pt,a,{to:6,replace:7,state:8,getProps:9})}}function gt(e){return e&&e.__esModule&&Object.prototype.hasOwnProperty.call(e,"default")?e.default:e}var vt={exports:{}},yt={exports:{}},$t=function(e,t){return function(){for(var n=new Array(arguments.length),s=0;s<n.length;s++)n[s]=arguments[s];return e.apply(t,n)}},bt=$t,wt=Object.prototype.toString,kt=function(e){return function(t){var n=wt.call(t);return e[n]||(e[n]=n.slice(8,-1).toLowerCase())}}(Object.create(null));function xt(e){return e=e.toLowerCase(),function(t){return kt(t)===e}}function _t(e){return Array.isArray(e)}function It(e){return void 0===e}var Tt=xt("ArrayBuffer");function Ct(e){return null!==e&&"object"==typeof e}function Et(e){if("object"!==kt(e))return!1;var t=Object.getPrototypeOf(e);return null===t||t===Object.prototype}var Nt=xt("Date"),St=xt("File"),At=xt("Blob"),Lt=xt("FileList");function Rt(e){return"[object Function]"===wt.call(e)}var Ot=xt("URLSearchParams");function Pt(e,t){if(null!=e)if("object"!=typeof e&&(e=[e]),_t(e))for(var n=0,s=e.length;n<s;n++)t.call(null,e[n],n,e);else for(var r in e)Object.prototype.hasOwnProperty.call(e,r)&&t.call(null,e[r],r,e)}var jt,Mt=(jt="undefined"!=typeof Uint8Array&&Object.getPrototypeOf(Uint8Array),function(e){return jt&&e instanceof jt}),qt={isArray:_t,isArrayBuffer:Tt,isBuffer:function(e){return null!==e&&!It(e)&&null!==e.constructor&&!It(e.constructor)&&"function"==typeof e.constructor.isBuffer&&e.constructor.isBuffer(e)},isFormData:function(e){var t="[object FormData]";return e&&("function"==typeof FormData&&e instanceof FormData||wt.call(e)===t||Rt(e.toString)&&e.toString()===t)},isArrayBufferView:function(e){return"undefined"!=typeof ArrayBuffer&&ArrayBuffer.isView?ArrayBuffer.isView(e):e&&e.buffer&&Tt(e.buffer)},isString:function(e){return"string"==typeof e},isNumber:function(e){return"number"==typeof e},isObject:Ct,isPlainObject:Et,isUndefined:It,isDate:Nt,isFile:St,isBlob:At,isFunction:Rt,isStream:function(e){return Ct(e)&&Rt(e.pipe)},isURLSearchParams:Ot,isStandardBrowserEnv:function(){return("undefined"==typeof navigator||"ReactNative"!==navigator.product&&"NativeScript"!==navigator.product&&"NS"!==navigator.product)&&("undefined"!=typeof window&&"undefined"!=typeof document)},forEach:Pt,merge:function e(){var t={};function n(n,s){Et(t[s])&&Et(n)?t[s]=e(t[s],n):Et(n)?t[s]=e({},n):_t(n)?t[s]=n.slice():t[s]=n}for(var s=0,r=arguments.length;s<r;s++)Pt(arguments[s],n);return t},extend:function(e,t,n){return Pt(t,(function(t,s){e[s]=n&&"function"==typeof t?bt(t,n):t})),e},trim:function(e){return e.trim?e.trim():e.replace(/^\s+|\s+$/g,"")},stripBOM:function(e){return 65279===e.charCodeAt(0)&&(e=e.slice(1)),e},inherits:function(e,t,n,s){e.prototype=Object.create(t.prototype,s),e.prototype.constructor=e,n&&Object.assign(e.prototype,n)},toFlatObject:function(e,t,n){var s,r,i,o={};t=t||{};do{for(r=(s=Object.getOwnPropertyNames(e)).length;r-- >0;)o[i=s[r]]||(t[i]=e[i],o[i]=!0);e=Object.getPrototypeOf(e)}while(e&&(!n||n(e,t))&&e!==Object.prototype);return t},kindOf:kt,kindOfTest:xt,endsWith:function(e,t,n){e=String(e),(void 0===n||n>e.length)&&(n=e.length),n-=t.length;var s=e.indexOf(t,n);return-1!==s&&s===n},toArray:function(e){if(!e)return null;var t=e.length;if(It(t))return null;for(var n=new Array(t);t-- >0;)n[t]=e[t];return n},isTypedArray:Mt,isFileList:Lt},Ft=qt;function Bt(e){return encodeURIComponent(e).replace(/%3A/gi,":").replace(/%24/g,"$").replace(/%2C/gi,",").replace(/%20/g,"+").replace(/%5B/gi,"[").replace(/%5D/gi,"]")}var Dt=function(e,t,n){if(!t)return e;var s;if(n)s=n(t);else if(Ft.isURLSearchParams(t))s=t.toString();else{var r=[];Ft.forEach(t,(function(e,t){null!=e&&(Ft.isArray(e)?t+="[]":e=[e],Ft.forEach(e,(function(e){Ft.isDate(e)?e=e.toISOString():Ft.isObject(e)&&(e=JSON.stringify(e)),r.push(Bt(t)+"="+Bt(e))})))})),s=r.join("&")}if(s){var i=e.indexOf("#");-1!==i&&(e=e.slice(0,i)),e+=(-1===e.indexOf("?")?"?":"&")+s}return e},Ht=qt;function Ut(){this.handlers=[]}Ut.prototype.use=function(e,t,n){return this.handlers.push({fulfilled:e,rejected:t,synchronous:!!n&&n.synchronous,runWhen:n?n.runWhen:null}),this.handlers.length-1},Ut.prototype.eject=function(e){this.handlers[e]&&(this.handlers[e]=null)},Ut.prototype.forEach=function(e){Ht.forEach(this.handlers,(function(t){null!==t&&e(t)}))};var zt,Vt,Wt=Ut,Kt=qt;function Yt(){if(Vt)return zt;Vt=1;var e=qt;function t(e,t,n,s,r){Error.call(this),this.message=e,this.name="AxiosError",t&&(this.code=t),n&&(this.config=n),s&&(this.request=s),r&&(this.response=r)}e.inherits(t,Error,{toJSON:function(){return{message:this.message,name:this.name,description:this.description,number:this.number,fileName:this.fileName,lineNumber:this.lineNumber,columnNumber:this.columnNumber,stack:this.stack,config:this.config,code:this.code,status:this.response&&this.response.status?this.response.status:null}}});var n=t.prototype,s={};return["ERR_BAD_OPTION_VALUE","ERR_BAD_OPTION","ECONNABORTED","ETIMEDOUT","ERR_NETWORK","ERR_FR_TOO_MANY_REDIRECTS","ERR_DEPRECATED","ERR_BAD_RESPONSE","ERR_BAD_REQUEST","ERR_CANCELED"].forEach((function(e){s[e]={value:e}})),Object.defineProperties(t,s),Object.defineProperty(n,"isAxiosError",{value:!0}),t.from=function(s,r,i,o,a,l){var c=Object.create(n);return e.toFlatObject(s,c,(function(e){return e!==Error.prototype})),t.call(c,s.message,r,i,o,a),c.name=s.name,l&&Object.assign(c,l),c},zt=t}var Xt,Jt,Qt,Gt,Zt,en,tn={silentJSONParsing:!0,forcedJSONParsing:!0,clarifyTimeoutError:!1};function nn(){if(Jt)return Xt;Jt=1;var e=qt;return Xt=function(t,n){n=n||new FormData;var s=[];function r(t){return null===t?"":e.isDate(t)?t.toISOString():e.isArrayBuffer(t)||e.isTypedArray(t)?"function"==typeof Blob?new Blob([t]):Buffer.from(t):t}return function t(i,o){if(e.isPlainObject(i)||e.isArray(i)){if(-1!==s.indexOf(i))throw Error("Circular reference detected in "+o);s.push(i),e.forEach(i,(function(s,i){if(!e.isUndefined(s)){var a,l=o?o+"."+i:i;if(s&&!o&&"object"==typeof s)if(e.endsWith(i,"{}"))s=JSON.stringify(s);else if(e.endsWith(i,"[]")&&(a=e.toArray(s)))return void a.forEach((function(t){!e.isUndefined(t)&&n.append(l,r(t))}));t(s,l)}})),s.pop()}else n.append(o,r(i))}(t),n},Xt}function sn(){if(Gt)return Qt;Gt=1;var e=Yt();return Qt=function(t,n,s){var r=s.config.validateStatus;s.status&&r&&!r(s.status)?n(new e("Request failed with status code "+s.status,[e.ERR_BAD_REQUEST,e.ERR_BAD_RESPONSE][Math.floor(s.status/100)-4],s.config,s.request,s)):t(s)},Qt}function rn(){if(en)return Zt;en=1;var e=qt;return Zt=e.isStandardBrowserEnv()?{write:function(t,n,s,r,i,o){var a=[];a.push(t+"="+encodeURIComponent(n)),e.isNumber(s)&&a.push("expires="+new Date(s).toGMTString()),e.isString(r)&&a.push("path="+r),e.isString(i)&&a.push("domain="+i),!0===o&&a.push("secure"),document.cookie=a.join("; ")},read:function(e){var t=document.cookie.match(new RegExp("(^|;\\s*)("+e+")=([^;]*)"));return t?decodeURIComponent(t[3]):null},remove:function(e){this.write(e,"",Date.now()-864e5)}}:{write:function(){},read:function(){return null},remove:function(){}},Zt}var on,an,ln,cn,un,dn,fn,pn,hn,mn,gn,vn,yn=function(e){return/^([a-z][a-z\d+\-.]*:)?\/\//i.test(e)},$n=function(e,t){return t?e.replace(/\/+$/,"")+"/"+t.replace(/^\/+/,""):e},bn=function(e,t){return e&&!yn(t)?$n(e,t):t};function wn(){if(an)return on;an=1;var e=qt,t=["age","authorization","content-length","content-type","etag","expires","from","host","if-modified-since","if-unmodified-since","last-modified","location","max-forwards","proxy-authorization","referer","retry-after","user-agent"];return on=function(n){var s,r,i,o={};return n?(e.forEach(n.split("\n"),(function(n){if(i=n.indexOf(":"),s=e.trim(n.substr(0,i)).toLowerCase(),r=e.trim(n.substr(i+1)),s){if(o[s]&&t.indexOf(s)>=0)return;o[s]="set-cookie"===s?(o[s]?o[s]:[]).concat([r]):o[s]?o[s]+", "+r:r}})),o):o},on}function kn(){if(cn)return ln;cn=1;var e=qt;return ln=e.isStandardBrowserEnv()?function(){var t,n=/(msie|trident)/i.test(navigator.userAgent),s=document.createElement("a");function r(e){var t=e;return n&&(s.setAttribute("href",t),t=s.href),s.setAttribute("href",t),{href:s.href,protocol:s.protocol?s.protocol.replace(/:$/,""):"",host:s.host,search:s.search?s.search.replace(/^\?/,""):"",hash:s.hash?s.hash.replace(/^#/,""):"",hostname:s.hostname,port:s.port,pathname:"/"===s.pathname.charAt(0)?s.pathname:"/"+s.pathname}}return t=r(window.location.href),function(n){var s=e.isString(n)?r(n):n;return s.protocol===t.protocol&&s.host===t.host}}():function(){return!0},ln}function xn(){if(dn)return un;dn=1;var e=Yt();function t(t){e.call(this,null==t?"canceled":t,e.ERR_CANCELED),this.name="CanceledError"}return qt.inherits(t,e,{__CANCEL__:!0}),un=t}function _n(){return pn||(pn=1,fn=function(e){var t=/^([-+\w]{1,25})(:?\/\/|:)/.exec(e);return t&&t[1]||""}),fn}function In(){if(mn)return hn;mn=1;var e=qt,t=sn(),n=rn(),s=Dt,r=bn,i=wn(),o=kn(),a=tn,l=Yt(),c=xn(),u=_n();return hn=function(d){return new Promise((function(f,p){var h,m=d.data,g=d.headers,v=d.responseType;function y(){d.cancelToken&&d.cancelToken.unsubscribe(h),d.signal&&d.signal.removeEventListener("abort",h)}e.isFormData(m)&&e.isStandardBrowserEnv()&&delete g["Content-Type"];var $=new XMLHttpRequest;if(d.auth){var b=d.auth.username||"",w=d.auth.password?unescape(encodeURIComponent(d.auth.password)):"";g.Authorization="Basic "+btoa(b+":"+w)}var k=r(d.baseURL,d.url);function x(){if($){var e="getAllResponseHeaders"in $?i($.getAllResponseHeaders()):null,n={data:v&&"text"!==v&&"json"!==v?$.response:$.responseText,status:$.status,statusText:$.statusText,headers:e,config:d,request:$};t((function(e){f(e),y()}),(function(e){p(e),y()}),n),$=null}}if($.open(d.method.toUpperCase(),s(k,d.params,d.paramsSerializer),!0),$.timeout=d.timeout,"onloadend"in $?$.onloadend=x:$.onreadystatechange=function(){$&&4===$.readyState&&(0!==$.status||$.responseURL&&0===$.responseURL.indexOf("file:"))&&setTimeout(x)},$.onabort=function(){$&&(p(new l("Request aborted",l.ECONNABORTED,d,$)),$=null)},$.onerror=function(){p(new l("Network Error",l.ERR_NETWORK,d,$,$)),$=null},$.ontimeout=function(){var e=d.timeout?"timeout of "+d.timeout+"ms exceeded":"timeout exceeded",t=d.transitional||a;d.timeoutErrorMessage&&(e=d.timeoutErrorMessage),p(new l(e,t.clarifyTimeoutError?l.ETIMEDOUT:l.ECONNABORTED,d,$)),$=null},e.isStandardBrowserEnv()){var _=(d.withCredentials||o(k))&&d.xsrfCookieName?n.read(d.xsrfCookieName):void 0;_&&(g[d.xsrfHeaderName]=_)}"setRequestHeader"in $&&e.forEach(g,(function(e,t){void 0===m&&"content-type"===t.toLowerCase()?delete g[t]:$.setRequestHeader(t,e)})),e.isUndefined(d.withCredentials)||($.withCredentials=!!d.withCredentials),v&&"json"!==v&&($.responseType=d.responseType),"function"==typeof d.onDownloadProgress&&$.addEventListener("progress",d.onDownloadProgress),"function"==typeof d.onUploadProgress&&$.upload&&$.upload.addEventListener("progress",d.onUploadProgress),(d.cancelToken||d.signal)&&(h=function(e){$&&(p(!e||e&&e.type?new c:e),$.abort(),$=null)},d.cancelToken&&d.cancelToken.subscribe(h),d.signal&&(d.signal.aborted?h():d.signal.addEventListener("abort",h))),m||(m=null);var I=u(k);I&&-1===["http","https","file"].indexOf(I)?p(new l("Unsupported protocol "+I+":",l.ERR_BAD_REQUEST,d)):$.send(m)}))},hn}var Tn=qt,Cn=function(e,t){Kt.forEach(e,(function(n,s){s!==t&&s.toUpperCase()===t.toUpperCase()&&(e[t]=n,delete e[s])}))},En=Yt(),Nn=tn,Sn=nn(),An={"Content-Type":"application/x-www-form-urlencoded"};function Ln(e,t){!Tn.isUndefined(e)&&Tn.isUndefined(e["Content-Type"])&&(e["Content-Type"]=t)}var Rn,On={transitional:Nn,adapter:(("undefined"!=typeof XMLHttpRequest||"undefined"!=typeof process&&"[object process]"===Object.prototype.toString.call(process))&&(Rn=In()),Rn),transformRequest:[function(e,t){if(Cn(t,"Accept"),Cn(t,"Content-Type"),Tn.isFormData(e)||Tn.isArrayBuffer(e)||Tn.isBuffer(e)||Tn.isStream(e)||Tn.isFile(e)||Tn.isBlob(e))return e;if(Tn.isArrayBufferView(e))return e.buffer;if(Tn.isURLSearchParams(e))return Ln(t,"application/x-www-form-urlencoded;charset=utf-8"),e.toString();var n,s=Tn.isObject(e),r=t&&t["Content-Type"];if((n=Tn.isFileList(e))||s&&"multipart/form-data"===r){var i=this.env&&this.env.FormData;return Sn(n?{"files[]":e}:e,i&&new i)}return s||"application/json"===r?(Ln(t,"application/json"),function(e,t,n){if(Tn.isString(e))try{return(t||JSON.parse)(e),Tn.trim(e)}catch(e){if("SyntaxError"!==e.name)throw e}return(n||JSON.stringify)(e)}(e)):e}],transformResponse:[function(e){var t=this.transitional||On.transitional,n=t&&t.silentJSONParsing,s=t&&t.forcedJSONParsing,r=!n&&"json"===this.responseType;if(r||s&&Tn.isString(e)&&e.length)try{return JSON.parse(e)}catch(e){if(r){if("SyntaxError"===e.name)throw En.from(e,En.ERR_BAD_RESPONSE,this,null,this.response);throw e}}return e}],timeout:0,xsrfCookieName:"XSRF-TOKEN",xsrfHeaderName:"X-XSRF-TOKEN",maxContentLength:-1,maxBodyLength:-1,env:{FormData:vn?gn:(vn=1,gn=null)},validateStatus:function(e){return e>=200&&e<300},headers:{common:{Accept:"application/json, text/plain, */*"}}};Tn.forEach(["delete","get","head"],(function(e){On.headers[e]={}})),Tn.forEach(["post","put","patch"],(function(e){On.headers[e]=Tn.merge(An)}));var Pn,jn,Mn=On,qn=qt,Fn=Mn;function Bn(){return jn||(jn=1,Pn=function(e){return!(!e||!e.__CANCEL__)}),Pn}var Dn=qt,Hn=function(e,t,n){var s=this||Fn;return qn.forEach(n,(function(n){e=n.call(s,e,t)})),e},Un=Bn(),zn=Mn,Vn=xn();function Wn(e){if(e.cancelToken&&e.cancelToken.throwIfRequested(),e.signal&&e.signal.aborted)throw new Vn}var Kn,Yn,Xn=qt,Jn=function(e,t){t=t||{};var n={};function s(e,t){return Xn.isPlainObject(e)&&Xn.isPlainObject(t)?Xn.merge(e,t):Xn.isPlainObject(t)?Xn.merge({},t):Xn.isArray(t)?t.slice():t}function r(n){return Xn.isUndefined(t[n])?Xn.isUndefined(e[n])?void 0:s(void 0,e[n]):s(e[n],t[n])}function i(e){if(!Xn.isUndefined(t[e]))return s(void 0,t[e])}function o(n){return Xn.isUndefined(t[n])?Xn.isUndefined(e[n])?void 0:s(void 0,e[n]):s(void 0,t[n])}function a(n){return n in t?s(e[n],t[n]):n in e?s(void 0,e[n]):void 0}var l={url:i,method:i,data:i,baseURL:o,transformRequest:o,transformResponse:o,paramsSerializer:o,timeout:o,timeoutMessage:o,withCredentials:o,adapter:o,responseType:o,xsrfCookieName:o,xsrfHeaderName:o,onUploadProgress:o,onDownloadProgress:o,decompress:o,maxContentLength:o,maxBodyLength:o,beforeRedirect:o,transport:o,httpAgent:o,httpsAgent:o,cancelToken:o,socketPath:o,responseEncoding:o,validateStatus:a};return Xn.forEach(Object.keys(e).concat(Object.keys(t)),(function(e){var t=l[e]||r,s=t(e);Xn.isUndefined(s)&&t!==a||(n[e]=s)})),n};function Qn(){return Yn?Kn:(Yn=1,Kn={version:"0.27.2"})}var Gn=Qn().version,Zn=Yt(),es={};["object","boolean","number","function","string","symbol"].forEach((function(e,t){es[e]=function(n){return typeof n===e||"a"+(t<1?"n ":" ")+e}}));var ts={};es.transitional=function(e,t,n){function s(e,t){return"[Axios v"+Gn+"] Transitional option '"+e+"'"+t+(n?". "+n:"")}return function(n,r,i){if(!1===e)throw new Zn(s(r," has been removed"+(t?" in "+t:"")),Zn.ERR_DEPRECATED);return t&&!ts[r]&&(ts[r]=!0,console.warn(s(r," has been deprecated since v"+t+" and will be removed in the near future"))),!e||e(n,r,i)}};var ns,ss,rs,is,os,as,ls={assertOptions:function(e,t,n){if("object"!=typeof e)throw new Zn("options must be an object",Zn.ERR_BAD_OPTION_VALUE);for(var s=Object.keys(e),r=s.length;r-- >0;){var i=s[r],o=t[i];if(o){var a=e[i],l=void 0===a||o(a,i,e);if(!0!==l)throw new Zn("option "+i+" must be "+l,Zn.ERR_BAD_OPTION_VALUE)}else if(!0!==n)throw new Zn("Unknown option "+i,Zn.ERR_BAD_OPTION)}},validators:es},cs=qt,us=Dt,ds=Wt,fs=function(e){return Wn(e),e.headers=e.headers||{},e.data=Hn.call(e,e.data,e.headers,e.transformRequest),e.headers=Dn.merge(e.headers.common||{},e.headers[e.method]||{},e.headers),Dn.forEach(["delete","get","head","post","put","patch","common"],(function(t){delete e.headers[t]})),(e.adapter||zn.adapter)(e).then((function(t){return Wn(e),t.data=Hn.call(e,t.data,t.headers,e.transformResponse),t}),(function(t){return Un(t)||(Wn(e),t&&t.response&&(t.response.data=Hn.call(e,t.response.data,t.response.headers,e.transformResponse))),Promise.reject(t)}))},ps=Jn,hs=bn,ms=ls,gs=ms.validators;function vs(e){this.defaults=e,this.interceptors={request:new ds,response:new ds}}vs.prototype.request=function(e,t){"string"==typeof e?(t=t||{}).url=e:t=e||{},(t=ps(this.defaults,t)).method?t.method=t.method.toLowerCase():this.defaults.method?t.method=this.defaults.method.toLowerCase():t.method="get";var n=t.transitional;void 0!==n&&ms.assertOptions(n,{silentJSONParsing:gs.transitional(gs.boolean),forcedJSONParsing:gs.transitional(gs.boolean),clarifyTimeoutError:gs.transitional(gs.boolean)},!1);var s=[],r=!0;this.interceptors.request.forEach((function(e){"function"==typeof e.runWhen&&!1===e.runWhen(t)||(r=r&&e.synchronous,s.unshift(e.fulfilled,e.rejected))}));var i,o=[];if(this.interceptors.response.forEach((function(e){o.push(e.fulfilled,e.rejected)})),!r){var a=[fs,void 0];for(Array.prototype.unshift.apply(a,s),a=a.concat(o),i=Promise.resolve(t);a.length;)i=i.then(a.shift(),a.shift());return i}for(var l=t;s.length;){var c=s.shift(),u=s.shift();try{l=c(l)}catch(e){u(e);break}}try{i=fs(l)}catch(e){return Promise.reject(e)}for(;o.length;)i=i.then(o.shift(),o.shift());return i},vs.prototype.getUri=function(e){e=ps(this.defaults,e);var t=hs(e.baseURL,e.url);return us(t,e.params,e.paramsSerializer)},cs.forEach(["delete","get","head","options"],(function(e){vs.prototype[e]=function(t,n){return this.request(ps(n||{},{method:e,url:t,data:(n||{}).data}))}})),cs.forEach(["post","put","patch"],(function(e){function t(t){return function(n,s,r){return this.request(ps(r||{},{method:e,headers:t?{"Content-Type":"multipart/form-data"}:{},url:n,data:s}))}}vs.prototype[e]=t(),vs.prototype[e+"Form"]=t(!0)}));var ys=qt,$s=$t,bs=vs,ws=Jn;var ks=function e(t){var n=new bs(t),s=$s(bs.prototype.request,n);return ys.extend(s,bs.prototype,n),ys.extend(s,n),s.create=function(n){return e(ws(t,n))},s}(Mn);ks.Axios=bs,ks.CanceledError=xn(),ks.CancelToken=function(){if(ss)return ns;ss=1;var e=xn();function t(t){if("function"!=typeof t)throw new TypeError("executor must be a function.");var n;this.promise=new Promise((function(e){n=e}));var s=this;this.promise.then((function(e){if(s._listeners){var t,n=s._listeners.length;for(t=0;t<n;t++)s._listeners[t](e);s._listeners=null}})),this.promise.then=function(e){var t,n=new Promise((function(e){s.subscribe(e),t=e})).then(e);return n.cancel=function(){s.unsubscribe(t)},n},t((function(t){s.reason||(s.reason=new e(t),n(s.reason))}))}return t.prototype.throwIfRequested=function(){if(this.reason)throw this.reason},t.prototype.subscribe=function(e){this.reason?e(this.reason):this._listeners?this._listeners.push(e):this._listeners=[e]},t.prototype.unsubscribe=function(e){if(this._listeners){var t=this._listeners.indexOf(e);-1!==t&&this._listeners.splice(t,1)}},t.source=function(){var e;return{token:new t((function(t){e=t})),cancel:e}},ns=t}(),ks.isCancel=Bn(),ks.VERSION=Qn().version,ks.toFormData=nn(),ks.AxiosError=Yt(),ks.Cancel=ks.CanceledError,ks.all=function(e){return Promise.all(e)},ks.spread=is?rs:(is=1,rs=function(e){return function(t){return e.apply(null,t)}}),ks.isAxiosError=function(){if(as)return os;as=1;var e=qt;return os=function(t){return e.isObject(t)&&!0===t.isAxiosError}}(),yt.exports=ks,yt.exports.default=ks,vt.exports=yt.exports;var xs=gt(vt.exports);const _s=Object.create(null);_s.open="0",_s.close="1",_s.ping="2",_s.pong="3",_s.message="4",_s.upgrade="5",_s.noop="6";const Is=Object.create(null);Object.keys(_s).forEach((e=>{Is[_s[e]]=e}));const Ts={type:"error",data:"parser error"},Cs="function"==typeof Blob||"undefined"!=typeof Blob&&"[object BlobConstructor]"===Object.prototype.toString.call(Blob),Es="function"==typeof ArrayBuffer,Ns=({type:e,data:t},n,s)=>{return Cs&&t instanceof Blob?n?s(t):Ss(t,s):Es&&(t instanceof ArrayBuffer||(r=t,"function"==typeof ArrayBuffer.isView?ArrayBuffer.isView(r):r&&r.buffer instanceof ArrayBuffer))?n?s(t):Ss(new Blob([t]),s):s(_s[e]+(t||""));var r},Ss=(e,t)=>{const n=new FileReader;return n.onload=function(){const e=n.result.split(",")[1];t("b"+e)},n.readAsDataURL(e)},As="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",Ls="undefined"==typeof Uint8Array?[]:new Uint8Array(256);for(let e=0;e<As.length;e++)Ls[As.charCodeAt(e)]=e;const Rs="function"==typeof ArrayBuffer,Os=(e,t)=>{if("string"!=typeof e)return{type:"message",data:js(e,t)};const n=e.charAt(0);if("b"===n)return{type:"message",data:Ps(e.substring(1),t)};return Is[n]?e.length>1?{type:Is[n],data:e.substring(1)}:{type:Is[n]}:Ts},Ps=(e,t)=>{if(Rs){const n=(e=>{let t,n,s,r,i,o=.75*e.length,a=e.length,l=0;"="===e[e.length-1]&&(o--,"="===e[e.length-2]&&o--);const c=new ArrayBuffer(o),u=new Uint8Array(c);for(t=0;t<a;t+=4)n=Ls[e.charCodeAt(t)],s=Ls[e.charCodeAt(t+1)],r=Ls[e.charCodeAt(t+2)],i=Ls[e.charCodeAt(t+3)],u[l++]=n<<2|s>>4,u[l++]=(15&s)<<4|r>>2,u[l++]=(3&r)<<6|63&i;return c})(e);return js(n,t)}return{base64:!0,data:e}},js=(e,t)=>"blob"===t&&e instanceof ArrayBuffer?new Blob([e]):e,Ms=String.fromCharCode(30);function qs(e){if(e)return function(e){for(var t in qs.prototype)e[t]=qs.prototype[t];return e}(e)}qs.prototype.on=qs.prototype.addEventListener=function(e,t){return this._callbacks=this._callbacks||{},(this._callbacks["$"+e]=this._callbacks["$"+e]||[]).push(t),this},qs.prototype.once=function(e,t){function n(){this.off(e,n),t.apply(this,arguments)}return n.fn=t,this.on(e,n),this},qs.prototype.off=qs.prototype.removeListener=qs.prototype.removeAllListeners=qs.prototype.removeEventListener=function(e,t){if(this._callbacks=this._callbacks||{},0==arguments.length)return this._callbacks={},this;var n,s=this._callbacks["$"+e];if(!s)return this;if(1==arguments.length)return delete this._callbacks["$"+e],this;for(var r=0;r<s.length;r++)if((n=s[r])===t||n.fn===t){s.splice(r,1);break}return 0===s.length&&delete this._callbacks["$"+e],this},qs.prototype.emit=function(e){this._callbacks=this._callbacks||{};for(var t=new Array(arguments.length-1),n=this._callbacks["$"+e],s=1;s<arguments.length;s++)t[s-1]=arguments[s];if(n){s=0;for(var r=(n=n.slice(0)).length;s<r;++s)n[s].apply(this,t)}return this},qs.prototype.emitReserved=qs.prototype.emit,qs.prototype.listeners=function(e){return this._callbacks=this._callbacks||{},this._callbacks["$"+e]||[]},qs.prototype.hasListeners=function(e){return!!this.listeners(e).length};const Fs="undefined"!=typeof self?self:"undefined"!=typeof window?window:Function("return this")();function Bs(e,...t){return t.reduce(((t,n)=>(e.hasOwnProperty(n)&&(t[n]=e[n]),t)),{})}const Ds=setTimeout,Hs=clearTimeout;function Us(e,t){t.useNativeTimers?(e.setTimeoutFn=Ds.bind(Fs),e.clearTimeoutFn=Hs.bind(Fs)):(e.setTimeoutFn=setTimeout.bind(Fs),e.clearTimeoutFn=clearTimeout.bind(Fs))}class zs extends Error{constructor(e,t,n){super(e),this.description=t,this.context=n,this.type="TransportError"}}class Vs extends qs{constructor(e){super(),this.writable=!1,Us(this,e),this.opts=e,this.query=e.query,this.readyState="",this.socket=e.socket}onError(e,t,n){return super.emitReserved("error",new zs(e,t,n)),this}open(){return"closed"!==this.readyState&&""!==this.readyState||(this.readyState="opening",this.doOpen()),this}close(){return"opening"!==this.readyState&&"open"!==this.readyState||(this.doClose(),this.onClose()),this}send(e){"open"===this.readyState&&this.write(e)}onOpen(){this.readyState="open",this.writable=!0,super.emitReserved("open")}onData(e){const t=Os(e,this.socket.binaryType);this.onPacket(t)}onPacket(e){super.emitReserved("packet",e)}onClose(e){this.readyState="closed",super.emitReserved("close",e)}}const Ws="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_".split(""),Ks={};let Ys,Xs=0,Js=0;function Qs(e){let t="";do{t=Ws[e%64]+t,e=Math.floor(e/64)}while(e>0);return t}function Gs(){const e=Qs(+new Date);return e!==Ys?(Xs=0,Ys=e):e+"."+Qs(Xs++)}for(;Js<64;Js++)Ks[Ws[Js]]=Js;function Zs(e){let t="";for(let n in e)e.hasOwnProperty(n)&&(t.length&&(t+="&"),t+=encodeURIComponent(n)+"="+encodeURIComponent(e[n]));return t}let er=!1;try{er="undefined"!=typeof XMLHttpRequest&&"withCredentials"in new XMLHttpRequest}catch(e){}const tr=er;function nr(e){const t=e.xdomain;try{if("undefined"!=typeof XMLHttpRequest&&(!t||tr))return new XMLHttpRequest}catch(e){}if(!t)try{return new(Fs[["Active"].concat("Object").join("X")])("Microsoft.XMLHTTP")}catch(e){}}function sr(){}const rr=null!=new nr({xdomain:!1}).responseType;class ir extends qs{constructor(e,t){super(),Us(this,t),this.opts=t,this.method=t.method||"GET",this.uri=e,this.async=!1!==t.async,this.data=void 0!==t.data?t.data:null,this.create()}create(){const e=Bs(this.opts,"agent","pfx","key","passphrase","cert","ca","ciphers","rejectUnauthorized","autoUnref");e.xdomain=!!this.opts.xd,e.xscheme=!!this.opts.xs;const t=this.xhr=new nr(e);try{t.open(this.method,this.uri,this.async);try{if(this.opts.extraHeaders){t.setDisableHeaderCheck&&t.setDisableHeaderCheck(!0);for(let e in this.opts.extraHeaders)this.opts.extraHeaders.hasOwnProperty(e)&&t.setRequestHeader(e,this.opts.extraHeaders[e])}}catch(e){}if("POST"===this.method)try{t.setRequestHeader("Content-type","text/plain;charset=UTF-8")}catch(e){}try{t.setRequestHeader("Accept","*/*")}catch(e){}"withCredentials"in t&&(t.withCredentials=this.opts.withCredentials),this.opts.requestTimeout&&(t.timeout=this.opts.requestTimeout),t.onreadystatechange=()=>{4===t.readyState&&(200===t.status||1223===t.status?this.onLoad():this.setTimeoutFn((()=>{this.onError("number"==typeof t.status?t.status:0)}),0))},t.send(this.data)}catch(e){return void this.setTimeoutFn((()=>{this.onError(e)}),0)}"undefined"!=typeof document&&(this.index=ir.requestsCount++,ir.requests[this.index]=this)}onError(e){this.emitReserved("error",e,this.xhr),this.cleanup(!0)}cleanup(e){if(void 0!==this.xhr&&null!==this.xhr){if(this.xhr.onreadystatechange=sr,e)try{this.xhr.abort()}catch(e){}"undefined"!=typeof document&&delete ir.requests[this.index],this.xhr=null}}onLoad(){const e=this.xhr.responseText;null!==e&&(this.emitReserved("data",e),this.emitReserved("success"),this.cleanup())}abort(){this.cleanup()}}if(ir.requestsCount=0,ir.requests={},"undefined"!=typeof document)if("function"==typeof attachEvent)attachEvent("onunload",or);else if("function"==typeof addEventListener){addEventListener("onpagehide"in Fs?"pagehide":"unload",or,!1)}function or(){for(let e in ir.requests)ir.requests.hasOwnProperty(e)&&ir.requests[e].abort()}const ar="function"==typeof Promise&&"function"==typeof Promise.resolve?e=>Promise.resolve().then(e):(e,t)=>t(e,0),lr=Fs.WebSocket||Fs.MozWebSocket,cr="undefined"!=typeof navigator&&"string"==typeof navigator.product&&"reactnative"===navigator.product.toLowerCase();const ur={websocket:class extends Vs{constructor(e){super(e),this.supportsBinary=!e.forceBase64}get name(){return"websocket"}doOpen(){if(!this.check())return;const e=this.uri(),t=this.opts.protocols,n=cr?{}:Bs(this.opts,"agent","perMessageDeflate","pfx","key","passphrase","cert","ca","ciphers","rejectUnauthorized","localAddress","protocolVersion","origin","maxPayload","family","checkServerIdentity");this.opts.extraHeaders&&(n.headers=this.opts.extraHeaders);try{this.ws=cr?new lr(e,t,n):t?new lr(e,t):new lr(e)}catch(e){return this.emitReserved("error",e)}this.ws.binaryType=this.socket.binaryType||"arraybuffer",this.addEventListeners()}addEventListeners(){this.ws.onopen=()=>{this.opts.autoUnref&&this.ws._socket.unref(),this.onOpen()},this.ws.onclose=e=>this.onClose({description:"websocket connection closed",context:e}),this.ws.onmessage=e=>this.onData(e.data),this.ws.onerror=e=>this.onError("websocket error",e)}write(e){this.writable=!1;for(let t=0;t<e.length;t++){const n=e[t],s=t===e.length-1;Ns(n,this.supportsBinary,(e=>{try{this.ws.send(e)}catch(e){}s&&ar((()=>{this.writable=!0,this.emitReserved("drain")}),this.setTimeoutFn)}))}}doClose(){void 0!==this.ws&&(this.ws.close(),this.ws=null)}uri(){let e=this.query||{};const t=this.opts.secure?"wss":"ws";let n="";this.opts.port&&("wss"===t&&443!==Number(this.opts.port)||"ws"===t&&80!==Number(this.opts.port))&&(n=":"+this.opts.port),this.opts.timestampRequests&&(e[this.opts.timestampParam]=Gs()),this.supportsBinary||(e.b64=1);const s=Zs(e);return t+"://"+(-1!==this.opts.hostname.indexOf(":")?"["+this.opts.hostname+"]":this.opts.hostname)+n+this.opts.path+(s.length?"?"+s:"")}check(){return!!lr}},polling:class extends Vs{constructor(e){if(super(e),this.polling=!1,"undefined"!=typeof location){const t="https:"===location.protocol;let n=location.port;n||(n=t?"443":"80"),this.xd="undefined"!=typeof location&&e.hostname!==location.hostname||n!==e.port,this.xs=e.secure!==t}const t=e&&e.forceBase64;this.supportsBinary=rr&&!t}get name(){return"polling"}doOpen(){this.poll()}pause(e){this.readyState="pausing";const t=()=>{this.readyState="paused",e()};if(this.polling||!this.writable){let e=0;this.polling&&(e++,this.once("pollComplete",(function(){--e||t()}))),this.writable||(e++,this.once("drain",(function(){--e||t()})))}else t()}poll(){this.polling=!0,this.doPoll(),this.emitReserved("poll")}onData(e){((e,t)=>{const n=e.split(Ms),s=[];for(let e=0;e<n.length;e++){const r=Os(n[e],t);if(s.push(r),"error"===r.type)break}return s})(e,this.socket.binaryType).forEach((e=>{if("opening"===this.readyState&&"open"===e.type&&this.onOpen(),"close"===e.type)return this.onClose({description:"transport closed by the server"}),!1;this.onPacket(e)})),"closed"!==this.readyState&&(this.polling=!1,this.emitReserved("pollComplete"),"open"===this.readyState&&this.poll())}doClose(){const e=()=>{this.write([{type:"close"}])};"open"===this.readyState?e():this.once("open",e)}write(e){this.writable=!1,((e,t)=>{const n=e.length,s=new Array(n);let r=0;e.forEach(((e,i)=>{Ns(e,!1,(e=>{s[i]=e,++r===n&&t(s.join(Ms))}))}))})(e,(e=>{this.doWrite(e,(()=>{this.writable=!0,this.emitReserved("drain")}))}))}uri(){let e=this.query||{};const t=this.opts.secure?"https":"http";let n="";!1!==this.opts.timestampRequests&&(e[this.opts.timestampParam]=Gs()),this.supportsBinary||e.sid||(e.b64=1),this.opts.port&&("https"===t&&443!==Number(this.opts.port)||"http"===t&&80!==Number(this.opts.port))&&(n=":"+this.opts.port);const s=Zs(e);return t+"://"+(-1!==this.opts.hostname.indexOf(":")?"["+this.opts.hostname+"]":this.opts.hostname)+n+this.opts.path+(s.length?"?"+s:"")}request(e={}){return Object.assign(e,{xd:this.xd,xs:this.xs},this.opts),new ir(this.uri(),e)}doWrite(e,t){const n=this.request({method:"POST",data:e});n.on("success",t),n.on("error",((e,t)=>{this.onError("xhr post error",e,t)}))}doPoll(){const e=this.request();e.on("data",this.onData.bind(this)),e.on("error",((e,t)=>{this.onError("xhr poll error",e,t)})),this.pollXhr=e}}},dr=/^(?:(?![^:@]+:[^:@\/]*@)(http|https|ws|wss):\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?((?:[a-f0-9]{0,4}:){2,7}[a-f0-9]{0,4}|[^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/,fr=["source","protocol","authority","userInfo","user","password","host","port","relative","path","directory","file","query","anchor"];function pr(e){const t=e,n=e.indexOf("["),s=e.indexOf("]");-1!=n&&-1!=s&&(e=e.substring(0,n)+e.substring(n,s).replace(/:/g,";")+e.substring(s,e.length));let r=dr.exec(e||""),i={},o=14;for(;o--;)i[fr[o]]=r[o]||"";return-1!=n&&-1!=s&&(i.source=t,i.host=i.host.substring(1,i.host.length-1).replace(/;/g,":"),i.authority=i.authority.replace("[","").replace("]","").replace(/;/g,":"),i.ipv6uri=!0),i.pathNames=function(e,t){const n=/\/{2,9}/g,s=t.replace(n,"/").split("/");"/"!=t.substr(0,1)&&0!==t.length||s.splice(0,1);"/"==t.substr(t.length-1,1)&&s.splice(s.length-1,1);return s}(0,i.path),i.queryKey=function(e,t){const n={};return t.replace(/(?:^|&)([^&=]*)=?([^&]*)/g,(function(e,t,s){t&&(n[t]=s)})),n}(0,i.query),i}class hr extends qs{constructor(e,t={}){super(),e&&"object"==typeof e&&(t=e,e=null),e?(e=pr(e),t.hostname=e.host,t.secure="https"===e.protocol||"wss"===e.protocol,t.port=e.port,e.query&&(t.query=e.query)):t.host&&(t.hostname=pr(t.host).host),Us(this,t),this.secure=null!=t.secure?t.secure:"undefined"!=typeof location&&"https:"===location.protocol,t.hostname&&!t.port&&(t.port=this.secure?"443":"80"),this.hostname=t.hostname||("undefined"!=typeof location?location.hostname:"localhost"),this.port=t.port||("undefined"!=typeof location&&location.port?location.port:this.secure?"443":"80"),this.transports=t.transports||["polling","websocket"],this.readyState="",this.writeBuffer=[],this.prevBufferLen=0,this.opts=Object.assign({path:"/engine.io",agent:!1,withCredentials:!1,upgrade:!0,timestampParam:"t",rememberUpgrade:!1,rejectUnauthorized:!0,perMessageDeflate:{threshold:1024},transportOptions:{},closeOnBeforeunload:!0},t),this.opts.path=this.opts.path.replace(/\/$/,"")+"/","string"==typeof this.opts.query&&(this.opts.query=function(e){let t={},n=e.split("&");for(let e=0,s=n.length;e<s;e++){let s=n[e].split("=");t[decodeURIComponent(s[0])]=decodeURIComponent(s[1])}return t}(this.opts.query)),this.id=null,this.upgrades=null,this.pingInterval=null,this.pingTimeout=null,this.pingTimeoutTimer=null,"function"==typeof addEventListener&&(this.opts.closeOnBeforeunload&&addEventListener("beforeunload",(()=>{this.transport&&(this.transport.removeAllListeners(),this.transport.close())}),!1),"localhost"!==this.hostname&&(this.offlineEventListener=()=>{this.onClose("transport close",{description:"network connection lost"})},addEventListener("offline",this.offlineEventListener,!1))),this.open()}createTransport(e){const t=Object.assign({},this.opts.query);t.EIO=4,t.transport=e,this.id&&(t.sid=this.id);const n=Object.assign({},this.opts.transportOptions[e],this.opts,{query:t,socket:this,hostname:this.hostname,secure:this.secure,port:this.port});return new ur[e](n)}open(){let e;if(this.opts.rememberUpgrade&&hr.priorWebsocketSuccess&&-1!==this.transports.indexOf("websocket"))e="websocket";else{if(0===this.transports.length)return void this.setTimeoutFn((()=>{this.emitReserved("error","No transports available")}),0);e=this.transports[0]}this.readyState="opening";try{e=this.createTransport(e)}catch(e){return this.transports.shift(),void this.open()}e.open(),this.setTransport(e)}setTransport(e){this.transport&&this.transport.removeAllListeners(),this.transport=e,e.on("drain",this.onDrain.bind(this)).on("packet",this.onPacket.bind(this)).on("error",this.onError.bind(this)).on("close",(e=>this.onClose("transport close",e)))}probe(e){let t=this.createTransport(e),n=!1;hr.priorWebsocketSuccess=!1;const s=()=>{n||(t.send([{type:"ping",data:"probe"}]),t.once("packet",(e=>{if(!n)if("pong"===e.type&&"probe"===e.data){if(this.upgrading=!0,this.emitReserved("upgrading",t),!t)return;hr.priorWebsocketSuccess="websocket"===t.name,this.transport.pause((()=>{n||"closed"!==this.readyState&&(c(),this.setTransport(t),t.send([{type:"upgrade"}]),this.emitReserved("upgrade",t),t=null,this.upgrading=!1,this.flush())}))}else{const e=new Error("probe error");e.transport=t.name,this.emitReserved("upgradeError",e)}})))};function r(){n||(n=!0,c(),t.close(),t=null)}const i=e=>{const n=new Error("probe error: "+e);n.transport=t.name,r(),this.emitReserved("upgradeError",n)};function o(){i("transport closed")}function a(){i("socket closed")}function l(e){t&&e.name!==t.name&&r()}const c=()=>{t.removeListener("open",s),t.removeListener("error",i),t.removeListener("close",o),this.off("close",a),this.off("upgrading",l)};t.once("open",s),t.once("error",i),t.once("close",o),this.once("close",a),this.once("upgrading",l),t.open()}onOpen(){if(this.readyState="open",hr.priorWebsocketSuccess="websocket"===this.transport.name,this.emitReserved("open"),this.flush(),"open"===this.readyState&&this.opts.upgrade&&this.transport.pause){let e=0;const t=this.upgrades.length;for(;e<t;e++)this.probe(this.upgrades[e])}}onPacket(e){if("opening"===this.readyState||"open"===this.readyState||"closing"===this.readyState)switch(this.emitReserved("packet",e),this.emitReserved("heartbeat"),e.type){case"open":this.onHandshake(JSON.parse(e.data));break;case"ping":this.resetPingTimeout(),this.sendPacket("pong"),this.emitReserved("ping"),this.emitReserved("pong");break;case"error":const t=new Error("server error");t.code=e.data,this.onError(t);break;case"message":this.emitReserved("data",e.data),this.emitReserved("message",e.data)}}onHandshake(e){this.emitReserved("handshake",e),this.id=e.sid,this.transport.query.sid=e.sid,this.upgrades=this.filterUpgrades(e.upgrades),this.pingInterval=e.pingInterval,this.pingTimeout=e.pingTimeout,this.maxPayload=e.maxPayload,this.onOpen(),"closed"!==this.readyState&&this.resetPingTimeout()}resetPingTimeout(){this.clearTimeoutFn(this.pingTimeoutTimer),this.pingTimeoutTimer=this.setTimeoutFn((()=>{this.onClose("ping timeout")}),this.pingInterval+this.pingTimeout),this.opts.autoUnref&&this.pingTimeoutTimer.unref()}onDrain(){this.writeBuffer.splice(0,this.prevBufferLen),this.prevBufferLen=0,0===this.writeBuffer.length?this.emitReserved("drain"):this.flush()}flush(){if("closed"!==this.readyState&&this.transport.writable&&!this.upgrading&&this.writeBuffer.length){const e=this.getWritablePackets();this.transport.send(e),this.prevBufferLen=e.length,this.emitReserved("flush")}}getWritablePackets(){if(!(this.maxPayload&&"polling"===this.transport.name&&this.writeBuffer.length>1))return this.writeBuffer;let e=1;for(let n=0;n<this.writeBuffer.length;n++){const s=this.writeBuffer[n].data;if(s&&(e+="string"==typeof(t=s)?function(e){let t=0,n=0;for(let s=0,r=e.length;s<r;s++)t=e.charCodeAt(s),t<128?n+=1:t<2048?n+=2:t<55296||t>=57344?n+=3:(s++,n+=4);return n}(t):Math.ceil(1.33*(t.byteLength||t.size))),n>0&&e>this.maxPayload)return this.writeBuffer.slice(0,n);e+=2}var t;return this.writeBuffer}write(e,t,n){return this.sendPacket("message",e,t,n),this}send(e,t,n){return this.sendPacket("message",e,t,n),this}sendPacket(e,t,n,s){if("function"==typeof t&&(s=t,t=void 0),"function"==typeof n&&(s=n,n=null),"closing"===this.readyState||"closed"===this.readyState)return;(n=n||{}).compress=!1!==n.compress;const r={type:e,data:t,options:n};this.emitReserved("packetCreate",r),this.writeBuffer.push(r),s&&this.once("flush",s),this.flush()}close(){const e=()=>{this.onClose("forced close"),this.transport.close()},t=()=>{this.off("upgrade",t),this.off("upgradeError",t),e()},n=()=>{this.once("upgrade",t),this.once("upgradeError",t)};return"opening"!==this.readyState&&"open"!==this.readyState||(this.readyState="closing",this.writeBuffer.length?this.once("drain",(()=>{this.upgrading?n():e()})):this.upgrading?n():e()),this}onError(e){hr.priorWebsocketSuccess=!1,this.emitReserved("error",e),this.onClose("transport error",e)}onClose(e,t){"opening"!==this.readyState&&"open"!==this.readyState&&"closing"!==this.readyState||(this.clearTimeoutFn(this.pingTimeoutTimer),this.transport.removeAllListeners("close"),this.transport.close(),this.transport.removeAllListeners(),"function"==typeof removeEventListener&&removeEventListener("offline",this.offlineEventListener,!1),this.readyState="closed",this.id=null,this.emitReserved("close",e,t),this.writeBuffer=[],this.prevBufferLen=0)}filterUpgrades(e){const t=[];let n=0;const s=e.length;for(;n<s;n++)~this.transports.indexOf(e[n])&&t.push(e[n]);return t}}hr.protocol=4;const mr="function"==typeof ArrayBuffer,gr=Object.prototype.toString,vr="function"==typeof Blob||"undefined"!=typeof Blob&&"[object BlobConstructor]"===gr.call(Blob),yr="function"==typeof File||"undefined"!=typeof File&&"[object FileConstructor]"===gr.call(File);function $r(e){return mr&&(e instanceof ArrayBuffer||(e=>"function"==typeof ArrayBuffer.isView?ArrayBuffer.isView(e):e.buffer instanceof ArrayBuffer)(e))||vr&&e instanceof Blob||yr&&e instanceof File}function br(e,t){if(!e||"object"!=typeof e)return!1;if(Array.isArray(e)){for(let t=0,n=e.length;t<n;t++)if(br(e[t]))return!0;return!1}if($r(e))return!0;if(e.toJSON&&"function"==typeof e.toJSON&&1===arguments.length)return br(e.toJSON(),!0);for(const t in e)if(Object.prototype.hasOwnProperty.call(e,t)&&br(e[t]))return!0;return!1}function wr(e){const t=[],n=e.data,s=e;return s.data=kr(n,t),s.attachments=t.length,{packet:s,buffers:t}}function kr(e,t){if(!e)return e;if($r(e)){const n={_placeholder:!0,num:t.length};return t.push(e),n}if(Array.isArray(e)){const n=new Array(e.length);for(let s=0;s<e.length;s++)n[s]=kr(e[s],t);return n}if("object"==typeof e&&!(e instanceof Date)){const n={};for(const s in e)Object.prototype.hasOwnProperty.call(e,s)&&(n[s]=kr(e[s],t));return n}return e}function xr(e,t){return e.data=_r(e.data,t),e.attachments=void 0,e}function _r(e,t){if(!e)return e;if(e&&!0===e._placeholder){if("number"==typeof e.num&&e.num>=0&&e.num<t.length)return t[e.num];throw new Error("illegal attachments")}if(Array.isArray(e))for(let n=0;n<e.length;n++)e[n]=_r(e[n],t);else if("object"==typeof e)for(const n in e)Object.prototype.hasOwnProperty.call(e,n)&&(e[n]=_r(e[n],t));return e}var Ir;!function(e){e[e.CONNECT=0]="CONNECT",e[e.DISCONNECT=1]="DISCONNECT",e[e.EVENT=2]="EVENT",e[e.ACK=3]="ACK",e[e.CONNECT_ERROR=4]="CONNECT_ERROR",e[e.BINARY_EVENT=5]="BINARY_EVENT",e[e.BINARY_ACK=6]="BINARY_ACK"}(Ir||(Ir={}));class Tr extends qs{constructor(e){super(),this.reviver=e}add(e){let t;if("string"==typeof e){if(this.reconstructor)throw new Error("got plaintext data when reconstructing a packet");t=this.decodeString(e),t.type===Ir.BINARY_EVENT||t.type===Ir.BINARY_ACK?(this.reconstructor=new Cr(t),0===t.attachments&&super.emitReserved("decoded",t)):super.emitReserved("decoded",t)}else{if(!$r(e)&&!e.base64)throw new Error("Unknown type: "+e);if(!this.reconstructor)throw new Error("got binary data when not reconstructing a packet");t=this.reconstructor.takeBinaryData(e),t&&(this.reconstructor=null,super.emitReserved("decoded",t))}}decodeString(e){let t=0;const n={type:Number(e.charAt(0))};if(void 0===Ir[n.type])throw new Error("unknown packet type "+n.type);if(n.type===Ir.BINARY_EVENT||n.type===Ir.BINARY_ACK){const s=t+1;for(;"-"!==e.charAt(++t)&&t!=e.length;);const r=e.substring(s,t);if(r!=Number(r)||"-"!==e.charAt(t))throw new Error("Illegal attachments");n.attachments=Number(r)}if("/"===e.charAt(t+1)){const s=t+1;for(;++t;){if(","===e.charAt(t))break;if(t===e.length)break}n.nsp=e.substring(s,t)}else n.nsp="/";const s=e.charAt(t+1);if(""!==s&&Number(s)==s){const s=t+1;for(;++t;){const n=e.charAt(t);if(null==n||Number(n)!=n){--t;break}if(t===e.length)break}n.id=Number(e.substring(s,t+1))}if(e.charAt(++t)){const s=this.tryParse(e.substr(t));if(!Tr.isPayloadValid(n.type,s))throw new Error("invalid payload");n.data=s}return n}tryParse(e){try{return JSON.parse(e,this.reviver)}catch(e){return!1}}static isPayloadValid(e,t){switch(e){case Ir.CONNECT:return"object"==typeof t;case Ir.DISCONNECT:return void 0===t;case Ir.CONNECT_ERROR:return"string"==typeof t||"object"==typeof t;case Ir.EVENT:case Ir.BINARY_EVENT:return Array.isArray(t)&&t.length>0;case Ir.ACK:case Ir.BINARY_ACK:return Array.isArray(t)}}destroy(){this.reconstructor&&this.reconstructor.finishedReconstruction()}}class Cr{constructor(e){this.packet=e,this.buffers=[],this.reconPack=e}takeBinaryData(e){if(this.buffers.push(e),this.buffers.length===this.reconPack.attachments){const e=xr(this.reconPack,this.buffers);return this.finishedReconstruction(),e}return null}finishedReconstruction(){this.reconPack=null,this.buffers=[]}}var Er=Object.freeze({__proto__:null,protocol:5,get PacketType(){return Ir},Encoder:class{constructor(e){this.replacer=e}encode(e){return e.type!==Ir.EVENT&&e.type!==Ir.ACK||!br(e)?[this.encodeAsString(e)]:(e.type=e.type===Ir.EVENT?Ir.BINARY_EVENT:Ir.BINARY_ACK,this.encodeAsBinary(e))}encodeAsString(e){let t=""+e.type;return e.type!==Ir.BINARY_EVENT&&e.type!==Ir.BINARY_ACK||(t+=e.attachments+"-"),e.nsp&&"/"!==e.nsp&&(t+=e.nsp+","),null!=e.id&&(t+=e.id),null!=e.data&&(t+=JSON.stringify(e.data,this.replacer)),t}encodeAsBinary(e){const t=wr(e),n=this.encodeAsString(t.packet),s=t.buffers;return s.unshift(n),s}},Decoder:Tr});function Nr(e,t,n){return e.on(t,n),function(){e.off(t,n)}}const Sr=Object.freeze({connect:1,connect_error:1,disconnect:1,disconnecting:1,newListener:1,removeListener:1});class Ar extends qs{constructor(e,t,n){super(),this.connected=!1,this.receiveBuffer=[],this.sendBuffer=[],this.ids=0,this.acks={},this.flags={},this.io=e,this.nsp=t,n&&n.auth&&(this.auth=n.auth),this.io._autoConnect&&this.open()}get disconnected(){return!this.connected}subEvents(){if(this.subs)return;const e=this.io;this.subs=[Nr(e,"open",this.onopen.bind(this)),Nr(e,"packet",this.onpacket.bind(this)),Nr(e,"error",this.onerror.bind(this)),Nr(e,"close",this.onclose.bind(this))]}get active(){return!!this.subs}connect(){return this.connected||(this.subEvents(),this.io._reconnecting||this.io.open(),"open"===this.io._readyState&&this.onopen()),this}open(){return this.connect()}send(...e){return e.unshift("message"),this.emit.apply(this,e),this}emit(e,...t){if(Sr.hasOwnProperty(e))throw new Error('"'+e+'" is a reserved event name');t.unshift(e);const n={type:Ir.EVENT,data:t,options:{}};if(n.options.compress=!1!==this.flags.compress,"function"==typeof t[t.length-1]){const e=this.ids++,s=t.pop();this._registerAckCallback(e,s),n.id=e}const s=this.io.engine&&this.io.engine.transport&&this.io.engine.transport.writable;return this.flags.volatile&&(!s||!this.connected)||(this.connected?(this.notifyOutgoingListeners(n),this.packet(n)):this.sendBuffer.push(n)),this.flags={},this}_registerAckCallback(e,t){const n=this.flags.timeout;if(void 0===n)return void(this.acks[e]=t);const s=this.io.setTimeoutFn((()=>{delete this.acks[e];for(let t=0;t<this.sendBuffer.length;t++)this.sendBuffer[t].id===e&&this.sendBuffer.splice(t,1);t.call(this,new Error("operation has timed out"))}),n);this.acks[e]=(...e)=>{this.io.clearTimeoutFn(s),t.apply(this,[null,...e])}}packet(e){e.nsp=this.nsp,this.io._packet(e)}onopen(){"function"==typeof this.auth?this.auth((e=>{this.packet({type:Ir.CONNECT,data:e})})):this.packet({type:Ir.CONNECT,data:this.auth})}onerror(e){this.connected||this.emitReserved("connect_error",e)}onclose(e,t){this.connected=!1,delete this.id,this.emitReserved("disconnect",e,t)}onpacket(e){if(e.nsp===this.nsp)switch(e.type){case Ir.CONNECT:if(e.data&&e.data.sid){const t=e.data.sid;this.onconnect(t)}else this.emitReserved("connect_error",new Error("It seems you are trying to reach a Socket.IO server in v2.x with a v3.x client, but they are not compatible (more information here: https://socket.io/docs/v3/migrating-from-2-x-to-3-0/)"));break;case Ir.EVENT:case Ir.BINARY_EVENT:this.onevent(e);break;case Ir.ACK:case Ir.BINARY_ACK:this.onack(e);break;case Ir.DISCONNECT:this.ondisconnect();break;case Ir.CONNECT_ERROR:this.destroy();const t=new Error(e.data.message);t.data=e.data.data,this.emitReserved("connect_error",t)}}onevent(e){const t=e.data||[];null!=e.id&&t.push(this.ack(e.id)),this.connected?this.emitEvent(t):this.receiveBuffer.push(Object.freeze(t))}emitEvent(e){if(this._anyListeners&&this._anyListeners.length){const t=this._anyListeners.slice();for(const n of t)n.apply(this,e)}super.emit.apply(this,e)}ack(e){const t=this;let n=!1;return function(...s){n||(n=!0,t.packet({type:Ir.ACK,id:e,data:s}))}}onack(e){const t=this.acks[e.id];"function"==typeof t&&(t.apply(this,e.data),delete this.acks[e.id])}onconnect(e){this.id=e,this.connected=!0,this.emitBuffered(),this.emitReserved("connect")}emitBuffered(){this.receiveBuffer.forEach((e=>this.emitEvent(e))),this.receiveBuffer=[],this.sendBuffer.forEach((e=>{this.notifyOutgoingListeners(e),this.packet(e)})),this.sendBuffer=[]}ondisconnect(){this.destroy(),this.onclose("io server disconnect")}destroy(){this.subs&&(this.subs.forEach((e=>e())),this.subs=void 0),this.io._destroy(this)}disconnect(){return this.connected&&this.packet({type:Ir.DISCONNECT}),this.destroy(),this.connected&&this.onclose("io client disconnect"),this}close(){return this.disconnect()}compress(e){return this.flags.compress=e,this}get volatile(){return this.flags.volatile=!0,this}timeout(e){return this.flags.timeout=e,this}onAny(e){return this._anyListeners=this._anyListeners||[],this._anyListeners.push(e),this}prependAny(e){return this._anyListeners=this._anyListeners||[],this._anyListeners.unshift(e),this}offAny(e){if(!this._anyListeners)return this;if(e){const t=this._anyListeners;for(let n=0;n<t.length;n++)if(e===t[n])return t.splice(n,1),this}else this._anyListeners=[];return this}listenersAny(){return this._anyListeners||[]}onAnyOutgoing(e){return this._anyOutgoingListeners=this._anyOutgoingListeners||[],this._anyOutgoingListeners.push(e),this}prependAnyOutgoing(e){return this._anyOutgoingListeners=this._anyOutgoingListeners||[],this._anyOutgoingListeners.unshift(e),this}offAnyOutgoing(e){if(!this._anyOutgoingListeners)return this;if(e){const t=this._anyOutgoingListeners;for(let n=0;n<t.length;n++)if(e===t[n])return t.splice(n,1),this}else this._anyOutgoingListeners=[];return this}listenersAnyOutgoing(){return this._anyOutgoingListeners||[]}notifyOutgoingListeners(e){if(this._anyOutgoingListeners&&this._anyOutgoingListeners.length){const t=this._anyOutgoingListeners.slice();for(const n of t)n.apply(this,e.data)}}}function Lr(e){e=e||{},this.ms=e.min||100,this.max=e.max||1e4,this.factor=e.factor||2,this.jitter=e.jitter>0&&e.jitter<=1?e.jitter:0,this.attempts=0}Lr.prototype.duration=function(){var e=this.ms*Math.pow(this.factor,this.attempts++);if(this.jitter){var t=Math.random(),n=Math.floor(t*this.jitter*e);e=0==(1&Math.floor(10*t))?e-n:e+n}return 0|Math.min(e,this.max)},Lr.prototype.reset=function(){this.attempts=0},Lr.prototype.setMin=function(e){this.ms=e},Lr.prototype.setMax=function(e){this.max=e},Lr.prototype.setJitter=function(e){this.jitter=e};class Rr extends qs{constructor(e,t){var n;super(),this.nsps={},this.subs=[],e&&"object"==typeof e&&(t=e,e=void 0),(t=t||{}).path=t.path||"/socket.io",this.opts=t,Us(this,t),this.reconnection(!1!==t.reconnection),this.reconnectionAttempts(t.reconnectionAttempts||1/0),this.reconnectionDelay(t.reconnectionDelay||1e3),this.reconnectionDelayMax(t.reconnectionDelayMax||5e3),this.randomizationFactor(null!==(n=t.randomizationFactor)&&void 0!==n?n:.5),this.backoff=new Lr({min:this.reconnectionDelay(),max:this.reconnectionDelayMax(),jitter:this.randomizationFactor()}),this.timeout(null==t.timeout?2e4:t.timeout),this._readyState="closed",this.uri=e;const s=t.parser||Er;this.encoder=new s.Encoder,this.decoder=new s.Decoder,this._autoConnect=!1!==t.autoConnect,this._autoConnect&&this.open()}reconnection(e){return arguments.length?(this._reconnection=!!e,this):this._reconnection}reconnectionAttempts(e){return void 0===e?this._reconnectionAttempts:(this._reconnectionAttempts=e,this)}reconnectionDelay(e){var t;return void 0===e?this._reconnectionDelay:(this._reconnectionDelay=e,null===(t=this.backoff)||void 0===t||t.setMin(e),this)}randomizationFactor(e){var t;return void 0===e?this._randomizationFactor:(this._randomizationFactor=e,null===(t=this.backoff)||void 0===t||t.setJitter(e),this)}reconnectionDelayMax(e){var t;return void 0===e?this._reconnectionDelayMax:(this._reconnectionDelayMax=e,null===(t=this.backoff)||void 0===t||t.setMax(e),this)}timeout(e){return arguments.length?(this._timeout=e,this):this._timeout}maybeReconnectOnOpen(){!this._reconnecting&&this._reconnection&&0===this.backoff.attempts&&this.reconnect()}open(e){if(~this._readyState.indexOf("open"))return this;this.engine=new hr(this.uri,this.opts);const t=this.engine,n=this;this._readyState="opening",this.skipReconnect=!1;const s=Nr(t,"open",(function(){n.onopen(),e&&e()})),r=Nr(t,"error",(t=>{n.cleanup(),n._readyState="closed",this.emitReserved("error",t),e?e(t):n.maybeReconnectOnOpen()}));if(!1!==this._timeout){const e=this._timeout;0===e&&s();const n=this.setTimeoutFn((()=>{s(),t.close(),t.emit("error",new Error("timeout"))}),e);this.opts.autoUnref&&n.unref(),this.subs.push((function(){clearTimeout(n)}))}return this.subs.push(s),this.subs.push(r),this}connect(e){return this.open(e)}onopen(){this.cleanup(),this._readyState="open",this.emitReserved("open");const e=this.engine;this.subs.push(Nr(e,"ping",this.onping.bind(this)),Nr(e,"data",this.ondata.bind(this)),Nr(e,"error",this.onerror.bind(this)),Nr(e,"close",this.onclose.bind(this)),Nr(this.decoder,"decoded",this.ondecoded.bind(this)))}onping(){this.emitReserved("ping")}ondata(e){this.decoder.add(e)}ondecoded(e){this.emitReserved("packet",e)}onerror(e){this.emitReserved("error",e)}socket(e,t){let n=this.nsps[e];return n||(n=new Ar(this,e,t),this.nsps[e]=n),n}_destroy(e){const t=Object.keys(this.nsps);for(const e of t){if(this.nsps[e].active)return}this._close()}_packet(e){const t=this.encoder.encode(e);for(let n=0;n<t.length;n++)this.engine.write(t[n],e.options)}cleanup(){this.subs.forEach((e=>e())),this.subs.length=0,this.decoder.destroy()}_close(){this.skipReconnect=!0,this._reconnecting=!1,this.onclose("forced close"),this.engine&&this.engine.close()}disconnect(){return this._close()}onclose(e,t){this.cleanup(),this.backoff.reset(),this._readyState="closed",this.emitReserved("close",e,t),this._reconnection&&!this.skipReconnect&&this.reconnect()}reconnect(){if(this._reconnecting||this.skipReconnect)return this;const e=this;if(this.backoff.attempts>=this._reconnectionAttempts)this.backoff.reset(),this.emitReserved("reconnect_failed"),this._reconnecting=!1;else{const t=this.backoff.duration();this._reconnecting=!0;const n=this.setTimeoutFn((()=>{e.skipReconnect||(this.emitReserved("reconnect_attempt",e.backoff.attempts),e.skipReconnect||e.open((t=>{t?(e._reconnecting=!1,e.reconnect(),this.emitReserved("reconnect_error",t)):e.onreconnect()})))}),t);this.opts.autoUnref&&n.unref(),this.subs.push((function(){clearTimeout(n)}))}}onreconnect(){const e=this.backoff.attempts;this._reconnecting=!1,this.backoff.reset(),this.emitReserved("reconnect",e)}}const Or={};function Pr(e,t){"object"==typeof e&&(t=e,e=void 0);const n=function(e,t="",n){let s=e;n=n||"undefined"!=typeof location&&location,null==e&&(e=n.protocol+"//"+n.host),"string"==typeof e&&("/"===e.charAt(0)&&(e="/"===e.charAt(1)?n.protocol+e:n.host+e),/^(https?|wss?):\/\//.test(e)||(e=void 0!==n?n.protocol+"//"+e:"https://"+e),s=pr(e)),s.port||(/^(http|ws)$/.test(s.protocol)?s.port="80":/^(http|ws)s$/.test(s.protocol)&&(s.port="443")),s.path=s.path||"/";const r=-1!==s.host.indexOf(":")?"["+s.host+"]":s.host;return s.id=s.protocol+"://"+r+":"+s.port+t,s.href=s.protocol+"://"+r+(n&&n.port===s.port?"":":"+s.port),s}(e,(t=t||{}).path||"/socket.io"),s=n.source,r=n.id,i=n.path,o=Or[r]&&i in Or[r].nsps;let a;return t.forceNew||t["force new connection"]||!1===t.multiplex||o?a=new Rr(s,t):(Or[r]||(Or[r]=new Rr(s,t)),a=Or[r]),n.query&&!t.query&&(t.query=n.queryKey),a.socket(n.path,t)}Object.assign(Pr,{Manager:Rr,Socket:Ar,io:Pr,connect:Pr});const jr=Be(function(e){let t=localStorage.getItem(e);if("undefined"===t)return{};try{t=JSON.parse(t)}catch(e){console.log(e)}return t}("config")||{order:{Content:"",Mangas:"",Videos:"'"},items:0}),Mr=async e=>(jr.update((t=>e)),function(e,t){localStorage.setItem(e,JSON.stringify(t))}("config",e),e);function qr(e){let t,n,s,r,o,a,l,c,u,d,f,p,h,m,g,v,y,$,b,w,k;return{c(){t=A("div"),n=A("div"),s=A("div"),s.innerHTML='<label for="orderby" class="input-group-text svelte-1kmdy4">Sort By:</label>',r=R(),o=A("select"),a=A("option"),a.textContent=" Name",l=A("option"),l.textContent=" Name",c=A("option"),c.textContent=" Date",u=A("option"),u.textContent=" Date",d=R(),f=A("div"),p=A("div"),p.innerHTML='<label for="items" class="input-group-text svelte-1kmdy4">File per Page:</label>',h=R(),m=A("input"),g=R(),v=A("span"),v.textContent="0 = auto, max 500",y=R(),$=A("div"),b=A("span"),b.textContent="Save",q(s,"class","input-group-prepend svelte-1kmdy4"),a.__value="nu",a.value=a.__value,q(a,"class","svelte-1kmdy4"),l.__value="nd",l.value=l.__value,q(l,"class","svelte-1kmdy4"),c.__value="du",c.value=c.__value,q(c,"class","svelte-1kmdy4"),u.__value="dd",u.value=u.__value,q(u,"class","svelte-1kmdy4"),q(o,"id","orderby"),q(o,"class","form-control fa svelte-1kmdy4"),void 0===e[1].order[document.title.split(" ")[0]]&&pe((()=>e[4].call(o))),q(n,"class","input-group svelte-1kmdy4"),q(p,"class","input-group-prepend svelte-1kmdy4"),q(m,"id","items"),q(m,"type","number"),q(m,"min","0"),q(m,"max","500"),q(m,"class","form-control svelte-1kmdy4"),q(v,"id","fpp-tips"),q(v,"class","svelte-1kmdy4"),q(f,"class","input-group svelte-1kmdy4"),q(b,"id","btn-save"),q(b,"class","btn svelte-1kmdy4"),q($,"class","bottom-controls svelte-1kmdy4"),q(t,"id","config-content"),q(t,"class","svelte-1kmdy4")},m(i,x){E(i,t,x),I(t,n),I(n,s),I(n,r),I(n,o),I(o,a),I(o,l),I(o,c),I(o,u),z(o,e[1].order[document.title.split(" ")[0]]),I(t,d),I(t,f),I(f,p),I(f,h),I(f,m),H(m,e[1].items),I(f,g),I(f,v),I(t,y),I(t,$),I($,b),w||(k=[P(o,"change",e[4]),P(m,"input",e[5]),P(b,"click",e[2])],w=!0)},p(e,t){2&t&&z(o,e[1].order[document.title.split(" ")[0]]),2&t&&B(m.value)!==e[1].items&&H(m,e[1].items)},d(e){e&&N(t),w=!1,i(k)}}}function Fr(t){let n,s,r,i,o,a,l,c,u,d,f,p,h,m,g,v,$=t[0].username+"",b=!t[0].role.includes("Administrator"),w=b&&qr(t);return{c(){n=A("label"),s=A("i"),r=R(),i=A("span"),o=L($),l=R(),c=A("input"),u=R(),d=A("div"),f=A("div"),p=A("span"),p.innerHTML='<i class="fas fa-sign-out-alt"></i> Log out',h=R(),w&&w.c(),q(s,"class","fas fa-user-cog"),q(i,"class","nav-title svelte-1kmdy4"),q(n,"id","user-label"),q(n,"class",a=y(t[0].role)+" svelte-1kmdy4"),q(n,"for","show-config"),q(c,"type","checkbox"),q(c,"name",""),q(c,"id","show-config"),q(c,"class","svelte-1kmdy4"),q(p,"class","svelte-1kmdy4"),q(f,"id","sep"),q(f,"class","svelte-1kmdy4"),q(d,"id","user-config"),q(d,"class",m=y(t[0].role.includes("User")?"user-config":"admin-config")+" svelte-1kmdy4")},m(e,a){E(e,n,a),I(n,s),I(n,r),I(n,i),I(i,o),E(e,l,a),E(e,c,a),E(e,u,a),E(e,d,a),I(d,f),I(f,p),I(d,h),w&&w.m(d,null),g||(v=P(p,"click",t[3]),g=!0)},p(e,[t]){1&t&&$!==($=e[0].username+"")&&D(o,$),1&t&&a!==(a=y(e[0].role)+" svelte-1kmdy4")&&q(n,"class",a),1&t&&(b=!e[0].role.includes("Administrator")),b?w?w.p(e,t):(w=qr(e),w.c(),w.m(d,null)):w&&(w.d(1),w=null),1&t&&m!==(m=y(e[0].role.includes("User")?"user-config":"admin-config")+" svelte-1kmdy4")&&q(d,"class",m)},i:e,o:e,d(e){e&&N(n),e&&N(l),e&&N(c),e&&N(u),e&&N(d),w&&w.d(),g=!1,v()}}}function Br(e,t,n){let s;d(e,jr,(e=>n(7,s=e)));let{User:r}=t;document.title.split(" ")[0];const i={...s};return new MutationObserver((([{target:e}])=>document.title.split(" ")[0])).observe(document.querySelector("title"),{childList:!0}),e.$$set=e=>{"User"in e&&n(0,r=e.User)},[r,i,()=>{Mr(i)},function(t){oe.call(this,e,t)},function(){i.order[document.title.split(" ")[0]]=V(this),n(1,i)},function(){i.items=B(this.value),n(1,i)}]}class Dr extends qe{constructor(e){super(),Me(this,e,Br,Fr,a,{User:0})}}const Hr=Be(!1);function Ur(e,t,n){const s=e.slice();return s[10]=t[n],s}function zr(e,t,n){const s=e.slice();return s[13]=t[n].Id,s[14]=t[n].Name,s}function Vr(e){let t,n,s,r;return n=new mt({props:{to:e[10].path,getProps:Zr,$$slots:{default:[Kr]},$$scope:{ctx:e}}}),{c(){t=A("li"),Re(n.$$.fragment),s=R(),q(t,"class","nav-item svelte-18k938q")},m(e,i){E(e,t,i),Oe(n,t,null),I(t,s),r=!0},p(e,t){const s={};1&t&&(s.to=e[10].path),131073&t&&(s.$$scope={dirty:t,ctx:e}),n.$set(s)},i(e){r||(Ie(n.$$.fragment,e),r=!0)},o(e){Te(n.$$.fragment,e),r=!1},d(e){e&&N(t),Pe(n)}}}function Wr(e){let t,n,s=e[1]&&Yr(e);return{c(){s&&s.c(),t=O()},m(e,r){s&&s.m(e,r),E(e,t,r),n=!0},p(e,n){e[1]?s?(s.p(e,n),2&n&&Ie(s,1)):(s=Yr(e),s.c(),Ie(s,1),s.m(t.parentNode,t)):s&&(xe(),Te(s,1,1,(()=>{s=null})),_e())},i(e){n||(Ie(s),n=!0)},o(e){Te(s),n=!1},d(e){s&&s.d(e),e&&N(t)}}}function Kr(e){let t,n,s,r,i,o=e[10].title+"";return{c(){t=A("i"),s=R(),r=A("span"),i=L(o),q(t,"class",n=y("fas fa-"+e[10].class)+" svelte-18k938q"),q(r,"class","nav-title svelte-18k938q")},m(e,n){E(e,t,n),E(e,s,n),E(e,r,n),I(r,i)},p(e,s){1&s&&n!==(n=y("fas fa-"+e[10].class)+" svelte-18k938q")&&q(t,"class",n),1&s&&o!==(o=e[10].title+"")&&D(i,o)},d(e){e&&N(t),e&&N(s),e&&N(r)}}}function Yr(e){let t,n,s,r;return n=new mt({props:{to:e[10].path+"/"+e[2][e[10].title],getProps:Zr,$$slots:{default:[Jr]},$$scope:{ctx:e}}}),{c(){t=A("li"),Re(n.$$.fragment),s=R(),q(t,"class","nav-item svelte-18k938q")},m(e,i){E(e,t,i),Oe(n,t,null),I(t,s),r=!0},p(e,t){const s={};5&t&&(s.to=e[10].path+"/"+e[2][e[10].title]),131079&t&&(s.$$scope={dirty:t,ctx:e}),n.$set(s)},i(e){r||(Ie(n.$$.fragment,e),r=!0)},o(e){Te(n.$$.fragment,e),r=!1},d(e){e&&N(t),Pe(n)}}}function Xr(e){let t,n,s,r,i,o,a,l=e[14]+"";return{c(){t=A("li"),n=L(l),s=R(),q(t,"class","list-item svelte-18k938q"),q(t,"id",r=e[13]),q(t,"title",i=e[10].title),W(t,"selected",e[13]===e[2][e[10].title])},m(r,i){E(r,t,i),I(t,n),I(t,s),o||(a=P(t,"click",e[5]),o=!0)},p(e,s){3&s&&l!==(l=e[14]+"")&&D(n,l),3&s&&r!==(r=e[13])&&q(t,"id",r),1&s&&i!==(i=e[10].title)&&q(t,"title",i),7&s&&W(t,"selected",e[13]===e[2][e[10].title])},d(e){e&&N(t),o=!1,a()}}}function Jr(e){let t,n,s,r,i,o,a,l,c=e[10].title+"";function u(...t){return e[6](e[10],...t)}let d=e[1][e[10].title].filter(u),f=[];for(let t=0;t<d.length;t+=1)f[t]=Xr(zr(e,d,t));return{c(){t=A("span"),n=A("i"),r=R(),i=A("span"),o=L(c),a=R(),l=A("ul");for(let e=0;e<f.length;e+=1)f[e].c();q(n,"class",s=y("fas fa-"+e[10].class)+" svelte-18k938q"),q(i,"class","nav-title svelte-18k938q"),q(l,"class","down-list svelte-18k938q"),q(t,"class","fa-icon svelte-18k938q")},m(e,s){E(e,t,s),I(t,n),I(t,r),I(t,i),I(i,o),I(t,a),I(t,l);for(let e=0;e<f.length;e+=1)f[e].m(l,null)},p(t,r){if(e=t,1&r&&s!==(s=y("fas fa-"+e[10].class)+" svelte-18k938q")&&q(n,"class",s),1&r&&c!==(c=e[10].title+"")&&D(o,c),39&r){let t;for(d=e[1][e[10].title].filter(u),t=0;t<d.length;t+=1){const n=zr(e,d,t);f[t]?f[t].p(n,r):(f[t]=Xr(n),f[t].c(),f[t].m(l,null))}for(;t<f.length;t+=1)f[t].d(1);f.length=d.length}},d(e){e&&N(t),S(f,e)}}}function Qr(e){let t,n,s,r,i;const o=[Wr,Vr],a=[];function l(e,n){return 1&n&&(t=null),null==t&&(t=!!["Mangas","Videos"].includes(e[10].title)),t?0:1}return n=l(e,-1),s=a[n]=o[n](e),{c(){s.c(),r=O()},m(e,t){a[n].m(e,t),E(e,r,t),i=!0},p(e,t){let i=n;n=l(e,t),n===i?a[n].p(e,t):(xe(),Te(a[i],1,1,(()=>{a[i]=null})),_e(),s=a[n],s?s.p(e,t):(s=a[n]=o[n](e),s.c()),Ie(s,1),s.m(r.parentNode,r))},i(e){i||(Ie(s),i=!0)},o(e){Te(s),i=!1},d(e){a[n].d(e),e&&N(r)}}}function Gr(e){let t,n,s,r,i,o,a,l=e[0],c=[];for(let t=0;t<l.length;t+=1)c[t]=Qr(Ur(e,l,t));const u=e=>Te(c[e],1,1,(()=>{c[e]=null}));return o=new Dr({props:{User:e[4]}}),o.$on("click",e[7]),{c(){t=A("nav"),n=A("ul");for(let e=0;e<c.length;e+=1)c[e].c();s=R(),r=A("ul"),i=A("li"),Re(o.$$.fragment),q(n,"class","navbar-nav svelte-18k938q"),q(i,"id","p-config"),q(i,"class","nav-item svelte-18k938q"),q(r,"class","navbar-nav svelte-18k938q"),q(t,"id","menu"),q(t,"class","navbar svelte-18k938q"),W(t,"hide",e[3])},m(e,l){E(e,t,l),I(t,n);for(let e=0;e<c.length;e+=1)c[e].m(n,null);I(t,s),I(t,r),I(r,i),Oe(o,i,null),a=!0},p(e,[s]){if(39&s){let t;for(l=e[0],t=0;t<l.length;t+=1){const r=Ur(e,l,t);c[t]?(c[t].p(r,s),Ie(c[t],1)):(c[t]=Qr(r),c[t].c(),Ie(c[t],1),c[t].m(n,null))}for(xe(),t=l.length;t<c.length;t+=1)u(t);_e()}8&s&&W(t,"hide",e[3])},i(e){if(!a){for(let e=0;e<l.length;e+=1)Ie(c[e]);Ie(o.$$.fragment,e),a=!0}},o(e){c=c.filter(Boolean);for(let e=0;e<c.length;e+=1)Te(c[e]);Te(o.$$.fragment,e),a=!1},d(e){e&&N(t),S(c,e),Pe(o)}}}function Zr({location:e,href:t,isPartiallyCurrent:n,isCurrent:s}){let r=!1;return"/"===t&&"/"===e.pathname&&(r=!0),"/"!==t&&n&&(r=!0),r?{class:"active"}:{}}function ei(e,t,n){let{navItems:s}=t;const r=(e,t)=>e.Name.localeCompare(t.Name),i=ie("User");let o,a={Mangas:"",Videos:""},l=!1,c=Hr.subscribe((e=>{n(3,l=e)}));ne(c);return e.$$set=e=>{"navItems"in e&&n(0,s=e.navItems)},e.$$.update=()=>{2&e.$$.dirty&&(o||xs.get("/api/files/dirs/").then((({data:e})=>{if(e instanceof Array){let t=(e||[]).filter((e=>"Mangas"===e.Type)).sort(r),s=(e||[]).filter((e=>"Videos"===e.Type)).sort(r);n(1,o={Mangas:t,Videos:s}),n(2,a={Mangas:t[0]?t[0].Id:"",Videos:s[0]?s[0].Id:""})}})))},[s,o,a,l,i,({target:{id:e,title:t}})=>{n(2,a[t]=e,a)},(e,t)=>t.Type===e.title,function(t){oe.call(this,e,t)}]}class ti extends qe{constructor(e){super(),Me(this,e,ei,Gr,a,{navItems:0})}}function ni(e){const t=e-1;return t*t*t+1}function si(e,{delay:n=0,duration:s=400,easing:r=t}={}){const i=+getComputedStyle(e).opacity;return{delay:n,duration:s,easing:r,css:e=>"opacity: "+e*i}}function ri(e,{delay:t=0,duration:n=400,easing:s=ni,x:r=0,y:i=0,opacity:o=0}={}){const a=getComputedStyle(e),l=+a.opacity,c="none"===a.transform?"":a.transform,u=l*(1-o);return{delay:t,duration:n,easing:s,css:(e,t)=>`\n\t\t\ttransform: ${c} translate(${(1-e)*r}px, ${(1-e)*i}px);\n\t\t\topacity: ${l-u*t}`}}function ii(e){let t,n,s,r,o,a,l,c,u,d,f,p,h,m,g,v,y,$,b,w,k,x,_,T,C,S,O,j,M,F,B,U,V,W,K,Y,X,J,Q,G,Z,ee,te,ne,se,re,ie,oe,ae,le,ce,ue,de,fe,he=e[0].Id?"Edit":"Create",me=e[0].Id?"Update":"Save";return{c(){t=A("div"),n=A("div"),s=A("div"),r=A("h3"),o=L(he),a=R(),l=A("div"),c=A("input"),u=R(),d=A("div"),f=A("div"),f.innerHTML='<label for="Name" class="input-group-text svelte-13h6j0"><i class="fas fa-user svelte-13h6j0"></i></label>',p=R(),h=A("input"),m=R(),g=A("div"),v=A("div"),v.innerHTML='<label for="Password" class="input-group-text svelte-13h6j0"><i class="fas fa-key svelte-13h6j0"></i></label>',y=R(),$=A("input"),b=R(),w=A("div"),k=A("div"),k.innerHTML='<label for="Role" class="input-group-text">Role</label>',x=R(),_=A("select"),T=A("option"),T.textContent="User",C=A("option"),C.textContent="Administrator",S=A("option"),S.textContent="Manager",O=R(),j=A("div"),M=A("div"),F=A("div"),F.innerHTML='<label for="State" class="input-group-text">Status</label>',B=R(),U=A("select"),V=A("option"),V.textContent="Active",W=A("option"),W.textContent="Inactive",K=R(),Y=A("div"),X=A("div"),X.innerHTML='<label for="Adult" class="input-group-text">Adult</label>',J=R(),Q=A("input"),G=R(),Z=A("label"),Z.innerHTML='<i class="fas fa-times svelte-13h6j0"></i>',ee=R(),te=A("div"),ne=L(e[1]),se=R(),re=A("div"),ie=A("button"),ie.textContent="Cancel",oe=R(),ae=A("button"),le=L(me),q(s,"class","modal-header"),q(c,"type","hidden"),q(c,"name","Id"),q(c,"class","svelte-13h6j0"),q(f,"class","input-group-prepend"),q(h,"class","form-control svelte-13h6j0"),q(h,"type","text"),q(h,"name","Name"),q(d,"class","input-group"),q(v,"class","input-group-prepend"),q($,"class","form-control svelte-13h6j0"),q($,"type","password"),q($,"autocomplete","new-password"),q(g,"class","input-group"),q(k,"class","input-group-prepend"),T.__value="User",T.value=T.__value,C.__value="Administrator",C.value=C.__value,S.__value="Manager",S.value=S.__value,q(_,"class","form-control"),q(_,"name","Role"),void 0===e[0].Role&&pe((()=>e[7].call(_))),q(w,"class","input-group"),q(F,"class","input-group-prepend"),V.__value="Active",V.value=V.__value,W.__value="Inactive",W.value=W.__value,q(U,"class","form-control"),q(U,"name","State"),void 0===e[0].Status&&pe((()=>e[8].call(U))),q(M,"class","first-ctrl input-group svelte-13h6j0"),q(X,"class","input-group-prepend"),q(Q,"id","Adult"),q(Q,"type","checkbox"),q(Q,"class","svelte-13h6j0"),q(Z,"for","Adult"),q(Z,"class","form-control checkadult svelte-13h6j0"),q(Y,"class","second-ctrl input-group svelte-13h6j0"),q(j,"class","input-grouping svelte-13h6j0"),q(te,"class","errors"),q(l,"class","modal-body"),q(ie,"class","btn"),q(ae,"class","btn"),q(re,"class","modal-footer"),q(n,"class","modal card svelte-13h6j0"),q(t,"class","modal-container")},m(i,N){E(i,t,N),I(t,n),I(n,s),I(s,r),I(r,o),I(n,a),I(n,l),I(l,c),H(c,e[0].Id),I(l,u),I(l,d),I(d,f),I(d,p),I(d,h),H(h,e[0].Name),I(l,m),I(l,g),I(g,v),I(g,y),I(g,$),H($,e[0].Password),I(l,b),I(l,w),I(w,k),I(w,x),I(w,_),I(_,T),I(_,C),I(_,S),z(_,e[0].Role),I(l,O),I(l,j),I(j,M),I(M,F),I(M,B),I(M,U),I(U,V),I(U,W),z(U,e[0].Status),I(j,K),I(j,Y),I(Y,X),I(Y,J),I(Y,Q),Q.checked=e[0].AdultPass,I(Y,G),I(Y,Z),I(l,ee),I(l,te),I(te,ne),I(n,se),I(n,re),I(re,ie),I(re,oe),I(re,ae),I(ae,le),ue=!0,de||(fe=[P(c,"input",e[4]),P(h,"input",e[5]),P($,"input",e[6]),P(_,"change",e[7]),P(U,"change",e[8]),P(Q,"change",e[9]),P(ie,"click",e[3]),P(ae,"click",e[2])],de=!0)},p(e,[t]){(!ue||1&t)&&he!==(he=e[0].Id?"Edit":"Create")&&D(o,he),1&t&&H(c,e[0].Id),1&t&&h.value!==e[0].Name&&H(h,e[0].Name),1&t&&$.value!==e[0].Password&&H($,e[0].Password),1&t&&z(_,e[0].Role),1&t&&z(U,e[0].Status),1&t&&(Q.checked=e[0].AdultPass),(!ue||2&t)&&D(ne,e[1]),(!ue||1&t)&&me!==(me=e[0].Id?"Update":"Save")&&D(le,me)},i(e){ue||(pe((()=>{ce||(ce=Se(n,si,{duration:200},!0)),ce.run(1)})),ue=!0)},o(e){ce||(ce=Se(n,si,{duration:200},!1)),ce.run(0),ue=!1},d(e){e&&N(t),e&&ce&&ce.end(),de=!1,i(fe)}}}function oi(e,t,n){let{foundUser:s={AdultPass:!1,Password:""}}=t;const r=se();let i="";return e.$$set=e=>{"foundUser"in e&&n(0,s=e.foundUser)},[s,i,e=>{if(!s.Name)return n(1,i="Name Can't be empty");xs.post("/api/admin/users/add-edit",s).then((({data:e})=>{e.fail?(n(1,i=e.msg),console.log(e)):r("updateusers",e.user)}))},()=>{r("closeModal")},function(){s.Id=this.value,n(0,s)},function(){s.Name=this.value,n(0,s)},function(){s.Password=this.value,n(0,s)},function(){s.Role=V(this),n(0,s)},function(){s.Status=V(this),n(0,s)},function(){s.AdultPass=this.checked,n(0,s)}]}class ai extends qe{constructor(e){super(),Me(this,e,oi,ii,a,{foundUser:0})}}function li(e,t,n){const s=e.slice();return s[8]=t[n],s}function ci(e){let t,n;return t=new ai({props:{foundUser:e[1]}}),t.$on("closeModal",e[4]),t.$on("updateusers",e[7]),{c(){Re(t.$$.fragment)},m(e,s){Oe(t,e,s),n=!0},p(e,n){const s={};2&n&&(s.foundUser=e[1]),t.$set(s)},i(e){n||(Ie(t.$$.fragment,e),n=!0)},o(e){Te(t.$$.fragment,e),n=!1},d(e){Pe(t,e)}}}function ui(t){let n;return{c(){n=A("tr"),n.innerHTML='<td colspan="5" class="svelte-u9hanp">Loading Data From Server</td>'},m(e,t){E(e,n,t)},p:e,d(e){e&&N(n)}}}function di(e){let t,n=e[0],s=[];for(let t=0;t<n.length;t+=1)s[t]=fi(li(e,n,t));return{c(){for(let e=0;e<s.length;e+=1)s[e].c();t=O()},m(e,n){for(let t=0;t<s.length;t+=1)s[t].m(e,n);E(e,t,n)},p(e,r){if(97&r){let i;for(n=e[0],i=0;i<n.length;i+=1){const o=li(e,n,i);s[i]?s[i].p(o,r):(s[i]=fi(o),s[i].c(),s[i].m(t.parentNode,t))}for(;i<s.length;i+=1)s[i].d(1);s.length=n.length}},d(e){S(s,e),e&&N(t)}}}function fi(e){let t,n,s,r,o,a,l,c,u,d,f,p,h,m,g,v,y,$,b,w,k,x,_=e[8].Name+"",T=e[8].Role+"",C=e[8].State+"",S=e[8].AdultPass?"true":"false";return{c(){t=A("tr"),n=A("td"),s=A("span"),s.innerHTML='<i class="fas fa-edit svelte-u9hanp"></i>',r=R(),o=A("span"),o.innerHTML='<i class="fas fa-trash-alt svelte-u9hanp"></i>',a=R(),l=A("td"),c=L(_),u=R(),d=A("td"),f=L(T),p=R(),h=A("td"),m=L(C),g=R(),v=A("td"),y=L(S),$=R(),q(s,"class","u-edit"),q(o,"class","u-remove ml-2"),q(n,"class","svelte-u9hanp"),q(l,"class","svelte-u9hanp"),q(d,"class","svelte-u9hanp"),q(h,"class","svelte-u9hanp"),q(v,"class","svelte-u9hanp"),q(t,"id",b=e[8].Id),q(t,"key",w=e[8].Name),q(t,"class","svelte-u9hanp")},m(i,b){E(i,t,b),I(t,n),I(n,s),I(n,r),I(n,o),I(t,a),I(t,l),I(l,c),I(t,u),I(t,d),I(d,f),I(t,p),I(t,h),I(h,m),I(t,g),I(t,v),I(v,y),I(t,$),k||(x=[P(s,"click",e[5]),P(o,"click",e[6])],k=!0)},p(e,n){1&n&&_!==(_=e[8].Name+"")&&D(c,_),1&n&&T!==(T=e[8].Role+"")&&D(f,T),1&n&&C!==(C=e[8].State+"")&&D(m,C),1&n&&S!==(S=e[8].AdultPass?"true":"false")&&D(y,S),1&n&&b!==(b=e[8].Id)&&q(t,"id",b),1&n&&w!==(w=e[8].Name)&&q(t,"key",w)},d(e){e&&N(t),k=!1,i(x)}}}function pi(e){let t,n,s,r,i,o,a,l,c,u,d,f,p,h,m,g,v,y=e[3]&&ci(e);function $(e,t){return e[0].length?di:ui}let b=$(e),w=b(e);return{c(){y&&y.c(),t=R(),n=A("div"),s=A("div"),r=L(e[2]),i=R(),o=A("div"),a=A("span"),a.innerHTML='<i class="fas fa-user-plus svelte-u9hanp"></i>',l=R(),c=A("h3"),c.textContent="Users Manager",u=R(),d=A("table"),f=A("thead"),f.innerHTML='<tr><th class="svelte-u9hanp">Actions</th> \n        <th class="svelte-u9hanp">Name</th> \n        <th class="svelte-u9hanp">Role</th> \n        <th class="svelte-u9hanp">State</th> \n        <th class="svelte-u9hanp">Adult</th></tr>',p=R(),h=A("tbody"),w.c(),q(s,"class","remove-error"),q(a,"class","btn svelte-u9hanp"),q(c,"class","text-center"),q(o,"class","controls svelte-u9hanp"),q(d,"class","table table-dark table-hover table-bordered svelte-u9hanp"),q(n,"id","u-manager"),q(n,"class","card bg-dark manager svelte-u9hanp")},m($,b){y&&y.m($,b),E($,t,b),E($,n,b),I(n,s),I(s,r),I(n,i),I(n,o),I(o,a),I(o,l),I(o,c),I(n,u),I(n,d),I(d,f),I(d,p),I(d,h),w.m(h,null),m=!0,g||(v=P(a,"click",e[5]),g=!0)},p(e,[n]){e[3]?y?(y.p(e,n),8&n&&Ie(y,1)):(y=ci(e),y.c(),Ie(y,1),y.m(t.parentNode,t)):y&&(xe(),Te(y,1,1,(()=>{y=null})),_e()),(!m||4&n)&&D(r,e[2]),b===(b=$(e))&&w?w.p(e,n):(w.d(1),w=b(e),w&&(w.c(),w.m(h,null)))},i(e){m||(Ie(y),m=!0)},o(e){Te(y),m=!1},d(e){y&&y.d(e),e&&N(t),e&&N(n),w.d(),g=!1,v()}}}function hi(e,t,n){let s=[],r={AdultPass:!1},i="",o=!1;const a=()=>{n(3,o=!1),n(1,r={AdultPass:!1})};return te((async()=>{xs.get("/api/admin/users").then((({data:e})=>{e.users&&n(0,s=e.users)}))})),[s,r,i,o,a,e=>{let t=e.target.closest("tr");t&&n(1,r={...s.find((e=>e.Id===t.id))}||{}),n(3,o=!0)},e=>{let t=e.target.closest("tr"),r=t.children[1].innerText;t&&xs.delete("/api/admin/users/remove",{data:{Id:t.id,Role:r}}).then((({data:e})=>{e.removed?n(0,s=s.filter((e=>e.Id!==t.id))):n(2,i=e.msg)}))},e=>{let t=e.detail,r=s.filter((e=>e.Id!==t.Id));n(0,s=[...r,t].sort(((e,t)=>e.Name.localeCompare(t.Name)))),t.Password="",a()}]}class mi extends qe{constructor(e){super(),Me(this,e,hi,pi,a,{})}}const gi=()=>{let e=document.querySelector(".list-container")||{};return parseInt(e.offsetHeight/37.19)};function vi(t){let n,s,r,o,a,l,c,u,d;return{c(){n=A("div"),s=A("div"),r=A("span"),r.innerHTML='<i class="fas fa-search"></i>',o=R(),a=A("input"),l=R(),c=A("span"),c.innerHTML='<i class="fas fa-times-circle"></i>',q(r,"class","btn-filter input-group-text"),q(s,"class","input-group-prepend svelte-1f7z5e6"),q(a,"type","text"),q(a,"class","form-control filter-file svelte-1f7z5e6"),q(a,"placeholder","Filter"),q(c,"id","clear-filter"),q(c,"class","svelte-1f7z5e6"),q(n,"id","filter-control"),q(n,"class","input-group svelte-1f7z5e6")},m(e,i){E(e,n,i),I(n,s),I(s,r),I(n,o),I(n,a),H(a,t[0]),I(n,l),I(n,c),u||(d=[P(r,"click",t[3]),P(a,"input",t[4]),P(a,"keydown",t[2]),P(c,"click",t[1])],u=!0)},p(e,[t]){1&t&&a.value!==e[0]&&H(a,e[0])},i:e,o:e,d(e){e&&N(n),u=!1,i(d)}}}function yi(e,t,n){const s=se();let{filter:r=""}=t;return e.$$set=e=>{"filter"in e&&n(0,r=e.filter)},[r,()=>{s("filter",""),n(0,r="")},e=>{13===e.keyCode&&s("filter",(r||"").replace(/%|\?/,""))},()=>{s("filter",(r||"").replace(/%|\?/,""))},function(){r=this.value,n(0,r)}]}class $i extends qe{constructor(e){super(),Me(this,e,yi,vi,a,{filter:0})}}function bi(e){let t,n,s,r,o,a,l,c,u,d,f,p,h;function m(e,t){return e[3]?ki:wi}let g=m(e),v=g(e);return{c(){t=A("div"),n=A("ul"),s=A("li"),s.innerHTML='<i class="fas fa-angle-double-left svelte-1ps3v0w"></i>',r=R(),o=A("li"),o.innerHTML='<i class="fas fa-angle-left svelte-1ps3v0w"></i>',a=R(),l=A("li"),v.c(),c=R(),u=A("li"),u.innerHTML='<i class="fas fa-angle-right svelte-1ps3v0w"></i>',d=R(),f=A("li"),f.innerHTML='<i class="fas fa-angle-double-right svelte-1ps3v0w"></i>',q(s,"id","first-page"),q(s,"class","page-link svelte-1ps3v0w"),W(s,"d-none",e[2]),q(o,"id","prev-page"),q(o,"class","page-link svelte-1ps3v0w"),W(o,"border-r-left",e[2]),q(l,"id","current-page"),q(l,"class","page-link svelte-1ps3v0w"),q(u,"id","next-page"),q(u,"class","page-link svelte-1ps3v0w"),W(u,"border-r-right",e[2]),q(f,"id","last-page"),q(f,"class","page-link svelte-1ps3v0w"),W(f,"d-none",e[2]),q(n,"class","pagination svelte-1ps3v0w"),q(t,"id","pager"),q(t,"class","svelte-1ps3v0w")},m(i,m){E(i,t,m),I(t,n),I(n,s),I(n,r),I(n,o),I(n,a),I(n,l),v.m(l,null),I(n,c),I(n,u),I(n,d),I(n,f),p||(h=[P(l,"click",e[5]),P(t,"click",e[4])],p=!0)},p(e,t){4&t&&W(s,"d-none",e[2]),4&t&&W(o,"border-r-left",e[2]),g===(g=m(e))&&v?v.p(e,t):(v.d(1),v=g(e),v&&(v.c(),v.m(l,null))),4&t&&W(u,"border-r-right",e[2]),4&t&&W(f,"d-none",e[2])},d(e){e&&N(t),v.d(),p=!1,i(h)}}}function wi(e){let t,n=e[0]+"/"+e[1];return{c(){t=L(n)},m(e,n){E(e,t,n)},p(e,s){3&s&&n!==(n=e[0]+"/"+e[1])&&D(t,n)},d(e){e&&N(t)}}}function ki(t){let n,s,r;return{c(){n=A("input"),q(n,"type","text"),n.value=t[0],q(n,"class","form-control")},m(i,a){var l;E(i,n,a),s||(r=[P(n,"blur",t[6]),P(n,"change",t[8]),(l=t[7].call(null,n),l&&o(l.destroy)?l.destroy:e),P(n,"keydown",M(t[9]))],s=!0)},p(e,t){1&t&&n.value!==e[0]&&(n.value=e[0])},d(e){e&&N(n),s=!1,i(r)}}}function xi(t){let n,s=t[1]>1&&bi(t);return{c(){s&&s.c(),n=O()},m(e,t){s&&s.m(e,t),E(e,n,t)},p(e,[t]){e[1]>1?s?s.p(e,t):(s=bi(e),s.c(),s.m(n.parentNode,n)):s&&(s.d(1),s=null)},i:e,o:e,d(e){s&&s.d(e),e&&N(n)}}}function _i(e,t,n){const s=se();let{page:r=1}=t,{totalPages:i=0}=t,{hideFL:o=!1}=t,a=!1;return e.$$set=e=>{"page"in e&&n(0,r=e.page),"totalPages"in e&&n(1,i=e.totalPages),"hideFL"in e&&n(2,o=e.hideFL)},[r,i,o,a,e=>{window.localStorage.setItem("selected",0);let t=e.target;switch(e.target.id){case"prev-page":s("gotopage",r-1);break;case"next-page":s("gotopage",r+1);break;case"first-page":s("gotopage",1);break;case"last-page":s("gotopage",i);break;case"current-page":((e,t,n,s)=>{if(!e.querySelector("input")){e.textContent="",e.innerHTML=`<input type="text" value=${t} class="form-control" min=1 \n                           max=${n}>`;let r=e.querySelector("input");r.addEventListener("focusout",(s=>{e.textContent=`${t} / ${n}`})),r.onkeydown=e=>{if(13===e.keyCode){let e=parseInt(r.value);isNaN(e)||(t=e<1?1:e>n?n:e),s("gotopage",t),r=null}},r.focus(),r.setSelectionRange(r.value.length,r.value.length)}})(t,r,i,s)}},()=>{n(3,a=!0)},()=>{n(3,a=!1)},e=>{e.focus()},e=>{let t=parseInt(e.target.value);isNaN(t)||(t=t<1?1:t>i?i:t,s("gotopage",t))},function(t){oe.call(this,e,t)}]}class Ii extends qe{constructor(e){super(),Me(this,e,_i,xi,a,{page:0,totalPages:1,hideFL:2})}}function Ti(e,t,n){const s=e.slice();return s[10]=t[n].Id,s[11]=t[n].Name,s[12]=t[n].Type,s[13]=t[n].Path,s}function Ci(e){let t,n=e[2],s=[];for(let t=0;t<n.length;t+=1)s[t]=Si(Ti(e,n,t));return{c(){for(let e=0;e<s.length;e+=1)s[e].c();t=O()},m(e,n){for(let t=0;t<s.length;t+=1)s[t].m(e,n);E(e,t,n)},p(e,r){if(12&r){let i;for(n=e[2],i=0;i<n.length;i+=1){const o=Ti(e,n,i);s[i]?s[i].p(o,r):(s[i]=Si(o),s[i].c(),s[i].m(t.parentNode,t))}for(;i<s.length;i+=1)s[i].d(1);s.length=n.length}},d(e){S(s,e),e&&N(t)}}}function Ei(e){let t,n,s=`Not ${e[1]} Found`;return{c(){t=A("li"),n=L(s),q(t,"class","list-group-item empty-list svelte-ozw83h")},m(e,s){E(e,t,s),I(t,n)},p(e,t){2&t&&s!==(s=`Not ${e[1]} Found`)&&D(n,s)},d(e){e&&N(t)}}}function Ni(e){let t;return{c(){t=A("i"),q(t,"class","fas fa-sync svelte-ozw83h")},m(e,n){E(e,t,n)},d(e){e&&N(t)}}}function Si(e){let t,n,s,r,i,o,a,l,c,u,d,f,p=e[12].includes("Folder"),h=e[11]+"",m=p&&Ni();return{c(){t=A("li"),m&&m.c(),n=R(),s=A("i"),r=R(),i=A("i"),o=R(),a=L(h),l=R(),q(s,"class","fas fa-edit svelte-ozw83h"),q(i,"class","fas fa-trash-alt svelte-ozw83h"),q(t,"id",c=e[10]),q(t,"title",u=e[13]||e[11]),q(t,"class","list-group-item svelte-ozw83h"),W(t,"active",e[3]===e[10])},m(c,u){E(c,t,u),m&&m.m(t,null),I(t,n),I(t,s),I(t,r),I(t,i),I(t,o),I(t,a),I(t,l),d||(f=P(t,"click",e[7]),d=!0)},p(e,s){4&s&&(p=e[12].includes("Folder")),p?m||(m=Ni(),m.c(),m.m(t,n)):m&&(m.d(1),m=null),4&s&&h!==(h=e[11]+"")&&D(a,h),4&s&&c!==(c=e[10])&&q(t,"id",c),4&s&&u!==(u=e[13]||e[11])&&q(t,"title",u),12&s&&W(t,"active",e[3]===e[10])},d(e){e&&N(t),m&&m.d(),d=!1,f()}}}function Ai(e){let t,n,s,r,i,o,a,l,c,u,d,f,p,h=`${e[6]} - ${e[1]}`;function m(e,t){return e[2].length<1?Ei:Ci}s=new $i({props:{filter:e[0]}}),s.$on("filter",e[8]);let g=m(e),v=g(e);return f=new Ii({props:{page:e[4],totalPages:e[5]}}),f.$on("gotopage",e[9]),{c(){t=A("div"),n=A("div"),Re(s.$$.fragment),r=R(),i=A("h4"),o=L(h),a=R(),l=A("div"),c=A("ul"),v.c(),u=R(),d=A("div"),Re(f.$$.fragment),q(i,"class","text-center svelte-ozw83h"),q(n,"class","controls svelte-ozw83h"),q(c,"class","list-group text-dark"),q(l,"class","list-container svelte-ozw83h"),q(d,"class","list-controls svelte-ozw83h"),q(t,"id",e[1]),q(t,"class","file-list col-6 svelte-ozw83h")},m(e,h){E(e,t,h),I(t,n),Oe(s,n,null),I(n,r),I(n,i),I(i,o),I(t,a),I(t,l),I(l,c),v.m(c,null),I(t,u),I(t,d),Oe(f,d,null),p=!0},p(e,[n]){const r={};1&n&&(r.filter=e[0]),s.$set(r),(!p||66&n)&&h!==(h=`${e[6]} - ${e[1]}`)&&D(o,h),g===(g=m(e))&&v?v.p(e,n):(v.d(1),v=g(e),v&&(v.c(),v.m(c,null)));const i={};16&n&&(i.page=e[4]),32&n&&(i.totalPages=e[5]),f.$set(i),(!p||2&n)&&q(t,"id",e[1])},i(e){p||(Ie(s.$$.fragment,e),Ie(f.$$.fragment,e),p=!0)},o(e){Te(s.$$.fragment,e),Te(f.$$.fragment,e),p=!1},d(e){e&&N(t),Pe(s),v.d(),Pe(f)}}}function Li(e,t,n){let{filter:s}=t,{title:r}=t,{items:i}=t,{folderId:o}=t,{page:a=1}=t,{totalPages:l=0}=t,{totalItems:c=0}=t;return e.$$set=e=>{"filter"in e&&n(0,s=e.filter),"title"in e&&n(1,r=e.title),"items"in e&&n(2,i=e.items),"folderId"in e&&n(3,o=e.folderId),"page"in e&&n(4,a=e.page),"totalPages"in e&&n(5,l=e.totalPages),"totalItems"in e&&n(6,c=e.totalItems)},[s,r,i,o,a,l,c,function(t){oe.call(this,e,t)},function(t){oe.call(this,e,t)},function(t){oe.call(this,e,t)}]}class Ri extends qe{constructor(e){super(),Me(this,e,Li,Ai,a,{filter:0,title:1,items:2,folderId:3,page:4,totalPages:5,totalItems:6})}}function Oi(e){let t,n,s,r,i,o,a=e[0].Name+"";return{c(){t=A("p"),n=L("Are you sure you want to remove "),s=A("strong"),r=L(a),i=R(),o=A("div"),o.innerHTML='<div class="input-group-prepend"><label for="sysdel" class="input-group-text del-label svelte-h81hyi">Delete From System</label></div> \n            <input id="sysdel" type="checkbox" class="svelte-h81hyi"/> \n            <label for="sysdel" class="form-control svelte-h81hyi"><i class="fas fa-times svelte-h81hyi"></i></label>',q(s,"class","svelte-h81hyi"),q(o,"class","input-group")},m(e,a){E(e,t,a),I(t,n),I(t,s),I(s,r),E(e,i,a),E(e,o,a)},p(e,t){1&t&&a!==(a=e[0].Name+"")&&D(r,a)},d(e){e&&N(t),e&&N(i),e&&N(o)}}}function Pi(e){let t,n,s,r,i;return{c(){t=A("div"),n=A("div"),n.innerHTML='<label for="Name" class="input-group-text svelte-h81hyi">Name</label>',s=R(),r=A("input"),q(n,"class","input-group-prepend"),q(r,"type","text"),q(r,"name","Name"),q(r,"class","form-control"),r.value=i=e[0].Name,q(t,"class","input-group")},m(e,i){E(e,t,i),I(t,n),I(t,s),I(t,r)},p(e,t){1&t&&i!==(i=e[0].Name)&&r.value!==i&&(r.value=i)},d(e){e&&N(t)}}}function ji(e){let t,n,s,r,o,a,l,c,u,d,f,p,h,m,g,v,y,$,b,w,k,x=e[1].title+"",_=(e[1].error||"")+"",T=e[1].Del?"Remove":"Update";function C(e,t){return e[1].Del?Oi:Pi}let S=C(e),O=S(e);return{c(){t=A("div"),n=A("div"),s=A("div"),r=A("h3"),o=L(x),a=R(),l=A("form"),c=A("div"),O.c(),u=R(),d=A("div"),f=L(_),p=R(),h=A("div"),m=A("button"),m.textContent="Cancel",g=R(),v=A("button"),y=L(T),q(s,"class","modal-header"),q(c,"class","modal-body"),q(d,"class","error svelte-h81hyi"),q(m,"type","button"),q(m,"class","btn"),q(v,"type","submit"),q(v,"class","btn"),q(h,"class","modal-footer"),q(l,"action","#"),q(n,"class","modal card"),q(t,"class","modal-container")},m(i,$){E(i,t,$),I(t,n),I(n,s),I(s,r),I(r,o),I(n,a),I(n,l),I(l,c),O.m(c,null),I(l,u),I(l,d),I(d,f),I(l,p),I(l,h),I(h,m),I(h,g),I(h,v),I(v,y),b=!0,w||(k=[P(m,"click",e[3]),P(l,"submit",j(e[2]))],w=!0)},p(e,[t]){(!b||2&t)&&x!==(x=e[1].title+"")&&D(o,x),S===(S=C(e))&&O?O.p(e,t):(O.d(1),O=S(e),O&&(O.c(),O.m(c,null))),(!b||2&t)&&_!==(_=(e[1].error||"")+"")&&D(f,_),(!b||2&t)&&T!==(T=e[1].Del?"Remove":"Update")&&D(y,T)},i(e){b||(pe((()=>{$||($=Se(n,si,{duration:200},!0)),$.run(1)})),b=!0)},o(e){$||($=Se(n,si,{duration:200},!1)),$.run(0),b=!1},d(e){e&&N(t),O.d(),e&&$&&$.end(),w=!1,i(k)}}}function Mi(e,t,n){let{file:s}=t,{modalType:r}=t;return e.$$set=e=>{"file"in e&&n(0,s=e.file),"modalType"in e&&n(1,r=e.modalType)},[s,r,function(t){oe.call(this,e,t)},function(t){oe.call(this,e,t)}]}class qi extends qe{constructor(e){super(),Me(this,e,Mi,ji,a,{file:0,modalType:1})}}function Fi(e){let t,n;return t=new qi({props:{file:e[6],modalType:e[8]}}),t.$on("submit",e[12]),t.$on("click",e[13]),{c(){Re(t.$$.fragment)},m(e,s){Oe(t,e,s),n=!0},p(e,n){const s={};64&n&&(s.file=e[6]),256&n&&(s.modalType=e[8]),t.$set(s)},i(e){n||(Ie(t.$$.fragment,e),n=!0)},o(e){Te(t.$$.fragment,e),n=!1},d(e){Pe(t,e)}}}function Bi(e){let t,n,s,r=e[7]&&Fi(e);return n=new Ri({props:{title:"Folders",folderId:e[2],items:e[5],page:e[0],totalPages:e[3],totalItems:e[4],filter:e[1]}}),n.$on("filter",e[9]),n.$on("gotopage",e[10]),n.$on("click",e[11]),{c(){r&&r.c(),t=R(),Re(n.$$.fragment)},m(e,i){r&&r.m(e,i),E(e,t,i),Oe(n,e,i),s=!0},p(e,[s]){e[7]?r?(r.p(e,s),128&s&&Ie(r,1)):(r=Fi(e),r.c(),Ie(r,1),r.m(t.parentNode,t)):r&&(xe(),Te(r,1,1,(()=>{r=null})),_e());const i={};4&s&&(i.folderId=e[2]),32&s&&(i.items=e[5]),1&s&&(i.page=e[0]),8&s&&(i.totalPages=e[3]),16&s&&(i.totalItems=e[4]),2&s&&(i.filter=e[1]),n.$set(i)},i(e){s||(Ie(r),Ie(n.$$.fragment,e),s=!0)},o(e){Te(r),Te(n.$$.fragment,e),s=!1},d(e){r&&r.d(e),e&&N(t),Pe(n,e)}}}function Di(e,t,n){const s=se(),r=ie("socket");let{page:i=1}=t,{filter:o=""}=t,{folderId:a}=t,l=1,c=0,u=[],d={},f=!1,p={};const h=async e=>{let{data:t}=await xs.get(`/api/admin/folders/${e}/${gi()}/${o||""}`);if(t.folders){let r=t.folders[0];n(2,a=r?r.Id:""),n(5,u=t.folders),n(3,l=t.totalPages),n(4,c=t.totalItems),n(0,i=e),s("folderid",a),We(`/folders/${e}/${o||""}`)}};te((()=>{h(i),r.on("folder-renamed",(e=>{e.success&&(n(6,d.Name=e.Name,d),n(5,u),m())})),r.on("folder-removed",(e=>{e.success&&(h(i),m())}))})),ne((()=>{delete r._callbacks["$folder-renamed"],delete r._callbacks["$folder-removed"]}));const m=()=>{n(7,f=!1),n(6,d={})};return e.$$set=e=>{"page"in e&&n(0,i=e.page),"filter"in e&&n(1,o=e.filter),"folderId"in e&&n(2,a=e.folderId)},[i,o,a,l,c,u,d,f,p,e=>{n(1,o=e.detail),h(1)},e=>{var t,n,s;(e=parseInt(e.detail))<1||e>l||h((t=e,n=1,s=l,Math.min(Math.max(t,n),s)))},({target:e})=>{let t=e;if("LI"===t.tagName)n(2,a=t.id),s("folderid",a);else{n(6,d=u.find((e=>e.Id===t.closest("li").id)));let e=t.classList.toString();/fa-edit/gi.test(e)?(n(8,p={title:"Edit Folder",Del:!1}),n(7,f=!0)):/fa-trash-alt/gi.test(e)?(n(8,p={title:"Remove Folder",Del:!0}),n(7,f=!0)):r.emit("scan-dir",{Id:d.Id,isFolder:!0})}},e=>{if(p.Del){let t=e.target.querySelector("input").checked;r.emit("remove-folder",{Id:d.Id,Del:t})}else{let t=e.target.querySelector("input").value;t?r.emit("rename-folder",{Id:d.Id,Name:t}):n(8,p.error="Name Can't be empty",p)}},m]}class Hi extends qe{constructor(e){super(),Me(this,e,Di,Bi,a,{page:0,filter:1,folderId:2})}}function Ui(e){let t,n;return t=new qi({props:{file:e[5],modalType:e[7]}}),t.$on("submit",e[11]),t.$on("click",e[12]),{c(){Re(t.$$.fragment)},m(e,s){Oe(t,e,s),n=!0},p(e,n){const s={};32&n&&(s.file=e[5]),128&n&&(s.modalType=e[7]),t.$set(s)},i(e){n||(Ie(t.$$.fragment,e),n=!0)},o(e){Te(t.$$.fragment,e),n=!1},d(e){Pe(t,e)}}}function zi(e){let t,n,s,r=e[6]&&Ui(e);return n=new Ri({props:{title:"Files",folderId:"",items:e[4],page:e[0],totalPages:e[1],totalItems:e[2],filter:e[3]}}),n.$on("filter",e[8]),n.$on("gotopage",e[9]),n.$on("click",e[10]),{c(){r&&r.c(),t=R(),Re(n.$$.fragment)},m(e,i){r&&r.m(e,i),E(e,t,i),Oe(n,e,i),s=!0},p(e,[s]){e[6]?r?(r.p(e,s),64&s&&Ie(r,1)):(r=Ui(e),r.c(),Ie(r,1),r.m(t.parentNode,t)):r&&(xe(),Te(r,1,1,(()=>{r=null})),_e());const i={};16&s&&(i.items=e[4]),1&s&&(i.page=e[0]),2&s&&(i.totalPages=e[1]),4&s&&(i.totalItems=e[2]),8&s&&(i.filter=e[3]),n.$set(i)},i(e){s||(Ie(r),Ie(n.$$.fragment,e),s=!0)},o(e){Te(r),Te(n.$$.fragment,e),s=!1},d(e){r&&r.d(e),e&&N(t),Pe(n,e)}}}function Vi(e,t,n){const s=ie("socket");let r,i,{folderId:o}=t,a=o,l=1,c="",u=[],d={},f=!1,p={};const h=async e=>{let t=gi(),{data:s}=await xs.get(`/api/admin/folders/files/${o}/${e}/${t}/${c||""}`);s.files&&(n(4,u=s.files),n(1,r=s.totalPages),n(2,i=s.totalItems),n(0,l=e))};te((async()=>{h(1),s.on("file-renamed",(e=>{e.success&&(n(5,d.Name=e.Name,d),n(4,u),m())})),s.on("file-removed",(e=>{e.success&&(l===r&&u.length>1?n(4,u=u.filter((e=>e.Id!==d.Id))):(n(0,l=l>1?l-1:l),h(l)),m())}))})),ne((()=>{delete s._callbacks["$file-renamed"],delete s._callbacks["$file-removed"]}));const m=()=>{n(6,f=!1),n(5,d={})};return e.$$set=e=>{"folderId"in e&&n(13,o=e.folderId)},e.$$.update=()=>{8192&e.$$.dirty&&o!==a&&h(1)},[l,r,i,c,u,d,f,p,e=>{n(3,c=e.detail),h(1)},e=>{(e=parseInt(e.detail))<1||e>r||(n(0,l=e<1?1:e>r?r:e),h(l))},e=>{let t=e.target;if("LI"!==t.tagName){n(5,d=u.find((e=>e.Id===t.closest("li").id)));let e=t.classList.toString();/fa-edit/gi.test(e)?n(7,p={title:"Edit File",Del:!1,isFile:!0}):n(7,p={title:"Remove File",Del:!0,isFile:!0}),n(6,f=!0)}},e=>{if(p.Del){let t=e.target.querySelector("input").checked;s.emit("remove-file",{Id:d.Id,Del:t})}else{let t=e.target.querySelector("input").value;t?s.emit("rename-file",{Id:d.Id,Name:t}):n(7,p.error="Name Can't be empty",p)}},m,o]}class Wi extends qe{constructor(e){super(),Me(this,e,Vi,zi,a,{folderId:13})}}function Ki(e){let t,n,s,r,i,o;return s=new Hi({props:{page:parseInt(e[1])||1,folderId:e[0],filter:e[2]}}),s.$on("folderid",e[3]),i=new Wi({props:{folderId:e[0]}}),{c(){t=A("div"),n=A("div"),Re(s.$$.fragment),r=R(),Re(i.$$.fragment),q(n,"class","rows svelte-1digf97"),q(t,"class","card bg-dark admin-manager  svelte-1digf97")},m(e,a){E(e,t,a),I(t,n),Oe(s,n,null),I(n,r),Oe(i,n,null),o=!0},p(e,[t]){const n={};2&t&&(n.page=parseInt(e[1])||1),1&t&&(n.folderId=e[0]),4&t&&(n.filter=e[2]),s.$set(n);const r={};1&t&&(r.folderId=e[0]),i.$set(r)},i(e){o||(Ie(s.$$.fragment,e),Ie(i.$$.fragment,e),o=!0)},o(e){Te(s.$$.fragment,e),Te(i.$$.fragment,e),o=!1},d(e){e&&N(t),Pe(s),Pe(i)}}}function Yi(e,t,n){let{page:s}=t,{filter:r}=t,{folderId:i}=t;return e.$$set=e=>{"page"in e&&n(1,s=e.page),"filter"in e&&n(2,r=e.filter),"folderId"in e&&n(0,i=e.folderId)},[i,s,r,e=>{n(0,i=e.detail)}]}class Xi extends qe{constructor(e){super(),Me(this,e,Yi,Ki,a,{page:1,filter:2,folderId:0})}}function Ji(e,t,n){const s=e.slice();return s[8]=t[n].Content,s[9]=t[n].Id,s[10]=t[n].Name,s}function Qi(e){let t,n,s;return n=new to({props:{type:"folder",items:e[8]}}),n.$on("scanDir",e[4]),{c(){t=A("ul"),Re(n.$$.fragment),q(t,"class","tree-node svelte-jlzmny")},m(e,r){E(e,t,r),Oe(n,t,null),s=!0},p(e,t){const s={};1&t&&(s.items=e[8]),n.$set(s)},i(e){s||(Ie(n.$$.fragment,e),s=!0)},o(e){Te(n.$$.fragment,e),s=!1},d(e){e&&N(t),Pe(n)}}}function Gi(e){let t,n,s,r,o,a,l,c,u,d,f,p,h,m,g=e[10]+"",v=e[8].length>0&&Qi(e);return{c(){t=A("li"),n=A("span"),s=A("i"),o=R(),a=L(g),l=R(),c=A("span"),c.textContent="▶",u=R(),v&&v.c(),d=R(),q(s,"class",r=y(`fa fa-${e[1]} mr-1`)+" svelte-jlzmny"),q(n,"class","dir svelte-jlzmny"),q(c,"class","caret svelte-jlzmny"),q(t,"id",f=e[9]),q(t,"class","tree-item svelte-jlzmny")},m(r,i){E(r,t,i),I(t,n),I(n,s),I(n,o),I(n,a),I(t,l),I(t,c),I(t,u),v&&v.m(t,null),I(t,d),p=!0,h||(m=[P(n,"click",e[3]),P(c,"click",e[2])],h=!0)},p(e,n){(!p||2&n&&r!==(r=y(`fa fa-${e[1]} mr-1`)+" svelte-jlzmny"))&&q(s,"class",r),(!p||1&n)&&g!==(g=e[10]+"")&&D(a,g),e[8].length>0?v?(v.p(e,n),1&n&&Ie(v,1)):(v=Qi(e),v.c(),Ie(v,1),v.m(t,d)):v&&(xe(),Te(v,1,1,(()=>{v=null})),_e()),(!p||1&n&&f!==(f=e[9]))&&q(t,"id",f)},i(e){p||(Ie(v),p=!0)},o(e){Te(v),p=!1},d(e){e&&N(t),v&&v.d(),h=!1,i(m)}}}function Zi(e){let t,n,s=e[0],r=[];for(let t=0;t<s.length;t+=1)r[t]=Gi(Ji(e,s,t));const i=e=>Te(r[e],1,1,(()=>{r[e]=null}));return{c(){for(let e=0;e<r.length;e+=1)r[e].c();t=O()},m(e,s){for(let t=0;t<r.length;t+=1)r[t].m(e,s);E(e,t,s),n=!0},p(e,[n]){if(15&n){let o;for(s=e[0],o=0;o<s.length;o+=1){const i=Ji(e,s,o);r[o]?(r[o].p(i,n),Ie(r[o],1)):(r[o]=Gi(i),r[o].c(),Ie(r[o],1),r[o].m(t.parentNode,t))}for(xe(),o=s.length;o<r.length;o+=1)i(o);_e()}},i(e){if(!n){for(let e=0;e<s.length;e+=1)Ie(r[e]);n=!0}},o(e){r=r.filter(Boolean);for(let e=0;e<r.length;e+=1)Te(r[e]);n=!1},d(e){S(r,e),e&&N(t)}}}function eo(e,t,n){let{items:s=[]}=t,{type:r}=t,i={};const o=se();return e.$$set=e=>{"items"in e&&n(0,s=e.items),"type"in e&&n(1,r=e.type)},[s,r,e=>{let t=e.target.closest("li"),r=s.find((e=>e.Id.toString()===t.id));0===r.Content.length?xs.post("/api/admin/directories/Content",{Path:r.Path}).then((({data:e})=>{r.Content=e.data,n(0,s)})):(r.Content=[],n(0,s))},e=>{let t=e.target.closest("li");i=s.find((e=>e.Id.toString()===t.id)),o("scanDir",i)},function(t){oe.call(this,e,t)}]}class to extends qe{constructor(e){super(),Me(this,e,eo,Zi,a,{items:0,type:1})}}function no(e){let t,n,s,r,a,l,c,u,d,f,p,h,m,g,v,$,b,w,k,x,_,T,C,S,L,O,j,M,F;return{c(){t=A("div"),n=A("div"),s=A("div"),s.innerHTML="<h3>Create</h3>",r=R(),a=A("div"),l=A("div"),c=A("div"),c.innerHTML='<label for="Name" class="input-group-text svelte-1xqug3q">Type</label>',u=R(),d=A("select"),f=A("option"),f.textContent="Mangas",p=A("option"),p.textContent="Videos",h=R(),m=A("div"),g=A("div"),g.innerHTML='<label for="is-adult" class="input-group-text svelte-1xqug3q">Is Adult</label>',v=R(),$=A("input"),b=R(),w=A("label"),k=A("span"),_=R(),T=A("div"),C=A("button"),C.textContent="Cancel",S=R(),L=A("button"),L.textContent="Create",q(s,"class","modal-header"),q(c,"class","input-group-prepend"),f.__value="Mangas",f.value=f.__value,p.__value="Videos",p.value=p.__value,q(d,"class","form-control"),q(d,"name","Type"),void 0===e[1]&&pe((()=>e[5].call(d))),q(l,"class","input-group"),q(g,"class","input-group-prepend"),q($,"id","is-adult"),q($,"type","checkbox"),q($,"class","svelte-1xqug3q"),q(k,"class",x=y("ad-icon fas fa-"+(e[2]?"check":"times"))+" svelte-1xqug3q"),q(w,"id","check-icon"),q(w,"for","is-adult"),q(w,"class","form-control svelte-1xqug3q"),q(m,"class","input-group"),q(a,"class","modal-body"),q(C,"class","btn"),q(L,"class","btn"),q(T,"class","modal-footer"),q(n,"class","modal card svelte-1xqug3q"),q(t,"class","modal-container")},m(i,y){E(i,t,y),I(t,n),I(n,s),I(n,r),I(n,a),I(a,l),I(l,c),I(l,u),I(l,d),I(d,f),I(d,p),z(d,e[1]),I(a,h),I(a,m),I(m,g),I(m,v),I(m,$),$.checked=e[2],I(m,b),I(m,w),I(w,k),I(n,_),I(n,T),I(T,C),I(T,S),I(T,L),j=!0,M||(F=[P(d,"change",e[5]),P($,"change",e[6]),P(C,"click",(function(){o(e[0])&&e[0].apply(this,arguments)})),P(L,"click",e[3])],M=!0)},p(t,[n]){e=t,2&n&&z(d,e[1]),4&n&&($.checked=e[2]),(!j||4&n&&x!==(x=y("ad-icon fas fa-"+(e[2]?"check":"times"))+" svelte-1xqug3q"))&&q(k,"class",x)},i(e){j||(pe((()=>{O||(O=Se(n,si,{duration:200},!0)),O.run(1)})),j=!0)},o(e){O||(O=Se(n,si,{duration:200},!1)),O.run(0),j=!1},d(e){e&&N(t),e&&O&&O.end(),M=!1,i(F)}}}function so(e,t,n){let{createDirectory:s}=t,{hideModal:r}=t,i="Mangas",o=!1;return e.$$set=e=>{"createDirectory"in e&&n(4,s=e.createDirectory),"hideModal"in e&&n(0,r=e.hideModal)},[r,i,o,()=>{s(i,o)},s,function(){i=V(this),n(1,i)},function(){o=this.checked,n(2,o)}]}class ro extends qe{constructor(e){super(),Me(this,e,so,no,a,{createDirectory:4,hideModal:0})}}function io(t){let n,s;return n=new ro({props:{createDirectory:t[3],hideModal:t[4]}}),{c(){Re(n.$$.fragment)},m(e,t){Oe(n,e,t),s=!0},p:e,i(e){s||(Ie(n.$$.fragment,e),s=!0)},o(e){Te(n.$$.fragment,e),s=!1},d(e){Pe(n,e)}}}function oo(e){let t,n,s,r,i,o,a=e[1]&&io(e);return i=new to({props:{type:"hdd",items:e[0]}}),i.$on("scanDir",e[2]),{c(){a&&a.c(),t=R(),n=A("div"),n.innerHTML='<i class="fas fa-server"></i> \n  <span class="tree-name">Server</span>',s=R(),r=A("ul"),Re(i.$$.fragment),q(n,"class","tree-title"),q(r,"class","tree-view svelte-1kc7hqf")},m(e,l){a&&a.m(e,l),E(e,t,l),E(e,n,l),E(e,s,l),E(e,r,l),Oe(i,r,null),o=!0},p(e,[n]){e[1]?a?(a.p(e,n),2&n&&Ie(a,1)):(a=io(e),a.c(),Ie(a,1),a.m(t.parentNode,t)):a&&(xe(),Te(a,1,1,(()=>{a=null})),_e());const s={};1&n&&(s.items=e[0]),i.$set(s)},i(e){o||(Ie(a),Ie(i.$$.fragment,e),o=!0)},o(e){Te(a),Te(i.$$.fragment,e),o=!1},d(e){a&&a.d(e),e&&N(t),e&&N(n),e&&N(s),e&&N(r),Pe(i)}}}function ao(e,t,n){const s=ie("socket");let r=[],i=!1,o={};const a=()=>{n(1,i=!1),o={}};return te((()=>{s.on("disk-loaded",(e=>{n(0,r=e)})),s.emit("load-disks")})),ne((()=>{delete s._callbacks["$disk-loaded"]})),[r,i,({detail:e})=>{o=e,n(1,i=!0)},(e,t)=>{s.emit("scan-dir",{Path:o.Path,Type:e,IsAdult:t}),a()},a]}class lo extends qe{constructor(e){super(),Me(this,e,ao,oo,a,{})}}function co(e,t,n){const s=e.slice();return s[5]=t[n].Id,s[6]=t[n].Name,s[7]=t[n].IsLoading,s[8]=t[n].FullPath,s[9]=t[n].Type,s}function uo(e){let t,n=e[0],s=[];for(let t=0;t<n.length;t+=1)s[t]=po(co(e,n,t));return{c(){for(let e=0;e<s.length;e+=1)s[e].c();t=O()},m(e,n){for(let t=0;t<s.length;t+=1)s[t].m(e,n);E(e,t,n)},p(e,r){if(13&r){let i;for(n=e[0],i=0;i<n.length;i+=1){const o=co(e,n,i);s[i]?s[i].p(o,r):(s[i]=po(o),s[i].c(),s[i].m(t.parentNode,t))}for(;i<s.length;i+=1)s[i].d(1);s.length=n.length}},d(e){S(s,e),e&&N(t)}}}function fo(t){let n;return{c(){n=A("tr"),n.innerHTML='<td colspan="4">Not Directory Added</td>',q(n,"class","text-center")},m(e,t){E(e,n,t)},p:e,d(e){e&&N(n)}}}function po(e){let t,n,s,r,o,a,l,c,u,d,f,p,h,m,g,v,$,b,w,k,x,_=e[6]+"",T=e[9]+"",C=e[8]+"";return{c(){t=A("tr"),n=A("td"),s=A("span"),r=A("i"),a=R(),l=A("span"),l.innerHTML='<i class="fas fa-trash-alt"></i>',c=R(),u=A("td"),d=L(_),f=R(),p=A("td"),h=L(T),m=R(),g=A("td"),v=L(C),$=R(),q(r,"class",o=y("fas fa-sync"+(e[7]?" fa-spin":""))+" svelte-te2s82"),q(s,"class","dir-sync"),q(l,"class","dir-remove ml-2"),q(t,"id",b=e[5]),q(t,"key",w=e[5])},m(i,o){E(i,t,o),I(t,n),I(n,s),I(s,r),I(n,a),I(n,l),I(t,c),I(t,u),I(u,d),I(t,f),I(t,p),I(p,h),I(t,m),I(t,g),I(g,v),I(t,$),k||(x=[P(s,"click",e[3]),P(l,"click",e[2])],k=!0)},p(e,n){1&n&&o!==(o=y("fas fa-sync"+(e[7]?" fa-spin":""))+" svelte-te2s82")&&q(r,"class",o),1&n&&_!==(_=e[6]+"")&&D(d,_),1&n&&T!==(T=e[9]+"")&&D(h,T),1&n&&C!==(C=e[8]+"")&&D(v,C),1&n&&b!==(b=e[5])&&q(t,"id",b),1&n&&w!==(w=e[5])&&q(t,"key",w)},d(e){e&&N(t),k=!1,i(x)}}}function ho(t){let n,s,r,i,o,a,l;function c(e,t){return e[0].length<0?fo:uo}let u=c(t),d=u(t);return{c(){n=A("div"),s=L(t[1]),r=R(),i=A("table"),o=A("thead"),o.innerHTML="<tr><th>Actions</th> \n      <th>Name</th> \n      <th>Type</th> \n      <th>Full Path</th></tr>",a=R(),l=A("tbody"),d.c(),q(n,"class","message svelte-te2s82"),q(i,"id","dir-list"),q(i,"class","table table-dark table-hover table-bordered")},m(e,t){E(e,n,t),I(n,s),E(e,r,t),E(e,i,t),I(i,o),I(i,a),I(i,l),d.m(l,null)},p(e,[t]){2&t&&D(s,e[1]),u===(u=c(e))&&d?d.p(e,t):(d.d(1),d=u(e),d&&(d.c(),d.m(l,null)))},i:e,o:e,d(e){e&&N(n),e&&N(r),e&&N(i),d.d()}}}function mo(e,t,n){const s=ie("socket");let r=[],i="";te((async()=>{let e=await xs.get("/api/admin/directories");n(0,r=e.data),s.on("scan-finish",(({id:e})=>{if(e){r.find((t=>t.Id===e)).IsLoading=!1,n(0,r)}})),s.on("scan-info",(e=>{console.log(e)}))})),ne((()=>{delete s._callbacks["$scan-finish"],delete s._callbacks["$scan-info"]}));return[r,i,e=>{let t=e.target.closest("tr");t&&xs.delete("/api/admin/directories/remove",{data:{Id:t.id}}).then((({data:e})=>{e.removed?(n(0,r=r.filter((e=>e.Id!==t.id))),n(0,r)):n(1,i=e.msg)}))},e=>{let t=e.target.closest("tr"),i=r.find((e=>e.Id===t.id));s.emit("scan-dir",{Id:i.Id}),i.IsLoading=!0,n(0,r)}]}class go extends qe{constructor(e){super(),Me(this,e,mo,ho,a,{})}}function vo(e){let t,n,s,r,i;return n=new lo({}),{c(){t=A("div"),Re(n.$$.fragment),q(t,"id","tabs-content"),q(t,"class","svelte-1crvm1x")},m(e,s){E(e,t,s),Oe(n,t,null),i=!0},i(e){i||(Ie(n.$$.fragment,e),pe((()=>{r&&r.end(1),s=Ee(t,ri,{y:200,duration:200}),s.start()})),i=!0)},o(e){Te(n.$$.fragment,e),s&&s.invalidate(),r=Ne(t,ri,{y:200,duration:200}),i=!1},d(e){e&&N(t),Pe(n),e&&r&&r.end()}}}function yo(e){let t,n,s,r,i;return n=new go({}),{c(){t=A("div"),Re(n.$$.fragment),q(t,"id","tabs-content"),q(t,"class","svelte-1crvm1x")},m(e,s){E(e,t,s),Oe(n,t,null),i=!0},i(e){i||(Ie(n.$$.fragment,e),pe((()=>{r&&r.end(1),s=Ee(t,ri,{y:200,duration:200}),s.start()})),i=!0)},o(e){Te(n.$$.fragment,e),s&&s.invalidate(),r=Ne(t,ri,{y:200,duration:200}),i=!1},d(e){e&&N(t),Pe(n),e&&r&&r.end()}}}function $o(e){let t,n,s,r,o,a,l,c,u,d,f,p,h,m,g,v,y,$;const b=[yo,vo],w=[];function k(e,t){return 1&t&&(h=null),null==h&&(h=!!e[0].includes("tab-1")),h?0:1}return m=k(e,-1),g=w[m]=b[m](e),{c(){t=A("div"),n=A("div"),s=A("div"),r=A("input"),o=R(),a=A("label"),a.innerHTML='<i class="fas fa-folder svelte-1crvm1x"></i> \n        <span id="dirs" class="svelte-1crvm1x">Directories</span>',l=R(),c=A("div"),u=A("input"),d=R(),f=A("label"),f.innerHTML='<div class="fas fa-hdd svelte-1crvm1x"></div> \n        <span id="disks" class="svelte-1crvm1x">Server</span>',p=R(),g.c(),q(r,"type","radio"),r.__value="tab-1",r.value=r.__value,q(r,"id","tab1"),q(r,"class","svelte-1crvm1x"),e[2][0].push(r),q(a,"class","nav-link svelte-1crvm1x"),q(a,"for","tab1"),q(s,"class","nav-item"),q(u,"type","radio"),u.__value="tab-2",u.value=u.__value,q(u,"id","tab2"),q(u,"class","svelte-1crvm1x"),e[2][0].push(u),q(f,"class","nav-link svelte-1crvm1x"),q(f,"for","tab2"),q(c,"class","nav-item"),q(n,"class","nav nav-tabs controls svelte-1crvm1x"),q(t,"class","card bg-dark text-light admin-manager svelte-1crvm1x")},m(i,h){E(i,t,h),I(t,n),I(n,s),I(s,r),r.checked=r.__value===e[0],I(s,o),I(s,a),I(n,l),I(n,c),I(c,u),u.checked=u.__value===e[0],I(c,d),I(c,f),I(t,p),w[m].m(t,null),v=!0,y||($=[P(r,"change",e[1]),P(u,"change",e[3])],y=!0)},p(e,[n]){1&n&&(r.checked=r.__value===e[0]),1&n&&(u.checked=u.__value===e[0]);let s=m;m=k(e,n),m!==s&&(xe(),Te(w[s],1,1,(()=>{w[s]=null})),_e(),g=w[m],g||(g=w[m]=b[m](e),g.c()),Ie(g,1),g.m(t,null))},i(e){v||(Ie(g),v=!0)},o(e){Te(g),v=!1},d(n){n&&N(t),e[2][0].splice(e[2][0].indexOf(r),1),e[2][0].splice(e[2][0].indexOf(u),1),w[m].d(),y=!1,i($)}}}function bo(e,t,n){let{tab:s="tab-1"}=t;return e.$$set=e=>{"tab"in e&&n(0,s=e.tab)},e.$$.update=()=>{1&e.$$.dirty&&We(`/content-manager/${s||"tab-1"}`,{replace:!0})},[s,function(){s=this.__value,n(0,s)},[[]],function(){s=this.__value,n(0,s)}]}class wo extends qe{constructor(e){super(),Me(this,e,bo,$o,a,{tab:0})}}function ko(e,t,n){const s=e.slice();return s[16]=t[n].Id,s[17]=t[n].Name,s[18]=t[n].Type,s[19]=t[n].Folder,s}function xo(e){let t,n;return t=new qi({props:{file:e[4],modalType:e[6]}}),t.$on("submit",e[10]),t.$on("click",e[11]),{c(){Re(t.$$.fragment)},m(e,s){Oe(t,e,s),n=!0},p(e,n){const s={};16&n&&(s.file=e[4]),64&n&&(s.modalType=e[6]),t.$set(s)},i(e){n||(Ie(t.$$.fragment,e),n=!0)},o(e){Te(t.$$.fragment,e),n=!1},d(e){Pe(t,e)}}}function _o(e){let t,n=e[3],s=[];for(let t=0;t<n.length;t+=1)s[t]=To(ko(e,n,t));return{c(){for(let e=0;e<s.length;e+=1)s[e].c();t=O()},m(e,n){for(let t=0;t<s.length;t+=1)s[t].m(e,n);E(e,t,n)},p(e,r){if(520&r){let i;for(n=e[3],i=0;i<n.length;i+=1){const o=ko(e,n,i);s[i]?s[i].p(o,r):(s[i]=To(o),s[i].c(),s[i].m(t.parentNode,t))}for(;i<s.length;i+=1)s[i].d(1);s.length=n.length}},d(e){S(s,e),e&&N(t)}}}function Io(t){let n;return{c(){n=A("tr"),n.innerHTML='<td colspan="3">No Files Found</td>'},m(e,t){E(e,n,t)},p:e,d(e){e&&N(n)}}}function To(e){let t,n,s,r,i,o,a,l,c,u,d,f,p=e[17]+"",h=e[19].Path+"";return{c(){t=A("tr"),n=A("td"),n.innerHTML='<i class="fas fa-edit svelte-2ttdvu"></i> \n                <i class="fas fa-trash-alt svelte-2ttdvu"></i>',s=R(),r=A("td"),i=L(p),o=R(),a=A("td"),l=L(h),c=R(),q(t,"id",u=e[16])},m(u,p){E(u,t,p),I(t,n),I(t,s),I(t,r),I(r,i),I(t,o),I(t,a),I(a,l),I(t,c),d||(f=P(t,"click",e[9]),d=!0)},p(e,n){8&n&&p!==(p=e[17]+"")&&D(i,p),8&n&&h!==(h=e[19].Path+"")&&D(l,h),8&n&&u!==(u=e[16])&&q(t,"id",u)},d(e){e&&N(t),d=!1,f()}}}function Co(e){let t,n,s,r,i,o,a,l,c,u,d,f,p,h,m,g,v,y=`${e[2]} - Files`,$=e[5]&&xo(e);function b(e,t){return e[3].length<1?Io:_o}r=new $i({}),r.$on("filter",e[7]);let w=b(e),k=w(e);return g=new Ii({props:{page:e[0],totalPages:e[1]}}),g.$on("gotopage",e[8]),{c(){$&&$.c(),t=R(),n=A("div"),s=A("div"),Re(r.$$.fragment),i=R(),o=A("h4"),a=L(y),l=R(),c=A("div"),u=A("table"),d=A("thead"),d.innerHTML="<tr><td>Actions</td> \n          <td>Name</td> \n          <td>Path</td></tr>",f=R(),p=A("tbody"),k.c(),h=R(),m=A("div"),Re(g.$$.fragment),q(o,"class","text-center svelte-2ttdvu"),q(s,"class","controls svelte-2ttdvu"),q(u,"class","table table-bordered table-dark"),q(c,"class","list-container svelte-2ttdvu"),q(m,"class","list-controls svelte-2ttdvu"),q(n,"class","file-list col-6 svelte-2ttdvu")},m(e,y){$&&$.m(e,y),E(e,t,y),E(e,n,y),I(n,s),Oe(r,s,null),I(s,i),I(s,o),I(o,a),I(n,l),I(n,c),I(c,u),I(u,d),I(u,f),I(u,p),k.m(p,null),I(n,h),I(n,m),Oe(g,m,null),v=!0},p(e,[n]){e[5]?$?($.p(e,n),32&n&&Ie($,1)):($=xo(e),$.c(),Ie($,1),$.m(t.parentNode,t)):$&&(xe(),Te($,1,1,(()=>{$=null})),_e()),(!v||4&n)&&y!==(y=`${e[2]} - Files`)&&D(a,y),w===(w=b(e))&&k?k.p(e,n):(k.d(1),k=w(e),k&&(k.c(),k.m(p,null)));const s={};1&n&&(s.page=e[0]),2&n&&(s.totalPages=e[1]),g.$set(s)},i(e){v||(Ie($),Ie(r.$$.fragment,e),Ie(g.$$.fragment,e),v=!0)},o(e){Te($),Te(r.$$.fragment,e),Te(g.$$.fragment,e),v=!1},d(e){$&&$.d(e),e&&N(t),e&&N(n),Pe(r),k.d(),Pe(g)}}}function Eo(e,t,n){const s=ie("socket");let{page:r=1}=t,{filter:i=""}=t,o=0,a=0,l=[],c={},u=!1,d={};const f=async e=>{let{data:t}=await xs.get(`/api/admin/files/${e}/${(()=>{let e=document.querySelector(".list-container")||{};return parseInt(e.offsetHeight/45)-1})()}/${i||""}`);t.files&&(n(3,l=t.files),n(1,o=t.totalPages||0),n(2,a=t.totalItems||0),n(0,r=e))};te((async()=>{f(1),s.on("file-renamed",(e=>{e.success&&(n(4,c.Name=e.Name,c),n(3,l),p())})),s.on("file-removed",(e=>{e.success&&(r===o&&l.length>1?n(3,l=l.filter((e=>e.Id!==c.Id))):(n(0,r=r>1?r-1:r),f(r)),p())}))})),ne((()=>{delete s._callbacks["$file-renamed"],delete s._callbacks["$file-removed"]}));const p=()=>{n(5,u=!1),n(4,c={})};return e.$$set=e=>{"page"in e&&n(0,r=e.page),"filter"in e&&n(12,i=e.filter)},[r,o,a,l,c,u,d,e=>{n(12,i=e.detail),f(1)},e=>{(e=parseInt(e.detail))<1||e>o||(n(0,r=e<1?1:e>o?o:e),f(r))},e=>{let t=e.target;if("I"===t.tagName){n(4,c=l.find((e=>e.Id===t.closest("tr").id)));let e=t.classList.toString();/fa-edit/gi.test(e)?n(6,d={title:"Edit File",Del:!1,isFile:!0}):n(6,d={title:"Remove File",Del:!0,isFile:!0}),n(5,u=!0)}},e=>{if(d.Del){let t=e.target.querySelector("input").checked;s.emit("remove-file",{Id:c.Id,Del:t})}else{let t=e.target.querySelector("input").value;t?s.emit("rename-file",{Id:c.Id,Name:t}):n(6,d.error="Name Can't be empty",d)}},p,i]}class No extends qe{constructor(e){super(),Me(this,e,Eo,Co,a,{page:0,filter:12})}}function So(t){let n,s,r,i,o,a,l,c,u,d,f;return n=new ti({props:{navItems:t[0]}}),n.$on("click",t[1]),i=new ft({props:{path:"/folders/:page/:filter",component:Xi}}),a=new ft({props:{path:"/content-manager/:tab",component:wo}}),c=new ft({props:{path:"/files/:page/:filter",component:No}}),d=new ft({props:{path:"/",component:mi}}),{c(){Re(n.$$.fragment),s=R(),r=A("div"),Re(i.$$.fragment),o=R(),Re(a.$$.fragment),l=R(),Re(c.$$.fragment),u=R(),Re(d.$$.fragment),q(r,"class","content svelte-913v8z")},m(e,t){Oe(n,e,t),E(e,s,t),E(e,r,t),Oe(i,r,null),I(r,o),Oe(a,r,null),I(r,l),Oe(c,r,null),I(r,u),Oe(d,r,null),f=!0},p:e,i(e){f||(Ie(n.$$.fragment,e),Ie(i.$$.fragment,e),Ie(a.$$.fragment,e),Ie(c.$$.fragment,e),Ie(d.$$.fragment,e),f=!0)},o(e){Te(n.$$.fragment,e),Te(i.$$.fragment,e),Te(a.$$.fragment,e),Te(c.$$.fragment,e),Te(d.$$.fragment,e),f=!1},d(e){Pe(n,e),e&&N(s),e&&N(r),Pe(i),Pe(a),Pe(c),Pe(d)}}}function Ao(e){let t,n;return t=new rt({props:{$$slots:{default:[So]},$$scope:{ctx:e}}}),{c(){Re(t.$$.fragment)},m(e,s){Oe(t,e,s),n=!0},p(e,[n]){const s={};4&n&&(s.$$scope={dirty:n,ctx:e}),t.$set(s)},i(e){n||(Ie(t.$$.fragment,e),n=!0)},o(e){Te(t.$$.fragment,e),n=!1},d(e){Pe(t,e)}}}function Lo(e){return[[{title:"Users",path:"/",class:"users"},{title:"Files",path:"/files",class:"file"},{title:"Folders",path:"/folders",class:"folder"},{title:"Content Manager",path:"/content-manager/tab-1",class:"sitemap"}],function(t){oe.call(this,e,t)}]}class Ro extends qe{constructor(e){super(),Me(this,e,Lo,Ao,a,{})}}const Oo=Be([]);function Po(e,t,n){const s=e.slice();return s[10]=t[n].Id,s[11]=t[n].Name,s[12]=t[n].Type,s[13]=t[n].Cover,s[14]=t[n].FileCount,s[15]=t[n].FilesType,s[17]=n,s}function jo(e){let t,n,s,r,o,a,l,u,d,f,p,h,m,g,v,y,$,b,w,k,x,_,T=e[14]+"",C=e[11]+"";return{c(){t=A("div"),n=A("div"),s=A("div"),r=A("span"),r.innerHTML='<i class="fas fa-folder svelte-f0bvf6"></i>',o=R(),a=A("span"),l=L(T),u=R(),d=A("span"),d.innerHTML='<i class="fas fa-trash-alt svelte-f0bvf6"></i>',f=R(),p=A("div"),h=A("img"),g=R(),v=A("div"),y=L(C),$=R(),q(r,"class","file-btn-left"),q(a,"class","file-progress"),q(d,"class","remove"),q(s,"class","file-btns"),c(h.src,m=e[13])||q(h,"src",m),q(h,"alt","No Cover Found"),q(p,"class","file-cover"),q(v,"class","file-name"),q(n,"class","file-info"),q(t,"class","file"),q(t,"id",b=e[10]),q(t,"data-type",w=e[12]),q(t,"data-types",k=e[15]),q(t,"tabindex","0"),W(t,"current",e[17]===e[1])},m(i,c){E(i,t,c),I(t,n),I(n,s),I(s,r),I(s,o),I(s,a),I(a,l),I(s,u),I(s,d),I(n,f),I(n,p),I(p,h),I(n,g),I(n,v),I(v,y),I(t,$),x||(_=[P(r,"click",M(e[4])),P(p,"dblclick",M(e[4]))],x=!0)},p(e,n){1&n&&T!==(T=e[14]+"")&&D(l,T),1&n&&!c(h.src,m=e[13])&&q(h,"src",m),1&n&&C!==(C=e[11]+"")&&D(y,C),1&n&&b!==(b=e[10])&&q(t,"id",b),1&n&&w!==(w=e[12])&&q(t,"data-type",w),1&n&&k!==(k=e[15])&&q(t,"data-types",k),2&n&&W(t,"current",e[17]===e[1])},d(e){e&&N(t),x=!1,i(_)}}}function Mo(t){let n,s,r,o,a,l,c,u,d,f,p,h=t[0],m=[];for(let e=0;e<h.length;e+=1)m[e]=jo(Po(t,h,e));return{c(){n=A("div"),s=A("div"),s.innerHTML='<span class="svelte-f0bvf6"><i class="fas fa-folder svelte-f0bvf6"></i>\n      Recents</span>',r=R(),o=A("div"),a=A("span"),l=R(),c=A("div");for(let e=0;e<m.length;e+=1)m[e].c();u=R(),d=A("span"),q(s,"class","title svelte-f0bvf6"),q(a,"class","fas fa-chevron-circle-left svelte-f0bvf6"),q(c,"class","carousel svelte-f0bvf6"),q(c,"tabindex","0"),q(d,"class","fas fa-chevron-circle-right svelte-f0bvf6"),q(o,"class","wrapper svelte-f0bvf6"),q(n,"class","content svelte-f0bvf6")},m(e,i){E(e,n,i),I(n,s),I(n,r),I(n,o),I(o,a),I(o,l),I(o,c);for(let e=0;e<m.length;e+=1)m[e].m(c,null);t[6](c),I(o,u),I(o,d),f||(p=[P(a,"click",t[3]),P(c,"scroll",t[5]),P(d,"click",t[3])],f=!0)},p(e,[t]){if(19&t){let n;for(h=e[0],n=0;n<h.length;n+=1){const s=Po(e,h,n);m[n]?m[n].p(s,t):(m[n]=jo(s),m[n].c(),m[n].m(c,null))}for(;n<m.length;n+=1)m[n].d(1);m.length=h.length}},i:e,o:e,d(e){e&&N(n),S(m,e),t[6](null),f=!1,i(p)}}}function qo(e,t,n){let s,r=[],i=0;xs.get("/api/files/recents").then((({data:e})=>{e instanceof Array&&n(0,r=e)}));let o;const a=()=>{if(s){let e=document.querySelector(".file");e&&(s.offsetWidth,e.offsetWidth)}};return te((()=>(a(),window.onresize=a,()=>{window.onresize=null}))),[r,i,s,({target:{classList:e}})=>{let t,{scrollLeft:n,offsetWidth:r,scrollWidth:i}=s;e.contains("fa-chevron-circle-left")?(t=n-r,0===n&&(t=i)):(t=n+r,n===i-r&&(t=0)),s.scroll({left:t,behavior:"smooth"})},({target:e})=>{let t=r.find((t=>t.Id===e.closest(".file").id));localStorage.setItem("content","/"),We(`/${t.FilesType}/viewer/${t.Id}/${t.CurrentFile}`)},e=>{o&&clearTimeout(o),o=setTimeout((()=>{let e=document.querySelector(".file");n(1,i=Math.round(s.scrollLeft/e.offsetWidth+.05)),s.scroll({left:i*e.offsetWidth,behavior:"smooth"})}),100)},function(e){le[e?"unshift":"push"]((()=>{s=e,n(2,s)}))}]}class Fo extends qe{constructor(e){super(),Me(this,e,qo,Mo,a,{})}}const Bo=e=>{let t=document.querySelectorAll(".img-current img")[e];t&&t.scrollIntoView()},Do=function(e,t,n,s,r){let i=t<0?0:t,o=[];for(;o.length<n&&!(i>r-1||i<0);)e[i]||o.push(i),i+=s>0?1:-1;return o};function Ho(e){if(0===e)return"00:00";var t=Math.floor(e/3600),n=Math.floor(60*(e/3600-t)),s=Math.floor(e%60);return(0===t?"":t+":")+String(n).padStart(2,"0")+":"+String(s).padStart(2,"0")}const Uo=/(android)|(iphone)/i.test(navigator.userAgent),zo=Uo?15:0,Vo=Uo?170:200,Wo=e=>{let t=document.body.offsetWidth;return parseInt((t-zo)/Vo)*e},Ko={Manga:{type:"mangas",class:"book-open",formatter:(e,t)=>`${parseInt(e||0)+1}/${t}`},Video:{type:"videos",class:"play-circle",formatter:(e,t)=>`${Ho(e)}/${Ho(t)}`},Folder:{type:"folders",class:"folder-open",formatter:()=>""}},Yo=(e,t,n)=>{const s=location.pathname;let r=s.replace(/(^\/+|\/+$)/g,"").split("/")[0];switch(e.dataset.type){case"Manga":case"Video":{let n=s.replace(/(^\/+|\/+$)/g,"").split("/").slice(0,3);n[1]="viewer";let r=`/${n.join("/")}/${e.id}`;localStorage.setItem("content",s),localStorage.setItem("fileId",e.id),We(r),console.log(n[2]),t&&t.emit("recent-folder",{CurrentFile:e.id,FolderId:n[2]});break}default:localStorage.setObject("folder",{folder:e.id,pathname:s}),We(`/${n||r}/content/${e.id}/`)}},Xo=function(e,t,n,s,r){return(e-t)*(r-s)/(n-t)+s};var Jo=0;const Qo=e=>[...document.querySelectorAll(".file")].indexOf(e),Go=e=>{Jo=e;let t=(e=>[...document.querySelectorAll(".file")][e])(e);if(t){let n=t.parentElement,s=n.parentElement,r=s.scrollTop,i=t.offsetTop;i-r+1<-1&&(r=i<60?0:i);let o=i+t.offsetHeight,a=r+s.offsetHeight;o-a+1>0&&(r=o+31>n.offsetHeight?n.offsetHeight-10:r+(o-a)),s.scroll({top:r,behavior:"smooth"});let l=document.querySelector(".file.active");l&&l.classList.remove("active"),t.classList.add("active"),t.focus(),window.localStorage.setItem("selected",e)}return t},Zo=(e,t,n,s)=>{let r=document.querySelector(".file"),i=0;if(r){let o=!1,a=(()=>{let e=document.querySelector(".file");return Math.floor(e.parentElement.offsetWidth/e.offsetWidth)})(),l=document.querySelectorAll(".file").length;switch(Jo=Qo(r.parentElement.querySelector(".active")),e.keyCode){case 13:console.log("file",e.target),s(e.target);break;case 37:Jo>0?Go(Jo-1):n&&(i=Wo(3)-1,n({detail:t-1},i)),o=!0;break;case 38:n&&e.ctrlKey?(i=Wo(3)-1,n({detail:t-1},i)):Jo-a>=0&&Go(Jo-a),o=!0;break;case 39:Jo<l-1?Go(Jo+1):n&&n({detail:parseInt(t)+1},0),o=!0;break;case 40:n&&e.ctrlKey?n({detail:parseInt(t)+1},0):Jo+a<l&&Go(Jo+a),o=!0;break;case 36:Go(0),o=!0;break;case 35:Go(l-1),o=!0}o&&e.preventDefault()}};function ea(e,t,n){const s=e.slice();return s[13]=t[n],s}function ta(e){let t,n;function s(e,n){return 2&n&&(t=null),null==t&&(t=!!e[1].startsWith("favorites")),t?ra:e[2]?sa:na}let r=s(e,-1),i=r(e);return{c(){i.c(),n=O()},m(e,t){i.m(e,t),E(e,n,t)},p(e,t){r===(r=s(e,t))&&i?i.p(e,t):(i.d(1),i=r(e),i&&(i.c(),i.m(n.parentNode,n)))},d(e){i.d(e),e&&N(n)}}}function na(t){let n;return{c(){n=A("i"),q(n,"class","far fa-star")},m(e,s){E(e,n,s),t[10](n)},p:e,d(e){e&&N(n),t[10](null)}}}function sa(t){let n;return{c(){n=A("i"),q(n,"class","fas fa-star")},m(e,t){E(e,n,t)},p:e,d(e){e&&N(n)}}}function ra(t){let n;return{c(){n=A("i"),q(n,"class","fas fa-trash-alt text-danger")},m(e,s){E(e,n,s),t[9](n)},p:e,d(e){e&&N(n),t[9](null)}}}function ia(e){let t,n=e[5],s=[];for(let t=0;t<n.length;t+=1)s[t]=oa(ea(e,n,t));return{c(){t=A("ul");for(let e=0;e<s.length;e+=1)s[e].c();q(t,"class","svelte-5vo8z2")},m(e,n){E(e,t,n);for(let e=0;e<s.length;e+=1)s[e].m(t,null)},p(e,r){if(96&r){let i;for(n=e[5],i=0;i<n.length;i+=1){const o=ea(e,n,i);s[i]?s[i].p(o,r):(s[i]=oa(o),s[i].c(),s[i].m(t,null))}for(;i<s.length;i+=1)s[i].d(1);s.length=n.length}},d(e){e&&N(t),S(s,e)}}}function oa(e){let t,n,s,r,i,o=e[13].Name+"";return{c(){t=A("li"),n=L(o),q(t,"id",s=e[13].Id),q(t,"class","svelte-5vo8z2")},m(s,o){E(s,t,o),I(t,n),r||(i=P(t,"click",e[6]),r=!0)},p(e,r){32&r&&o!==(o=e[13].Name+"")&&D(n,o),32&r&&s!==(s=e[13].Id)&&q(t,"id",s)},d(e){e&&N(t),r=!1,i()}}}function aa(t){let n,s,r,i="Folder"===t[0]&&ta(t),o=t[4]&&ia(t);return{c(){n=A("span"),s=A("span"),i&&i.c(),r=R(),o&&o.c(),q(s,"class","fav-icon"),q(n,"class","fav-control svelte-5vo8z2")},m(e,t){E(e,n,t),I(n,s),i&&i.m(s,null),I(n,r),o&&o.m(n,null)},p(e,[t]){"Folder"===e[0]?i?i.p(e,t):(i=ta(e),i.c(),i.m(s,null)):i&&(i.d(1),i=null),e[4]?o?o.p(e,t):(o=ia(e),o.c(),o.m(n,null)):o&&(o.d(1),o=null)},i:e,o:e,d(e){e&&N(n),i&&i.d(),o&&o.d()}}}function la(e,t,n){let s;d(e,Oo,(e=>n(5,s=e)));let{Type:r}=t,{type:i}=t,{isFav:o}=t,{favClicked:a}=t,{favId:l}=t;const c=se();let u,f=!1;return e.$$set=e=>{"Type"in e&&n(0,r=e.Type),"type"in e&&n(1,i=e.type),"isFav"in e&&n(2,o=e.isFav),"favClicked"in e&&n(7,a=e.favClicked),"favId"in e&&n(8,l=e.favId)},e.$$.update=()=>{136&e.$$.dirty&&(a===u&&u?(n(4,f=u.classList.contains("far")),u.classList.contains("fa-trash-alt")&&(async e=>{let{data:t}=await xs.post("/api/files/favorites/remove-folder",{id:l,fid:e});t.removed&&c("removeFile",e)})(u.closest(".file").id)):n(4,f=!1))},[r,i,o,u,f,s,async e=>{let t=e.target.closest(".file").id,s=e.target.id;const{data:r}=await xs.post("/api/files/favorites/add-folder",{FolderId:t,FavoriteId:s});r.success&&n(3,u.className="fas fa-star",u)},a,l,function(e){le[e?"unshift":"push"]((()=>{u=e,n(3,u)}))},function(e){le[e?"unshift":"push"]((()=>{u=e,n(3,u)}))}]}class ca extends qe{constructor(e){super(),Me(this,e,la,aa,a,{Type:0,type:1,isFav:2,favClicked:7,favId:8})}}function ua(e,t,n){const s=e.slice();return s[30]=t[n].Id,s[31]=t[n].Name,s[32]=t[n].Type,s[33]=t[n].Cover,s[34]=t[n].CurrentPos,s[35]=t[n].Duration,s[36]=t[n].isFav,s[37]=t[n].FileCount,s[39]=n,s}function da(t){let n,s,r;return{c(){n=A("button"),n.textContent="Continue",q(n,"class","btn btn-secondary")},m(e,i){E(e,n,i),s||(r=P(n,"click",t[13]),s=!0)},p:e,d(e){e&&N(n),s=!1,r()}}}function fa(e){let t,n=Ko[e[32]].formatter(e[34],e[35])+"";return{c(){t=L(n)},m(e,n){E(e,t,n)},p(e,s){16&s[0]&&n!==(n=Ko[e[32]].formatter(e[34],e[35])+"")&&D(t,n)},d(e){e&&N(t)}}}function pa(e){let t,n=e[37]+"";return{c(){t=L(n)},m(e,n){E(e,t,n)},p(e,s){16&s[0]&&n!==(n=e[37]+"")&&D(t,n)},d(e){e&&N(t)}}}function ha(e){let t,n,s,r,o,a,l,u,d,f,p,h,m,g,v,$,b,w,k,x,_,T,C,S,O,j=e[31]+"";function F(e,t){return 16&t[0]&&(d=null),null==d&&(d=!!e[32].includes("Folder")),d?pa:fa}let B=F(e,[-1,-1]),H=B(e);return p=new ca({props:{isFav:e[36],type:e[3],Type:e[32],favClicked:e[5],favId:e[2]}}),p.$on("removeFile",e[15]),{c(){t=A("div"),n=A("div"),s=A("div"),r=A("span"),o=A("i"),l=R(),u=A("span"),H.c(),f=R(),Re(p.$$.fragment),h=R(),m=A("div"),g=A("img"),$=R(),b=A("div"),w=L(j),k=R(),q(o,"class",a=y("fas fa-"+Ko[e[32]].class)+" svelte-5zjxis"),q(r,"class","file-btn-left svelte-5zjxis"),q(u,"class","file-progress"),q(s,"class","file-btns"),c(g.src,v=e[33])||q(g,"src",v),q(g,"alt","No Cover Found"),q(g,"class","svelte-5zjxis"),q(m,"class","file-cover"),q(b,"class","file-name"),q(n,"class","file-info"),q(t,"class","file svelte-5zjxis"),q(t,"id",x=e[30]),q(t,"data-type",_=e[32]),q(t,"tabindex","0")},m(i,a){E(i,t,a),I(t,n),I(n,s),I(s,r),I(r,o),I(s,l),I(s,u),H.m(u,null),I(s,f),Oe(p,s,null),I(n,h),I(n,m),I(m,g),I(n,$),I(n,b),I(b,w),I(t,k),C=!0,S||(O=[P(r,"click",M(e[11])),P(m,"dblclick",M(e[11]))],S=!0)},p(e,n){(!C||16&n[0]&&a!==(a=y("fas fa-"+Ko[e[32]].class)+" svelte-5zjxis"))&&q(o,"class",a),B===(B=F(e,n))&&H?H.p(e,n):(H.d(1),H=B(e),H&&(H.c(),H.m(u,null)));const s={};16&n[0]&&(s.isFav=e[36]),8&n[0]&&(s.type=e[3]),16&n[0]&&(s.Type=e[32]),32&n[0]&&(s.favClicked=e[5]),4&n[0]&&(s.favId=e[2]),p.$set(s),(!C||16&n[0]&&!c(g.src,v=e[33]))&&q(g,"src",v),(!C||16&n[0])&&j!==(j=e[31]+"")&&D(w,j),(!C||16&n[0]&&x!==(x=e[30]))&&q(t,"id",x),(!C||16&n[0]&&_!==(_=e[32]))&&q(t,"data-type",_)},i(e){C||(Ie(p.$$.fragment,e),T||pe((()=>{T=Ee(t,si,{}),T.start()})),C=!0)},o(e){Te(p.$$.fragment,e),C=!1},d(e){e&&N(t),H.d(),Pe(p),S=!1,i(O)}}}function ma(e){let t,n,s,r,o,a,l,u,d,p,v,$,b,w,k,x=e[4].totalFiles+"",_=e[18]&&function(e){let t,n,s,r,o,a,l,u,d,f,p,h,m,g,v,y,$,b,w,k=e[6].Name+"",x=e[7]&&da(e);return{c(){t=A("div"),n=A("div"),s=A("img"),o=R(),a=A("h4"),l=L(k),u=R(),d=A("div"),x&&x.c(),f=R(),p=A("button"),p.textContent="First",h=R(),m=A("button"),m.textContent="Last",g=R(),v=A("button"),v.textContent="Reset All",y=R(),$=A("button"),$.textContent="Update",c(s.src,r=e[6].Cover)||q(s,"src",r),q(s,"alt","Place Holder"),q(s,"class","svelte-5zjxis"),q(n,"id","img-info"),q(n,"class","svelte-5zjxis"),q(a,"class","svelte-5zjxis"),q(p,"id","first"),q(p,"class","btn btn-secondary"),q(m,"id","last"),q(m,"class","btn btn-secondary"),q(v,"class","btn btn-secondary"),q($,"class","btn btn-secondary"),q(d,"id","btn-bar"),q(t,"id","info"),q(t,"class","svelte-5zjxis")},m(r,i){E(r,t,i),I(t,n),I(n,s),I(t,o),I(t,a),I(a,l),I(t,u),I(t,d),x&&x.m(d,null),I(d,f),I(d,p),I(d,h),I(d,m),I(d,g),I(d,v),I(d,y),I(d,$),b||(w=[P(p,"click",e[12]),P(m,"click",e[12]),P(v,"click",e[17]),P($,"click",e[16])],b=!0)},p(e,t){64&t[0]&&!c(s.src,r=e[6].Cover)&&q(s,"src",r),64&t[0]&&k!==(k=e[6].Name+"")&&D(l,k),e[7]?x?x.p(e,t):(x=da(e),x.c(),x.m(d,f)):x&&(x.d(1),x=null)},d(e){e&&N(t),x&&x.d(),b=!1,i(w)}}}(e),T=e[4].files,C=[];for(let t=0;t<T.length;t+=1)C[t]=ha(ua(e,T,t));const O=e=>Te(C[e],1,1,(()=>{C[e]=null})),j=e[22].default,M=f(j,e,e[21],null);return l=new $i({props:{filter:e[1]}}),l.$on("filter",e[9]),d=new Ii({props:{page:parseInt(e[0]||1),totalPages:e[4].totalPages}}),d.$on("gotopage",e[8]),{c(){t=A("div"),_&&_.c(),n=R(),s=A("div");for(let e=0;e<C.length;e+=1)C[e].c();r=R(),o=A("div"),M&&M.c(),a=R(),Re(l.$$.fragment),u=R(),Re(d.$$.fragment),p=R(),v=A("span"),$=L(x),q(s,"class","files-list svelte-5zjxis"),q(t,"class",y("scroll-container")+" svelte-5zjxis"),W(t,"r-content",e[18]),q(v,"class","items"),q(o,"class","controls svelte-5zjxis")},m(i,c){E(i,t,c),_&&_.m(t,null),I(t,n),I(t,s);for(let e=0;e<C.length;e+=1)C[e].m(s,null);E(i,r,c),E(i,o,c),M&&M.m(o,null),I(o,a),Oe(l,o,null),I(o,u),Oe(d,o,null),I(o,p),I(o,v),I(v,$),b=!0,w||(k=[P(s,"keydown",e[10]),P(s,"click",e[14])],w=!0)},p(e,t){if(e[18]&&_.p(e,t),34876&t[0]){let n;for(T=e[4].files,n=0;n<T.length;n+=1){const r=ua(e,T,n);C[n]?(C[n].p(r,t),Ie(C[n],1)):(C[n]=ha(r),C[n].c(),Ie(C[n],1),C[n].m(s,null))}for(xe(),n=T.length;n<C.length;n+=1)O(n);_e()}M&&M.p&&(!b||2097152&t[0])&&m(M,j,e,e[21],b?h(j,e[21],t,null):g(e[21]),null);const n={};2&t[0]&&(n.filter=e[1]),l.$set(n);const r={};1&t[0]&&(r.page=parseInt(e[0]||1)),16&t[0]&&(r.totalPages=e[4].totalPages),d.$set(r),(!b||16&t[0])&&x!==(x=e[4].totalFiles+"")&&D($,x)},i(e){if(!b){for(let e=0;e<T.length;e+=1)Ie(C[e]);Ie(M,e),Ie(l.$$.fragment,e),Ie(d.$$.fragment,e),b=!0}},o(e){C=C.filter(Boolean);for(let e=0;e<C.length;e+=1)Te(C[e]);Te(M,e),Te(l.$$.fragment,e),Te(d.$$.fragment,e),b=!1},d(e){e&&N(t),_&&_.d(),S(C,e),e&&N(r),e&&N(o),M&&M.d(e),Pe(l),Pe(d),w=!1,i(k)}}}function ga(e,t,n){let s;d(e,jr,(e=>n(20,s=e)));let{$$slots:r={},$$scope:i}=t,{id:o=""}=t,{page:a=1}=t,{filter:l=""}=t,{type:c=""}=t,{title:u=""}=t;const f=ie("socket"),p=ie("logout");let h={files:[],totalPages:0,totalFiles:0},m=0,g=null,v={},y="";const $=xs.CancelToken;let b;const w=async(e=1,t="",s="",r,i)=>{try{b&&b();let o=((e=1,{order:t="nu",items:n},s,r,i,o)=>{let a=0===(n||0)?Wo(3):n;r.includes("content")&&(r=`folder-content/${i}`),s=(s||"").replace("%"," ");let l="";return l=["mangas","videos"].includes(r)?`/api/files/${r}/${o}/${t}/${e}/${a}/${s}`:`/api/files/${r}/${t}/${e}/${a}/${s}`,l})(e,{items:r.items,order:r.order[u]||"nu"},t,i||c,s),{data:a}=await xs.get(o,{cancelToken:new $((function(e){b=e}))});"object"==typeof a?(n(4,h=a),a.files[0]&&n(6,v=a.files[0].Folder),n(7,y=a.currentFile),m=h.files.findIndex((e=>e.Id===y))||0):p()}catch(e){console.log(e)}},k=async(e,t)=>{e=parseInt(e.detail);let{totalPages:n}=h;e<1||e>n||isNaN(e)||(We(`/${c}/${e=e<1?1:e>n?n:e}/${l||""}`),m=t||0)};var x;x=()=>{let e=m,t=localStorage.getItem("fileId"),n=document.getElementById(t);t&&n&&(e=Qo(n),localStorage.removeItem("fileId")),Go(e)},ee().$$.after_update.push(x);let _=location.pathname.includes("content");return e.$$set=e=>{"id"in e&&n(2,o=e.id),"page"in e&&n(0,a=e.page),"filter"in e&&n(1,l=e.filter),"type"in e&&n(3,c=e.type),"title"in e&&n(19,u=e.title),"$$scope"in e&&n(21,i=e.$$scope)},e.$$.update=()=>{524289&e.$$.dirty[0]&&(document.title=`${u} Page ${a||""}`),1048591&e.$$.dirty[0]&&w(a,l,o,s,c),27&e.$$.dirty[0]&&h.totalPages&&parseInt(a)>h.totalPages&&We(`/${c}/${a-1}/${l||""}`)},[a,l,o,c,h,g,v,y,k,e=>{n(1,l=e.detail),We(`/${c}/1/${l||""}`)},e=>{Zo(e,a,k,Yo)},e=>{Yo(e.target.closest(".file"),f)},async({target:{id:e}})=>{const{data:t}=await xs.get(`/api/files/first-last/${e}/${v.Id}`);Yo({id:t.Id,dataset:{type:t.Type}},f)},async()=>{const{data:e}=await xs.get(`/api/files/file-data/${y}`);Yo({id:y,dataset:{type:e.Type}},f)},e=>{let{target:t}=e;(e=>{let t=e.target.closest(".file");Go(Qo(t))})(e),m=Qo(t.closest(".file")),n(5,g=t)},e=>{n(4,h.files=h.files.filter((t=>t.Id!==e.detail)),h),h.totalPages>1?(0===h.files.length&&n(0,a-=1),w(a,l||"",s)):n(4,h)},()=>{f.emit("scan-dir",{Id:v.Id,isFolder:!0})},async()=>{await w(a,l,o,s,c)},_,u,s,i,r]}class va extends qe{constructor(e){super(),Me(this,e,ga,ma,a,{id:2,page:0,filter:1,type:3,title:19},null,[-1,-1])}}function ya(e){let t,n;return t=new va({props:{title:"Mangas",type:`mangas/${e[0]}`,filter:e[2],page:e[1]}}),{c(){Re(t.$$.fragment)},m(e,s){Oe(t,e,s),n=!0},p(e,[n]){const s={};1&n&&(s.type=`mangas/${e[0]}`),4&n&&(s.filter=e[2]),2&n&&(s.page=e[1]),t.$set(s)},i(e){n||(Ie(t.$$.fragment,e),n=!0)},o(e){Te(t.$$.fragment,e),n=!1},d(e){Pe(t,e)}}}function $a(e,t,n){let{dir:s=""}=t,{page:r=1}=t,{filter:i=""}=t;return e.$$set=e=>{"dir"in e&&n(0,s=e.dir),"page"in e&&n(1,r=e.page),"filter"in e&&n(2,i=e.filter)},[s,r,i]}class ba extends qe{constructor(e){super(),Me(this,e,$a,ya,a,{dir:0,page:1,filter:2})}}function wa(e){let t,n;return t=new va({props:{title:"Videos",type:`videos/${e[2]||"0"}`,filter:e[1],page:e[0]}}),{c(){Re(t.$$.fragment)},m(e,s){Oe(t,e,s),n=!0},p(e,[n]){const s={};4&n&&(s.type=`videos/${e[2]||"0"}`),2&n&&(s.filter=e[1]),1&n&&(s.page=e[0]),t.$set(s)},i(e){n||(Ie(t.$$.fragment,e),n=!0)},o(e){Te(t.$$.fragment,e),n=!1},d(e){Pe(t,e)}}}function ka(e,t,n){let{page:s=1}=t,{filter:r=""}=t,{dir:i=""}=t;return e.$$set=e=>{"page"in e&&n(0,s=e.page),"filter"in e&&n(1,r=e.filter),"dir"in e&&n(2,i=e.dir)},[s,r,i]}class xa extends qe{constructor(e){super(),Me(this,e,ka,wa,a,{page:0,filter:1,dir:2})}}function _a(e,t,n){const s=e.slice();return s[11]=t[n],s}function Ia(e){let t,n,s,r,o,a,l,c,u,d,f,p,h,m,g=e[11].Name+"";return{c(){t=A("tr"),n=A("td"),s=L(g),o=R(),a=A("td"),l=A("span"),l.innerHTML='<i class="fas fa-edit svelte-35vezv"></i>',c=R(),u=A("span"),u.innerHTML='<i class="fas fa-trash-alt svelte-35vezv"></i>',d=R(),q(n,"data-title",r=e[11].Name),q(n,"class","svelte-35vezv"),q(a,"class","svelte-35vezv"),q(t,"id",f=e[11].Id),q(t,"class",p=y(e[11].Id===e[0]?"active":"")+" svelte-35vezv")},m(r,i){E(r,t,i),I(t,n),I(n,s),I(t,o),I(t,a),I(a,l),I(a,c),I(a,u),I(t,d),h||(m=[P(n,"click",e[8]),P(l,"click",e[6]),P(u,"click",e[7])],h=!0)},p(e,i){8&i&&g!==(g=e[11].Name+"")&&D(s,g),8&i&&r!==(r=e[11].Name)&&q(n,"data-title",r),8&i&&f!==(f=e[11].Id)&&q(t,"id",f),9&i&&p!==(p=y(e[11].Id===e[0]?"active":"")+" svelte-35vezv")&&q(t,"class",p)},d(e){e&&N(t),h=!1,i(m)}}}function Ta(t){let n,s,r,o,a,l,c,u,d,f,p,h,m,g,v,y,$,b,w,k,x,_,T,C,O,j,M,F,B=(t[2]||"")+"",U=t[3],z=[];for(let e=0;e<U.length;e+=1)z[e]=Ia(_a(t,U,e));return{c(){n=A("div"),s=A("label"),s.innerHTML='<i class="fas fa-heart svelte-35vezv"></i>',r=R(),o=A("input"),a=R(),l=A("div"),c=A("div"),u=A("div"),d=A("div"),f=A("label"),f.innerHTML='<i class="fas fa-save svelte-35vezv"></i>',p=R(),h=A("div"),m=A("input"),g=R(),v=A("span"),v.innerHTML='<i class="fas fa-times-circle svelte-35vezv"></i>',y=R(),$=A("div"),b=R(),w=A("div"),k=L(B),x=R(),_=A("div"),T=A("table"),C=A("thead"),C.innerHTML='<tr class="svelte-35vezv"><th class="svelte-35vezv">Name</th> \n                        <th class="svelte-35vezv">Action</th></tr>',O=R(),j=A("tbody");for(let e=0;e<z.length;e+=1)z[e].c();q(s,"for","show-favs"),q(o,"type","checkbox"),q(o,"id","show-favs"),q(o,"class","svelte-35vezv"),q(f,"for","fav-name"),q(f,"id","addfav"),q(f,"class","input-group-text"),q(m,"name","fav-name"),q(m,"type","text"),q(m,"class","form-control svelte-35vezv"),q(m,"placeholder","New Favorite"),q(v,"class","svelte-35vezv"),q(h,"class","i-control svelte-35vezv"),q(d,"class","input-group-prepend"),q(u,"id","fav-controls"),q($,"class","text-danger"),q(c,"class","modal-title svelte-35vezv"),q(w,"class","errors svelte-35vezv"),q(j,"class","svelte-35vezv"),q(T,"class","table table-bordered bg-light table-hover svelte-35vezv"),q(_,"class","modal-body"),q(l,"id","fav-manager"),q(l,"class","card text-light svelte-35vezv"),q(n,"class","first-controls svelte-35vezv")},m(e,i){E(e,n,i),I(n,s),I(n,r),I(n,o),I(n,a),I(n,l),I(l,c),I(c,u),I(u,d),I(d,f),I(d,p),I(d,h),I(h,m),H(m,t[1].Name),I(h,g),I(h,v),I(c,y),I(c,$),I(l,b),I(l,w),I(w,k),I(l,x),I(l,_),I(_,T),I(T,C),I(T,O),I(T,j);for(let e=0;e<z.length;e+=1)z[e].m(j,null);M||(F=[P(f,"click",t[4]),P(m,"input",t[9]),P(v,"click",t[5])],M=!0)},p(e,[t]){if(2&t&&m.value!==e[1].Name&&H(m,e[1].Name),4&t&&B!==(B=(e[2]||"")+"")&&D(k,B),457&t){let n;for(U=e[3],n=0;n<U.length;n+=1){const s=_a(e,U,n);z[n]?z[n].p(s,t):(z[n]=Ia(s),z[n].c(),z[n].m(j,null))}for(;n<z.length;n+=1)z[n].d(1);z.length=U.length}},i:e,o:e,d(e){e&&N(n),S(z,e),M=!1,i(F)}}}function Ca(e,t,n){let s;d(e,Oo,(e=>n(3,s=e)));let r,{id:i=""}=t,o={};return e.$$set=e=>{"id"in e&&n(0,i=e.id)},e.$$.update=()=>{1&e.$$.dirty&&n(1,o={Name:"",Type:"Manga"})},[i,o,r,s,e=>{o.Type,(async e=>{const{data:t}=await xs.post("/api/files/favorites/add-edit",e);return t.Id&&Oo.update((n=>[...n.filter((t=>t.Id!==e.Id)),t].sort(((e,t)=>e.Name.localeCompare(t.Name))))),t})(o).then((e=>{e.Id!==i&&(We(`/favorites/${e.Id}`),console.log("navegate",e.Id))})),n(2,r="")},()=>{n(1,o={Name:"",Type:"Manga"}),n(2,r="")},e=>{n(1,o=s.find((t=>t.Id===e.target.closest("tr").id))),n(2,r="")},e=>{let t=e.target.closest("tr"),i=t.querySelector("td:nth-child(2)").textContent;(async(e,t)=>{const{data:n}=await xs.delete("/api/files/favorites/remove",{data:{Id:e,Type:t}});return console.log(n),n.removed&&Oo.update((t=>t.filter((t=>t.Id!==e)))),n})(t.id,i).then((e=>{e.removed?We(`/favorites/${s[0].Id}`):n(2,r=e.msg)}))},e=>{We(`/favorites/${e.target.closest("tr").id}`),n(2,r="")},function(){o.Name=this.value,n(1,o),n(0,i)}]}class Ea extends qe{constructor(e){super(),Me(this,e,Ca,Ta,a,{id:0})}}function Na(e){let t,n;return t=new Ea({props:{id:e[2]}}),{c(){Re(t.$$.fragment)},m(e,s){Oe(t,e,s),n=!0},p(e,n){const s={};4&n&&(s.id=e[2]),t.$set(s)},i(e){n||(Ie(t.$$.fragment,e),n=!0)},o(e){Te(t.$$.fragment,e),n=!1},d(e){Pe(t,e)}}}function Sa(e){let t,n;return t=new va({props:{title:"Favorites",type:e[3],filter:e[1],page:e[0],id:e[2],$$slots:{default:[Na]},$$scope:{ctx:e}}}),{c(){Re(t.$$.fragment)},m(e,s){Oe(t,e,s),n=!0},p(e,[n]){const s={};8&n&&(s.type=e[3]),2&n&&(s.filter=e[1]),1&n&&(s.page=e[0]),4&n&&(s.id=e[2]),260&n&&(s.$$scope={dirty:n,ctx:e}),t.$set(s)},i(e){n||(Ie(t.$$.fragment,e),n=!0)},o(e){Te(t.$$.fragment,e),n=!1},d(e){Pe(t,e)}}}function Aa(e,t,n){let s;d(e,Oo,(e=>n(4,s=e)));let{page:r=1}=t,{filter:i=""}=t,{id:o=s[0].Id}=t;ie("User");let a=`favorites/${o}`;return e.$$set=e=>{"page"in e&&n(0,r=e.page),"filter"in e&&n(1,i=e.filter),"id"in e&&n(2,o=e.id)},e.$$.update=()=>{4&e.$$.dirty&&n(3,a=`favorites/${o}`)},[r,i,o,a]}class La extends qe{constructor(e){super(),Me(this,e,Aa,Sa,a,{page:0,filter:1,id:2})}}function Ra(t){let n,s,r;return{c(){n=A("div"),n.innerHTML='<i class="fas fa-arrow-circle-up svelte-1h1xnzm"></i>',q(n,"class","first-controls svelte-1h1xnzm")},m(e,i){E(e,n,i),s||(r=P(n,"click",t[4]),s=!0)},p:e,d(e){e&&N(n),s=!1,r()}}}function Oa(e){let t,n;return t=new va({props:{title:"Content",type:e[3],filter:e[1],page:e[0],id:e[2],$$slots:{default:[Ra]},$$scope:{ctx:e}}}),{c(){Re(t.$$.fragment)},m(e,s){Oe(t,e,s),n=!0},p(e,[n]){const s={};2&n&&(s.filter=e[1]),1&n&&(s.page=e[0]),4&n&&(s.id=e[2]),64&n&&(s.$$scope={dirty:n,ctx:e}),t.$set(s)},i(e){n||(Ie(t.$$.fragment,e),n=!0)},o(e){Te(t.$$.fragment,e),n=!1},d(e){Pe(t,e)}}}function Pa(e,t,n){let{page:s=1}=t,{filter:r=""}=t,{id:i=""}=t,o=window.location.pathname.replace(/(^\/+|\/+$)/g,"").split("/"),a=`${o[0]}/${o[1]}/${i}`;return e.$$set=e=>{"page"in e&&n(0,s=e.page),"filter"in e&&n(1,r=e.filter),"id"in e&&n(2,i=e.id)},[s,r,i,a,()=>{let e=localStorage.getObject("folder");localStorage.setItem("fileId",e.folder),We(e.pathname,{replace:!0})}]}class ja extends qe{constructor(e){super(),Me(this,e,Pa,Oa,a,{page:0,filter:1,id:2})}}function Ma(e,t,n){const s=e.slice();return s[20]=t[n].Id,s[21]=t[n].Name,s[22]=t[n].Cover,s[23]=t[n].CurrentPos,s[24]=t[n].Duration,s[25]=t[n].Type,s}function qa(e){let t,n,s,r,i,o,a,l,u,d,f,p,h,m,g,v,$=(e[25].includes("Manga")?`${e[23]+1}/${e[24]}`:Ho(e[24]))+"",b=e[21]+"";return{c(){t=A("li"),n=A("span"),s=A("img"),o=R(),a=A("span"),l=L($),u=R(),d=A("span"),f=L(b),p=R(),q(s,"data-src",r=e[22]),c(s.src,i="")||q(s,"src",""),q(s,"alt",""),q(s,"class","svelte-bfixg2"),q(a,"class","duration svelte-bfixg2"),q(n,"class","cover svelte-bfixg2"),q(d,"class","l-name svelte-bfixg2"),q(t,"id",h=e[20]),q(t,"class",m=y(e[20]===e[1]?"active":"")+" svelte-bfixg2")},m(r,i){E(r,t,i),I(t,n),I(n,s),I(n,o),I(n,a),I(a,l),I(t,u),I(t,d),I(d,f),I(t,p),g||(v=P(t,"click",e[12]),g=!0)},p(e,n){192&n&&r!==(r=e[22])&&q(s,"data-src",r),192&n&&$!==($=(e[25].includes("Manga")?`${e[23]+1}/${e[24]}`:Ho(e[24]))+"")&&D(l,$),192&n&&b!==(b=e[21]+"")&&D(f,b),192&n&&h!==(h=e[20])&&q(t,"id",h),194&n&&m!==(m=y(e[20]===e[1]?"active":"")+" svelte-bfixg2")&&q(t,"class",m)},d(e){e&&N(t),g=!1,v()}}}function Fa(e){let t,n,s;return n=new Ii({props:{page:parseInt(e[5]||1),totalPages:e[4],hideFL:!0}}),n.$on("gotopage",e[9]),{c(){t=A("div"),Re(n.$$.fragment),q(t,"class","b-control svelte-bfixg2")},m(e,r){E(e,t,r),Oe(n,t,null),s=!0},p(e,t){const s={};32&t&&(s.page=parseInt(e[5]||1)),16&t&&(s.totalPages=e[4]),n.$set(s)},i(e){s||(Ie(n.$$.fragment,e),s=!0)},o(e){Te(n.$$.fragment,e),s=!1},d(e){e&&N(t),Pe(n)}}}function Ba(e){let t,n,s,r,o,a,l,c,u,d,f,p,h,m,g,v,$,b,w=e[6].slice(e[7],e[7]+Da),k=[];for(let t=0;t<w.length;t+=1)k[t]=qa(Ma(e,w,t));let x=e[4]>1&&Fa(e);return{c(){t=A("label"),n=A("span"),n.innerHTML='<i class="fas fa-list svelte-bfixg2"></i>',r=R(),o=A("input"),a=R(),l=A("div"),c=A("div"),u=A("input"),d=R(),f=A("span"),f.innerHTML='<i class="fas fa-times-circle svelte-bfixg2"></i>',p=R(),h=A("div"),m=A("ul");for(let e=0;e<k.length;e+=1)k[e].c();g=R(),x&&x.c(),q(n,"class","p-sort svelte-bfixg2"),q(t,"class",s=y("show-list"+(e[3]?"":" move"))+" svelte-bfixg2"),q(t,"for","p-hide"),U(t,"bottom","35px"),q(o,"type","checkbox"),q(o,"id","p-hide"),q(o,"class","svelte-bfixg2"),q(u,"type","text"),q(u,"placeholder","Filter"),q(u,"class","form-control svelte-bfixg2"),q(f,"class","clear-filter svelte-bfixg2"),q(c,"id","v-filter"),q(c,"class","svelte-bfixg2"),q(m,"class","svelte-bfixg2"),q(h,"id","p-list"),q(h,"class","svelte-bfixg2"),q(l,"id","play-list"),q(l,"class","svelte-bfixg2"),W(l,"move",!e[8])},m(s,i){E(s,t,i),I(t,n),E(s,r,i),E(s,o,i),o.checked=e[3],E(s,a,i),E(s,l,i),I(l,c),I(c,u),H(u,e[0].filter),I(c,d),I(c,f),I(l,p),I(l,h),I(h,m);for(let e=0;e<k.length;e+=1)k[e].m(m,null);e[15](h),I(l,g),x&&x.m(l,null),v=!0,$||(b=[P(o,"change",e[13]),P(u,"input",e[14]),P(f,"click",e[10])],$=!0)},p(e,[n]){if((!v||8&n&&s!==(s=y("show-list"+(e[3]?"":" move"))+" svelte-bfixg2"))&&q(t,"class",s),8&n&&(o.checked=e[3]),1&n&&u.value!==e[0].filter&&H(u,e[0].filter),194&n){let t;for(w=e[6].slice(e[7],e[7]+Da),t=0;t<w.length;t+=1){const s=Ma(e,w,t);k[t]?k[t].p(s,n):(k[t]=qa(s),k[t].c(),k[t].m(m,null))}for(;t<k.length;t+=1)k[t].d(1);k.length=w.length}e[4]>1?x?(x.p(e,n),16&n&&Ie(x,1)):(x=Fa(e),x.c(),Ie(x,1),x.m(l,null)):x&&(xe(),Te(x,1,1,(()=>{x=null})),_e()),256&n&&W(l,"move",!e[8])},i(e){v||(Ie(x),v=!0)},o(e){Te(x),v=!1},d(n){n&&N(t),n&&N(r),n&&N(o),n&&N(a),n&&N(l),S(k,n),e[15](null),x&&x.d(),$=!1,i(b)}}}const Da=100;function Ha(e,t,n){let s;d(e,Hr,(e=>n(8,s=e)));const r=se();let i,o,{files:a=[]}=t,{fileId:l}=t,{filters:c={filter:""}}=t,u=!0,f=0,p=1,h=0,m=[];const g=()=>{if(i&&i.disconnect(),o){let e=document.querySelectorAll("#play-list li img");i=new IntersectionObserver((e=>{for(let t of e){let e=t.target;t.isIntersecting?e.src=e.dataset.src:e.src=""}}),{root:o,rootMargin:"1000px",threshold:0}),e.forEach((e=>{i.observe(e)}))}};return e.$$set=e=>{"files"in e&&n(11,a=e.files),"fileId"in e&&n(1,l=e.fileId),"filters"in e&&n(0,c=e.filters)},e.$$.update=()=>{if(12&e.$$.dirty&&!u&&o){let e=document.querySelector("#play-list .active");e&&(o.scroll({top:e.offsetTop-250}),g(),setTimeout((()=>{o.scroll({top:e.offsetTop-250})}),300))}if(2049&e.$$.dirty){c.filter?n(6,m=a.filter((e=>e.Name.toLocaleLowerCase().includes(c.filter.toLocaleLowerCase())))):n(6,m=a);const e=setTimeout((()=>{g(),clearTimeout(e)}),50)}if(2128&e.$$.dirty&&a.length>100&&0===f&&(n(4,f=Math.ceil(m.length/Da)),n(5,p=(()=>{let e=m.findIndex((e=>e.Id===l)),t=1;for(;t*Da<e&&t<f;)t++;return t})())),96&e.$$.dirty){let e=(p-1)*Da;e<m.length?n(7,h=e):n(7,h=0)}},[c,l,o,u,f,p,m,h,s,e=>{(e=parseInt(e.detail))<1||e>f||isNaN(e)||(n(5,p=e<1?1:e>f?f:e),g())},()=>{console.log("dispath-clear"),n(0,c.filter="",c),r("clearfilter")},a,function(t){oe.call(this,e,t)},function(){u=this.checked,n(3,u)},function(){c.filter=this.value,n(0,c)},function(e){le[e?"unshift":"push"]((()=>{o=e,n(2,o)}))}]}class Ua extends qe{constructor(e){super(),Me(this,e,Ha,Ba,a,{files:11,fileId:1,filters:0})}}var za,Va;let Wa,Ka;let Ya=!1;const Xa=()=>{Ya=!0},Ja=()=>{const e=Ka;Wa[e]&&!Wa[e].src?(loadImages(e-1,6),setTimeout((()=>{Bo(e),setTimeout((()=>{clearTimeout(Qa),Ya=!1}),100)}),500)):Ya=!1};let Qa,Ga=!1;const Za=(e,t)=>{t.onmouseup=Ja,t.onmousedown=Xa,Va||(Va=new IntersectionObserver((t=>{if(!Ya&&t.length<Wa.length){let n,s;for(let e of t)if(e.isIntersecting){n=parseInt(e.target.id),s=n<Ka?-1:1;const t=Wa[s+n];t&&!t.src.includes("data:img")&&(Ga=!0)}Ga&&(Ga=!1,Qa&&clearTimeout(Qa),Qa=setTimeout((()=>{e(n,8,s),clearTimeout(Qa)}),50))}}),{root:t,rootMargin:2*window.innerHeight+"px",threshold:0})),Wa.forEach((e=>{Va.observe(e)}))},el=e=>{e.onmousedown=null,e.onmouseup=null,za&&za.disconnect(),Va&&Va.disconnect(),Wa=[],za=null,Va=null,Wa=null,Ka=null};var tl=null;const nl=e=>{try{tl&&"BODY"!==e.tagName?"BODY"===document.fullscreenElement.tagName?document.exitFullscreen().then((()=>{e.requestFullscreen()})):document.exitFullscreen().then((()=>{tl.requestFullscreen()})):document.fullscreenElement?(document.exitFullscreen(),tl=null):(e.requestFullscreen(),"BODY"===e.tagName&&(tl=e))}catch(e){console.log(e)}},sl={PrevFile:{name:"Ins",keyCode:45,isctrl:!0,action:null},NextFile:{name:"Del",keyCode:46,isctrl:!0,action:null},SkipForward:{name:"ArrowRight",keyCode:39,isctrl:!1,action:null},SkipBack:{name:"ArrowLeft",keyCode:37,isctrl:!1,action:null},Fullscreen:{name:"Enter",keyCode:13,isctrl:!1,action:null},VolumeUp:{name:"ArrowUp",keyCode:38,isctrl:!1,action:null},VolumeDown:{name:"ArrowDown",keyCode:40,isctrl:!1,action:null},PlayOrPause:{name:"Space",keyCode:32,isctrl:!1,action:null},ShowList:{name:"L",keyCode:30,isctrl:!1,action:null}},rl=e=>{for(let t of Object.keys(sl))if(sl[t].keyCode===e.keyCode){let{action:n,isctrl:s}=sl[t];n&&e.ctrlKey===s&&n(e.ctrlKey);break}};let il,ol,al={},ll=!1,cl=!1,ul={dis:0,dir:0},dl={dis:0,dir:0},fl={nextPage:"",prevPage:"",nextFile:"",prevFile:""};const pl=e=>{ll=!0,il=e.timeStamp;let{pageX:t,pageY:n}=e.touches&&e.touches[0]||e;al={x:t,y:n}},hl=e=>{if(ll){let{pageX:t,pageY:n}=e.touches[0];dl.dir=t-al.x,ul.dir=n-al.y,ul.dis=Math.abs(ul.dir),dl.dis=Math.abs(dl.dir),cl=!0}},ml=e=>{ll=!1;let{file:{CurrentPos:t,Duration:n},webtoon:s,nextFile:r,nextPage:i,prevFile:o,prevPage:a,fullScreen:l}=fl;if(cl)dl.dis>100?dl.dir>0?a():i():ul.dis>180&&(ul.dir>0?(console.log("down"),s&&0===t&&o()):(console.log("up"),console.log(s,t,n-1),s&&t===n-1&&r()));else{if(ol=e.timeStamp,ol-il>70){let e=window.innerWidth,t=window.innerHeight;al.y<.33*t?al.x<.33*e?console.log("left Y25%"):al.x<.66*e?console.log("center Y25%"):console.log("right Y25%"):al.y<.8*t?al.x<.33*e?(console.log("left Y50%"),i()):al.x<.66*e?(l(),console.log("center Y50%")):(console.log("right Y50%"),i()):al.x<.33*e?o():al.x<.66*e?((async e=>{Hr.update((t=>void 0!==e?e:!t))})(),console.log("center x")):(r(),console.log("right x"))}}cl=!1};function gl(t){let n,s,r,o,a,l,c,u,d,f,p,h,m,g,v,y,$,b,w,k,x,_,T,C,S;return{c(){n=A("label"),n.innerHTML='<i class="fas fa-cog svelte-1frc9ix"></i>',s=R(),r=A("input"),o=R(),a=A("div"),l=A("div"),c=A("div"),c.innerHTML='<label for="img-fill" class="input-group-text svelte-1frc9ix">Ajust Image:</label>',u=R(),d=A("select"),f=A("option"),f.textContent="fill",p=A("option"),p.textContent="cover",h=A("option"),h.textContent="contain",m=R(),g=A("div"),v=A("div"),v.innerHTML='<label for="img-width" class="input-group-text svelte-1frc9ix">Width</label>',y=R(),$=A("input"),w=R(),k=A("div"),x=A("div"),x.innerHTML='<label for="from-start" class="input-group-text svelte-1frc9ix">From Start</label>',_=R(),T=A("input"),q(n,"for","show"),q(n,"class","svelte-1frc9ix"),q(r,"type","checkbox"),q(r,"name",""),q(r,"id","show"),q(r,"class","svelte-1frc9ix"),q(c,"class","input-group-prepend svelte-1frc9ix"),f.__value="fill",f.value=f.__value,q(f,"class","svelte-1frc9ix"),p.__value="cover",p.value=p.__value,q(p,"class","svelte-1frc9ix"),h.__value="contain",h.value=h.__value,q(h,"class","svelte-1frc9ix"),q(d,"id","img-fill"),q(d,"class","form-control svelte-1frc9ix"),void 0===t[2]&&pe((()=>t[14].call(d))),q(l,"class","input-group svelte-1frc9ix"),q(v,"class","input-group-prepend svelte-1frc9ix"),q($,"id","img-width"),q($,"type","number"),q($,"min","30"),q($,"max","100"),q($,"class","form-control svelte-1frc9ix"),q($,"placeholder",b=t[0].width+"%"),q(g,"class","input-group svelte-1frc9ix"),q(x,"class","input-group-prepend svelte-1frc9ix"),q(T,"id","from-start"),q(T,"type","checkbox"),q(T,"class","form-control svelte-1frc9ix"),q(k,"class","input-group svelte-1frc9ix"),q(a,"id","content"),q(a,"class","svelte-1frc9ix"),W(a,"show",t[4])},m(e,i){E(e,n,i),E(e,s,i),E(e,r,i),r.checked=t[4],E(e,o,i),E(e,a,i),I(a,l),I(l,c),I(l,u),I(l,d),I(d,f),I(d,p),I(d,h),z(d,t[2]),I(a,m),I(a,g),I(g,v),I(g,y),I(g,$),H($,t[5]),I(a,w),I(a,k),I(k,x),I(k,_),I(k,T),T.checked=t[3],C||(S=[P(r,"change",t[13]),P(d,"change",t[14]),P($,"blur",t[6]),P($,"focus",t[7]),P($,"change",t[8]),P($,"keydown",M(t[12])),P($,"input",t[15]),P(T,"change",t[16]),P(a,"click",M(j(t[11])))],C=!0)},p(e,[t]){16&t&&(r.checked=e[4]),4&t&&z(d,e[2]),1&t&&b!==(b=e[0].width+"%")&&q($,"placeholder",b),32&t&&B($.value)!==e[5]&&H($,e[5]),8&t&&(T.checked=e[3]),16&t&&W(a,"show",e[4])},i:e,o:e,d(e){e&&N(n),e&&N(s),e&&N(r),e&&N(o),e&&N(a),C=!1,i(S)}}}function vl(t,n,s){let r,i=e,o=()=>(i(),i=u(c,(e=>s(10,r=e))),c);t.$$.on_destroy.push((()=>i()));const a=se();let{config:l={}}=n,{ToggleMenu:c}=n;o();let d=!1,f="",p=l.width,h=l.imgAbjust||"",m=!1;return t.$$set=e=>{"config"in e&&s(0,l=e.config),"ToggleMenu"in e&&o(s(1,c=e.ToggleMenu))},t.$$.update=()=>{8&t.$$.dirty&&(console.log("isF",m),a("fromStart",m)),516&t.$$.dirty&&a("mconfig",{width:p,imgAbjust:h}),1024&t.$$.dirty&&r&&s(4,d=!1)},[l,c,h,m,d,f,()=>{s(5,f="")},()=>{s(5,f=l.width)},()=>{s(9,p=f<30?30:f>100?100:f),s(5,f=p),localStorage.setItem("mWidth",f)},p,r,function(e){oe.call(this,t,e)},function(e){oe.call(this,t,e)},function(){d=this.checked,s(4,d),s(10,r)},function(){h=V(this),s(2,h)},function(){f=B(this.value),s(5,f)},function(){m=this.checked,s(3,m)}]}class yl extends qe{constructor(e){super(),Me(this,e,vl,gl,a,{config:0,ToggleMenu:1})}}function $l(e,t,n){const s=e.slice();return s[40]=t[n],s[42]=n,s}function bl(e){let t,n=Array(e[0].Duration).fill(),s=[];for(let t=0;t<n.length;t+=1)s[t]=kl($l(e,n,t));return{c(){for(let e=0;e<s.length;e+=1)s[e].c();t=O()},m(e,n){for(let t=0;t<s.length;t+=1)s[t].m(e,n);E(e,t,n)},p(e,r){if(133&r[0]){let i;for(n=Array(e[0].Duration).fill(),i=0;i<n.length;i+=1){const o=$l(e,n,i);s[i]?s[i].p(o,r):(s[i]=kl(o),s[i].c(),s[i].m(t.parentNode,t))}for(;i<s.length;i+=1)s[i].d(1);s.length=n.length}},d(e){S(s,e),e&&N(t)}}}function wl(e){let t,n;return{c(){t=A("img"),U(t,"object-fit",e[7].imgAbjust),c(t.src,n=e[2][e[0].CurrentPos]&&"data:img/jpeg;base64, "+e[2][e[0].CurrentPos])||q(t,"src",n),q(t,"alt","Loading..."),W(t,"empty-img",!e[2][e[0].CurrentPos])},m(e,n){E(e,t,n)},p(e,s){128&s[0]&&U(t,"object-fit",e[7].imgAbjust),5&s[0]&&!c(t.src,n=e[2][e[0].CurrentPos]&&"data:img/jpeg;base64, "+e[2][e[0].CurrentPos])&&q(t,"src",n),5&s[0]&&W(t,"empty-img",!e[2][e[0].CurrentPos])},d(e){e&&N(t)}}}function kl(e){let t,n;return{c(){t=A("img"),q(t,"id",e[42]),U(t,"object-fit",e[7].imgAbjust),c(t.src,n=e[2][e[42]]?"data:img/jpeg;base64, "+e[2][e[42]]:"")||q(t,"src",n),q(t,"alt","Loading...r"),q(t,"class","svelte-16u82nq"),W(t,"empty-img",!e[2][e[42]])},m(e,n){E(e,t,n)},p(e,s){128&s[0]&&U(t,"object-fit",e[7].imgAbjust),4&s[0]&&!c(t.src,n=e[2][e[42]]?"data:img/jpeg;base64, "+e[2][e[42]]:"")&&q(t,"src",n),4&s[0]&&W(t,"empty-img",!e[2][e[42]])},d(e){e&&N(t)}}}function xl(e){let t,n,s,r,a,l,c,u,d,f,p,h,m,g,v,$,b,w,k,x,_,T,C,S,O,F,B,H,z,V,K,Y,X,J,Q,G,Z=e[1]?"List":"Pages";function ee(e,t){return e[1]?bl:wl}let te=ee(e),ne=te(e);return K=new yl({props:{config:e[7],ToggleMenu:Hr}}),K.$on("mconfig",e[15]),{c(){t=A("div"),n=A("span"),s=A("i"),r=R(),a=L(e[5]),l=R(),c=A("div"),u=A("div"),ne.c(),f=R(),p=A("div"),h=A("span"),h.innerHTML='<i class="far fa-times-circle popup-msg" data-title="Close"></i>',m=R(),g=A("span"),v=A("input"),$=R(),b=A("label"),w=L(Z),k=R(),x=A("i"),_=R(),T=A("span"),T.innerHTML='<i class="fa fa-arrow-circle-left"></i>',C=R(),S=A("span"),O=A("form"),F=A("input"),B=R(),H=A("span"),H.innerHTML='<i class="fa fa-arrow-circle-right"></i>',z=R(),V=A("span"),Re(K.$$.fragment),Y=R(),X=A("span"),X.innerHTML='<i class="fas fa-expand-arrows-alt popup-msg" data-title="Full Screen"></i>',q(s,"class","fas fa-sticky-note svelte-16u82nq"),q(n,"class","fullscreen-progress svelte-16u82nq"),q(u,"class",d=y("img-current"+(e[1]?" webtoon-img":""))+" svelte-16u82nq"),U(u,"width",e[7].width+"%"),q(u,"tabindex","0"),q(c,"class","viewer"),q(h,"id","hide-player"),q(v,"type","checkbox"),q(v,"name",""),q(v,"id","webtoon"),q(v,"class","svelte-16u82nq"),q(x,"class","fas fa-eye svelte-16u82nq"),q(b,"for","webtoon"),q(b,"class","svelte-16u82nq"),q(g,"class","web-toon"),q(T,"class","prev-page"),q(F,"type","text"),F.value="",q(F,"placeholder",e[5]),q(O,"action",""),q(S,"class","current-page"),q(H,"class","next-page"),q(V,"class","config svelte-16u82nq"),q(X,"class","btn-fullscr"),q(p,"class","controls svelte-16u82nq"),q(t,"id","manga-viewer"),q(t,"tabindex","0"),q(t,"class","svelte-16u82nq"),W(t,"hide",e[8])},m(i,d){E(i,t,d),I(t,n),I(n,s),I(n,r),I(n,a),I(t,l),I(t,c),I(c,u),ne.m(u,null),e[22](u),I(t,f),I(t,p),I(p,h),I(p,m),I(p,g),I(g,v),v.checked=e[1],I(g,$),I(g,b),I(b,w),I(b,k),I(b,x),I(p,_),I(p,T),I(p,C),I(p,S),I(S,O),I(O,F),e[24](F),I(p,B),I(p,H),I(p,z),I(p,V),Oe(K,V,null),I(p,Y),I(p,X),J=!0,Q||(G=[P(u,"touchstart",pl),P(u,"touchend",ml),P(u,"mousedown",pl),P(u,"mouseup",ml),P(u,"touchmove",hl),P(h,"click",e[14]),P(v,"change",e[23]),P(T,"click",e[9]),P(F,"focus",e[11]),P(F,"blur",e[12]),P(F,"keydown",M(e[21])),P(O,"submit",j(e[13])),P(H,"click",e[10]),P(X,"click",(function(){o(e[4].action)&&e[4].action.apply(this,arguments)}))],Q=!0)},p(n,s){e=n,(!J||32&s[0])&&D(a,e[5]),te===(te=ee(e))&&ne?ne.p(e,s):(ne.d(1),ne=te(e),ne&&(ne.c(),ne.m(u,null))),(!J||2&s[0]&&d!==(d=y("img-current"+(e[1]?" webtoon-img":""))+" svelte-16u82nq"))&&q(u,"class",d),(!J||128&s[0])&&U(u,"width",e[7].width+"%"),2&s[0]&&(v.checked=e[1]),(!J||2&s[0])&&Z!==(Z=e[1]?"List":"Pages")&&D(w,Z),(!J||32&s[0])&&q(F,"placeholder",e[5]);const r={};128&s[0]&&(r.config=e[7]),K.$set(r),256&s[0]&&W(t,"hide",e[8])},i(e){J||(Ie(K.$$.fragment,e),J=!0)},o(e){Te(K.$$.fragment,e),J=!1},d(n){n&&N(t),ne.d(),e[22](null),e[24](null),Pe(K),Q=!1,i(G)}}}function _l(e,t,n){let s;d(e,Hr,(e=>n(8,s=e)));let{file:r}=t,{KeyMap:i}=t,{viewer:o}=t;const{NextFile:a,PrevFile:l,Fullscreen:c,SkipForward:u,SkipBack:f}=i,p=ie("socket"),h=se();let m,g,v,y,$=`${r.CurrentPos+1}/${r.Duration}`,b=[r.Duration],w=!1,k=!1,x=!1,_={width:window.innerWidth<600?100:localStorage.getItem("mWidth")||65,imgAbjust:"fill"},I=[];const T=(e,t,s=1)=>{w||(n(20,I=Do(b,e,t,s,r.Duration)),I.length>0?(p.emit("loadzip-image",{Id:r.Id,indices:I}),w=!0):x&&L())};p.on("image-loaded",(e=>{e.last?(w=!1,n(20,I=[]),x&&m&&(x=!1,L(100))):n(2,b[e.page]=e.img,b)}));const C=()=>{let e=r.CurrentPos-1;e>-1?(m?Bo(e):b[e-7]||w||T(e,8,-1),n(0,r.CurrentPos=e,r)):(x=!0,l.action())},E=()=>{let e=r.CurrentPos+1;e<r.Duration?(m?Bo(e):b[e+7]||w||T(e,8),n(0,r.CurrentPos=e,r)):(x=!0,el(v),a.action())},N=()=>{n(6,y.value=r.CurrentPos+1,y)},S=()=>{n(6,y.value="",y)};u.action=E,f.action=C;const A=e=>{n(0,r.CurrentPos=e,r)};let L=(e=0)=>{let t=setTimeout((()=>{Bo(r.CurrentPos),((e,t,n)=>{Wa=t.querySelectorAll("img"),za||(za=new IntersectionObserver((t=>{if(t.length<Wa.length)for(let s of t){let t=s.target;if(s.isIntersecting){e(parseInt(t.id)),Ka=t.id;let s=Wa[Ka];s&&!s.src.includes("data:img")&&n(Ka-3,8,1)}}}),{root:t}),Wa.forEach((e=>{za.observe(e)})))})(A,v,T),Za(T,v,r.CurrentPos),clearTimeout(t)}),e)};c.action=()=>{m?(el(v),nl(o),L(200)):nl(o)};return fl.prevPage=C,fl.nextPage=E,fl.fullScreen=c.action,fl.nextFile=a.action,fl.prevFile=l.action,fl.file=r,ne((()=>{delete p._callbacks["$image-loaded"],el(v)})),e.$$set=e=>{"file"in e&&n(0,r=e.file),"KeyMap"in e&&n(16,i=e.KeyMap),"viewer"in e&&n(17,o=e.viewer)},e.$$.update=()=>{1&e.$$.dirty[0]&&n(5,$=`${parseInt(r.CurrentPos)+1}/${r.Duration}`),1310733&e.$$.dirty[0]&&r.Id!==g&&(x=!0,n(2,b=[]),n(18,g=r.Id),v&&el(v),n(20,I=Do(b,r.CurrentPos-2,8,1,r.Duration)),p.emit("loadzip-image",{Id:r.Id,indices:I}),fl.file=r),524298&e.$$.dirty[0]&&(m?(fl.webtoon=m,k||(n(19,k=!0),L())):k&&(fl.webtoon=m,n(19,k=!1),el(v)))},[r,m,b,v,c,$,y,_,s,C,E,N,S,e=>{let t=parseInt(y.value);if(isNaN(t))return N();!(t<0)&&t>=r.Duration&&r.Duration,n(0,r.CurrentPos=t-1,r),m&&(x=!0,el(v)),T(t-5,10),S()},()=>h("returnBack"),({detail:e})=>{n(7,_=e)},i,o,g,k,I,function(t){oe.call(this,e,t)},function(e){le[e?"unshift":"push"]((()=>{v=e,n(3,v)}))},function(){m=this.checked,n(1,m)},function(e){le[e?"unshift":"push"]((()=>{y=e,n(6,y)}))}]}class Il extends qe{constructor(e){super(),Me(this,e,_l,xl,a,{file:0,KeyMap:16,viewer:17},null,[-1,-1])}}const Tl=e=>({value:8&e}),Cl=e=>({value:e[3].value});function El(e){let t,n,s,r;const i=e[14].default,o=f(i,e,e[13],Cl);return{c(){t=A("span"),n=A("span"),o&&o.c(),q(n,"class","rc-preview-content svelte-hkabeq"),q(t,"class","rc-preview svelte-hkabeq"),q(t,"data-title","00:00"),q(t,"style",s=`left: calc(${e[3].pos}% - ${e[2]&&e[2].offsetWidth/2}px)`)},m(s,i){E(s,t,i),I(t,n),o&&o.m(n,null),e[15](t),r=!0},p(e,n){o&&o.p&&(!r||8200&n)&&m(o,i,e,e[13],r?h(i,e[13],n,Tl):g(e[13]),Cl),(!r||12&n&&s!==(s=`left: calc(${e[3].pos}% - ${e[2]&&e[2].offsetWidth/2}px)`))&&q(t,"style",s)},i(e){r||(Ie(o,e),r=!0)},o(e){Te(o,e),r=!1},d(n){n&&N(t),o&&o.d(n),e[15](null)}}}function Nl(e){let t,n,s,r,o,a,l,c,u,d,f,p=e[0]&&El(e);return{c(){t=A("div"),n=A("div"),s=A("div"),o=R(),a=A("span"),c=R(),p&&p.c(),q(s,"class","rc-progress svelte-hkabeq"),q(s,"style",r=`border-radius: ${100===Math.round(e[4])?"0.3rem":"0.3rem 0px 0px 0.3rem"}; width: ${e[4]>.3?e[4]:0}%`),q(a,"class","rc-thumb svelte-hkabeq"),q(a,"style",l=`left: calc(${e[4]}% - 11px)`),q(n,"id",e[5]),q(n,"class","rc-track svelte-hkabeq"),q(t,"class","rc-slider svelte-hkabeq")},m(r,i){E(r,t,i),I(t,n),I(n,s),I(n,o),I(n,a),I(n,c),p&&p.m(n,null),e[16](n),u=!0,d||(f=[P(a,"mousedown",e[8]),P(n,"mousedown",e[6]),P(n,"touchstart",e[6]),P(n,"mousemove",e[7])],d=!0)},p(e,[t]){(!u||16&t&&r!==(r=`border-radius: ${100===Math.round(e[4])?"0.3rem":"0.3rem 0px 0px 0.3rem"}; width: ${e[4]>.3?e[4]:0}%`))&&q(s,"style",r),(!u||16&t&&l!==(l=`left: calc(${e[4]}% - 11px)`))&&q(a,"style",l),e[0]?p?(p.p(e,t),1&t&&Ie(p,1)):(p=El(e),p.c(),Ie(p,1),p.m(n,null)):p&&(xe(),Te(p,1,1,(()=>{p=null})),_e())},i(e){u||(Ie(p),u=!0)},o(e){Te(p),u=!1},d(n){n&&N(t),p&&p.d(),e[16](null),d=!1,i(f)}}}function Sl(e,t,n){let{$$slots:s={},$$scope:r}=t,{value:i}=t,{preview:o=!1}=t,{min:a=0}=t,{max:l=100}=t,{onChange:c}=t;se();let u,d,f="rc-"+(new Date).getTime(),p=0,h=Xo(i,a,l,0,100),m={is:!1};const g=e=>{if(m.is&&e.target.id===f||"touchmove"===e.type&&e.touches[0].target.id===f){let t;t="touchmove"===e.type?e.touches[0].pageX-e.touches[0].target.getBoundingClientRect().left:e.offsetX,t>0&&t<u.offsetWidth&&v(t)}};document.onmouseup=e=>{m=!1,document.removeEventListener("mousemove",g),document.removeEventListener("touchmove",g)};const v=e=>{let t=Number(Xo(e-1,0,u.offsetWidth-2,a,l).toFixed(2));t=t<0?0:t>l?l:t,c(t)};return e.$$set=e=>{"value"in e&&n(9,i=e.value),"preview"in e&&n(0,o=e.preview),"min"in e&&n(10,a=e.min),"max"in e&&n(11,l=e.max),"onChange"in e&&n(12,c=e.onChange),"$$scope"in e&&n(13,r=e.$$scope)},e.$$.update=()=>{3584&e.$$.dirty&&n(4,h=Xo(i,a,l,0,100))},[o,u,d,p,h,f,e=>{let t;m={is:!0,id:f},"touchstart"===e.type?(t=e.touches[0].pageX-e.touches[0].target.getBoundingClientRect().left,document.addEventListener("touchmove",g)):(t=e.offsetX,document.addEventListener("mousemove",g)),isNaN(t)||v(t)},e=>{if(o){var t=Math.floor(e.pageX-u.getBoundingClientRect().left),s=Xo(t-1,0,u.offsetWidth-2,0,100).toFixed(0);let r=Number(Xo(t-1,0,u.offsetWidth-2,a,l).toFixed(2));n(3,p={pos:s=s<0?0:s>100?100:s,value:r<0?0:r>l?l:r})}},e=>{m={is:!0,id:f},"touchstart"===e.type?document.addEventListener("touchmove",g):document.addEventListener("mousemove",g),e.stopPropagation()},i,a,l,c,r,s,function(e){le[e?"unshift":"push"]((()=>{d=e,n(2,d)}))},function(e){le[e?"unshift":"push"]((()=>{u=e,n(1,u)}))}]}class Al extends qe{constructor(e){super(),Me(this,e,Sl,Nl,a,{value:9,preview:0,min:10,max:11,onChange:12})}}const Ll={startX:0,endPosX:0,startY:0,endY:0,time:0};var Rl=!1,Ol=0,Pl={...Ll};let jl=0;function Ml(e){let t,n,s,r,o,a,l,u,d,f,p,h,m,g,v,$,b,w,k,x,_,T,C,S,O,F,B,H,U,z,V,K,Y,X,J,Q,G,Z,ee,te,ne,se=!0;return m=new Al({props:{min:0,max:e[0].Duration,value:e[0].CurrentPos,onChange:e[10],preview:!0,$$slots:{default:[ql,({value:e})=>({33:e}),({value:e})=>[0,e?4:0]]},$$scope:{ctx:e}}}),{c(){t=A("div"),n=A("div"),s=A("video"),r=A("track"),l=R(),u=A("div"),d=A("div"),f=A("span"),p=L(e[3]),h=R(),Re(m.$$.fragment),g=R(),v=A("div"),$=A("span"),$.innerHTML='<i class="far fa-times-circle svelte-1cmvqct"></i>',b=R(),w=A("span"),w.innerHTML='<i class="far fa-arrow-alt-circle-left svelte-1cmvqct"></i>',k=R(),x=A("label"),_=A("input"),T=R(),C=A("i"),O=R(),F=A("span"),F.innerHTML='<i class="far fa-arrow-alt-circle-right svelte-1cmvqct"></i>',B=R(),H=A("span"),H.innerHTML='<i class="fas fa-expand-arrows-alt svelte-1cmvqct"></i>',U=R(),z=A("span"),V=A("input"),Y=R(),X=A("label"),J=A("input"),G=R(),Z=A("i"),q(r,"kind","captions"),q(s,"class","player svelte-1cmvqct"),c(s.src,o=`/api/viewer/${e[0].Id}`)||q(s,"src",o),q(s,"preload","metadata"),s.controls=!1,s.autoplay=!0,q(s,"poster",a=e[0].Cover),s.loop=!1,q(f,"id","v-progress"),q(f,"class","svelte-1cmvqct"),q(d,"class","v-seeker svelte-1cmvqct"),q($,"class","svelte-1cmvqct"),q(w,"class","prev-page svelte-1cmvqct"),q(_,"type","checkbox"),q(_,"id","v-play"),q(_,"class","svelte-1cmvqct"),q(C,"class",S=y(`far fa-${e[2].pause?"play":"pause"}-circle`)+" svelte-1cmvqct"),q(x,"for","v-play"),q(x,"class","svelte-1cmvqct"),q(F,"class","next-page svelte-1cmvqct"),q(H,"class","svelte-1cmvqct"),q(V,"type","range"),q(V,"min",0),q(V,"max",1),q(V,"step",.05),V.value=K=e[2].volume,q(V,"class","svelte-1cmvqct"),q(J,"id","v-mute"),q(J,"type","checkbox"),q(J,"class","vol-ctrl svelte-1cmvqct"),J.checked=Q=0===e[2].volume,q(Z,"class","fas fa-volume-up popup-msg svelte-1cmvqct"),q(Z,"data-title","Mute"),q(X,"for","v-mute"),q(X,"class","svelte-1cmvqct"),q(z,"class","v-vol svelte-1cmvqct"),q(v,"class","player-btns svelte-1cmvqct"),q(u,"class","player-controls svelte-1cmvqct"),q(n,"class","player-content svelte-1cmvqct"),q(t,"class","player-container svelte-1cmvqct"),q(t,"tabindex","0"),W(t,"isFullScreen",e[4])},m(i,o){E(i,t,o),I(t,n),I(n,s),I(s,r),e[24](s),isNaN(e[2].volume)||(s.volume=e[2].volume),I(n,l),I(n,u),I(u,d),I(d,f),I(f,p),I(d,h),Oe(m,d,null),I(u,g),I(u,v),I(v,$),I(v,b),I(v,w),I(v,k),I(v,x),I(x,_),I(x,T),I(x,C),I(v,O),I(v,F),I(v,B),I(v,H),I(v,U),I(v,z),I(z,V),I(z,Y),I(z,X),I(X,J),I(X,G),I(X,Z),e[27](u),ee=!0,te||(ne=[P(s,"play",e[25]),P(s,"pause",e[25]),P(s,"volumechange",e[26]),P(s,"contextmenu",j(e[23])),P(s,"loadedmetadata",e[8]),P(s,"timeupdate",e[16]),P(s,"click",e[18]),P($,"click",e[9]),P(w,"click",e[7].action),P(_,"change",e[17]),P(F,"click",e[6].action),P(H,"click",e[12]),P(V,"input",e[13]),P(J,"change",e[11]),P(u,"mousedown",M(e[22])),P(t,"mousemove",e[14]),P(t,"keydown",e[19]),P(t,"wheel",e[15])],te=!0)},p(e,n){(!ee||1&n[0]&&!c(s.src,o=`/api/viewer/${e[0].Id}`))&&q(s,"src",o),(!ee||1&n[0]&&a!==(a=e[0].Cover))&&q(s,"poster",a),4&n[0]&&se!==(se=e[2].pause)&&s[se?"pause":"play"](),4&n[0]&&!isNaN(e[2].volume)&&(s.volume=e[2].volume),(!ee||8&n[0])&&D(p,e[3]);const r={};1&n[0]&&(r.max=e[0].Duration),1&n[0]&&(r.value=e[0].CurrentPos),12&n[1]&&(r.$$scope={dirty:n,ctx:e}),m.$set(r),(!ee||4&n[0]&&S!==(S=y(`far fa-${e[2].pause?"play":"pause"}-circle`)+" svelte-1cmvqct"))&&q(C,"class",S),(!ee||4&n[0]&&K!==(K=e[2].volume))&&(V.value=K),(!ee||4&n[0]&&Q!==(Q=0===e[2].volume))&&(J.checked=Q),16&n[0]&&W(t,"isFullScreen",e[4])},i(e){ee||(Ie(m.$$.fragment,e),ee=!0)},o(e){Te(m.$$.fragment,e),ee=!1},d(n){n&&N(t),e[24](null),Pe(m),e[27](null),te=!1,i(ne)}}}function ql(e){let t,n=Ho(e[33]+2)+"";return{c(){t=L(n)},m(e,n){E(e,t,n)},p(e,s){4&s[1]&&n!==(n=Ho(e[33]+2)+"")&&D(t,n)},d(e){e&&N(t)}}}function Fl(e){let t,n,s=e[0].Id&&Ml(e);return{c(){s&&s.c(),t=O()},m(e,r){s&&s.m(e,r),E(e,t,r),n=!0},p(e,n){e[0].Id?s?(s.p(e,n),1&n[0]&&Ie(s,1)):(s=Ml(e),s.c(),Ie(s,1),s.m(t.parentNode,t)):s&&(xe(),Te(s,1,1,(()=>{s=null})),_e())},i(e){n||(Ie(s),n=!0)},o(e){Te(s),n=!1},d(e){s&&s.d(e),e&&N(t)}}}function Bl(e,t,n){let{KeyMap:s}=t,{file:r}=t,{viewer:i}=t;const{NextFile:o,PrevFile:a,SkipForward:l,SkipBack:c}=s,u=se();let d,f,p={time:!1,volume:.5,pause:!1,muted:!1},h={},m=!1;const g=()=>{nl(i)},v=()=>n(4,m=null!==document.fullscreenElement);let y;te((()=>((e=>{e&&(e.onmousedown=e.ontouchstart=t=>{if(Rl=!0,jl=t.timeStamp,"mousedown"!==t.type){let{pageX:e,pageY:n}=t.touches[0];Pl={time:jl,startX:e,startY:n}}else 1===t.which&&(e.paused?e.play():e.pause())},e.ontouchmove=t=>{if(Rl){let{pageX:n,pageY:s}=t.touches[0],{startX:r,startY:i}=Pl,o=n-r,a=s-i;if(0===Ol&&(o>10||o<-10)?Ol=1:0===Ol&&(a>10||a<-10)&&(Ol=2),1!==Ol||e.seeking){if(2===Ol&&(a>2||a<-2)){let r=e.volume+(a<0?.03:-.03);e.volume=r<0?0:r>1?1:r,Pl={time:t.timeStamp,startX:n,startY:s}}}else if(o>20||o<-20){let{duration:r,currentTime:i}=e,a=i+(o>0?5:-5);e.currentTime=a<0?0:a>r?r:a,Pl={time:t.timeStamp,startX:n,startY:s}}}},e.onmouseup=e.ontouchend=e=>{Rl=!1,Pl={initialData:Ll},Ol=0})})(h),window.addEventListener("fullscreenchange",v),()=>window.removeEventListener("fullscreenchange",v))));return e.$$set=e=>{"KeyMap"in e&&n(20,s=e.KeyMap),"file"in e&&n(0,r=e.file),"viewer"in e&&n(21,i=e.viewer)},e.$$.update=()=>{3&e.$$.dirty[0]&&h&&n(3,d=Ho(r.CurrentPos)+"/"+Ho(r.Duration))},[r,h,p,d,m,f,o,a,e=>{n(1,h.currentTime=r.CurrentPos,h)},()=>{u("returnBack")},e=>{n(1,h.currentTime=e,h)},({target:e})=>{n(1,h.muted=e.checked,h)},g,({target:{value:e}})=>{n(2,p.volume=e,p)},()=>{m&&window.innerWidth>1e3&&(n(5,f.style.bottom=0,f),clearTimeout(y),y=setTimeout((()=>{n(5,f.style.bottom=-f.offsetHeight+"px",f)}),5e3))},({deltaY:e})=>{let{volume:t}=p;t+=e<0?.05:-.05,n(2,p.volume=t<0?0:t>1?1:t,p)},()=>{n(0,r.CurrentPos=h.currentTime,r)},({target:{checked:e}})=>e?h.pause():h.play(),()=>{m&&("0px"==f.style.bottom?(n(5,f.style.bottom=-f.offsetHeight+"px",f),h.play()):(n(5,f.style.bottom=0,f),h.pause()))},({keyCode:e,ctrlKey:t})=>{switch(e){case 13:g();break;case 39:n(1,h.currentTime+=t?10:5,h);break;case 37:n(1,h.currentTime-=t?10:5,h);break;case 38:{let e=h.volume+.05;n(1,h.volume=e>1?1:e,h);break}case 40:{let e=h.volume-.05;n(1,h.volume=e<0?0:e,h);break}case 32:h.paused?h.play():h.pause()}console.log(e)},s,i,function(t){oe.call(this,e,t)},function(t){oe.call(this,e,t)},function(e){le[e?"unshift":"push"]((()=>{h=e,n(1,h)}))},function(){p.pause=this.paused,n(2,p)},function(){p.volume=this.volume,n(2,p)},function(e){le[e?"unshift":"push"]((()=>{f=e,n(5,f)}))}]}class Dl extends qe{constructor(e){super(),Me(this,e,Bl,Fl,a,{KeyMap:20,file:0,viewer:21},null,[-1,-1])}}function Hl(e){let t,n;return t=new Dl({props:{file:e[2],KeyMap:sl,viewer:e[4]}}),t.$on("returnBack",e[10]),{c(){Re(t.$$.fragment)},m(e,s){Oe(t,e,s),n=!0},p(e,n){const s={};4&n&&(s.file=e[2]),16&n&&(s.viewer=e[4]),t.$set(s)},i(e){n||(Ie(t.$$.fragment,e),n=!0)},o(e){Te(t.$$.fragment,e),n=!1},d(e){Pe(t,e)}}}function Ul(e){let t,n;return t=new Il({props:{viewer:e[4],file:e[2],KeyMap:sl}}),t.$on("changefile",e[9]),t.$on("returnBack",e[10]),{c(){Re(t.$$.fragment)},m(e,s){Oe(t,e,s),n=!0},p(e,n){const s={};16&n&&(s.viewer=e[4]),4&n&&(s.file=e[2]),t.$set(s)},i(e){n||(Ie(t.$$.fragment,e),n=!0)},o(e){Te(t.$$.fragment,e),n=!1},d(e){Pe(t,e)}}}function zl(e){let t,n,s,r,i,o,a,l,c,u,d,f,p,h,m,g,v,y,$,b,w,k,x=e[2].Name+"",_=`${e[5]+1} / ${e[1].length}`;h=new Ua({props:{fileId:e[0],files:e[1],filters:e[7]}}),h.$on("click",e[8]),h.$on("clearfilter",e[11]);const T=[Ul,Hl],C=[];function S(e,t){return 4&t&&(g=null),4&t&&(v=null),null==g&&(g=!!e[2].Type.includes("Manga")),g?0:(null==v&&(v=!!e[2].Type.includes("Video")),v?1:-1)}return~(y=S(e,-1))&&($=C[y]=T[y](e)),{c(){t=A("div"),n=A("div"),s=A("span"),r=L(x),i=R(),o=A("span"),a=A("span"),l=A("i"),c=R(),u=L(_),d=R(),f=A("div"),p=R(),Re(h.$$.fragment),m=R(),$&&$.c(),q(s,"class","svelte-160yte1"),q(n,"class","f-name svelte-160yte1"),W(n,"nomenu",e[6]),q(l,"class","fas fa-file svelte-160yte1"),q(a,"id","files-prog"),q(a,"class","svelte-160yte1"),q(f,"id","clock"),q(f,"class","svelte-160yte1"),q(o,"class","info svelte-160yte1"),W(o,"top",e[2].Type.includes("Video")),q(t,"class","viewer svelte-160yte1")},m(g,v){E(g,t,v),I(t,n),I(n,s),I(s,r),e[15](n),I(t,i),I(t,o),I(o,a),I(a,l),I(a,c),I(a,u),I(o,d),I(o,f),I(t,p),Oe(h,t,null),I(t,m),~y&&C[y].m(t,null),e[16](t),b=!0,w||(k=P(t,"keydown",rl),w=!0)},p(e,[s]){(!b||4&s)&&x!==(x=e[2].Name+"")&&D(r,x),64&s&&W(n,"nomenu",e[6]),(!b||34&s)&&_!==(_=`${e[5]+1} / ${e[1].length}`)&&D(u,_),4&s&&W(o,"top",e[2].Type.includes("Video"));const i={};1&s&&(i.fileId=e[0]),2&s&&(i.files=e[1]),h.$set(i);let a=y;y=S(e,s),y===a?~y&&C[y].p(e,s):($&&(xe(),Te(C[a],1,1,(()=>{C[a]=null})),_e()),~y?($=C[y],$?$.p(e,s):($=C[y]=T[y](e),$.c()),Ie($,1),$.m(t,null)):$=null)},i(e){b||(Ie(h.$$.fragment,e),Ie($),b=!0)},o(e){Te(h.$$.fragment,e),Te($),b=!1},d(n){n&&N(t),e[15](null),Pe(h),~y&&C[y].d(),e[16](null),w=!1,k()}}}function Vl(e,t,n){let s;d(e,Hr,(e=>n(6,s=e)));let{folderId:r}=t,{fileId:i}=t;const o=location.pathname.replace(/(^\/+|\/+$)/g,"").split("/").slice(0,3).join("/"),a=ie("socket"),{Fullscreen:l,NextFile:c,PrevFile:u}=sl;let f,p,h=[],m=[],g={Type:""},v=1,y={filter:""};te((async()=>{let{data:e}=await xs.post("/api/viewer/folder",{id:r});if(!e.fail){n(1,m=h=e.files.sort(((e,t)=>{let n=e.Name.replace("-",".").match(/\d+.\d+|\d+/),s=t.Name.replace("-",".").match(/\d+.\d+|\d+/);return n&&s?Number(n[0])-Number(s[0]):e.Name.replace("-","Z").localeCompare(t.Name.replace("-","Z"))})));const t=m[0];t&&(window.title=t.Cover.split("/")[2])}return window.addEventListener("beforeunload",$),()=>{window.removeEventListener("beforeunload",$)}}));const $=()=>{let{Id:e,CurrentPos:t}=g;a.emit("file-update-pos",{Id:e,CurrentPos:t})},b=(e=0)=>{let t=m.findIndex((e=>e.Id===i))+e;v>-1&&v<m.length-1&&(n(5,v=t),$(),We(`/${o}/${m[v].Id}`))};let w,k;c.action=()=>b(1),c.isctrl=!0,u.action=()=>b(-1),u.isctrl=!0;let x;return window.addEventListener("fullscreenchange",(e=>{if(document.fullscreenElement){const e=document.getElementById("clock");e&&(e.innerText=(new Date).toLocaleTimeString("en-US"),x=setInterval((()=>{e.innerText=(new Date).toLocaleTimeString("en-US")}),1e3))}else clearInterval(x),clock.innerText="";/(android)|(iphone)/i.test(navigator.userAgent)&&g.Type.includes("Video")&&document.fullscreenElement?window.screen.orientation.lock("landscape"):window.screen.orientation.unlock()})),e.$$set=e=>{"folderId"in e&&n(12,r=e.folderId),"fileId"in e&&n(0,i=e.fileId)},e.$$.update=()=>{3&e.$$.dirty&&m.length>0&&(n(2,g=m.find((e=>e.Id===i))||m[0]),n(5,v=m.findIndex((e=>e.Id===i)))),24588&e.$$.dirty&&g.Id!=w&&(n(13,w=g.Id),clearTimeout(k),n(3,f.style.opacity=1,f),n(14,k=setTimeout((()=>{f&&n(3,f.style.opacity=0,f)}),5e3))),4097&e.$$.dirty&&i&&a&&a.emit("recent-folder",{CurrentFile:i,FolderId:r})},[i,m,g,f,p,v,s,y,({target:{id:e}})=>{$(),console.log("filter: ",y.filter),y.filter?n(1,m=h.filter((e=>e.Name.toLocaleLowerCase().includes(y.filter.toLocaleLowerCase())))):n(1,m=h),We(`/${o}/${e}`)},b,()=>{$();const e=localStorage.getItem("content");localStorage.setItem("fileId",g.Id),We(e)},()=>{console.log("clearfilter"),n(1,m=h)},r,w,k,function(e){le[e?"unshift":"push"]((()=>{f=e,n(3,f),n(2,g),n(13,w),n(14,k),n(1,m),n(0,i)}))},function(e){le[e?"unshift":"push"]((()=>{p=e,n(4,p)}))}]}class Wl extends qe{constructor(e){super(),Me(this,e,Vl,zl,a,{folderId:12,fileId:0})}}function Kl(e){let t,n;return t=new Fo({}),{c(){Re(t.$$.fragment)},m(e,s){Oe(t,e,s),n=!0},i(e){n||(Ie(t.$$.fragment,e),n=!0)},o(e){Te(t.$$.fragment,e),n=!1},d(e){Pe(t,e)}}}function Yl(t){let n;return{c(){n=A("div"),n.textContent="Not found"},m(e,t){E(e,n,t)},p:e,d(e){e&&N(n)}}}function Xl(e){let t,n,s,r,i,o,a,l,c,u,d,f,p,h,m,g,v,y,$,b,w,k,x,_;return t=new ti({props:{navItems:e[0]}}),t.$on("click",e[1]),s=new ft({props:{path:"/videos/content/:id/:page/:filter",component:ja}}),i=new ft({props:{path:"/videos/viewer/:folderId/:fileId",component:Wl}}),a=new ft({props:{path:"/videos/:dir/:page/:filter",component:xa}}),c=new ft({props:{path:"/mangas/content/:id/:page/:filter",component:ja}}),d=new ft({props:{path:"/mangas/viewer/:folderId/:fileId",component:Wl}}),p=new ft({props:{path:"/mangas/:dir/:page/:filter",component:ba}}),m=new ft({props:{path:"/favorites/content/:id/:page/:filter",component:ja}}),v=new ft({props:{path:"/favorites/:id/:page/:filter",component:La}}),$=new ft({props:{path:"/favorites/viewer/:folderId/:fileId",component:Wl}}),w=new ft({props:{exact:!0,path:"/",$$slots:{default:[Kl]},$$scope:{ctx:e}}}),x=new ft({props:{path:"*",$$slots:{default:[Yl]},$$scope:{ctx:e}}}),{c(){Re(t.$$.fragment),n=R(),Re(s.$$.fragment),r=R(),Re(i.$$.fragment),o=R(),Re(a.$$.fragment),l=R(),Re(c.$$.fragment),u=R(),Re(d.$$.fragment),f=R(),Re(p.$$.fragment),h=R(),Re(m.$$.fragment),g=R(),Re(v.$$.fragment),y=R(),Re($.$$.fragment),b=R(),Re(w.$$.fragment),k=R(),Re(x.$$.fragment)},m(e,I){Oe(t,e,I),E(e,n,I),Oe(s,e,I),E(e,r,I),Oe(i,e,I),E(e,o,I),Oe(a,e,I),E(e,l,I),Oe(c,e,I),E(e,u,I),Oe(d,e,I),E(e,f,I),Oe(p,e,I),E(e,h,I),Oe(m,e,I),E(e,g,I),Oe(v,e,I),E(e,y,I),Oe($,e,I),E(e,b,I),Oe(w,e,I),E(e,k,I),Oe(x,e,I),_=!0},p(e,t){const n={};4&t&&(n.$$scope={dirty:t,ctx:e}),w.$set(n);const s={};4&t&&(s.$$scope={dirty:t,ctx:e}),x.$set(s)},i(e){_||(Ie(t.$$.fragment,e),Ie(s.$$.fragment,e),Ie(i.$$.fragment,e),Ie(a.$$.fragment,e),Ie(c.$$.fragment,e),Ie(d.$$.fragment,e),Ie(p.$$.fragment,e),Ie(m.$$.fragment,e),Ie(v.$$.fragment,e),Ie($.$$.fragment,e),Ie(w.$$.fragment,e),Ie(x.$$.fragment,e),_=!0)},o(e){Te(t.$$.fragment,e),Te(s.$$.fragment,e),Te(i.$$.fragment,e),Te(a.$$.fragment,e),Te(c.$$.fragment,e),Te(d.$$.fragment,e),Te(p.$$.fragment,e),Te(m.$$.fragment,e),Te(v.$$.fragment,e),Te($.$$.fragment,e),Te(w.$$.fragment,e),Te(x.$$.fragment,e),_=!1},d(e){Pe(t,e),e&&N(n),Pe(s,e),e&&N(r),Pe(i,e),e&&N(o),Pe(a,e),e&&N(l),Pe(c,e),e&&N(u),Pe(d,e),e&&N(f),Pe(p,e),e&&N(h),Pe(m,e),e&&N(g),Pe(v,e),e&&N(y),Pe($,e),e&&N(b),Pe(w,e),e&&N(k),Pe(x,e)}}}function Jl(e){let t,n;return t=new rt({props:{$$slots:{default:[Xl]},$$scope:{ctx:e}}}),{c(){Re(t.$$.fragment)},m(e,s){Oe(t,e,s),n=!0},p(e,[n]){const s={};4&n&&(s.$$scope={dirty:n,ctx:e}),t.$set(s)},i(e){n||(Ie(t.$$.fragment,e),n=!0)},o(e){Te(t.$$.fragment,e),n=!1},d(e){Pe(t,e)}}}function Ql(e){return Oo.set(ie("User").favorites),[[{title:"Home",path:"/",class:"home"},{title:"Videos",path:"/videos",class:"film"},{title:"Mangas",path:"/mangas",class:"book"},{title:"Favorites",path:"/favorites",class:"heart"}],function(t){oe.call(this,e,t)}]}class Gl extends qe{constructor(e){super(),Me(this,e,Ql,Jl,a,{})}}function Zl(t){let n,s,r,o,a,l,c,u,d,f,p,h,m,g,v,y,$,b,w,k,x,_,T,C=t[1].name+"",S=t[1].password+"";return{c(){n=A("div"),s=A("form"),r=A("h3"),r.textContent="Login",o=R(),a=A("div"),l=A("div"),l.innerHTML='<label for="name" class="input-group-text svelte-c4yjcf"><i class="fas fa-user svelte-c4yjcf"></i></label>',c=R(),u=A("input"),d=R(),f=A("div"),p=L(C),h=R(),m=A("div"),g=A("div"),g.innerHTML='<label for="password" class="input-group-text svelte-c4yjcf"><i class="fas fa-key svelte-c4yjcf"></i></label>',v=R(),y=A("input"),$=R(),b=A("div"),w=L(S),k=R(),x=A("div"),x.innerHTML='<button class="btn" tabindex="0">Submit</button>',q(r,"class","mb-4 svelte-c4yjcf"),q(l,"class","input-group-prepend"),q(u,"id","name"),q(u,"type","text"),q(u,"class","form-control"),q(u,"name","username"),q(u,"placeholder","Name"),q(u,"tabindex","0"),q(a,"class","input-group"),q(f,"id","name-errors"),q(f,"class","error text-left text-danger svelte-c4yjcf"),q(g,"class","input-group-prepend"),q(y,"id","password"),q(y,"type","password"),q(y,"class","form-control"),q(y,"name","Password"),q(y,"placeholder","Password"),q(y,"autocomplete","on"),q(y,"tabindex","0"),q(m,"class","input-group"),q(b,"id","pasword-errors"),q(b,"class","error text-left text-danger svelte-c4yjcf"),q(x,"class","form-footer"),q(s,"method","post"),q(s,"class","card bg-dark p-3 svelte-c4yjcf"),q(n,"id","login-container"),q(n,"class","svelte-c4yjcf")},m(e,i){E(e,n,i),I(n,s),I(s,r),I(s,o),I(s,a),I(a,l),I(a,c),I(a,u),H(u,t[0].username),I(s,d),I(s,f),I(f,p),I(s,h),I(s,m),I(m,g),I(m,v),I(m,y),H(y,t[0].password),I(s,$),I(s,b),I(b,w),I(s,k),I(s,x),_||(T=[P(u,"input",t[3]),P(y,"input",t[4]),P(s,"submit",t[2])],_=!0)},p(e,[t]){1&t&&u.value!==e[0].username&&H(u,e[0].username),2&t&&C!==(C=e[1].name+"")&&D(p,C),1&t&&y.value!==e[0].password&&H(y,e[0].password),2&t&&S!==(S=e[1].password+"")&&D(w,S)},i:e,o:e,d(e){e&&N(n),_=!1,i(T)}}}function ec(e,t,n){const s=se();let r={username:"",password:""},i={name:"",password:""};return[r,i,e=>{e.preventDefault(),xs.post("/api/users/login",r).then((({data:e})=>{e.isAutenticated?s("login",{...e,Id:""}):name?n(1,i.name="User can't be empty",i):n(1,i.password="Password can't be empty",i)})).catch((e=>{e.toString().includes("Network Error")?n(1,i.password="server offline",i):n(1,i.password="Server Error",i)}))},function(){r.username=this.value,n(0,r)},function(){r.password=this.value,n(0,r)}]}class tc extends qe{constructor(e){super(),Me(this,e,ec,Zl,a,{})}}function nc(t){let n,s;return n=new tc({}),n.$on("login",t[3]),{c(){Re(n.$$.fragment)},m(e,t){Oe(n,e,t),s=!0},p:e,i(e){s||(Ie(n.$$.fragment,e),s=!0)},o(e){Te(n.$$.fragment,e),s=!1},d(e){Pe(n,e)}}}function sc(e){let t,n,s,r,i;const o=[oc,ic],a=[];function l(e,n){return 1&n&&(t=null),null==t&&(t=!!e[0].role.includes("Admin")),t?0:1}return n=l(e,-1),s=a[n]=o[n](e),{c(){s.c(),r=O()},m(e,t){a[n].m(e,t),E(e,r,t),i=!0},p(e,t){let i=n;n=l(e,t),n===i?a[n].p(e,t):(xe(),Te(a[i],1,1,(()=>{a[i]=null})),_e(),s=a[n],s?s.p(e,t):(s=a[n]=o[n](e),s.c()),Ie(s,1),s.m(r.parentNode,r))},i(e){i||(Ie(s),i=!0)},o(e){Te(s),i=!1},d(e){a[n].d(e),e&&N(r)}}}function rc(t){let n;return{c(){n=A("div"),n.textContent="Loading"},m(e,t){E(e,n,t)},p:e,i:e,o:e,d(e){e&&N(n)}}}function ic(t){let n,s;return n=new Gl({}),n.$on("click",t[2]),{c(){Re(n.$$.fragment)},m(e,t){Oe(n,e,t),s=!0},p:e,i(e){s||(Ie(n.$$.fragment,e),s=!0)},o(e){Te(n.$$.fragment,e),s=!1},d(e){Pe(n,e)}}}function oc(t){let n,s;return n=new Ro({}),n.$on("click",t[2]),{c(){Re(n.$$.fragment)},m(e,t){Oe(n,e,t),s=!0},p:e,i(e){s||(Ie(n.$$.fragment,e),s=!0)},o(e){Te(n.$$.fragment,e),s=!1},d(e){Pe(n,e)}}}function ac(e){let t,n,s,r;const i=[rc,sc,nc],o=[];function a(e,t){return e[1]?0:e[0].username?1:2}return n=a(e),s=o[n]=i[n](e),{c(){t=A("div"),s.c(),q(t,"id","root")},m(e,s){E(e,t,s),o[n].m(t,null),r=!0},p(e,[r]){let l=n;n=a(e),n===l?o[n].p(e,r):(xe(),Te(o[l],1,1,(()=>{o[l]=null})),_e(),s=o[n],s?s.p(e,r):(s=o[n]=i[n](e),s.c()),Ie(s,1),s.m(t,null))},i(e){r||(Ie(s),r=!0)},o(e){Te(s),r=!1},d(e){e&&N(t),o[n].d()}}}function lc(e,t,n){let s,r={username:""},i=!0;te((async()=>{let e=await xs.get("/api/users");e.data.isAutenticated&&n(0,r=e.data),n(1,i=!1)}));const o=async()=>{n(0,r={}),We("/login",{replace:!0}),s&&s.close(),["fullscreen","standalone","minimal-ui"].some((e=>window.matchMedia("(display-mode: "+e+")").matches))&&history.go(-(history.length-2));try{xs.get("/api/users/logout")}catch(e){console.log(e)}};return e.$$.update=()=>{17&e.$$.dirty&&r.isAutenticated&&(n(4,s=Pr("/")),re("socket",s),re("User",r),s.on("error",(e=>{console.log(e)})),re("logout",o))},[r,i,o,e=>{n(0,r=e.detail),We("/",{replace:!0})},s]}window.local=localStorage,Storage.prototype.setObject=function(e,t){this.setItem(e,JSON.stringify(t))},Storage.prototype.getObject=function(e){let t=this.getItem(e);if("undefined"===t)return{};try{t=JSON.parse(t)}catch(e){console.log(e)}return t},window.addEventListener("load",(()=>{if("serviceWorker"in navigator)try{navigator.serviceWorker.register("/service-worker.js")}catch(e){console.log(e)}}));return new class extends qe{constructor(e){super(),Me(this,e,lc,ac,a,{})}}({target:document.body})}();
+
+(function(l, r) { if (!l || l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (self.location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(self.document);
+var app = (function () {
+    'use strict';
+
+    function noop() { }
+    const identity = x => x;
+    function assign(tar, src) {
+        // @ts-ignore
+        for (const k in src)
+            tar[k] = src[k];
+        return tar;
+    }
+    function run(fn) {
+        return fn();
+    }
+    function blank_object() {
+        return Object.create(null);
+    }
+    function run_all(fns) {
+        fns.forEach(run);
+    }
+    function is_function(thing) {
+        return typeof thing === 'function';
+    }
+    function safe_not_equal(a, b) {
+        return a != a ? b == b : a !== b || ((a && typeof a === 'object') || typeof a === 'function');
+    }
+    let src_url_equal_anchor;
+    function src_url_equal(element_src, url) {
+        if (!src_url_equal_anchor) {
+            src_url_equal_anchor = document.createElement('a');
+        }
+        src_url_equal_anchor.href = url;
+        return element_src === src_url_equal_anchor.href;
+    }
+    function is_empty(obj) {
+        return Object.keys(obj).length === 0;
+    }
+    function subscribe(store, ...callbacks) {
+        if (store == null) {
+            return noop;
+        }
+        const unsub = store.subscribe(...callbacks);
+        return unsub.unsubscribe ? () => unsub.unsubscribe() : unsub;
+    }
+    function component_subscribe(component, store, callback) {
+        component.$$.on_destroy.push(subscribe(store, callback));
+    }
+    function create_slot(definition, ctx, $$scope, fn) {
+        if (definition) {
+            const slot_ctx = get_slot_context(definition, ctx, $$scope, fn);
+            return definition[0](slot_ctx);
+        }
+    }
+    function get_slot_context(definition, ctx, $$scope, fn) {
+        return definition[1] && fn
+            ? assign($$scope.ctx.slice(), definition[1](fn(ctx)))
+            : $$scope.ctx;
+    }
+    function get_slot_changes(definition, $$scope, dirty, fn) {
+        if (definition[2] && fn) {
+            const lets = definition[2](fn(dirty));
+            if ($$scope.dirty === undefined) {
+                return lets;
+            }
+            if (typeof lets === 'object') {
+                const merged = [];
+                const len = Math.max($$scope.dirty.length, lets.length);
+                for (let i = 0; i < len; i += 1) {
+                    merged[i] = $$scope.dirty[i] | lets[i];
+                }
+                return merged;
+            }
+            return $$scope.dirty | lets;
+        }
+        return $$scope.dirty;
+    }
+    function update_slot_base(slot, slot_definition, ctx, $$scope, slot_changes, get_slot_context_fn) {
+        if (slot_changes) {
+            const slot_context = get_slot_context(slot_definition, ctx, $$scope, get_slot_context_fn);
+            slot.p(slot_context, slot_changes);
+        }
+    }
+    function get_all_dirty_from_scope($$scope) {
+        if ($$scope.ctx.length > 32) {
+            const dirty = [];
+            const length = $$scope.ctx.length / 32;
+            for (let i = 0; i < length; i++) {
+                dirty[i] = -1;
+            }
+            return dirty;
+        }
+        return -1;
+    }
+    function exclude_internal_props(props) {
+        const result = {};
+        for (const k in props)
+            if (k[0] !== '$')
+                result[k] = props[k];
+        return result;
+    }
+    function null_to_empty(value) {
+        return value == null ? '' : value;
+    }
+    function action_destroyer(action_result) {
+        return action_result && is_function(action_result.destroy) ? action_result.destroy : noop;
+    }
+
+    const is_client = typeof window !== 'undefined';
+    let now = is_client
+        ? () => window.performance.now()
+        : () => Date.now();
+    let raf = is_client ? cb => requestAnimationFrame(cb) : noop;
+
+    const tasks = new Set();
+    function run_tasks(now) {
+        tasks.forEach(task => {
+            if (!task.c(now)) {
+                tasks.delete(task);
+                task.f();
+            }
+        });
+        if (tasks.size !== 0)
+            raf(run_tasks);
+    }
+    /**
+     * Creates a new task that runs on each raf frame
+     * until it returns a falsy value or is aborted
+     */
+    function loop(callback) {
+        let task;
+        if (tasks.size === 0)
+            raf(run_tasks);
+        return {
+            promise: new Promise(fulfill => {
+                tasks.add(task = { c: callback, f: fulfill });
+            }),
+            abort() {
+                tasks.delete(task);
+            }
+        };
+    }
+    function append(target, node) {
+        target.appendChild(node);
+    }
+    function get_root_for_style(node) {
+        if (!node)
+            return document;
+        const root = node.getRootNode ? node.getRootNode() : node.ownerDocument;
+        if (root && root.host) {
+            return root;
+        }
+        return node.ownerDocument;
+    }
+    function append_empty_stylesheet(node) {
+        const style_element = element('style');
+        append_stylesheet(get_root_for_style(node), style_element);
+        return style_element.sheet;
+    }
+    function append_stylesheet(node, style) {
+        append(node.head || node, style);
+    }
+    function insert(target, node, anchor) {
+        target.insertBefore(node, anchor || null);
+    }
+    function detach(node) {
+        node.parentNode.removeChild(node);
+    }
+    function destroy_each(iterations, detaching) {
+        for (let i = 0; i < iterations.length; i += 1) {
+            if (iterations[i])
+                iterations[i].d(detaching);
+        }
+    }
+    function element(name) {
+        return document.createElement(name);
+    }
+    function text(data) {
+        return document.createTextNode(data);
+    }
+    function space() {
+        return text(' ');
+    }
+    function empty$1() {
+        return text('');
+    }
+    function listen(node, event, handler, options) {
+        node.addEventListener(event, handler, options);
+        return () => node.removeEventListener(event, handler, options);
+    }
+    function prevent_default(fn) {
+        return function (event) {
+            event.preventDefault();
+            // @ts-ignore
+            return fn.call(this, event);
+        };
+    }
+    function stop_propagation(fn) {
+        return function (event) {
+            event.stopPropagation();
+            // @ts-ignore
+            return fn.call(this, event);
+        };
+    }
+    function attr(node, attribute, value) {
+        if (value == null)
+            node.removeAttribute(attribute);
+        else if (node.getAttribute(attribute) !== value)
+            node.setAttribute(attribute, value);
+    }
+    function set_attributes(node, attributes) {
+        // @ts-ignore
+        const descriptors = Object.getOwnPropertyDescriptors(node.__proto__);
+        for (const key in attributes) {
+            if (attributes[key] == null) {
+                node.removeAttribute(key);
+            }
+            else if (key === 'style') {
+                node.style.cssText = attributes[key];
+            }
+            else if (key === '__value') {
+                node.value = node[key] = attributes[key];
+            }
+            else if (descriptors[key] && descriptors[key].set) {
+                node[key] = attributes[key];
+            }
+            else {
+                attr(node, key, attributes[key]);
+            }
+        }
+    }
+    function to_number(value) {
+        return value === '' ? null : +value;
+    }
+    function children(element) {
+        return Array.from(element.childNodes);
+    }
+    function set_data(text, data) {
+        data = '' + data;
+        if (text.wholeText !== data)
+            text.data = data;
+    }
+    function set_input_value(input, value) {
+        input.value = value == null ? '' : value;
+    }
+    function set_style(node, key, value, important) {
+        if (value === null) {
+            node.style.removeProperty(key);
+        }
+        else {
+            node.style.setProperty(key, value, important ? 'important' : '');
+        }
+    }
+    function select_option(select, value) {
+        for (let i = 0; i < select.options.length; i += 1) {
+            const option = select.options[i];
+            if (option.__value === value) {
+                option.selected = true;
+                return;
+            }
+        }
+        select.selectedIndex = -1; // no option should be selected
+    }
+    function select_value(select) {
+        const selected_option = select.querySelector(':checked') || select.options[0];
+        return selected_option && selected_option.__value;
+    }
+    function toggle_class(element, name, toggle) {
+        element.classList[toggle ? 'add' : 'remove'](name);
+    }
+    function custom_event(type, detail, { bubbles = false, cancelable = false } = {}) {
+        const e = document.createEvent('CustomEvent');
+        e.initCustomEvent(type, bubbles, cancelable, detail);
+        return e;
+    }
+
+    // we need to store the information for multiple documents because a Svelte application could also contain iframes
+    // https://github.com/sveltejs/svelte/issues/3624
+    const managed_styles = new Map();
+    let active = 0;
+    // https://github.com/darkskyapp/string-hash/blob/master/index.js
+    function hash(str) {
+        let hash = 5381;
+        let i = str.length;
+        while (i--)
+            hash = ((hash << 5) - hash) ^ str.charCodeAt(i);
+        return hash >>> 0;
+    }
+    function create_style_information(doc, node) {
+        const info = { stylesheet: append_empty_stylesheet(node), rules: {} };
+        managed_styles.set(doc, info);
+        return info;
+    }
+    function create_rule(node, a, b, duration, delay, ease, fn, uid = 0) {
+        const step = 16.666 / duration;
+        let keyframes = '{\n';
+        for (let p = 0; p <= 1; p += step) {
+            const t = a + (b - a) * ease(p);
+            keyframes += p * 100 + `%{${fn(t, 1 - t)}}\n`;
+        }
+        const rule = keyframes + `100% {${fn(b, 1 - b)}}\n}`;
+        const name = `__svelte_${hash(rule)}_${uid}`;
+        const doc = get_root_for_style(node);
+        const { stylesheet, rules } = managed_styles.get(doc) || create_style_information(doc, node);
+        if (!rules[name]) {
+            rules[name] = true;
+            stylesheet.insertRule(`@keyframes ${name} ${rule}`, stylesheet.cssRules.length);
+        }
+        const animation = node.style.animation || '';
+        node.style.animation = `${animation ? `${animation}, ` : ''}${name} ${duration}ms linear ${delay}ms 1 both`;
+        active += 1;
+        return name;
+    }
+    function delete_rule(node, name) {
+        const previous = (node.style.animation || '').split(', ');
+        const next = previous.filter(name
+            ? anim => anim.indexOf(name) < 0 // remove specific animation
+            : anim => anim.indexOf('__svelte') === -1 // remove all Svelte animations
+        );
+        const deleted = previous.length - next.length;
+        if (deleted) {
+            node.style.animation = next.join(', ');
+            active -= deleted;
+            if (!active)
+                clear_rules();
+        }
+    }
+    function clear_rules() {
+        raf(() => {
+            if (active)
+                return;
+            managed_styles.forEach(info => {
+                const { stylesheet } = info;
+                let i = stylesheet.cssRules.length;
+                while (i--)
+                    stylesheet.deleteRule(i);
+                info.rules = {};
+            });
+            managed_styles.clear();
+        });
+    }
+
+    let current_component;
+    function set_current_component(component) {
+        current_component = component;
+    }
+    function get_current_component() {
+        if (!current_component)
+            throw new Error('Function called outside component initialization');
+        return current_component;
+    }
+    function onMount(fn) {
+        get_current_component().$$.on_mount.push(fn);
+    }
+    function afterUpdate(fn) {
+        get_current_component().$$.after_update.push(fn);
+    }
+    function onDestroy(fn) {
+        get_current_component().$$.on_destroy.push(fn);
+    }
+    function createEventDispatcher() {
+        const component = get_current_component();
+        return (type, detail, { cancelable = false } = {}) => {
+            const callbacks = component.$$.callbacks[type];
+            if (callbacks) {
+                // TODO are there situations where events could be dispatched
+                // in a server (non-DOM) environment?
+                const event = custom_event(type, detail, { cancelable });
+                callbacks.slice().forEach(fn => {
+                    fn.call(component, event);
+                });
+                return !event.defaultPrevented;
+            }
+            return true;
+        };
+    }
+    function setContext(key, context) {
+        get_current_component().$$.context.set(key, context);
+        return context;
+    }
+    function getContext(key) {
+        return get_current_component().$$.context.get(key);
+    }
+    // TODO figure out if we still want to support
+    // shorthand events, or if we want to implement
+    // a real bubbling mechanism
+    function bubble(component, event) {
+        const callbacks = component.$$.callbacks[event.type];
+        if (callbacks) {
+            // @ts-ignore
+            callbacks.slice().forEach(fn => fn.call(this, event));
+        }
+    }
+
+    const dirty_components = [];
+    const binding_callbacks = [];
+    const render_callbacks = [];
+    const flush_callbacks = [];
+    const resolved_promise = Promise.resolve();
+    let update_scheduled = false;
+    function schedule_update() {
+        if (!update_scheduled) {
+            update_scheduled = true;
+            resolved_promise.then(flush);
+        }
+    }
+    function add_render_callback(fn) {
+        render_callbacks.push(fn);
+    }
+    // flush() calls callbacks in this order:
+    // 1. All beforeUpdate callbacks, in order: parents before children
+    // 2. All bind:this callbacks, in reverse order: children before parents.
+    // 3. All afterUpdate callbacks, in order: parents before children. EXCEPT
+    //    for afterUpdates called during the initial onMount, which are called in
+    //    reverse order: children before parents.
+    // Since callbacks might update component values, which could trigger another
+    // call to flush(), the following steps guard against this:
+    // 1. During beforeUpdate, any updated components will be added to the
+    //    dirty_components array and will cause a reentrant call to flush(). Because
+    //    the flush index is kept outside the function, the reentrant call will pick
+    //    up where the earlier call left off and go through all dirty components. The
+    //    current_component value is saved and restored so that the reentrant call will
+    //    not interfere with the "parent" flush() call.
+    // 2. bind:this callbacks cannot trigger new flush() calls.
+    // 3. During afterUpdate, any updated components will NOT have their afterUpdate
+    //    callback called a second time; the seen_callbacks set, outside the flush()
+    //    function, guarantees this behavior.
+    const seen_callbacks = new Set();
+    let flushidx = 0; // Do *not* move this inside the flush() function
+    function flush() {
+        const saved_component = current_component;
+        do {
+            // first, call beforeUpdate functions
+            // and update components
+            while (flushidx < dirty_components.length) {
+                const component = dirty_components[flushidx];
+                flushidx++;
+                set_current_component(component);
+                update(component.$$);
+            }
+            set_current_component(null);
+            dirty_components.length = 0;
+            flushidx = 0;
+            while (binding_callbacks.length)
+                binding_callbacks.pop()();
+            // then, once components are updated, call
+            // afterUpdate functions. This may cause
+            // subsequent updates...
+            for (let i = 0; i < render_callbacks.length; i += 1) {
+                const callback = render_callbacks[i];
+                if (!seen_callbacks.has(callback)) {
+                    // ...so guard against infinite loops
+                    seen_callbacks.add(callback);
+                    callback();
+                }
+            }
+            render_callbacks.length = 0;
+        } while (dirty_components.length);
+        while (flush_callbacks.length) {
+            flush_callbacks.pop()();
+        }
+        update_scheduled = false;
+        seen_callbacks.clear();
+        set_current_component(saved_component);
+    }
+    function update($$) {
+        if ($$.fragment !== null) {
+            $$.update();
+            run_all($$.before_update);
+            const dirty = $$.dirty;
+            $$.dirty = [-1];
+            $$.fragment && $$.fragment.p($$.ctx, dirty);
+            $$.after_update.forEach(add_render_callback);
+        }
+    }
+
+    let promise;
+    function wait() {
+        if (!promise) {
+            promise = Promise.resolve();
+            promise.then(() => {
+                promise = null;
+            });
+        }
+        return promise;
+    }
+    function dispatch(node, direction, kind) {
+        node.dispatchEvent(custom_event(`${direction ? 'intro' : 'outro'}${kind}`));
+    }
+    const outroing = new Set();
+    let outros;
+    function group_outros() {
+        outros = {
+            r: 0,
+            c: [],
+            p: outros // parent group
+        };
+    }
+    function check_outros() {
+        if (!outros.r) {
+            run_all(outros.c);
+        }
+        outros = outros.p;
+    }
+    function transition_in(block, local) {
+        if (block && block.i) {
+            outroing.delete(block);
+            block.i(local);
+        }
+    }
+    function transition_out(block, local, detach, callback) {
+        if (block && block.o) {
+            if (outroing.has(block))
+                return;
+            outroing.add(block);
+            outros.c.push(() => {
+                outroing.delete(block);
+                if (callback) {
+                    if (detach)
+                        block.d(1);
+                    callback();
+                }
+            });
+            block.o(local);
+        }
+        else if (callback) {
+            callback();
+        }
+    }
+    const null_transition = { duration: 0 };
+    function create_in_transition(node, fn, params) {
+        let config = fn(node, params);
+        let running = false;
+        let animation_name;
+        let task;
+        let uid = 0;
+        function cleanup() {
+            if (animation_name)
+                delete_rule(node, animation_name);
+        }
+        function go() {
+            const { delay = 0, duration = 300, easing = identity, tick = noop, css } = config || null_transition;
+            if (css)
+                animation_name = create_rule(node, 0, 1, duration, delay, easing, css, uid++);
+            tick(0, 1);
+            const start_time = now() + delay;
+            const end_time = start_time + duration;
+            if (task)
+                task.abort();
+            running = true;
+            add_render_callback(() => dispatch(node, true, 'start'));
+            task = loop(now => {
+                if (running) {
+                    if (now >= end_time) {
+                        tick(1, 0);
+                        dispatch(node, true, 'end');
+                        cleanup();
+                        return running = false;
+                    }
+                    if (now >= start_time) {
+                        const t = easing((now - start_time) / duration);
+                        tick(t, 1 - t);
+                    }
+                }
+                return running;
+            });
+        }
+        let started = false;
+        return {
+            start() {
+                if (started)
+                    return;
+                started = true;
+                delete_rule(node);
+                if (is_function(config)) {
+                    config = config();
+                    wait().then(go);
+                }
+                else {
+                    go();
+                }
+            },
+            invalidate() {
+                started = false;
+            },
+            end() {
+                if (running) {
+                    cleanup();
+                    running = false;
+                }
+            }
+        };
+    }
+    function create_out_transition(node, fn, params) {
+        let config = fn(node, params);
+        let running = true;
+        let animation_name;
+        const group = outros;
+        group.r += 1;
+        function go() {
+            const { delay = 0, duration = 300, easing = identity, tick = noop, css } = config || null_transition;
+            if (css)
+                animation_name = create_rule(node, 1, 0, duration, delay, easing, css);
+            const start_time = now() + delay;
+            const end_time = start_time + duration;
+            add_render_callback(() => dispatch(node, false, 'start'));
+            loop(now => {
+                if (running) {
+                    if (now >= end_time) {
+                        tick(0, 1);
+                        dispatch(node, false, 'end');
+                        if (!--group.r) {
+                            // this will result in `end()` being called,
+                            // so we don't need to clean up here
+                            run_all(group.c);
+                        }
+                        return false;
+                    }
+                    if (now >= start_time) {
+                        const t = easing((now - start_time) / duration);
+                        tick(1 - t, t);
+                    }
+                }
+                return running;
+            });
+        }
+        if (is_function(config)) {
+            wait().then(() => {
+                // @ts-ignore
+                config = config();
+                go();
+            });
+        }
+        else {
+            go();
+        }
+        return {
+            end(reset) {
+                if (reset && config.tick) {
+                    config.tick(1, 0);
+                }
+                if (running) {
+                    if (animation_name)
+                        delete_rule(node, animation_name);
+                    running = false;
+                }
+            }
+        };
+    }
+    function create_bidirectional_transition(node, fn, params, intro) {
+        let config = fn(node, params);
+        let t = intro ? 0 : 1;
+        let running_program = null;
+        let pending_program = null;
+        let animation_name = null;
+        function clear_animation() {
+            if (animation_name)
+                delete_rule(node, animation_name);
+        }
+        function init(program, duration) {
+            const d = (program.b - t);
+            duration *= Math.abs(d);
+            return {
+                a: t,
+                b: program.b,
+                d,
+                duration,
+                start: program.start,
+                end: program.start + duration,
+                group: program.group
+            };
+        }
+        function go(b) {
+            const { delay = 0, duration = 300, easing = identity, tick = noop, css } = config || null_transition;
+            const program = {
+                start: now() + delay,
+                b
+            };
+            if (!b) {
+                // @ts-ignore todo: improve typings
+                program.group = outros;
+                outros.r += 1;
+            }
+            if (running_program || pending_program) {
+                pending_program = program;
+            }
+            else {
+                // if this is an intro, and there's a delay, we need to do
+                // an initial tick and/or apply CSS animation immediately
+                if (css) {
+                    clear_animation();
+                    animation_name = create_rule(node, t, b, duration, delay, easing, css);
+                }
+                if (b)
+                    tick(0, 1);
+                running_program = init(program, duration);
+                add_render_callback(() => dispatch(node, b, 'start'));
+                loop(now => {
+                    if (pending_program && now > pending_program.start) {
+                        running_program = init(pending_program, duration);
+                        pending_program = null;
+                        dispatch(node, running_program.b, 'start');
+                        if (css) {
+                            clear_animation();
+                            animation_name = create_rule(node, t, running_program.b, running_program.duration, 0, easing, config.css);
+                        }
+                    }
+                    if (running_program) {
+                        if (now >= running_program.end) {
+                            tick(t = running_program.b, 1 - t);
+                            dispatch(node, running_program.b, 'end');
+                            if (!pending_program) {
+                                // we're done
+                                if (running_program.b) {
+                                    // intro — we can tidy up immediately
+                                    clear_animation();
+                                }
+                                else {
+                                    // outro — needs to be coordinated
+                                    if (!--running_program.group.r)
+                                        run_all(running_program.group.c);
+                                }
+                            }
+                            running_program = null;
+                        }
+                        else if (now >= running_program.start) {
+                            const p = now - running_program.start;
+                            t = running_program.a + running_program.d * easing(p / running_program.duration);
+                            tick(t, 1 - t);
+                        }
+                    }
+                    return !!(running_program || pending_program);
+                });
+            }
+        }
+        return {
+            run(b) {
+                if (is_function(config)) {
+                    wait().then(() => {
+                        // @ts-ignore
+                        config = config();
+                        go(b);
+                    });
+                }
+                else {
+                    go(b);
+                }
+            },
+            end() {
+                clear_animation();
+                running_program = pending_program = null;
+            }
+        };
+    }
+
+    function get_spread_update(levels, updates) {
+        const update = {};
+        const to_null_out = {};
+        const accounted_for = { $$scope: 1 };
+        let i = levels.length;
+        while (i--) {
+            const o = levels[i];
+            const n = updates[i];
+            if (n) {
+                for (const key in o) {
+                    if (!(key in n))
+                        to_null_out[key] = 1;
+                }
+                for (const key in n) {
+                    if (!accounted_for[key]) {
+                        update[key] = n[key];
+                        accounted_for[key] = 1;
+                    }
+                }
+                levels[i] = n;
+            }
+            else {
+                for (const key in o) {
+                    accounted_for[key] = 1;
+                }
+            }
+        }
+        for (const key in to_null_out) {
+            if (!(key in update))
+                update[key] = undefined;
+        }
+        return update;
+    }
+    function get_spread_object(spread_props) {
+        return typeof spread_props === 'object' && spread_props !== null ? spread_props : {};
+    }
+    function create_component(block) {
+        block && block.c();
+    }
+    function mount_component(component, target, anchor, customElement) {
+        const { fragment, on_mount, on_destroy, after_update } = component.$$;
+        fragment && fragment.m(target, anchor);
+        if (!customElement) {
+            // onMount happens before the initial afterUpdate
+            add_render_callback(() => {
+                const new_on_destroy = on_mount.map(run).filter(is_function);
+                if (on_destroy) {
+                    on_destroy.push(...new_on_destroy);
+                }
+                else {
+                    // Edge case - component was destroyed immediately,
+                    // most likely as a result of a binding initialising
+                    run_all(new_on_destroy);
+                }
+                component.$$.on_mount = [];
+            });
+        }
+        after_update.forEach(add_render_callback);
+    }
+    function destroy_component(component, detaching) {
+        const $$ = component.$$;
+        if ($$.fragment !== null) {
+            run_all($$.on_destroy);
+            $$.fragment && $$.fragment.d(detaching);
+            // TODO null out other refs, including component.$$ (but need to
+            // preserve final state?)
+            $$.on_destroy = $$.fragment = null;
+            $$.ctx = [];
+        }
+    }
+    function make_dirty(component, i) {
+        if (component.$$.dirty[0] === -1) {
+            dirty_components.push(component);
+            schedule_update();
+            component.$$.dirty.fill(0);
+        }
+        component.$$.dirty[(i / 31) | 0] |= (1 << (i % 31));
+    }
+    function init(component, options, instance, create_fragment, not_equal, props, append_styles, dirty = [-1]) {
+        const parent_component = current_component;
+        set_current_component(component);
+        const $$ = component.$$ = {
+            fragment: null,
+            ctx: null,
+            // state
+            props,
+            update: noop,
+            not_equal,
+            bound: blank_object(),
+            // lifecycle
+            on_mount: [],
+            on_destroy: [],
+            on_disconnect: [],
+            before_update: [],
+            after_update: [],
+            context: new Map(options.context || (parent_component ? parent_component.$$.context : [])),
+            // everything else
+            callbacks: blank_object(),
+            dirty,
+            skip_bound: false,
+            root: options.target || parent_component.$$.root
+        };
+        append_styles && append_styles($$.root);
+        let ready = false;
+        $$.ctx = instance
+            ? instance(component, options.props || {}, (i, ret, ...rest) => {
+                const value = rest.length ? rest[0] : ret;
+                if ($$.ctx && not_equal($$.ctx[i], $$.ctx[i] = value)) {
+                    if (!$$.skip_bound && $$.bound[i])
+                        $$.bound[i](value);
+                    if (ready)
+                        make_dirty(component, i);
+                }
+                return ret;
+            })
+            : [];
+        $$.update();
+        ready = true;
+        run_all($$.before_update);
+        // `false` as a special case of no DOM component
+        $$.fragment = create_fragment ? create_fragment($$.ctx) : false;
+        if (options.target) {
+            if (options.hydrate) {
+                const nodes = children(options.target);
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                $$.fragment && $$.fragment.l(nodes);
+                nodes.forEach(detach);
+            }
+            else {
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                $$.fragment && $$.fragment.c();
+            }
+            if (options.intro)
+                transition_in(component.$$.fragment);
+            mount_component(component, options.target, options.anchor, options.customElement);
+            flush();
+        }
+        set_current_component(parent_component);
+    }
+    /**
+     * Base class for Svelte components. Used when dev=false.
+     */
+    class SvelteComponent {
+        $destroy() {
+            destroy_component(this, 1);
+            this.$destroy = noop;
+        }
+        $on(type, callback) {
+            const callbacks = (this.$$.callbacks[type] || (this.$$.callbacks[type] = []));
+            callbacks.push(callback);
+            return () => {
+                const index = callbacks.indexOf(callback);
+                if (index !== -1)
+                    callbacks.splice(index, 1);
+            };
+        }
+        $set($$props) {
+            if (this.$$set && !is_empty($$props)) {
+                this.$$.skip_bound = true;
+                this.$$set($$props);
+                this.$$.skip_bound = false;
+            }
+        }
+    }
+
+    const subscriber_queue = [];
+    /**
+     * Creates a `Readable` store that allows reading by subscription.
+     * @param value initial value
+     * @param {StartStopNotifier}start start and stop notifications for subscriptions
+     */
+    function readable(value, start) {
+        return {
+            subscribe: writable(value, start).subscribe
+        };
+    }
+    /**
+     * Create a `Writable` store that allows both updating and reading by subscription.
+     * @param {*=}value initial value
+     * @param {StartStopNotifier=}start start and stop notifications for subscriptions
+     */
+    function writable(value, start = noop) {
+        let stop;
+        const subscribers = new Set();
+        function set(new_value) {
+            if (safe_not_equal(value, new_value)) {
+                value = new_value;
+                if (stop) { // store is ready
+                    const run_queue = !subscriber_queue.length;
+                    for (const subscriber of subscribers) {
+                        subscriber[1]();
+                        subscriber_queue.push(subscriber, value);
+                    }
+                    if (run_queue) {
+                        for (let i = 0; i < subscriber_queue.length; i += 2) {
+                            subscriber_queue[i][0](subscriber_queue[i + 1]);
+                        }
+                        subscriber_queue.length = 0;
+                    }
+                }
+            }
+        }
+        function update(fn) {
+            set(fn(value));
+        }
+        function subscribe(run, invalidate = noop) {
+            const subscriber = [run, invalidate];
+            subscribers.add(subscriber);
+            if (subscribers.size === 1) {
+                stop = start(set) || noop;
+            }
+            run(value);
+            return () => {
+                subscribers.delete(subscriber);
+                if (subscribers.size === 0) {
+                    stop();
+                    stop = null;
+                }
+            };
+        }
+        return { set, update, subscribe };
+    }
+    function derived(stores, fn, initial_value) {
+        const single = !Array.isArray(stores);
+        const stores_array = single
+            ? [stores]
+            : stores;
+        const auto = fn.length < 2;
+        return readable(initial_value, (set) => {
+            let inited = false;
+            const values = [];
+            let pending = 0;
+            let cleanup = noop;
+            const sync = () => {
+                if (pending) {
+                    return;
+                }
+                cleanup();
+                const result = fn(single ? values[0] : values, set);
+                if (auto) {
+                    set(result);
+                }
+                else {
+                    cleanup = is_function(result) ? result : noop;
+                }
+            };
+            const unsubscribers = stores_array.map((store, i) => subscribe(store, (value) => {
+                values[i] = value;
+                pending &= ~(1 << i);
+                if (inited) {
+                    sync();
+                }
+            }, () => {
+                pending |= (1 << i);
+            }));
+            inited = true;
+            sync();
+            return function stop() {
+                run_all(unsubscribers);
+                cleanup();
+            };
+        });
+    }
+
+    const LOCATION = {};
+    const ROUTER = {};
+
+    /**
+     * Adapted from https://github.com/reach/router/blob/b60e6dd781d5d3a4bdaaf4de665649c0f6a7e78d/src/lib/history.js
+     *
+     * https://github.com/reach/router/blob/master/LICENSE
+     * */
+
+    function getLocation(source) {
+      return {
+        ...source.location,
+        state: source.history.state,
+        key: (source.history.state && source.history.state.key) || "initial"
+      };
+    }
+
+    function createHistory(source, options) {
+      const listeners = [];
+      let location = getLocation(source);
+
+      return {
+        get location() {
+          return location;
+        },
+
+        listen(listener) {
+          listeners.push(listener);
+
+          const popstateListener = () => {
+            location = getLocation(source);
+            listener({ location, action: "POP" });
+          };
+
+          source.addEventListener("popstate", popstateListener);
+
+          return () => {
+            source.removeEventListener("popstate", popstateListener);
+
+            const index = listeners.indexOf(listener);
+            listeners.splice(index, 1);
+          };
+        },
+
+        navigate(to, { state, replace = false } = {}) {
+          state = { ...state, key: Date.now() + "" };
+          // try...catch iOS Safari limits to 100 pushState calls
+          try {
+            if (replace) {
+              source.history.replaceState(state, null, to);
+            } else {
+              source.history.pushState(state, null, to);
+            }
+          } catch (e) {
+            source.location[replace ? "replace" : "assign"](to);
+          }
+
+          location = getLocation(source);
+          listeners.forEach(listener => listener({ location, action: "PUSH" }));
+        }
+      };
+    }
+
+    // Stores history entries in memory for testing or other platforms like Native
+    function createMemorySource(initialPathname = "/") {
+      let index = 0;
+      const stack = [{ pathname: initialPathname, search: "" }];
+      const states = [];
+
+      return {
+        get location() {
+          return stack[index];
+        },
+        addEventListener(name, fn) {},
+        removeEventListener(name, fn) {},
+        history: {
+          get entries() {
+            return stack;
+          },
+          get index() {
+            return index;
+          },
+          get state() {
+            return states[index];
+          },
+          pushState(state, _, uri) {
+            const [pathname, search = ""] = uri.split("?");
+            index++;
+            stack.push({ pathname, search });
+            states.push(state);
+          },
+          replaceState(state, _, uri) {
+            const [pathname, search = ""] = uri.split("?");
+            stack[index] = { pathname, search };
+            states[index] = state;
+          }
+        }
+      };
+    }
+
+    // Global history uses window.history as the source if available,
+    // otherwise a memory history
+    const canUseDOM = Boolean(
+      typeof window !== "undefined" &&
+        window.document &&
+        window.document.createElement
+    );
+    const globalHistory = createHistory(canUseDOM ? window : createMemorySource());
+    const { navigate } = globalHistory;
+
+    /**
+     * Adapted from https://github.com/reach/router/blob/b60e6dd781d5d3a4bdaaf4de665649c0f6a7e78d/src/lib/utils.js
+     *
+     * https://github.com/reach/router/blob/master/LICENSE
+     * */
+
+    const paramRe = /^:(.+)/;
+
+    const SEGMENT_POINTS = 4;
+    const STATIC_POINTS = 3;
+    const DYNAMIC_POINTS = 2;
+    const SPLAT_PENALTY = 1;
+    const ROOT_POINTS = 1;
+
+    /**
+     * Check if `string` starts with `search`
+     * @param {string} string
+     * @param {string} search
+     * @return {boolean}
+     */
+    function startsWith(string, search) {
+      return string.substr(0, search.length) === search;
+    }
+
+    /**
+     * Check if `segment` is a root segment
+     * @param {string} segment
+     * @return {boolean}
+     */
+    function isRootSegment(segment) {
+      return segment === "";
+    }
+
+    /**
+     * Check if `segment` is a dynamic segment
+     * @param {string} segment
+     * @return {boolean}
+     */
+    function isDynamic(segment) {
+      return paramRe.test(segment);
+    }
+
+    /**
+     * Check if `segment` is a splat
+     * @param {string} segment
+     * @return {boolean}
+     */
+    function isSplat(segment) {
+      return segment[0] === "*";
+    }
+
+    /**
+     * Split up the URI into segments delimited by `/`
+     * @param {string} uri
+     * @return {string[]}
+     */
+    function segmentize(uri) {
+      return (
+        uri
+          // Strip starting/ending `/`
+          .replace(/(^\/+|\/+$)/g, "")
+          .split("/")
+      );
+    }
+
+    /**
+     * Strip `str` of potential start and end `/`
+     * @param {string} str
+     * @return {string}
+     */
+    function stripSlashes(str) {
+      return str.replace(/(^\/+|\/+$)/g, "");
+    }
+
+    /**
+     * Score a route depending on how its individual segments look
+     * @param {object} route
+     * @param {number} index
+     * @return {object}
+     */
+    function rankRoute(route, index) {
+      const score = route.default
+        ? 0
+        : segmentize(route.path).reduce((score, segment) => {
+            score += SEGMENT_POINTS;
+
+            if (isRootSegment(segment)) {
+              score += ROOT_POINTS;
+            } else if (isDynamic(segment)) {
+              score += DYNAMIC_POINTS;
+            } else if (isSplat(segment)) {
+              score -= SEGMENT_POINTS + SPLAT_PENALTY;
+            } else {
+              score += STATIC_POINTS;
+            }
+
+            return score;
+          }, 0);
+
+      return { route, score, index };
+    }
+
+    /**
+     * Give a score to all routes and sort them on that
+     * @param {object[]} routes
+     * @return {object[]}
+     */
+    function rankRoutes(routes) {
+      return (
+        routes
+          .map(rankRoute)
+          // If two routes have the exact same score, we go by index instead
+          .sort((a, b) =>
+            a.score < b.score ? 1 : a.score > b.score ? -1 : a.index - b.index
+          )
+      );
+    }
+
+    /**
+     * Ranks and picks the best route to match. Each segment gets the highest
+     * amount of points, then the type of segment gets an additional amount of
+     * points where
+     *
+     *  static > dynamic > splat > root
+     *
+     * This way we don't have to worry about the order of our routes, let the
+     * computers do it.
+     *
+     * A route looks like this
+     *
+     *  { path, default, value }
+     *
+     * And a returned match looks like:
+     *
+     *  { route, params, uri }
+     *
+     * @param {object[]} routes
+     * @param {string} uri
+     * @return {?object}
+     */
+    function pick$1(routes, uri) {
+      let match;
+      let default_;
+
+      const [uriPathname] = uri.split("?");
+      const uriSegments = segmentize(uriPathname);
+      const isRootUri = uriSegments[0] === "";
+      const ranked = rankRoutes(routes);
+
+      for (let i = 0, l = ranked.length; i < l; i++) {
+        const route = ranked[i].route;
+        let missed = false;
+
+        if (route.default) {
+          default_ = {
+            route,
+            params: {},
+            uri,
+          };
+          continue;
+        }
+
+        const routeSegments = segmentize(route.path);
+        const params = {};
+        const max = Math.max(uriSegments.length, routeSegments.length);
+        let index = 0;
+
+        for (; index < max; index++) {
+          const routeSegment = routeSegments[index];
+          const uriSegment = uriSegments[index];
+
+          if (routeSegment !== undefined && isSplat(routeSegment)) {
+            // Hit a splat, just grab the rest, and return a match
+            // uri:   /files/documents/work
+            // route: /files/* or /files/*splatname
+            const splatName = routeSegment === "*" ? "*" : routeSegment.slice(1);
+
+            params[splatName] = uriSegments.slice(index).map(decodeURIComponent).join("/");
+            break;
+          }
+          if (!routeSegment.includes(":") && routeSegment !== uriSegment) {
+            missed = true;
+            break;
+          }
+          let dynamicMatch = paramRe.exec(routeSegment);
+
+          if (dynamicMatch && !isRootUri) {
+            const value = decodeURIComponent(uriSegment);
+            params[dynamicMatch[1]] = value === "undefined" ? undefined : value;
+          } else if (routeSegment !== uriSegment) {
+            // Current segments don't match, not dynamic, not splat, so no match
+            // uri:   /users/123/settings
+            // route: /users/:id/profile
+            missed = true;
+            break;
+          }
+        }
+
+        if (!missed) {
+          match = {
+            route,
+            params,
+            uri: "/" + uriSegments.slice(0, index).join("/"),
+          };
+          break;
+        }
+      }
+
+      return match || default_ || null;
+    }
+
+    /**
+     * Check if the `path` matches the `uri`.
+     * @param {string} path
+     * @param {string} uri
+     * @return {?object}
+     */
+    function match(route, uri) {
+      return pick$1([route], uri);
+    }
+
+    /**
+     * Add the query to the pathname if a query is given
+     * @param {string} pathname
+     * @param {string} [query]
+     * @return {string}
+     */
+    function addQuery(pathname, query) {
+      return pathname + (query ? `?${query}` : "");
+    }
+
+    /**
+     * Resolve URIs as though every path is a directory, no files. Relative URIs
+     * in the browser can feel awkward because not only can you be "in a directory",
+     * you can be "at a file", too. For example:
+     *
+     *  browserSpecResolve('foo', '/bar/') => /bar/foo
+     *  browserSpecResolve('foo', '/bar') => /foo
+     *
+     * But on the command line of a file system, it's not as complicated. You can't
+     * `cd` from a file, only directories. This way, links have to know less about
+     * their current path. To go deeper you can do this:
+     *
+     *  <Link to="deeper"/>
+     *  // instead of
+     *  <Link to=`{${props.uri}/deeper}`/>
+     *
+     * Just like `cd`, if you want to go deeper from the command line, you do this:
+     *
+     *  cd deeper
+     *  # not
+     *  cd $(pwd)/deeper
+     *
+     * By treating every path as a directory, linking to relative paths should
+     * require less contextual information and (fingers crossed) be more intuitive.
+     * @param {string} to
+     * @param {string} base
+     * @return {string}
+     */
+    function resolve(to, base) {
+      // /foo/bar, /baz/qux => /foo/bar
+      if (startsWith(to, "/")) {
+        return to;
+      }
+
+      const [toPathname, toQuery] = to.split("?");
+      const [basePathname] = base.split("?");
+      const toSegments = segmentize(toPathname);
+      const baseSegments = segmentize(basePathname);
+
+      // ?a=b, /users?b=c => /users?a=b
+      if (toSegments[0] === "") {
+        return addQuery(basePathname, toQuery);
+      }
+
+      // profile, /users/789 => /users/789/profile
+      if (!startsWith(toSegments[0], ".")) {
+        const pathname = baseSegments.concat(toSegments).join("/");
+
+        return addQuery((basePathname === "/" ? "" : "/") + pathname, toQuery);
+      }
+
+      // ./       , /users/123 => /users/123
+      // ../      , /users/123 => /users
+      // ../..    , /users/123 => /
+      // ../../one, /a/b/c/d   => /a/b/one
+      // .././one , /a/b/c/d   => /a/b/c/one
+      const allSegments = baseSegments.concat(toSegments);
+      const segments = [];
+
+      allSegments.forEach((segment) => {
+        if (segment === "..") {
+          segments.pop();
+        } else if (segment !== ".") {
+          segments.push(segment);
+        }
+      });
+
+      return addQuery("/" + segments.join("/"), toQuery);
+    }
+
+    /**
+     * Combines the `basepath` and the `path` into one path.
+     * @param {string} basepath
+     * @param {string} path
+     */
+    function combinePaths(basepath, path) {
+      return `${stripSlashes(
+    path === "/" ? basepath : `${stripSlashes(basepath)}/${stripSlashes(path)}`
+  )}/`;
+    }
+
+    /**
+     * Decides whether a given `event` should result in a navigation or not.
+     * @param {object} event
+     */
+    function shouldNavigate(event) {
+      return (
+        !event.defaultPrevented &&
+        event.button === 0 &&
+        !(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey)
+      );
+    }
+
+    /* node_modules\svelte-routing\src\Router.svelte generated by Svelte v3.49.0 */
+
+    function create_fragment$B(ctx) {
+    	let current;
+    	const default_slot_template = /*#slots*/ ctx[9].default;
+    	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[8], null);
+
+    	return {
+    		c() {
+    			if (default_slot) default_slot.c();
+    		},
+    		m(target, anchor) {
+    			if (default_slot) {
+    				default_slot.m(target, anchor);
+    			}
+
+    			current = true;
+    		},
+    		p(ctx, [dirty]) {
+    			if (default_slot) {
+    				if (default_slot.p && (!current || dirty & /*$$scope*/ 256)) {
+    					update_slot_base(
+    						default_slot,
+    						default_slot_template,
+    						ctx,
+    						/*$$scope*/ ctx[8],
+    						!current
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[8])
+    						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[8], dirty, null),
+    						null
+    					);
+    				}
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(default_slot, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(default_slot, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (default_slot) default_slot.d(detaching);
+    		}
+    	};
+    }
+
+    function instance$B($$self, $$props, $$invalidate) {
+    	let $location;
+    	let $routes;
+    	let $base;
+    	let { $$slots: slots = {}, $$scope } = $$props;
+    	let { basepath = "/" } = $$props;
+    	let { url = null } = $$props;
+    	const locationContext = getContext(LOCATION);
+    	const routerContext = getContext(ROUTER);
+    	const routes = writable([]);
+    	component_subscribe($$self, routes, value => $$invalidate(6, $routes = value));
+    	const activeRoute = writable(null);
+    	let hasActiveRoute = false; // Used in SSR to synchronously set that a Route is active.
+
+    	// If locationContext is not set, this is the topmost Router in the tree.
+    	// If the `url` prop is given we force the location to it.
+    	const location = locationContext || writable(url ? { pathname: url } : globalHistory.location);
+
+    	component_subscribe($$self, location, value => $$invalidate(5, $location = value));
+
+    	// If routerContext is set, the routerBase of the parent Router
+    	// will be the base for this Router's descendants.
+    	// If routerContext is not set, the path and resolved uri will both
+    	// have the value of the basepath prop.
+    	const base = routerContext
+    	? routerContext.routerBase
+    	: writable({ path: basepath, uri: basepath });
+
+    	component_subscribe($$self, base, value => $$invalidate(7, $base = value));
+
+    	const routerBase = derived([base, activeRoute], ([base, activeRoute]) => {
+    		// If there is no activeRoute, the routerBase will be identical to the base.
+    		if (activeRoute === null) {
+    			return base;
+    		}
+
+    		const { path: basepath } = base;
+    		const { route, uri } = activeRoute;
+
+    		// Remove the potential /* or /*splatname from
+    		// the end of the child Routes relative paths.
+    		const path = route.default
+    		? basepath
+    		: route.path.replace(/\*.*$/, "");
+
+    		return { path, uri };
+    	});
+
+    	function registerRoute(route) {
+    		const { path: basepath } = $base;
+    		let { path } = route;
+
+    		// We store the original path in the _path property so we can reuse
+    		// it when the basepath changes. The only thing that matters is that
+    		// the route reference is intact, so mutation is fine.
+    		route._path = path;
+
+    		route.path = combinePaths(basepath, path);
+
+    		if (typeof window === "undefined") {
+    			// In SSR we should set the activeRoute immediately if it is a match.
+    			// If there are more Routes being registered after a match is found,
+    			// we just skip them.
+    			if (hasActiveRoute) {
+    				return;
+    			}
+
+    			const matchingRoute = match(route, $location.pathname);
+
+    			if (matchingRoute) {
+    				activeRoute.set(matchingRoute);
+    				hasActiveRoute = true;
+    			}
+    		} else {
+    			routes.update(rs => {
+    				rs.push(route);
+    				return rs;
+    			});
+    		}
+    	}
+
+    	function unregisterRoute(route) {
+    		routes.update(rs => {
+    			const index = rs.indexOf(route);
+    			rs.splice(index, 1);
+    			return rs;
+    		});
+    	}
+
+    	if (!locationContext) {
+    		// The topmost Router in the tree is responsible for updating
+    		// the location store and supplying it through context.
+    		onMount(() => {
+    			const unlisten = globalHistory.listen(history => {
+    				location.set(history.location);
+    			});
+
+    			return unlisten;
+    		});
+
+    		setContext(LOCATION, location);
+    	}
+
+    	setContext(ROUTER, {
+    		activeRoute,
+    		base,
+    		routerBase,
+    		registerRoute,
+    		unregisterRoute
+    	});
+
+    	$$self.$$set = $$props => {
+    		if ('basepath' in $$props) $$invalidate(3, basepath = $$props.basepath);
+    		if ('url' in $$props) $$invalidate(4, url = $$props.url);
+    		if ('$$scope' in $$props) $$invalidate(8, $$scope = $$props.$$scope);
+    	};
+
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty & /*$base*/ 128) {
+    			// This reactive statement will update all the Routes' path when
+    			// the basepath changes.
+    			{
+    				const { path: basepath } = $base;
+
+    				routes.update(rs => {
+    					rs.forEach(r => r.path = combinePaths(basepath, r._path));
+    					return rs;
+    				});
+    			}
+    		}
+
+    		if ($$self.$$.dirty & /*$routes, $location*/ 96) {
+    			// This reactive statement will be run when the Router is created
+    			// when there are no Routes and then again the following tick, so it
+    			// will not find an active Route in SSR and in the browser it will only
+    			// pick an active Route after all Routes have been registered.
+    			{
+    				const bestMatch = pick$1($routes, $location.pathname);
+    				activeRoute.set(bestMatch);
+    			}
+    		}
+    	};
+
+    	return [
+    		routes,
+    		location,
+    		base,
+    		basepath,
+    		url,
+    		$location,
+    		$routes,
+    		$base,
+    		$$scope,
+    		slots
+    	];
+    }
+
+    class Router extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$B, create_fragment$B, safe_not_equal, { basepath: 3, url: 4 });
+    	}
+    }
+
+    /* node_modules\svelte-routing\src\Route.svelte generated by Svelte v3.49.0 */
+
+    const get_default_slot_changes$1 = dirty => ({
+    	params: dirty & /*routeParams*/ 4,
+    	location: dirty & /*$location*/ 16
+    });
+
+    const get_default_slot_context$1 = ctx => ({
+    	params: /*routeParams*/ ctx[2],
+    	location: /*$location*/ ctx[4]
+    });
+
+    // (40:0) {#if $activeRoute !== null && $activeRoute.route === route}
+    function create_if_block$l(ctx) {
+    	let current_block_type_index;
+    	let if_block;
+    	let if_block_anchor;
+    	let current;
+    	const if_block_creators = [create_if_block_1$9, create_else_block$c];
+    	const if_blocks = [];
+
+    	function select_block_type(ctx, dirty) {
+    		if (/*component*/ ctx[0] !== null) return 0;
+    		return 1;
+    	}
+
+    	current_block_type_index = select_block_type(ctx);
+    	if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+
+    	return {
+    		c() {
+    			if_block.c();
+    			if_block_anchor = empty$1();
+    		},
+    		m(target, anchor) {
+    			if_blocks[current_block_type_index].m(target, anchor);
+    			insert(target, if_block_anchor, anchor);
+    			current = true;
+    		},
+    		p(ctx, dirty) {
+    			let previous_block_index = current_block_type_index;
+    			current_block_type_index = select_block_type(ctx);
+
+    			if (current_block_type_index === previous_block_index) {
+    				if_blocks[current_block_type_index].p(ctx, dirty);
+    			} else {
+    				group_outros();
+
+    				transition_out(if_blocks[previous_block_index], 1, 1, () => {
+    					if_blocks[previous_block_index] = null;
+    				});
+
+    				check_outros();
+    				if_block = if_blocks[current_block_type_index];
+
+    				if (!if_block) {
+    					if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+    					if_block.c();
+    				} else {
+    					if_block.p(ctx, dirty);
+    				}
+
+    				transition_in(if_block, 1);
+    				if_block.m(if_block_anchor.parentNode, if_block_anchor);
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(if_block);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(if_block);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if_blocks[current_block_type_index].d(detaching);
+    			if (detaching) detach(if_block_anchor);
+    		}
+    	};
+    }
+
+    // (43:2) {:else}
+    function create_else_block$c(ctx) {
+    	let current;
+    	const default_slot_template = /*#slots*/ ctx[10].default;
+    	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[9], get_default_slot_context$1);
+
+    	return {
+    		c() {
+    			if (default_slot) default_slot.c();
+    		},
+    		m(target, anchor) {
+    			if (default_slot) {
+    				default_slot.m(target, anchor);
+    			}
+
+    			current = true;
+    		},
+    		p(ctx, dirty) {
+    			if (default_slot) {
+    				if (default_slot.p && (!current || dirty & /*$$scope, routeParams, $location*/ 532)) {
+    					update_slot_base(
+    						default_slot,
+    						default_slot_template,
+    						ctx,
+    						/*$$scope*/ ctx[9],
+    						!current
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[9])
+    						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[9], dirty, get_default_slot_changes$1),
+    						get_default_slot_context$1
+    					);
+    				}
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(default_slot, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(default_slot, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (default_slot) default_slot.d(detaching);
+    		}
+    	};
+    }
+
+    // (41:2) {#if component !== null}
+    function create_if_block_1$9(ctx) {
+    	let switch_instance;
+    	let switch_instance_anchor;
+    	let current;
+    	const switch_instance_spread_levels = [/*routeParams*/ ctx[2], /*routeProps*/ ctx[3]];
+    	var switch_value = /*component*/ ctx[0];
+
+    	function switch_props(ctx) {
+    		let switch_instance_props = {};
+
+    		for (let i = 0; i < switch_instance_spread_levels.length; i += 1) {
+    			switch_instance_props = assign(switch_instance_props, switch_instance_spread_levels[i]);
+    		}
+
+    		return { props: switch_instance_props };
+    	}
+
+    	if (switch_value) {
+    		switch_instance = new switch_value(switch_props());
+    	}
+
+    	return {
+    		c() {
+    			if (switch_instance) create_component(switch_instance.$$.fragment);
+    			switch_instance_anchor = empty$1();
+    		},
+    		m(target, anchor) {
+    			if (switch_instance) {
+    				mount_component(switch_instance, target, anchor);
+    			}
+
+    			insert(target, switch_instance_anchor, anchor);
+    			current = true;
+    		},
+    		p(ctx, dirty) {
+    			const switch_instance_changes = (dirty & /*routeParams, routeProps*/ 12)
+    			? get_spread_update(switch_instance_spread_levels, [
+    					dirty & /*routeParams*/ 4 && get_spread_object(/*routeParams*/ ctx[2]),
+    					dirty & /*routeProps*/ 8 && get_spread_object(/*routeProps*/ ctx[3])
+    				])
+    			: {};
+
+    			if (switch_value !== (switch_value = /*component*/ ctx[0])) {
+    				if (switch_instance) {
+    					group_outros();
+    					const old_component = switch_instance;
+
+    					transition_out(old_component.$$.fragment, 1, 0, () => {
+    						destroy_component(old_component, 1);
+    					});
+
+    					check_outros();
+    				}
+
+    				if (switch_value) {
+    					switch_instance = new switch_value(switch_props());
+    					create_component(switch_instance.$$.fragment);
+    					transition_in(switch_instance.$$.fragment, 1);
+    					mount_component(switch_instance, switch_instance_anchor.parentNode, switch_instance_anchor);
+    				} else {
+    					switch_instance = null;
+    				}
+    			} else if (switch_value) {
+    				switch_instance.$set(switch_instance_changes);
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+    			if (switch_instance) transition_in(switch_instance.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			if (switch_instance) transition_out(switch_instance.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(switch_instance_anchor);
+    			if (switch_instance) destroy_component(switch_instance, detaching);
+    		}
+    	};
+    }
+
+    function create_fragment$A(ctx) {
+    	let if_block_anchor;
+    	let current;
+    	let if_block = /*$activeRoute*/ ctx[1] !== null && /*$activeRoute*/ ctx[1].route === /*route*/ ctx[7] && create_if_block$l(ctx);
+
+    	return {
+    		c() {
+    			if (if_block) if_block.c();
+    			if_block_anchor = empty$1();
+    		},
+    		m(target, anchor) {
+    			if (if_block) if_block.m(target, anchor);
+    			insert(target, if_block_anchor, anchor);
+    			current = true;
+    		},
+    		p(ctx, [dirty]) {
+    			if (/*$activeRoute*/ ctx[1] !== null && /*$activeRoute*/ ctx[1].route === /*route*/ ctx[7]) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+
+    					if (dirty & /*$activeRoute*/ 2) {
+    						transition_in(if_block, 1);
+    					}
+    				} else {
+    					if_block = create_if_block$l(ctx);
+    					if_block.c();
+    					transition_in(if_block, 1);
+    					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+    				}
+    			} else if (if_block) {
+    				group_outros();
+
+    				transition_out(if_block, 1, 1, () => {
+    					if_block = null;
+    				});
+
+    				check_outros();
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(if_block);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(if_block);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (if_block) if_block.d(detaching);
+    			if (detaching) detach(if_block_anchor);
+    		}
+    	};
+    }
+
+    function instance$A($$self, $$props, $$invalidate) {
+    	let $activeRoute;
+    	let $location;
+    	let { $$slots: slots = {}, $$scope } = $$props;
+    	let { path = "" } = $$props;
+    	let { component = null } = $$props;
+    	const { registerRoute, unregisterRoute, activeRoute } = getContext(ROUTER);
+    	component_subscribe($$self, activeRoute, value => $$invalidate(1, $activeRoute = value));
+    	const location = getContext(LOCATION);
+    	component_subscribe($$self, location, value => $$invalidate(4, $location = value));
+
+    	const route = {
+    		path,
+    		// If no path prop is given, this Route will act as the default Route
+    		// that is rendered if no other Route in the Router is a match.
+    		default: path === ""
+    	};
+
+    	let routeParams = {};
+    	let routeProps = {};
+    	registerRoute(route);
+
+    	// There is no need to unregister Routes in SSR since it will all be
+    	// thrown away anyway.
+    	if (typeof window !== "undefined") {
+    		onDestroy(() => {
+    			unregisterRoute(route);
+    		});
+    	}
+
+    	$$self.$$set = $$new_props => {
+    		$$invalidate(13, $$props = assign(assign({}, $$props), exclude_internal_props($$new_props)));
+    		if ('path' in $$new_props) $$invalidate(8, path = $$new_props.path);
+    		if ('component' in $$new_props) $$invalidate(0, component = $$new_props.component);
+    		if ('$$scope' in $$new_props) $$invalidate(9, $$scope = $$new_props.$$scope);
+    	};
+
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty & /*$activeRoute*/ 2) {
+    			if ($activeRoute && $activeRoute.route === route) {
+    				$$invalidate(2, routeParams = $activeRoute.params);
+    			}
+    		}
+
+    		{
+    			const { path, component, ...rest } = $$props;
+    			$$invalidate(3, routeProps = rest);
+    		}
+    	};
+
+    	$$props = exclude_internal_props($$props);
+
+    	return [
+    		component,
+    		$activeRoute,
+    		routeParams,
+    		routeProps,
+    		$location,
+    		activeRoute,
+    		location,
+    		route,
+    		path,
+    		$$scope,
+    		slots
+    	];
+    }
+
+    class Route extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$A, create_fragment$A, safe_not_equal, { path: 8, component: 0 });
+    	}
+    }
+
+    /* node_modules\svelte-routing\src\Link.svelte generated by Svelte v3.49.0 */
+
+    function create_fragment$z(ctx) {
+    	let a;
+    	let current;
+    	let mounted;
+    	let dispose;
+    	const default_slot_template = /*#slots*/ ctx[15].default;
+    	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[14], null);
+
+    	let a_levels = [
+    		{ href: /*href*/ ctx[0] },
+    		{ "aria-current": /*ariaCurrent*/ ctx[2] },
+    		/*props*/ ctx[1]
+    	];
+
+    	let a_data = {};
+
+    	for (let i = 0; i < a_levels.length; i += 1) {
+    		a_data = assign(a_data, a_levels[i]);
+    	}
+
+    	return {
+    		c() {
+    			a = element("a");
+    			if (default_slot) default_slot.c();
+    			set_attributes(a, a_data);
+    		},
+    		m(target, anchor) {
+    			insert(target, a, anchor);
+
+    			if (default_slot) {
+    				default_slot.m(a, null);
+    			}
+
+    			current = true;
+
+    			if (!mounted) {
+    				dispose = listen(a, "click", /*onClick*/ ctx[5]);
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, [dirty]) {
+    			if (default_slot) {
+    				if (default_slot.p && (!current || dirty & /*$$scope*/ 16384)) {
+    					update_slot_base(
+    						default_slot,
+    						default_slot_template,
+    						ctx,
+    						/*$$scope*/ ctx[14],
+    						!current
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[14])
+    						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[14], dirty, null),
+    						null
+    					);
+    				}
+    			}
+
+    			set_attributes(a, a_data = get_spread_update(a_levels, [
+    				(!current || dirty & /*href*/ 1) && { href: /*href*/ ctx[0] },
+    				(!current || dirty & /*ariaCurrent*/ 4) && { "aria-current": /*ariaCurrent*/ ctx[2] },
+    				dirty & /*props*/ 2 && /*props*/ ctx[1]
+    			]));
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(default_slot, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(default_slot, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(a);
+    			if (default_slot) default_slot.d(detaching);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+    }
+
+    function instance$z($$self, $$props, $$invalidate) {
+    	let ariaCurrent;
+    	let $location;
+    	let $base;
+    	let { $$slots: slots = {}, $$scope } = $$props;
+    	let { to = "#" } = $$props;
+    	let { replace = false } = $$props;
+    	let { state = {} } = $$props;
+    	let { getProps = () => ({}) } = $$props;
+    	const { base } = getContext(ROUTER);
+    	component_subscribe($$self, base, value => $$invalidate(13, $base = value));
+    	const location = getContext(LOCATION);
+    	component_subscribe($$self, location, value => $$invalidate(12, $location = value));
+    	const dispatch = createEventDispatcher();
+    	let href, isPartiallyCurrent, isCurrent, props;
+
+    	function onClick(event) {
+    		dispatch("click", event);
+
+    		if (shouldNavigate(event)) {
+    			event.preventDefault();
+
+    			// Don't push another entry to the history stack when the user
+    			// clicks on a Link to the page they are currently on.
+    			const shouldReplace = $location.pathname === href || replace;
+
+    			navigate(href, { state, replace: shouldReplace });
+    		}
+    	}
+
+    	$$self.$$set = $$props => {
+    		if ('to' in $$props) $$invalidate(6, to = $$props.to);
+    		if ('replace' in $$props) $$invalidate(7, replace = $$props.replace);
+    		if ('state' in $$props) $$invalidate(8, state = $$props.state);
+    		if ('getProps' in $$props) $$invalidate(9, getProps = $$props.getProps);
+    		if ('$$scope' in $$props) $$invalidate(14, $$scope = $$props.$$scope);
+    	};
+
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty & /*to, $base*/ 8256) {
+    			$$invalidate(0, href = to === "/" ? $base.uri : resolve(to, $base.uri));
+    		}
+
+    		if ($$self.$$.dirty & /*$location, href*/ 4097) {
+    			$$invalidate(10, isPartiallyCurrent = startsWith($location.pathname, href));
+    		}
+
+    		if ($$self.$$.dirty & /*href, $location*/ 4097) {
+    			$$invalidate(11, isCurrent = href === $location.pathname);
+    		}
+
+    		if ($$self.$$.dirty & /*isCurrent*/ 2048) {
+    			$$invalidate(2, ariaCurrent = isCurrent ? "page" : undefined);
+    		}
+
+    		if ($$self.$$.dirty & /*getProps, $location, href, isPartiallyCurrent, isCurrent*/ 7681) {
+    			$$invalidate(1, props = getProps({
+    				location: $location,
+    				href,
+    				isPartiallyCurrent,
+    				isCurrent
+    			}));
+    		}
+    	};
+
+    	return [
+    		href,
+    		props,
+    		ariaCurrent,
+    		base,
+    		location,
+    		onClick,
+    		to,
+    		replace,
+    		state,
+    		getProps,
+    		isPartiallyCurrent,
+    		isCurrent,
+    		$location,
+    		$base,
+    		$$scope,
+    		slots
+    	];
+    }
+
+    class Link extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$z, create_fragment$z, safe_not_equal, { to: 6, replace: 7, state: 8, getProps: 9 });
+    	}
+    }
+
+    function getDefaultExportFromCjs (x) {
+    	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
+    }
+
+    var axios$3 = {exports: {}};
+
+    var axios$2 = {exports: {}};
+
+    var bind$2 = function bind(fn, thisArg) {
+      return function wrap() {
+        var args = new Array(arguments.length);
+        for (var i = 0; i < args.length; i++) {
+          args[i] = arguments[i];
+        }
+        return fn.apply(thisArg, args);
+      };
+    };
+
+    var bind$1 = bind$2;
+
+    // utils is a library of generic helper functions non-specific to axios
+
+    var toString$1 = Object.prototype.toString;
+
+    // eslint-disable-next-line func-names
+    var kindOf = (function(cache) {
+      // eslint-disable-next-line func-names
+      return function(thing) {
+        var str = toString$1.call(thing);
+        return cache[str] || (cache[str] = str.slice(8, -1).toLowerCase());
+      };
+    })(Object.create(null));
+
+    function kindOfTest(type) {
+      type = type.toLowerCase();
+      return function isKindOf(thing) {
+        return kindOf(thing) === type;
+      };
+    }
+
+    /**
+     * Determine if a value is an Array
+     *
+     * @param {Object} val The value to test
+     * @returns {boolean} True if value is an Array, otherwise false
+     */
+    function isArray(val) {
+      return Array.isArray(val);
+    }
+
+    /**
+     * Determine if a value is undefined
+     *
+     * @param {Object} val The value to test
+     * @returns {boolean} True if the value is undefined, otherwise false
+     */
+    function isUndefined(val) {
+      return typeof val === 'undefined';
+    }
+
+    /**
+     * Determine if a value is a Buffer
+     *
+     * @param {Object} val The value to test
+     * @returns {boolean} True if value is a Buffer, otherwise false
+     */
+    function isBuffer(val) {
+      return val !== null && !isUndefined(val) && val.constructor !== null && !isUndefined(val.constructor)
+        && typeof val.constructor.isBuffer === 'function' && val.constructor.isBuffer(val);
+    }
+
+    /**
+     * Determine if a value is an ArrayBuffer
+     *
+     * @function
+     * @param {Object} val The value to test
+     * @returns {boolean} True if value is an ArrayBuffer, otherwise false
+     */
+    var isArrayBuffer = kindOfTest('ArrayBuffer');
+
+
+    /**
+     * Determine if a value is a view on an ArrayBuffer
+     *
+     * @param {Object} val The value to test
+     * @returns {boolean} True if value is a view on an ArrayBuffer, otherwise false
+     */
+    function isArrayBufferView(val) {
+      var result;
+      if ((typeof ArrayBuffer !== 'undefined') && (ArrayBuffer.isView)) {
+        result = ArrayBuffer.isView(val);
+      } else {
+        result = (val) && (val.buffer) && (isArrayBuffer(val.buffer));
+      }
+      return result;
+    }
+
+    /**
+     * Determine if a value is a String
+     *
+     * @param {Object} val The value to test
+     * @returns {boolean} True if value is a String, otherwise false
+     */
+    function isString(val) {
+      return typeof val === 'string';
+    }
+
+    /**
+     * Determine if a value is a Number
+     *
+     * @param {Object} val The value to test
+     * @returns {boolean} True if value is a Number, otherwise false
+     */
+    function isNumber(val) {
+      return typeof val === 'number';
+    }
+
+    /**
+     * Determine if a value is an Object
+     *
+     * @param {Object} val The value to test
+     * @returns {boolean} True if value is an Object, otherwise false
+     */
+    function isObject(val) {
+      return val !== null && typeof val === 'object';
+    }
+
+    /**
+     * Determine if a value is a plain Object
+     *
+     * @param {Object} val The value to test
+     * @return {boolean} True if value is a plain Object, otherwise false
+     */
+    function isPlainObject(val) {
+      if (kindOf(val) !== 'object') {
+        return false;
+      }
+
+      var prototype = Object.getPrototypeOf(val);
+      return prototype === null || prototype === Object.prototype;
+    }
+
+    /**
+     * Determine if a value is a Date
+     *
+     * @function
+     * @param {Object} val The value to test
+     * @returns {boolean} True if value is a Date, otherwise false
+     */
+    var isDate = kindOfTest('Date');
+
+    /**
+     * Determine if a value is a File
+     *
+     * @function
+     * @param {Object} val The value to test
+     * @returns {boolean} True if value is a File, otherwise false
+     */
+    var isFile = kindOfTest('File');
+
+    /**
+     * Determine if a value is a Blob
+     *
+     * @function
+     * @param {Object} val The value to test
+     * @returns {boolean} True if value is a Blob, otherwise false
+     */
+    var isBlob = kindOfTest('Blob');
+
+    /**
+     * Determine if a value is a FileList
+     *
+     * @function
+     * @param {Object} val The value to test
+     * @returns {boolean} True if value is a File, otherwise false
+     */
+    var isFileList = kindOfTest('FileList');
+
+    /**
+     * Determine if a value is a Function
+     *
+     * @param {Object} val The value to test
+     * @returns {boolean} True if value is a Function, otherwise false
+     */
+    function isFunction(val) {
+      return toString$1.call(val) === '[object Function]';
+    }
+
+    /**
+     * Determine if a value is a Stream
+     *
+     * @param {Object} val The value to test
+     * @returns {boolean} True if value is a Stream, otherwise false
+     */
+    function isStream(val) {
+      return isObject(val) && isFunction(val.pipe);
+    }
+
+    /**
+     * Determine if a value is a FormData
+     *
+     * @param {Object} thing The value to test
+     * @returns {boolean} True if value is an FormData, otherwise false
+     */
+    function isFormData(thing) {
+      var pattern = '[object FormData]';
+      return thing && (
+        (typeof FormData === 'function' && thing instanceof FormData) ||
+        toString$1.call(thing) === pattern ||
+        (isFunction(thing.toString) && thing.toString() === pattern)
+      );
+    }
+
+    /**
+     * Determine if a value is a URLSearchParams object
+     * @function
+     * @param {Object} val The value to test
+     * @returns {boolean} True if value is a URLSearchParams object, otherwise false
+     */
+    var isURLSearchParams = kindOfTest('URLSearchParams');
+
+    /**
+     * Trim excess whitespace off the beginning and end of a string
+     *
+     * @param {String} str The String to trim
+     * @returns {String} The String freed of excess whitespace
+     */
+    function trim(str) {
+      return str.trim ? str.trim() : str.replace(/^\s+|\s+$/g, '');
+    }
+
+    /**
+     * Determine if we're running in a standard browser environment
+     *
+     * This allows axios to run in a web worker, and react-native.
+     * Both environments support XMLHttpRequest, but not fully standard globals.
+     *
+     * web workers:
+     *  typeof window -> undefined
+     *  typeof document -> undefined
+     *
+     * react-native:
+     *  navigator.product -> 'ReactNative'
+     * nativescript
+     *  navigator.product -> 'NativeScript' or 'NS'
+     */
+    function isStandardBrowserEnv() {
+      if (typeof navigator !== 'undefined' && (navigator.product === 'ReactNative' ||
+                                               navigator.product === 'NativeScript' ||
+                                               navigator.product === 'NS')) {
+        return false;
+      }
+      return (
+        typeof window !== 'undefined' &&
+        typeof document !== 'undefined'
+      );
+    }
+
+    /**
+     * Iterate over an Array or an Object invoking a function for each item.
+     *
+     * If `obj` is an Array callback will be called passing
+     * the value, index, and complete array for each item.
+     *
+     * If 'obj' is an Object callback will be called passing
+     * the value, key, and complete object for each property.
+     *
+     * @param {Object|Array} obj The object to iterate
+     * @param {Function} fn The callback to invoke for each item
+     */
+    function forEach(obj, fn) {
+      // Don't bother if no value provided
+      if (obj === null || typeof obj === 'undefined') {
+        return;
+      }
+
+      // Force an array if not already something iterable
+      if (typeof obj !== 'object') {
+        /*eslint no-param-reassign:0*/
+        obj = [obj];
+      }
+
+      if (isArray(obj)) {
+        // Iterate over array values
+        for (var i = 0, l = obj.length; i < l; i++) {
+          fn.call(null, obj[i], i, obj);
+        }
+      } else {
+        // Iterate over object keys
+        for (var key in obj) {
+          if (Object.prototype.hasOwnProperty.call(obj, key)) {
+            fn.call(null, obj[key], key, obj);
+          }
+        }
+      }
+    }
+
+    /**
+     * Accepts varargs expecting each argument to be an object, then
+     * immutably merges the properties of each object and returns result.
+     *
+     * When multiple objects contain the same key the later object in
+     * the arguments list will take precedence.
+     *
+     * Example:
+     *
+     * ```js
+     * var result = merge({foo: 123}, {foo: 456});
+     * console.log(result.foo); // outputs 456
+     * ```
+     *
+     * @param {Object} obj1 Object to merge
+     * @returns {Object} Result of all merge properties
+     */
+    function merge(/* obj1, obj2, obj3, ... */) {
+      var result = {};
+      function assignValue(val, key) {
+        if (isPlainObject(result[key]) && isPlainObject(val)) {
+          result[key] = merge(result[key], val);
+        } else if (isPlainObject(val)) {
+          result[key] = merge({}, val);
+        } else if (isArray(val)) {
+          result[key] = val.slice();
+        } else {
+          result[key] = val;
+        }
+      }
+
+      for (var i = 0, l = arguments.length; i < l; i++) {
+        forEach(arguments[i], assignValue);
+      }
+      return result;
+    }
+
+    /**
+     * Extends object a by mutably adding to it the properties of object b.
+     *
+     * @param {Object} a The object to be extended
+     * @param {Object} b The object to copy properties from
+     * @param {Object} thisArg The object to bind function to
+     * @return {Object} The resulting value of object a
+     */
+    function extend(a, b, thisArg) {
+      forEach(b, function assignValue(val, key) {
+        if (thisArg && typeof val === 'function') {
+          a[key] = bind$1(val, thisArg);
+        } else {
+          a[key] = val;
+        }
+      });
+      return a;
+    }
+
+    /**
+     * Remove byte order marker. This catches EF BB BF (the UTF-8 BOM)
+     *
+     * @param {string} content with BOM
+     * @return {string} content value without BOM
+     */
+    function stripBOM(content) {
+      if (content.charCodeAt(0) === 0xFEFF) {
+        content = content.slice(1);
+      }
+      return content;
+    }
+
+    /**
+     * Inherit the prototype methods from one constructor into another
+     * @param {function} constructor
+     * @param {function} superConstructor
+     * @param {object} [props]
+     * @param {object} [descriptors]
+     */
+
+    function inherits(constructor, superConstructor, props, descriptors) {
+      constructor.prototype = Object.create(superConstructor.prototype, descriptors);
+      constructor.prototype.constructor = constructor;
+      props && Object.assign(constructor.prototype, props);
+    }
+
+    /**
+     * Resolve object with deep prototype chain to a flat object
+     * @param {Object} sourceObj source object
+     * @param {Object} [destObj]
+     * @param {Function} [filter]
+     * @returns {Object}
+     */
+
+    function toFlatObject(sourceObj, destObj, filter) {
+      var props;
+      var i;
+      var prop;
+      var merged = {};
+
+      destObj = destObj || {};
+
+      do {
+        props = Object.getOwnPropertyNames(sourceObj);
+        i = props.length;
+        while (i-- > 0) {
+          prop = props[i];
+          if (!merged[prop]) {
+            destObj[prop] = sourceObj[prop];
+            merged[prop] = true;
+          }
+        }
+        sourceObj = Object.getPrototypeOf(sourceObj);
+      } while (sourceObj && (!filter || filter(sourceObj, destObj)) && sourceObj !== Object.prototype);
+
+      return destObj;
+    }
+
+    /*
+     * determines whether a string ends with the characters of a specified string
+     * @param {String} str
+     * @param {String} searchString
+     * @param {Number} [position= 0]
+     * @returns {boolean}
+     */
+    function endsWith(str, searchString, position) {
+      str = String(str);
+      if (position === undefined || position > str.length) {
+        position = str.length;
+      }
+      position -= searchString.length;
+      var lastIndex = str.indexOf(searchString, position);
+      return lastIndex !== -1 && lastIndex === position;
+    }
+
+
+    /**
+     * Returns new array from array like object
+     * @param {*} [thing]
+     * @returns {Array}
+     */
+    function toArray(thing) {
+      if (!thing) return null;
+      var i = thing.length;
+      if (isUndefined(i)) return null;
+      var arr = new Array(i);
+      while (i-- > 0) {
+        arr[i] = thing[i];
+      }
+      return arr;
+    }
+
+    // eslint-disable-next-line func-names
+    var isTypedArray = (function(TypedArray) {
+      // eslint-disable-next-line func-names
+      return function(thing) {
+        return TypedArray && thing instanceof TypedArray;
+      };
+    })(typeof Uint8Array !== 'undefined' && Object.getPrototypeOf(Uint8Array));
+
+    var utils$9 = {
+      isArray: isArray,
+      isArrayBuffer: isArrayBuffer,
+      isBuffer: isBuffer,
+      isFormData: isFormData,
+      isArrayBufferView: isArrayBufferView,
+      isString: isString,
+      isNumber: isNumber,
+      isObject: isObject,
+      isPlainObject: isPlainObject,
+      isUndefined: isUndefined,
+      isDate: isDate,
+      isFile: isFile,
+      isBlob: isBlob,
+      isFunction: isFunction,
+      isStream: isStream,
+      isURLSearchParams: isURLSearchParams,
+      isStandardBrowserEnv: isStandardBrowserEnv,
+      forEach: forEach,
+      merge: merge,
+      extend: extend,
+      trim: trim,
+      stripBOM: stripBOM,
+      inherits: inherits,
+      toFlatObject: toFlatObject,
+      kindOf: kindOf,
+      kindOfTest: kindOfTest,
+      endsWith: endsWith,
+      toArray: toArray,
+      isTypedArray: isTypedArray,
+      isFileList: isFileList
+    };
+
+    var utils$8 = utils$9;
+
+    function encode$2(val) {
+      return encodeURIComponent(val).
+        replace(/%3A/gi, ':').
+        replace(/%24/g, '$').
+        replace(/%2C/gi, ',').
+        replace(/%20/g, '+').
+        replace(/%5B/gi, '[').
+        replace(/%5D/gi, ']');
+    }
+
+    /**
+     * Build a URL by appending params to the end
+     *
+     * @param {string} url The base of the url (e.g., http://www.google.com)
+     * @param {object} [params] The params to be appended
+     * @returns {string} The formatted url
+     */
+    var buildURL$1 = function buildURL(url, params, paramsSerializer) {
+      /*eslint no-param-reassign:0*/
+      if (!params) {
+        return url;
+      }
+
+      var serializedParams;
+      if (paramsSerializer) {
+        serializedParams = paramsSerializer(params);
+      } else if (utils$8.isURLSearchParams(params)) {
+        serializedParams = params.toString();
+      } else {
+        var parts = [];
+
+        utils$8.forEach(params, function serialize(val, key) {
+          if (val === null || typeof val === 'undefined') {
+            return;
+          }
+
+          if (utils$8.isArray(val)) {
+            key = key + '[]';
+          } else {
+            val = [val];
+          }
+
+          utils$8.forEach(val, function parseValue(v) {
+            if (utils$8.isDate(v)) {
+              v = v.toISOString();
+            } else if (utils$8.isObject(v)) {
+              v = JSON.stringify(v);
+            }
+            parts.push(encode$2(key) + '=' + encode$2(v));
+          });
+        });
+
+        serializedParams = parts.join('&');
+      }
+
+      if (serializedParams) {
+        var hashmarkIndex = url.indexOf('#');
+        if (hashmarkIndex !== -1) {
+          url = url.slice(0, hashmarkIndex);
+        }
+
+        url += (url.indexOf('?') === -1 ? '?' : '&') + serializedParams;
+      }
+
+      return url;
+    };
+
+    var utils$7 = utils$9;
+
+    function InterceptorManager$1() {
+      this.handlers = [];
+    }
+
+    /**
+     * Add a new interceptor to the stack
+     *
+     * @param {Function} fulfilled The function to handle `then` for a `Promise`
+     * @param {Function} rejected The function to handle `reject` for a `Promise`
+     *
+     * @return {Number} An ID used to remove interceptor later
+     */
+    InterceptorManager$1.prototype.use = function use(fulfilled, rejected, options) {
+      this.handlers.push({
+        fulfilled: fulfilled,
+        rejected: rejected,
+        synchronous: options ? options.synchronous : false,
+        runWhen: options ? options.runWhen : null
+      });
+      return this.handlers.length - 1;
+    };
+
+    /**
+     * Remove an interceptor from the stack
+     *
+     * @param {Number} id The ID that was returned by `use`
+     */
+    InterceptorManager$1.prototype.eject = function eject(id) {
+      if (this.handlers[id]) {
+        this.handlers[id] = null;
+      }
+    };
+
+    /**
+     * Iterate over all the registered interceptors
+     *
+     * This method is particularly useful for skipping over any
+     * interceptors that may have become `null` calling `eject`.
+     *
+     * @param {Function} fn The function to call for each interceptor
+     */
+    InterceptorManager$1.prototype.forEach = function forEach(fn) {
+      utils$7.forEach(this.handlers, function forEachHandler(h) {
+        if (h !== null) {
+          fn(h);
+        }
+      });
+    };
+
+    var InterceptorManager_1 = InterceptorManager$1;
+
+    var utils$6 = utils$9;
+
+    var normalizeHeaderName$1 = function normalizeHeaderName(headers, normalizedName) {
+      utils$6.forEach(headers, function processHeader(value, name) {
+        if (name !== normalizedName && name.toUpperCase() === normalizedName.toUpperCase()) {
+          headers[normalizedName] = value;
+          delete headers[name];
+        }
+      });
+    };
+
+    var AxiosError_1;
+    var hasRequiredAxiosError;
+
+    function requireAxiosError () {
+    	if (hasRequiredAxiosError) return AxiosError_1;
+    	hasRequiredAxiosError = 1;
+
+    	var utils = utils$9;
+
+    	/**
+    	 * Create an Error with the specified message, config, error code, request and response.
+    	 *
+    	 * @param {string} message The error message.
+    	 * @param {string} [code] The error code (for example, 'ECONNABORTED').
+    	 * @param {Object} [config] The config.
+    	 * @param {Object} [request] The request.
+    	 * @param {Object} [response] The response.
+    	 * @returns {Error} The created error.
+    	 */
+    	function AxiosError(message, code, config, request, response) {
+    	  Error.call(this);
+    	  this.message = message;
+    	  this.name = 'AxiosError';
+    	  code && (this.code = code);
+    	  config && (this.config = config);
+    	  request && (this.request = request);
+    	  response && (this.response = response);
+    	}
+
+    	utils.inherits(AxiosError, Error, {
+    	  toJSON: function toJSON() {
+    	    return {
+    	      // Standard
+    	      message: this.message,
+    	      name: this.name,
+    	      // Microsoft
+    	      description: this.description,
+    	      number: this.number,
+    	      // Mozilla
+    	      fileName: this.fileName,
+    	      lineNumber: this.lineNumber,
+    	      columnNumber: this.columnNumber,
+    	      stack: this.stack,
+    	      // Axios
+    	      config: this.config,
+    	      code: this.code,
+    	      status: this.response && this.response.status ? this.response.status : null
+    	    };
+    	  }
+    	});
+
+    	var prototype = AxiosError.prototype;
+    	var descriptors = {};
+
+    	[
+    	  'ERR_BAD_OPTION_VALUE',
+    	  'ERR_BAD_OPTION',
+    	  'ECONNABORTED',
+    	  'ETIMEDOUT',
+    	  'ERR_NETWORK',
+    	  'ERR_FR_TOO_MANY_REDIRECTS',
+    	  'ERR_DEPRECATED',
+    	  'ERR_BAD_RESPONSE',
+    	  'ERR_BAD_REQUEST',
+    	  'ERR_CANCELED'
+    	// eslint-disable-next-line func-names
+    	].forEach(function(code) {
+    	  descriptors[code] = {value: code};
+    	});
+
+    	Object.defineProperties(AxiosError, descriptors);
+    	Object.defineProperty(prototype, 'isAxiosError', {value: true});
+
+    	// eslint-disable-next-line func-names
+    	AxiosError.from = function(error, code, config, request, response, customProps) {
+    	  var axiosError = Object.create(prototype);
+
+    	  utils.toFlatObject(error, axiosError, function filter(obj) {
+    	    return obj !== Error.prototype;
+    	  });
+
+    	  AxiosError.call(axiosError, error.message, code, config, request, response);
+
+    	  axiosError.name = error.name;
+
+    	  customProps && Object.assign(axiosError, customProps);
+
+    	  return axiosError;
+    	};
+
+    	AxiosError_1 = AxiosError;
+    	return AxiosError_1;
+    }
+
+    var transitional = {
+      silentJSONParsing: true,
+      forcedJSONParsing: true,
+      clarifyTimeoutError: false
+    };
+
+    var toFormData_1;
+    var hasRequiredToFormData;
+
+    function requireToFormData () {
+    	if (hasRequiredToFormData) return toFormData_1;
+    	hasRequiredToFormData = 1;
+
+    	var utils = utils$9;
+
+    	/**
+    	 * Convert a data object to FormData
+    	 * @param {Object} obj
+    	 * @param {?Object} [formData]
+    	 * @returns {Object}
+    	 **/
+
+    	function toFormData(obj, formData) {
+    	  // eslint-disable-next-line no-param-reassign
+    	  formData = formData || new FormData();
+
+    	  var stack = [];
+
+    	  function convertValue(value) {
+    	    if (value === null) return '';
+
+    	    if (utils.isDate(value)) {
+    	      return value.toISOString();
+    	    }
+
+    	    if (utils.isArrayBuffer(value) || utils.isTypedArray(value)) {
+    	      return typeof Blob === 'function' ? new Blob([value]) : Buffer.from(value);
+    	    }
+
+    	    return value;
+    	  }
+
+    	  function build(data, parentKey) {
+    	    if (utils.isPlainObject(data) || utils.isArray(data)) {
+    	      if (stack.indexOf(data) !== -1) {
+    	        throw Error('Circular reference detected in ' + parentKey);
+    	      }
+
+    	      stack.push(data);
+
+    	      utils.forEach(data, function each(value, key) {
+    	        if (utils.isUndefined(value)) return;
+    	        var fullKey = parentKey ? parentKey + '.' + key : key;
+    	        var arr;
+
+    	        if (value && !parentKey && typeof value === 'object') {
+    	          if (utils.endsWith(key, '{}')) {
+    	            // eslint-disable-next-line no-param-reassign
+    	            value = JSON.stringify(value);
+    	          } else if (utils.endsWith(key, '[]') && (arr = utils.toArray(value))) {
+    	            // eslint-disable-next-line func-names
+    	            arr.forEach(function(el) {
+    	              !utils.isUndefined(el) && formData.append(fullKey, convertValue(el));
+    	            });
+    	            return;
+    	          }
+    	        }
+
+    	        build(value, fullKey);
+    	      });
+
+    	      stack.pop();
+    	    } else {
+    	      formData.append(parentKey, convertValue(data));
+    	    }
+    	  }
+
+    	  build(obj);
+
+    	  return formData;
+    	}
+
+    	toFormData_1 = toFormData;
+    	return toFormData_1;
+    }
+
+    var settle;
+    var hasRequiredSettle;
+
+    function requireSettle () {
+    	if (hasRequiredSettle) return settle;
+    	hasRequiredSettle = 1;
+
+    	var AxiosError = requireAxiosError();
+
+    	/**
+    	 * Resolve or reject a Promise based on response status.
+    	 *
+    	 * @param {Function} resolve A function that resolves the promise.
+    	 * @param {Function} reject A function that rejects the promise.
+    	 * @param {object} response The response.
+    	 */
+    	settle = function settle(resolve, reject, response) {
+    	  var validateStatus = response.config.validateStatus;
+    	  if (!response.status || !validateStatus || validateStatus(response.status)) {
+    	    resolve(response);
+    	  } else {
+    	    reject(new AxiosError(
+    	      'Request failed with status code ' + response.status,
+    	      [AxiosError.ERR_BAD_REQUEST, AxiosError.ERR_BAD_RESPONSE][Math.floor(response.status / 100) - 4],
+    	      response.config,
+    	      response.request,
+    	      response
+    	    ));
+    	  }
+    	};
+    	return settle;
+    }
+
+    var cookies;
+    var hasRequiredCookies;
+
+    function requireCookies () {
+    	if (hasRequiredCookies) return cookies;
+    	hasRequiredCookies = 1;
+
+    	var utils = utils$9;
+
+    	cookies = (
+    	  utils.isStandardBrowserEnv() ?
+
+    	  // Standard browser envs support document.cookie
+    	    (function standardBrowserEnv() {
+    	      return {
+    	        write: function write(name, value, expires, path, domain, secure) {
+    	          var cookie = [];
+    	          cookie.push(name + '=' + encodeURIComponent(value));
+
+    	          if (utils.isNumber(expires)) {
+    	            cookie.push('expires=' + new Date(expires).toGMTString());
+    	          }
+
+    	          if (utils.isString(path)) {
+    	            cookie.push('path=' + path);
+    	          }
+
+    	          if (utils.isString(domain)) {
+    	            cookie.push('domain=' + domain);
+    	          }
+
+    	          if (secure === true) {
+    	            cookie.push('secure');
+    	          }
+
+    	          document.cookie = cookie.join('; ');
+    	        },
+
+    	        read: function read(name) {
+    	          var match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
+    	          return (match ? decodeURIComponent(match[3]) : null);
+    	        },
+
+    	        remove: function remove(name) {
+    	          this.write(name, '', Date.now() - 86400000);
+    	        }
+    	      };
+    	    })() :
+
+    	  // Non standard browser env (web workers, react-native) lack needed support.
+    	    (function nonStandardBrowserEnv() {
+    	      return {
+    	        write: function write() {},
+    	        read: function read() { return null; },
+    	        remove: function remove() {}
+    	      };
+    	    })()
+    	);
+    	return cookies;
+    }
+
+    /**
+     * Determines whether the specified URL is absolute
+     *
+     * @param {string} url The URL to test
+     * @returns {boolean} True if the specified URL is absolute, otherwise false
+     */
+    var isAbsoluteURL$1 = function isAbsoluteURL(url) {
+      // A URL is considered absolute if it begins with "<scheme>://" or "//" (protocol-relative URL).
+      // RFC 3986 defines scheme name as a sequence of characters beginning with a letter and followed
+      // by any combination of letters, digits, plus, period, or hyphen.
+      return /^([a-z][a-z\d+\-.]*:)?\/\//i.test(url);
+    };
+
+    /**
+     * Creates a new URL by combining the specified URLs
+     *
+     * @param {string} baseURL The base URL
+     * @param {string} relativeURL The relative URL
+     * @returns {string} The combined URL
+     */
+    var combineURLs$1 = function combineURLs(baseURL, relativeURL) {
+      return relativeURL
+        ? baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '')
+        : baseURL;
+    };
+
+    var isAbsoluteURL = isAbsoluteURL$1;
+    var combineURLs = combineURLs$1;
+
+    /**
+     * Creates a new URL by combining the baseURL with the requestedURL,
+     * only when the requestedURL is not already an absolute URL.
+     * If the requestURL is absolute, this function returns the requestedURL untouched.
+     *
+     * @param {string} baseURL The base URL
+     * @param {string} requestedURL Absolute or relative URL to combine
+     * @returns {string} The combined full path
+     */
+    var buildFullPath$1 = function buildFullPath(baseURL, requestedURL) {
+      if (baseURL && !isAbsoluteURL(requestedURL)) {
+        return combineURLs(baseURL, requestedURL);
+      }
+      return requestedURL;
+    };
+
+    var parseHeaders;
+    var hasRequiredParseHeaders;
+
+    function requireParseHeaders () {
+    	if (hasRequiredParseHeaders) return parseHeaders;
+    	hasRequiredParseHeaders = 1;
+
+    	var utils = utils$9;
+
+    	// Headers whose duplicates are ignored by node
+    	// c.f. https://nodejs.org/api/http.html#http_message_headers
+    	var ignoreDuplicateOf = [
+    	  'age', 'authorization', 'content-length', 'content-type', 'etag',
+    	  'expires', 'from', 'host', 'if-modified-since', 'if-unmodified-since',
+    	  'last-modified', 'location', 'max-forwards', 'proxy-authorization',
+    	  'referer', 'retry-after', 'user-agent'
+    	];
+
+    	/**
+    	 * Parse headers into an object
+    	 *
+    	 * ```
+    	 * Date: Wed, 27 Aug 2014 08:58:49 GMT
+    	 * Content-Type: application/json
+    	 * Connection: keep-alive
+    	 * Transfer-Encoding: chunked
+    	 * ```
+    	 *
+    	 * @param {String} headers Headers needing to be parsed
+    	 * @returns {Object} Headers parsed into an object
+    	 */
+    	parseHeaders = function parseHeaders(headers) {
+    	  var parsed = {};
+    	  var key;
+    	  var val;
+    	  var i;
+
+    	  if (!headers) { return parsed; }
+
+    	  utils.forEach(headers.split('\n'), function parser(line) {
+    	    i = line.indexOf(':');
+    	    key = utils.trim(line.substr(0, i)).toLowerCase();
+    	    val = utils.trim(line.substr(i + 1));
+
+    	    if (key) {
+    	      if (parsed[key] && ignoreDuplicateOf.indexOf(key) >= 0) {
+    	        return;
+    	      }
+    	      if (key === 'set-cookie') {
+    	        parsed[key] = (parsed[key] ? parsed[key] : []).concat([val]);
+    	      } else {
+    	        parsed[key] = parsed[key] ? parsed[key] + ', ' + val : val;
+    	      }
+    	    }
+    	  });
+
+    	  return parsed;
+    	};
+    	return parseHeaders;
+    }
+
+    var isURLSameOrigin;
+    var hasRequiredIsURLSameOrigin;
+
+    function requireIsURLSameOrigin () {
+    	if (hasRequiredIsURLSameOrigin) return isURLSameOrigin;
+    	hasRequiredIsURLSameOrigin = 1;
+
+    	var utils = utils$9;
+
+    	isURLSameOrigin = (
+    	  utils.isStandardBrowserEnv() ?
+
+    	  // Standard browser envs have full support of the APIs needed to test
+    	  // whether the request URL is of the same origin as current location.
+    	    (function standardBrowserEnv() {
+    	      var msie = /(msie|trident)/i.test(navigator.userAgent);
+    	      var urlParsingNode = document.createElement('a');
+    	      var originURL;
+
+    	      /**
+    	    * Parse a URL to discover it's components
+    	    *
+    	    * @param {String} url The URL to be parsed
+    	    * @returns {Object}
+    	    */
+    	      function resolveURL(url) {
+    	        var href = url;
+
+    	        if (msie) {
+    	        // IE needs attribute set twice to normalize properties
+    	          urlParsingNode.setAttribute('href', href);
+    	          href = urlParsingNode.href;
+    	        }
+
+    	        urlParsingNode.setAttribute('href', href);
+
+    	        // urlParsingNode provides the UrlUtils interface - http://url.spec.whatwg.org/#urlutils
+    	        return {
+    	          href: urlParsingNode.href,
+    	          protocol: urlParsingNode.protocol ? urlParsingNode.protocol.replace(/:$/, '') : '',
+    	          host: urlParsingNode.host,
+    	          search: urlParsingNode.search ? urlParsingNode.search.replace(/^\?/, '') : '',
+    	          hash: urlParsingNode.hash ? urlParsingNode.hash.replace(/^#/, '') : '',
+    	          hostname: urlParsingNode.hostname,
+    	          port: urlParsingNode.port,
+    	          pathname: (urlParsingNode.pathname.charAt(0) === '/') ?
+    	            urlParsingNode.pathname :
+    	            '/' + urlParsingNode.pathname
+    	        };
+    	      }
+
+    	      originURL = resolveURL(window.location.href);
+
+    	      /**
+    	    * Determine if a URL shares the same origin as the current location
+    	    *
+    	    * @param {String} requestURL The URL to test
+    	    * @returns {boolean} True if URL shares the same origin, otherwise false
+    	    */
+    	      return function isURLSameOrigin(requestURL) {
+    	        var parsed = (utils.isString(requestURL)) ? resolveURL(requestURL) : requestURL;
+    	        return (parsed.protocol === originURL.protocol &&
+    	            parsed.host === originURL.host);
+    	      };
+    	    })() :
+
+    	  // Non standard browser envs (web workers, react-native) lack needed support.
+    	    (function nonStandardBrowserEnv() {
+    	      return function isURLSameOrigin() {
+    	        return true;
+    	      };
+    	    })()
+    	);
+    	return isURLSameOrigin;
+    }
+
+    var CanceledError_1;
+    var hasRequiredCanceledError;
+
+    function requireCanceledError () {
+    	if (hasRequiredCanceledError) return CanceledError_1;
+    	hasRequiredCanceledError = 1;
+
+    	var AxiosError = requireAxiosError();
+    	var utils = utils$9;
+
+    	/**
+    	 * A `CanceledError` is an object that is thrown when an operation is canceled.
+    	 *
+    	 * @class
+    	 * @param {string=} message The message.
+    	 */
+    	function CanceledError(message) {
+    	  // eslint-disable-next-line no-eq-null,eqeqeq
+    	  AxiosError.call(this, message == null ? 'canceled' : message, AxiosError.ERR_CANCELED);
+    	  this.name = 'CanceledError';
+    	}
+
+    	utils.inherits(CanceledError, AxiosError, {
+    	  __CANCEL__: true
+    	});
+
+    	CanceledError_1 = CanceledError;
+    	return CanceledError_1;
+    }
+
+    var parseProtocol;
+    var hasRequiredParseProtocol;
+
+    function requireParseProtocol () {
+    	if (hasRequiredParseProtocol) return parseProtocol;
+    	hasRequiredParseProtocol = 1;
+
+    	parseProtocol = function parseProtocol(url) {
+    	  var match = /^([-+\w]{1,25})(:?\/\/|:)/.exec(url);
+    	  return match && match[1] || '';
+    	};
+    	return parseProtocol;
+    }
+
+    var xhr;
+    var hasRequiredXhr;
+
+    function requireXhr () {
+    	if (hasRequiredXhr) return xhr;
+    	hasRequiredXhr = 1;
+
+    	var utils = utils$9;
+    	var settle = requireSettle();
+    	var cookies = requireCookies();
+    	var buildURL = buildURL$1;
+    	var buildFullPath = buildFullPath$1;
+    	var parseHeaders = requireParseHeaders();
+    	var isURLSameOrigin = requireIsURLSameOrigin();
+    	var transitionalDefaults = transitional;
+    	var AxiosError = requireAxiosError();
+    	var CanceledError = requireCanceledError();
+    	var parseProtocol = requireParseProtocol();
+
+    	xhr = function xhrAdapter(config) {
+    	  return new Promise(function dispatchXhrRequest(resolve, reject) {
+    	    var requestData = config.data;
+    	    var requestHeaders = config.headers;
+    	    var responseType = config.responseType;
+    	    var onCanceled;
+    	    function done() {
+    	      if (config.cancelToken) {
+    	        config.cancelToken.unsubscribe(onCanceled);
+    	      }
+
+    	      if (config.signal) {
+    	        config.signal.removeEventListener('abort', onCanceled);
+    	      }
+    	    }
+
+    	    if (utils.isFormData(requestData) && utils.isStandardBrowserEnv()) {
+    	      delete requestHeaders['Content-Type']; // Let the browser set it
+    	    }
+
+    	    var request = new XMLHttpRequest();
+
+    	    // HTTP basic authentication
+    	    if (config.auth) {
+    	      var username = config.auth.username || '';
+    	      var password = config.auth.password ? unescape(encodeURIComponent(config.auth.password)) : '';
+    	      requestHeaders.Authorization = 'Basic ' + btoa(username + ':' + password);
+    	    }
+
+    	    var fullPath = buildFullPath(config.baseURL, config.url);
+
+    	    request.open(config.method.toUpperCase(), buildURL(fullPath, config.params, config.paramsSerializer), true);
+
+    	    // Set the request timeout in MS
+    	    request.timeout = config.timeout;
+
+    	    function onloadend() {
+    	      if (!request) {
+    	        return;
+    	      }
+    	      // Prepare the response
+    	      var responseHeaders = 'getAllResponseHeaders' in request ? parseHeaders(request.getAllResponseHeaders()) : null;
+    	      var responseData = !responseType || responseType === 'text' ||  responseType === 'json' ?
+    	        request.responseText : request.response;
+    	      var response = {
+    	        data: responseData,
+    	        status: request.status,
+    	        statusText: request.statusText,
+    	        headers: responseHeaders,
+    	        config: config,
+    	        request: request
+    	      };
+
+    	      settle(function _resolve(value) {
+    	        resolve(value);
+    	        done();
+    	      }, function _reject(err) {
+    	        reject(err);
+    	        done();
+    	      }, response);
+
+    	      // Clean up request
+    	      request = null;
+    	    }
+
+    	    if ('onloadend' in request) {
+    	      // Use onloadend if available
+    	      request.onloadend = onloadend;
+    	    } else {
+    	      // Listen for ready state to emulate onloadend
+    	      request.onreadystatechange = function handleLoad() {
+    	        if (!request || request.readyState !== 4) {
+    	          return;
+    	        }
+
+    	        // The request errored out and we didn't get a response, this will be
+    	        // handled by onerror instead
+    	        // With one exception: request that using file: protocol, most browsers
+    	        // will return status as 0 even though it's a successful request
+    	        if (request.status === 0 && !(request.responseURL && request.responseURL.indexOf('file:') === 0)) {
+    	          return;
+    	        }
+    	        // readystate handler is calling before onerror or ontimeout handlers,
+    	        // so we should call onloadend on the next 'tick'
+    	        setTimeout(onloadend);
+    	      };
+    	    }
+
+    	    // Handle browser request cancellation (as opposed to a manual cancellation)
+    	    request.onabort = function handleAbort() {
+    	      if (!request) {
+    	        return;
+    	      }
+
+    	      reject(new AxiosError('Request aborted', AxiosError.ECONNABORTED, config, request));
+
+    	      // Clean up request
+    	      request = null;
+    	    };
+
+    	    // Handle low level network errors
+    	    request.onerror = function handleError() {
+    	      // Real errors are hidden from us by the browser
+    	      // onerror should only fire if it's a network error
+    	      reject(new AxiosError('Network Error', AxiosError.ERR_NETWORK, config, request, request));
+
+    	      // Clean up request
+    	      request = null;
+    	    };
+
+    	    // Handle timeout
+    	    request.ontimeout = function handleTimeout() {
+    	      var timeoutErrorMessage = config.timeout ? 'timeout of ' + config.timeout + 'ms exceeded' : 'timeout exceeded';
+    	      var transitional = config.transitional || transitionalDefaults;
+    	      if (config.timeoutErrorMessage) {
+    	        timeoutErrorMessage = config.timeoutErrorMessage;
+    	      }
+    	      reject(new AxiosError(
+    	        timeoutErrorMessage,
+    	        transitional.clarifyTimeoutError ? AxiosError.ETIMEDOUT : AxiosError.ECONNABORTED,
+    	        config,
+    	        request));
+
+    	      // Clean up request
+    	      request = null;
+    	    };
+
+    	    // Add xsrf header
+    	    // This is only done if running in a standard browser environment.
+    	    // Specifically not if we're in a web worker, or react-native.
+    	    if (utils.isStandardBrowserEnv()) {
+    	      // Add xsrf header
+    	      var xsrfValue = (config.withCredentials || isURLSameOrigin(fullPath)) && config.xsrfCookieName ?
+    	        cookies.read(config.xsrfCookieName) :
+    	        undefined;
+
+    	      if (xsrfValue) {
+    	        requestHeaders[config.xsrfHeaderName] = xsrfValue;
+    	      }
+    	    }
+
+    	    // Add headers to the request
+    	    if ('setRequestHeader' in request) {
+    	      utils.forEach(requestHeaders, function setRequestHeader(val, key) {
+    	        if (typeof requestData === 'undefined' && key.toLowerCase() === 'content-type') {
+    	          // Remove Content-Type if data is undefined
+    	          delete requestHeaders[key];
+    	        } else {
+    	          // Otherwise add header to the request
+    	          request.setRequestHeader(key, val);
+    	        }
+    	      });
+    	    }
+
+    	    // Add withCredentials to request if needed
+    	    if (!utils.isUndefined(config.withCredentials)) {
+    	      request.withCredentials = !!config.withCredentials;
+    	    }
+
+    	    // Add responseType to request if needed
+    	    if (responseType && responseType !== 'json') {
+    	      request.responseType = config.responseType;
+    	    }
+
+    	    // Handle progress if needed
+    	    if (typeof config.onDownloadProgress === 'function') {
+    	      request.addEventListener('progress', config.onDownloadProgress);
+    	    }
+
+    	    // Not all browsers support upload events
+    	    if (typeof config.onUploadProgress === 'function' && request.upload) {
+    	      request.upload.addEventListener('progress', config.onUploadProgress);
+    	    }
+
+    	    if (config.cancelToken || config.signal) {
+    	      // Handle cancellation
+    	      // eslint-disable-next-line func-names
+    	      onCanceled = function(cancel) {
+    	        if (!request) {
+    	          return;
+    	        }
+    	        reject(!cancel || (cancel && cancel.type) ? new CanceledError() : cancel);
+    	        request.abort();
+    	        request = null;
+    	      };
+
+    	      config.cancelToken && config.cancelToken.subscribe(onCanceled);
+    	      if (config.signal) {
+    	        config.signal.aborted ? onCanceled() : config.signal.addEventListener('abort', onCanceled);
+    	      }
+    	    }
+
+    	    if (!requestData) {
+    	      requestData = null;
+    	    }
+
+    	    var protocol = parseProtocol(fullPath);
+
+    	    if (protocol && [ 'http', 'https', 'file' ].indexOf(protocol) === -1) {
+    	      reject(new AxiosError('Unsupported protocol ' + protocol + ':', AxiosError.ERR_BAD_REQUEST, config));
+    	      return;
+    	    }
+
+
+    	    // Send the request
+    	    request.send(requestData);
+    	  });
+    	};
+    	return xhr;
+    }
+
+    var _null;
+    var hasRequired_null;
+
+    function require_null () {
+    	if (hasRequired_null) return _null;
+    	hasRequired_null = 1;
+    	// eslint-disable-next-line strict
+    	_null = null;
+    	return _null;
+    }
+
+    var utils$5 = utils$9;
+    var normalizeHeaderName = normalizeHeaderName$1;
+    var AxiosError$1 = requireAxiosError();
+    var transitionalDefaults = transitional;
+    var toFormData = requireToFormData();
+
+    var DEFAULT_CONTENT_TYPE = {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    };
+
+    function setContentTypeIfUnset(headers, value) {
+      if (!utils$5.isUndefined(headers) && utils$5.isUndefined(headers['Content-Type'])) {
+        headers['Content-Type'] = value;
+      }
+    }
+
+    function getDefaultAdapter() {
+      var adapter;
+      if (typeof XMLHttpRequest !== 'undefined') {
+        // For browsers use XHR adapter
+        adapter = requireXhr();
+      } else if (typeof process !== 'undefined' && Object.prototype.toString.call(process) === '[object process]') {
+        // For node use HTTP adapter
+        adapter = requireXhr();
+      }
+      return adapter;
+    }
+
+    function stringifySafely(rawValue, parser, encoder) {
+      if (utils$5.isString(rawValue)) {
+        try {
+          (parser || JSON.parse)(rawValue);
+          return utils$5.trim(rawValue);
+        } catch (e) {
+          if (e.name !== 'SyntaxError') {
+            throw e;
+          }
+        }
+      }
+
+      return (encoder || JSON.stringify)(rawValue);
+    }
+
+    var defaults$3 = {
+
+      transitional: transitionalDefaults,
+
+      adapter: getDefaultAdapter(),
+
+      transformRequest: [function transformRequest(data, headers) {
+        normalizeHeaderName(headers, 'Accept');
+        normalizeHeaderName(headers, 'Content-Type');
+
+        if (utils$5.isFormData(data) ||
+          utils$5.isArrayBuffer(data) ||
+          utils$5.isBuffer(data) ||
+          utils$5.isStream(data) ||
+          utils$5.isFile(data) ||
+          utils$5.isBlob(data)
+        ) {
+          return data;
+        }
+        if (utils$5.isArrayBufferView(data)) {
+          return data.buffer;
+        }
+        if (utils$5.isURLSearchParams(data)) {
+          setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
+          return data.toString();
+        }
+
+        var isObjectPayload = utils$5.isObject(data);
+        var contentType = headers && headers['Content-Type'];
+
+        var isFileList;
+
+        if ((isFileList = utils$5.isFileList(data)) || (isObjectPayload && contentType === 'multipart/form-data')) {
+          var _FormData = this.env && this.env.FormData;
+          return toFormData(isFileList ? {'files[]': data} : data, _FormData && new _FormData());
+        } else if (isObjectPayload || contentType === 'application/json') {
+          setContentTypeIfUnset(headers, 'application/json');
+          return stringifySafely(data);
+        }
+
+        return data;
+      }],
+
+      transformResponse: [function transformResponse(data) {
+        var transitional = this.transitional || defaults$3.transitional;
+        var silentJSONParsing = transitional && transitional.silentJSONParsing;
+        var forcedJSONParsing = transitional && transitional.forcedJSONParsing;
+        var strictJSONParsing = !silentJSONParsing && this.responseType === 'json';
+
+        if (strictJSONParsing || (forcedJSONParsing && utils$5.isString(data) && data.length)) {
+          try {
+            return JSON.parse(data);
+          } catch (e) {
+            if (strictJSONParsing) {
+              if (e.name === 'SyntaxError') {
+                throw AxiosError$1.from(e, AxiosError$1.ERR_BAD_RESPONSE, this, null, this.response);
+              }
+              throw e;
+            }
+          }
+        }
+
+        return data;
+      }],
+
+      /**
+       * A timeout in milliseconds to abort a request. If set to 0 (default) a
+       * timeout is not created.
+       */
+      timeout: 0,
+
+      xsrfCookieName: 'XSRF-TOKEN',
+      xsrfHeaderName: 'X-XSRF-TOKEN',
+
+      maxContentLength: -1,
+      maxBodyLength: -1,
+
+      env: {
+        FormData: require_null()
+      },
+
+      validateStatus: function validateStatus(status) {
+        return status >= 200 && status < 300;
+      },
+
+      headers: {
+        common: {
+          'Accept': 'application/json, text/plain, */*'
+        }
+      }
+    };
+
+    utils$5.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
+      defaults$3.headers[method] = {};
+    });
+
+    utils$5.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+      defaults$3.headers[method] = utils$5.merge(DEFAULT_CONTENT_TYPE);
+    });
+
+    var defaults_1 = defaults$3;
+
+    var utils$4 = utils$9;
+    var defaults$2 = defaults_1;
+
+    /**
+     * Transform the data for a request or a response
+     *
+     * @param {Object|String} data The data to be transformed
+     * @param {Array} headers The headers for the request or response
+     * @param {Array|Function} fns A single function or Array of functions
+     * @returns {*} The resulting transformed data
+     */
+    var transformData$1 = function transformData(data, headers, fns) {
+      var context = this || defaults$2;
+      /*eslint no-param-reassign:0*/
+      utils$4.forEach(fns, function transform(fn) {
+        data = fn.call(context, data, headers);
+      });
+
+      return data;
+    };
+
+    var isCancel$1;
+    var hasRequiredIsCancel;
+
+    function requireIsCancel () {
+    	if (hasRequiredIsCancel) return isCancel$1;
+    	hasRequiredIsCancel = 1;
+
+    	isCancel$1 = function isCancel(value) {
+    	  return !!(value && value.__CANCEL__);
+    	};
+    	return isCancel$1;
+    }
+
+    var utils$3 = utils$9;
+    var transformData = transformData$1;
+    var isCancel = requireIsCancel();
+    var defaults$1 = defaults_1;
+    var CanceledError = requireCanceledError();
+
+    /**
+     * Throws a `CanceledError` if cancellation has been requested.
+     */
+    function throwIfCancellationRequested(config) {
+      if (config.cancelToken) {
+        config.cancelToken.throwIfRequested();
+      }
+
+      if (config.signal && config.signal.aborted) {
+        throw new CanceledError();
+      }
+    }
+
+    /**
+     * Dispatch a request to the server using the configured adapter.
+     *
+     * @param {object} config The config that is to be used for the request
+     * @returns {Promise} The Promise to be fulfilled
+     */
+    var dispatchRequest$1 = function dispatchRequest(config) {
+      throwIfCancellationRequested(config);
+
+      // Ensure headers exist
+      config.headers = config.headers || {};
+
+      // Transform request data
+      config.data = transformData.call(
+        config,
+        config.data,
+        config.headers,
+        config.transformRequest
+      );
+
+      // Flatten headers
+      config.headers = utils$3.merge(
+        config.headers.common || {},
+        config.headers[config.method] || {},
+        config.headers
+      );
+
+      utils$3.forEach(
+        ['delete', 'get', 'head', 'post', 'put', 'patch', 'common'],
+        function cleanHeaderConfig(method) {
+          delete config.headers[method];
+        }
+      );
+
+      var adapter = config.adapter || defaults$1.adapter;
+
+      return adapter(config).then(function onAdapterResolution(response) {
+        throwIfCancellationRequested(config);
+
+        // Transform response data
+        response.data = transformData.call(
+          config,
+          response.data,
+          response.headers,
+          config.transformResponse
+        );
+
+        return response;
+      }, function onAdapterRejection(reason) {
+        if (!isCancel(reason)) {
+          throwIfCancellationRequested(config);
+
+          // Transform response data
+          if (reason && reason.response) {
+            reason.response.data = transformData.call(
+              config,
+              reason.response.data,
+              reason.response.headers,
+              config.transformResponse
+            );
+          }
+        }
+
+        return Promise.reject(reason);
+      });
+    };
+
+    var utils$2 = utils$9;
+
+    /**
+     * Config-specific merge-function which creates a new config-object
+     * by merging two configuration objects together.
+     *
+     * @param {Object} config1
+     * @param {Object} config2
+     * @returns {Object} New object resulting from merging config2 to config1
+     */
+    var mergeConfig$2 = function mergeConfig(config1, config2) {
+      // eslint-disable-next-line no-param-reassign
+      config2 = config2 || {};
+      var config = {};
+
+      function getMergedValue(target, source) {
+        if (utils$2.isPlainObject(target) && utils$2.isPlainObject(source)) {
+          return utils$2.merge(target, source);
+        } else if (utils$2.isPlainObject(source)) {
+          return utils$2.merge({}, source);
+        } else if (utils$2.isArray(source)) {
+          return source.slice();
+        }
+        return source;
+      }
+
+      // eslint-disable-next-line consistent-return
+      function mergeDeepProperties(prop) {
+        if (!utils$2.isUndefined(config2[prop])) {
+          return getMergedValue(config1[prop], config2[prop]);
+        } else if (!utils$2.isUndefined(config1[prop])) {
+          return getMergedValue(undefined, config1[prop]);
+        }
+      }
+
+      // eslint-disable-next-line consistent-return
+      function valueFromConfig2(prop) {
+        if (!utils$2.isUndefined(config2[prop])) {
+          return getMergedValue(undefined, config2[prop]);
+        }
+      }
+
+      // eslint-disable-next-line consistent-return
+      function defaultToConfig2(prop) {
+        if (!utils$2.isUndefined(config2[prop])) {
+          return getMergedValue(undefined, config2[prop]);
+        } else if (!utils$2.isUndefined(config1[prop])) {
+          return getMergedValue(undefined, config1[prop]);
+        }
+      }
+
+      // eslint-disable-next-line consistent-return
+      function mergeDirectKeys(prop) {
+        if (prop in config2) {
+          return getMergedValue(config1[prop], config2[prop]);
+        } else if (prop in config1) {
+          return getMergedValue(undefined, config1[prop]);
+        }
+      }
+
+      var mergeMap = {
+        'url': valueFromConfig2,
+        'method': valueFromConfig2,
+        'data': valueFromConfig2,
+        'baseURL': defaultToConfig2,
+        'transformRequest': defaultToConfig2,
+        'transformResponse': defaultToConfig2,
+        'paramsSerializer': defaultToConfig2,
+        'timeout': defaultToConfig2,
+        'timeoutMessage': defaultToConfig2,
+        'withCredentials': defaultToConfig2,
+        'adapter': defaultToConfig2,
+        'responseType': defaultToConfig2,
+        'xsrfCookieName': defaultToConfig2,
+        'xsrfHeaderName': defaultToConfig2,
+        'onUploadProgress': defaultToConfig2,
+        'onDownloadProgress': defaultToConfig2,
+        'decompress': defaultToConfig2,
+        'maxContentLength': defaultToConfig2,
+        'maxBodyLength': defaultToConfig2,
+        'beforeRedirect': defaultToConfig2,
+        'transport': defaultToConfig2,
+        'httpAgent': defaultToConfig2,
+        'httpsAgent': defaultToConfig2,
+        'cancelToken': defaultToConfig2,
+        'socketPath': defaultToConfig2,
+        'responseEncoding': defaultToConfig2,
+        'validateStatus': mergeDirectKeys
+      };
+
+      utils$2.forEach(Object.keys(config1).concat(Object.keys(config2)), function computeConfigValue(prop) {
+        var merge = mergeMap[prop] || mergeDeepProperties;
+        var configValue = merge(prop);
+        (utils$2.isUndefined(configValue) && merge !== mergeDirectKeys) || (config[prop] = configValue);
+      });
+
+      return config;
+    };
+
+    var data;
+    var hasRequiredData;
+
+    function requireData () {
+    	if (hasRequiredData) return data;
+    	hasRequiredData = 1;
+    	data = {
+    	  "version": "0.27.2"
+    	};
+    	return data;
+    }
+
+    var VERSION = requireData().version;
+    var AxiosError = requireAxiosError();
+
+    var validators$1 = {};
+
+    // eslint-disable-next-line func-names
+    ['object', 'boolean', 'number', 'function', 'string', 'symbol'].forEach(function(type, i) {
+      validators$1[type] = function validator(thing) {
+        return typeof thing === type || 'a' + (i < 1 ? 'n ' : ' ') + type;
+      };
+    });
+
+    var deprecatedWarnings = {};
+
+    /**
+     * Transitional option validator
+     * @param {function|boolean?} validator - set to false if the transitional option has been removed
+     * @param {string?} version - deprecated version / removed since version
+     * @param {string?} message - some message with additional info
+     * @returns {function}
+     */
+    validators$1.transitional = function transitional(validator, version, message) {
+      function formatMessage(opt, desc) {
+        return '[Axios v' + VERSION + '] Transitional option \'' + opt + '\'' + desc + (message ? '. ' + message : '');
+      }
+
+      // eslint-disable-next-line func-names
+      return function(value, opt, opts) {
+        if (validator === false) {
+          throw new AxiosError(
+            formatMessage(opt, ' has been removed' + (version ? ' in ' + version : '')),
+            AxiosError.ERR_DEPRECATED
+          );
+        }
+
+        if (version && !deprecatedWarnings[opt]) {
+          deprecatedWarnings[opt] = true;
+          // eslint-disable-next-line no-console
+          console.warn(
+            formatMessage(
+              opt,
+              ' has been deprecated since v' + version + ' and will be removed in the near future'
+            )
+          );
+        }
+
+        return validator ? validator(value, opt, opts) : true;
+      };
+    };
+
+    /**
+     * Assert object's properties type
+     * @param {object} options
+     * @param {object} schema
+     * @param {boolean?} allowUnknown
+     */
+
+    function assertOptions(options, schema, allowUnknown) {
+      if (typeof options !== 'object') {
+        throw new AxiosError('options must be an object', AxiosError.ERR_BAD_OPTION_VALUE);
+      }
+      var keys = Object.keys(options);
+      var i = keys.length;
+      while (i-- > 0) {
+        var opt = keys[i];
+        var validator = schema[opt];
+        if (validator) {
+          var value = options[opt];
+          var result = value === undefined || validator(value, opt, options);
+          if (result !== true) {
+            throw new AxiosError('option ' + opt + ' must be ' + result, AxiosError.ERR_BAD_OPTION_VALUE);
+          }
+          continue;
+        }
+        if (allowUnknown !== true) {
+          throw new AxiosError('Unknown option ' + opt, AxiosError.ERR_BAD_OPTION);
+        }
+      }
+    }
+
+    var validator$1 = {
+      assertOptions: assertOptions,
+      validators: validators$1
+    };
+
+    var utils$1 = utils$9;
+    var buildURL = buildURL$1;
+    var InterceptorManager = InterceptorManager_1;
+    var dispatchRequest = dispatchRequest$1;
+    var mergeConfig$1 = mergeConfig$2;
+    var buildFullPath = buildFullPath$1;
+    var validator = validator$1;
+
+    var validators = validator.validators;
+    /**
+     * Create a new instance of Axios
+     *
+     * @param {Object} instanceConfig The default config for the instance
+     */
+    function Axios$1(instanceConfig) {
+      this.defaults = instanceConfig;
+      this.interceptors = {
+        request: new InterceptorManager(),
+        response: new InterceptorManager()
+      };
+    }
+
+    /**
+     * Dispatch a request
+     *
+     * @param {Object} config The config specific for this request (merged with this.defaults)
+     */
+    Axios$1.prototype.request = function request(configOrUrl, config) {
+      /*eslint no-param-reassign:0*/
+      // Allow for axios('example/url'[, config]) a la fetch API
+      if (typeof configOrUrl === 'string') {
+        config = config || {};
+        config.url = configOrUrl;
+      } else {
+        config = configOrUrl || {};
+      }
+
+      config = mergeConfig$1(this.defaults, config);
+
+      // Set config.method
+      if (config.method) {
+        config.method = config.method.toLowerCase();
+      } else if (this.defaults.method) {
+        config.method = this.defaults.method.toLowerCase();
+      } else {
+        config.method = 'get';
+      }
+
+      var transitional = config.transitional;
+
+      if (transitional !== undefined) {
+        validator.assertOptions(transitional, {
+          silentJSONParsing: validators.transitional(validators.boolean),
+          forcedJSONParsing: validators.transitional(validators.boolean),
+          clarifyTimeoutError: validators.transitional(validators.boolean)
+        }, false);
+      }
+
+      // filter out skipped interceptors
+      var requestInterceptorChain = [];
+      var synchronousRequestInterceptors = true;
+      this.interceptors.request.forEach(function unshiftRequestInterceptors(interceptor) {
+        if (typeof interceptor.runWhen === 'function' && interceptor.runWhen(config) === false) {
+          return;
+        }
+
+        synchronousRequestInterceptors = synchronousRequestInterceptors && interceptor.synchronous;
+
+        requestInterceptorChain.unshift(interceptor.fulfilled, interceptor.rejected);
+      });
+
+      var responseInterceptorChain = [];
+      this.interceptors.response.forEach(function pushResponseInterceptors(interceptor) {
+        responseInterceptorChain.push(interceptor.fulfilled, interceptor.rejected);
+      });
+
+      var promise;
+
+      if (!synchronousRequestInterceptors) {
+        var chain = [dispatchRequest, undefined];
+
+        Array.prototype.unshift.apply(chain, requestInterceptorChain);
+        chain = chain.concat(responseInterceptorChain);
+
+        promise = Promise.resolve(config);
+        while (chain.length) {
+          promise = promise.then(chain.shift(), chain.shift());
+        }
+
+        return promise;
+      }
+
+
+      var newConfig = config;
+      while (requestInterceptorChain.length) {
+        var onFulfilled = requestInterceptorChain.shift();
+        var onRejected = requestInterceptorChain.shift();
+        try {
+          newConfig = onFulfilled(newConfig);
+        } catch (error) {
+          onRejected(error);
+          break;
+        }
+      }
+
+      try {
+        promise = dispatchRequest(newConfig);
+      } catch (error) {
+        return Promise.reject(error);
+      }
+
+      while (responseInterceptorChain.length) {
+        promise = promise.then(responseInterceptorChain.shift(), responseInterceptorChain.shift());
+      }
+
+      return promise;
+    };
+
+    Axios$1.prototype.getUri = function getUri(config) {
+      config = mergeConfig$1(this.defaults, config);
+      var fullPath = buildFullPath(config.baseURL, config.url);
+      return buildURL(fullPath, config.params, config.paramsSerializer);
+    };
+
+    // Provide aliases for supported request methods
+    utils$1.forEach(['delete', 'get', 'head', 'options'], function forEachMethodNoData(method) {
+      /*eslint func-names:0*/
+      Axios$1.prototype[method] = function(url, config) {
+        return this.request(mergeConfig$1(config || {}, {
+          method: method,
+          url: url,
+          data: (config || {}).data
+        }));
+      };
+    });
+
+    utils$1.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+      /*eslint func-names:0*/
+
+      function generateHTTPMethod(isForm) {
+        return function httpMethod(url, data, config) {
+          return this.request(mergeConfig$1(config || {}, {
+            method: method,
+            headers: isForm ? {
+              'Content-Type': 'multipart/form-data'
+            } : {},
+            url: url,
+            data: data
+          }));
+        };
+      }
+
+      Axios$1.prototype[method] = generateHTTPMethod();
+
+      Axios$1.prototype[method + 'Form'] = generateHTTPMethod(true);
+    });
+
+    var Axios_1 = Axios$1;
+
+    var CancelToken_1;
+    var hasRequiredCancelToken;
+
+    function requireCancelToken () {
+    	if (hasRequiredCancelToken) return CancelToken_1;
+    	hasRequiredCancelToken = 1;
+
+    	var CanceledError = requireCanceledError();
+
+    	/**
+    	 * A `CancelToken` is an object that can be used to request cancellation of an operation.
+    	 *
+    	 * @class
+    	 * @param {Function} executor The executor function.
+    	 */
+    	function CancelToken(executor) {
+    	  if (typeof executor !== 'function') {
+    	    throw new TypeError('executor must be a function.');
+    	  }
+
+    	  var resolvePromise;
+
+    	  this.promise = new Promise(function promiseExecutor(resolve) {
+    	    resolvePromise = resolve;
+    	  });
+
+    	  var token = this;
+
+    	  // eslint-disable-next-line func-names
+    	  this.promise.then(function(cancel) {
+    	    if (!token._listeners) return;
+
+    	    var i;
+    	    var l = token._listeners.length;
+
+    	    for (i = 0; i < l; i++) {
+    	      token._listeners[i](cancel);
+    	    }
+    	    token._listeners = null;
+    	  });
+
+    	  // eslint-disable-next-line func-names
+    	  this.promise.then = function(onfulfilled) {
+    	    var _resolve;
+    	    // eslint-disable-next-line func-names
+    	    var promise = new Promise(function(resolve) {
+    	      token.subscribe(resolve);
+    	      _resolve = resolve;
+    	    }).then(onfulfilled);
+
+    	    promise.cancel = function reject() {
+    	      token.unsubscribe(_resolve);
+    	    };
+
+    	    return promise;
+    	  };
+
+    	  executor(function cancel(message) {
+    	    if (token.reason) {
+    	      // Cancellation has already been requested
+    	      return;
+    	    }
+
+    	    token.reason = new CanceledError(message);
+    	    resolvePromise(token.reason);
+    	  });
+    	}
+
+    	/**
+    	 * Throws a `CanceledError` if cancellation has been requested.
+    	 */
+    	CancelToken.prototype.throwIfRequested = function throwIfRequested() {
+    	  if (this.reason) {
+    	    throw this.reason;
+    	  }
+    	};
+
+    	/**
+    	 * Subscribe to the cancel signal
+    	 */
+
+    	CancelToken.prototype.subscribe = function subscribe(listener) {
+    	  if (this.reason) {
+    	    listener(this.reason);
+    	    return;
+    	  }
+
+    	  if (this._listeners) {
+    	    this._listeners.push(listener);
+    	  } else {
+    	    this._listeners = [listener];
+    	  }
+    	};
+
+    	/**
+    	 * Unsubscribe from the cancel signal
+    	 */
+
+    	CancelToken.prototype.unsubscribe = function unsubscribe(listener) {
+    	  if (!this._listeners) {
+    	    return;
+    	  }
+    	  var index = this._listeners.indexOf(listener);
+    	  if (index !== -1) {
+    	    this._listeners.splice(index, 1);
+    	  }
+    	};
+
+    	/**
+    	 * Returns an object that contains a new `CancelToken` and a function that, when called,
+    	 * cancels the `CancelToken`.
+    	 */
+    	CancelToken.source = function source() {
+    	  var cancel;
+    	  var token = new CancelToken(function executor(c) {
+    	    cancel = c;
+    	  });
+    	  return {
+    	    token: token,
+    	    cancel: cancel
+    	  };
+    	};
+
+    	CancelToken_1 = CancelToken;
+    	return CancelToken_1;
+    }
+
+    var spread;
+    var hasRequiredSpread;
+
+    function requireSpread () {
+    	if (hasRequiredSpread) return spread;
+    	hasRequiredSpread = 1;
+
+    	/**
+    	 * Syntactic sugar for invoking a function and expanding an array for arguments.
+    	 *
+    	 * Common use case would be to use `Function.prototype.apply`.
+    	 *
+    	 *  ```js
+    	 *  function f(x, y, z) {}
+    	 *  var args = [1, 2, 3];
+    	 *  f.apply(null, args);
+    	 *  ```
+    	 *
+    	 * With `spread` this example can be re-written.
+    	 *
+    	 *  ```js
+    	 *  spread(function(x, y, z) {})([1, 2, 3]);
+    	 *  ```
+    	 *
+    	 * @param {Function} callback
+    	 * @returns {Function}
+    	 */
+    	spread = function spread(callback) {
+    	  return function wrap(arr) {
+    	    return callback.apply(null, arr);
+    	  };
+    	};
+    	return spread;
+    }
+
+    var isAxiosError;
+    var hasRequiredIsAxiosError;
+
+    function requireIsAxiosError () {
+    	if (hasRequiredIsAxiosError) return isAxiosError;
+    	hasRequiredIsAxiosError = 1;
+
+    	var utils = utils$9;
+
+    	/**
+    	 * Determines whether the payload is an error thrown by Axios
+    	 *
+    	 * @param {*} payload The value to test
+    	 * @returns {boolean} True if the payload is an error thrown by Axios, otherwise false
+    	 */
+    	isAxiosError = function isAxiosError(payload) {
+    	  return utils.isObject(payload) && (payload.isAxiosError === true);
+    	};
+    	return isAxiosError;
+    }
+
+    var utils = utils$9;
+    var bind = bind$2;
+    var Axios = Axios_1;
+    var mergeConfig = mergeConfig$2;
+    var defaults = defaults_1;
+
+    /**
+     * Create an instance of Axios
+     *
+     * @param {Object} defaultConfig The default config for the instance
+     * @return {Axios} A new instance of Axios
+     */
+    function createInstance(defaultConfig) {
+      var context = new Axios(defaultConfig);
+      var instance = bind(Axios.prototype.request, context);
+
+      // Copy axios.prototype to instance
+      utils.extend(instance, Axios.prototype, context);
+
+      // Copy context to instance
+      utils.extend(instance, context);
+
+      // Factory for creating new instances
+      instance.create = function create(instanceConfig) {
+        return createInstance(mergeConfig(defaultConfig, instanceConfig));
+      };
+
+      return instance;
+    }
+
+    // Create the default instance to be exported
+    var axios$1 = createInstance(defaults);
+
+    // Expose Axios class to allow class inheritance
+    axios$1.Axios = Axios;
+
+    // Expose Cancel & CancelToken
+    axios$1.CanceledError = requireCanceledError();
+    axios$1.CancelToken = requireCancelToken();
+    axios$1.isCancel = requireIsCancel();
+    axios$1.VERSION = requireData().version;
+    axios$1.toFormData = requireToFormData();
+
+    // Expose AxiosError class
+    axios$1.AxiosError = requireAxiosError();
+
+    // alias for CanceledError for backward compatibility
+    axios$1.Cancel = axios$1.CanceledError;
+
+    // Expose all/spread
+    axios$1.all = function all(promises) {
+      return Promise.all(promises);
+    };
+    axios$1.spread = requireSpread();
+
+    // Expose isAxiosError
+    axios$1.isAxiosError = requireIsAxiosError();
+
+    axios$2.exports = axios$1;
+
+    // Allow use of default import syntax in TypeScript
+    axios$2.exports.default = axios$1;
+
+    (function (module) {
+    	module.exports = axios$2.exports;
+    } (axios$3));
+
+    var axios = /*@__PURE__*/getDefaultExportFromCjs(axios$3.exports);
+
+    const PACKET_TYPES = Object.create(null); // no Map = no polyfill
+    PACKET_TYPES["open"] = "0";
+    PACKET_TYPES["close"] = "1";
+    PACKET_TYPES["ping"] = "2";
+    PACKET_TYPES["pong"] = "3";
+    PACKET_TYPES["message"] = "4";
+    PACKET_TYPES["upgrade"] = "5";
+    PACKET_TYPES["noop"] = "6";
+    const PACKET_TYPES_REVERSE = Object.create(null);
+    Object.keys(PACKET_TYPES).forEach(key => {
+        PACKET_TYPES_REVERSE[PACKET_TYPES[key]] = key;
+    });
+    const ERROR_PACKET = { type: "error", data: "parser error" };
+
+    const withNativeBlob$1 = typeof Blob === "function" ||
+        (typeof Blob !== "undefined" &&
+            Object.prototype.toString.call(Blob) === "[object BlobConstructor]");
+    const withNativeArrayBuffer$2 = typeof ArrayBuffer === "function";
+    // ArrayBuffer.isView method is not defined in IE10
+    const isView$1 = obj => {
+        return typeof ArrayBuffer.isView === "function"
+            ? ArrayBuffer.isView(obj)
+            : obj && obj.buffer instanceof ArrayBuffer;
+    };
+    const encodePacket = ({ type, data }, supportsBinary, callback) => {
+        if (withNativeBlob$1 && data instanceof Blob) {
+            if (supportsBinary) {
+                return callback(data);
+            }
+            else {
+                return encodeBlobAsBase64(data, callback);
+            }
+        }
+        else if (withNativeArrayBuffer$2 &&
+            (data instanceof ArrayBuffer || isView$1(data))) {
+            if (supportsBinary) {
+                return callback(data);
+            }
+            else {
+                return encodeBlobAsBase64(new Blob([data]), callback);
+            }
+        }
+        // plain string
+        return callback(PACKET_TYPES[type] + (data || ""));
+    };
+    const encodeBlobAsBase64 = (data, callback) => {
+        const fileReader = new FileReader();
+        fileReader.onload = function () {
+            const content = fileReader.result.split(",")[1];
+            callback("b" + content);
+        };
+        return fileReader.readAsDataURL(data);
+    };
+
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+    // Use a lookup table to find the index.
+    const lookup$1 = typeof Uint8Array === 'undefined' ? [] : new Uint8Array(256);
+    for (let i = 0; i < chars.length; i++) {
+        lookup$1[chars.charCodeAt(i)] = i;
+    }
+    const decode$1 = (base64) => {
+        let bufferLength = base64.length * 0.75, len = base64.length, i, p = 0, encoded1, encoded2, encoded3, encoded4;
+        if (base64[base64.length - 1] === '=') {
+            bufferLength--;
+            if (base64[base64.length - 2] === '=') {
+                bufferLength--;
+            }
+        }
+        const arraybuffer = new ArrayBuffer(bufferLength), bytes = new Uint8Array(arraybuffer);
+        for (i = 0; i < len; i += 4) {
+            encoded1 = lookup$1[base64.charCodeAt(i)];
+            encoded2 = lookup$1[base64.charCodeAt(i + 1)];
+            encoded3 = lookup$1[base64.charCodeAt(i + 2)];
+            encoded4 = lookup$1[base64.charCodeAt(i + 3)];
+            bytes[p++] = (encoded1 << 2) | (encoded2 >> 4);
+            bytes[p++] = ((encoded2 & 15) << 4) | (encoded3 >> 2);
+            bytes[p++] = ((encoded3 & 3) << 6) | (encoded4 & 63);
+        }
+        return arraybuffer;
+    };
+
+    const withNativeArrayBuffer$1 = typeof ArrayBuffer === "function";
+    const decodePacket = (encodedPacket, binaryType) => {
+        if (typeof encodedPacket !== "string") {
+            return {
+                type: "message",
+                data: mapBinary(encodedPacket, binaryType)
+            };
+        }
+        const type = encodedPacket.charAt(0);
+        if (type === "b") {
+            return {
+                type: "message",
+                data: decodeBase64Packet(encodedPacket.substring(1), binaryType)
+            };
+        }
+        const packetType = PACKET_TYPES_REVERSE[type];
+        if (!packetType) {
+            return ERROR_PACKET;
+        }
+        return encodedPacket.length > 1
+            ? {
+                type: PACKET_TYPES_REVERSE[type],
+                data: encodedPacket.substring(1)
+            }
+            : {
+                type: PACKET_TYPES_REVERSE[type]
+            };
+    };
+    const decodeBase64Packet = (data, binaryType) => {
+        if (withNativeArrayBuffer$1) {
+            const decoded = decode$1(data);
+            return mapBinary(decoded, binaryType);
+        }
+        else {
+            return { base64: true, data }; // fallback for old browsers
+        }
+    };
+    const mapBinary = (data, binaryType) => {
+        switch (binaryType) {
+            case "blob":
+                return data instanceof ArrayBuffer ? new Blob([data]) : data;
+            case "arraybuffer":
+            default:
+                return data; // assuming the data is already an ArrayBuffer
+        }
+    };
+
+    const SEPARATOR = String.fromCharCode(30); // see https://en.wikipedia.org/wiki/Delimiter#ASCII_delimited_text
+    const encodePayload = (packets, callback) => {
+        // some packets may be added to the array while encoding, so the initial length must be saved
+        const length = packets.length;
+        const encodedPackets = new Array(length);
+        let count = 0;
+        packets.forEach((packet, i) => {
+            // force base64 encoding for binary packets
+            encodePacket(packet, false, encodedPacket => {
+                encodedPackets[i] = encodedPacket;
+                if (++count === length) {
+                    callback(encodedPackets.join(SEPARATOR));
+                }
+            });
+        });
+    };
+    const decodePayload = (encodedPayload, binaryType) => {
+        const encodedPackets = encodedPayload.split(SEPARATOR);
+        const packets = [];
+        for (let i = 0; i < encodedPackets.length; i++) {
+            const decodedPacket = decodePacket(encodedPackets[i], binaryType);
+            packets.push(decodedPacket);
+            if (decodedPacket.type === "error") {
+                break;
+            }
+        }
+        return packets;
+    };
+    const protocol$1 = 4;
+
+    /**
+     * Initialize a new `Emitter`.
+     *
+     * @api public
+     */
+
+    function Emitter(obj) {
+      if (obj) return mixin(obj);
+    }
+
+    /**
+     * Mixin the emitter properties.
+     *
+     * @param {Object} obj
+     * @return {Object}
+     * @api private
+     */
+
+    function mixin(obj) {
+      for (var key in Emitter.prototype) {
+        obj[key] = Emitter.prototype[key];
+      }
+      return obj;
+    }
+
+    /**
+     * Listen on the given `event` with `fn`.
+     *
+     * @param {String} event
+     * @param {Function} fn
+     * @return {Emitter}
+     * @api public
+     */
+
+    Emitter.prototype.on =
+    Emitter.prototype.addEventListener = function(event, fn){
+      this._callbacks = this._callbacks || {};
+      (this._callbacks['$' + event] = this._callbacks['$' + event] || [])
+        .push(fn);
+      return this;
+    };
+
+    /**
+     * Adds an `event` listener that will be invoked a single
+     * time then automatically removed.
+     *
+     * @param {String} event
+     * @param {Function} fn
+     * @return {Emitter}
+     * @api public
+     */
+
+    Emitter.prototype.once = function(event, fn){
+      function on() {
+        this.off(event, on);
+        fn.apply(this, arguments);
+      }
+
+      on.fn = fn;
+      this.on(event, on);
+      return this;
+    };
+
+    /**
+     * Remove the given callback for `event` or all
+     * registered callbacks.
+     *
+     * @param {String} event
+     * @param {Function} fn
+     * @return {Emitter}
+     * @api public
+     */
+
+    Emitter.prototype.off =
+    Emitter.prototype.removeListener =
+    Emitter.prototype.removeAllListeners =
+    Emitter.prototype.removeEventListener = function(event, fn){
+      this._callbacks = this._callbacks || {};
+
+      // all
+      if (0 == arguments.length) {
+        this._callbacks = {};
+        return this;
+      }
+
+      // specific event
+      var callbacks = this._callbacks['$' + event];
+      if (!callbacks) return this;
+
+      // remove all handlers
+      if (1 == arguments.length) {
+        delete this._callbacks['$' + event];
+        return this;
+      }
+
+      // remove specific handler
+      var cb;
+      for (var i = 0; i < callbacks.length; i++) {
+        cb = callbacks[i];
+        if (cb === fn || cb.fn === fn) {
+          callbacks.splice(i, 1);
+          break;
+        }
+      }
+
+      // Remove event specific arrays for event types that no
+      // one is subscribed for to avoid memory leak.
+      if (callbacks.length === 0) {
+        delete this._callbacks['$' + event];
+      }
+
+      return this;
+    };
+
+    /**
+     * Emit `event` with the given args.
+     *
+     * @param {String} event
+     * @param {Mixed} ...
+     * @return {Emitter}
+     */
+
+    Emitter.prototype.emit = function(event){
+      this._callbacks = this._callbacks || {};
+
+      var args = new Array(arguments.length - 1)
+        , callbacks = this._callbacks['$' + event];
+
+      for (var i = 1; i < arguments.length; i++) {
+        args[i - 1] = arguments[i];
+      }
+
+      if (callbacks) {
+        callbacks = callbacks.slice(0);
+        for (var i = 0, len = callbacks.length; i < len; ++i) {
+          callbacks[i].apply(this, args);
+        }
+      }
+
+      return this;
+    };
+
+    // alias used for reserved events (protected method)
+    Emitter.prototype.emitReserved = Emitter.prototype.emit;
+
+    /**
+     * Return array of callbacks for `event`.
+     *
+     * @param {String} event
+     * @return {Array}
+     * @api public
+     */
+
+    Emitter.prototype.listeners = function(event){
+      this._callbacks = this._callbacks || {};
+      return this._callbacks['$' + event] || [];
+    };
+
+    /**
+     * Check if this emitter has `event` handlers.
+     *
+     * @param {String} event
+     * @return {Boolean}
+     * @api public
+     */
+
+    Emitter.prototype.hasListeners = function(event){
+      return !! this.listeners(event).length;
+    };
+
+    const globalThisShim = (() => {
+        if (typeof self !== "undefined") {
+            return self;
+        }
+        else if (typeof window !== "undefined") {
+            return window;
+        }
+        else {
+            return Function("return this")();
+        }
+    })();
+
+    function pick(obj, ...attr) {
+        return attr.reduce((acc, k) => {
+            if (obj.hasOwnProperty(k)) {
+                acc[k] = obj[k];
+            }
+            return acc;
+        }, {});
+    }
+    // Keep a reference to the real timeout functions so they can be used when overridden
+    const NATIVE_SET_TIMEOUT = setTimeout;
+    const NATIVE_CLEAR_TIMEOUT = clearTimeout;
+    function installTimerFunctions(obj, opts) {
+        if (opts.useNativeTimers) {
+            obj.setTimeoutFn = NATIVE_SET_TIMEOUT.bind(globalThisShim);
+            obj.clearTimeoutFn = NATIVE_CLEAR_TIMEOUT.bind(globalThisShim);
+        }
+        else {
+            obj.setTimeoutFn = setTimeout.bind(globalThisShim);
+            obj.clearTimeoutFn = clearTimeout.bind(globalThisShim);
+        }
+    }
+    // base64 encoded buffers are about 33% bigger (https://en.wikipedia.org/wiki/Base64)
+    const BASE64_OVERHEAD = 1.33;
+    // we could also have used `new Blob([obj]).size`, but it isn't supported in IE9
+    function byteLength(obj) {
+        if (typeof obj === "string") {
+            return utf8Length(obj);
+        }
+        // arraybuffer or blob
+        return Math.ceil((obj.byteLength || obj.size) * BASE64_OVERHEAD);
+    }
+    function utf8Length(str) {
+        let c = 0, length = 0;
+        for (let i = 0, l = str.length; i < l; i++) {
+            c = str.charCodeAt(i);
+            if (c < 0x80) {
+                length += 1;
+            }
+            else if (c < 0x800) {
+                length += 2;
+            }
+            else if (c < 0xd800 || c >= 0xe000) {
+                length += 3;
+            }
+            else {
+                i++;
+                length += 4;
+            }
+        }
+        return length;
+    }
+
+    class TransportError extends Error {
+        constructor(reason, description, context) {
+            super(reason);
+            this.description = description;
+            this.context = context;
+            this.type = "TransportError";
+        }
+    }
+    class Transport extends Emitter {
+        /**
+         * Transport abstract constructor.
+         *
+         * @param {Object} options.
+         * @api private
+         */
+        constructor(opts) {
+            super();
+            this.writable = false;
+            installTimerFunctions(this, opts);
+            this.opts = opts;
+            this.query = opts.query;
+            this.readyState = "";
+            this.socket = opts.socket;
+        }
+        /**
+         * Emits an error.
+         *
+         * @param {String} reason
+         * @param description
+         * @param context - the error context
+         * @return {Transport} for chaining
+         * @api protected
+         */
+        onError(reason, description, context) {
+            super.emitReserved("error", new TransportError(reason, description, context));
+            return this;
+        }
+        /**
+         * Opens the transport.
+         *
+         * @api public
+         */
+        open() {
+            if ("closed" === this.readyState || "" === this.readyState) {
+                this.readyState = "opening";
+                this.doOpen();
+            }
+            return this;
+        }
+        /**
+         * Closes the transport.
+         *
+         * @api public
+         */
+        close() {
+            if ("opening" === this.readyState || "open" === this.readyState) {
+                this.doClose();
+                this.onClose();
+            }
+            return this;
+        }
+        /**
+         * Sends multiple packets.
+         *
+         * @param {Array} packets
+         * @api public
+         */
+        send(packets) {
+            if ("open" === this.readyState) {
+                this.write(packets);
+            }
+        }
+        /**
+         * Called upon open
+         *
+         * @api protected
+         */
+        onOpen() {
+            this.readyState = "open";
+            this.writable = true;
+            super.emitReserved("open");
+        }
+        /**
+         * Called with data.
+         *
+         * @param {String} data
+         * @api protected
+         */
+        onData(data) {
+            const packet = decodePacket(data, this.socket.binaryType);
+            this.onPacket(packet);
+        }
+        /**
+         * Called with a decoded packet.
+         *
+         * @api protected
+         */
+        onPacket(packet) {
+            super.emitReserved("packet", packet);
+        }
+        /**
+         * Called upon close.
+         *
+         * @api protected
+         */
+        onClose(details) {
+            this.readyState = "closed";
+            super.emitReserved("close", details);
+        }
+    }
+
+    // imported from https://github.com/unshiftio/yeast
+    const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_'.split(''), length = 64, map$1 = {};
+    let seed = 0, i = 0, prev;
+    /**
+     * Return a string representing the specified number.
+     *
+     * @param {Number} num The number to convert.
+     * @returns {String} The string representation of the number.
+     * @api public
+     */
+    function encode$1(num) {
+        let encoded = '';
+        do {
+            encoded = alphabet[num % length] + encoded;
+            num = Math.floor(num / length);
+        } while (num > 0);
+        return encoded;
+    }
+    /**
+     * Yeast: A tiny growing id generator.
+     *
+     * @returns {String} A unique id.
+     * @api public
+     */
+    function yeast() {
+        const now = encode$1(+new Date());
+        if (now !== prev)
+            return seed = 0, prev = now;
+        return now + '.' + encode$1(seed++);
+    }
+    //
+    // Map each character to its index.
+    //
+    for (; i < length; i++)
+        map$1[alphabet[i]] = i;
+
+    // imported from https://github.com/galkn/querystring
+    /**
+     * Compiles a querystring
+     * Returns string representation of the object
+     *
+     * @param {Object}
+     * @api private
+     */
+    function encode(obj) {
+        let str = '';
+        for (let i in obj) {
+            if (obj.hasOwnProperty(i)) {
+                if (str.length)
+                    str += '&';
+                str += encodeURIComponent(i) + '=' + encodeURIComponent(obj[i]);
+            }
+        }
+        return str;
+    }
+    /**
+     * Parses a simple querystring into an object
+     *
+     * @param {String} qs
+     * @api private
+     */
+    function decode(qs) {
+        let qry = {};
+        let pairs = qs.split('&');
+        for (let i = 0, l = pairs.length; i < l; i++) {
+            let pair = pairs[i].split('=');
+            qry[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+        }
+        return qry;
+    }
+
+    // imported from https://github.com/component/has-cors
+    let value = false;
+    try {
+        value = typeof XMLHttpRequest !== 'undefined' &&
+            'withCredentials' in new XMLHttpRequest();
+    }
+    catch (err) {
+        // if XMLHttp support is disabled in IE then it will throw
+        // when trying to create
+    }
+    const hasCORS = value;
+
+    // browser shim for xmlhttprequest module
+    function XHR(opts) {
+        const xdomain = opts.xdomain;
+        // XMLHttpRequest can be disabled on IE
+        try {
+            if ("undefined" !== typeof XMLHttpRequest && (!xdomain || hasCORS)) {
+                return new XMLHttpRequest();
+            }
+        }
+        catch (e) { }
+        if (!xdomain) {
+            try {
+                return new globalThisShim[["Active"].concat("Object").join("X")]("Microsoft.XMLHTTP");
+            }
+            catch (e) { }
+        }
+    }
+
+    function empty() { }
+    const hasXHR2 = (function () {
+        const xhr = new XHR({
+            xdomain: false
+        });
+        return null != xhr.responseType;
+    })();
+    class Polling extends Transport {
+        /**
+         * XHR Polling constructor.
+         *
+         * @param {Object} opts
+         * @api public
+         */
+        constructor(opts) {
+            super(opts);
+            this.polling = false;
+            if (typeof location !== "undefined") {
+                const isSSL = "https:" === location.protocol;
+                let port = location.port;
+                // some user agents have empty `location.port`
+                if (!port) {
+                    port = isSSL ? "443" : "80";
+                }
+                this.xd =
+                    (typeof location !== "undefined" &&
+                        opts.hostname !== location.hostname) ||
+                        port !== opts.port;
+                this.xs = opts.secure !== isSSL;
+            }
+            /**
+             * XHR supports binary
+             */
+            const forceBase64 = opts && opts.forceBase64;
+            this.supportsBinary = hasXHR2 && !forceBase64;
+        }
+        /**
+         * Transport name.
+         */
+        get name() {
+            return "polling";
+        }
+        /**
+         * Opens the socket (triggers polling). We write a PING message to determine
+         * when the transport is open.
+         *
+         * @api private
+         */
+        doOpen() {
+            this.poll();
+        }
+        /**
+         * Pauses polling.
+         *
+         * @param {Function} callback upon buffers are flushed and transport is paused
+         * @api private
+         */
+        pause(onPause) {
+            this.readyState = "pausing";
+            const pause = () => {
+                this.readyState = "paused";
+                onPause();
+            };
+            if (this.polling || !this.writable) {
+                let total = 0;
+                if (this.polling) {
+                    total++;
+                    this.once("pollComplete", function () {
+                        --total || pause();
+                    });
+                }
+                if (!this.writable) {
+                    total++;
+                    this.once("drain", function () {
+                        --total || pause();
+                    });
+                }
+            }
+            else {
+                pause();
+            }
+        }
+        /**
+         * Starts polling cycle.
+         *
+         * @api public
+         */
+        poll() {
+            this.polling = true;
+            this.doPoll();
+            this.emitReserved("poll");
+        }
+        /**
+         * Overloads onData to detect payloads.
+         *
+         * @api private
+         */
+        onData(data) {
+            const callback = packet => {
+                // if its the first message we consider the transport open
+                if ("opening" === this.readyState && packet.type === "open") {
+                    this.onOpen();
+                }
+                // if its a close packet, we close the ongoing requests
+                if ("close" === packet.type) {
+                    this.onClose({ description: "transport closed by the server" });
+                    return false;
+                }
+                // otherwise bypass onData and handle the message
+                this.onPacket(packet);
+            };
+            // decode payload
+            decodePayload(data, this.socket.binaryType).forEach(callback);
+            // if an event did not trigger closing
+            if ("closed" !== this.readyState) {
+                // if we got data we're not polling
+                this.polling = false;
+                this.emitReserved("pollComplete");
+                if ("open" === this.readyState) {
+                    this.poll();
+                }
+            }
+        }
+        /**
+         * For polling, send a close packet.
+         *
+         * @api private
+         */
+        doClose() {
+            const close = () => {
+                this.write([{ type: "close" }]);
+            };
+            if ("open" === this.readyState) {
+                close();
+            }
+            else {
+                // in case we're trying to close while
+                // handshaking is in progress (GH-164)
+                this.once("open", close);
+            }
+        }
+        /**
+         * Writes a packets payload.
+         *
+         * @param {Array} data packets
+         * @param {Function} drain callback
+         * @api private
+         */
+        write(packets) {
+            this.writable = false;
+            encodePayload(packets, data => {
+                this.doWrite(data, () => {
+                    this.writable = true;
+                    this.emitReserved("drain");
+                });
+            });
+        }
+        /**
+         * Generates uri for connection.
+         *
+         * @api private
+         */
+        uri() {
+            let query = this.query || {};
+            const schema = this.opts.secure ? "https" : "http";
+            let port = "";
+            // cache busting is forced
+            if (false !== this.opts.timestampRequests) {
+                query[this.opts.timestampParam] = yeast();
+            }
+            if (!this.supportsBinary && !query.sid) {
+                query.b64 = 1;
+            }
+            // avoid port if default for schema
+            if (this.opts.port &&
+                (("https" === schema && Number(this.opts.port) !== 443) ||
+                    ("http" === schema && Number(this.opts.port) !== 80))) {
+                port = ":" + this.opts.port;
+            }
+            const encodedQuery = encode(query);
+            const ipv6 = this.opts.hostname.indexOf(":") !== -1;
+            return (schema +
+                "://" +
+                (ipv6 ? "[" + this.opts.hostname + "]" : this.opts.hostname) +
+                port +
+                this.opts.path +
+                (encodedQuery.length ? "?" + encodedQuery : ""));
+        }
+        /**
+         * Creates a request.
+         *
+         * @param {String} method
+         * @api private
+         */
+        request(opts = {}) {
+            Object.assign(opts, { xd: this.xd, xs: this.xs }, this.opts);
+            return new Request(this.uri(), opts);
+        }
+        /**
+         * Sends data.
+         *
+         * @param {String} data to send.
+         * @param {Function} called upon flush.
+         * @api private
+         */
+        doWrite(data, fn) {
+            const req = this.request({
+                method: "POST",
+                data: data
+            });
+            req.on("success", fn);
+            req.on("error", (xhrStatus, context) => {
+                this.onError("xhr post error", xhrStatus, context);
+            });
+        }
+        /**
+         * Starts a poll cycle.
+         *
+         * @api private
+         */
+        doPoll() {
+            const req = this.request();
+            req.on("data", this.onData.bind(this));
+            req.on("error", (xhrStatus, context) => {
+                this.onError("xhr poll error", xhrStatus, context);
+            });
+            this.pollXhr = req;
+        }
+    }
+    class Request extends Emitter {
+        /**
+         * Request constructor
+         *
+         * @param {Object} options
+         * @api public
+         */
+        constructor(uri, opts) {
+            super();
+            installTimerFunctions(this, opts);
+            this.opts = opts;
+            this.method = opts.method || "GET";
+            this.uri = uri;
+            this.async = false !== opts.async;
+            this.data = undefined !== opts.data ? opts.data : null;
+            this.create();
+        }
+        /**
+         * Creates the XHR object and sends the request.
+         *
+         * @api private
+         */
+        create() {
+            const opts = pick(this.opts, "agent", "pfx", "key", "passphrase", "cert", "ca", "ciphers", "rejectUnauthorized", "autoUnref");
+            opts.xdomain = !!this.opts.xd;
+            opts.xscheme = !!this.opts.xs;
+            const xhr = (this.xhr = new XHR(opts));
+            try {
+                xhr.open(this.method, this.uri, this.async);
+                try {
+                    if (this.opts.extraHeaders) {
+                        xhr.setDisableHeaderCheck && xhr.setDisableHeaderCheck(true);
+                        for (let i in this.opts.extraHeaders) {
+                            if (this.opts.extraHeaders.hasOwnProperty(i)) {
+                                xhr.setRequestHeader(i, this.opts.extraHeaders[i]);
+                            }
+                        }
+                    }
+                }
+                catch (e) { }
+                if ("POST" === this.method) {
+                    try {
+                        xhr.setRequestHeader("Content-type", "text/plain;charset=UTF-8");
+                    }
+                    catch (e) { }
+                }
+                try {
+                    xhr.setRequestHeader("Accept", "*/*");
+                }
+                catch (e) { }
+                // ie6 check
+                if ("withCredentials" in xhr) {
+                    xhr.withCredentials = this.opts.withCredentials;
+                }
+                if (this.opts.requestTimeout) {
+                    xhr.timeout = this.opts.requestTimeout;
+                }
+                xhr.onreadystatechange = () => {
+                    if (4 !== xhr.readyState)
+                        return;
+                    if (200 === xhr.status || 1223 === xhr.status) {
+                        this.onLoad();
+                    }
+                    else {
+                        // make sure the `error` event handler that's user-set
+                        // does not throw in the same tick and gets caught here
+                        this.setTimeoutFn(() => {
+                            this.onError(typeof xhr.status === "number" ? xhr.status : 0);
+                        }, 0);
+                    }
+                };
+                xhr.send(this.data);
+            }
+            catch (e) {
+                // Need to defer since .create() is called directly from the constructor
+                // and thus the 'error' event can only be only bound *after* this exception
+                // occurs.  Therefore, also, we cannot throw here at all.
+                this.setTimeoutFn(() => {
+                    this.onError(e);
+                }, 0);
+                return;
+            }
+            if (typeof document !== "undefined") {
+                this.index = Request.requestsCount++;
+                Request.requests[this.index] = this;
+            }
+        }
+        /**
+         * Called upon error.
+         *
+         * @api private
+         */
+        onError(err) {
+            this.emitReserved("error", err, this.xhr);
+            this.cleanup(true);
+        }
+        /**
+         * Cleans up house.
+         *
+         * @api private
+         */
+        cleanup(fromError) {
+            if ("undefined" === typeof this.xhr || null === this.xhr) {
+                return;
+            }
+            this.xhr.onreadystatechange = empty;
+            if (fromError) {
+                try {
+                    this.xhr.abort();
+                }
+                catch (e) { }
+            }
+            if (typeof document !== "undefined") {
+                delete Request.requests[this.index];
+            }
+            this.xhr = null;
+        }
+        /**
+         * Called upon load.
+         *
+         * @api private
+         */
+        onLoad() {
+            const data = this.xhr.responseText;
+            if (data !== null) {
+                this.emitReserved("data", data);
+                this.emitReserved("success");
+                this.cleanup();
+            }
+        }
+        /**
+         * Aborts the request.
+         *
+         * @api public
+         */
+        abort() {
+            this.cleanup();
+        }
+    }
+    Request.requestsCount = 0;
+    Request.requests = {};
+    /**
+     * Aborts pending requests when unloading the window. This is needed to prevent
+     * memory leaks (e.g. when using IE) and to ensure that no spurious error is
+     * emitted.
+     */
+    if (typeof document !== "undefined") {
+        // @ts-ignore
+        if (typeof attachEvent === "function") {
+            // @ts-ignore
+            attachEvent("onunload", unloadHandler);
+        }
+        else if (typeof addEventListener === "function") {
+            const terminationEvent = "onpagehide" in globalThisShim ? "pagehide" : "unload";
+            addEventListener(terminationEvent, unloadHandler, false);
+        }
+    }
+    function unloadHandler() {
+        for (let i in Request.requests) {
+            if (Request.requests.hasOwnProperty(i)) {
+                Request.requests[i].abort();
+            }
+        }
+    }
+
+    const nextTick = (() => {
+        const isPromiseAvailable = typeof Promise === "function" && typeof Promise.resolve === "function";
+        if (isPromiseAvailable) {
+            return cb => Promise.resolve().then(cb);
+        }
+        else {
+            return (cb, setTimeoutFn) => setTimeoutFn(cb, 0);
+        }
+    })();
+    const WebSocket = globalThisShim.WebSocket || globalThisShim.MozWebSocket;
+    const usingBrowserWebSocket = true;
+    const defaultBinaryType = "arraybuffer";
+
+    // detect ReactNative environment
+    const isReactNative = typeof navigator !== "undefined" &&
+        typeof navigator.product === "string" &&
+        navigator.product.toLowerCase() === "reactnative";
+    class WS extends Transport {
+        /**
+         * WebSocket transport constructor.
+         *
+         * @api {Object} connection options
+         * @api public
+         */
+        constructor(opts) {
+            super(opts);
+            this.supportsBinary = !opts.forceBase64;
+        }
+        /**
+         * Transport name.
+         *
+         * @api public
+         */
+        get name() {
+            return "websocket";
+        }
+        /**
+         * Opens socket.
+         *
+         * @api private
+         */
+        doOpen() {
+            if (!this.check()) {
+                // let probe timeout
+                return;
+            }
+            const uri = this.uri();
+            const protocols = this.opts.protocols;
+            // React Native only supports the 'headers' option, and will print a warning if anything else is passed
+            const opts = isReactNative
+                ? {}
+                : pick(this.opts, "agent", "perMessageDeflate", "pfx", "key", "passphrase", "cert", "ca", "ciphers", "rejectUnauthorized", "localAddress", "protocolVersion", "origin", "maxPayload", "family", "checkServerIdentity");
+            if (this.opts.extraHeaders) {
+                opts.headers = this.opts.extraHeaders;
+            }
+            try {
+                this.ws =
+                    usingBrowserWebSocket && !isReactNative
+                        ? protocols
+                            ? new WebSocket(uri, protocols)
+                            : new WebSocket(uri)
+                        : new WebSocket(uri, protocols, opts);
+            }
+            catch (err) {
+                return this.emitReserved("error", err);
+            }
+            this.ws.binaryType = this.socket.binaryType || defaultBinaryType;
+            this.addEventListeners();
+        }
+        /**
+         * Adds event listeners to the socket
+         *
+         * @api private
+         */
+        addEventListeners() {
+            this.ws.onopen = () => {
+                if (this.opts.autoUnref) {
+                    this.ws._socket.unref();
+                }
+                this.onOpen();
+            };
+            this.ws.onclose = closeEvent => this.onClose({
+                description: "websocket connection closed",
+                context: closeEvent
+            });
+            this.ws.onmessage = ev => this.onData(ev.data);
+            this.ws.onerror = e => this.onError("websocket error", e);
+        }
+        /**
+         * Writes data to socket.
+         *
+         * @param {Array} array of packets.
+         * @api private
+         */
+        write(packets) {
+            this.writable = false;
+            // encodePacket efficient as it uses WS framing
+            // no need for encodePayload
+            for (let i = 0; i < packets.length; i++) {
+                const packet = packets[i];
+                const lastPacket = i === packets.length - 1;
+                encodePacket(packet, this.supportsBinary, data => {
+                    // always create a new object (GH-437)
+                    const opts = {};
+                    // Sometimes the websocket has already been closed but the browser didn't
+                    // have a chance of informing us about it yet, in that case send will
+                    // throw an error
+                    try {
+                        if (usingBrowserWebSocket) {
+                            // TypeError is thrown when passing the second argument on Safari
+                            this.ws.send(data);
+                        }
+                    }
+                    catch (e) {
+                    }
+                    if (lastPacket) {
+                        // fake drain
+                        // defer to next tick to allow Socket to clear writeBuffer
+                        nextTick(() => {
+                            this.writable = true;
+                            this.emitReserved("drain");
+                        }, this.setTimeoutFn);
+                    }
+                });
+            }
+        }
+        /**
+         * Closes socket.
+         *
+         * @api private
+         */
+        doClose() {
+            if (typeof this.ws !== "undefined") {
+                this.ws.close();
+                this.ws = null;
+            }
+        }
+        /**
+         * Generates uri for connection.
+         *
+         * @api private
+         */
+        uri() {
+            let query = this.query || {};
+            const schema = this.opts.secure ? "wss" : "ws";
+            let port = "";
+            // avoid port if default for schema
+            if (this.opts.port &&
+                (("wss" === schema && Number(this.opts.port) !== 443) ||
+                    ("ws" === schema && Number(this.opts.port) !== 80))) {
+                port = ":" + this.opts.port;
+            }
+            // append timestamp to URI
+            if (this.opts.timestampRequests) {
+                query[this.opts.timestampParam] = yeast();
+            }
+            // communicate binary support capabilities
+            if (!this.supportsBinary) {
+                query.b64 = 1;
+            }
+            const encodedQuery = encode(query);
+            const ipv6 = this.opts.hostname.indexOf(":") !== -1;
+            return (schema +
+                "://" +
+                (ipv6 ? "[" + this.opts.hostname + "]" : this.opts.hostname) +
+                port +
+                this.opts.path +
+                (encodedQuery.length ? "?" + encodedQuery : ""));
+        }
+        /**
+         * Feature detection for WebSocket.
+         *
+         * @return {Boolean} whether this transport is available.
+         * @api public
+         */
+        check() {
+            return !!WebSocket;
+        }
+    }
+
+    const transports = {
+        websocket: WS,
+        polling: Polling
+    };
+
+    // imported from https://github.com/galkn/parseuri
+    /**
+     * Parses an URI
+     *
+     * @author Steven Levithan <stevenlevithan.com> (MIT license)
+     * @api private
+     */
+    const re = /^(?:(?![^:@]+:[^:@\/]*@)(http|https|ws|wss):\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?((?:[a-f0-9]{0,4}:){2,7}[a-f0-9]{0,4}|[^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/;
+    const parts = [
+        'source', 'protocol', 'authority', 'userInfo', 'user', 'password', 'host', 'port', 'relative', 'path', 'directory', 'file', 'query', 'anchor'
+    ];
+    function parse(str) {
+        const src = str, b = str.indexOf('['), e = str.indexOf(']');
+        if (b != -1 && e != -1) {
+            str = str.substring(0, b) + str.substring(b, e).replace(/:/g, ';') + str.substring(e, str.length);
+        }
+        let m = re.exec(str || ''), uri = {}, i = 14;
+        while (i--) {
+            uri[parts[i]] = m[i] || '';
+        }
+        if (b != -1 && e != -1) {
+            uri.source = src;
+            uri.host = uri.host.substring(1, uri.host.length - 1).replace(/;/g, ':');
+            uri.authority = uri.authority.replace('[', '').replace(']', '').replace(/;/g, ':');
+            uri.ipv6uri = true;
+        }
+        uri.pathNames = pathNames(uri, uri['path']);
+        uri.queryKey = queryKey(uri, uri['query']);
+        return uri;
+    }
+    function pathNames(obj, path) {
+        const regx = /\/{2,9}/g, names = path.replace(regx, "/").split("/");
+        if (path.substr(0, 1) == '/' || path.length === 0) {
+            names.splice(0, 1);
+        }
+        if (path.substr(path.length - 1, 1) == '/') {
+            names.splice(names.length - 1, 1);
+        }
+        return names;
+    }
+    function queryKey(uri, query) {
+        const data = {};
+        query.replace(/(?:^|&)([^&=]*)=?([^&]*)/g, function ($0, $1, $2) {
+            if ($1) {
+                data[$1] = $2;
+            }
+        });
+        return data;
+    }
+
+    class Socket$1 extends Emitter {
+        /**
+         * Socket constructor.
+         *
+         * @param {String|Object} uri or options
+         * @param {Object} opts - options
+         * @api public
+         */
+        constructor(uri, opts = {}) {
+            super();
+            if (uri && "object" === typeof uri) {
+                opts = uri;
+                uri = null;
+            }
+            if (uri) {
+                uri = parse(uri);
+                opts.hostname = uri.host;
+                opts.secure = uri.protocol === "https" || uri.protocol === "wss";
+                opts.port = uri.port;
+                if (uri.query)
+                    opts.query = uri.query;
+            }
+            else if (opts.host) {
+                opts.hostname = parse(opts.host).host;
+            }
+            installTimerFunctions(this, opts);
+            this.secure =
+                null != opts.secure
+                    ? opts.secure
+                    : typeof location !== "undefined" && "https:" === location.protocol;
+            if (opts.hostname && !opts.port) {
+                // if no port is specified manually, use the protocol default
+                opts.port = this.secure ? "443" : "80";
+            }
+            this.hostname =
+                opts.hostname ||
+                    (typeof location !== "undefined" ? location.hostname : "localhost");
+            this.port =
+                opts.port ||
+                    (typeof location !== "undefined" && location.port
+                        ? location.port
+                        : this.secure
+                            ? "443"
+                            : "80");
+            this.transports = opts.transports || ["polling", "websocket"];
+            this.readyState = "";
+            this.writeBuffer = [];
+            this.prevBufferLen = 0;
+            this.opts = Object.assign({
+                path: "/engine.io",
+                agent: false,
+                withCredentials: false,
+                upgrade: true,
+                timestampParam: "t",
+                rememberUpgrade: false,
+                rejectUnauthorized: true,
+                perMessageDeflate: {
+                    threshold: 1024
+                },
+                transportOptions: {},
+                closeOnBeforeunload: true
+            }, opts);
+            this.opts.path = this.opts.path.replace(/\/$/, "") + "/";
+            if (typeof this.opts.query === "string") {
+                this.opts.query = decode(this.opts.query);
+            }
+            // set on handshake
+            this.id = null;
+            this.upgrades = null;
+            this.pingInterval = null;
+            this.pingTimeout = null;
+            // set on heartbeat
+            this.pingTimeoutTimer = null;
+            if (typeof addEventListener === "function") {
+                if (this.opts.closeOnBeforeunload) {
+                    // Firefox closes the connection when the "beforeunload" event is emitted but not Chrome. This event listener
+                    // ensures every browser behaves the same (no "disconnect" event at the Socket.IO level when the page is
+                    // closed/reloaded)
+                    addEventListener("beforeunload", () => {
+                        if (this.transport) {
+                            // silently close the transport
+                            this.transport.removeAllListeners();
+                            this.transport.close();
+                        }
+                    }, false);
+                }
+                if (this.hostname !== "localhost") {
+                    this.offlineEventListener = () => {
+                        this.onClose("transport close", {
+                            description: "network connection lost"
+                        });
+                    };
+                    addEventListener("offline", this.offlineEventListener, false);
+                }
+            }
+            this.open();
+        }
+        /**
+         * Creates transport of the given type.
+         *
+         * @param {String} transport name
+         * @return {Transport}
+         * @api private
+         */
+        createTransport(name) {
+            const query = Object.assign({}, this.opts.query);
+            // append engine.io protocol identifier
+            query.EIO = protocol$1;
+            // transport name
+            query.transport = name;
+            // session id if we already have one
+            if (this.id)
+                query.sid = this.id;
+            const opts = Object.assign({}, this.opts.transportOptions[name], this.opts, {
+                query,
+                socket: this,
+                hostname: this.hostname,
+                secure: this.secure,
+                port: this.port
+            });
+            return new transports[name](opts);
+        }
+        /**
+         * Initializes transport to use and starts probe.
+         *
+         * @api private
+         */
+        open() {
+            let transport;
+            if (this.opts.rememberUpgrade &&
+                Socket$1.priorWebsocketSuccess &&
+                this.transports.indexOf("websocket") !== -1) {
+                transport = "websocket";
+            }
+            else if (0 === this.transports.length) {
+                // Emit error on next tick so it can be listened to
+                this.setTimeoutFn(() => {
+                    this.emitReserved("error", "No transports available");
+                }, 0);
+                return;
+            }
+            else {
+                transport = this.transports[0];
+            }
+            this.readyState = "opening";
+            // Retry with the next transport if the transport is disabled (jsonp: false)
+            try {
+                transport = this.createTransport(transport);
+            }
+            catch (e) {
+                this.transports.shift();
+                this.open();
+                return;
+            }
+            transport.open();
+            this.setTransport(transport);
+        }
+        /**
+         * Sets the current transport. Disables the existing one (if any).
+         *
+         * @api private
+         */
+        setTransport(transport) {
+            if (this.transport) {
+                this.transport.removeAllListeners();
+            }
+            // set up transport
+            this.transport = transport;
+            // set up transport listeners
+            transport
+                .on("drain", this.onDrain.bind(this))
+                .on("packet", this.onPacket.bind(this))
+                .on("error", this.onError.bind(this))
+                .on("close", reason => this.onClose("transport close", reason));
+        }
+        /**
+         * Probes a transport.
+         *
+         * @param {String} transport name
+         * @api private
+         */
+        probe(name) {
+            let transport = this.createTransport(name);
+            let failed = false;
+            Socket$1.priorWebsocketSuccess = false;
+            const onTransportOpen = () => {
+                if (failed)
+                    return;
+                transport.send([{ type: "ping", data: "probe" }]);
+                transport.once("packet", msg => {
+                    if (failed)
+                        return;
+                    if ("pong" === msg.type && "probe" === msg.data) {
+                        this.upgrading = true;
+                        this.emitReserved("upgrading", transport);
+                        if (!transport)
+                            return;
+                        Socket$1.priorWebsocketSuccess = "websocket" === transport.name;
+                        this.transport.pause(() => {
+                            if (failed)
+                                return;
+                            if ("closed" === this.readyState)
+                                return;
+                            cleanup();
+                            this.setTransport(transport);
+                            transport.send([{ type: "upgrade" }]);
+                            this.emitReserved("upgrade", transport);
+                            transport = null;
+                            this.upgrading = false;
+                            this.flush();
+                        });
+                    }
+                    else {
+                        const err = new Error("probe error");
+                        // @ts-ignore
+                        err.transport = transport.name;
+                        this.emitReserved("upgradeError", err);
+                    }
+                });
+            };
+            function freezeTransport() {
+                if (failed)
+                    return;
+                // Any callback called by transport should be ignored since now
+                failed = true;
+                cleanup();
+                transport.close();
+                transport = null;
+            }
+            // Handle any error that happens while probing
+            const onerror = err => {
+                const error = new Error("probe error: " + err);
+                // @ts-ignore
+                error.transport = transport.name;
+                freezeTransport();
+                this.emitReserved("upgradeError", error);
+            };
+            function onTransportClose() {
+                onerror("transport closed");
+            }
+            // When the socket is closed while we're probing
+            function onclose() {
+                onerror("socket closed");
+            }
+            // When the socket is upgraded while we're probing
+            function onupgrade(to) {
+                if (transport && to.name !== transport.name) {
+                    freezeTransport();
+                }
+            }
+            // Remove all listeners on the transport and on self
+            const cleanup = () => {
+                transport.removeListener("open", onTransportOpen);
+                transport.removeListener("error", onerror);
+                transport.removeListener("close", onTransportClose);
+                this.off("close", onclose);
+                this.off("upgrading", onupgrade);
+            };
+            transport.once("open", onTransportOpen);
+            transport.once("error", onerror);
+            transport.once("close", onTransportClose);
+            this.once("close", onclose);
+            this.once("upgrading", onupgrade);
+            transport.open();
+        }
+        /**
+         * Called when connection is deemed open.
+         *
+         * @api private
+         */
+        onOpen() {
+            this.readyState = "open";
+            Socket$1.priorWebsocketSuccess = "websocket" === this.transport.name;
+            this.emitReserved("open");
+            this.flush();
+            // we check for `readyState` in case an `open`
+            // listener already closed the socket
+            if ("open" === this.readyState &&
+                this.opts.upgrade &&
+                this.transport.pause) {
+                let i = 0;
+                const l = this.upgrades.length;
+                for (; i < l; i++) {
+                    this.probe(this.upgrades[i]);
+                }
+            }
+        }
+        /**
+         * Handles a packet.
+         *
+         * @api private
+         */
+        onPacket(packet) {
+            if ("opening" === this.readyState ||
+                "open" === this.readyState ||
+                "closing" === this.readyState) {
+                this.emitReserved("packet", packet);
+                // Socket is live - any packet counts
+                this.emitReserved("heartbeat");
+                switch (packet.type) {
+                    case "open":
+                        this.onHandshake(JSON.parse(packet.data));
+                        break;
+                    case "ping":
+                        this.resetPingTimeout();
+                        this.sendPacket("pong");
+                        this.emitReserved("ping");
+                        this.emitReserved("pong");
+                        break;
+                    case "error":
+                        const err = new Error("server error");
+                        // @ts-ignore
+                        err.code = packet.data;
+                        this.onError(err);
+                        break;
+                    case "message":
+                        this.emitReserved("data", packet.data);
+                        this.emitReserved("message", packet.data);
+                        break;
+                }
+            }
+        }
+        /**
+         * Called upon handshake completion.
+         *
+         * @param {Object} data - handshake obj
+         * @api private
+         */
+        onHandshake(data) {
+            this.emitReserved("handshake", data);
+            this.id = data.sid;
+            this.transport.query.sid = data.sid;
+            this.upgrades = this.filterUpgrades(data.upgrades);
+            this.pingInterval = data.pingInterval;
+            this.pingTimeout = data.pingTimeout;
+            this.maxPayload = data.maxPayload;
+            this.onOpen();
+            // In case open handler closes socket
+            if ("closed" === this.readyState)
+                return;
+            this.resetPingTimeout();
+        }
+        /**
+         * Sets and resets ping timeout timer based on server pings.
+         *
+         * @api private
+         */
+        resetPingTimeout() {
+            this.clearTimeoutFn(this.pingTimeoutTimer);
+            this.pingTimeoutTimer = this.setTimeoutFn(() => {
+                this.onClose("ping timeout");
+            }, this.pingInterval + this.pingTimeout);
+            if (this.opts.autoUnref) {
+                this.pingTimeoutTimer.unref();
+            }
+        }
+        /**
+         * Called on `drain` event
+         *
+         * @api private
+         */
+        onDrain() {
+            this.writeBuffer.splice(0, this.prevBufferLen);
+            // setting prevBufferLen = 0 is very important
+            // for example, when upgrading, upgrade packet is sent over,
+            // and a nonzero prevBufferLen could cause problems on `drain`
+            this.prevBufferLen = 0;
+            if (0 === this.writeBuffer.length) {
+                this.emitReserved("drain");
+            }
+            else {
+                this.flush();
+            }
+        }
+        /**
+         * Flush write buffers.
+         *
+         * @api private
+         */
+        flush() {
+            if ("closed" !== this.readyState &&
+                this.transport.writable &&
+                !this.upgrading &&
+                this.writeBuffer.length) {
+                const packets = this.getWritablePackets();
+                this.transport.send(packets);
+                // keep track of current length of writeBuffer
+                // splice writeBuffer and callbackBuffer on `drain`
+                this.prevBufferLen = packets.length;
+                this.emitReserved("flush");
+            }
+        }
+        /**
+         * Ensure the encoded size of the writeBuffer is below the maxPayload value sent by the server (only for HTTP
+         * long-polling)
+         *
+         * @private
+         */
+        getWritablePackets() {
+            const shouldCheckPayloadSize = this.maxPayload &&
+                this.transport.name === "polling" &&
+                this.writeBuffer.length > 1;
+            if (!shouldCheckPayloadSize) {
+                return this.writeBuffer;
+            }
+            let payloadSize = 1; // first packet type
+            for (let i = 0; i < this.writeBuffer.length; i++) {
+                const data = this.writeBuffer[i].data;
+                if (data) {
+                    payloadSize += byteLength(data);
+                }
+                if (i > 0 && payloadSize > this.maxPayload) {
+                    return this.writeBuffer.slice(0, i);
+                }
+                payloadSize += 2; // separator + packet type
+            }
+            return this.writeBuffer;
+        }
+        /**
+         * Sends a message.
+         *
+         * @param {String} message.
+         * @param {Function} callback function.
+         * @param {Object} options.
+         * @return {Socket} for chaining.
+         * @api public
+         */
+        write(msg, options, fn) {
+            this.sendPacket("message", msg, options, fn);
+            return this;
+        }
+        send(msg, options, fn) {
+            this.sendPacket("message", msg, options, fn);
+            return this;
+        }
+        /**
+         * Sends a packet.
+         *
+         * @param {String} packet type.
+         * @param {String} data.
+         * @param {Object} options.
+         * @param {Function} callback function.
+         * @api private
+         */
+        sendPacket(type, data, options, fn) {
+            if ("function" === typeof data) {
+                fn = data;
+                data = undefined;
+            }
+            if ("function" === typeof options) {
+                fn = options;
+                options = null;
+            }
+            if ("closing" === this.readyState || "closed" === this.readyState) {
+                return;
+            }
+            options = options || {};
+            options.compress = false !== options.compress;
+            const packet = {
+                type: type,
+                data: data,
+                options: options
+            };
+            this.emitReserved("packetCreate", packet);
+            this.writeBuffer.push(packet);
+            if (fn)
+                this.once("flush", fn);
+            this.flush();
+        }
+        /**
+         * Closes the connection.
+         *
+         * @api public
+         */
+        close() {
+            const close = () => {
+                this.onClose("forced close");
+                this.transport.close();
+            };
+            const cleanupAndClose = () => {
+                this.off("upgrade", cleanupAndClose);
+                this.off("upgradeError", cleanupAndClose);
+                close();
+            };
+            const waitForUpgrade = () => {
+                // wait for upgrade to finish since we can't send packets while pausing a transport
+                this.once("upgrade", cleanupAndClose);
+                this.once("upgradeError", cleanupAndClose);
+            };
+            if ("opening" === this.readyState || "open" === this.readyState) {
+                this.readyState = "closing";
+                if (this.writeBuffer.length) {
+                    this.once("drain", () => {
+                        if (this.upgrading) {
+                            waitForUpgrade();
+                        }
+                        else {
+                            close();
+                        }
+                    });
+                }
+                else if (this.upgrading) {
+                    waitForUpgrade();
+                }
+                else {
+                    close();
+                }
+            }
+            return this;
+        }
+        /**
+         * Called upon transport error
+         *
+         * @api private
+         */
+        onError(err) {
+            Socket$1.priorWebsocketSuccess = false;
+            this.emitReserved("error", err);
+            this.onClose("transport error", err);
+        }
+        /**
+         * Called upon transport close.
+         *
+         * @api private
+         */
+        onClose(reason, description) {
+            if ("opening" === this.readyState ||
+                "open" === this.readyState ||
+                "closing" === this.readyState) {
+                // clear timers
+                this.clearTimeoutFn(this.pingTimeoutTimer);
+                // stop event from firing again for transport
+                this.transport.removeAllListeners("close");
+                // ensure transport won't stay open
+                this.transport.close();
+                // ignore further transport communication
+                this.transport.removeAllListeners();
+                if (typeof removeEventListener === "function") {
+                    removeEventListener("offline", this.offlineEventListener, false);
+                }
+                // set ready state
+                this.readyState = "closed";
+                // clear session id
+                this.id = null;
+                // emit close event
+                this.emitReserved("close", reason, description);
+                // clean buffers after, so users can still
+                // grab the buffers on `close` event
+                this.writeBuffer = [];
+                this.prevBufferLen = 0;
+            }
+        }
+        /**
+         * Filters upgrades, returning only those matching client transports.
+         *
+         * @param {Array} server upgrades
+         * @api private
+         *
+         */
+        filterUpgrades(upgrades) {
+            const filteredUpgrades = [];
+            let i = 0;
+            const j = upgrades.length;
+            for (; i < j; i++) {
+                if (~this.transports.indexOf(upgrades[i]))
+                    filteredUpgrades.push(upgrades[i]);
+            }
+            return filteredUpgrades;
+        }
+    }
+    Socket$1.protocol = protocol$1;
+
+    /**
+     * URL parser.
+     *
+     * @param uri - url
+     * @param path - the request path of the connection
+     * @param loc - An object meant to mimic window.location.
+     *        Defaults to window.location.
+     * @public
+     */
+    function url(uri, path = "", loc) {
+        let obj = uri;
+        // default to window.location
+        loc = loc || (typeof location !== "undefined" && location);
+        if (null == uri)
+            uri = loc.protocol + "//" + loc.host;
+        // relative path support
+        if (typeof uri === "string") {
+            if ("/" === uri.charAt(0)) {
+                if ("/" === uri.charAt(1)) {
+                    uri = loc.protocol + uri;
+                }
+                else {
+                    uri = loc.host + uri;
+                }
+            }
+            if (!/^(https?|wss?):\/\//.test(uri)) {
+                if ("undefined" !== typeof loc) {
+                    uri = loc.protocol + "//" + uri;
+                }
+                else {
+                    uri = "https://" + uri;
+                }
+            }
+            // parse
+            obj = parse(uri);
+        }
+        // make sure we treat `localhost:80` and `localhost` equally
+        if (!obj.port) {
+            if (/^(http|ws)$/.test(obj.protocol)) {
+                obj.port = "80";
+            }
+            else if (/^(http|ws)s$/.test(obj.protocol)) {
+                obj.port = "443";
+            }
+        }
+        obj.path = obj.path || "/";
+        const ipv6 = obj.host.indexOf(":") !== -1;
+        const host = ipv6 ? "[" + obj.host + "]" : obj.host;
+        // define unique id
+        obj.id = obj.protocol + "://" + host + ":" + obj.port + path;
+        // define href
+        obj.href =
+            obj.protocol +
+                "://" +
+                host +
+                (loc && loc.port === obj.port ? "" : ":" + obj.port);
+        return obj;
+    }
+
+    const withNativeArrayBuffer = typeof ArrayBuffer === "function";
+    const isView = (obj) => {
+        return typeof ArrayBuffer.isView === "function"
+            ? ArrayBuffer.isView(obj)
+            : obj.buffer instanceof ArrayBuffer;
+    };
+    const toString = Object.prototype.toString;
+    const withNativeBlob = typeof Blob === "function" ||
+        (typeof Blob !== "undefined" &&
+            toString.call(Blob) === "[object BlobConstructor]");
+    const withNativeFile = typeof File === "function" ||
+        (typeof File !== "undefined" &&
+            toString.call(File) === "[object FileConstructor]");
+    /**
+     * Returns true if obj is a Buffer, an ArrayBuffer, a Blob or a File.
+     *
+     * @private
+     */
+    function isBinary(obj) {
+        return ((withNativeArrayBuffer && (obj instanceof ArrayBuffer || isView(obj))) ||
+            (withNativeBlob && obj instanceof Blob) ||
+            (withNativeFile && obj instanceof File));
+    }
+    function hasBinary(obj, toJSON) {
+        if (!obj || typeof obj !== "object") {
+            return false;
+        }
+        if (Array.isArray(obj)) {
+            for (let i = 0, l = obj.length; i < l; i++) {
+                if (hasBinary(obj[i])) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        if (isBinary(obj)) {
+            return true;
+        }
+        if (obj.toJSON &&
+            typeof obj.toJSON === "function" &&
+            arguments.length === 1) {
+            return hasBinary(obj.toJSON(), true);
+        }
+        for (const key in obj) {
+            if (Object.prototype.hasOwnProperty.call(obj, key) && hasBinary(obj[key])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Replaces every Buffer | ArrayBuffer | Blob | File in packet with a numbered placeholder.
+     *
+     * @param {Object} packet - socket.io event packet
+     * @return {Object} with deconstructed packet and list of buffers
+     * @public
+     */
+    function deconstructPacket(packet) {
+        const buffers = [];
+        const packetData = packet.data;
+        const pack = packet;
+        pack.data = _deconstructPacket(packetData, buffers);
+        pack.attachments = buffers.length; // number of binary 'attachments'
+        return { packet: pack, buffers: buffers };
+    }
+    function _deconstructPacket(data, buffers) {
+        if (!data)
+            return data;
+        if (isBinary(data)) {
+            const placeholder = { _placeholder: true, num: buffers.length };
+            buffers.push(data);
+            return placeholder;
+        }
+        else if (Array.isArray(data)) {
+            const newData = new Array(data.length);
+            for (let i = 0; i < data.length; i++) {
+                newData[i] = _deconstructPacket(data[i], buffers);
+            }
+            return newData;
+        }
+        else if (typeof data === "object" && !(data instanceof Date)) {
+            const newData = {};
+            for (const key in data) {
+                if (Object.prototype.hasOwnProperty.call(data, key)) {
+                    newData[key] = _deconstructPacket(data[key], buffers);
+                }
+            }
+            return newData;
+        }
+        return data;
+    }
+    /**
+     * Reconstructs a binary packet from its placeholder packet and buffers
+     *
+     * @param {Object} packet - event packet with placeholders
+     * @param {Array} buffers - binary buffers to put in placeholder positions
+     * @return {Object} reconstructed packet
+     * @public
+     */
+    function reconstructPacket(packet, buffers) {
+        packet.data = _reconstructPacket(packet.data, buffers);
+        packet.attachments = undefined; // no longer useful
+        return packet;
+    }
+    function _reconstructPacket(data, buffers) {
+        if (!data)
+            return data;
+        if (data && data._placeholder === true) {
+            const isIndexValid = typeof data.num === "number" &&
+                data.num >= 0 &&
+                data.num < buffers.length;
+            if (isIndexValid) {
+                return buffers[data.num]; // appropriate buffer (should be natural order anyway)
+            }
+            else {
+                throw new Error("illegal attachments");
+            }
+        }
+        else if (Array.isArray(data)) {
+            for (let i = 0; i < data.length; i++) {
+                data[i] = _reconstructPacket(data[i], buffers);
+            }
+        }
+        else if (typeof data === "object") {
+            for (const key in data) {
+                if (Object.prototype.hasOwnProperty.call(data, key)) {
+                    data[key] = _reconstructPacket(data[key], buffers);
+                }
+            }
+        }
+        return data;
+    }
+
+    /**
+     * Protocol version.
+     *
+     * @public
+     */
+    const protocol = 5;
+    var PacketType;
+    (function (PacketType) {
+        PacketType[PacketType["CONNECT"] = 0] = "CONNECT";
+        PacketType[PacketType["DISCONNECT"] = 1] = "DISCONNECT";
+        PacketType[PacketType["EVENT"] = 2] = "EVENT";
+        PacketType[PacketType["ACK"] = 3] = "ACK";
+        PacketType[PacketType["CONNECT_ERROR"] = 4] = "CONNECT_ERROR";
+        PacketType[PacketType["BINARY_EVENT"] = 5] = "BINARY_EVENT";
+        PacketType[PacketType["BINARY_ACK"] = 6] = "BINARY_ACK";
+    })(PacketType || (PacketType = {}));
+    /**
+     * A socket.io Encoder instance
+     */
+    class Encoder {
+        /**
+         * Encoder constructor
+         *
+         * @param {function} replacer - custom replacer to pass down to JSON.parse
+         */
+        constructor(replacer) {
+            this.replacer = replacer;
+        }
+        /**
+         * Encode a packet as a single string if non-binary, or as a
+         * buffer sequence, depending on packet type.
+         *
+         * @param {Object} obj - packet object
+         */
+        encode(obj) {
+            if (obj.type === PacketType.EVENT || obj.type === PacketType.ACK) {
+                if (hasBinary(obj)) {
+                    obj.type =
+                        obj.type === PacketType.EVENT
+                            ? PacketType.BINARY_EVENT
+                            : PacketType.BINARY_ACK;
+                    return this.encodeAsBinary(obj);
+                }
+            }
+            return [this.encodeAsString(obj)];
+        }
+        /**
+         * Encode packet as string.
+         */
+        encodeAsString(obj) {
+            // first is type
+            let str = "" + obj.type;
+            // attachments if we have them
+            if (obj.type === PacketType.BINARY_EVENT ||
+                obj.type === PacketType.BINARY_ACK) {
+                str += obj.attachments + "-";
+            }
+            // if we have a namespace other than `/`
+            // we append it followed by a comma `,`
+            if (obj.nsp && "/" !== obj.nsp) {
+                str += obj.nsp + ",";
+            }
+            // immediately followed by the id
+            if (null != obj.id) {
+                str += obj.id;
+            }
+            // json data
+            if (null != obj.data) {
+                str += JSON.stringify(obj.data, this.replacer);
+            }
+            return str;
+        }
+        /**
+         * Encode packet as 'buffer sequence' by removing blobs, and
+         * deconstructing packet into object with placeholders and
+         * a list of buffers.
+         */
+        encodeAsBinary(obj) {
+            const deconstruction = deconstructPacket(obj);
+            const pack = this.encodeAsString(deconstruction.packet);
+            const buffers = deconstruction.buffers;
+            buffers.unshift(pack); // add packet info to beginning of data list
+            return buffers; // write all the buffers
+        }
+    }
+    /**
+     * A socket.io Decoder instance
+     *
+     * @return {Object} decoder
+     */
+    class Decoder extends Emitter {
+        /**
+         * Decoder constructor
+         *
+         * @param {function} reviver - custom reviver to pass down to JSON.stringify
+         */
+        constructor(reviver) {
+            super();
+            this.reviver = reviver;
+        }
+        /**
+         * Decodes an encoded packet string into packet JSON.
+         *
+         * @param {String} obj - encoded packet
+         */
+        add(obj) {
+            let packet;
+            if (typeof obj === "string") {
+                if (this.reconstructor) {
+                    throw new Error("got plaintext data when reconstructing a packet");
+                }
+                packet = this.decodeString(obj);
+                if (packet.type === PacketType.BINARY_EVENT ||
+                    packet.type === PacketType.BINARY_ACK) {
+                    // binary packet's json
+                    this.reconstructor = new BinaryReconstructor(packet);
+                    // no attachments, labeled binary but no binary data to follow
+                    if (packet.attachments === 0) {
+                        super.emitReserved("decoded", packet);
+                    }
+                }
+                else {
+                    // non-binary full packet
+                    super.emitReserved("decoded", packet);
+                }
+            }
+            else if (isBinary(obj) || obj.base64) {
+                // raw binary data
+                if (!this.reconstructor) {
+                    throw new Error("got binary data when not reconstructing a packet");
+                }
+                else {
+                    packet = this.reconstructor.takeBinaryData(obj);
+                    if (packet) {
+                        // received final buffer
+                        this.reconstructor = null;
+                        super.emitReserved("decoded", packet);
+                    }
+                }
+            }
+            else {
+                throw new Error("Unknown type: " + obj);
+            }
+        }
+        /**
+         * Decode a packet String (JSON data)
+         *
+         * @param {String} str
+         * @return {Object} packet
+         */
+        decodeString(str) {
+            let i = 0;
+            // look up type
+            const p = {
+                type: Number(str.charAt(0)),
+            };
+            if (PacketType[p.type] === undefined) {
+                throw new Error("unknown packet type " + p.type);
+            }
+            // look up attachments if type binary
+            if (p.type === PacketType.BINARY_EVENT ||
+                p.type === PacketType.BINARY_ACK) {
+                const start = i + 1;
+                while (str.charAt(++i) !== "-" && i != str.length) { }
+                const buf = str.substring(start, i);
+                if (buf != Number(buf) || str.charAt(i) !== "-") {
+                    throw new Error("Illegal attachments");
+                }
+                p.attachments = Number(buf);
+            }
+            // look up namespace (if any)
+            if ("/" === str.charAt(i + 1)) {
+                const start = i + 1;
+                while (++i) {
+                    const c = str.charAt(i);
+                    if ("," === c)
+                        break;
+                    if (i === str.length)
+                        break;
+                }
+                p.nsp = str.substring(start, i);
+            }
+            else {
+                p.nsp = "/";
+            }
+            // look up id
+            const next = str.charAt(i + 1);
+            if ("" !== next && Number(next) == next) {
+                const start = i + 1;
+                while (++i) {
+                    const c = str.charAt(i);
+                    if (null == c || Number(c) != c) {
+                        --i;
+                        break;
+                    }
+                    if (i === str.length)
+                        break;
+                }
+                p.id = Number(str.substring(start, i + 1));
+            }
+            // look up json data
+            if (str.charAt(++i)) {
+                const payload = this.tryParse(str.substr(i));
+                if (Decoder.isPayloadValid(p.type, payload)) {
+                    p.data = payload;
+                }
+                else {
+                    throw new Error("invalid payload");
+                }
+            }
+            return p;
+        }
+        tryParse(str) {
+            try {
+                return JSON.parse(str, this.reviver);
+            }
+            catch (e) {
+                return false;
+            }
+        }
+        static isPayloadValid(type, payload) {
+            switch (type) {
+                case PacketType.CONNECT:
+                    return typeof payload === "object";
+                case PacketType.DISCONNECT:
+                    return payload === undefined;
+                case PacketType.CONNECT_ERROR:
+                    return typeof payload === "string" || typeof payload === "object";
+                case PacketType.EVENT:
+                case PacketType.BINARY_EVENT:
+                    return Array.isArray(payload) && payload.length > 0;
+                case PacketType.ACK:
+                case PacketType.BINARY_ACK:
+                    return Array.isArray(payload);
+            }
+        }
+        /**
+         * Deallocates a parser's resources
+         */
+        destroy() {
+            if (this.reconstructor) {
+                this.reconstructor.finishedReconstruction();
+            }
+        }
+    }
+    /**
+     * A manager of a binary event's 'buffer sequence'. Should
+     * be constructed whenever a packet of type BINARY_EVENT is
+     * decoded.
+     *
+     * @param {Object} packet
+     * @return {BinaryReconstructor} initialized reconstructor
+     */
+    class BinaryReconstructor {
+        constructor(packet) {
+            this.packet = packet;
+            this.buffers = [];
+            this.reconPack = packet;
+        }
+        /**
+         * Method to be called when binary data received from connection
+         * after a BINARY_EVENT packet.
+         *
+         * @param {Buffer | ArrayBuffer} binData - the raw binary data received
+         * @return {null | Object} returns null if more binary data is expected or
+         *   a reconstructed packet object if all buffers have been received.
+         */
+        takeBinaryData(binData) {
+            this.buffers.push(binData);
+            if (this.buffers.length === this.reconPack.attachments) {
+                // done with buffer list
+                const packet = reconstructPacket(this.reconPack, this.buffers);
+                this.finishedReconstruction();
+                return packet;
+            }
+            return null;
+        }
+        /**
+         * Cleans up binary packet reconstruction variables.
+         */
+        finishedReconstruction() {
+            this.reconPack = null;
+            this.buffers = [];
+        }
+    }
+
+    var parser = /*#__PURE__*/Object.freeze({
+        __proto__: null,
+        protocol: protocol,
+        get PacketType () { return PacketType; },
+        Encoder: Encoder,
+        Decoder: Decoder
+    });
+
+    function on(obj, ev, fn) {
+        obj.on(ev, fn);
+        return function subDestroy() {
+            obj.off(ev, fn);
+        };
+    }
+
+    /**
+     * Internal events.
+     * These events can't be emitted by the user.
+     */
+    const RESERVED_EVENTS = Object.freeze({
+        connect: 1,
+        connect_error: 1,
+        disconnect: 1,
+        disconnecting: 1,
+        // EventEmitter reserved events: https://nodejs.org/api/events.html#events_event_newlistener
+        newListener: 1,
+        removeListener: 1,
+    });
+    class Socket extends Emitter {
+        /**
+         * `Socket` constructor.
+         *
+         * @public
+         */
+        constructor(io, nsp, opts) {
+            super();
+            this.connected = false;
+            this.receiveBuffer = [];
+            this.sendBuffer = [];
+            this.ids = 0;
+            this.acks = {};
+            this.flags = {};
+            this.io = io;
+            this.nsp = nsp;
+            if (opts && opts.auth) {
+                this.auth = opts.auth;
+            }
+            if (this.io._autoConnect)
+                this.open();
+        }
+        /**
+         * Whether the socket is currently disconnected
+         */
+        get disconnected() {
+            return !this.connected;
+        }
+        /**
+         * Subscribe to open, close and packet events
+         *
+         * @private
+         */
+        subEvents() {
+            if (this.subs)
+                return;
+            const io = this.io;
+            this.subs = [
+                on(io, "open", this.onopen.bind(this)),
+                on(io, "packet", this.onpacket.bind(this)),
+                on(io, "error", this.onerror.bind(this)),
+                on(io, "close", this.onclose.bind(this)),
+            ];
+        }
+        /**
+         * Whether the Socket will try to reconnect when its Manager connects or reconnects
+         */
+        get active() {
+            return !!this.subs;
+        }
+        /**
+         * "Opens" the socket.
+         *
+         * @public
+         */
+        connect() {
+            if (this.connected)
+                return this;
+            this.subEvents();
+            if (!this.io["_reconnecting"])
+                this.io.open(); // ensure open
+            if ("open" === this.io._readyState)
+                this.onopen();
+            return this;
+        }
+        /**
+         * Alias for connect()
+         */
+        open() {
+            return this.connect();
+        }
+        /**
+         * Sends a `message` event.
+         *
+         * @return self
+         * @public
+         */
+        send(...args) {
+            args.unshift("message");
+            this.emit.apply(this, args);
+            return this;
+        }
+        /**
+         * Override `emit`.
+         * If the event is in `events`, it's emitted normally.
+         *
+         * @return self
+         * @public
+         */
+        emit(ev, ...args) {
+            if (RESERVED_EVENTS.hasOwnProperty(ev)) {
+                throw new Error('"' + ev + '" is a reserved event name');
+            }
+            args.unshift(ev);
+            const packet = {
+                type: PacketType.EVENT,
+                data: args,
+            };
+            packet.options = {};
+            packet.options.compress = this.flags.compress !== false;
+            // event ack callback
+            if ("function" === typeof args[args.length - 1]) {
+                const id = this.ids++;
+                const ack = args.pop();
+                this._registerAckCallback(id, ack);
+                packet.id = id;
+            }
+            const isTransportWritable = this.io.engine &&
+                this.io.engine.transport &&
+                this.io.engine.transport.writable;
+            const discardPacket = this.flags.volatile && (!isTransportWritable || !this.connected);
+            if (discardPacket) ;
+            else if (this.connected) {
+                this.notifyOutgoingListeners(packet);
+                this.packet(packet);
+            }
+            else {
+                this.sendBuffer.push(packet);
+            }
+            this.flags = {};
+            return this;
+        }
+        /**
+         * @private
+         */
+        _registerAckCallback(id, ack) {
+            const timeout = this.flags.timeout;
+            if (timeout === undefined) {
+                this.acks[id] = ack;
+                return;
+            }
+            // @ts-ignore
+            const timer = this.io.setTimeoutFn(() => {
+                delete this.acks[id];
+                for (let i = 0; i < this.sendBuffer.length; i++) {
+                    if (this.sendBuffer[i].id === id) {
+                        this.sendBuffer.splice(i, 1);
+                    }
+                }
+                ack.call(this, new Error("operation has timed out"));
+            }, timeout);
+            this.acks[id] = (...args) => {
+                // @ts-ignore
+                this.io.clearTimeoutFn(timer);
+                ack.apply(this, [null, ...args]);
+            };
+        }
+        /**
+         * Sends a packet.
+         *
+         * @param packet
+         * @private
+         */
+        packet(packet) {
+            packet.nsp = this.nsp;
+            this.io._packet(packet);
+        }
+        /**
+         * Called upon engine `open`.
+         *
+         * @private
+         */
+        onopen() {
+            if (typeof this.auth == "function") {
+                this.auth((data) => {
+                    this.packet({ type: PacketType.CONNECT, data });
+                });
+            }
+            else {
+                this.packet({ type: PacketType.CONNECT, data: this.auth });
+            }
+        }
+        /**
+         * Called upon engine or manager `error`.
+         *
+         * @param err
+         * @private
+         */
+        onerror(err) {
+            if (!this.connected) {
+                this.emitReserved("connect_error", err);
+            }
+        }
+        /**
+         * Called upon engine `close`.
+         *
+         * @param reason
+         * @param description
+         * @private
+         */
+        onclose(reason, description) {
+            this.connected = false;
+            delete this.id;
+            this.emitReserved("disconnect", reason, description);
+        }
+        /**
+         * Called with socket packet.
+         *
+         * @param packet
+         * @private
+         */
+        onpacket(packet) {
+            const sameNamespace = packet.nsp === this.nsp;
+            if (!sameNamespace)
+                return;
+            switch (packet.type) {
+                case PacketType.CONNECT:
+                    if (packet.data && packet.data.sid) {
+                        const id = packet.data.sid;
+                        this.onconnect(id);
+                    }
+                    else {
+                        this.emitReserved("connect_error", new Error("It seems you are trying to reach a Socket.IO server in v2.x with a v3.x client, but they are not compatible (more information here: https://socket.io/docs/v3/migrating-from-2-x-to-3-0/)"));
+                    }
+                    break;
+                case PacketType.EVENT:
+                case PacketType.BINARY_EVENT:
+                    this.onevent(packet);
+                    break;
+                case PacketType.ACK:
+                case PacketType.BINARY_ACK:
+                    this.onack(packet);
+                    break;
+                case PacketType.DISCONNECT:
+                    this.ondisconnect();
+                    break;
+                case PacketType.CONNECT_ERROR:
+                    this.destroy();
+                    const err = new Error(packet.data.message);
+                    // @ts-ignore
+                    err.data = packet.data.data;
+                    this.emitReserved("connect_error", err);
+                    break;
+            }
+        }
+        /**
+         * Called upon a server event.
+         *
+         * @param packet
+         * @private
+         */
+        onevent(packet) {
+            const args = packet.data || [];
+            if (null != packet.id) {
+                args.push(this.ack(packet.id));
+            }
+            if (this.connected) {
+                this.emitEvent(args);
+            }
+            else {
+                this.receiveBuffer.push(Object.freeze(args));
+            }
+        }
+        emitEvent(args) {
+            if (this._anyListeners && this._anyListeners.length) {
+                const listeners = this._anyListeners.slice();
+                for (const listener of listeners) {
+                    listener.apply(this, args);
+                }
+            }
+            super.emit.apply(this, args);
+        }
+        /**
+         * Produces an ack callback to emit with an event.
+         *
+         * @private
+         */
+        ack(id) {
+            const self = this;
+            let sent = false;
+            return function (...args) {
+                // prevent double callbacks
+                if (sent)
+                    return;
+                sent = true;
+                self.packet({
+                    type: PacketType.ACK,
+                    id: id,
+                    data: args,
+                });
+            };
+        }
+        /**
+         * Called upon a server acknowlegement.
+         *
+         * @param packet
+         * @private
+         */
+        onack(packet) {
+            const ack = this.acks[packet.id];
+            if ("function" === typeof ack) {
+                ack.apply(this, packet.data);
+                delete this.acks[packet.id];
+            }
+        }
+        /**
+         * Called upon server connect.
+         *
+         * @private
+         */
+        onconnect(id) {
+            this.id = id;
+            this.connected = true;
+            this.emitBuffered();
+            this.emitReserved("connect");
+        }
+        /**
+         * Emit buffered events (received and emitted).
+         *
+         * @private
+         */
+        emitBuffered() {
+            this.receiveBuffer.forEach((args) => this.emitEvent(args));
+            this.receiveBuffer = [];
+            this.sendBuffer.forEach((packet) => {
+                this.notifyOutgoingListeners(packet);
+                this.packet(packet);
+            });
+            this.sendBuffer = [];
+        }
+        /**
+         * Called upon server disconnect.
+         *
+         * @private
+         */
+        ondisconnect() {
+            this.destroy();
+            this.onclose("io server disconnect");
+        }
+        /**
+         * Called upon forced client/server side disconnections,
+         * this method ensures the manager stops tracking us and
+         * that reconnections don't get triggered for this.
+         *
+         * @private
+         */
+        destroy() {
+            if (this.subs) {
+                // clean subscriptions to avoid reconnections
+                this.subs.forEach((subDestroy) => subDestroy());
+                this.subs = undefined;
+            }
+            this.io["_destroy"](this);
+        }
+        /**
+         * Disconnects the socket manually.
+         *
+         * @return self
+         * @public
+         */
+        disconnect() {
+            if (this.connected) {
+                this.packet({ type: PacketType.DISCONNECT });
+            }
+            // remove socket from pool
+            this.destroy();
+            if (this.connected) {
+                // fire events
+                this.onclose("io client disconnect");
+            }
+            return this;
+        }
+        /**
+         * Alias for disconnect()
+         *
+         * @return self
+         * @public
+         */
+        close() {
+            return this.disconnect();
+        }
+        /**
+         * Sets the compress flag.
+         *
+         * @param compress - if `true`, compresses the sending data
+         * @return self
+         * @public
+         */
+        compress(compress) {
+            this.flags.compress = compress;
+            return this;
+        }
+        /**
+         * Sets a modifier for a subsequent event emission that the event message will be dropped when this socket is not
+         * ready to send messages.
+         *
+         * @returns self
+         * @public
+         */
+        get volatile() {
+            this.flags.volatile = true;
+            return this;
+        }
+        /**
+         * Sets a modifier for a subsequent event emission that the callback will be called with an error when the
+         * given number of milliseconds have elapsed without an acknowledgement from the server:
+         *
+         * ```
+         * socket.timeout(5000).emit("my-event", (err) => {
+         *   if (err) {
+         *     // the server did not acknowledge the event in the given delay
+         *   }
+         * });
+         * ```
+         *
+         * @returns self
+         * @public
+         */
+        timeout(timeout) {
+            this.flags.timeout = timeout;
+            return this;
+        }
+        /**
+         * Adds a listener that will be fired when any event is emitted. The event name is passed as the first argument to the
+         * callback.
+         *
+         * @param listener
+         * @public
+         */
+        onAny(listener) {
+            this._anyListeners = this._anyListeners || [];
+            this._anyListeners.push(listener);
+            return this;
+        }
+        /**
+         * Adds a listener that will be fired when any event is emitted. The event name is passed as the first argument to the
+         * callback. The listener is added to the beginning of the listeners array.
+         *
+         * @param listener
+         * @public
+         */
+        prependAny(listener) {
+            this._anyListeners = this._anyListeners || [];
+            this._anyListeners.unshift(listener);
+            return this;
+        }
+        /**
+         * Removes the listener that will be fired when any event is emitted.
+         *
+         * @param listener
+         * @public
+         */
+        offAny(listener) {
+            if (!this._anyListeners) {
+                return this;
+            }
+            if (listener) {
+                const listeners = this._anyListeners;
+                for (let i = 0; i < listeners.length; i++) {
+                    if (listener === listeners[i]) {
+                        listeners.splice(i, 1);
+                        return this;
+                    }
+                }
+            }
+            else {
+                this._anyListeners = [];
+            }
+            return this;
+        }
+        /**
+         * Returns an array of listeners that are listening for any event that is specified. This array can be manipulated,
+         * e.g. to remove listeners.
+         *
+         * @public
+         */
+        listenersAny() {
+            return this._anyListeners || [];
+        }
+        /**
+         * Adds a listener that will be fired when any event is emitted. The event name is passed as the first argument to the
+         * callback.
+         *
+         * @param listener
+         *
+         * <pre><code>
+         *
+         * socket.onAnyOutgoing((event, ...args) => {
+         *   console.log(event);
+         * });
+         *
+         * </pre></code>
+         *
+         * @public
+         */
+        onAnyOutgoing(listener) {
+            this._anyOutgoingListeners = this._anyOutgoingListeners || [];
+            this._anyOutgoingListeners.push(listener);
+            return this;
+        }
+        /**
+         * Adds a listener that will be fired when any event is emitted. The event name is passed as the first argument to the
+         * callback. The listener is added to the beginning of the listeners array.
+         *
+         * @param listener
+         *
+         * <pre><code>
+         *
+         * socket.prependAnyOutgoing((event, ...args) => {
+         *   console.log(event);
+         * });
+         *
+         * </pre></code>
+         *
+         * @public
+         */
+        prependAnyOutgoing(listener) {
+            this._anyOutgoingListeners = this._anyOutgoingListeners || [];
+            this._anyOutgoingListeners.unshift(listener);
+            return this;
+        }
+        /**
+         * Removes the listener that will be fired when any event is emitted.
+         *
+         * @param listener
+         *
+         * <pre><code>
+         *
+         * const handler = (event, ...args) => {
+         *   console.log(event);
+         * }
+         *
+         * socket.onAnyOutgoing(handler);
+         *
+         * // then later
+         * socket.offAnyOutgoing(handler);
+         *
+         * </pre></code>
+         *
+         * @public
+         */
+        offAnyOutgoing(listener) {
+            if (!this._anyOutgoingListeners) {
+                return this;
+            }
+            if (listener) {
+                const listeners = this._anyOutgoingListeners;
+                for (let i = 0; i < listeners.length; i++) {
+                    if (listener === listeners[i]) {
+                        listeners.splice(i, 1);
+                        return this;
+                    }
+                }
+            }
+            else {
+                this._anyOutgoingListeners = [];
+            }
+            return this;
+        }
+        /**
+         * Returns an array of listeners that are listening for any event that is specified. This array can be manipulated,
+         * e.g. to remove listeners.
+         *
+         * @public
+         */
+        listenersAnyOutgoing() {
+            return this._anyOutgoingListeners || [];
+        }
+        /**
+         * Notify the listeners for each packet sent
+         *
+         * @param packet
+         *
+         * @private
+         */
+        notifyOutgoingListeners(packet) {
+            if (this._anyOutgoingListeners && this._anyOutgoingListeners.length) {
+                const listeners = this._anyOutgoingListeners.slice();
+                for (const listener of listeners) {
+                    listener.apply(this, packet.data);
+                }
+            }
+        }
+    }
+
+    /**
+     * Initialize backoff timer with `opts`.
+     *
+     * - `min` initial timeout in milliseconds [100]
+     * - `max` max timeout [10000]
+     * - `jitter` [0]
+     * - `factor` [2]
+     *
+     * @param {Object} opts
+     * @api public
+     */
+    function Backoff(opts) {
+        opts = opts || {};
+        this.ms = opts.min || 100;
+        this.max = opts.max || 10000;
+        this.factor = opts.factor || 2;
+        this.jitter = opts.jitter > 0 && opts.jitter <= 1 ? opts.jitter : 0;
+        this.attempts = 0;
+    }
+    /**
+     * Return the backoff duration.
+     *
+     * @return {Number}
+     * @api public
+     */
+    Backoff.prototype.duration = function () {
+        var ms = this.ms * Math.pow(this.factor, this.attempts++);
+        if (this.jitter) {
+            var rand = Math.random();
+            var deviation = Math.floor(rand * this.jitter * ms);
+            ms = (Math.floor(rand * 10) & 1) == 0 ? ms - deviation : ms + deviation;
+        }
+        return Math.min(ms, this.max) | 0;
+    };
+    /**
+     * Reset the number of attempts.
+     *
+     * @api public
+     */
+    Backoff.prototype.reset = function () {
+        this.attempts = 0;
+    };
+    /**
+     * Set the minimum duration
+     *
+     * @api public
+     */
+    Backoff.prototype.setMin = function (min) {
+        this.ms = min;
+    };
+    /**
+     * Set the maximum duration
+     *
+     * @api public
+     */
+    Backoff.prototype.setMax = function (max) {
+        this.max = max;
+    };
+    /**
+     * Set the jitter
+     *
+     * @api public
+     */
+    Backoff.prototype.setJitter = function (jitter) {
+        this.jitter = jitter;
+    };
+
+    class Manager extends Emitter {
+        constructor(uri, opts) {
+            var _a;
+            super();
+            this.nsps = {};
+            this.subs = [];
+            if (uri && "object" === typeof uri) {
+                opts = uri;
+                uri = undefined;
+            }
+            opts = opts || {};
+            opts.path = opts.path || "/socket.io";
+            this.opts = opts;
+            installTimerFunctions(this, opts);
+            this.reconnection(opts.reconnection !== false);
+            this.reconnectionAttempts(opts.reconnectionAttempts || Infinity);
+            this.reconnectionDelay(opts.reconnectionDelay || 1000);
+            this.reconnectionDelayMax(opts.reconnectionDelayMax || 5000);
+            this.randomizationFactor((_a = opts.randomizationFactor) !== null && _a !== void 0 ? _a : 0.5);
+            this.backoff = new Backoff({
+                min: this.reconnectionDelay(),
+                max: this.reconnectionDelayMax(),
+                jitter: this.randomizationFactor(),
+            });
+            this.timeout(null == opts.timeout ? 20000 : opts.timeout);
+            this._readyState = "closed";
+            this.uri = uri;
+            const _parser = opts.parser || parser;
+            this.encoder = new _parser.Encoder();
+            this.decoder = new _parser.Decoder();
+            this._autoConnect = opts.autoConnect !== false;
+            if (this._autoConnect)
+                this.open();
+        }
+        reconnection(v) {
+            if (!arguments.length)
+                return this._reconnection;
+            this._reconnection = !!v;
+            return this;
+        }
+        reconnectionAttempts(v) {
+            if (v === undefined)
+                return this._reconnectionAttempts;
+            this._reconnectionAttempts = v;
+            return this;
+        }
+        reconnectionDelay(v) {
+            var _a;
+            if (v === undefined)
+                return this._reconnectionDelay;
+            this._reconnectionDelay = v;
+            (_a = this.backoff) === null || _a === void 0 ? void 0 : _a.setMin(v);
+            return this;
+        }
+        randomizationFactor(v) {
+            var _a;
+            if (v === undefined)
+                return this._randomizationFactor;
+            this._randomizationFactor = v;
+            (_a = this.backoff) === null || _a === void 0 ? void 0 : _a.setJitter(v);
+            return this;
+        }
+        reconnectionDelayMax(v) {
+            var _a;
+            if (v === undefined)
+                return this._reconnectionDelayMax;
+            this._reconnectionDelayMax = v;
+            (_a = this.backoff) === null || _a === void 0 ? void 0 : _a.setMax(v);
+            return this;
+        }
+        timeout(v) {
+            if (!arguments.length)
+                return this._timeout;
+            this._timeout = v;
+            return this;
+        }
+        /**
+         * Starts trying to reconnect if reconnection is enabled and we have not
+         * started reconnecting yet
+         *
+         * @private
+         */
+        maybeReconnectOnOpen() {
+            // Only try to reconnect if it's the first time we're connecting
+            if (!this._reconnecting &&
+                this._reconnection &&
+                this.backoff.attempts === 0) {
+                // keeps reconnection from firing twice for the same reconnection loop
+                this.reconnect();
+            }
+        }
+        /**
+         * Sets the current transport `socket`.
+         *
+         * @param {Function} fn - optional, callback
+         * @return self
+         * @public
+         */
+        open(fn) {
+            if (~this._readyState.indexOf("open"))
+                return this;
+            this.engine = new Socket$1(this.uri, this.opts);
+            const socket = this.engine;
+            const self = this;
+            this._readyState = "opening";
+            this.skipReconnect = false;
+            // emit `open`
+            const openSubDestroy = on(socket, "open", function () {
+                self.onopen();
+                fn && fn();
+            });
+            // emit `error`
+            const errorSub = on(socket, "error", (err) => {
+                self.cleanup();
+                self._readyState = "closed";
+                this.emitReserved("error", err);
+                if (fn) {
+                    fn(err);
+                }
+                else {
+                    // Only do this if there is no fn to handle the error
+                    self.maybeReconnectOnOpen();
+                }
+            });
+            if (false !== this._timeout) {
+                const timeout = this._timeout;
+                if (timeout === 0) {
+                    openSubDestroy(); // prevents a race condition with the 'open' event
+                }
+                // set timer
+                const timer = this.setTimeoutFn(() => {
+                    openSubDestroy();
+                    socket.close();
+                    // @ts-ignore
+                    socket.emit("error", new Error("timeout"));
+                }, timeout);
+                if (this.opts.autoUnref) {
+                    timer.unref();
+                }
+                this.subs.push(function subDestroy() {
+                    clearTimeout(timer);
+                });
+            }
+            this.subs.push(openSubDestroy);
+            this.subs.push(errorSub);
+            return this;
+        }
+        /**
+         * Alias for open()
+         *
+         * @return self
+         * @public
+         */
+        connect(fn) {
+            return this.open(fn);
+        }
+        /**
+         * Called upon transport open.
+         *
+         * @private
+         */
+        onopen() {
+            // clear old subs
+            this.cleanup();
+            // mark as open
+            this._readyState = "open";
+            this.emitReserved("open");
+            // add new subs
+            const socket = this.engine;
+            this.subs.push(on(socket, "ping", this.onping.bind(this)), on(socket, "data", this.ondata.bind(this)), on(socket, "error", this.onerror.bind(this)), on(socket, "close", this.onclose.bind(this)), on(this.decoder, "decoded", this.ondecoded.bind(this)));
+        }
+        /**
+         * Called upon a ping.
+         *
+         * @private
+         */
+        onping() {
+            this.emitReserved("ping");
+        }
+        /**
+         * Called with data.
+         *
+         * @private
+         */
+        ondata(data) {
+            this.decoder.add(data);
+        }
+        /**
+         * Called when parser fully decodes a packet.
+         *
+         * @private
+         */
+        ondecoded(packet) {
+            this.emitReserved("packet", packet);
+        }
+        /**
+         * Called upon socket error.
+         *
+         * @private
+         */
+        onerror(err) {
+            this.emitReserved("error", err);
+        }
+        /**
+         * Creates a new socket for the given `nsp`.
+         *
+         * @return {Socket}
+         * @public
+         */
+        socket(nsp, opts) {
+            let socket = this.nsps[nsp];
+            if (!socket) {
+                socket = new Socket(this, nsp, opts);
+                this.nsps[nsp] = socket;
+            }
+            return socket;
+        }
+        /**
+         * Called upon a socket close.
+         *
+         * @param socket
+         * @private
+         */
+        _destroy(socket) {
+            const nsps = Object.keys(this.nsps);
+            for (const nsp of nsps) {
+                const socket = this.nsps[nsp];
+                if (socket.active) {
+                    return;
+                }
+            }
+            this._close();
+        }
+        /**
+         * Writes a packet.
+         *
+         * @param packet
+         * @private
+         */
+        _packet(packet) {
+            const encodedPackets = this.encoder.encode(packet);
+            for (let i = 0; i < encodedPackets.length; i++) {
+                this.engine.write(encodedPackets[i], packet.options);
+            }
+        }
+        /**
+         * Clean up transport subscriptions and packet buffer.
+         *
+         * @private
+         */
+        cleanup() {
+            this.subs.forEach((subDestroy) => subDestroy());
+            this.subs.length = 0;
+            this.decoder.destroy();
+        }
+        /**
+         * Close the current socket.
+         *
+         * @private
+         */
+        _close() {
+            this.skipReconnect = true;
+            this._reconnecting = false;
+            this.onclose("forced close");
+            if (this.engine)
+                this.engine.close();
+        }
+        /**
+         * Alias for close()
+         *
+         * @private
+         */
+        disconnect() {
+            return this._close();
+        }
+        /**
+         * Called upon engine close.
+         *
+         * @private
+         */
+        onclose(reason, description) {
+            this.cleanup();
+            this.backoff.reset();
+            this._readyState = "closed";
+            this.emitReserved("close", reason, description);
+            if (this._reconnection && !this.skipReconnect) {
+                this.reconnect();
+            }
+        }
+        /**
+         * Attempt a reconnection.
+         *
+         * @private
+         */
+        reconnect() {
+            if (this._reconnecting || this.skipReconnect)
+                return this;
+            const self = this;
+            if (this.backoff.attempts >= this._reconnectionAttempts) {
+                this.backoff.reset();
+                this.emitReserved("reconnect_failed");
+                this._reconnecting = false;
+            }
+            else {
+                const delay = this.backoff.duration();
+                this._reconnecting = true;
+                const timer = this.setTimeoutFn(() => {
+                    if (self.skipReconnect)
+                        return;
+                    this.emitReserved("reconnect_attempt", self.backoff.attempts);
+                    // check again for the case socket closed in above events
+                    if (self.skipReconnect)
+                        return;
+                    self.open((err) => {
+                        if (err) {
+                            self._reconnecting = false;
+                            self.reconnect();
+                            this.emitReserved("reconnect_error", err);
+                        }
+                        else {
+                            self.onreconnect();
+                        }
+                    });
+                }, delay);
+                if (this.opts.autoUnref) {
+                    timer.unref();
+                }
+                this.subs.push(function subDestroy() {
+                    clearTimeout(timer);
+                });
+            }
+        }
+        /**
+         * Called upon successful reconnect.
+         *
+         * @private
+         */
+        onreconnect() {
+            const attempt = this.backoff.attempts;
+            this._reconnecting = false;
+            this.backoff.reset();
+            this.emitReserved("reconnect", attempt);
+        }
+    }
+
+    /**
+     * Managers cache.
+     */
+    const cache = {};
+    function lookup(uri, opts) {
+        if (typeof uri === "object") {
+            opts = uri;
+            uri = undefined;
+        }
+        opts = opts || {};
+        const parsed = url(uri, opts.path || "/socket.io");
+        const source = parsed.source;
+        const id = parsed.id;
+        const path = parsed.path;
+        const sameNamespace = cache[id] && path in cache[id]["nsps"];
+        const newConnection = opts.forceNew ||
+            opts["force new connection"] ||
+            false === opts.multiplex ||
+            sameNamespace;
+        let io;
+        if (newConnection) {
+            io = new Manager(source, opts);
+        }
+        else {
+            if (!cache[id]) {
+                cache[id] = new Manager(source, opts);
+            }
+            io = cache[id];
+        }
+        if (parsed.query && !opts.query) {
+            opts.query = parsed.queryKey;
+        }
+        return io.socket(parsed.path, opts);
+    }
+    // so that "lookup" can be used both as a function (e.g. `io(...)`) and as a
+    // namespace (e.g. `io.connect(...)`), for backward compatibility
+    Object.assign(lookup, {
+        Manager,
+        Socket,
+        io: lookup,
+        connect: lookup,
+    });
+
+    const setObject = function (key, value) {
+        localStorage.setItem(key, JSON.stringify(value));
+    };
+
+    const getObject = function (key) {
+        let value = localStorage.getItem(key);
+        if (value === "undefined") return {};
+        try {
+            value = JSON.parse(value);
+        } catch (err) {
+            console.log(err);
+        }
+        return value;
+    };
+
+    const initConfig = {
+      order: {
+        Content: "",
+        Mangas: "",
+        Videos: "'",
+      },
+      items: 0,
+    };
+
+    const PageConfig = writable(getObject("config") || initConfig);
+
+    const updateConfig = async (config) => {
+      PageConfig.update((cfg) => (config));
+      setObject("config", config);
+      return config;
+    };
+
+    /* src\ShareComponent\Config.svelte generated by Svelte v3.49.0 */
+
+    function create_if_block$k(ctx) {
+    	let div5;
+    	let div1;
+    	let div0;
+    	let t1;
+    	let select;
+    	let option0;
+    	let option1;
+    	let option2;
+    	let option3;
+    	let t6;
+    	let div3;
+    	let div2;
+    	let t8;
+    	let input;
+    	let t9;
+    	let span0;
+    	let t11;
+    	let div4;
+    	let span1;
+    	let mounted;
+    	let dispose;
+
+    	return {
+    		c() {
+    			div5 = element("div");
+    			div1 = element("div");
+    			div0 = element("div");
+    			div0.innerHTML = `<label for="orderby" class="input-group-text svelte-1kmdy4">Sort By:</label>`;
+    			t1 = space();
+    			select = element("select");
+    			option0 = element("option");
+    			option0.textContent = " Name";
+    			option1 = element("option");
+    			option1.textContent = " Name";
+    			option2 = element("option");
+    			option2.textContent = " Date";
+    			option3 = element("option");
+    			option3.textContent = " Date";
+    			t6 = space();
+    			div3 = element("div");
+    			div2 = element("div");
+    			div2.innerHTML = `<label for="items" class="input-group-text svelte-1kmdy4">File per Page:</label>`;
+    			t8 = space();
+    			input = element("input");
+    			t9 = space();
+    			span0 = element("span");
+    			span0.textContent = "0 = auto, max 500";
+    			t11 = space();
+    			div4 = element("div");
+    			span1 = element("span");
+    			span1.textContent = "Save";
+    			attr(div0, "class", "input-group-prepend svelte-1kmdy4");
+    			option0.__value = "nu";
+    			option0.value = option0.__value;
+    			attr(option0, "class", "svelte-1kmdy4");
+    			option1.__value = "nd";
+    			option1.value = option1.__value;
+    			attr(option1, "class", "svelte-1kmdy4");
+    			option2.__value = "du";
+    			option2.value = option2.__value;
+    			attr(option2, "class", "svelte-1kmdy4");
+    			option3.__value = "dd";
+    			option3.value = option3.__value;
+    			attr(option3, "class", "svelte-1kmdy4");
+    			attr(select, "id", "orderby");
+    			attr(select, "class", "form-control fa svelte-1kmdy4");
+    			if (/*Config*/ ctx[1].order[document.title.split(" ")[0]] === void 0) add_render_callback(() => /*select_change_handler*/ ctx[4].call(select));
+    			attr(div1, "class", "input-group svelte-1kmdy4");
+    			attr(div2, "class", "input-group-prepend svelte-1kmdy4");
+    			attr(input, "id", "items");
+    			attr(input, "type", "number");
+    			attr(input, "min", "0");
+    			attr(input, "max", "500");
+    			attr(input, "class", "form-control svelte-1kmdy4");
+    			attr(span0, "id", "fpp-tips");
+    			attr(span0, "class", "svelte-1kmdy4");
+    			attr(div3, "class", "input-group svelte-1kmdy4");
+    			attr(span1, "id", "btn-save");
+    			attr(span1, "class", "btn svelte-1kmdy4");
+    			attr(div4, "class", "bottom-controls svelte-1kmdy4");
+    			attr(div5, "id", "config-content");
+    			attr(div5, "class", "svelte-1kmdy4");
+    		},
+    		m(target, anchor) {
+    			insert(target, div5, anchor);
+    			append(div5, div1);
+    			append(div1, div0);
+    			append(div1, t1);
+    			append(div1, select);
+    			append(select, option0);
+    			append(select, option1);
+    			append(select, option2);
+    			append(select, option3);
+    			select_option(select, /*Config*/ ctx[1].order[document.title.split(" ")[0]]);
+    			append(div5, t6);
+    			append(div5, div3);
+    			append(div3, div2);
+    			append(div3, t8);
+    			append(div3, input);
+    			set_input_value(input, /*Config*/ ctx[1].items);
+    			append(div3, t9);
+    			append(div3, span0);
+    			append(div5, t11);
+    			append(div5, div4);
+    			append(div4, span1);
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(select, "change", /*select_change_handler*/ ctx[4]),
+    					listen(input, "input", /*input_input_handler*/ ctx[5]),
+    					listen(span1, "click", /*applyChanges*/ ctx[2])
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*Config, document*/ 2) {
+    				select_option(select, /*Config*/ ctx[1].order[document.title.split(" ")[0]]);
+    			}
+
+    			if (dirty & /*Config*/ 2 && to_number(input.value) !== /*Config*/ ctx[1].items) {
+    				set_input_value(input, /*Config*/ ctx[1].items);
+    			}
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div5);
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    function create_fragment$y(ctx) {
+    	let label;
+    	let i0;
+    	let t0;
+    	let span0;
+    	let t1_value = /*User*/ ctx[0].username + "";
+    	let t1;
+    	let label_class_value;
+    	let t2;
+    	let input;
+    	let t3;
+    	let div1;
+    	let div0;
+    	let span1;
+    	let t5;
+    	let show_if = !/*User*/ ctx[0].role.includes("Administrator");
+    	let div1_class_value;
+    	let mounted;
+    	let dispose;
+    	let if_block = show_if && create_if_block$k(ctx);
+
+    	return {
+    		c() {
+    			label = element("label");
+    			i0 = element("i");
+    			t0 = space();
+    			span0 = element("span");
+    			t1 = text(t1_value);
+    			t2 = space();
+    			input = element("input");
+    			t3 = space();
+    			div1 = element("div");
+    			div0 = element("div");
+    			span1 = element("span");
+    			span1.innerHTML = `<i class="fas fa-sign-out-alt"></i> Log out`;
+    			t5 = space();
+    			if (if_block) if_block.c();
+    			attr(i0, "class", "fas fa-user-cog");
+    			attr(span0, "class", "nav-title svelte-1kmdy4");
+    			attr(label, "id", "user-label");
+    			attr(label, "class", label_class_value = "" + (null_to_empty(/*User*/ ctx[0].role) + " svelte-1kmdy4"));
+    			attr(label, "for", "show-config");
+    			attr(input, "type", "checkbox");
+    			attr(input, "name", "");
+    			attr(input, "id", "show-config");
+    			attr(input, "class", "svelte-1kmdy4");
+    			attr(span1, "class", "svelte-1kmdy4");
+    			attr(div0, "id", "sep");
+    			attr(div0, "class", "svelte-1kmdy4");
+    			attr(div1, "id", "user-config");
+
+    			attr(div1, "class", div1_class_value = "" + (null_to_empty(/*User*/ ctx[0].role.includes("User")
+    			? "user-config"
+    			: "admin-config") + " svelte-1kmdy4"));
+    		},
+    		m(target, anchor) {
+    			insert(target, label, anchor);
+    			append(label, i0);
+    			append(label, t0);
+    			append(label, span0);
+    			append(span0, t1);
+    			insert(target, t2, anchor);
+    			insert(target, input, anchor);
+    			insert(target, t3, anchor);
+    			insert(target, div1, anchor);
+    			append(div1, div0);
+    			append(div0, span1);
+    			append(div1, t5);
+    			if (if_block) if_block.m(div1, null);
+
+    			if (!mounted) {
+    				dispose = listen(span1, "click", /*click_handler*/ ctx[3]);
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, [dirty]) {
+    			if (dirty & /*User*/ 1 && t1_value !== (t1_value = /*User*/ ctx[0].username + "")) set_data(t1, t1_value);
+
+    			if (dirty & /*User*/ 1 && label_class_value !== (label_class_value = "" + (null_to_empty(/*User*/ ctx[0].role) + " svelte-1kmdy4"))) {
+    				attr(label, "class", label_class_value);
+    			}
+
+    			if (dirty & /*User*/ 1) show_if = !/*User*/ ctx[0].role.includes("Administrator");
+
+    			if (show_if) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+    				} else {
+    					if_block = create_if_block$k(ctx);
+    					if_block.c();
+    					if_block.m(div1, null);
+    				}
+    			} else if (if_block) {
+    				if_block.d(1);
+    				if_block = null;
+    			}
+
+    			if (dirty & /*User*/ 1 && div1_class_value !== (div1_class_value = "" + (null_to_empty(/*User*/ ctx[0].role.includes("User")
+    			? "user-config"
+    			: "admin-config") + " svelte-1kmdy4"))) {
+    				attr(div1, "class", div1_class_value);
+    			}
+    		},
+    		i: noop,
+    		o: noop,
+    		d(detaching) {
+    			if (detaching) detach(label);
+    			if (detaching) detach(t2);
+    			if (detaching) detach(input);
+    			if (detaching) detach(t3);
+    			if (detaching) detach(div1);
+    			if (if_block) if_block.d();
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+    }
+
+    function instance$y($$self, $$props, $$invalidate) {
+    	let $PageConfig;
+    	component_subscribe($$self, PageConfig, $$value => $$invalidate(7, $PageConfig = $$value));
+    	let { User } = $$props;
+    	document.title.split(" ")[0];
+    	const Config = { ...$PageConfig };
+
+    	const applyChanges = () => {
+    		updateConfig(Config);
+    	};
+
+    	const observer = new MutationObserver(([{ target }]) => document.title.split(" ")[0]);
+    	observer.observe(document.querySelector("title"), { childList: true });
+
+    	function click_handler(event) {
+    		bubble.call(this, $$self, event);
+    	}
+
+    	function select_change_handler() {
+    		Config.order[document.title.split(" ")[0]] = select_value(this);
+    		$$invalidate(1, Config);
+    	}
+
+    	function input_input_handler() {
+    		Config.items = to_number(this.value);
+    		$$invalidate(1, Config);
+    	}
+
+    	$$self.$$set = $$props => {
+    		if ('User' in $$props) $$invalidate(0, User = $$props.User);
+    	};
+
+    	return [
+    		User,
+    		Config,
+    		applyChanges,
+    		click_handler,
+    		select_change_handler,
+    		input_input_handler
+    	];
+    }
+
+    class Config_1 extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$y, create_fragment$y, safe_not_equal, { User: 0 });
+    	}
+    }
+
+    const ToggleMenu = writable(false);
+
+    const updateToggleMenu = async (newVal) => {
+      ToggleMenu.update((value) => (newVal !== undefined ? newVal : !value));
+    };
+
+    /* src\ShareComponent\Navbar.svelte generated by Svelte v3.49.0 */
+
+    function get_each_context$b(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[10] = list[i];
+    	return child_ctx;
+    }
+
+    function get_each_context_1(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[13] = list[i].Id;
+    	child_ctx[14] = list[i].Name;
+    	return child_ctx;
+    }
+
+    // (81:6) {:else}
+    function create_else_block$b(ctx) {
+    	let li;
+    	let link;
+    	let t;
+    	let current;
+
+    	link = new Link({
+    			props: {
+    				to: /*item*/ ctx[10].path,
+    				getProps,
+    				$$slots: { default: [create_default_slot_1$1] },
+    				$$scope: { ctx }
+    			}
+    		});
+
+    	return {
+    		c() {
+    			li = element("li");
+    			create_component(link.$$.fragment);
+    			t = space();
+    			attr(li, "class", "nav-item svelte-18k938q");
+    		},
+    		m(target, anchor) {
+    			insert(target, li, anchor);
+    			mount_component(link, li, null);
+    			append(li, t);
+    			current = true;
+    		},
+    		p(ctx, dirty) {
+    			const link_changes = {};
+    			if (dirty & /*navItems*/ 1) link_changes.to = /*item*/ ctx[10].path;
+
+    			if (dirty & /*$$scope, navItems*/ 131073) {
+    				link_changes.$$scope = { dirty, ctx };
+    			}
+
+    			link.$set(link_changes);
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(link.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(link.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(li);
+    			destroy_component(link);
+    		}
+    	};
+    }
+
+    // (57:6) {#if ["Mangas", "Videos"].includes(item.title)}
+    function create_if_block$j(ctx) {
+    	let if_block_anchor;
+    	let current;
+    	let if_block = /*dirs*/ ctx[1] && create_if_block_1$8(ctx);
+
+    	return {
+    		c() {
+    			if (if_block) if_block.c();
+    			if_block_anchor = empty$1();
+    		},
+    		m(target, anchor) {
+    			if (if_block) if_block.m(target, anchor);
+    			insert(target, if_block_anchor, anchor);
+    			current = true;
+    		},
+    		p(ctx, dirty) {
+    			if (/*dirs*/ ctx[1]) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+
+    					if (dirty & /*dirs*/ 2) {
+    						transition_in(if_block, 1);
+    					}
+    				} else {
+    					if_block = create_if_block_1$8(ctx);
+    					if_block.c();
+    					transition_in(if_block, 1);
+    					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+    				}
+    			} else if (if_block) {
+    				group_outros();
+
+    				transition_out(if_block, 1, 1, () => {
+    					if_block = null;
+    				});
+
+    				check_outros();
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(if_block);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(if_block);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (if_block) if_block.d(detaching);
+    			if (detaching) detach(if_block_anchor);
+    		}
+    	};
+    }
+
+    // (83:10) <Link to={item.path} {getProps}>
+    function create_default_slot_1$1(ctx) {
+    	let i;
+    	let i_class_value;
+    	let t0;
+    	let span;
+    	let t1_value = /*item*/ ctx[10].title + "";
+    	let t1;
+
+    	return {
+    		c() {
+    			i = element("i");
+    			t0 = space();
+    			span = element("span");
+    			t1 = text(t1_value);
+    			attr(i, "class", i_class_value = "" + (null_to_empty("fas fa-" + /*item*/ ctx[10].class) + " svelte-18k938q"));
+    			attr(span, "class", "nav-title svelte-18k938q");
+    		},
+    		m(target, anchor) {
+    			insert(target, i, anchor);
+    			insert(target, t0, anchor);
+    			insert(target, span, anchor);
+    			append(span, t1);
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*navItems*/ 1 && i_class_value !== (i_class_value = "" + (null_to_empty("fas fa-" + /*item*/ ctx[10].class) + " svelte-18k938q"))) {
+    				attr(i, "class", i_class_value);
+    			}
+
+    			if (dirty & /*navItems*/ 1 && t1_value !== (t1_value = /*item*/ ctx[10].title + "")) set_data(t1, t1_value);
+    		},
+    		d(detaching) {
+    			if (detaching) detach(i);
+    			if (detaching) detach(t0);
+    			if (detaching) detach(span);
+    		}
+    	};
+    }
+
+    // (58:8) {#if dirs}
+    function create_if_block_1$8(ctx) {
+    	let li;
+    	let link;
+    	let t;
+    	let current;
+
+    	link = new Link({
+    			props: {
+    				to: /*item*/ ctx[10].path + "/" + /*selected*/ ctx[2][/*item*/ ctx[10].title],
+    				getProps,
+    				$$slots: { default: [create_default_slot$5] },
+    				$$scope: { ctx }
+    			}
+    		});
+
+    	return {
+    		c() {
+    			li = element("li");
+    			create_component(link.$$.fragment);
+    			t = space();
+    			attr(li, "class", "nav-item svelte-18k938q");
+    		},
+    		m(target, anchor) {
+    			insert(target, li, anchor);
+    			mount_component(link, li, null);
+    			append(li, t);
+    			current = true;
+    		},
+    		p(ctx, dirty) {
+    			const link_changes = {};
+    			if (dirty & /*navItems, selected*/ 5) link_changes.to = /*item*/ ctx[10].path + "/" + /*selected*/ ctx[2][/*item*/ ctx[10].title];
+
+    			if (dirty & /*$$scope, dirs, navItems, selected*/ 131079) {
+    				link_changes.$$scope = { dirty, ctx };
+    			}
+
+    			link.$set(link_changes);
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(link.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(link.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(li);
+    			destroy_component(link);
+    		}
+    	};
+    }
+
+    // (65:18) {#each dirs[item.title].filter((d) => d.Type === item.title) as { Id, Name }}
+    function create_each_block_1(ctx) {
+    	let li;
+    	let t0_value = /*Name*/ ctx[14] + "";
+    	let t0;
+    	let t1;
+    	let li_id_value;
+    	let li_title_value;
+    	let mounted;
+    	let dispose;
+
+    	return {
+    		c() {
+    			li = element("li");
+    			t0 = text(t0_value);
+    			t1 = space();
+    			attr(li, "class", "list-item svelte-18k938q");
+    			attr(li, "id", li_id_value = /*Id*/ ctx[13]);
+    			attr(li, "title", li_title_value = /*item*/ ctx[10].title);
+    			toggle_class(li, "selected", /*Id*/ ctx[13] === /*selected*/ ctx[2][/*item*/ ctx[10].title]);
+    		},
+    		m(target, anchor) {
+    			insert(target, li, anchor);
+    			append(li, t0);
+    			append(li, t1);
+
+    			if (!mounted) {
+    				dispose = listen(li, "click", /*selectDir*/ ctx[5]);
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*dirs, navItems*/ 3 && t0_value !== (t0_value = /*Name*/ ctx[14] + "")) set_data(t0, t0_value);
+
+    			if (dirty & /*dirs, navItems*/ 3 && li_id_value !== (li_id_value = /*Id*/ ctx[13])) {
+    				attr(li, "id", li_id_value);
+    			}
+
+    			if (dirty & /*navItems*/ 1 && li_title_value !== (li_title_value = /*item*/ ctx[10].title)) {
+    				attr(li, "title", li_title_value);
+    			}
+
+    			if (dirty & /*dirs, navItems, selected*/ 7) {
+    				toggle_class(li, "selected", /*Id*/ ctx[13] === /*selected*/ ctx[2][/*item*/ ctx[10].title]);
+    			}
+    		},
+    		d(detaching) {
+    			if (detaching) detach(li);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+    }
+
+    // (60:12) <Link to={item.path + "/" + selected[item.title]} {getProps}>
+    function create_default_slot$5(ctx) {
+    	let span1;
+    	let i;
+    	let i_class_value;
+    	let t0;
+    	let span0;
+    	let t1_value = /*item*/ ctx[10].title + "";
+    	let t1;
+    	let t2;
+    	let ul;
+
+    	function func(...args) {
+    		return /*func*/ ctx[6](/*item*/ ctx[10], ...args);
+    	}
+
+    	let each_value_1 = /*dirs*/ ctx[1][/*item*/ ctx[10].title].filter(func);
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value_1.length; i += 1) {
+    		each_blocks[i] = create_each_block_1(get_each_context_1(ctx, each_value_1, i));
+    	}
+
+    	return {
+    		c() {
+    			span1 = element("span");
+    			i = element("i");
+    			t0 = space();
+    			span0 = element("span");
+    			t1 = text(t1_value);
+    			t2 = space();
+    			ul = element("ul");
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			attr(i, "class", i_class_value = "" + (null_to_empty("fas fa-" + /*item*/ ctx[10].class) + " svelte-18k938q"));
+    			attr(span0, "class", "nav-title svelte-18k938q");
+    			attr(ul, "class", "down-list svelte-18k938q");
+    			attr(span1, "class", "fa-icon svelte-18k938q");
+    		},
+    		m(target, anchor) {
+    			insert(target, span1, anchor);
+    			append(span1, i);
+    			append(span1, t0);
+    			append(span1, span0);
+    			append(span0, t1);
+    			append(span1, t2);
+    			append(span1, ul);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(ul, null);
+    			}
+    		},
+    		p(new_ctx, dirty) {
+    			ctx = new_ctx;
+
+    			if (dirty & /*navItems*/ 1 && i_class_value !== (i_class_value = "" + (null_to_empty("fas fa-" + /*item*/ ctx[10].class) + " svelte-18k938q"))) {
+    				attr(i, "class", i_class_value);
+    			}
+
+    			if (dirty & /*navItems*/ 1 && t1_value !== (t1_value = /*item*/ ctx[10].title + "")) set_data(t1, t1_value);
+
+    			if (dirty & /*dirs, navItems, selected, selectDir*/ 39) {
+    				each_value_1 = /*dirs*/ ctx[1][/*item*/ ctx[10].title].filter(func);
+    				let i;
+
+    				for (i = 0; i < each_value_1.length; i += 1) {
+    					const child_ctx = get_each_context_1(ctx, each_value_1, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block_1(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(ul, null);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value_1.length;
+    			}
+    		},
+    		d(detaching) {
+    			if (detaching) detach(span1);
+    			destroy_each(each_blocks, detaching);
+    		}
+    	};
+    }
+
+    // (56:4) {#each navItems as item}
+    function create_each_block$b(ctx) {
+    	let show_if;
+    	let current_block_type_index;
+    	let if_block;
+    	let if_block_anchor;
+    	let current;
+    	const if_block_creators = [create_if_block$j, create_else_block$b];
+    	const if_blocks = [];
+
+    	function select_block_type(ctx, dirty) {
+    		if (dirty & /*navItems*/ 1) show_if = null;
+    		if (show_if == null) show_if = !!["Mangas", "Videos"].includes(/*item*/ ctx[10].title);
+    		if (show_if) return 0;
+    		return 1;
+    	}
+
+    	current_block_type_index = select_block_type(ctx, -1);
+    	if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+
+    	return {
+    		c() {
+    			if_block.c();
+    			if_block_anchor = empty$1();
+    		},
+    		m(target, anchor) {
+    			if_blocks[current_block_type_index].m(target, anchor);
+    			insert(target, if_block_anchor, anchor);
+    			current = true;
+    		},
+    		p(ctx, dirty) {
+    			let previous_block_index = current_block_type_index;
+    			current_block_type_index = select_block_type(ctx, dirty);
+
+    			if (current_block_type_index === previous_block_index) {
+    				if_blocks[current_block_type_index].p(ctx, dirty);
+    			} else {
+    				group_outros();
+
+    				transition_out(if_blocks[previous_block_index], 1, 1, () => {
+    					if_blocks[previous_block_index] = null;
+    				});
+
+    				check_outros();
+    				if_block = if_blocks[current_block_type_index];
+
+    				if (!if_block) {
+    					if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+    					if_block.c();
+    				} else {
+    					if_block.p(ctx, dirty);
+    				}
+
+    				transition_in(if_block, 1);
+    				if_block.m(if_block_anchor.parentNode, if_block_anchor);
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(if_block);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(if_block);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if_blocks[current_block_type_index].d(detaching);
+    			if (detaching) detach(if_block_anchor);
+    		}
+    	};
+    }
+
+    function create_fragment$x(ctx) {
+    	let nav;
+    	let ul0;
+    	let t;
+    	let ul1;
+    	let li;
+    	let config;
+    	let current;
+    	let each_value = /*navItems*/ ctx[0];
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block$b(get_each_context$b(ctx, each_value, i));
+    	}
+
+    	const out = i => transition_out(each_blocks[i], 1, 1, () => {
+    		each_blocks[i] = null;
+    	});
+
+    	config = new Config_1({ props: { User: /*User*/ ctx[4] } });
+    	config.$on("click", /*click_handler*/ ctx[7]);
+
+    	return {
+    		c() {
+    			nav = element("nav");
+    			ul0 = element("ul");
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			t = space();
+    			ul1 = element("ul");
+    			li = element("li");
+    			create_component(config.$$.fragment);
+    			attr(ul0, "class", "navbar-nav svelte-18k938q");
+    			attr(li, "id", "p-config");
+    			attr(li, "class", "nav-item svelte-18k938q");
+    			attr(ul1, "class", "navbar-nav svelte-18k938q");
+    			attr(nav, "id", "menu");
+    			attr(nav, "class", "navbar svelte-18k938q");
+    			toggle_class(nav, "hide", /*menuToggle*/ ctx[3]);
+    		},
+    		m(target, anchor) {
+    			insert(target, nav, anchor);
+    			append(nav, ul0);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(ul0, null);
+    			}
+
+    			append(nav, t);
+    			append(nav, ul1);
+    			append(ul1, li);
+    			mount_component(config, li, null);
+    			current = true;
+    		},
+    		p(ctx, [dirty]) {
+    			if (dirty & /*navItems, selected, getProps, dirs, selectDir*/ 39) {
+    				each_value = /*navItems*/ ctx[0];
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context$b(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    						transition_in(each_blocks[i], 1);
+    					} else {
+    						each_blocks[i] = create_each_block$b(child_ctx);
+    						each_blocks[i].c();
+    						transition_in(each_blocks[i], 1);
+    						each_blocks[i].m(ul0, null);
+    					}
+    				}
+
+    				group_outros();
+
+    				for (i = each_value.length; i < each_blocks.length; i += 1) {
+    					out(i);
+    				}
+
+    				check_outros();
+    			}
+
+    			if (dirty & /*menuToggle*/ 8) {
+    				toggle_class(nav, "hide", /*menuToggle*/ ctx[3]);
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+
+    			for (let i = 0; i < each_value.length; i += 1) {
+    				transition_in(each_blocks[i]);
+    			}
+
+    			transition_in(config.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			each_blocks = each_blocks.filter(Boolean);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				transition_out(each_blocks[i]);
+    			}
+
+    			transition_out(config.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(nav);
+    			destroy_each(each_blocks, detaching);
+    			destroy_component(config);
+    		}
+    	};
+    }
+
+    function getProps({ location, href, isPartiallyCurrent, isCurrent }) {
+    	let isActive = false;
+    	if (href === "/" && location.pathname === "/") isActive = true;
+
+    	if (href !== "/" && isPartiallyCurrent) {
+    		isActive = true;
+    	}
+
+    	if (isActive) {
+    		return { class: "active" };
+    	}
+
+    	return {};
+    }
+
+    function instance$x($$self, $$props, $$invalidate) {
+    	let { navItems } = $$props;
+    	const sortName = (a, b) => a.Name.localeCompare(b.Name);
+    	const User = getContext("User");
+    	let dirs;
+    	let selected = { Mangas: "", Videos: "" };
+    	let menuToggle = false;
+
+    	let unSubscribe = ToggleMenu.subscribe(value => {
+    		$$invalidate(3, menuToggle = value);
+    	});
+
+    	onDestroy(unSubscribe);
+
+    	const selectDir = ({ target: { id, title } }) => {
+    		$$invalidate(2, selected[title] = id, selected);
+    	};
+
+    	const func = (item, d) => d.Type === item.title;
+
+    	function click_handler(event) {
+    		bubble.call(this, $$self, event);
+    	}
+
+    	$$self.$$set = $$props => {
+    		if ('navItems' in $$props) $$invalidate(0, navItems = $$props.navItems);
+    	};
+
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty & /*dirs*/ 2) {
+    			if (!dirs) {
+    				axios.get("/api/files/dirs/").then(({ data }) => {
+    					if (data instanceof Array) {
+    						let Mangas = (data || []).filter(d => d.Type === "Mangas").sort(sortName);
+    						let Videos = (data || []).filter(d => d.Type === "Videos").sort(sortName);
+    						$$invalidate(1, dirs = { Mangas, Videos });
+
+    						$$invalidate(2, selected = {
+    							Mangas: Mangas[0] ? Mangas[0].Id : "",
+    							Videos: Videos[0] ? Videos[0].Id : ""
+    						});
+    					}
+    				});
+    			}
+    		}
+    	};
+
+    	return [navItems, dirs, selected, menuToggle, User, selectDir, func, click_handler];
+    }
+
+    class Navbar extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$x, create_fragment$x, safe_not_equal, { navItems: 0 });
+    	}
+    }
+
+    function cubicOut(t) {
+        const f = t - 1.0;
+        return f * f * f + 1.0;
+    }
+
+    function fade(node, { delay = 0, duration = 400, easing = identity } = {}) {
+        const o = +getComputedStyle(node).opacity;
+        return {
+            delay,
+            duration,
+            easing,
+            css: t => `opacity: ${t * o}`
+        };
+    }
+    function fly(node, { delay = 0, duration = 400, easing = cubicOut, x = 0, y = 0, opacity = 0 } = {}) {
+        const style = getComputedStyle(node);
+        const target_opacity = +style.opacity;
+        const transform = style.transform === 'none' ? '' : style.transform;
+        const od = target_opacity * (1 - opacity);
+        return {
+            delay,
+            duration,
+            easing,
+            css: (t, u) => `
+			transform: ${transform} translate(${(1 - t) * x}px, ${(1 - t) * y}px);
+			opacity: ${target_opacity - (od * u)}`
+        };
+    }
+
+    /* src\Admin\Component\ModalUser.svelte generated by Svelte v3.49.0 */
+
+    function create_fragment$w(ctx) {
+    	let div16;
+    	let div15;
+    	let div0;
+    	let h3;
+    	let t0_value = (/*foundUser*/ ctx[0].Id ? 'Edit' : 'Create') + "";
+    	let t0;
+    	let t1;
+    	let div13;
+    	let input0;
+    	let t2;
+    	let div2;
+    	let div1;
+    	let t3;
+    	let input1;
+    	let t4;
+    	let div4;
+    	let div3;
+    	let t5;
+    	let input2;
+    	let t6;
+    	let div6;
+    	let div5;
+    	let t8;
+    	let select0;
+    	let option0;
+    	let option1;
+    	let option2;
+    	let t12;
+    	let div11;
+    	let div8;
+    	let div7;
+    	let t14;
+    	let select1;
+    	let option3;
+    	let option4;
+    	let t17;
+    	let div10;
+    	let div9;
+    	let t19;
+    	let input3;
+    	let t20;
+    	let label5;
+    	let t21;
+    	let div12;
+    	let t22;
+    	let t23;
+    	let div14;
+    	let button0;
+    	let t25;
+    	let button1;
+    	let t26_value = (/*foundUser*/ ctx[0].Id ? 'Update' : 'Save') + "";
+    	let t26;
+    	let div15_transition;
+    	let current;
+    	let mounted;
+    	let dispose;
+
+    	return {
+    		c() {
+    			div16 = element("div");
+    			div15 = element("div");
+    			div0 = element("div");
+    			h3 = element("h3");
+    			t0 = text(t0_value);
+    			t1 = space();
+    			div13 = element("div");
+    			input0 = element("input");
+    			t2 = space();
+    			div2 = element("div");
+    			div1 = element("div");
+    			div1.innerHTML = `<label for="Name" class="input-group-text svelte-13h6j0"><i class="fas fa-user svelte-13h6j0"></i></label>`;
+    			t3 = space();
+    			input1 = element("input");
+    			t4 = space();
+    			div4 = element("div");
+    			div3 = element("div");
+    			div3.innerHTML = `<label for="Password" class="input-group-text svelte-13h6j0"><i class="fas fa-key svelte-13h6j0"></i></label>`;
+    			t5 = space();
+    			input2 = element("input");
+    			t6 = space();
+    			div6 = element("div");
+    			div5 = element("div");
+    			div5.innerHTML = `<label for="Role" class="input-group-text">Role</label>`;
+    			t8 = space();
+    			select0 = element("select");
+    			option0 = element("option");
+    			option0.textContent = "User";
+    			option1 = element("option");
+    			option1.textContent = "Administrator";
+    			option2 = element("option");
+    			option2.textContent = "Manager";
+    			t12 = space();
+    			div11 = element("div");
+    			div8 = element("div");
+    			div7 = element("div");
+    			div7.innerHTML = `<label for="State" class="input-group-text">Status</label>`;
+    			t14 = space();
+    			select1 = element("select");
+    			option3 = element("option");
+    			option3.textContent = "Active";
+    			option4 = element("option");
+    			option4.textContent = "Inactive";
+    			t17 = space();
+    			div10 = element("div");
+    			div9 = element("div");
+    			div9.innerHTML = `<label for="Adult" class="input-group-text">Adult</label>`;
+    			t19 = space();
+    			input3 = element("input");
+    			t20 = space();
+    			label5 = element("label");
+    			label5.innerHTML = `<i class="fas fa-times svelte-13h6j0"></i>`;
+    			t21 = space();
+    			div12 = element("div");
+    			t22 = text(/*error*/ ctx[1]);
+    			t23 = space();
+    			div14 = element("div");
+    			button0 = element("button");
+    			button0.textContent = "Cancel";
+    			t25 = space();
+    			button1 = element("button");
+    			t26 = text(t26_value);
+    			attr(div0, "class", "modal-header");
+    			attr(input0, "type", "hidden");
+    			attr(input0, "name", "Id");
+    			attr(input0, "class", "svelte-13h6j0");
+    			attr(div1, "class", "input-group-prepend");
+    			attr(input1, "class", "form-control svelte-13h6j0");
+    			attr(input1, "type", "text");
+    			attr(input1, "name", "Name");
+    			attr(div2, "class", "input-group");
+    			attr(div3, "class", "input-group-prepend");
+    			attr(input2, "class", "form-control svelte-13h6j0");
+    			attr(input2, "type", "password");
+    			attr(input2, "autocomplete", "new-password");
+    			attr(div4, "class", "input-group");
+    			attr(div5, "class", "input-group-prepend");
+    			option0.__value = "User";
+    			option0.value = option0.__value;
+    			option1.__value = "Administrator";
+    			option1.value = option1.__value;
+    			option2.__value = "Manager";
+    			option2.value = option2.__value;
+    			attr(select0, "class", "form-control");
+    			attr(select0, "name", "Role");
+    			if (/*foundUser*/ ctx[0].Role === void 0) add_render_callback(() => /*select0_change_handler*/ ctx[7].call(select0));
+    			attr(div6, "class", "input-group");
+    			attr(div7, "class", "input-group-prepend");
+    			option3.__value = "Active";
+    			option3.value = option3.__value;
+    			option4.__value = "Inactive";
+    			option4.value = option4.__value;
+    			attr(select1, "class", "form-control");
+    			attr(select1, "name", "State");
+    			if (/*foundUser*/ ctx[0].Status === void 0) add_render_callback(() => /*select1_change_handler*/ ctx[8].call(select1));
+    			attr(div8, "class", "first-ctrl input-group svelte-13h6j0");
+    			attr(div9, "class", "input-group-prepend");
+    			attr(input3, "id", "Adult");
+    			attr(input3, "type", "checkbox");
+    			attr(input3, "class", "svelte-13h6j0");
+    			attr(label5, "for", "Adult");
+    			attr(label5, "class", "form-control checkadult svelte-13h6j0");
+    			attr(div10, "class", "second-ctrl input-group svelte-13h6j0");
+    			attr(div11, "class", "input-grouping svelte-13h6j0");
+    			attr(div12, "class", "errors");
+    			attr(div13, "class", "modal-body");
+    			attr(button0, "class", "btn");
+    			attr(button1, "class", "btn");
+    			attr(div14, "class", "modal-footer");
+    			attr(div15, "class", "modal card svelte-13h6j0");
+    			attr(div16, "class", "modal-container");
+    		},
+    		m(target, anchor) {
+    			insert(target, div16, anchor);
+    			append(div16, div15);
+    			append(div15, div0);
+    			append(div0, h3);
+    			append(h3, t0);
+    			append(div15, t1);
+    			append(div15, div13);
+    			append(div13, input0);
+    			set_input_value(input0, /*foundUser*/ ctx[0].Id);
+    			append(div13, t2);
+    			append(div13, div2);
+    			append(div2, div1);
+    			append(div2, t3);
+    			append(div2, input1);
+    			set_input_value(input1, /*foundUser*/ ctx[0].Name);
+    			append(div13, t4);
+    			append(div13, div4);
+    			append(div4, div3);
+    			append(div4, t5);
+    			append(div4, input2);
+    			set_input_value(input2, /*foundUser*/ ctx[0].Password);
+    			append(div13, t6);
+    			append(div13, div6);
+    			append(div6, div5);
+    			append(div6, t8);
+    			append(div6, select0);
+    			append(select0, option0);
+    			append(select0, option1);
+    			append(select0, option2);
+    			select_option(select0, /*foundUser*/ ctx[0].Role);
+    			append(div13, t12);
+    			append(div13, div11);
+    			append(div11, div8);
+    			append(div8, div7);
+    			append(div8, t14);
+    			append(div8, select1);
+    			append(select1, option3);
+    			append(select1, option4);
+    			select_option(select1, /*foundUser*/ ctx[0].Status);
+    			append(div11, t17);
+    			append(div11, div10);
+    			append(div10, div9);
+    			append(div10, t19);
+    			append(div10, input3);
+    			input3.checked = /*foundUser*/ ctx[0].AdultPass;
+    			append(div10, t20);
+    			append(div10, label5);
+    			append(div13, t21);
+    			append(div13, div12);
+    			append(div12, t22);
+    			append(div15, t23);
+    			append(div15, div14);
+    			append(div14, button0);
+    			append(div14, t25);
+    			append(div14, button1);
+    			append(button1, t26);
+    			current = true;
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(input0, "input", /*input0_input_handler*/ ctx[4]),
+    					listen(input1, "input", /*input1_input_handler*/ ctx[5]),
+    					listen(input2, "input", /*input2_input_handler*/ ctx[6]),
+    					listen(select0, "change", /*select0_change_handler*/ ctx[7]),
+    					listen(select1, "change", /*select1_change_handler*/ ctx[8]),
+    					listen(input3, "change", /*input3_change_handler*/ ctx[9]),
+    					listen(button0, "click", /*closeModal*/ ctx[3]),
+    					listen(button1, "click", /*submit*/ ctx[2])
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, [dirty]) {
+    			if ((!current || dirty & /*foundUser*/ 1) && t0_value !== (t0_value = (/*foundUser*/ ctx[0].Id ? 'Edit' : 'Create') + "")) set_data(t0, t0_value);
+
+    			if (dirty & /*foundUser*/ 1) {
+    				set_input_value(input0, /*foundUser*/ ctx[0].Id);
+    			}
+
+    			if (dirty & /*foundUser*/ 1 && input1.value !== /*foundUser*/ ctx[0].Name) {
+    				set_input_value(input1, /*foundUser*/ ctx[0].Name);
+    			}
+
+    			if (dirty & /*foundUser*/ 1 && input2.value !== /*foundUser*/ ctx[0].Password) {
+    				set_input_value(input2, /*foundUser*/ ctx[0].Password);
+    			}
+
+    			if (dirty & /*foundUser*/ 1) {
+    				select_option(select0, /*foundUser*/ ctx[0].Role);
+    			}
+
+    			if (dirty & /*foundUser*/ 1) {
+    				select_option(select1, /*foundUser*/ ctx[0].Status);
+    			}
+
+    			if (dirty & /*foundUser*/ 1) {
+    				input3.checked = /*foundUser*/ ctx[0].AdultPass;
+    			}
+
+    			if (!current || dirty & /*error*/ 2) set_data(t22, /*error*/ ctx[1]);
+    			if ((!current || dirty & /*foundUser*/ 1) && t26_value !== (t26_value = (/*foundUser*/ ctx[0].Id ? 'Update' : 'Save') + "")) set_data(t26, t26_value);
+    		},
+    		i(local) {
+    			if (current) return;
+
+    			add_render_callback(() => {
+    				if (!div15_transition) div15_transition = create_bidirectional_transition(div15, fade, { duration: 200 }, true);
+    				div15_transition.run(1);
+    			});
+
+    			current = true;
+    		},
+    		o(local) {
+    			if (!div15_transition) div15_transition = create_bidirectional_transition(div15, fade, { duration: 200 }, false);
+    			div15_transition.run(0);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div16);
+    			if (detaching && div15_transition) div15_transition.end();
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    function instance$w($$self, $$props, $$invalidate) {
+    	let { foundUser = { AdultPass: false, Password: "" } } = $$props;
+    	const dispatch = createEventDispatcher();
+    	let error = "";
+
+    	const submit = e => {
+    		if (!foundUser.Name) return $$invalidate(1, error = "Name Can't be empty");
+
+    		axios.post("/api/admin/users/add-edit", foundUser).then(({ data }) => {
+    			if (!data.fail) {
+    				dispatch("updateusers", data.user);
+    			} else {
+    				$$invalidate(1, error = data.msg);
+    				console.log(data);
+    			}
+    		});
+    	};
+
+    	const closeModal = () => {
+    		dispatch("closeModal");
+    	};
+
+    	function input0_input_handler() {
+    		foundUser.Id = this.value;
+    		$$invalidate(0, foundUser);
+    	}
+
+    	function input1_input_handler() {
+    		foundUser.Name = this.value;
+    		$$invalidate(0, foundUser);
+    	}
+
+    	function input2_input_handler() {
+    		foundUser.Password = this.value;
+    		$$invalidate(0, foundUser);
+    	}
+
+    	function select0_change_handler() {
+    		foundUser.Role = select_value(this);
+    		$$invalidate(0, foundUser);
+    	}
+
+    	function select1_change_handler() {
+    		foundUser.Status = select_value(this);
+    		$$invalidate(0, foundUser);
+    	}
+
+    	function input3_change_handler() {
+    		foundUser.AdultPass = this.checked;
+    		$$invalidate(0, foundUser);
+    	}
+
+    	$$self.$$set = $$props => {
+    		if ('foundUser' in $$props) $$invalidate(0, foundUser = $$props.foundUser);
+    	};
+
+    	return [
+    		foundUser,
+    		error,
+    		submit,
+    		closeModal,
+    		input0_input_handler,
+    		input1_input_handler,
+    		input2_input_handler,
+    		select0_change_handler,
+    		select1_change_handler,
+    		input3_change_handler
+    	];
+    }
+
+    class ModalUser extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$w, create_fragment$w, safe_not_equal, { foundUser: 0 });
+    	}
+    }
+
+    /* src\Admin\User.svelte generated by Svelte v3.49.0 */
+
+    function get_each_context$a(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[8] = list[i];
+    	return child_ctx;
+    }
+
+    // (95:0) {#if showModal}
+    function create_if_block_1$7(ctx) {
+    	let modaluser;
+    	let current;
+
+    	modaluser = new ModalUser({
+    			props: { foundUser: /*foundUser*/ ctx[1] }
+    		});
+
+    	modaluser.$on("closeModal", /*hideModal*/ ctx[4]);
+    	modaluser.$on("updateusers", /*updateUsers*/ ctx[7]);
+
+    	return {
+    		c() {
+    			create_component(modaluser.$$.fragment);
+    		},
+    		m(target, anchor) {
+    			mount_component(modaluser, target, anchor);
+    			current = true;
+    		},
+    		p(ctx, dirty) {
+    			const modaluser_changes = {};
+    			if (dirty & /*foundUser*/ 2) modaluser_changes.foundUser = /*foundUser*/ ctx[1];
+    			modaluser.$set(modaluser_changes);
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(modaluser.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(modaluser.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			destroy_component(modaluser, detaching);
+    		}
+    	};
+    }
+
+    // (137:6) {:else}
+    function create_else_block$a(ctx) {
+    	let tr;
+
+    	return {
+    		c() {
+    			tr = element("tr");
+    			tr.innerHTML = `<td colspan="5" class="svelte-u9hanp">Loading Data From Server</td>`;
+    		},
+    		m(target, anchor) {
+    			insert(target, tr, anchor);
+    		},
+    		p: noop,
+    		d(detaching) {
+    			if (detaching) detach(tr);
+    		}
+    	};
+    }
+
+    // (120:6) {#if users.length}
+    function create_if_block$i(ctx) {
+    	let each_1_anchor;
+    	let each_value = /*users*/ ctx[0];
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block$a(get_each_context$a(ctx, each_value, i));
+    	}
+
+    	return {
+    		c() {
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			each_1_anchor = empty$1();
+    		},
+    		m(target, anchor) {
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(target, anchor);
+    			}
+
+    			insert(target, each_1_anchor, anchor);
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*users, removeUser, saveEdit*/ 97) {
+    				each_value = /*users*/ ctx[0];
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context$a(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block$a(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value.length;
+    			}
+    		},
+    		d(detaching) {
+    			destroy_each(each_blocks, detaching);
+    			if (detaching) detach(each_1_anchor);
+    		}
+    	};
+    }
+
+    // (121:8) {#each users as user}
+    function create_each_block$a(ctx) {
+    	let tr;
+    	let td0;
+    	let span0;
+    	let t0;
+    	let span1;
+    	let t1;
+    	let td1;
+    	let t2_value = /*user*/ ctx[8].Name + "";
+    	let t2;
+    	let t3;
+    	let td2;
+    	let t4_value = /*user*/ ctx[8].Role + "";
+    	let t4;
+    	let t5;
+    	let td3;
+    	let t6_value = /*user*/ ctx[8].State + "";
+    	let t6;
+    	let t7;
+    	let td4;
+    	let t8_value = (/*user*/ ctx[8].AdultPass ? 'true' : 'false') + "";
+    	let t8;
+    	let t9;
+    	let tr_id_value;
+    	let tr_key_value;
+    	let mounted;
+    	let dispose;
+
+    	return {
+    		c() {
+    			tr = element("tr");
+    			td0 = element("td");
+    			span0 = element("span");
+    			span0.innerHTML = `<i class="fas fa-edit svelte-u9hanp"></i>`;
+    			t0 = space();
+    			span1 = element("span");
+    			span1.innerHTML = `<i class="fas fa-trash-alt svelte-u9hanp"></i>`;
+    			t1 = space();
+    			td1 = element("td");
+    			t2 = text(t2_value);
+    			t3 = space();
+    			td2 = element("td");
+    			t4 = text(t4_value);
+    			t5 = space();
+    			td3 = element("td");
+    			t6 = text(t6_value);
+    			t7 = space();
+    			td4 = element("td");
+    			t8 = text(t8_value);
+    			t9 = space();
+    			attr(span0, "class", "u-edit");
+    			attr(span1, "class", "u-remove ml-2");
+    			attr(td0, "class", "svelte-u9hanp");
+    			attr(td1, "class", "svelte-u9hanp");
+    			attr(td2, "class", "svelte-u9hanp");
+    			attr(td3, "class", "svelte-u9hanp");
+    			attr(td4, "class", "svelte-u9hanp");
+    			attr(tr, "id", tr_id_value = /*user*/ ctx[8].Id);
+    			attr(tr, "key", tr_key_value = /*user*/ ctx[8].Name);
+    			attr(tr, "class", "svelte-u9hanp");
+    		},
+    		m(target, anchor) {
+    			insert(target, tr, anchor);
+    			append(tr, td0);
+    			append(td0, span0);
+    			append(td0, t0);
+    			append(td0, span1);
+    			append(tr, t1);
+    			append(tr, td1);
+    			append(td1, t2);
+    			append(tr, t3);
+    			append(tr, td2);
+    			append(td2, t4);
+    			append(tr, t5);
+    			append(tr, td3);
+    			append(td3, t6);
+    			append(tr, t7);
+    			append(tr, td4);
+    			append(td4, t8);
+    			append(tr, t9);
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(span0, "click", /*saveEdit*/ ctx[5]),
+    					listen(span1, "click", /*removeUser*/ ctx[6])
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*users*/ 1 && t2_value !== (t2_value = /*user*/ ctx[8].Name + "")) set_data(t2, t2_value);
+    			if (dirty & /*users*/ 1 && t4_value !== (t4_value = /*user*/ ctx[8].Role + "")) set_data(t4, t4_value);
+    			if (dirty & /*users*/ 1 && t6_value !== (t6_value = /*user*/ ctx[8].State + "")) set_data(t6, t6_value);
+    			if (dirty & /*users*/ 1 && t8_value !== (t8_value = (/*user*/ ctx[8].AdultPass ? 'true' : 'false') + "")) set_data(t8, t8_value);
+
+    			if (dirty & /*users*/ 1 && tr_id_value !== (tr_id_value = /*user*/ ctx[8].Id)) {
+    				attr(tr, "id", tr_id_value);
+    			}
+
+    			if (dirty & /*users*/ 1 && tr_key_value !== (tr_key_value = /*user*/ ctx[8].Name)) {
+    				attr(tr, "key", tr_key_value);
+    			}
+    		},
+    		d(detaching) {
+    			if (detaching) detach(tr);
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    function create_fragment$v(ctx) {
+    	let t0;
+    	let div2;
+    	let div0;
+    	let t1;
+    	let t2;
+    	let div1;
+    	let span;
+    	let t3;
+    	let h3;
+    	let t5;
+    	let table;
+    	let thead;
+    	let t15;
+    	let tbody;
+    	let current;
+    	let mounted;
+    	let dispose;
+    	let if_block0 = /*showModal*/ ctx[3] && create_if_block_1$7(ctx);
+
+    	function select_block_type(ctx, dirty) {
+    		if (/*users*/ ctx[0].length) return create_if_block$i;
+    		return create_else_block$a;
+    	}
+
+    	let current_block_type = select_block_type(ctx);
+    	let if_block1 = current_block_type(ctx);
+
+    	return {
+    		c() {
+    			if (if_block0) if_block0.c();
+    			t0 = space();
+    			div2 = element("div");
+    			div0 = element("div");
+    			t1 = text(/*error*/ ctx[2]);
+    			t2 = space();
+    			div1 = element("div");
+    			span = element("span");
+    			span.innerHTML = `<i class="fas fa-user-plus svelte-u9hanp"></i>`;
+    			t3 = space();
+    			h3 = element("h3");
+    			h3.textContent = "Users Manager";
+    			t5 = space();
+    			table = element("table");
+    			thead = element("thead");
+
+    			thead.innerHTML = `<tr><th class="svelte-u9hanp">Actions</th> 
+        <th class="svelte-u9hanp">Name</th> 
+        <th class="svelte-u9hanp">Role</th> 
+        <th class="svelte-u9hanp">State</th> 
+        <th class="svelte-u9hanp">Adult</th></tr>`;
+
+    			t15 = space();
+    			tbody = element("tbody");
+    			if_block1.c();
+    			attr(div0, "class", "remove-error");
+    			attr(span, "class", "btn svelte-u9hanp");
+    			attr(h3, "class", "text-center");
+    			attr(div1, "class", "controls svelte-u9hanp");
+    			attr(table, "class", "table table-dark table-hover table-bordered svelte-u9hanp");
+    			attr(div2, "id", "u-manager");
+    			attr(div2, "class", "card bg-dark manager svelte-u9hanp");
+    		},
+    		m(target, anchor) {
+    			if (if_block0) if_block0.m(target, anchor);
+    			insert(target, t0, anchor);
+    			insert(target, div2, anchor);
+    			append(div2, div0);
+    			append(div0, t1);
+    			append(div2, t2);
+    			append(div2, div1);
+    			append(div1, span);
+    			append(div1, t3);
+    			append(div1, h3);
+    			append(div2, t5);
+    			append(div2, table);
+    			append(table, thead);
+    			append(table, t15);
+    			append(table, tbody);
+    			if_block1.m(tbody, null);
+    			current = true;
+
+    			if (!mounted) {
+    				dispose = listen(span, "click", /*saveEdit*/ ctx[5]);
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, [dirty]) {
+    			if (/*showModal*/ ctx[3]) {
+    				if (if_block0) {
+    					if_block0.p(ctx, dirty);
+
+    					if (dirty & /*showModal*/ 8) {
+    						transition_in(if_block0, 1);
+    					}
+    				} else {
+    					if_block0 = create_if_block_1$7(ctx);
+    					if_block0.c();
+    					transition_in(if_block0, 1);
+    					if_block0.m(t0.parentNode, t0);
+    				}
+    			} else if (if_block0) {
+    				group_outros();
+
+    				transition_out(if_block0, 1, 1, () => {
+    					if_block0 = null;
+    				});
+
+    				check_outros();
+    			}
+
+    			if (!current || dirty & /*error*/ 4) set_data(t1, /*error*/ ctx[2]);
+
+    			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block1) {
+    				if_block1.p(ctx, dirty);
+    			} else {
+    				if_block1.d(1);
+    				if_block1 = current_block_type(ctx);
+
+    				if (if_block1) {
+    					if_block1.c();
+    					if_block1.m(tbody, null);
+    				}
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(if_block0);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(if_block0);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (if_block0) if_block0.d(detaching);
+    			if (detaching) detach(t0);
+    			if (detaching) detach(div2);
+    			if_block1.d();
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+    }
+
+    function instance$v($$self, $$props, $$invalidate) {
+    	let users = [];
+    	let foundUser = { AdultPass: false };
+    	let error = "";
+    	let showModal = false;
+
+    	const hideModal = () => {
+    		$$invalidate(3, showModal = false);
+    		$$invalidate(1, foundUser = { AdultPass: false });
+    	};
+
+    	const saveEdit = e => {
+    		let tr = e.target.closest("tr");
+
+    		if (tr) {
+    			$$invalidate(1, foundUser = { ...users.find(u => u.Id === tr.id) } || {});
+    		}
+
+    		$$invalidate(3, showModal = true);
+    	};
+
+    	const removeUser = e => {
+    		let tr = e.target.closest("tr");
+    		let Role = tr.children[1].innerText;
+
+    		if (tr) {
+    			axios.delete("/api/admin/users/remove", { data: { Id: tr.id, Role } }).then(({ data }) => {
+    				if (data.removed) {
+    					$$invalidate(0, users = users.filter(u => u.Id !== tr.id));
+    				} else {
+    					$$invalidate(2, error = data.msg);
+    				}
+    			});
+    		}
+    	};
+
+    	const updateUsers = event => {
+    		let user = event.detail;
+
+    		//Filter users
+    		let filteredUsers = users.filter(u => u.Id !== user.Id);
+
+    		//Add and sort users
+    		$$invalidate(0, users = [...filteredUsers, user].sort((a, b) => {
+    			return a.Name.localeCompare(b.Name);
+    		}));
+
+    		user.Password = "";
+    		hideModal();
+    	};
+
+    	onMount(async () => {
+    		axios.get("/api/admin/users").then(({ data }) => {
+    			if (data.users) {
+    				$$invalidate(0, users = data.users);
+    			}
+    		});
+    	});
+
+    	return [
+    		users,
+    		foundUser,
+    		error,
+    		showModal,
+    		hideModal,
+    		saveEdit,
+    		removeUser,
+    		updateUsers
+    	];
+    }
+
+    class User extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$v, create_fragment$v, safe_not_equal, {});
+    	}
+    }
+
+    const calRows = () => {
+      let container = document.querySelector(".list-container") || {};
+      return parseInt(container.offsetHeight / 37.19);
+    };
+
+    const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
+
+    /* src\ShareComponent\Filter.svelte generated by Svelte v3.49.0 */
+
+    function create_fragment$u(ctx) {
+    	let div1;
+    	let div0;
+    	let span0;
+    	let t0;
+    	let input;
+    	let t1;
+    	let span1;
+    	let mounted;
+    	let dispose;
+
+    	return {
+    		c() {
+    			div1 = element("div");
+    			div0 = element("div");
+    			span0 = element("span");
+    			span0.innerHTML = `<i class="fas fa-search"></i>`;
+    			t0 = space();
+    			input = element("input");
+    			t1 = space();
+    			span1 = element("span");
+    			span1.innerHTML = `<i class="fas fa-times-circle"></i>`;
+    			attr(span0, "class", "btn-filter input-group-text");
+    			attr(div0, "class", "input-group-prepend svelte-1f7z5e6");
+    			attr(input, "type", "text");
+    			attr(input, "class", "form-control filter-file svelte-1f7z5e6");
+    			attr(input, "placeholder", "Filter");
+    			attr(span1, "id", "clear-filter");
+    			attr(span1, "class", "svelte-1f7z5e6");
+    			attr(div1, "id", "filter-control");
+    			attr(div1, "class", "input-group svelte-1f7z5e6");
+    		},
+    		m(target, anchor) {
+    			insert(target, div1, anchor);
+    			append(div1, div0);
+    			append(div0, span0);
+    			append(div1, t0);
+    			append(div1, input);
+    			set_input_value(input, /*filter*/ ctx[0]);
+    			append(div1, t1);
+    			append(div1, span1);
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(span0, "click", /*btnFilter*/ ctx[3]),
+    					listen(input, "input", /*input_input_handler*/ ctx[4]),
+    					listen(input, "keydown", /*submitFilter*/ ctx[2]),
+    					listen(span1, "click", /*ClearFilter*/ ctx[1])
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, [dirty]) {
+    			if (dirty & /*filter*/ 1 && input.value !== /*filter*/ ctx[0]) {
+    				set_input_value(input, /*filter*/ ctx[0]);
+    			}
+    		},
+    		i: noop,
+    		o: noop,
+    		d(detaching) {
+    			if (detaching) detach(div1);
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    function instance$u($$self, $$props, $$invalidate) {
+    	const dispatch = createEventDispatcher();
+    	let { filter = "" } = $$props;
+
+    	const ClearFilter = () => {
+    		dispatch("filter", "");
+    		$$invalidate(0, filter = "");
+    	};
+
+    	const submitFilter = e => {
+    		if (e.keyCode === 13) {
+    			dispatch("filter", (filter || "").replace(/%|\?/, ""));
+    		}
+    	};
+
+    	const btnFilter = () => {
+    		dispatch("filter", (filter || "").replace(/%|\?/, ""));
+    	};
+
+    	function input_input_handler() {
+    		filter = this.value;
+    		$$invalidate(0, filter);
+    	}
+
+    	$$self.$$set = $$props => {
+    		if ('filter' in $$props) $$invalidate(0, filter = $$props.filter);
+    	};
+
+    	return [filter, ClearFilter, submitFilter, btnFilter, input_input_handler];
+    }
+
+    class Filter extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$u, create_fragment$u, safe_not_equal, { filter: 0 });
+    	}
+    }
+
+    const paginationInput = (li, page, totalPages, dispatch) => {
+      let input = li.querySelector("input");
+      if (!input) {
+        li.textContent = "";
+
+        li.innerHTML = `<input type="text" value=${page} class="form-control" min=1 
+                           max=${totalPages}>`;
+
+        let newInput = li.querySelector("input");
+
+        newInput.addEventListener("focusout", (e) => {
+          li.textContent = `${page} / ${totalPages}`;
+        });
+
+        newInput.onkeydown = (event) => {
+          if (event.keyCode === 13) {
+            let pg = parseInt(newInput.value);
+            if (!isNaN(pg)) {
+              page = pg < 1 ? 1 : pg > totalPages ? totalPages : pg;
+            }
+            dispatch("gotopage", page);
+            newInput = null;
+          }
+        };
+        newInput.focus();
+        newInput.setSelectionRange(newInput.value.length, newInput.value.length);
+      }
+    };
+
+    /* src\ShareComponent\Pagination.svelte generated by Svelte v3.49.0 */
+
+    function create_if_block$h(ctx) {
+    	let div;
+    	let ul;
+    	let li0;
+    	let t0;
+    	let li1;
+    	let t1;
+    	let li2;
+    	let t2;
+    	let li3;
+    	let t3;
+    	let li4;
+    	let mounted;
+    	let dispose;
+
+    	function select_block_type(ctx, dirty) {
+    		if (/*showinput*/ ctx[3]) return create_if_block_1$6;
+    		return create_else_block$9;
+    	}
+
+    	let current_block_type = select_block_type(ctx);
+    	let if_block = current_block_type(ctx);
+
+    	return {
+    		c() {
+    			div = element("div");
+    			ul = element("ul");
+    			li0 = element("li");
+    			li0.innerHTML = `<i class="fas fa-angle-double-left svelte-1ps3v0w"></i>`;
+    			t0 = space();
+    			li1 = element("li");
+    			li1.innerHTML = `<i class="fas fa-angle-left svelte-1ps3v0w"></i>`;
+    			t1 = space();
+    			li2 = element("li");
+    			if_block.c();
+    			t2 = space();
+    			li3 = element("li");
+    			li3.innerHTML = `<i class="fas fa-angle-right svelte-1ps3v0w"></i>`;
+    			t3 = space();
+    			li4 = element("li");
+    			li4.innerHTML = `<i class="fas fa-angle-double-right svelte-1ps3v0w"></i>`;
+    			attr(li0, "id", "first-page");
+    			attr(li0, "class", "page-link svelte-1ps3v0w");
+    			toggle_class(li0, "d-none", /*hideFL*/ ctx[2]);
+    			attr(li1, "id", "prev-page");
+    			attr(li1, "class", "page-link svelte-1ps3v0w");
+    			toggle_class(li1, "border-r-left", /*hideFL*/ ctx[2]);
+    			attr(li2, "id", "current-page");
+    			attr(li2, "class", "page-link svelte-1ps3v0w");
+    			attr(li3, "id", "next-page");
+    			attr(li3, "class", "page-link svelte-1ps3v0w");
+    			toggle_class(li3, "border-r-right", /*hideFL*/ ctx[2]);
+    			attr(li4, "id", "last-page");
+    			attr(li4, "class", "page-link svelte-1ps3v0w");
+    			toggle_class(li4, "d-none", /*hideFL*/ ctx[2]);
+    			attr(ul, "class", "pagination svelte-1ps3v0w");
+    			attr(div, "id", "pager");
+    			attr(div, "class", "svelte-1ps3v0w");
+    		},
+    		m(target, anchor) {
+    			insert(target, div, anchor);
+    			append(div, ul);
+    			append(ul, li0);
+    			append(ul, t0);
+    			append(ul, li1);
+    			append(ul, t1);
+    			append(ul, li2);
+    			if_block.m(li2, null);
+    			append(ul, t2);
+    			append(ul, li3);
+    			append(ul, t3);
+    			append(ul, li4);
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(li2, "click", /*onShowinput*/ ctx[5]),
+    					listen(div, "click", /*pagerClick*/ ctx[4])
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*hideFL*/ 4) {
+    				toggle_class(li0, "d-none", /*hideFL*/ ctx[2]);
+    			}
+
+    			if (dirty & /*hideFL*/ 4) {
+    				toggle_class(li1, "border-r-left", /*hideFL*/ ctx[2]);
+    			}
+
+    			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block) {
+    				if_block.p(ctx, dirty);
+    			} else {
+    				if_block.d(1);
+    				if_block = current_block_type(ctx);
+
+    				if (if_block) {
+    					if_block.c();
+    					if_block.m(li2, null);
+    				}
+    			}
+
+    			if (dirty & /*hideFL*/ 4) {
+    				toggle_class(li3, "border-r-right", /*hideFL*/ ctx[2]);
+    			}
+
+    			if (dirty & /*hideFL*/ 4) {
+    				toggle_class(li4, "d-none", /*hideFL*/ ctx[2]);
+    			}
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div);
+    			if_block.d();
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    // (153:16) {:else}
+    function create_else_block$9(ctx) {
+    	let t_value = /*page*/ ctx[0] + '/' + /*totalPages*/ ctx[1] + "";
+    	let t;
+
+    	return {
+    		c() {
+    			t = text(t_value);
+    		},
+    		m(target, anchor) {
+    			insert(target, t, anchor);
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*page, totalPages*/ 3 && t_value !== (t_value = /*page*/ ctx[0] + '/' + /*totalPages*/ ctx[1] + "")) set_data(t, t_value);
+    		},
+    		d(detaching) {
+    			if (detaching) detach(t);
+    		}
+    	};
+    }
+
+    // (144:16) {#if showinput}
+    function create_if_block_1$6(ctx) {
+    	let input;
+    	let mounted;
+    	let dispose;
+
+    	return {
+    		c() {
+    			input = element("input");
+    			attr(input, "type", "text");
+    			input.value = /*page*/ ctx[0];
+    			attr(input, "class", "form-control");
+    		},
+    		m(target, anchor) {
+    			insert(target, input, anchor);
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(input, "blur", /*hideInput*/ ctx[6]),
+    					listen(input, "change", /*handleChange*/ ctx[8]),
+    					action_destroyer(/*init*/ ctx[7].call(null, input)),
+    					listen(input, "keydown", stop_propagation(/*keydown_handler*/ ctx[9]))
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*page*/ 1 && input.value !== /*page*/ ctx[0]) {
+    				input.value = /*page*/ ctx[0];
+    			}
+    		},
+    		d(detaching) {
+    			if (detaching) detach(input);
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    function create_fragment$t(ctx) {
+    	let if_block_anchor;
+    	let if_block = /*totalPages*/ ctx[1] > 1 && create_if_block$h(ctx);
+
+    	return {
+    		c() {
+    			if (if_block) if_block.c();
+    			if_block_anchor = empty$1();
+    		},
+    		m(target, anchor) {
+    			if (if_block) if_block.m(target, anchor);
+    			insert(target, if_block_anchor, anchor);
+    		},
+    		p(ctx, [dirty]) {
+    			if (/*totalPages*/ ctx[1] > 1) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+    				} else {
+    					if_block = create_if_block$h(ctx);
+    					if_block.c();
+    					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+    				}
+    			} else if (if_block) {
+    				if_block.d(1);
+    				if_block = null;
+    			}
+    		},
+    		i: noop,
+    		o: noop,
+    		d(detaching) {
+    			if (if_block) if_block.d(detaching);
+    			if (detaching) detach(if_block_anchor);
+    		}
+    	};
+    }
+
+    function instance$t($$self, $$props, $$invalidate) {
+    	const dispatch = createEventDispatcher();
+    	let { page = 1 } = $$props;
+    	let { totalPages = 0 } = $$props;
+    	let { hideFL = false } = $$props;
+    	let showinput = false;
+
+    	const pagerClick = e => {
+    		window.localStorage.setItem("selected", 0);
+    		let li = e.target;
+
+    		switch (e.target.id) {
+    			case "prev-page":
+    				{
+    					dispatch("gotopage", page - 1);
+    					break;
+    				}
+    			case "next-page":
+    				{
+    					dispatch("gotopage", page + 1);
+    					break;
+    				}
+    			case "first-page":
+    				{
+    					dispatch("gotopage", 1);
+    					break;
+    				}
+    			case "last-page":
+    				{
+    					dispatch("gotopage", totalPages);
+    					break;
+    				}
+    			case "current-page":
+    				{
+    					paginationInput(li, page, totalPages, dispatch);
+    					break;
+    				}
+    		}
+    	};
+
+    	const onShowinput = () => {
+    		$$invalidate(3, showinput = true);
+    	};
+
+    	const hideInput = () => {
+    		$$invalidate(3, showinput = false);
+    	};
+
+    	const init = el => {
+    		el.focus();
+    	};
+
+    	const handleChange = event => {
+    		let pg = parseInt(event.target.value);
+
+    		if (!isNaN(pg)) {
+    			pg = pg < 1 ? 1 : pg > totalPages ? totalPages : pg;
+    			dispatch("gotopage", pg);
+    		}
+    	};
+
+    	function keydown_handler(event) {
+    		bubble.call(this, $$self, event);
+    	}
+
+    	$$self.$$set = $$props => {
+    		if ('page' in $$props) $$invalidate(0, page = $$props.page);
+    		if ('totalPages' in $$props) $$invalidate(1, totalPages = $$props.totalPages);
+    		if ('hideFL' in $$props) $$invalidate(2, hideFL = $$props.hideFL);
+    	};
+
+    	return [
+    		page,
+    		totalPages,
+    		hideFL,
+    		showinput,
+    		pagerClick,
+    		onShowinput,
+    		hideInput,
+    		init,
+    		handleChange,
+    		keydown_handler
+    	];
+    }
+
+    class Pagination extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$t, create_fragment$t, safe_not_equal, { page: 0, totalPages: 1, hideFL: 2 });
+    	}
+    }
+
+    /* src\Admin\Folders\ItemList.svelte generated by Svelte v3.49.0 */
+
+    function get_each_context$9(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[10] = list[i].Id;
+    	child_ctx[11] = list[i].Name;
+    	child_ctx[12] = list[i].Type;
+    	child_ctx[13] = list[i].Path;
+    	return child_ctx;
+    }
+
+    // (70:12) {:else}
+    function create_else_block$8(ctx) {
+    	let each_1_anchor;
+    	let each_value = /*items*/ ctx[2];
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block$9(get_each_context$9(ctx, each_value, i));
+    	}
+
+    	return {
+    		c() {
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			each_1_anchor = empty$1();
+    		},
+    		m(target, anchor) {
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(target, anchor);
+    			}
+
+    			insert(target, each_1_anchor, anchor);
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*items, folderId*/ 12) {
+    				each_value = /*items*/ ctx[2];
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context$9(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block$9(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value.length;
+    			}
+    		},
+    		d(detaching) {
+    			destroy_each(each_blocks, detaching);
+    			if (detaching) detach(each_1_anchor);
+    		}
+    	};
+    }
+
+    // (68:12) {#if items.length < 1}
+    function create_if_block$g(ctx) {
+    	let li;
+    	let t_value = `Not ${/*title*/ ctx[1]} Found` + "";
+    	let t;
+
+    	return {
+    		c() {
+    			li = element("li");
+    			t = text(t_value);
+    			attr(li, "class", "list-group-item empty-list svelte-ozw83h");
+    		},
+    		m(target, anchor) {
+    			insert(target, li, anchor);
+    			append(li, t);
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*title*/ 2 && t_value !== (t_value = `Not ${/*title*/ ctx[1]} Found` + "")) set_data(t, t_value);
+    		},
+    		d(detaching) {
+    			if (detaching) detach(li);
+    		}
+    	};
+    }
+
+    // (78:24) {#if Type.includes('Folder')}
+    function create_if_block_1$5(ctx) {
+    	let i;
+
+    	return {
+    		c() {
+    			i = element("i");
+    			attr(i, "class", "fas fa-sync svelte-ozw83h");
+    		},
+    		m(target, anchor) {
+    			insert(target, i, anchor);
+    		},
+    		d(detaching) {
+    			if (detaching) detach(i);
+    		}
+    	};
+    }
+
+    // (71:16) {#each items as { Id, Name, Type, Path }}
+    function create_each_block$9(ctx) {
+    	let li;
+    	let show_if = /*Type*/ ctx[12].includes('Folder');
+    	let t0;
+    	let i0;
+    	let t1;
+    	let i1;
+    	let t2;
+    	let t3_value = /*Name*/ ctx[11] + "";
+    	let t3;
+    	let t4;
+    	let li_id_value;
+    	let li_title_value;
+    	let mounted;
+    	let dispose;
+    	let if_block = show_if && create_if_block_1$5();
+
+    	return {
+    		c() {
+    			li = element("li");
+    			if (if_block) if_block.c();
+    			t0 = space();
+    			i0 = element("i");
+    			t1 = space();
+    			i1 = element("i");
+    			t2 = space();
+    			t3 = text(t3_value);
+    			t4 = space();
+    			attr(i0, "class", "fas fa-edit svelte-ozw83h");
+    			attr(i1, "class", "fas fa-trash-alt svelte-ozw83h");
+    			attr(li, "id", li_id_value = /*Id*/ ctx[10]);
+    			attr(li, "title", li_title_value = /*Path*/ ctx[13] || /*Name*/ ctx[11]);
+    			attr(li, "class", "list-group-item svelte-ozw83h");
+    			toggle_class(li, "active", /*folderId*/ ctx[3] === /*Id*/ ctx[10]);
+    		},
+    		m(target, anchor) {
+    			insert(target, li, anchor);
+    			if (if_block) if_block.m(li, null);
+    			append(li, t0);
+    			append(li, i0);
+    			append(li, t1);
+    			append(li, i1);
+    			append(li, t2);
+    			append(li, t3);
+    			append(li, t4);
+
+    			if (!mounted) {
+    				dispose = listen(li, "click", /*click_handler*/ ctx[7]);
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*items*/ 4) show_if = /*Type*/ ctx[12].includes('Folder');
+
+    			if (show_if) {
+    				if (if_block) ; else {
+    					if_block = create_if_block_1$5();
+    					if_block.c();
+    					if_block.m(li, t0);
+    				}
+    			} else if (if_block) {
+    				if_block.d(1);
+    				if_block = null;
+    			}
+
+    			if (dirty & /*items*/ 4 && t3_value !== (t3_value = /*Name*/ ctx[11] + "")) set_data(t3, t3_value);
+
+    			if (dirty & /*items*/ 4 && li_id_value !== (li_id_value = /*Id*/ ctx[10])) {
+    				attr(li, "id", li_id_value);
+    			}
+
+    			if (dirty & /*items*/ 4 && li_title_value !== (li_title_value = /*Path*/ ctx[13] || /*Name*/ ctx[11])) {
+    				attr(li, "title", li_title_value);
+    			}
+
+    			if (dirty & /*folderId, items*/ 12) {
+    				toggle_class(li, "active", /*folderId*/ ctx[3] === /*Id*/ ctx[10]);
+    			}
+    		},
+    		d(detaching) {
+    			if (detaching) detach(li);
+    			if (if_block) if_block.d();
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+    }
+
+    function create_fragment$s(ctx) {
+    	let div3;
+    	let div0;
+    	let filter_1;
+    	let t0;
+    	let h4;
+    	let t1_value = `${/*totalItems*/ ctx[6]} - ${/*title*/ ctx[1]}` + "";
+    	let t1;
+    	let t2;
+    	let div1;
+    	let ul;
+    	let t3;
+    	let div2;
+    	let pagination;
+    	let current;
+    	filter_1 = new Filter({ props: { filter: /*filter*/ ctx[0] } });
+    	filter_1.$on("filter", /*filter_handler*/ ctx[8]);
+
+    	function select_block_type(ctx, dirty) {
+    		if (/*items*/ ctx[2].length < 1) return create_if_block$g;
+    		return create_else_block$8;
+    	}
+
+    	let current_block_type = select_block_type(ctx);
+    	let if_block = current_block_type(ctx);
+
+    	pagination = new Pagination({
+    			props: {
+    				page: /*page*/ ctx[4],
+    				totalPages: /*totalPages*/ ctx[5]
+    			}
+    		});
+
+    	pagination.$on("gotopage", /*gotopage_handler*/ ctx[9]);
+
+    	return {
+    		c() {
+    			div3 = element("div");
+    			div0 = element("div");
+    			create_component(filter_1.$$.fragment);
+    			t0 = space();
+    			h4 = element("h4");
+    			t1 = text(t1_value);
+    			t2 = space();
+    			div1 = element("div");
+    			ul = element("ul");
+    			if_block.c();
+    			t3 = space();
+    			div2 = element("div");
+    			create_component(pagination.$$.fragment);
+    			attr(h4, "class", "text-center svelte-ozw83h");
+    			attr(div0, "class", "controls svelte-ozw83h");
+    			attr(ul, "class", "list-group text-dark");
+    			attr(div1, "class", "list-container svelte-ozw83h");
+    			attr(div2, "class", "list-controls svelte-ozw83h");
+    			attr(div3, "id", /*title*/ ctx[1]);
+    			attr(div3, "class", "file-list col-6 svelte-ozw83h");
+    		},
+    		m(target, anchor) {
+    			insert(target, div3, anchor);
+    			append(div3, div0);
+    			mount_component(filter_1, div0, null);
+    			append(div0, t0);
+    			append(div0, h4);
+    			append(h4, t1);
+    			append(div3, t2);
+    			append(div3, div1);
+    			append(div1, ul);
+    			if_block.m(ul, null);
+    			append(div3, t3);
+    			append(div3, div2);
+    			mount_component(pagination, div2, null);
+    			current = true;
+    		},
+    		p(ctx, [dirty]) {
+    			const filter_1_changes = {};
+    			if (dirty & /*filter*/ 1) filter_1_changes.filter = /*filter*/ ctx[0];
+    			filter_1.$set(filter_1_changes);
+    			if ((!current || dirty & /*totalItems, title*/ 66) && t1_value !== (t1_value = `${/*totalItems*/ ctx[6]} - ${/*title*/ ctx[1]}` + "")) set_data(t1, t1_value);
+
+    			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block) {
+    				if_block.p(ctx, dirty);
+    			} else {
+    				if_block.d(1);
+    				if_block = current_block_type(ctx);
+
+    				if (if_block) {
+    					if_block.c();
+    					if_block.m(ul, null);
+    				}
+    			}
+
+    			const pagination_changes = {};
+    			if (dirty & /*page*/ 16) pagination_changes.page = /*page*/ ctx[4];
+    			if (dirty & /*totalPages*/ 32) pagination_changes.totalPages = /*totalPages*/ ctx[5];
+    			pagination.$set(pagination_changes);
+
+    			if (!current || dirty & /*title*/ 2) {
+    				attr(div3, "id", /*title*/ ctx[1]);
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(filter_1.$$.fragment, local);
+    			transition_in(pagination.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(filter_1.$$.fragment, local);
+    			transition_out(pagination.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div3);
+    			destroy_component(filter_1);
+    			if_block.d();
+    			destroy_component(pagination);
+    		}
+    	};
+    }
+
+    function instance$s($$self, $$props, $$invalidate) {
+    	let { filter } = $$props;
+    	let { title } = $$props;
+    	let { items } = $$props;
+    	let { folderId } = $$props;
+    	let { page = 1 } = $$props;
+    	let { totalPages = 0 } = $$props;
+    	let { totalItems = 0 } = $$props;
+
+    	function click_handler(event) {
+    		bubble.call(this, $$self, event);
+    	}
+
+    	function filter_handler(event) {
+    		bubble.call(this, $$self, event);
+    	}
+
+    	function gotopage_handler(event) {
+    		bubble.call(this, $$self, event);
+    	}
+
+    	$$self.$$set = $$props => {
+    		if ('filter' in $$props) $$invalidate(0, filter = $$props.filter);
+    		if ('title' in $$props) $$invalidate(1, title = $$props.title);
+    		if ('items' in $$props) $$invalidate(2, items = $$props.items);
+    		if ('folderId' in $$props) $$invalidate(3, folderId = $$props.folderId);
+    		if ('page' in $$props) $$invalidate(4, page = $$props.page);
+    		if ('totalPages' in $$props) $$invalidate(5, totalPages = $$props.totalPages);
+    		if ('totalItems' in $$props) $$invalidate(6, totalItems = $$props.totalItems);
+    	};
+
+    	return [
+    		filter,
+    		title,
+    		items,
+    		folderId,
+    		page,
+    		totalPages,
+    		totalItems,
+    		click_handler,
+    		filter_handler,
+    		gotopage_handler
+    	];
+    }
+
+    class ItemList extends SvelteComponent {
+    	constructor(options) {
+    		super();
+
+    		init(this, options, instance$s, create_fragment$s, safe_not_equal, {
+    			filter: 0,
+    			title: 1,
+    			items: 2,
+    			folderId: 3,
+    			page: 4,
+    			totalPages: 5,
+    			totalItems: 6
+    		});
+    	}
+    }
+
+    /* src\Admin\Folders\Modal.svelte generated by Svelte v3.49.0 */
+
+    function create_else_block$7(ctx) {
+    	let p;
+    	let t0;
+    	let strong;
+    	let t1_value = /*file*/ ctx[0].Name + "";
+    	let t1;
+    	let t2;
+    	let div1;
+
+    	return {
+    		c() {
+    			p = element("p");
+    			t0 = text("Are you sure you want to remove ");
+    			strong = element("strong");
+    			t1 = text(t1_value);
+    			t2 = space();
+    			div1 = element("div");
+
+    			div1.innerHTML = `<div class="input-group-prepend"><label for="sysdel" class="input-group-text del-label svelte-h81hyi">Delete From System</label></div> 
+            <input id="sysdel" type="checkbox" class="svelte-h81hyi"/> 
+            <label for="sysdel" class="form-control svelte-h81hyi"><i class="fas fa-times svelte-h81hyi"></i></label>`;
+
+    			attr(strong, "class", "svelte-h81hyi");
+    			attr(div1, "class", "input-group");
+    		},
+    		m(target, anchor) {
+    			insert(target, p, anchor);
+    			append(p, t0);
+    			append(p, strong);
+    			append(strong, t1);
+    			insert(target, t2, anchor);
+    			insert(target, div1, anchor);
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*file*/ 1 && t1_value !== (t1_value = /*file*/ ctx[0].Name + "")) set_data(t1, t1_value);
+    		},
+    		d(detaching) {
+    			if (detaching) detach(p);
+    			if (detaching) detach(t2);
+    			if (detaching) detach(div1);
+    		}
+    	};
+    }
+
+    // (14:8) {#if !modalType.Del}
+    function create_if_block$f(ctx) {
+    	let div1;
+    	let div0;
+    	let t1;
+    	let input;
+    	let input_value_value;
+
+    	return {
+    		c() {
+    			div1 = element("div");
+    			div0 = element("div");
+    			div0.innerHTML = `<label for="Name" class="input-group-text svelte-h81hyi">Name</label>`;
+    			t1 = space();
+    			input = element("input");
+    			attr(div0, "class", "input-group-prepend");
+    			attr(input, "type", "text");
+    			attr(input, "name", "Name");
+    			attr(input, "class", "form-control");
+    			input.value = input_value_value = /*file*/ ctx[0].Name;
+    			attr(div1, "class", "input-group");
+    		},
+    		m(target, anchor) {
+    			insert(target, div1, anchor);
+    			append(div1, div0);
+    			append(div1, t1);
+    			append(div1, input);
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*file*/ 1 && input_value_value !== (input_value_value = /*file*/ ctx[0].Name) && input.value !== input_value_value) {
+    				input.value = input_value_value;
+    			}
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div1);
+    		}
+    	};
+    }
+
+    function create_fragment$r(ctx) {
+    	let div5;
+    	let div4;
+    	let div0;
+    	let h3;
+    	let t0_value = /*modalType*/ ctx[1].title + "";
+    	let t0;
+    	let t1;
+    	let form;
+    	let div1;
+    	let t2;
+    	let div2;
+    	let t3_value = (/*modalType*/ ctx[1].error || "") + "";
+    	let t3;
+    	let t4;
+    	let div3;
+    	let button0;
+    	let t6;
+    	let button1;
+    	let t7_value = (/*modalType*/ ctx[1].Del ? "Remove" : "Update") + "";
+    	let t7;
+    	let div4_transition;
+    	let current;
+    	let mounted;
+    	let dispose;
+
+    	function select_block_type(ctx, dirty) {
+    		if (!/*modalType*/ ctx[1].Del) return create_if_block$f;
+    		return create_else_block$7;
+    	}
+
+    	let current_block_type = select_block_type(ctx);
+    	let if_block = current_block_type(ctx);
+
+    	return {
+    		c() {
+    			div5 = element("div");
+    			div4 = element("div");
+    			div0 = element("div");
+    			h3 = element("h3");
+    			t0 = text(t0_value);
+    			t1 = space();
+    			form = element("form");
+    			div1 = element("div");
+    			if_block.c();
+    			t2 = space();
+    			div2 = element("div");
+    			t3 = text(t3_value);
+    			t4 = space();
+    			div3 = element("div");
+    			button0 = element("button");
+    			button0.textContent = "Cancel";
+    			t6 = space();
+    			button1 = element("button");
+    			t7 = text(t7_value);
+    			attr(div0, "class", "modal-header");
+    			attr(div1, "class", "modal-body");
+    			attr(div2, "class", "error svelte-h81hyi");
+    			attr(button0, "type", "button");
+    			attr(button0, "class", "btn");
+    			attr(button1, "type", "submit");
+    			attr(button1, "class", "btn");
+    			attr(div3, "class", "modal-footer");
+    			attr(form, "action", "#");
+    			attr(div4, "class", "modal card");
+    			attr(div5, "class", "modal-container");
+    		},
+    		m(target, anchor) {
+    			insert(target, div5, anchor);
+    			append(div5, div4);
+    			append(div4, div0);
+    			append(div0, h3);
+    			append(h3, t0);
+    			append(div4, t1);
+    			append(div4, form);
+    			append(form, div1);
+    			if_block.m(div1, null);
+    			append(form, t2);
+    			append(form, div2);
+    			append(div2, t3);
+    			append(form, t4);
+    			append(form, div3);
+    			append(div3, button0);
+    			append(div3, t6);
+    			append(div3, button1);
+    			append(button1, t7);
+    			current = true;
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(button0, "click", /*click_handler*/ ctx[3]),
+    					listen(form, "submit", prevent_default(/*submit_handler*/ ctx[2]))
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, [dirty]) {
+    			if ((!current || dirty & /*modalType*/ 2) && t0_value !== (t0_value = /*modalType*/ ctx[1].title + "")) set_data(t0, t0_value);
+
+    			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block) {
+    				if_block.p(ctx, dirty);
+    			} else {
+    				if_block.d(1);
+    				if_block = current_block_type(ctx);
+
+    				if (if_block) {
+    					if_block.c();
+    					if_block.m(div1, null);
+    				}
+    			}
+
+    			if ((!current || dirty & /*modalType*/ 2) && t3_value !== (t3_value = (/*modalType*/ ctx[1].error || "") + "")) set_data(t3, t3_value);
+    			if ((!current || dirty & /*modalType*/ 2) && t7_value !== (t7_value = (/*modalType*/ ctx[1].Del ? "Remove" : "Update") + "")) set_data(t7, t7_value);
+    		},
+    		i(local) {
+    			if (current) return;
+
+    			add_render_callback(() => {
+    				if (!div4_transition) div4_transition = create_bidirectional_transition(div4, fade, { duration: 200 }, true);
+    				div4_transition.run(1);
+    			});
+
+    			current = true;
+    		},
+    		o(local) {
+    			if (!div4_transition) div4_transition = create_bidirectional_transition(div4, fade, { duration: 200 }, false);
+    			div4_transition.run(0);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div5);
+    			if_block.d();
+    			if (detaching && div4_transition) div4_transition.end();
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    function instance$r($$self, $$props, $$invalidate) {
+    	let { file } = $$props;
+    	let { modalType } = $$props;
+
+    	function submit_handler(event) {
+    		bubble.call(this, $$self, event);
+    	}
+
+    	function click_handler(event) {
+    		bubble.call(this, $$self, event);
+    	}
+
+    	$$self.$$set = $$props => {
+    		if ('file' in $$props) $$invalidate(0, file = $$props.file);
+    		if ('modalType' in $$props) $$invalidate(1, modalType = $$props.modalType);
+    	};
+
+    	return [file, modalType, submit_handler, click_handler];
+    }
+
+    class Modal extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$r, create_fragment$r, safe_not_equal, { file: 0, modalType: 1 });
+    	}
+    }
+
+    /* src\Admin\Folders\FoldersList.svelte generated by Svelte v3.49.0 */
+
+    function create_if_block$e(ctx) {
+    	let modal;
+    	let current;
+
+    	modal = new Modal({
+    			props: {
+    				file: /*folder*/ ctx[6],
+    				modalType: /*modalType*/ ctx[8]
+    			}
+    		});
+
+    	modal.$on("submit", /*handleSubmit*/ ctx[12]);
+    	modal.$on("click", /*hideModal*/ ctx[13]);
+
+    	return {
+    		c() {
+    			create_component(modal.$$.fragment);
+    		},
+    		m(target, anchor) {
+    			mount_component(modal, target, anchor);
+    			current = true;
+    		},
+    		p(ctx, dirty) {
+    			const modal_changes = {};
+    			if (dirty & /*folder*/ 64) modal_changes.file = /*folder*/ ctx[6];
+    			if (dirty & /*modalType*/ 256) modal_changes.modalType = /*modalType*/ ctx[8];
+    			modal.$set(modal_changes);
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(modal.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(modal.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			destroy_component(modal, detaching);
+    		}
+    	};
+    }
+
+    function create_fragment$q(ctx) {
+    	let t;
+    	let itemlist;
+    	let current;
+    	let if_block = /*showModal*/ ctx[7] && create_if_block$e(ctx);
+
+    	itemlist = new ItemList({
+    			props: {
+    				title: "Folders",
+    				folderId: /*folderId*/ ctx[2],
+    				items: /*items*/ ctx[5],
+    				page: /*page*/ ctx[0],
+    				totalPages: /*totalPages*/ ctx[3],
+    				totalItems: /*totalItems*/ ctx[4],
+    				filter: /*filter*/ ctx[1]
+    			}
+    		});
+
+    	itemlist.$on("filter", /*onFilter*/ ctx[9]);
+    	itemlist.$on("gotopage", /*gotopage*/ ctx[10]);
+    	itemlist.$on("click", /*itemClick*/ ctx[11]);
+
+    	return {
+    		c() {
+    			if (if_block) if_block.c();
+    			t = space();
+    			create_component(itemlist.$$.fragment);
+    		},
+    		m(target, anchor) {
+    			if (if_block) if_block.m(target, anchor);
+    			insert(target, t, anchor);
+    			mount_component(itemlist, target, anchor);
+    			current = true;
+    		},
+    		p(ctx, [dirty]) {
+    			if (/*showModal*/ ctx[7]) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+
+    					if (dirty & /*showModal*/ 128) {
+    						transition_in(if_block, 1);
+    					}
+    				} else {
+    					if_block = create_if_block$e(ctx);
+    					if_block.c();
+    					transition_in(if_block, 1);
+    					if_block.m(t.parentNode, t);
+    				}
+    			} else if (if_block) {
+    				group_outros();
+
+    				transition_out(if_block, 1, 1, () => {
+    					if_block = null;
+    				});
+
+    				check_outros();
+    			}
+
+    			const itemlist_changes = {};
+    			if (dirty & /*folderId*/ 4) itemlist_changes.folderId = /*folderId*/ ctx[2];
+    			if (dirty & /*items*/ 32) itemlist_changes.items = /*items*/ ctx[5];
+    			if (dirty & /*page*/ 1) itemlist_changes.page = /*page*/ ctx[0];
+    			if (dirty & /*totalPages*/ 8) itemlist_changes.totalPages = /*totalPages*/ ctx[3];
+    			if (dirty & /*totalItems*/ 16) itemlist_changes.totalItems = /*totalItems*/ ctx[4];
+    			if (dirty & /*filter*/ 2) itemlist_changes.filter = /*filter*/ ctx[1];
+    			itemlist.$set(itemlist_changes);
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(if_block);
+    			transition_in(itemlist.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(if_block);
+    			transition_out(itemlist.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (if_block) if_block.d(detaching);
+    			if (detaching) detach(t);
+    			destroy_component(itemlist, detaching);
+    		}
+    	};
+    }
+
+    function instance$q($$self, $$props, $$invalidate) {
+    	const dispatch = createEventDispatcher();
+    	const socket = getContext("socket");
+    	let { page = 1 } = $$props;
+    	let { filter = "" } = $$props;
+    	let { folderId } = $$props;
+    	let totalPages = 1;
+    	let totalItems = 0;
+    	let items = [];
+    	let folder = {};
+    	let showModal = false;
+    	let modalType = {};
+
+    	const loadFolders = async pg => {
+    		let { data } = await axios.get(`/api/admin/folders/${pg}/${calRows()}/${filter || ""}`);
+
+    		if (data.folders) {
+    			let tmp = data.folders[0];
+    			$$invalidate(2, folderId = tmp ? tmp.Id : "");
+    			$$invalidate(5, items = data.folders);
+    			$$invalidate(3, totalPages = data.totalPages);
+    			$$invalidate(4, totalItems = data.totalItems);
+    			$$invalidate(0, page = pg);
+    			dispatch("folderid", folderId);
+    			navigate(`/folders/${pg}/${filter || ""}`);
+    		}
+    	};
+
+    	onMount(() => {
+    		loadFolders(page);
+
+    		socket.on("folder-renamed", data => {
+    			if (data.success) {
+    				$$invalidate(6, folder.Name = data.Name, folder);
+    				$$invalidate(5, items);
+    				hideModal();
+    			}
+    		});
+
+    		socket.on("folder-removed", data => {
+    			if (data.success) {
+    				loadFolders(page);
+    				hideModal();
+    			}
+    		});
+    	});
+
+    	onDestroy(() => {
+    		delete socket._callbacks["$folder-renamed"];
+    		delete socket._callbacks["$folder-removed"];
+    	});
+
+    	const onFilter = flt => {
+    		$$invalidate(1, filter = flt.detail);
+    		loadFolders(1);
+    	};
+
+    	const gotopage = pg => {
+    		pg = parseInt(pg.detail);
+    		if (pg < 1 || pg > totalPages) return;
+    		loadFolders(clamp(pg, 1, totalPages));
+    	};
+
+    	const itemClick = ({ target }) => {
+    		let el = target;
+
+    		if (el.tagName === "LI") {
+    			$$invalidate(2, folderId = el.id);
+    			dispatch("folderid", folderId);
+    		} else {
+    			$$invalidate(6, folder = items.find(f => f.Id === el.closest("li").id));
+    			let cList = el.classList.toString();
+
+    			if ((/fa-edit/gi).test(cList)) {
+    				$$invalidate(8, modalType = { title: "Edit Folder", Del: false });
+    				$$invalidate(7, showModal = true);
+    			} else if ((/fa-trash-alt/gi).test(cList)) {
+    				$$invalidate(8, modalType = { title: "Remove Folder", Del: true });
+    				$$invalidate(7, showModal = true);
+    			} else {
+    				socket.emit("scan-dir", { Id: folder.Id, isFolder: true });
+    			}
+    		}
+    	};
+
+    	const handleSubmit = event => {
+    		//if we are deleting the file
+    		if (modalType.Del) {
+    			let Del = event.target.querySelector("input").checked;
+    			socket.emit("remove-folder", { Id: folder.Id, Del });
+    		} else {
+    			let Name = event.target.querySelector("input").value;
+
+    			if (!Name) {
+    				$$invalidate(8, modalType.error = "Name Can't be empty", modalType);
+    			} else {
+    				socket.emit("rename-folder", { Id: folder.Id, Name });
+    			}
+    		}
+    	};
+
+    	const hideModal = () => {
+    		$$invalidate(7, showModal = false);
+    		$$invalidate(6, folder = {});
+    	};
+
+    	$$self.$$set = $$props => {
+    		if ('page' in $$props) $$invalidate(0, page = $$props.page);
+    		if ('filter' in $$props) $$invalidate(1, filter = $$props.filter);
+    		if ('folderId' in $$props) $$invalidate(2, folderId = $$props.folderId);
+    	};
+
+    	return [
+    		page,
+    		filter,
+    		folderId,
+    		totalPages,
+    		totalItems,
+    		items,
+    		folder,
+    		showModal,
+    		modalType,
+    		onFilter,
+    		gotopage,
+    		itemClick,
+    		handleSubmit,
+    		hideModal
+    	];
+    }
+
+    class FoldersList extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$q, create_fragment$q, safe_not_equal, { page: 0, filter: 1, folderId: 2 });
+    	}
+    }
+
+    /* src\Admin\Folders\FilesList.svelte generated by Svelte v3.49.0 */
+
+    function create_if_block$d(ctx) {
+    	let modal;
+    	let current;
+
+    	modal = new Modal({
+    			props: {
+    				file: /*file*/ ctx[5],
+    				modalType: /*modalType*/ ctx[7]
+    			}
+    		});
+
+    	modal.$on("submit", /*handleSubmit*/ ctx[11]);
+    	modal.$on("click", /*hideModal*/ ctx[12]);
+
+    	return {
+    		c() {
+    			create_component(modal.$$.fragment);
+    		},
+    		m(target, anchor) {
+    			mount_component(modal, target, anchor);
+    			current = true;
+    		},
+    		p(ctx, dirty) {
+    			const modal_changes = {};
+    			if (dirty & /*file*/ 32) modal_changes.file = /*file*/ ctx[5];
+    			if (dirty & /*modalType*/ 128) modal_changes.modalType = /*modalType*/ ctx[7];
+    			modal.$set(modal_changes);
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(modal.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(modal.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			destroy_component(modal, detaching);
+    		}
+    	};
+    }
+
+    function create_fragment$p(ctx) {
+    	let t;
+    	let itemlist;
+    	let current;
+    	let if_block = /*showModal*/ ctx[6] && create_if_block$d(ctx);
+
+    	itemlist = new ItemList({
+    			props: {
+    				title: "Files",
+    				folderId: "",
+    				items: /*items*/ ctx[4],
+    				page: /*page*/ ctx[0],
+    				totalPages: /*totalPages*/ ctx[1],
+    				totalItems: /*totalItems*/ ctx[2],
+    				filter: /*filter*/ ctx[3]
+    			}
+    		});
+
+    	itemlist.$on("filter", /*onFilter*/ ctx[8]);
+    	itemlist.$on("gotopage", /*goToPage*/ ctx[9]);
+    	itemlist.$on("click", /*itemClick*/ ctx[10]);
+
+    	return {
+    		c() {
+    			if (if_block) if_block.c();
+    			t = space();
+    			create_component(itemlist.$$.fragment);
+    		},
+    		m(target, anchor) {
+    			if (if_block) if_block.m(target, anchor);
+    			insert(target, t, anchor);
+    			mount_component(itemlist, target, anchor);
+    			current = true;
+    		},
+    		p(ctx, [dirty]) {
+    			if (/*showModal*/ ctx[6]) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+
+    					if (dirty & /*showModal*/ 64) {
+    						transition_in(if_block, 1);
+    					}
+    				} else {
+    					if_block = create_if_block$d(ctx);
+    					if_block.c();
+    					transition_in(if_block, 1);
+    					if_block.m(t.parentNode, t);
+    				}
+    			} else if (if_block) {
+    				group_outros();
+
+    				transition_out(if_block, 1, 1, () => {
+    					if_block = null;
+    				});
+
+    				check_outros();
+    			}
+
+    			const itemlist_changes = {};
+    			if (dirty & /*items*/ 16) itemlist_changes.items = /*items*/ ctx[4];
+    			if (dirty & /*page*/ 1) itemlist_changes.page = /*page*/ ctx[0];
+    			if (dirty & /*totalPages*/ 2) itemlist_changes.totalPages = /*totalPages*/ ctx[1];
+    			if (dirty & /*totalItems*/ 4) itemlist_changes.totalItems = /*totalItems*/ ctx[2];
+    			if (dirty & /*filter*/ 8) itemlist_changes.filter = /*filter*/ ctx[3];
+    			itemlist.$set(itemlist_changes);
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(if_block);
+    			transition_in(itemlist.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(if_block);
+    			transition_out(itemlist.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (if_block) if_block.d(detaching);
+    			if (detaching) detach(t);
+    			destroy_component(itemlist, detaching);
+    		}
+    	};
+    }
+
+    function instance$p($$self, $$props, $$invalidate) {
+    	const socket = getContext("socket");
+    	let { folderId } = $$props;
+    	let oldFolder = folderId;
+    	let page = 1;
+    	let totalPages;
+    	let totalItems;
+    	let filter = "";
+    	let items = [];
+    	let file = {};
+    	let showModal = false;
+    	let modalType = {};
+
+    	const loadFiles = async pg => {
+    		let rows = calRows();
+    		let { data } = await axios.get(`/api/admin/folders/files/${folderId}/${pg}/${rows}/${filter || ""}`);
+
+    		if (data.files) {
+    			$$invalidate(4, items = data.files);
+    			$$invalidate(1, totalPages = data.totalPages);
+    			$$invalidate(2, totalItems = data.totalItems);
+    			$$invalidate(0, page = pg);
+    		}
+    	};
+
+    	onMount(async () => {
+    		loadFiles(1);
+
+    		socket.on("file-renamed", data => {
+    			if (data.success) {
+    				$$invalidate(5, file.Name = data.Name, file);
+    				$$invalidate(4, items);
+    				hideModal();
+    			}
+    		});
+
+    		socket.on("file-removed", data => {
+    			if (data.success) {
+    				if (page === totalPages && items.length > 1) {
+    					$$invalidate(4, items = items.filter(f => f.Id !== file.Id));
+    				} else {
+    					$$invalidate(0, page = page > 1 ? page - 1 : page);
+    					loadFiles(page);
+    				}
+
+    				hideModal();
+    			}
+    		});
+    	});
+
+    	onDestroy(() => {
+    		delete socket._callbacks["$file-renamed"];
+    		delete socket._callbacks["$file-removed"];
+    	});
+
+    	const onFilter = event => {
+    		$$invalidate(3, filter = event.detail);
+    		loadFiles(1);
+    	};
+
+    	const goToPage = pg => {
+    		pg = parseInt(pg.detail);
+    		if (pg < 1 || pg > totalPages) return;
+    		$$invalidate(0, page = pg < 1 ? 1 : pg > totalPages ? totalPages : pg);
+    		loadFiles(page);
+    	};
+
+    	const itemClick = event => {
+    		let el = event.target;
+
+    		if (el.tagName !== "LI") {
+    			$$invalidate(5, file = items.find(f => f.Id === el.closest("li").id));
+    			let cList = el.classList.toString();
+
+    			//Edit button was clicked
+    			if ((/fa-edit/gi).test(cList)) {
+    				$$invalidate(7, modalType = {
+    					title: "Edit File",
+    					Del: false,
+    					isFile: true
+    				});
+    			} else //Delete button was clicked
+    			{
+    				$$invalidate(7, modalType = {
+    					title: "Remove File",
+    					Del: true,
+    					isFile: true
+    				});
+    			}
+
+    			$$invalidate(6, showModal = true);
+    		}
+    	};
+
+    	const handleSubmit = event => {
+    		if (modalType.Del) {
+    			let Del = event.target.querySelector("input").checked;
+    			socket.emit("remove-file", { Id: file.Id, Del });
+    		} else {
+    			let Name = event.target.querySelector("input").value;
+
+    			if (!Name) {
+    				$$invalidate(7, modalType.error = "Name Can't be empty", modalType);
+    			} else {
+    				socket.emit("rename-file", { Id: file.Id, Name });
+    			}
+    		}
+    	};
+
+    	const hideModal = () => {
+    		$$invalidate(6, showModal = false);
+    		$$invalidate(5, file = {});
+    	};
+
+    	$$self.$$set = $$props => {
+    		if ('folderId' in $$props) $$invalidate(13, folderId = $$props.folderId);
+    	};
+
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty & /*folderId*/ 8192) {
+    			if (folderId !== oldFolder) {
+    				loadFiles(1);
+    			}
+    		}
+    	};
+
+    	return [
+    		page,
+    		totalPages,
+    		totalItems,
+    		filter,
+    		items,
+    		file,
+    		showModal,
+    		modalType,
+    		onFilter,
+    		goToPage,
+    		itemClick,
+    		handleSubmit,
+    		hideModal,
+    		folderId
+    	];
+    }
+
+    class FilesList$1 extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$p, create_fragment$p, safe_not_equal, { folderId: 13 });
+    	}
+    }
+
+    /* src\Admin\Folders\Folders.svelte generated by Svelte v3.49.0 */
+
+    function create_fragment$o(ctx) {
+    	let div1;
+    	let div0;
+    	let folderlist;
+    	let t;
+    	let fileslist;
+    	let current;
+
+    	folderlist = new FoldersList({
+    			props: {
+    				page: parseInt(/*page*/ ctx[1]) || 1,
+    				folderId: /*folderId*/ ctx[0],
+    				filter: /*filter*/ ctx[2]
+    			}
+    		});
+
+    	folderlist.$on("folderid", /*folderid*/ ctx[3]);
+    	fileslist = new FilesList$1({ props: { folderId: /*folderId*/ ctx[0] } });
+
+    	return {
+    		c() {
+    			div1 = element("div");
+    			div0 = element("div");
+    			create_component(folderlist.$$.fragment);
+    			t = space();
+    			create_component(fileslist.$$.fragment);
+    			attr(div0, "class", "rows svelte-1digf97");
+    			attr(div1, "class", "card bg-dark admin-manager  svelte-1digf97");
+    		},
+    		m(target, anchor) {
+    			insert(target, div1, anchor);
+    			append(div1, div0);
+    			mount_component(folderlist, div0, null);
+    			append(div0, t);
+    			mount_component(fileslist, div0, null);
+    			current = true;
+    		},
+    		p(ctx, [dirty]) {
+    			const folderlist_changes = {};
+    			if (dirty & /*page*/ 2) folderlist_changes.page = parseInt(/*page*/ ctx[1]) || 1;
+    			if (dirty & /*folderId*/ 1) folderlist_changes.folderId = /*folderId*/ ctx[0];
+    			if (dirty & /*filter*/ 4) folderlist_changes.filter = /*filter*/ ctx[2];
+    			folderlist.$set(folderlist_changes);
+    			const fileslist_changes = {};
+    			if (dirty & /*folderId*/ 1) fileslist_changes.folderId = /*folderId*/ ctx[0];
+    			fileslist.$set(fileslist_changes);
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(folderlist.$$.fragment, local);
+    			transition_in(fileslist.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(folderlist.$$.fragment, local);
+    			transition_out(fileslist.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div1);
+    			destroy_component(folderlist);
+    			destroy_component(fileslist);
+    		}
+    	};
+    }
+
+    function instance$o($$self, $$props, $$invalidate) {
+    	let { page } = $$props;
+    	let { filter } = $$props;
+    	let { folderId } = $$props;
+
+    	const folderid = event => {
+    		$$invalidate(0, folderId = event.detail);
+    	};
+
+    	$$self.$$set = $$props => {
+    		if ('page' in $$props) $$invalidate(1, page = $$props.page);
+    		if ('filter' in $$props) $$invalidate(2, filter = $$props.filter);
+    		if ('folderId' in $$props) $$invalidate(0, folderId = $$props.folderId);
+    	};
+
+    	return [folderId, page, filter, folderid];
+    }
+
+    class Folders extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$o, create_fragment$o, safe_not_equal, { page: 1, filter: 2, folderId: 0 });
+    	}
+    }
+
+    /* src\Admin\Disks\TreeItem.svelte generated by Svelte v3.49.0 */
+
+    function get_each_context$8(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[8] = list[i].Content;
+    	child_ctx[9] = list[i].Id;
+    	child_ctx[10] = list[i].Name;
+    	return child_ctx;
+    }
+
+    // (93:4) {#if Content.length > 0}
+    function create_if_block$c(ctx) {
+    	let ul;
+    	let treeitem;
+    	let current;
+
+    	treeitem = new TreeItem({
+    			props: {
+    				type: "folder",
+    				items: /*Content*/ ctx[8]
+    			}
+    		});
+
+    	treeitem.$on("scanDir", /*scanDir_handler*/ ctx[4]);
+
+    	return {
+    		c() {
+    			ul = element("ul");
+    			create_component(treeitem.$$.fragment);
+    			attr(ul, "class", "tree-node svelte-jlzmny");
+    		},
+    		m(target, anchor) {
+    			insert(target, ul, anchor);
+    			mount_component(treeitem, ul, null);
+    			current = true;
+    		},
+    		p(ctx, dirty) {
+    			const treeitem_changes = {};
+    			if (dirty & /*items*/ 1) treeitem_changes.items = /*Content*/ ctx[8];
+    			treeitem.$set(treeitem_changes);
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(treeitem.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(treeitem.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(ul);
+    			destroy_component(treeitem);
+    		}
+    	};
+    }
+
+    // (86:0) {#each items as { Content, Id, Name }}
+    function create_each_block$8(ctx) {
+    	let li;
+    	let span0;
+    	let i;
+    	let i_class_value;
+    	let t0;
+    	let t1_value = /*Name*/ ctx[10] + "";
+    	let t1;
+    	let t2;
+    	let span1;
+    	let t4;
+    	let t5;
+    	let li_id_value;
+    	let current;
+    	let mounted;
+    	let dispose;
+    	let if_block = /*Content*/ ctx[8].length > 0 && create_if_block$c(ctx);
+
+    	return {
+    		c() {
+    			li = element("li");
+    			span0 = element("span");
+    			i = element("i");
+    			t0 = space();
+    			t1 = text(t1_value);
+    			t2 = space();
+    			span1 = element("span");
+    			span1.textContent = "▶";
+    			t4 = space();
+    			if (if_block) if_block.c();
+    			t5 = space();
+    			attr(i, "class", i_class_value = "" + (null_to_empty(`fa fa-${/*type*/ ctx[1]} mr-1`) + " svelte-jlzmny"));
+    			attr(span0, "class", "dir svelte-jlzmny");
+    			attr(span1, "class", "caret svelte-jlzmny");
+    			attr(li, "id", li_id_value = /*Id*/ ctx[9]);
+    			attr(li, "class", "tree-item svelte-jlzmny");
+    		},
+    		m(target, anchor) {
+    			insert(target, li, anchor);
+    			append(li, span0);
+    			append(span0, i);
+    			append(span0, t0);
+    			append(span0, t1);
+    			append(li, t2);
+    			append(li, span1);
+    			append(li, t4);
+    			if (if_block) if_block.m(li, null);
+    			append(li, t5);
+    			current = true;
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(span0, "click", /*scanDirectory*/ ctx[3]),
+    					listen(span1, "click", /*expandFolder*/ ctx[2])
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, dirty) {
+    			if (!current || dirty & /*type*/ 2 && i_class_value !== (i_class_value = "" + (null_to_empty(`fa fa-${/*type*/ ctx[1]} mr-1`) + " svelte-jlzmny"))) {
+    				attr(i, "class", i_class_value);
+    			}
+
+    			if ((!current || dirty & /*items*/ 1) && t1_value !== (t1_value = /*Name*/ ctx[10] + "")) set_data(t1, t1_value);
+
+    			if (/*Content*/ ctx[8].length > 0) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+
+    					if (dirty & /*items*/ 1) {
+    						transition_in(if_block, 1);
+    					}
+    				} else {
+    					if_block = create_if_block$c(ctx);
+    					if_block.c();
+    					transition_in(if_block, 1);
+    					if_block.m(li, t5);
+    				}
+    			} else if (if_block) {
+    				group_outros();
+
+    				transition_out(if_block, 1, 1, () => {
+    					if_block = null;
+    				});
+
+    				check_outros();
+    			}
+
+    			if (!current || dirty & /*items*/ 1 && li_id_value !== (li_id_value = /*Id*/ ctx[9])) {
+    				attr(li, "id", li_id_value);
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(if_block);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(if_block);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(li);
+    			if (if_block) if_block.d();
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    function create_fragment$n(ctx) {
+    	let each_1_anchor;
+    	let current;
+    	let each_value = /*items*/ ctx[0];
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block$8(get_each_context$8(ctx, each_value, i));
+    	}
+
+    	const out = i => transition_out(each_blocks[i], 1, 1, () => {
+    		each_blocks[i] = null;
+    	});
+
+    	return {
+    		c() {
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			each_1_anchor = empty$1();
+    		},
+    		m(target, anchor) {
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(target, anchor);
+    			}
+
+    			insert(target, each_1_anchor, anchor);
+    			current = true;
+    		},
+    		p(ctx, [dirty]) {
+    			if (dirty & /*items, expandFolder, scanDirectory, type*/ 15) {
+    				each_value = /*items*/ ctx[0];
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context$8(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    						transition_in(each_blocks[i], 1);
+    					} else {
+    						each_blocks[i] = create_each_block$8(child_ctx);
+    						each_blocks[i].c();
+    						transition_in(each_blocks[i], 1);
+    						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
+    					}
+    				}
+
+    				group_outros();
+
+    				for (i = each_value.length; i < each_blocks.length; i += 1) {
+    					out(i);
+    				}
+
+    				check_outros();
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+
+    			for (let i = 0; i < each_value.length; i += 1) {
+    				transition_in(each_blocks[i]);
+    			}
+
+    			current = true;
+    		},
+    		o(local) {
+    			each_blocks = each_blocks.filter(Boolean);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				transition_out(each_blocks[i]);
+    			}
+
+    			current = false;
+    		},
+    		d(detaching) {
+    			destroy_each(each_blocks, detaching);
+    			if (detaching) detach(each_1_anchor);
+    		}
+    	};
+    }
+
+    function instance$n($$self, $$props, $$invalidate) {
+    	let { items = [] } = $$props;
+    	let { type } = $$props;
+    	let item = {};
+    	const dispatch = createEventDispatcher();
+
+    	const expandFolder = event => {
+    		let li = event.target.closest("li");
+    		let item = items.find(d => d.Id.toString() === li.id);
+
+    		if (item.Content.length === 0) {
+    			axios.post("/api/admin/directories/Content", { Path: item.Path }).then(({ data }) => {
+    				item.Content = data.data;
+    				$$invalidate(0, items);
+    			});
+    		} else {
+    			item.Content = [];
+    			$$invalidate(0, items);
+    		}
+    	};
+
+    	const scanDirectory = event => {
+    		let li = event.target.closest("li");
+    		item = items.find(d => d.Id.toString() === li.id);
+    		dispatch("scanDir", item);
+    	};
+
+    	function scanDir_handler(event) {
+    		bubble.call(this, $$self, event);
+    	}
+
+    	$$self.$$set = $$props => {
+    		if ('items' in $$props) $$invalidate(0, items = $$props.items);
+    		if ('type' in $$props) $$invalidate(1, type = $$props.type);
+    	};
+
+    	return [items, type, expandFolder, scanDirectory, scanDir_handler];
+    }
+
+    class TreeItem extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$n, create_fragment$n, safe_not_equal, { items: 0, type: 1 });
+    	}
+    }
+
+    /* src\Admin\Disks\DirectoryModal.svelte generated by Svelte v3.49.0 */
+
+    function create_fragment$m(ctx) {
+    	let div8;
+    	let div7;
+    	let div0;
+    	let t1;
+    	let div5;
+    	let div2;
+    	let div1;
+    	let t3;
+    	let select;
+    	let option0;
+    	let option1;
+    	let t6;
+    	let div4;
+    	let div3;
+    	let t8;
+    	let input;
+    	let t9;
+    	let label2;
+    	let span;
+    	let span_class_value;
+    	let t10;
+    	let div6;
+    	let button0;
+    	let t12;
+    	let button1;
+    	let div7_transition;
+    	let current;
+    	let mounted;
+    	let dispose;
+
+    	return {
+    		c() {
+    			div8 = element("div");
+    			div7 = element("div");
+    			div0 = element("div");
+    			div0.innerHTML = `<h3>Create</h3>`;
+    			t1 = space();
+    			div5 = element("div");
+    			div2 = element("div");
+    			div1 = element("div");
+    			div1.innerHTML = `<label for="Name" class="input-group-text svelte-1xqug3q">Type</label>`;
+    			t3 = space();
+    			select = element("select");
+    			option0 = element("option");
+    			option0.textContent = "Mangas";
+    			option1 = element("option");
+    			option1.textContent = "Videos";
+    			t6 = space();
+    			div4 = element("div");
+    			div3 = element("div");
+    			div3.innerHTML = `<label for="is-adult" class="input-group-text svelte-1xqug3q">Is Adult</label>`;
+    			t8 = space();
+    			input = element("input");
+    			t9 = space();
+    			label2 = element("label");
+    			span = element("span");
+    			t10 = space();
+    			div6 = element("div");
+    			button0 = element("button");
+    			button0.textContent = "Cancel";
+    			t12 = space();
+    			button1 = element("button");
+    			button1.textContent = "Create";
+    			attr(div0, "class", "modal-header");
+    			attr(div1, "class", "input-group-prepend");
+    			option0.__value = "Mangas";
+    			option0.value = option0.__value;
+    			option1.__value = "Videos";
+    			option1.value = option1.__value;
+    			attr(select, "class", "form-control");
+    			attr(select, "name", "Type");
+    			if (/*Type*/ ctx[1] === void 0) add_render_callback(() => /*select_change_handler*/ ctx[5].call(select));
+    			attr(div2, "class", "input-group");
+    			attr(div3, "class", "input-group-prepend");
+    			attr(input, "id", "is-adult");
+    			attr(input, "type", "checkbox");
+    			attr(input, "class", "svelte-1xqug3q");
+    			attr(span, "class", span_class_value = "" + (null_to_empty(`ad-icon fas fa-${/*IsAdult*/ ctx[2] ? "check" : "times"}`) + " svelte-1xqug3q"));
+    			attr(label2, "id", "check-icon");
+    			attr(label2, "for", "is-adult");
+    			attr(label2, "class", "form-control svelte-1xqug3q");
+    			attr(div4, "class", "input-group");
+    			attr(div5, "class", "modal-body");
+    			attr(button0, "class", "btn");
+    			attr(button1, "class", "btn");
+    			attr(div6, "class", "modal-footer");
+    			attr(div7, "class", "modal card svelte-1xqug3q");
+    			attr(div8, "class", "modal-container");
+    		},
+    		m(target, anchor) {
+    			insert(target, div8, anchor);
+    			append(div8, div7);
+    			append(div7, div0);
+    			append(div7, t1);
+    			append(div7, div5);
+    			append(div5, div2);
+    			append(div2, div1);
+    			append(div2, t3);
+    			append(div2, select);
+    			append(select, option0);
+    			append(select, option1);
+    			select_option(select, /*Type*/ ctx[1]);
+    			append(div5, t6);
+    			append(div5, div4);
+    			append(div4, div3);
+    			append(div4, t8);
+    			append(div4, input);
+    			input.checked = /*IsAdult*/ ctx[2];
+    			append(div4, t9);
+    			append(div4, label2);
+    			append(label2, span);
+    			append(div7, t10);
+    			append(div7, div6);
+    			append(div6, button0);
+    			append(div6, t12);
+    			append(div6, button1);
+    			current = true;
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(select, "change", /*select_change_handler*/ ctx[5]),
+    					listen(input, "change", /*input_change_handler*/ ctx[6]),
+    					listen(button0, "click", function () {
+    						if (is_function(/*hideModal*/ ctx[0])) /*hideModal*/ ctx[0].apply(this, arguments);
+    					}),
+    					listen(button1, "click", /*create*/ ctx[3])
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(new_ctx, [dirty]) {
+    			ctx = new_ctx;
+
+    			if (dirty & /*Type*/ 2) {
+    				select_option(select, /*Type*/ ctx[1]);
+    			}
+
+    			if (dirty & /*IsAdult*/ 4) {
+    				input.checked = /*IsAdult*/ ctx[2];
+    			}
+
+    			if (!current || dirty & /*IsAdult*/ 4 && span_class_value !== (span_class_value = "" + (null_to_empty(`ad-icon fas fa-${/*IsAdult*/ ctx[2] ? "check" : "times"}`) + " svelte-1xqug3q"))) {
+    				attr(span, "class", span_class_value);
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+
+    			add_render_callback(() => {
+    				if (!div7_transition) div7_transition = create_bidirectional_transition(div7, fade, { duration: 200 }, true);
+    				div7_transition.run(1);
+    			});
+
+    			current = true;
+    		},
+    		o(local) {
+    			if (!div7_transition) div7_transition = create_bidirectional_transition(div7, fade, { duration: 200 }, false);
+    			div7_transition.run(0);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div8);
+    			if (detaching && div7_transition) div7_transition.end();
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    function instance$m($$self, $$props, $$invalidate) {
+    	let { createDirectory } = $$props;
+    	let { hideModal } = $$props;
+    	let Type = "Mangas";
+    	let IsAdult = false;
+
+    	const create = () => {
+    		createDirectory(Type, IsAdult);
+    	};
+
+    	function select_change_handler() {
+    		Type = select_value(this);
+    		$$invalidate(1, Type);
+    	}
+
+    	function input_change_handler() {
+    		IsAdult = this.checked;
+    		$$invalidate(2, IsAdult);
+    	}
+
+    	$$self.$$set = $$props => {
+    		if ('createDirectory' in $$props) $$invalidate(4, createDirectory = $$props.createDirectory);
+    		if ('hideModal' in $$props) $$invalidate(0, hideModal = $$props.hideModal);
+    	};
+
+    	return [
+    		hideModal,
+    		Type,
+    		IsAdult,
+    		create,
+    		createDirectory,
+    		select_change_handler,
+    		input_change_handler
+    	];
+    }
+
+    class DirectoryModal extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$m, create_fragment$m, safe_not_equal, { createDirectory: 4, hideModal: 0 });
+    	}
+    }
+
+    /* src\Admin\Disks\Tree.svelte generated by Svelte v3.49.0 */
+
+    function create_if_block$b(ctx) {
+    	let directorymodal;
+    	let current;
+
+    	directorymodal = new DirectoryModal({
+    			props: {
+    				createDirectory: /*createDirectory*/ ctx[3],
+    				hideModal: /*hideModal*/ ctx[4]
+    			}
+    		});
+
+    	return {
+    		c() {
+    			create_component(directorymodal.$$.fragment);
+    		},
+    		m(target, anchor) {
+    			mount_component(directorymodal, target, anchor);
+    			current = true;
+    		},
+    		p: noop,
+    		i(local) {
+    			if (current) return;
+    			transition_in(directorymodal.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(directorymodal.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			destroy_component(directorymodal, detaching);
+    		}
+    	};
+    }
+
+    function create_fragment$l(ctx) {
+    	let t0;
+    	let div;
+    	let t3;
+    	let ul;
+    	let treeitem;
+    	let current;
+    	let if_block = /*showModal*/ ctx[1] && create_if_block$b(ctx);
+
+    	treeitem = new TreeItem({
+    			props: { type: "hdd", items: /*content*/ ctx[0] }
+    		});
+
+    	treeitem.$on("scanDir", /*scanDir*/ ctx[2]);
+
+    	return {
+    		c() {
+    			if (if_block) if_block.c();
+    			t0 = space();
+    			div = element("div");
+
+    			div.innerHTML = `<i class="fas fa-server"></i> 
+  <span class="tree-name">Server</span>`;
+
+    			t3 = space();
+    			ul = element("ul");
+    			create_component(treeitem.$$.fragment);
+    			attr(div, "class", "tree-title");
+    			attr(ul, "class", "tree-view svelte-1kc7hqf");
+    		},
+    		m(target, anchor) {
+    			if (if_block) if_block.m(target, anchor);
+    			insert(target, t0, anchor);
+    			insert(target, div, anchor);
+    			insert(target, t3, anchor);
+    			insert(target, ul, anchor);
+    			mount_component(treeitem, ul, null);
+    			current = true;
+    		},
+    		p(ctx, [dirty]) {
+    			if (/*showModal*/ ctx[1]) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+
+    					if (dirty & /*showModal*/ 2) {
+    						transition_in(if_block, 1);
+    					}
+    				} else {
+    					if_block = create_if_block$b(ctx);
+    					if_block.c();
+    					transition_in(if_block, 1);
+    					if_block.m(t0.parentNode, t0);
+    				}
+    			} else if (if_block) {
+    				group_outros();
+
+    				transition_out(if_block, 1, 1, () => {
+    					if_block = null;
+    				});
+
+    				check_outros();
+    			}
+
+    			const treeitem_changes = {};
+    			if (dirty & /*content*/ 1) treeitem_changes.items = /*content*/ ctx[0];
+    			treeitem.$set(treeitem_changes);
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(if_block);
+    			transition_in(treeitem.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(if_block);
+    			transition_out(treeitem.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (if_block) if_block.d(detaching);
+    			if (detaching) detach(t0);
+    			if (detaching) detach(div);
+    			if (detaching) detach(t3);
+    			if (detaching) detach(ul);
+    			destroy_component(treeitem);
+    		}
+    	};
+    }
+
+    function instance$l($$self, $$props, $$invalidate) {
+    	const socket = getContext("socket");
+    	let content = [];
+    	let showModal = false;
+    	let item = {};
+
+    	const scanDir = ({ detail }) => {
+    		item = detail;
+    		$$invalidate(1, showModal = true);
+    	};
+
+    	const createDirectory = (Type, IsAdult) => {
+    		socket.emit("scan-dir", { Path: item.Path, Type, IsAdult });
+    		hideModal();
+    	};
+
+    	const hideModal = () => {
+    		$$invalidate(1, showModal = false);
+    		item = {};
+    	};
+
+    	onMount(() => {
+    		socket.on("disk-loaded", data => {
+    			$$invalidate(0, content = data);
+    		});
+
+    		socket.emit("load-disks");
+    	});
+
+    	onDestroy(() => {
+    		delete socket._callbacks["$disk-loaded"];
+    	});
+
+    	return [content, showModal, scanDir, createDirectory, hideModal];
+    }
+
+    class Tree extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$l, create_fragment$l, safe_not_equal, {});
+    	}
+    }
+
+    /* src\Admin\Disks\Directories.svelte generated by Svelte v3.49.0 */
+
+    function get_each_context$7(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[5] = list[i].Id;
+    	child_ctx[6] = list[i].Name;
+    	child_ctx[7] = list[i].IsLoading;
+    	child_ctx[8] = list[i].FullPath;
+    	child_ctx[9] = list[i].Type;
+    	return child_ctx;
+    }
+
+    // (71:4) {:else}
+    function create_else_block$6(ctx) {
+    	let each_1_anchor;
+    	let each_value = /*dirs*/ ctx[0];
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block$7(get_each_context$7(ctx, each_value, i));
+    	}
+
+    	return {
+    		c() {
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			each_1_anchor = empty$1();
+    		},
+    		m(target, anchor) {
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(target, anchor);
+    			}
+
+    			insert(target, each_1_anchor, anchor);
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*dirs, removeDir, rescan*/ 13) {
+    				each_value = /*dirs*/ ctx[0];
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context$7(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block$7(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value.length;
+    			}
+    		},
+    		d(detaching) {
+    			destroy_each(each_blocks, detaching);
+    			if (detaching) detach(each_1_anchor);
+    		}
+    	};
+    }
+
+    // (67:4) {#if dirs.length < 0}
+    function create_if_block$a(ctx) {
+    	let tr;
+
+    	return {
+    		c() {
+    			tr = element("tr");
+    			tr.innerHTML = `<td colspan="4">Not Directory Added</td>`;
+    			attr(tr, "class", "text-center");
+    		},
+    		m(target, anchor) {
+    			insert(target, tr, anchor);
+    		},
+    		p: noop,
+    		d(detaching) {
+    			if (detaching) detach(tr);
+    		}
+    	};
+    }
+
+    // (72:6) {#each dirs as { Id, Name, IsLoading, FullPath, Type }}
+    function create_each_block$7(ctx) {
+    	let tr;
+    	let td0;
+    	let span0;
+    	let i0;
+    	let i0_class_value;
+    	let t0;
+    	let span1;
+    	let t1;
+    	let td1;
+    	let t2_value = /*Name*/ ctx[6] + "";
+    	let t2;
+    	let t3;
+    	let td2;
+    	let t4_value = /*Type*/ ctx[9] + "";
+    	let t4;
+    	let t5;
+    	let td3;
+    	let t6_value = /*FullPath*/ ctx[8] + "";
+    	let t6;
+    	let t7;
+    	let tr_id_value;
+    	let tr_key_value;
+    	let mounted;
+    	let dispose;
+
+    	return {
+    		c() {
+    			tr = element("tr");
+    			td0 = element("td");
+    			span0 = element("span");
+    			i0 = element("i");
+    			t0 = space();
+    			span1 = element("span");
+    			span1.innerHTML = `<i class="fas fa-trash-alt"></i>`;
+    			t1 = space();
+    			td1 = element("td");
+    			t2 = text(t2_value);
+    			t3 = space();
+    			td2 = element("td");
+    			t4 = text(t4_value);
+    			t5 = space();
+    			td3 = element("td");
+    			t6 = text(t6_value);
+    			t7 = space();
+    			attr(i0, "class", i0_class_value = "" + (null_to_empty("fas fa-sync" + (/*IsLoading*/ ctx[7] ? " fa-spin" : "")) + " svelte-te2s82"));
+    			attr(span0, "class", "dir-sync");
+    			attr(span1, "class", "dir-remove ml-2");
+    			attr(tr, "id", tr_id_value = /*Id*/ ctx[5]);
+    			attr(tr, "key", tr_key_value = /*Id*/ ctx[5]);
+    		},
+    		m(target, anchor) {
+    			insert(target, tr, anchor);
+    			append(tr, td0);
+    			append(td0, span0);
+    			append(span0, i0);
+    			append(td0, t0);
+    			append(td0, span1);
+    			append(tr, t1);
+    			append(tr, td1);
+    			append(td1, t2);
+    			append(tr, t3);
+    			append(tr, td2);
+    			append(td2, t4);
+    			append(tr, t5);
+    			append(tr, td3);
+    			append(td3, t6);
+    			append(tr, t7);
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(span0, "click", /*rescan*/ ctx[3]),
+    					listen(span1, "click", /*removeDir*/ ctx[2])
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*dirs*/ 1 && i0_class_value !== (i0_class_value = "" + (null_to_empty("fas fa-sync" + (/*IsLoading*/ ctx[7] ? " fa-spin" : "")) + " svelte-te2s82"))) {
+    				attr(i0, "class", i0_class_value);
+    			}
+
+    			if (dirty & /*dirs*/ 1 && t2_value !== (t2_value = /*Name*/ ctx[6] + "")) set_data(t2, t2_value);
+    			if (dirty & /*dirs*/ 1 && t4_value !== (t4_value = /*Type*/ ctx[9] + "")) set_data(t4, t4_value);
+    			if (dirty & /*dirs*/ 1 && t6_value !== (t6_value = /*FullPath*/ ctx[8] + "")) set_data(t6, t6_value);
+
+    			if (dirty & /*dirs*/ 1 && tr_id_value !== (tr_id_value = /*Id*/ ctx[5])) {
+    				attr(tr, "id", tr_id_value);
+    			}
+
+    			if (dirty & /*dirs*/ 1 && tr_key_value !== (tr_key_value = /*Id*/ ctx[5])) {
+    				attr(tr, "key", tr_key_value);
+    			}
+    		},
+    		d(detaching) {
+    			if (detaching) detach(tr);
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    function create_fragment$k(ctx) {
+    	let div;
+    	let t0;
+    	let t1;
+    	let table;
+    	let thead;
+    	let t9;
+    	let tbody;
+
+    	function select_block_type(ctx, dirty) {
+    		if (/*dirs*/ ctx[0].length < 0) return create_if_block$a;
+    		return create_else_block$6;
+    	}
+
+    	let current_block_type = select_block_type(ctx);
+    	let if_block = current_block_type(ctx);
+
+    	return {
+    		c() {
+    			div = element("div");
+    			t0 = text(/*msg*/ ctx[1]);
+    			t1 = space();
+    			table = element("table");
+    			thead = element("thead");
+
+    			thead.innerHTML = `<tr><th>Actions</th> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Full Path</th></tr>`;
+
+    			t9 = space();
+    			tbody = element("tbody");
+    			if_block.c();
+    			attr(div, "class", "message svelte-te2s82");
+    			attr(table, "id", "dir-list");
+    			attr(table, "class", "table table-dark table-hover table-bordered");
+    		},
+    		m(target, anchor) {
+    			insert(target, div, anchor);
+    			append(div, t0);
+    			insert(target, t1, anchor);
+    			insert(target, table, anchor);
+    			append(table, thead);
+    			append(table, t9);
+    			append(table, tbody);
+    			if_block.m(tbody, null);
+    		},
+    		p(ctx, [dirty]) {
+    			if (dirty & /*msg*/ 2) set_data(t0, /*msg*/ ctx[1]);
+
+    			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block) {
+    				if_block.p(ctx, dirty);
+    			} else {
+    				if_block.d(1);
+    				if_block = current_block_type(ctx);
+
+    				if (if_block) {
+    					if_block.c();
+    					if_block.m(tbody, null);
+    				}
+    			}
+    		},
+    		i: noop,
+    		o: noop,
+    		d(detaching) {
+    			if (detaching) detach(div);
+    			if (detaching) detach(t1);
+    			if (detaching) detach(table);
+    			if_block.d();
+    		}
+    	};
+    }
+
+    function instance$k($$self, $$props, $$invalidate) {
+    	const socket = getContext("socket");
+    	let dirs = [];
+    	let msg = "";
+
+    	onMount(async () => {
+    		let resp = await axios.get("/api/admin/directories");
+    		$$invalidate(0, dirs = resp.data);
+
+    		socket.on("scan-finish", ({ id }) => {
+    			if (id) {
+    				let dir = dirs.find(d => d.Id === id);
+    				dir.IsLoading = false;
+    				$$invalidate(0, dirs);
+    			}
+    		});
+
+    		socket.on("scan-info", info => {
+    			console.log(info);
+    		});
+    	});
+
+    	onDestroy(() => {
+    		delete socket._callbacks["$scan-finish"];
+    		delete socket._callbacks["$scan-info"];
+    	});
+
+    	const removeDir = e => {
+    		let tr = e.target.closest("tr");
+
+    		if (tr) {
+    			axios.delete("/api/admin/directories/remove", { data: { Id: tr.id } }).then(({ data }) => {
+    				if (data.removed) {
+    					$$invalidate(0, dirs = dirs.filter(d => d.Id !== tr.id));
+    					$$invalidate(0, dirs);
+    				} else {
+    					$$invalidate(1, msg = data.msg);
+    				}
+    			});
+    		}
+    	};
+
+    	const rescan = e => {
+    		let tr = e.target.closest("tr");
+    		let dir = dirs.find(d => d.Id === tr.id);
+    		socket.emit("scan-dir", { Id: dir.Id });
+    		dir.IsLoading = true;
+    		$$invalidate(0, dirs);
+    	};
+
+    	return [dirs, msg, removeDir, rescan];
+    }
+
+    class Directories extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$k, create_fragment$k, safe_not_equal, {});
+    	}
+    }
+
+    /* src\Admin\Disks\DiskManager.svelte generated by Svelte v3.49.0 */
+
+    function create_else_block$5(ctx) {
+    	let div;
+    	let tree;
+    	let div_intro;
+    	let div_outro;
+    	let current;
+    	tree = new Tree({});
+
+    	return {
+    		c() {
+    			div = element("div");
+    			create_component(tree.$$.fragment);
+    			attr(div, "id", "tabs-content");
+    			attr(div, "class", "svelte-1crvm1x");
+    		},
+    		m(target, anchor) {
+    			insert(target, div, anchor);
+    			mount_component(tree, div, null);
+    			current = true;
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(tree.$$.fragment, local);
+
+    			add_render_callback(() => {
+    				if (div_outro) div_outro.end(1);
+    				div_intro = create_in_transition(div, fly, { y: 200, duration: 200 });
+    				div_intro.start();
+    			});
+
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(tree.$$.fragment, local);
+    			if (div_intro) div_intro.invalidate();
+    			div_outro = create_out_transition(div, fly, { y: 200, duration: 200 });
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div);
+    			destroy_component(tree);
+    			if (detaching && div_outro) div_outro.end();
+    		}
+    	};
+    }
+
+    // (96:2) {#if tab.includes('tab-1')}
+    function create_if_block$9(ctx) {
+    	let div;
+    	let directories;
+    	let div_intro;
+    	let div_outro;
+    	let current;
+    	directories = new Directories({});
+
+    	return {
+    		c() {
+    			div = element("div");
+    			create_component(directories.$$.fragment);
+    			attr(div, "id", "tabs-content");
+    			attr(div, "class", "svelte-1crvm1x");
+    		},
+    		m(target, anchor) {
+    			insert(target, div, anchor);
+    			mount_component(directories, div, null);
+    			current = true;
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(directories.$$.fragment, local);
+
+    			add_render_callback(() => {
+    				if (div_outro) div_outro.end(1);
+    				div_intro = create_in_transition(div, fly, { y: 200, duration: 200 });
+    				div_intro.start();
+    			});
+
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(directories.$$.fragment, local);
+    			if (div_intro) div_intro.invalidate();
+    			div_outro = create_out_transition(div, fly, { y: 200, duration: 200 });
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div);
+    			destroy_component(directories);
+    			if (detaching && div_outro) div_outro.end();
+    		}
+    	};
+    }
+
+    function create_fragment$j(ctx) {
+    	let div4;
+    	let div3;
+    	let div0;
+    	let input0;
+    	let t0;
+    	let label0;
+    	let t3;
+    	let div2;
+    	let input1;
+    	let t4;
+    	let label1;
+    	let t7;
+    	let show_if;
+    	let current_block_type_index;
+    	let if_block;
+    	let current;
+    	let mounted;
+    	let dispose;
+    	const if_block_creators = [create_if_block$9, create_else_block$5];
+    	const if_blocks = [];
+
+    	function select_block_type(ctx, dirty) {
+    		if (dirty & /*tab*/ 1) show_if = null;
+    		if (show_if == null) show_if = !!/*tab*/ ctx[0].includes('tab-1');
+    		if (show_if) return 0;
+    		return 1;
+    	}
+
+    	current_block_type_index = select_block_type(ctx, -1);
+    	if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+
+    	return {
+    		c() {
+    			div4 = element("div");
+    			div3 = element("div");
+    			div0 = element("div");
+    			input0 = element("input");
+    			t0 = space();
+    			label0 = element("label");
+
+    			label0.innerHTML = `<i class="fas fa-folder svelte-1crvm1x"></i> 
+        <span id="dirs" class="svelte-1crvm1x">Directories</span>`;
+
+    			t3 = space();
+    			div2 = element("div");
+    			input1 = element("input");
+    			t4 = space();
+    			label1 = element("label");
+
+    			label1.innerHTML = `<div class="fas fa-hdd svelte-1crvm1x"></div> 
+        <span id="disks" class="svelte-1crvm1x">Server</span>`;
+
+    			t7 = space();
+    			if_block.c();
+    			attr(input0, "type", "radio");
+    			input0.__value = "tab-1";
+    			input0.value = input0.__value;
+    			attr(input0, "id", "tab1");
+    			attr(input0, "class", "svelte-1crvm1x");
+    			/*$$binding_groups*/ ctx[2][0].push(input0);
+    			attr(label0, "class", "nav-link svelte-1crvm1x");
+    			attr(label0, "for", "tab1");
+    			attr(div0, "class", "nav-item");
+    			attr(input1, "type", "radio");
+    			input1.__value = "tab-2";
+    			input1.value = input1.__value;
+    			attr(input1, "id", "tab2");
+    			attr(input1, "class", "svelte-1crvm1x");
+    			/*$$binding_groups*/ ctx[2][0].push(input1);
+    			attr(label1, "class", "nav-link svelte-1crvm1x");
+    			attr(label1, "for", "tab2");
+    			attr(div2, "class", "nav-item");
+    			attr(div3, "class", "nav nav-tabs controls svelte-1crvm1x");
+    			attr(div4, "class", "card bg-dark text-light admin-manager svelte-1crvm1x");
+    		},
+    		m(target, anchor) {
+    			insert(target, div4, anchor);
+    			append(div4, div3);
+    			append(div3, div0);
+    			append(div0, input0);
+    			input0.checked = input0.__value === /*tab*/ ctx[0];
+    			append(div0, t0);
+    			append(div0, label0);
+    			append(div3, t3);
+    			append(div3, div2);
+    			append(div2, input1);
+    			input1.checked = input1.__value === /*tab*/ ctx[0];
+    			append(div2, t4);
+    			append(div2, label1);
+    			append(div4, t7);
+    			if_blocks[current_block_type_index].m(div4, null);
+    			current = true;
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(input0, "change", /*input0_change_handler*/ ctx[1]),
+    					listen(input1, "change", /*input1_change_handler*/ ctx[3])
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, [dirty]) {
+    			if (dirty & /*tab*/ 1) {
+    				input0.checked = input0.__value === /*tab*/ ctx[0];
+    			}
+
+    			if (dirty & /*tab*/ 1) {
+    				input1.checked = input1.__value === /*tab*/ ctx[0];
+    			}
+
+    			let previous_block_index = current_block_type_index;
+    			current_block_type_index = select_block_type(ctx, dirty);
+
+    			if (current_block_type_index !== previous_block_index) {
+    				group_outros();
+
+    				transition_out(if_blocks[previous_block_index], 1, 1, () => {
+    					if_blocks[previous_block_index] = null;
+    				});
+
+    				check_outros();
+    				if_block = if_blocks[current_block_type_index];
+
+    				if (!if_block) {
+    					if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+    					if_block.c();
+    				}
+
+    				transition_in(if_block, 1);
+    				if_block.m(div4, null);
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(if_block);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(if_block);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div4);
+    			/*$$binding_groups*/ ctx[2][0].splice(/*$$binding_groups*/ ctx[2][0].indexOf(input0), 1);
+    			/*$$binding_groups*/ ctx[2][0].splice(/*$$binding_groups*/ ctx[2][0].indexOf(input1), 1);
+    			if_blocks[current_block_type_index].d();
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    function instance$j($$self, $$props, $$invalidate) {
+    	let { tab = "tab-1" } = $$props;
+    	const $$binding_groups = [[]];
+
+    	function input0_change_handler() {
+    		tab = this.__value;
+    		$$invalidate(0, tab);
+    	}
+
+    	function input1_change_handler() {
+    		tab = this.__value;
+    		$$invalidate(0, tab);
+    	}
+
+    	$$self.$$set = $$props => {
+    		if ('tab' in $$props) $$invalidate(0, tab = $$props.tab);
+    	};
+
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty & /*tab*/ 1) {
+    			{
+    				navigate(`/content-manager/${tab || "tab-1"}`, { replace: true });
+    			}
+    		}
+    	};
+
+    	return [tab, input0_change_handler, $$binding_groups, input1_change_handler];
+    }
+
+    class DiskManager extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$j, create_fragment$j, safe_not_equal, { tab: 0 });
+    	}
+    }
+
+    /* src\Admin\FilesManager\Files.svelte generated by Svelte v3.49.0 */
+
+    function get_each_context$6(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[16] = list[i].Id;
+    	child_ctx[17] = list[i].Name;
+    	child_ctx[18] = list[i].Type;
+    	child_ctx[19] = list[i].Folder;
+    	return child_ctx;
+    }
+
+    // (145:0) {#if showModal}
+    function create_if_block_1$4(ctx) {
+    	let modal;
+    	let current;
+
+    	modal = new Modal({
+    			props: {
+    				file: /*file*/ ctx[4],
+    				modalType: /*modalType*/ ctx[6]
+    			}
+    		});
+
+    	modal.$on("submit", /*handleSubmit*/ ctx[10]);
+    	modal.$on("click", /*hideModal*/ ctx[11]);
+
+    	return {
+    		c() {
+    			create_component(modal.$$.fragment);
+    		},
+    		m(target, anchor) {
+    			mount_component(modal, target, anchor);
+    			current = true;
+    		},
+    		p(ctx, dirty) {
+    			const modal_changes = {};
+    			if (dirty & /*file*/ 16) modal_changes.file = /*file*/ ctx[4];
+    			if (dirty & /*modalType*/ 64) modal_changes.modalType = /*modalType*/ ctx[6];
+    			modal.$set(modal_changes);
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(modal.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(modal.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			destroy_component(modal, detaching);
+    		}
+    	};
+    }
+
+    // (168:8) {:else}
+    function create_else_block$4(ctx) {
+    	let each_1_anchor;
+    	let each_value = /*items*/ ctx[3];
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block$6(get_each_context$6(ctx, each_value, i));
+    	}
+
+    	return {
+    		c() {
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			each_1_anchor = empty$1();
+    		},
+    		m(target, anchor) {
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(target, anchor);
+    			}
+
+    			insert(target, each_1_anchor, anchor);
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*items, itemClick*/ 520) {
+    				each_value = /*items*/ ctx[3];
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context$6(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block$6(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value.length;
+    			}
+    		},
+    		d(detaching) {
+    			destroy_each(each_blocks, detaching);
+    			if (detaching) detach(each_1_anchor);
+    		}
+    	};
+    }
+
+    // (164:8) {#if items.length < 1}
+    function create_if_block$8(ctx) {
+    	let tr;
+
+    	return {
+    		c() {
+    			tr = element("tr");
+    			tr.innerHTML = `<td colspan="3">No Files Found</td>`;
+    		},
+    		m(target, anchor) {
+    			insert(target, tr, anchor);
+    		},
+    		p: noop,
+    		d(detaching) {
+    			if (detaching) detach(tr);
+    		}
+    	};
+    }
+
+    // (169:10) {#each items as { Id, Name, Type, Folder }}
+    function create_each_block$6(ctx) {
+    	let tr;
+    	let td0;
+    	let t1;
+    	let td1;
+    	let t2_value = /*Name*/ ctx[17] + "";
+    	let t2;
+    	let t3;
+    	let td2;
+    	let t4_value = /*Folder*/ ctx[19].Path + "";
+    	let t4;
+    	let t5;
+    	let tr_id_value;
+    	let mounted;
+    	let dispose;
+
+    	return {
+    		c() {
+    			tr = element("tr");
+    			td0 = element("td");
+
+    			td0.innerHTML = `<i class="fas fa-edit svelte-2ttdvu"></i> 
+                <i class="fas fa-trash-alt svelte-2ttdvu"></i>`;
+
+    			t1 = space();
+    			td1 = element("td");
+    			t2 = text(t2_value);
+    			t3 = space();
+    			td2 = element("td");
+    			t4 = text(t4_value);
+    			t5 = space();
+    			attr(tr, "id", tr_id_value = /*Id*/ ctx[16]);
+    		},
+    		m(target, anchor) {
+    			insert(target, tr, anchor);
+    			append(tr, td0);
+    			append(tr, t1);
+    			append(tr, td1);
+    			append(td1, t2);
+    			append(tr, t3);
+    			append(tr, td2);
+    			append(td2, t4);
+    			append(tr, t5);
+
+    			if (!mounted) {
+    				dispose = listen(tr, "click", /*itemClick*/ ctx[9]);
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*items*/ 8 && t2_value !== (t2_value = /*Name*/ ctx[17] + "")) set_data(t2, t2_value);
+    			if (dirty & /*items*/ 8 && t4_value !== (t4_value = /*Folder*/ ctx[19].Path + "")) set_data(t4, t4_value);
+
+    			if (dirty & /*items*/ 8 && tr_id_value !== (tr_id_value = /*Id*/ ctx[16])) {
+    				attr(tr, "id", tr_id_value);
+    			}
+    		},
+    		d(detaching) {
+    			if (detaching) detach(tr);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+    }
+
+    function create_fragment$i(ctx) {
+    	let t0;
+    	let div3;
+    	let div0;
+    	let filter_1;
+    	let t1;
+    	let h4;
+    	let t2_value = `${/*totalItems*/ ctx[2]} - Files` + "";
+    	let t2;
+    	let t3;
+    	let div1;
+    	let table;
+    	let thead;
+    	let t9;
+    	let tbody;
+    	let t10;
+    	let div2;
+    	let pagination;
+    	let current;
+    	let if_block0 = /*showModal*/ ctx[5] && create_if_block_1$4(ctx);
+    	filter_1 = new Filter({});
+    	filter_1.$on("filter", /*onFilter*/ ctx[7]);
+
+    	function select_block_type(ctx, dirty) {
+    		if (/*items*/ ctx[3].length < 1) return create_if_block$8;
+    		return create_else_block$4;
+    	}
+
+    	let current_block_type = select_block_type(ctx);
+    	let if_block1 = current_block_type(ctx);
+
+    	pagination = new Pagination({
+    			props: {
+    				page: /*page*/ ctx[0],
+    				totalPages: /*totalPages*/ ctx[1]
+    			}
+    		});
+
+    	pagination.$on("gotopage", /*goToPage*/ ctx[8]);
+
+    	return {
+    		c() {
+    			if (if_block0) if_block0.c();
+    			t0 = space();
+    			div3 = element("div");
+    			div0 = element("div");
+    			create_component(filter_1.$$.fragment);
+    			t1 = space();
+    			h4 = element("h4");
+    			t2 = text(t2_value);
+    			t3 = space();
+    			div1 = element("div");
+    			table = element("table");
+    			thead = element("thead");
+
+    			thead.innerHTML = `<tr><td>Actions</td> 
+          <td>Name</td> 
+          <td>Path</td></tr>`;
+
+    			t9 = space();
+    			tbody = element("tbody");
+    			if_block1.c();
+    			t10 = space();
+    			div2 = element("div");
+    			create_component(pagination.$$.fragment);
+    			attr(h4, "class", "text-center svelte-2ttdvu");
+    			attr(div0, "class", "controls svelte-2ttdvu");
+    			attr(table, "class", "table table-bordered table-dark");
+    			attr(div1, "class", "list-container svelte-2ttdvu");
+    			attr(div2, "class", "list-controls svelte-2ttdvu");
+    			attr(div3, "class", "file-list col-6 svelte-2ttdvu");
+    		},
+    		m(target, anchor) {
+    			if (if_block0) if_block0.m(target, anchor);
+    			insert(target, t0, anchor);
+    			insert(target, div3, anchor);
+    			append(div3, div0);
+    			mount_component(filter_1, div0, null);
+    			append(div0, t1);
+    			append(div0, h4);
+    			append(h4, t2);
+    			append(div3, t3);
+    			append(div3, div1);
+    			append(div1, table);
+    			append(table, thead);
+    			append(table, t9);
+    			append(table, tbody);
+    			if_block1.m(tbody, null);
+    			append(div3, t10);
+    			append(div3, div2);
+    			mount_component(pagination, div2, null);
+    			current = true;
+    		},
+    		p(ctx, [dirty]) {
+    			if (/*showModal*/ ctx[5]) {
+    				if (if_block0) {
+    					if_block0.p(ctx, dirty);
+
+    					if (dirty & /*showModal*/ 32) {
+    						transition_in(if_block0, 1);
+    					}
+    				} else {
+    					if_block0 = create_if_block_1$4(ctx);
+    					if_block0.c();
+    					transition_in(if_block0, 1);
+    					if_block0.m(t0.parentNode, t0);
+    				}
+    			} else if (if_block0) {
+    				group_outros();
+
+    				transition_out(if_block0, 1, 1, () => {
+    					if_block0 = null;
+    				});
+
+    				check_outros();
+    			}
+
+    			if ((!current || dirty & /*totalItems*/ 4) && t2_value !== (t2_value = `${/*totalItems*/ ctx[2]} - Files` + "")) set_data(t2, t2_value);
+
+    			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block1) {
+    				if_block1.p(ctx, dirty);
+    			} else {
+    				if_block1.d(1);
+    				if_block1 = current_block_type(ctx);
+
+    				if (if_block1) {
+    					if_block1.c();
+    					if_block1.m(tbody, null);
+    				}
+    			}
+
+    			const pagination_changes = {};
+    			if (dirty & /*page*/ 1) pagination_changes.page = /*page*/ ctx[0];
+    			if (dirty & /*totalPages*/ 2) pagination_changes.totalPages = /*totalPages*/ ctx[1];
+    			pagination.$set(pagination_changes);
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(if_block0);
+    			transition_in(filter_1.$$.fragment, local);
+    			transition_in(pagination.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(if_block0);
+    			transition_out(filter_1.$$.fragment, local);
+    			transition_out(pagination.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (if_block0) if_block0.d(detaching);
+    			if (detaching) detach(t0);
+    			if (detaching) detach(div3);
+    			destroy_component(filter_1);
+    			if_block1.d();
+    			destroy_component(pagination);
+    		}
+    	};
+    }
+
+    function instance$i($$self, $$props, $$invalidate) {
+    	const socket = getContext("socket");
+    	let { page = 1 } = $$props;
+    	let { filter = "" } = $$props;
+    	let totalPages = 0;
+    	let totalItems = 0;
+    	let items = [];
+    	let file = {};
+    	let showModal = false;
+    	let modalType = {};
+
+    	const calRows = () => {
+    		let container = document.querySelector(".list-container") || {};
+    		return parseInt(container.offsetHeight / 45) - 1;
+    	};
+
+    	const loadFiles = async pg => {
+    		let { data } = await axios.get(`/api/admin/files/${pg}/${calRows()}/${filter || ""}`);
+
+    		if (data.files) {
+    			$$invalidate(3, items = data.files);
+    			$$invalidate(1, totalPages = data.totalPages || 0);
+    			$$invalidate(2, totalItems = data.totalItems || 0);
+    			$$invalidate(0, page = pg);
+    		}
+    	};
+
+    	onMount(async () => {
+    		loadFiles(1);
+
+    		socket.on("file-renamed", data => {
+    			if (data.success) {
+    				$$invalidate(4, file.Name = data.Name, file);
+    				$$invalidate(3, items);
+    				hideModal();
+    			}
+    		});
+
+    		socket.on("file-removed", data => {
+    			if (data.success) {
+    				if (page === totalPages && items.length > 1) {
+    					$$invalidate(3, items = items.filter(f => f.Id !== file.Id));
+    				} else {
+    					$$invalidate(0, page = page > 1 ? page - 1 : page);
+    					loadFiles(page);
+    				}
+
+    				hideModal();
+    			}
+    		});
+    	});
+
+    	onDestroy(() => {
+    		delete socket._callbacks["$file-renamed"];
+    		delete socket._callbacks["$file-removed"];
+    	});
+
+    	const onFilter = event => {
+    		$$invalidate(12, filter = event.detail);
+    		loadFiles(1);
+    	};
+
+    	const goToPage = pg => {
+    		pg = parseInt(pg.detail);
+    		if (pg < 1 || pg > totalPages) return;
+    		$$invalidate(0, page = pg < 1 ? 1 : pg > totalPages ? totalPages : pg);
+    		loadFiles(page);
+    	};
+
+    	const itemClick = event => {
+    		let el = event.target;
+
+    		if (el.tagName === "I") {
+    			$$invalidate(4, file = items.find(f => f.Id === el.closest("tr").id));
+    			let cList = el.classList.toString();
+
+    			if ((/fa-edit/gi).test(cList)) {
+    				$$invalidate(6, modalType = {
+    					title: "Edit File",
+    					Del: false,
+    					isFile: true
+    				});
+    			} else {
+    				$$invalidate(6, modalType = {
+    					title: "Remove File",
+    					Del: true,
+    					isFile: true
+    				});
+    			}
+
+    			$$invalidate(5, showModal = true);
+    		}
+    	};
+
+    	const handleSubmit = event => {
+    		if (modalType.Del) {
+    			let Del = event.target.querySelector("input").checked;
+    			socket.emit("remove-file", { Id: file.Id, Del });
+    		} else {
+    			let Name = event.target.querySelector("input").value;
+
+    			if (!Name) {
+    				$$invalidate(6, modalType.error = "Name Can't be empty", modalType);
+    			} else {
+    				socket.emit("rename-file", { Id: file.Id, Name });
+    			}
+    		}
+    	};
+
+    	const hideModal = () => {
+    		$$invalidate(5, showModal = false);
+    		$$invalidate(4, file = {});
+    	};
+
+    	$$self.$$set = $$props => {
+    		if ('page' in $$props) $$invalidate(0, page = $$props.page);
+    		if ('filter' in $$props) $$invalidate(12, filter = $$props.filter);
+    	};
+
+    	return [
+    		page,
+    		totalPages,
+    		totalItems,
+    		items,
+    		file,
+    		showModal,
+    		modalType,
+    		onFilter,
+    		goToPage,
+    		itemClick,
+    		handleSubmit,
+    		hideModal,
+    		filter
+    	];
+    }
+
+    class Files extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$i, create_fragment$i, safe_not_equal, { page: 0, filter: 12 });
+    	}
+    }
+
+    /* src\Admin\AdminRoutes.svelte generated by Svelte v3.49.0 */
+
+    function create_default_slot$4(ctx) {
+    	let navbar;
+    	let t0;
+    	let div;
+    	let route0;
+    	let t1;
+    	let route1;
+    	let t2;
+    	let route2;
+    	let t3;
+    	let route3;
+    	let current;
+    	navbar = new Navbar({ props: { navItems: /*navItems*/ ctx[0] } });
+    	navbar.$on("click", /*click_handler*/ ctx[1]);
+
+    	route0 = new Route({
+    			props: {
+    				path: "/folders/:page/:filter",
+    				component: Folders
+    			}
+    		});
+
+    	route1 = new Route({
+    			props: {
+    				path: "/content-manager/:tab",
+    				component: DiskManager
+    			}
+    		});
+
+    	route2 = new Route({
+    			props: {
+    				path: "/files/:page/:filter",
+    				component: Files
+    			}
+    		});
+
+    	route3 = new Route({ props: { path: "/", component: User } });
+
+    	return {
+    		c() {
+    			create_component(navbar.$$.fragment);
+    			t0 = space();
+    			div = element("div");
+    			create_component(route0.$$.fragment);
+    			t1 = space();
+    			create_component(route1.$$.fragment);
+    			t2 = space();
+    			create_component(route2.$$.fragment);
+    			t3 = space();
+    			create_component(route3.$$.fragment);
+    			attr(div, "class", "content svelte-913v8z");
+    		},
+    		m(target, anchor) {
+    			mount_component(navbar, target, anchor);
+    			insert(target, t0, anchor);
+    			insert(target, div, anchor);
+    			mount_component(route0, div, null);
+    			append(div, t1);
+    			mount_component(route1, div, null);
+    			append(div, t2);
+    			mount_component(route2, div, null);
+    			append(div, t3);
+    			mount_component(route3, div, null);
+    			current = true;
+    		},
+    		p: noop,
+    		i(local) {
+    			if (current) return;
+    			transition_in(navbar.$$.fragment, local);
+    			transition_in(route0.$$.fragment, local);
+    			transition_in(route1.$$.fragment, local);
+    			transition_in(route2.$$.fragment, local);
+    			transition_in(route3.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(navbar.$$.fragment, local);
+    			transition_out(route0.$$.fragment, local);
+    			transition_out(route1.$$.fragment, local);
+    			transition_out(route2.$$.fragment, local);
+    			transition_out(route3.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			destroy_component(navbar, detaching);
+    			if (detaching) detach(t0);
+    			if (detaching) detach(div);
+    			destroy_component(route0);
+    			destroy_component(route1);
+    			destroy_component(route2);
+    			destroy_component(route3);
+    		}
+    	};
+    }
+
+    function create_fragment$h(ctx) {
+    	let router;
+    	let current;
+
+    	router = new Router({
+    			props: {
+    				$$slots: { default: [create_default_slot$4] },
+    				$$scope: { ctx }
+    			}
+    		});
+
+    	return {
+    		c() {
+    			create_component(router.$$.fragment);
+    		},
+    		m(target, anchor) {
+    			mount_component(router, target, anchor);
+    			current = true;
+    		},
+    		p(ctx, [dirty]) {
+    			const router_changes = {};
+
+    			if (dirty & /*$$scope*/ 4) {
+    				router_changes.$$scope = { dirty, ctx };
+    			}
+
+    			router.$set(router_changes);
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(router.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(router.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			destroy_component(router, detaching);
+    		}
+    	};
+    }
+
+    function instance$h($$self) {
+    	const navItems = [
+    		{
+    			title: "Users",
+    			path: "/",
+    			class: "users"
+    		},
+    		{
+    			title: "Files",
+    			path: "/files",
+    			class: "file"
+    		},
+    		{
+    			title: "Folders",
+    			path: "/folders",
+    			class: "folder"
+    		},
+    		{
+    			title: "Content Manager",
+    			path: "/content-manager/tab-1",
+    			class: "sitemap"
+    		}
+    	];
+
+    	function click_handler(event) {
+    		bubble.call(this, $$self, event);
+    	}
+
+    	return [navItems, click_handler];
+    }
+
+    class AdminRoutes extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$h, create_fragment$h, safe_not_equal, {});
+    	}
+    }
+
+    const FavoritesStores = writable([]);
+
+    const addUpdateFavorite = async (fav) => {
+      const { data } = await axios.post("/api/files/favorites/add-edit", fav);
+      if (data.Id) {
+        FavoritesStores.update((favs) => {
+          return (favs = [...favs.filter((f) => f.Id !== fav.Id), data].sort((f1, f2) =>
+            f1.Name.localeCompare(f2.Name)
+          ));
+        });
+      }
+      return data;
+    };
+
+    const removeFavorite = async (Id, Type) => {
+      const { data } = await axios.delete("/api/files/favorites/remove", {
+        data: { Id, Type },
+      });
+      console.log(data);
+      if (data.removed) {
+        FavoritesStores.update((favs) => (favs = favs.filter((fav) => fav.Id !== Id)));
+      }
+      return data;
+    };
+
+    /* src\User\pages\Home.svelte generated by Svelte v3.49.0 */
+
+    function get_each_context$5(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[10] = list[i].Id;
+    	child_ctx[11] = list[i].Name;
+    	child_ctx[12] = list[i].Type;
+    	child_ctx[13] = list[i].Cover;
+    	child_ctx[14] = list[i].FileCount;
+    	child_ctx[15] = list[i].FilesType;
+    	child_ctx[17] = i;
+    	return child_ctx;
+    }
+
+    // (78:6) {#each files as { Id, Name, Type, Cover, FileCount, FilesType }
+    function create_each_block$5(ctx) {
+    	let div4;
+    	let div3;
+    	let div0;
+    	let span0;
+    	let t0;
+    	let span1;
+    	let t1_value = /*FileCount*/ ctx[14] + "";
+    	let t1;
+    	let t2;
+    	let span2;
+    	let t3;
+    	let div1;
+    	let img;
+    	let img_src_value;
+    	let t4;
+    	let div2;
+    	let t5_value = /*Name*/ ctx[11] + "";
+    	let t5;
+    	let t6;
+    	let div4_id_value;
+    	let div4_data_type_value;
+    	let div4_data_types_value;
+    	let mounted;
+    	let dispose;
+
+    	return {
+    		c() {
+    			div4 = element("div");
+    			div3 = element("div");
+    			div0 = element("div");
+    			span0 = element("span");
+    			span0.innerHTML = `<i class="${"fas fa-folder"} svelte-f0bvf6"></i>`;
+    			t0 = space();
+    			span1 = element("span");
+    			t1 = text(t1_value);
+    			t2 = space();
+    			span2 = element("span");
+    			span2.innerHTML = `<i class="fas fa-trash-alt svelte-f0bvf6"></i>`;
+    			t3 = space();
+    			div1 = element("div");
+    			img = element("img");
+    			t4 = space();
+    			div2 = element("div");
+    			t5 = text(t5_value);
+    			t6 = space();
+    			attr(span0, "class", "file-btn-left");
+    			attr(span1, "class", "file-progress");
+    			attr(span2, "class", "remove");
+    			attr(div0, "class", "file-btns");
+    			if (!src_url_equal(img.src, img_src_value = /*Cover*/ ctx[13])) attr(img, "src", img_src_value);
+    			attr(img, "alt", "No Cover Found");
+    			attr(div1, "class", "file-cover");
+    			attr(div2, "class", "file-name");
+    			attr(div3, "class", "file-info");
+    			attr(div4, "class", "file");
+    			attr(div4, "id", div4_id_value = /*Id*/ ctx[10]);
+    			attr(div4, "data-type", div4_data_type_value = /*Type*/ ctx[12]);
+    			attr(div4, "data-types", div4_data_types_value = /*FilesType*/ ctx[15]);
+    			attr(div4, "tabindex", "0");
+    			toggle_class(div4, "current", /*i*/ ctx[17] === /*current*/ ctx[1]);
+    		},
+    		m(target, anchor) {
+    			insert(target, div4, anchor);
+    			append(div4, div3);
+    			append(div3, div0);
+    			append(div0, span0);
+    			append(div0, t0);
+    			append(div0, span1);
+    			append(span1, t1);
+    			append(div0, t2);
+    			append(div0, span2);
+    			append(div3, t3);
+    			append(div3, div1);
+    			append(div1, img);
+    			append(div3, t4);
+    			append(div3, div2);
+    			append(div2, t5);
+    			append(div4, t6);
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(span0, "click", stop_propagation(/*openFolder*/ ctx[4])),
+    					listen(div1, "dblclick", stop_propagation(/*openFolder*/ ctx[4]))
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*files*/ 1 && t1_value !== (t1_value = /*FileCount*/ ctx[14] + "")) set_data(t1, t1_value);
+
+    			if (dirty & /*files*/ 1 && !src_url_equal(img.src, img_src_value = /*Cover*/ ctx[13])) {
+    				attr(img, "src", img_src_value);
+    			}
+
+    			if (dirty & /*files*/ 1 && t5_value !== (t5_value = /*Name*/ ctx[11] + "")) set_data(t5, t5_value);
+
+    			if (dirty & /*files*/ 1 && div4_id_value !== (div4_id_value = /*Id*/ ctx[10])) {
+    				attr(div4, "id", div4_id_value);
+    			}
+
+    			if (dirty & /*files*/ 1 && div4_data_type_value !== (div4_data_type_value = /*Type*/ ctx[12])) {
+    				attr(div4, "data-type", div4_data_type_value);
+    			}
+
+    			if (dirty & /*files*/ 1 && div4_data_types_value !== (div4_data_types_value = /*FilesType*/ ctx[15])) {
+    				attr(div4, "data-types", div4_data_types_value);
+    			}
+
+    			if (dirty & /*current*/ 2) {
+    				toggle_class(div4, "current", /*i*/ ctx[17] === /*current*/ ctx[1]);
+    			}
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div4);
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    function create_fragment$g(ctx) {
+    	let div3;
+    	let div0;
+    	let t1;
+    	let div2;
+    	let span1;
+    	let t2;
+    	let div1;
+    	let t3;
+    	let span2;
+    	let mounted;
+    	let dispose;
+    	let each_value = /*files*/ ctx[0];
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block$5(get_each_context$5(ctx, each_value, i));
+    	}
+
+    	return {
+    		c() {
+    			div3 = element("div");
+    			div0 = element("div");
+
+    			div0.innerHTML = `<span class="svelte-f0bvf6"><i class="fas fa-folder svelte-f0bvf6"></i>
+      Recents</span>`;
+
+    			t1 = space();
+    			div2 = element("div");
+    			span1 = element("span");
+    			t2 = space();
+    			div1 = element("div");
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			t3 = space();
+    			span2 = element("span");
+    			attr(div0, "class", "title svelte-f0bvf6");
+    			attr(span1, "class", "fas fa-chevron-circle-left svelte-f0bvf6");
+    			attr(div1, "class", "carousel svelte-f0bvf6");
+    			attr(div1, "tabindex", "0");
+    			attr(span2, "class", "fas fa-chevron-circle-right svelte-f0bvf6");
+    			attr(div2, "class", "wrapper svelte-f0bvf6");
+    			attr(div3, "class", "content svelte-f0bvf6");
+    		},
+    		m(target, anchor) {
+    			insert(target, div3, anchor);
+    			append(div3, div0);
+    			append(div3, t1);
+    			append(div3, div2);
+    			append(div2, span1);
+    			append(div2, t2);
+    			append(div2, div1);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(div1, null);
+    			}
+
+    			/*div1_binding*/ ctx[6](div1);
+    			append(div2, t3);
+    			append(div2, span2);
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(span1, "click", /*scrollItems*/ ctx[3]),
+    					listen(div1, "scroll", /*onScroll*/ ctx[5]),
+    					listen(span2, "click", /*scrollItems*/ ctx[3])
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, [dirty]) {
+    			if (dirty & /*files, current, openFolder*/ 19) {
+    				each_value = /*files*/ ctx[0];
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context$5(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block$5(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(div1, null);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value.length;
+    			}
+    		},
+    		i: noop,
+    		o: noop,
+    		d(detaching) {
+    			if (detaching) detach(div3);
+    			destroy_each(each_blocks, detaching);
+    			/*div1_binding*/ ctx[6](null);
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    function instance$g($$self, $$props, $$invalidate) {
+    	let files = [];
+    	let current = 0;
+    	let container;
+
+    	axios.get("/api/files/recents").then(({ data }) => {
+    		if (data instanceof Array) {
+    			$$invalidate(0, files = data);
+    		}
+    	});
+
+    	const scrollItems = ({ target: { classList } }) => {
+    		let left;
+    		let behavior = "smooth";
+    		let { scrollLeft, offsetWidth, scrollWidth } = container;
+
+    		if (classList.contains("fa-chevron-circle-left")) {
+    			left = scrollLeft - offsetWidth;
+
+    			if (scrollLeft === 0) {
+    				left = scrollWidth;
+    			}
+    		} else {
+    			left = scrollLeft + offsetWidth;
+
+    			if (scrollLeft === scrollWidth - offsetWidth) {
+    				left = 0;
+    			}
+    		}
+
+    		container.scroll({ left, behavior });
+    	};
+
+    	const openFolder = ({ target }) => {
+    		let file = files.find(f => f.Id === target.closest(".file").id);
+    		localStorage.setItem("content", "/");
+    		navigate(`/${file.FilesType}/viewer/${file.Id}/${file.CurrentFile}`);
+    	};
+
+    	let tscroll;
+
+    	const onScroll = e => {
+    		if (tscroll) clearTimeout(tscroll);
+
+    		tscroll = setTimeout(
+    			() => {
+    				let el = document.querySelector(".file");
+    				$$invalidate(1, current = Math.round(container.scrollLeft / el.offsetWidth + 0.05));
+
+    				container.scroll({
+    					left: current * el.offsetWidth,
+    					behavior: "smooth"
+    				});
+    			},
+    			100
+    		);
+    	};
+
+    	const resize = () => {
+    		if (container) {
+    			let tFile = document.querySelector(".file");
+    			if (tFile) container.offsetWidth / tFile.offsetWidth;
+    		}
+    	};
+
+    	onMount(() => {
+    		resize();
+    		window.onresize = resize;
+
+    		return () => {
+    			window.onresize = null;
+    		};
+    	});
+
+    	function div1_binding($$value) {
+    		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
+    			container = $$value;
+    			$$invalidate(2, container);
+    		});
+    	}
+
+    	return [files, current, container, scrollItems, openFolder, onScroll, div1_binding];
+    }
+
+    class Home extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$g, create_fragment$g, safe_not_equal, {});
+    	}
+    }
+
+    const scrollInView = (num) => {
+        let currentimg = document.querySelectorAll(".img-current img")[num];
+        if (currentimg) {
+            currentimg.scrollIntoView();
+        }
+    };
+
+    // get a list of index of empty place of the array
+    const getEmptyIndex = function (arr, from, to, dir, size) {
+        let index = from < 0 ? 0 : from;
+        let items = [];
+        while (items.length < to) {
+            //check if is out of bound
+            if (index > size - 1 || index < 0) break;
+            // if is empty add index
+            if (!arr[index]) items.push(index);
+            //increase or decrease depending on direction
+            index += dir > 0 ? 1 : -1;
+        }
+        return items;
+    };
+
+    function formatTime(time) {
+        if (time === 0) return "00:00";
+
+        var h = Math.floor(time / 3600);
+        var min = Math.floor((time / 3600 - h) * 60);
+        var sec = Math.floor(time % 60);
+        return (
+            (h === 0 ? "" : h + ":") +
+            String(min).padStart(2, "0") +
+            ":" +
+            String(sec).padStart(2, "0")
+        );
+    }
+
+    const isMobile = /(android)|(iphone)/i.test(navigator.userAgent);
+    const scrollW = isMobile ? 15 : 0;
+    const itemW = isMobile ? 170 : 200;
+
+    const getFilesPerPage = (i) => {
+        let fwidth = document.body.offsetWidth;
+        let items = parseInt((fwidth - scrollW) / itemW);
+        return items * i;
+    };
+
+    const genUrl = (page = 1, { order = "nu", items }, filter, type, id, dir) => {
+        let itemsperpage = (items || 0) === 0 ? getFilesPerPage(3) : items;
+        if (type.includes("content")) {
+            type = `folder-content/${id}`;
+        }
+
+        filter = (filter || "").replace("%", " ");
+        let url = "";
+        if (["mangas", "videos"].includes(type)) {
+            url = `/api/files/${type}/${dir}/${order}/${page}/${itemsperpage}/${filter}`;
+        } else {
+            url = `/api/files/${type}/${order}/${page}/${itemsperpage}/${filter}`;
+        }
+        return url;
+    };
+
+    const FileTypes = {
+        Manga: {
+            type: "mangas",
+            class: "book-open",
+            formatter: (a, b) => `${parseInt(a || 0) + 1}/${b}`,
+        },
+        Video: {
+            type: "videos",
+            class: "play-circle",
+            formatter: (a, b) => `${formatTime(a)}/${formatTime(b)}`,
+        },
+        Folder: {
+            type: "folders",
+            class: "folder-open",
+            formatter() {
+                return "";
+            },
+        },
+    };
+
+    const ProcessFile = (file, socket, type) => {
+        const curPath = location.pathname;
+        let Type = curPath.replace(/(^\/+|\/+$)/g, "").split("/")[0];
+        switch (file.dataset.type) {
+            case "Manga":
+            case "Video": {
+                let segment = curPath
+                    .replace(/(^\/+|\/+$)/g, "")
+                    .split("/")
+                    .slice(0, 3);
+                segment[1] = "viewer";
+                let url = `/${segment.join("/")}/${file.id}`;
+                localStorage.setItem("content", curPath);
+                localStorage.setItem("fileId", file.id);
+                navigate(url);
+                console.log(segment[2]);
+                if (socket)
+                    socket.emit("recent-folder", {
+                        CurrentFile: file.id,
+                        FolderId: segment[2],
+                    });
+                break;
+            }
+            default: {
+                localStorage.setObject("folder", {
+                    folder: file.id,
+                    pathname: curPath,
+                });
+                navigate(`/${type || Type}/content/${file.id}/`);
+            }
+        }
+    };
+
+    const map = function (value, in_min, in_max, out_min, out_max) {
+        return ((value - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min;
+    };
+
+    const UP = 38;
+    const DOWN = 40;
+    const LEFT = 37;
+    const RIGHT = 39;
+    const ENTER = 13;
+    const HOME = 36;
+    const END = 35;
+    var selectedIndex = 0;
+
+    const calCol = () => {
+      let file = document.querySelector(".file");
+      return Math.floor(file.parentElement.offsetWidth / file.offsetWidth);
+    };
+
+    const getElByIndex = (index) => {
+      return [...document.querySelectorAll(".file")][index];
+    };
+
+    const getElIndex = (element) => {
+      return [...document.querySelectorAll(".file")].indexOf(element);
+    };
+
+    const selectItem = (index) => {
+      selectedIndex = index;
+      let nextEl = getElByIndex(index);
+      if (nextEl) {
+        let itemContainer = nextEl.parentElement;
+        let scrollElement = itemContainer.parentElement;
+        let scroll = scrollElement.scrollTop,
+          elofft = nextEl.offsetTop;
+
+        if (elofft - scroll + 1 < -1) {
+          scroll = elofft < 60 ? 0 : elofft;
+        }
+
+        let top = elofft + nextEl.offsetHeight;
+        let sctop = scroll + scrollElement.offsetHeight;
+
+        if (top - sctop + 1 > 0) {
+          scroll =
+            top + 31 > itemContainer.offsetHeight
+              ? itemContainer.offsetHeight - 10
+              : scroll + (top - sctop);
+        }
+
+        scrollElement.scroll({
+          top: scroll,
+          behavior: "smooth",
+        });
+
+        let activeEl = document.querySelector(".file.active");
+
+        if (activeEl) activeEl.classList.remove("active");
+
+        nextEl.classList.add("active");
+        nextEl.focus();
+        window.localStorage.setItem("selected", index);
+      }
+      return nextEl;
+    };
+
+    const fileClicks = (event) => {
+      let file = event.target.closest(".file");
+      selectItem(getElIndex(file));
+    };
+
+    const fileKeypress = (e, page, goToPage, processFile) => {
+      let file = document.querySelector(".file");
+      let selected = 0;
+      if (file) {
+        let wasProcesed = false;
+        let colNum = calCol();
+        let totalitem = document.querySelectorAll(".file").length;
+        selectedIndex = getElIndex(file.parentElement.querySelector(".active"));
+        switch (e.keyCode) {
+          case ENTER: {
+            console.log("file", e.target);
+            processFile(e.target);
+            break;
+          }
+          case LEFT: {
+            if (selectedIndex > 0) {
+              selectItem(selectedIndex - 1);
+            } else if (goToPage) {
+              selected = getFilesPerPage(3) - 1;
+              goToPage({ detail: page - 1 }, selected);
+            }
+
+            wasProcesed = true;
+            break;
+          }
+          case UP: {
+            if (goToPage && e.ctrlKey) {
+              selected = getFilesPerPage(3) - 1;
+              goToPage({ detail: page - 1 }, selected);
+            } else if (selectedIndex - colNum >= 0) {
+              selectItem(selectedIndex - colNum);
+            }
+            wasProcesed = true;
+            break;
+          }
+          case RIGHT: {
+            if (selectedIndex < totalitem - 1) {
+              selectItem(selectedIndex + 1);
+            } else if (goToPage) {
+              goToPage({ detail: parseInt(page) + 1 }, 0);
+            }
+
+            wasProcesed = true;
+            break;
+          }
+
+          case DOWN: {
+            if (goToPage && e.ctrlKey) {
+              goToPage({ detail: parseInt(page) + 1 }, 0);
+            } else if (selectedIndex + colNum < totalitem) {
+              selectItem(selectedIndex + colNum);
+            }
+            wasProcesed = true;
+            break;
+          }
+          case HOME: {
+            selectItem(0);
+            wasProcesed = true;
+            break;
+          }
+          case END: {
+            selectItem(totalitem - 1);
+            wasProcesed = true;
+            break;
+          }
+        }
+
+        if (wasProcesed) {
+          e.preventDefault();
+        }
+      }
+    };
+
+    /* src\User\Component\FavoriteList.svelte generated by Svelte v3.49.0 */
+
+    function get_each_context$4(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[13] = list[i];
+    	return child_ctx;
+    }
+
+    // (84:4) {#if Type === 'Folder'}
+    function create_if_block_1$3(ctx) {
+    	let show_if;
+    	let if_block_anchor;
+
+    	function select_block_type(ctx, dirty) {
+    		if (dirty & /*type*/ 2) show_if = null;
+    		if (show_if == null) show_if = !!/*type*/ ctx[1].startsWith('favorites');
+    		if (show_if) return create_if_block_2$2;
+    		if (/*isFav*/ ctx[2]) return create_if_block_3;
+    		return create_else_block$3;
+    	}
+
+    	let current_block_type = select_block_type(ctx, -1);
+    	let if_block = current_block_type(ctx);
+
+    	return {
+    		c() {
+    			if_block.c();
+    			if_block_anchor = empty$1();
+    		},
+    		m(target, anchor) {
+    			if_block.m(target, anchor);
+    			insert(target, if_block_anchor, anchor);
+    		},
+    		p(ctx, dirty) {
+    			if (current_block_type === (current_block_type = select_block_type(ctx, dirty)) && if_block) {
+    				if_block.p(ctx, dirty);
+    			} else {
+    				if_block.d(1);
+    				if_block = current_block_type(ctx);
+
+    				if (if_block) {
+    					if_block.c();
+    					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+    				}
+    			}
+    		},
+    		d(detaching) {
+    			if_block.d(detaching);
+    			if (detaching) detach(if_block_anchor);
+    		}
+    	};
+    }
+
+    // (89:6) {:else}
+    function create_else_block$3(ctx) {
+    	let i;
+
+    	return {
+    		c() {
+    			i = element("i");
+    			attr(i, "class", "far fa-star");
+    		},
+    		m(target, anchor) {
+    			insert(target, i, anchor);
+    			/*i_binding_1*/ ctx[10](i);
+    		},
+    		p: noop,
+    		d(detaching) {
+    			if (detaching) detach(i);
+    			/*i_binding_1*/ ctx[10](null);
+    		}
+    	};
+    }
+
+    // (87:22) 
+    function create_if_block_3(ctx) {
+    	let i;
+
+    	return {
+    		c() {
+    			i = element("i");
+    			attr(i, "class", "fas fa-star");
+    		},
+    		m(target, anchor) {
+    			insert(target, i, anchor);
+    		},
+    		p: noop,
+    		d(detaching) {
+    			if (detaching) detach(i);
+    		}
+    	};
+    }
+
+    // (85:6) {#if type.startsWith('favorites')}
+    function create_if_block_2$2(ctx) {
+    	let i;
+
+    	return {
+    		c() {
+    			i = element("i");
+    			attr(i, "class", "fas fa-trash-alt text-danger");
+    		},
+    		m(target, anchor) {
+    			insert(target, i, anchor);
+    			/*i_binding*/ ctx[9](i);
+    		},
+    		p: noop,
+    		d(detaching) {
+    			if (detaching) detach(i);
+    			/*i_binding*/ ctx[9](null);
+    		}
+    	};
+    }
+
+    // (94:2) {#if showList}
+    function create_if_block$7(ctx) {
+    	let ul;
+    	let each_value = /*$FavoritesStores*/ ctx[5];
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block$4(get_each_context$4(ctx, each_value, i));
+    	}
+
+    	return {
+    		c() {
+    			ul = element("ul");
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			attr(ul, "class", "svelte-5vo8z2");
+    		},
+    		m(target, anchor) {
+    			insert(target, ul, anchor);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(ul, null);
+    			}
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*$FavoritesStores, addToFav*/ 96) {
+    				each_value = /*$FavoritesStores*/ ctx[5];
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context$4(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block$4(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(ul, null);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value.length;
+    			}
+    		},
+    		d(detaching) {
+    			if (detaching) detach(ul);
+    			destroy_each(each_blocks, detaching);
+    		}
+    	};
+    }
+
+    // (96:6) {#each $FavoritesStores as fav}
+    function create_each_block$4(ctx) {
+    	let li;
+    	let t_value = /*fav*/ ctx[13].Name + "";
+    	let t;
+    	let li_id_value;
+    	let mounted;
+    	let dispose;
+
+    	return {
+    		c() {
+    			li = element("li");
+    			t = text(t_value);
+    			attr(li, "id", li_id_value = /*fav*/ ctx[13].Id);
+    			attr(li, "class", "svelte-5vo8z2");
+    		},
+    		m(target, anchor) {
+    			insert(target, li, anchor);
+    			append(li, t);
+
+    			if (!mounted) {
+    				dispose = listen(li, "click", /*addToFav*/ ctx[6]);
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*$FavoritesStores*/ 32 && t_value !== (t_value = /*fav*/ ctx[13].Name + "")) set_data(t, t_value);
+
+    			if (dirty & /*$FavoritesStores*/ 32 && li_id_value !== (li_id_value = /*fav*/ ctx[13].Id)) {
+    				attr(li, "id", li_id_value);
+    			}
+    		},
+    		d(detaching) {
+    			if (detaching) detach(li);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+    }
+
+    function create_fragment$f(ctx) {
+    	let span1;
+    	let span0;
+    	let t;
+    	let if_block0 = /*Type*/ ctx[0] === 'Folder' && create_if_block_1$3(ctx);
+    	let if_block1 = /*showList*/ ctx[4] && create_if_block$7(ctx);
+
+    	return {
+    		c() {
+    			span1 = element("span");
+    			span0 = element("span");
+    			if (if_block0) if_block0.c();
+    			t = space();
+    			if (if_block1) if_block1.c();
+    			attr(span0, "class", "fav-icon");
+    			attr(span1, "class", "fav-control svelte-5vo8z2");
+    		},
+    		m(target, anchor) {
+    			insert(target, span1, anchor);
+    			append(span1, span0);
+    			if (if_block0) if_block0.m(span0, null);
+    			append(span1, t);
+    			if (if_block1) if_block1.m(span1, null);
+    		},
+    		p(ctx, [dirty]) {
+    			if (/*Type*/ ctx[0] === 'Folder') {
+    				if (if_block0) {
+    					if_block0.p(ctx, dirty);
+    				} else {
+    					if_block0 = create_if_block_1$3(ctx);
+    					if_block0.c();
+    					if_block0.m(span0, null);
+    				}
+    			} else if (if_block0) {
+    				if_block0.d(1);
+    				if_block0 = null;
+    			}
+
+    			if (/*showList*/ ctx[4]) {
+    				if (if_block1) {
+    					if_block1.p(ctx, dirty);
+    				} else {
+    					if_block1 = create_if_block$7(ctx);
+    					if_block1.c();
+    					if_block1.m(span1, null);
+    				}
+    			} else if (if_block1) {
+    				if_block1.d(1);
+    				if_block1 = null;
+    			}
+    		},
+    		i: noop,
+    		o: noop,
+    		d(detaching) {
+    			if (detaching) detach(span1);
+    			if (if_block0) if_block0.d();
+    			if (if_block1) if_block1.d();
+    		}
+    	};
+    }
+
+    function instance$f($$self, $$props, $$invalidate) {
+    	let $FavoritesStores;
+    	component_subscribe($$self, FavoritesStores, $$value => $$invalidate(5, $FavoritesStores = $$value));
+    	let { Type } = $$props;
+    	let { type } = $$props;
+    	let { isFav } = $$props;
+    	let { favClicked } = $$props;
+    	let { favId } = $$props;
+    	const dispath = createEventDispatcher();
+    	let thisEl;
+    	let showList = false;
+
+    	const addToFav = async event => {
+    		let FolderId = event.target.closest(".file").id;
+    		let FavoriteId = event.target.id;
+    		const { data } = await axios.post("/api/files/favorites/add-folder", { FolderId, FavoriteId });
+
+    		if (data.success) {
+    			$$invalidate(3, thisEl.className = "fas fa-star", thisEl);
+    		}
+    	};
+
+    	const removeFile = async FolderId => {
+    		let { data } = await axios.post("/api/files/favorites/remove-folder", { id: favId, fid: FolderId });
+
+    		if (data.removed) {
+    			dispath("removeFile", FolderId);
+    		}
+    	};
+
+    	function i_binding($$value) {
+    		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
+    			thisEl = $$value;
+    			$$invalidate(3, thisEl);
+    		});
+    	}
+
+    	function i_binding_1($$value) {
+    		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
+    			thisEl = $$value;
+    			$$invalidate(3, thisEl);
+    		});
+    	}
+
+    	$$self.$$set = $$props => {
+    		if ('Type' in $$props) $$invalidate(0, Type = $$props.Type);
+    		if ('type' in $$props) $$invalidate(1, type = $$props.type);
+    		if ('isFav' in $$props) $$invalidate(2, isFav = $$props.isFav);
+    		if ('favClicked' in $$props) $$invalidate(7, favClicked = $$props.favClicked);
+    		if ('favId' in $$props) $$invalidate(8, favId = $$props.favId);
+    	};
+
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty & /*favClicked, thisEl*/ 136) {
+    			if (favClicked === thisEl && thisEl) {
+    				$$invalidate(4, showList = thisEl.classList.contains("far"));
+
+    				if (thisEl.classList.contains("fa-trash-alt")) {
+    					removeFile(thisEl.closest(".file").id);
+    				}
+    			} else {
+    				$$invalidate(4, showList = false);
+    			}
+    		}
+    	};
+
+    	return [
+    		Type,
+    		type,
+    		isFav,
+    		thisEl,
+    		showList,
+    		$FavoritesStores,
+    		addToFav,
+    		favClicked,
+    		favId,
+    		i_binding,
+    		i_binding_1
+    	];
+    }
+
+    class FavoriteList extends SvelteComponent {
+    	constructor(options) {
+    		super();
+
+    		init(this, options, instance$f, create_fragment$f, safe_not_equal, {
+    			Type: 0,
+    			type: 1,
+    			isFav: 2,
+    			favClicked: 7,
+    			favId: 8
+    		});
+    	}
+    }
+
+    /* src\User\Component\FilesList.svelte generated by Svelte v3.49.0 */
+
+    function get_each_context$3(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[30] = list[i].Id;
+    	child_ctx[31] = list[i].Name;
+    	child_ctx[32] = list[i].Type;
+    	child_ctx[33] = list[i].Cover;
+    	child_ctx[34] = list[i].CurrentPos;
+    	child_ctx[35] = list[i].Duration;
+    	child_ctx[36] = list[i].isFav;
+    	child_ctx[37] = list[i].FileCount;
+    	child_ctx[39] = i;
+    	return child_ctx;
+    }
+
+    // (143:2) {#if isContent}
+    function create_if_block_1$2(ctx) {
+    	let div2;
+    	let div0;
+    	let img;
+    	let img_src_value;
+    	let t0;
+    	let h4;
+    	let t1_value = /*folder*/ ctx[6].Name + "";
+    	let t1;
+    	let t2;
+    	let div1;
+    	let t3;
+    	let button0;
+    	let t5;
+    	let button1;
+    	let t7;
+    	let button2;
+    	let t9;
+    	let button3;
+    	let mounted;
+    	let dispose;
+    	let if_block = /*lastRead*/ ctx[7] && create_if_block_2$1(ctx);
+
+    	return {
+    		c() {
+    			div2 = element("div");
+    			div0 = element("div");
+    			img = element("img");
+    			t0 = space();
+    			h4 = element("h4");
+    			t1 = text(t1_value);
+    			t2 = space();
+    			div1 = element("div");
+    			if (if_block) if_block.c();
+    			t3 = space();
+    			button0 = element("button");
+    			button0.textContent = "First";
+    			t5 = space();
+    			button1 = element("button");
+    			button1.textContent = "Last";
+    			t7 = space();
+    			button2 = element("button");
+    			button2.textContent = "Reset All";
+    			t9 = space();
+    			button3 = element("button");
+    			button3.textContent = "Update";
+    			if (!src_url_equal(img.src, img_src_value = /*folder*/ ctx[6].Cover)) attr(img, "src", img_src_value);
+    			attr(img, "alt", "Place Holder");
+    			attr(img, "class", "svelte-5zjxis");
+    			attr(div0, "id", "img-info");
+    			attr(div0, "class", "svelte-5zjxis");
+    			attr(h4, "class", "svelte-5zjxis");
+    			attr(button0, "id", "first");
+    			attr(button0, "class", "btn btn-secondary");
+    			attr(button1, "id", "last");
+    			attr(button1, "class", "btn btn-secondary");
+    			attr(button2, "class", "btn btn-secondary");
+    			attr(button3, "class", "btn btn-secondary");
+    			attr(div1, "id", "btn-bar");
+    			attr(div2, "id", "info");
+    			attr(div2, "class", "svelte-5zjxis");
+    		},
+    		m(target, anchor) {
+    			insert(target, div2, anchor);
+    			append(div2, div0);
+    			append(div0, img);
+    			append(div2, t0);
+    			append(div2, h4);
+    			append(h4, t1);
+    			append(div2, t2);
+    			append(div2, div1);
+    			if (if_block) if_block.m(div1, null);
+    			append(div1, t3);
+    			append(div1, button0);
+    			append(div1, t5);
+    			append(div1, button1);
+    			append(div1, t7);
+    			append(div1, button2);
+    			append(div1, t9);
+    			append(div1, button3);
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(button0, "click", /*openFirstLast*/ ctx[12]),
+    					listen(button1, "click", /*openFirstLast*/ ctx[12]),
+    					listen(button2, "click", /*onResetFiles*/ ctx[17]),
+    					listen(button3, "click", /*scanfiles*/ ctx[16])
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, dirty) {
+    			if (dirty[0] & /*folder*/ 64 && !src_url_equal(img.src, img_src_value = /*folder*/ ctx[6].Cover)) {
+    				attr(img, "src", img_src_value);
+    			}
+
+    			if (dirty[0] & /*folder*/ 64 && t1_value !== (t1_value = /*folder*/ ctx[6].Name + "")) set_data(t1, t1_value);
+
+    			if (/*lastRead*/ ctx[7]) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+    				} else {
+    					if_block = create_if_block_2$1(ctx);
+    					if_block.c();
+    					if_block.m(div1, t3);
+    				}
+    			} else if (if_block) {
+    				if_block.d(1);
+    				if_block = null;
+    			}
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div2);
+    			if (if_block) if_block.d();
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    // (148:8) {#if lastRead}
+    function create_if_block_2$1(ctx) {
+    	let button;
+    	let mounted;
+    	let dispose;
+
+    	return {
+    		c() {
+    			button = element("button");
+    			button.textContent = "Continue";
+    			attr(button, "class", "btn btn-secondary");
+    		},
+    		m(target, anchor) {
+    			insert(target, button, anchor);
+
+    			if (!mounted) {
+    				dispose = listen(button, "click", /*continueReading*/ ctx[13]);
+    				mounted = true;
+    			}
+    		},
+    		p: noop,
+    		d(detaching) {
+    			if (detaching) detach(button);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+    }
+
+    // (169:14) {:else}
+    function create_else_block$2(ctx) {
+    	let t_value = FileTypes[/*Type*/ ctx[32]].formatter(/*CurrentPos*/ ctx[34], /*Duration*/ ctx[35]) + "";
+    	let t;
+
+    	return {
+    		c() {
+    			t = text(t_value);
+    		},
+    		m(target, anchor) {
+    			insert(target, t, anchor);
+    		},
+    		p(ctx, dirty) {
+    			if (dirty[0] & /*pageData*/ 16 && t_value !== (t_value = FileTypes[/*Type*/ ctx[32]].formatter(/*CurrentPos*/ ctx[34], /*Duration*/ ctx[35]) + "")) set_data(t, t_value);
+    		},
+    		d(detaching) {
+    			if (detaching) detach(t);
+    		}
+    	};
+    }
+
+    // (167:14) {#if Type.includes("Folder")}
+    function create_if_block$6(ctx) {
+    	let t_value = /*FileCount*/ ctx[37] + "";
+    	let t;
+
+    	return {
+    		c() {
+    			t = text(t_value);
+    		},
+    		m(target, anchor) {
+    			insert(target, t, anchor);
+    		},
+    		p(ctx, dirty) {
+    			if (dirty[0] & /*pageData*/ 16 && t_value !== (t_value = /*FileCount*/ ctx[37] + "")) set_data(t, t_value);
+    		},
+    		d(detaching) {
+    			if (detaching) detach(t);
+    		}
+    	};
+    }
+
+    // (159:4) {#each pageData.files as { Id, Name, Type, Cover, CurrentPos, Duration, isFav, FileCount }
+    function create_each_block$3(ctx) {
+    	let div4;
+    	let div3;
+    	let div0;
+    	let span0;
+    	let i_1;
+    	let i_1_class_value;
+    	let t0;
+    	let span1;
+    	let show_if;
+    	let t1;
+    	let favoritelist;
+    	let t2;
+    	let div1;
+    	let img;
+    	let img_src_value;
+    	let t3;
+    	let div2;
+    	let t4_value = /*Name*/ ctx[31] + "";
+    	let t4;
+    	let t5;
+    	let div4_id_value;
+    	let div4_data_type_value;
+    	let div4_intro;
+    	let current;
+    	let mounted;
+    	let dispose;
+
+    	function select_block_type(ctx, dirty) {
+    		if (dirty[0] & /*pageData*/ 16) show_if = null;
+    		if (show_if == null) show_if = !!/*Type*/ ctx[32].includes("Folder");
+    		if (show_if) return create_if_block$6;
+    		return create_else_block$2;
+    	}
+
+    	let current_block_type = select_block_type(ctx, [-1, -1]);
+    	let if_block = current_block_type(ctx);
+
+    	favoritelist = new FavoriteList({
+    			props: {
+    				isFav: /*isFav*/ ctx[36],
+    				type: /*type*/ ctx[3],
+    				Type: /*Type*/ ctx[32],
+    				favClicked: /*favClicked*/ ctx[5],
+    				favId: /*id*/ ctx[2]
+    			}
+    		});
+
+    	favoritelist.$on("removeFile", /*removeFile*/ ctx[15]);
+
+    	return {
+    		c() {
+    			div4 = element("div");
+    			div3 = element("div");
+    			div0 = element("div");
+    			span0 = element("span");
+    			i_1 = element("i");
+    			t0 = space();
+    			span1 = element("span");
+    			if_block.c();
+    			t1 = space();
+    			create_component(favoritelist.$$.fragment);
+    			t2 = space();
+    			div1 = element("div");
+    			img = element("img");
+    			t3 = space();
+    			div2 = element("div");
+    			t4 = text(t4_value);
+    			t5 = space();
+    			attr(i_1, "class", i_1_class_value = "" + (null_to_empty("fas fa-" + FileTypes[/*Type*/ ctx[32]].class) + " svelte-5zjxis"));
+    			attr(span0, "class", "file-btn-left svelte-5zjxis");
+    			attr(span1, "class", "file-progress");
+    			attr(div0, "class", "file-btns");
+    			if (!src_url_equal(img.src, img_src_value = /*Cover*/ ctx[33])) attr(img, "src", img_src_value);
+    			attr(img, "alt", "No Cover Found");
+    			attr(img, "class", "svelte-5zjxis");
+    			attr(div1, "class", "file-cover");
+    			attr(div2, "class", "file-name");
+    			attr(div3, "class", "file-info");
+    			attr(div4, "class", "file svelte-5zjxis");
+    			attr(div4, "id", div4_id_value = /*Id*/ ctx[30]);
+    			attr(div4, "data-type", div4_data_type_value = /*Type*/ ctx[32]);
+    			attr(div4, "tabindex", "0");
+    		},
+    		m(target, anchor) {
+    			insert(target, div4, anchor);
+    			append(div4, div3);
+    			append(div3, div0);
+    			append(div0, span0);
+    			append(span0, i_1);
+    			append(div0, t0);
+    			append(div0, span1);
+    			if_block.m(span1, null);
+    			append(div0, t1);
+    			mount_component(favoritelist, div0, null);
+    			append(div3, t2);
+    			append(div3, div1);
+    			append(div1, img);
+    			append(div3, t3);
+    			append(div3, div2);
+    			append(div2, t4);
+    			append(div4, t5);
+    			current = true;
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(span0, "click", stop_propagation(/*openFile*/ ctx[11])),
+    					listen(div1, "dblclick", stop_propagation(/*openFile*/ ctx[11]))
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, dirty) {
+    			if (!current || dirty[0] & /*pageData*/ 16 && i_1_class_value !== (i_1_class_value = "" + (null_to_empty("fas fa-" + FileTypes[/*Type*/ ctx[32]].class) + " svelte-5zjxis"))) {
+    				attr(i_1, "class", i_1_class_value);
+    			}
+
+    			if (current_block_type === (current_block_type = select_block_type(ctx, dirty)) && if_block) {
+    				if_block.p(ctx, dirty);
+    			} else {
+    				if_block.d(1);
+    				if_block = current_block_type(ctx);
+
+    				if (if_block) {
+    					if_block.c();
+    					if_block.m(span1, null);
+    				}
+    			}
+
+    			const favoritelist_changes = {};
+    			if (dirty[0] & /*pageData*/ 16) favoritelist_changes.isFav = /*isFav*/ ctx[36];
+    			if (dirty[0] & /*type*/ 8) favoritelist_changes.type = /*type*/ ctx[3];
+    			if (dirty[0] & /*pageData*/ 16) favoritelist_changes.Type = /*Type*/ ctx[32];
+    			if (dirty[0] & /*favClicked*/ 32) favoritelist_changes.favClicked = /*favClicked*/ ctx[5];
+    			if (dirty[0] & /*id*/ 4) favoritelist_changes.favId = /*id*/ ctx[2];
+    			favoritelist.$set(favoritelist_changes);
+
+    			if (!current || dirty[0] & /*pageData*/ 16 && !src_url_equal(img.src, img_src_value = /*Cover*/ ctx[33])) {
+    				attr(img, "src", img_src_value);
+    			}
+
+    			if ((!current || dirty[0] & /*pageData*/ 16) && t4_value !== (t4_value = /*Name*/ ctx[31] + "")) set_data(t4, t4_value);
+
+    			if (!current || dirty[0] & /*pageData*/ 16 && div4_id_value !== (div4_id_value = /*Id*/ ctx[30])) {
+    				attr(div4, "id", div4_id_value);
+    			}
+
+    			if (!current || dirty[0] & /*pageData*/ 16 && div4_data_type_value !== (div4_data_type_value = /*Type*/ ctx[32])) {
+    				attr(div4, "data-type", div4_data_type_value);
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(favoritelist.$$.fragment, local);
+
+    			if (!div4_intro) {
+    				add_render_callback(() => {
+    					div4_intro = create_in_transition(div4, fade, {});
+    					div4_intro.start();
+    				});
+    			}
+
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(favoritelist.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div4);
+    			if_block.d();
+    			destroy_component(favoritelist);
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    function create_fragment$e(ctx) {
+    	let div1;
+    	let t0;
+    	let div0;
+    	let t1;
+    	let div2;
+    	let t2;
+    	let filter_1;
+    	let t3;
+    	let pagination;
+    	let t4;
+    	let span;
+    	let t5_value = /*pageData*/ ctx[4].totalFiles + "";
+    	let t5;
+    	let current;
+    	let mounted;
+    	let dispose;
+    	let if_block = /*isContent*/ ctx[18] && create_if_block_1$2(ctx);
+    	let each_value = /*pageData*/ ctx[4].files;
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block$3(get_each_context$3(ctx, each_value, i));
+    	}
+
+    	const out = i => transition_out(each_blocks[i], 1, 1, () => {
+    		each_blocks[i] = null;
+    	});
+
+    	const default_slot_template = /*#slots*/ ctx[22].default;
+    	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[21], null);
+    	filter_1 = new Filter({ props: { filter: /*filter*/ ctx[1] } });
+    	filter_1.$on("filter", /*fileFilter*/ ctx[9]);
+
+    	pagination = new Pagination({
+    			props: {
+    				page: parseInt(/*page*/ ctx[0] || 1),
+    				totalPages: /*pageData*/ ctx[4].totalPages
+    			}
+    		});
+
+    	pagination.$on("gotopage", /*goToPage*/ ctx[8]);
+
+    	return {
+    		c() {
+    			div1 = element("div");
+    			if (if_block) if_block.c();
+    			t0 = space();
+    			div0 = element("div");
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			t1 = space();
+    			div2 = element("div");
+    			if (default_slot) default_slot.c();
+    			t2 = space();
+    			create_component(filter_1.$$.fragment);
+    			t3 = space();
+    			create_component(pagination.$$.fragment);
+    			t4 = space();
+    			span = element("span");
+    			t5 = text(t5_value);
+    			attr(div0, "class", "files-list svelte-5zjxis");
+    			attr(div1, "class", "" + (null_to_empty("scroll-container") + " svelte-5zjxis"));
+    			toggle_class(div1, "r-content", /*isContent*/ ctx[18]);
+    			attr(span, "class", "items");
+    			attr(div2, "class", "controls svelte-5zjxis");
+    		},
+    		m(target, anchor) {
+    			insert(target, div1, anchor);
+    			if (if_block) if_block.m(div1, null);
+    			append(div1, t0);
+    			append(div1, div0);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(div0, null);
+    			}
+
+    			insert(target, t1, anchor);
+    			insert(target, div2, anchor);
+
+    			if (default_slot) {
+    				default_slot.m(div2, null);
+    			}
+
+    			append(div2, t2);
+    			mount_component(filter_1, div2, null);
+    			append(div2, t3);
+    			mount_component(pagination, div2, null);
+    			append(div2, t4);
+    			append(div2, span);
+    			append(span, t5);
+    			current = true;
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(div0, "keydown", /*handleKeydown*/ ctx[10]),
+    					listen(div0, "click", /*favClick*/ ctx[14])
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, dirty) {
+    			if (/*isContent*/ ctx[18]) if_block.p(ctx, dirty);
+
+    			if (dirty[0] & /*pageData, openFile, type, favClicked, id, removeFile*/ 34876) {
+    				each_value = /*pageData*/ ctx[4].files;
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context$3(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    						transition_in(each_blocks[i], 1);
+    					} else {
+    						each_blocks[i] = create_each_block$3(child_ctx);
+    						each_blocks[i].c();
+    						transition_in(each_blocks[i], 1);
+    						each_blocks[i].m(div0, null);
+    					}
+    				}
+
+    				group_outros();
+
+    				for (i = each_value.length; i < each_blocks.length; i += 1) {
+    					out(i);
+    				}
+
+    				check_outros();
+    			}
+
+    			if (default_slot) {
+    				if (default_slot.p && (!current || dirty[0] & /*$$scope*/ 2097152)) {
+    					update_slot_base(
+    						default_slot,
+    						default_slot_template,
+    						ctx,
+    						/*$$scope*/ ctx[21],
+    						!current
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[21])
+    						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[21], dirty, null),
+    						null
+    					);
+    				}
+    			}
+
+    			const filter_1_changes = {};
+    			if (dirty[0] & /*filter*/ 2) filter_1_changes.filter = /*filter*/ ctx[1];
+    			filter_1.$set(filter_1_changes);
+    			const pagination_changes = {};
+    			if (dirty[0] & /*page*/ 1) pagination_changes.page = parseInt(/*page*/ ctx[0] || 1);
+    			if (dirty[0] & /*pageData*/ 16) pagination_changes.totalPages = /*pageData*/ ctx[4].totalPages;
+    			pagination.$set(pagination_changes);
+    			if ((!current || dirty[0] & /*pageData*/ 16) && t5_value !== (t5_value = /*pageData*/ ctx[4].totalFiles + "")) set_data(t5, t5_value);
+    		},
+    		i(local) {
+    			if (current) return;
+
+    			for (let i = 0; i < each_value.length; i += 1) {
+    				transition_in(each_blocks[i]);
+    			}
+
+    			transition_in(default_slot, local);
+    			transition_in(filter_1.$$.fragment, local);
+    			transition_in(pagination.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			each_blocks = each_blocks.filter(Boolean);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				transition_out(each_blocks[i]);
+    			}
+
+    			transition_out(default_slot, local);
+    			transition_out(filter_1.$$.fragment, local);
+    			transition_out(pagination.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div1);
+    			if (if_block) if_block.d();
+    			destroy_each(each_blocks, detaching);
+    			if (detaching) detach(t1);
+    			if (detaching) detach(div2);
+    			if (default_slot) default_slot.d(detaching);
+    			destroy_component(filter_1);
+    			destroy_component(pagination);
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    function instance$e($$self, $$props, $$invalidate) {
+    	let $PageConfig;
+    	component_subscribe($$self, PageConfig, $$value => $$invalidate(20, $PageConfig = $$value));
+    	let { $$slots: slots = {}, $$scope } = $$props;
+    	let { id = "" } = $$props;
+    	let { page = 1 } = $$props;
+    	let { filter = "" } = $$props;
+    	let { type = "" } = $$props;
+    	let { title = "" } = $$props;
+    	const socket = getContext("socket");
+    	const logout = getContext("logout");
+    	const baseData = { files: [], totalPages: 0, totalFiles: 0 };
+    	let pageData = baseData;
+    	let selected = 0;
+    	let favClicked = null;
+    	let folder = {};
+    	let lastRead = "";
+    	const cancelToken = axios.CancelToken;
+    	let cancel;
+
+    	const loadContent = async (pg = 1, flt = "", curId = "", config, nType) => {
+    		try {
+    			if (cancel) {
+    				cancel();
+    			}
+
+    			let url = genUrl(
+    				pg,
+    				{
+    					items: config.items,
+    					order: config.order[title] || "nu"
+    				},
+    				flt,
+    				nType || type,
+    				curId
+    			);
+
+    			let { data } = await axios.get(url, {
+    				cancelToken: new cancelToken(function executor(c) {
+    						cancel = c;
+    					})
+    			});
+
+    			if (typeof data === "object") {
+    				$$invalidate(4, pageData = data);
+
+    				if (data.files[0]) {
+    					$$invalidate(6, folder = data.files[0].Folder);
+    				}
+
+    				$$invalidate(7, lastRead = data.currentFile);
+    				selected = pageData.files.findIndex(f => f.Id === lastRead) || 0;
+    			} else {
+    				logout();
+    			}
+    		} catch(error) {
+    			console.log(error);
+    		}
+    	};
+
+    	const goToPage = async (pg, sel) => {
+    		pg = parseInt(pg.detail);
+    		let { totalPages } = pageData;
+    		if (pg < 1 || pg > totalPages || isNaN(pg)) return;
+    		pg = pg < 1 ? 1 : pg > totalPages ? totalPages : pg;
+    		navigate(`/${type}/${pg}/${filter || ""}`);
+    		selected = sel || 0;
+    	};
+
+    	const fileFilter = event => {
+    		$$invalidate(1, filter = event.detail);
+    		navigate(`/${type}/${1}/${filter || ""}`);
+    	};
+
+    	const handleKeydown = event => {
+    		fileKeypress(event, page, goToPage, ProcessFile);
+    	};
+
+    	const openFile = event => {
+    		ProcessFile(event.target.closest(".file"), socket);
+    	};
+
+    	const openFirstLast = async ({ target: { id } }) => {
+    		const { data } = await axios.get(`/api/files/first-last/${id}/${folder.Id}`);
+
+    		ProcessFile(
+    			{
+    				id: data.Id,
+    				dataset: { type: data.Type }
+    			},
+    			socket
+    		);
+    	};
+
+    	const continueReading = async () => {
+    		const { data } = await axios.get(`/api/files/file-data/${lastRead}`);
+
+    		ProcessFile(
+    			{
+    				id: lastRead,
+    				dataset: { type: data.Type }
+    			},
+    			socket
+    		);
+    	};
+
+    	const favClick = event => {
+    		let { target } = event;
+    		fileClicks(event);
+    		selected = getElIndex(target.closest(".file"));
+    		$$invalidate(5, favClicked = target);
+    	};
+
+    	const removeFile = event => {
+    		$$invalidate(4, pageData.files = pageData.files.filter(f => f.Id !== event.detail), pageData);
+
+    		if (pageData.totalPages > 1) {
+    			if (pageData.files.length === 0) {
+    				$$invalidate(0, page -= 1);
+    			}
+
+    			loadContent(page, filter || "", $PageConfig);
+    		} else {
+    			$$invalidate(4, pageData);
+    		}
+    	};
+
+    	const scanfiles = () => {
+    		socket.emit("scan-dir", { Id: folder.Id, isFolder: true });
+    	};
+
+    	afterUpdate(() => {
+    		let sel = selected;
+    		let id = localStorage.getItem("fileId");
+    		let el = document.getElementById(id);
+
+    		if (id && el) {
+    			sel = getElIndex(el);
+    			localStorage.removeItem("fileId");
+    		}
+
+    		selectItem(sel);
+    	});
+
+    	const onResetFiles = async () => {
+    		await loadContent(page, filter, id, $PageConfig, type);
+    	};
+
+    	let isContent = location.pathname.includes("content");
+
+    	$$self.$$set = $$props => {
+    		if ('id' in $$props) $$invalidate(2, id = $$props.id);
+    		if ('page' in $$props) $$invalidate(0, page = $$props.page);
+    		if ('filter' in $$props) $$invalidate(1, filter = $$props.filter);
+    		if ('type' in $$props) $$invalidate(3, type = $$props.type);
+    		if ('title' in $$props) $$invalidate(19, title = $$props.title);
+    		if ('$$scope' in $$props) $$invalidate(21, $$scope = $$props.$$scope);
+    	};
+
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty[0] & /*title, page*/ 524289) {
+    			document.title = `${title} Page ${page || ""}`;
+    		}
+
+    		if ($$self.$$.dirty[0] & /*page, filter, id, $PageConfig, type*/ 1048591) {
+    			loadContent(page, filter, id, $PageConfig, type);
+    		}
+
+    		if ($$self.$$.dirty[0] & /*pageData, page, type, filter*/ 27) {
+    			if (pageData.totalPages && parseInt(page) > pageData.totalPages) {
+    				navigate(`/${type}/${page - 1}/${filter || ""}`);
+    			}
+    		}
+    	};
+
+    	return [
+    		page,
+    		filter,
+    		id,
+    		type,
+    		pageData,
+    		favClicked,
+    		folder,
+    		lastRead,
+    		goToPage,
+    		fileFilter,
+    		handleKeydown,
+    		openFile,
+    		openFirstLast,
+    		continueReading,
+    		favClick,
+    		removeFile,
+    		scanfiles,
+    		onResetFiles,
+    		isContent,
+    		title,
+    		$PageConfig,
+    		$$scope,
+    		slots
+    	];
+    }
+
+    class FilesList extends SvelteComponent {
+    	constructor(options) {
+    		super();
+
+    		init(
+    			this,
+    			options,
+    			instance$e,
+    			create_fragment$e,
+    			safe_not_equal,
+    			{
+    				id: 2,
+    				page: 0,
+    				filter: 1,
+    				type: 3,
+    				title: 19
+    			},
+    			null,
+    			[-1, -1]
+    		);
+    	}
+    }
+
+    /* src\User\pages\Mangas.svelte generated by Svelte v3.49.0 */
+
+    function create_fragment$d(ctx) {
+    	let fileslist;
+    	let current;
+
+    	fileslist = new FilesList({
+    			props: {
+    				title: "Mangas",
+    				type: `mangas/${/*dir*/ ctx[0]}`,
+    				filter: /*filter*/ ctx[2],
+    				page: /*page*/ ctx[1]
+    			}
+    		});
+
+    	return {
+    		c() {
+    			create_component(fileslist.$$.fragment);
+    		},
+    		m(target, anchor) {
+    			mount_component(fileslist, target, anchor);
+    			current = true;
+    		},
+    		p(ctx, [dirty]) {
+    			const fileslist_changes = {};
+    			if (dirty & /*dir*/ 1) fileslist_changes.type = `mangas/${/*dir*/ ctx[0]}`;
+    			if (dirty & /*filter*/ 4) fileslist_changes.filter = /*filter*/ ctx[2];
+    			if (dirty & /*page*/ 2) fileslist_changes.page = /*page*/ ctx[1];
+    			fileslist.$set(fileslist_changes);
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(fileslist.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(fileslist.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			destroy_component(fileslist, detaching);
+    		}
+    	};
+    }
+
+    function instance$d($$self, $$props, $$invalidate) {
+    	let { dir = "" } = $$props;
+    	let { page = 1 } = $$props;
+    	let { filter = "" } = $$props;
+
+    	$$self.$$set = $$props => {
+    		if ('dir' in $$props) $$invalidate(0, dir = $$props.dir);
+    		if ('page' in $$props) $$invalidate(1, page = $$props.page);
+    		if ('filter' in $$props) $$invalidate(2, filter = $$props.filter);
+    	};
+
+    	return [dir, page, filter];
+    }
+
+    class Mangas extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$d, create_fragment$d, safe_not_equal, { dir: 0, page: 1, filter: 2 });
+    	}
+    }
+
+    /* src\User\pages\Videos.svelte generated by Svelte v3.49.0 */
+
+    function create_fragment$c(ctx) {
+    	let fileslist;
+    	let current;
+
+    	fileslist = new FilesList({
+    			props: {
+    				title: 'Videos',
+    				type: `videos/${/*dir*/ ctx[2] || '0'}`,
+    				filter: /*filter*/ ctx[1],
+    				page: /*page*/ ctx[0]
+    			}
+    		});
+
+    	return {
+    		c() {
+    			create_component(fileslist.$$.fragment);
+    		},
+    		m(target, anchor) {
+    			mount_component(fileslist, target, anchor);
+    			current = true;
+    		},
+    		p(ctx, [dirty]) {
+    			const fileslist_changes = {};
+    			if (dirty & /*dir*/ 4) fileslist_changes.type = `videos/${/*dir*/ ctx[2] || '0'}`;
+    			if (dirty & /*filter*/ 2) fileslist_changes.filter = /*filter*/ ctx[1];
+    			if (dirty & /*page*/ 1) fileslist_changes.page = /*page*/ ctx[0];
+    			fileslist.$set(fileslist_changes);
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(fileslist.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(fileslist.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			destroy_component(fileslist, detaching);
+    		}
+    	};
+    }
+
+    function instance$c($$self, $$props, $$invalidate) {
+    	let { page = 1 } = $$props;
+    	let { filter = "" } = $$props;
+    	let { dir = "" } = $$props;
+
+    	$$self.$$set = $$props => {
+    		if ('page' in $$props) $$invalidate(0, page = $$props.page);
+    		if ('filter' in $$props) $$invalidate(1, filter = $$props.filter);
+    		if ('dir' in $$props) $$invalidate(2, dir = $$props.dir);
+    	};
+
+    	return [page, filter, dir];
+    }
+
+    class Videos extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$c, create_fragment$c, safe_not_equal, { page: 0, filter: 1, dir: 2 });
+    	}
+    }
+
+    /* src\User\Component\FavoriteManager.svelte generated by Svelte v3.49.0 */
+
+    function get_each_context$2(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[11] = list[i];
+    	return child_ctx;
+    }
+
+    // (218:20) {#each $FavoritesStores as fav}
+    function create_each_block$2(ctx) {
+    	let tr;
+    	let td0;
+    	let t0_value = /*fav*/ ctx[11].Name + "";
+    	let t0;
+    	let td0_data_title_value;
+    	let t1;
+    	let td1;
+    	let span0;
+    	let t2;
+    	let span1;
+    	let t3;
+    	let tr_id_value;
+    	let tr_class_value;
+    	let mounted;
+    	let dispose;
+
+    	return {
+    		c() {
+    			tr = element("tr");
+    			td0 = element("td");
+    			t0 = text(t0_value);
+    			t1 = space();
+    			td1 = element("td");
+    			span0 = element("span");
+    			span0.innerHTML = `<i class="fas fa-edit svelte-35vezv"></i>`;
+    			t2 = space();
+    			span1 = element("span");
+    			span1.innerHTML = `<i class="fas fa-trash-alt svelte-35vezv"></i>`;
+    			t3 = space();
+    			attr(td0, "data-title", td0_data_title_value = /*fav*/ ctx[11].Name);
+    			attr(td0, "class", "svelte-35vezv");
+    			attr(td1, "class", "svelte-35vezv");
+    			attr(tr, "id", tr_id_value = /*fav*/ ctx[11].Id);
+    			attr(tr, "class", tr_class_value = "" + (null_to_empty(/*fav*/ ctx[11].Id === /*id*/ ctx[0] ? 'active' : '') + " svelte-35vezv"));
+    		},
+    		m(target, anchor) {
+    			insert(target, tr, anchor);
+    			append(tr, td0);
+    			append(td0, t0);
+    			append(tr, t1);
+    			append(tr, td1);
+    			append(td1, span0);
+    			append(td1, t2);
+    			append(td1, span1);
+    			append(tr, t3);
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(td0, "click", /*loadFavorite*/ ctx[8]),
+    					listen(span0, "click", /*editFavorite*/ ctx[6]),
+    					listen(span1, "click", /*removeFav*/ ctx[7])
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*$FavoritesStores*/ 8 && t0_value !== (t0_value = /*fav*/ ctx[11].Name + "")) set_data(t0, t0_value);
+
+    			if (dirty & /*$FavoritesStores*/ 8 && td0_data_title_value !== (td0_data_title_value = /*fav*/ ctx[11].Name)) {
+    				attr(td0, "data-title", td0_data_title_value);
+    			}
+
+    			if (dirty & /*$FavoritesStores*/ 8 && tr_id_value !== (tr_id_value = /*fav*/ ctx[11].Id)) {
+    				attr(tr, "id", tr_id_value);
+    			}
+
+    			if (dirty & /*$FavoritesStores, id*/ 9 && tr_class_value !== (tr_class_value = "" + (null_to_empty(/*fav*/ ctx[11].Id === /*id*/ ctx[0] ? 'active' : '') + " svelte-35vezv"))) {
+    				attr(tr, "class", tr_class_value);
+    			}
+    		},
+    		d(detaching) {
+    			if (detaching) detach(tr);
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    function create_fragment$b(ctx) {
+    	let div8;
+    	let label0;
+    	let t0;
+    	let input0;
+    	let t1;
+    	let div7;
+    	let div4;
+    	let div2;
+    	let div1;
+    	let label1;
+    	let t2;
+    	let div0;
+    	let input1;
+    	let t3;
+    	let span;
+    	let t4;
+    	let div3;
+    	let t5;
+    	let div5;
+    	let t6_value = (/*error*/ ctx[2] || '') + "";
+    	let t6;
+    	let t7;
+    	let div6;
+    	let table;
+    	let thead;
+    	let t11;
+    	let tbody;
+    	let mounted;
+    	let dispose;
+    	let each_value = /*$FavoritesStores*/ ctx[3];
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block$2(get_each_context$2(ctx, each_value, i));
+    	}
+
+    	return {
+    		c() {
+    			div8 = element("div");
+    			label0 = element("label");
+    			label0.innerHTML = `<i class="fas fa-heart svelte-35vezv"></i>`;
+    			t0 = space();
+    			input0 = element("input");
+    			t1 = space();
+    			div7 = element("div");
+    			div4 = element("div");
+    			div2 = element("div");
+    			div1 = element("div");
+    			label1 = element("label");
+    			label1.innerHTML = `<i class="fas fa-save svelte-35vezv"></i>`;
+    			t2 = space();
+    			div0 = element("div");
+    			input1 = element("input");
+    			t3 = space();
+    			span = element("span");
+    			span.innerHTML = `<i class="fas fa-times-circle svelte-35vezv"></i>`;
+    			t4 = space();
+    			div3 = element("div");
+    			t5 = space();
+    			div5 = element("div");
+    			t6 = text(t6_value);
+    			t7 = space();
+    			div6 = element("div");
+    			table = element("table");
+    			thead = element("thead");
+
+    			thead.innerHTML = `<tr class="svelte-35vezv"><th class="svelte-35vezv">Name</th> 
+                        <th class="svelte-35vezv">Action</th></tr>`;
+
+    			t11 = space();
+    			tbody = element("tbody");
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			attr(label0, "for", "show-favs");
+    			attr(input0, "type", "checkbox");
+    			attr(input0, "id", "show-favs");
+    			attr(input0, "class", "svelte-35vezv");
+    			attr(label1, "for", "fav-name");
+    			attr(label1, "id", "addfav");
+    			attr(label1, "class", "input-group-text");
+    			attr(input1, "name", "fav-name");
+    			attr(input1, "type", "text");
+    			attr(input1, "class", "form-control svelte-35vezv");
+    			attr(input1, "placeholder", "New Favorite");
+    			attr(span, "class", "svelte-35vezv");
+    			attr(div0, "class", "i-control svelte-35vezv");
+    			attr(div1, "class", "input-group-prepend");
+    			attr(div2, "id", "fav-controls");
+    			attr(div3, "class", "text-danger");
+    			attr(div4, "class", "modal-title svelte-35vezv");
+    			attr(div5, "class", "errors svelte-35vezv");
+    			attr(tbody, "class", "svelte-35vezv");
+    			attr(table, "class", "table table-bordered bg-light table-hover svelte-35vezv");
+    			attr(div6, "class", "modal-body");
+    			attr(div7, "id", "fav-manager");
+    			attr(div7, "class", "card text-light svelte-35vezv");
+    			attr(div8, "class", "first-controls svelte-35vezv");
+    		},
+    		m(target, anchor) {
+    			insert(target, div8, anchor);
+    			append(div8, label0);
+    			append(div8, t0);
+    			append(div8, input0);
+    			append(div8, t1);
+    			append(div8, div7);
+    			append(div7, div4);
+    			append(div4, div2);
+    			append(div2, div1);
+    			append(div1, label1);
+    			append(div1, t2);
+    			append(div1, div0);
+    			append(div0, input1);
+    			set_input_value(input1, /*currentFav*/ ctx[1].Name);
+    			append(div0, t3);
+    			append(div0, span);
+    			append(div4, t4);
+    			append(div4, div3);
+    			append(div7, t5);
+    			append(div7, div5);
+    			append(div5, t6);
+    			append(div7, t7);
+    			append(div7, div6);
+    			append(div6, table);
+    			append(table, thead);
+    			append(table, t11);
+    			append(table, tbody);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(tbody, null);
+    			}
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(label1, "click", /*saveFavorite*/ ctx[4]),
+    					listen(input1, "input", /*input1_input_handler*/ ctx[9]),
+    					listen(span, "click", /*clearFavorite*/ ctx[5])
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, [dirty]) {
+    			if (dirty & /*currentFav*/ 2 && input1.value !== /*currentFav*/ ctx[1].Name) {
+    				set_input_value(input1, /*currentFav*/ ctx[1].Name);
+    			}
+
+    			if (dirty & /*error*/ 4 && t6_value !== (t6_value = (/*error*/ ctx[2] || '') + "")) set_data(t6, t6_value);
+
+    			if (dirty & /*$FavoritesStores, id, removeFav, editFavorite, loadFavorite*/ 457) {
+    				each_value = /*$FavoritesStores*/ ctx[3];
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context$2(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block$2(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(tbody, null);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value.length;
+    			}
+    		},
+    		i: noop,
+    		o: noop,
+    		d(detaching) {
+    			if (detaching) detach(div8);
+    			destroy_each(each_blocks, detaching);
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    function instance$b($$self, $$props, $$invalidate) {
+    	let $FavoritesStores;
+    	component_subscribe($$self, FavoritesStores, $$value => $$invalidate(3, $FavoritesStores = $$value));
+    	let { id = "" } = $$props;
+    	let currentFav = {};
+    	let error;
+
+    	const saveFavorite = event => {
+    		currentFav.Type == "";
+
+    		addUpdateFavorite(currentFav).then(result => {
+    			if (result.Id !== id) {
+    				navigate(`/favorites/${result.Id}`);
+    				console.log("navegate", result.Id);
+    			}
+    		});
+
+    		$$invalidate(2, error = "");
+    	};
+
+    	const clearFavorite = () => {
+    		$$invalidate(1, currentFav = { Name: "", Type: "Manga" });
+    		$$invalidate(2, error = "");
+    	};
+
+    	const editFavorite = e => {
+    		$$invalidate(1, currentFav = $FavoritesStores.find(f => f.Id === e.target.closest("tr").id));
+    		$$invalidate(2, error = "");
+    	};
+
+    	const removeFav = e => {
+    		let tr = e.target.closest("tr");
+    		let type = tr.querySelector("td:nth-child(2)").textContent;
+
+    		// Clear input delete is currentFav
+    		removeFavorite(tr.id, type).then(data => {
+    			//Navegate to first favorite
+    			if (data.removed) {
+    				navigate(`/favorites/${$FavoritesStores[0].Id}`);
+    			} else {
+    				$$invalidate(2, error = data.msg);
+    			}
+    		});
+    	};
+
+    	const loadFavorite = event => {
+    		navigate(`/favorites/${event.target.closest("tr").id}`);
+    		$$invalidate(2, error = "");
+    	};
+
+    	function input1_input_handler() {
+    		currentFav.Name = this.value;
+    		($$invalidate(1, currentFav), $$invalidate(0, id));
+    	}
+
+    	$$self.$$set = $$props => {
+    		if ('id' in $$props) $$invalidate(0, id = $$props.id);
+    	};
+
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty & /*id*/ 1) {
+    			($$invalidate(1, currentFav = { Name: "", Type: "Manga" }));
+    		}
+    	};
+
+    	return [
+    		id,
+    		currentFav,
+    		error,
+    		$FavoritesStores,
+    		saveFavorite,
+    		clearFavorite,
+    		editFavorite,
+    		removeFav,
+    		loadFavorite,
+    		input1_input_handler
+    	];
+    }
+
+    class FavoriteManager extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$b, create_fragment$b, safe_not_equal, { id: 0 });
+    	}
+    }
+
+    /* src\User\pages\Favorites.svelte generated by Svelte v3.49.0 */
+
+    function create_default_slot$3(ctx) {
+    	let favoritemanager;
+    	let current;
+    	favoritemanager = new FavoriteManager({ props: { id: /*id*/ ctx[2] } });
+
+    	return {
+    		c() {
+    			create_component(favoritemanager.$$.fragment);
+    		},
+    		m(target, anchor) {
+    			mount_component(favoritemanager, target, anchor);
+    			current = true;
+    		},
+    		p(ctx, dirty) {
+    			const favoritemanager_changes = {};
+    			if (dirty & /*id*/ 4) favoritemanager_changes.id = /*id*/ ctx[2];
+    			favoritemanager.$set(favoritemanager_changes);
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(favoritemanager.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(favoritemanager.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			destroy_component(favoritemanager, detaching);
+    		}
+    	};
+    }
+
+    function create_fragment$a(ctx) {
+    	let fileslist;
+    	let current;
+
+    	fileslist = new FilesList({
+    			props: {
+    				title: "Favorites",
+    				type: /*type*/ ctx[3],
+    				filter: /*filter*/ ctx[1],
+    				page: /*page*/ ctx[0],
+    				id: /*id*/ ctx[2],
+    				$$slots: { default: [create_default_slot$3] },
+    				$$scope: { ctx }
+    			}
+    		});
+
+    	return {
+    		c() {
+    			create_component(fileslist.$$.fragment);
+    		},
+    		m(target, anchor) {
+    			mount_component(fileslist, target, anchor);
+    			current = true;
+    		},
+    		p(ctx, [dirty]) {
+    			const fileslist_changes = {};
+    			if (dirty & /*type*/ 8) fileslist_changes.type = /*type*/ ctx[3];
+    			if (dirty & /*filter*/ 2) fileslist_changes.filter = /*filter*/ ctx[1];
+    			if (dirty & /*page*/ 1) fileslist_changes.page = /*page*/ ctx[0];
+    			if (dirty & /*id*/ 4) fileslist_changes.id = /*id*/ ctx[2];
+
+    			if (dirty & /*$$scope, id*/ 260) {
+    				fileslist_changes.$$scope = { dirty, ctx };
+    			}
+
+    			fileslist.$set(fileslist_changes);
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(fileslist.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(fileslist.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			destroy_component(fileslist, detaching);
+    		}
+    	};
+    }
+
+    function instance$a($$self, $$props, $$invalidate) {
+    	let $FavoritesStores;
+    	component_subscribe($$self, FavoritesStores, $$value => $$invalidate(4, $FavoritesStores = $$value));
+    	let { page = 1 } = $$props;
+    	let { filter = "" } = $$props;
+    	let { id = $FavoritesStores[0].Id } = $$props;
+    	getContext("User");
+    	let type = `favorites/${id}`;
+
+    	$$self.$$set = $$props => {
+    		if ('page' in $$props) $$invalidate(0, page = $$props.page);
+    		if ('filter' in $$props) $$invalidate(1, filter = $$props.filter);
+    		if ('id' in $$props) $$invalidate(2, id = $$props.id);
+    	};
+
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty & /*id*/ 4) {
+    			$$invalidate(3, type = `favorites/${id}`);
+    		}
+    	};
+
+    	return [page, filter, id, type];
+    }
+
+    class Favorites extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$a, create_fragment$a, safe_not_equal, { page: 0, filter: 1, id: 2 });
+    	}
+    }
+
+    /* src\User\pages\Content.svelte generated by Svelte v3.49.0 */
+
+    function create_default_slot$2(ctx) {
+    	let div;
+    	let mounted;
+    	let dispose;
+
+    	return {
+    		c() {
+    			div = element("div");
+    			div.innerHTML = `<i class="fas fa-arrow-circle-up svelte-1h1xnzm"></i>`;
+    			attr(div, "class", "first-controls svelte-1h1xnzm");
+    		},
+    		m(target, anchor) {
+    			insert(target, div, anchor);
+
+    			if (!mounted) {
+    				dispose = listen(div, "click", /*exitFolder*/ ctx[4]);
+    				mounted = true;
+    			}
+    		},
+    		p: noop,
+    		d(detaching) {
+    			if (detaching) detach(div);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+    }
+
+    function create_fragment$9(ctx) {
+    	let fileslist;
+    	let current;
+
+    	fileslist = new FilesList({
+    			props: {
+    				title: "Content",
+    				type: /*type*/ ctx[3],
+    				filter: /*filter*/ ctx[1],
+    				page: /*page*/ ctx[0],
+    				id: /*id*/ ctx[2],
+    				$$slots: { default: [create_default_slot$2] },
+    				$$scope: { ctx }
+    			}
+    		});
+
+    	return {
+    		c() {
+    			create_component(fileslist.$$.fragment);
+    		},
+    		m(target, anchor) {
+    			mount_component(fileslist, target, anchor);
+    			current = true;
+    		},
+    		p(ctx, [dirty]) {
+    			const fileslist_changes = {};
+    			if (dirty & /*filter*/ 2) fileslist_changes.filter = /*filter*/ ctx[1];
+    			if (dirty & /*page*/ 1) fileslist_changes.page = /*page*/ ctx[0];
+    			if (dirty & /*id*/ 4) fileslist_changes.id = /*id*/ ctx[2];
+
+    			if (dirty & /*$$scope*/ 64) {
+    				fileslist_changes.$$scope = { dirty, ctx };
+    			}
+
+    			fileslist.$set(fileslist_changes);
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(fileslist.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(fileslist.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			destroy_component(fileslist, detaching);
+    		}
+    	};
+    }
+
+    function instance$9($$self, $$props, $$invalidate) {
+    	let { page = 1 } = $$props;
+    	let { filter = "" } = $$props;
+    	let { id = "" } = $$props;
+    	let segment = window.location.pathname.replace(/(^\/+|\/+$)/g, "").split("/");
+    	let type = `${segment[0]}/${segment[1]}/${id}`;
+
+    	const exitFolder = () => {
+    		let folder = localStorage.getObject("folder");
+    		localStorage.setItem("fileId", folder.folder);
+    		navigate(folder.pathname, { replace: true });
+    	};
+
+    	$$self.$$set = $$props => {
+    		if ('page' in $$props) $$invalidate(0, page = $$props.page);
+    		if ('filter' in $$props) $$invalidate(1, filter = $$props.filter);
+    		if ('id' in $$props) $$invalidate(2, id = $$props.id);
+    	};
+
+    	return [page, filter, id, type, exitFolder];
+    }
+
+    class Content extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$9, create_fragment$9, safe_not_equal, { page: 0, filter: 1, id: 2 });
+    	}
+    }
+
+    /* src\User\Component\PlayList.svelte generated by Svelte v3.49.0 */
+
+    function get_each_context$1(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[20] = list[i].Id;
+    	child_ctx[21] = list[i].Name;
+    	child_ctx[22] = list[i].Cover;
+    	child_ctx[23] = list[i].CurrentPos;
+    	child_ctx[24] = list[i].Duration;
+    	child_ctx[25] = list[i].Type;
+    	return child_ctx;
+    }
+
+    // (131:6) {#each filtered.slice(toLoad, toLoad + filePerPage) as { Id, Name, Cover, CurrentPos, Duration, Type }}
+    function create_each_block$1(ctx) {
+    	let li;
+    	let span1;
+    	let img;
+    	let img_data_src_value;
+    	let img_src_value;
+    	let t0;
+    	let span0;
+
+    	let t1_value = (/*Type*/ ctx[25].includes("Manga")
+    	? `${/*CurrentPos*/ ctx[23] + 1}/${/*Duration*/ ctx[24]}`
+    	: formatTime(/*Duration*/ ctx[24])) + "";
+
+    	let t1;
+    	let t2;
+    	let span2;
+    	let t3_value = /*Name*/ ctx[21] + "";
+    	let t3;
+    	let t4;
+    	let li_id_value;
+    	let li_class_value;
+    	let mounted;
+    	let dispose;
+
+    	return {
+    		c() {
+    			li = element("li");
+    			span1 = element("span");
+    			img = element("img");
+    			t0 = space();
+    			span0 = element("span");
+    			t1 = text(t1_value);
+    			t2 = space();
+    			span2 = element("span");
+    			t3 = text(t3_value);
+    			t4 = space();
+    			attr(img, "data-src", img_data_src_value = /*Cover*/ ctx[22]);
+    			if (!src_url_equal(img.src, img_src_value = "")) attr(img, "src", img_src_value);
+    			attr(img, "alt", "");
+    			attr(img, "class", "svelte-bfixg2");
+    			attr(span0, "class", "duration svelte-bfixg2");
+    			attr(span1, "class", "cover svelte-bfixg2");
+    			attr(span2, "class", "l-name svelte-bfixg2");
+    			attr(li, "id", li_id_value = /*Id*/ ctx[20]);
+    			attr(li, "class", li_class_value = "" + (null_to_empty(/*Id*/ ctx[20] === /*fileId*/ ctx[1] ? "active" : "") + " svelte-bfixg2"));
+    		},
+    		m(target, anchor) {
+    			insert(target, li, anchor);
+    			append(li, span1);
+    			append(span1, img);
+    			append(span1, t0);
+    			append(span1, span0);
+    			append(span0, t1);
+    			append(li, t2);
+    			append(li, span2);
+    			append(span2, t3);
+    			append(li, t4);
+
+    			if (!mounted) {
+    				dispose = listen(li, "click", /*click_handler*/ ctx[12]);
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*filtered, toLoad*/ 192 && img_data_src_value !== (img_data_src_value = /*Cover*/ ctx[22])) {
+    				attr(img, "data-src", img_data_src_value);
+    			}
+
+    			if (dirty & /*filtered, toLoad*/ 192 && t1_value !== (t1_value = (/*Type*/ ctx[25].includes("Manga")
+    			? `${/*CurrentPos*/ ctx[23] + 1}/${/*Duration*/ ctx[24]}`
+    			: formatTime(/*Duration*/ ctx[24])) + "")) set_data(t1, t1_value);
+
+    			if (dirty & /*filtered, toLoad*/ 192 && t3_value !== (t3_value = /*Name*/ ctx[21] + "")) set_data(t3, t3_value);
+
+    			if (dirty & /*filtered, toLoad*/ 192 && li_id_value !== (li_id_value = /*Id*/ ctx[20])) {
+    				attr(li, "id", li_id_value);
+    			}
+
+    			if (dirty & /*filtered, toLoad, fileId*/ 194 && li_class_value !== (li_class_value = "" + (null_to_empty(/*Id*/ ctx[20] === /*fileId*/ ctx[1] ? "active" : "") + " svelte-bfixg2"))) {
+    				attr(li, "class", li_class_value);
+    			}
+    		},
+    		d(detaching) {
+    			if (detaching) detach(li);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+    }
+
+    // (144:2) {#if totalPages > 1}
+    function create_if_block$5(ctx) {
+    	let div;
+    	let pagination;
+    	let current;
+
+    	pagination = new Pagination({
+    			props: {
+    				page: parseInt(/*page*/ ctx[5] || 1),
+    				totalPages: /*totalPages*/ ctx[4],
+    				hideFL: true
+    			}
+    		});
+
+    	pagination.$on("gotopage", /*goToPage*/ ctx[9]);
+
+    	return {
+    		c() {
+    			div = element("div");
+    			create_component(pagination.$$.fragment);
+    			attr(div, "class", "b-control svelte-bfixg2");
+    		},
+    		m(target, anchor) {
+    			insert(target, div, anchor);
+    			mount_component(pagination, div, null);
+    			current = true;
+    		},
+    		p(ctx, dirty) {
+    			const pagination_changes = {};
+    			if (dirty & /*page*/ 32) pagination_changes.page = parseInt(/*page*/ ctx[5] || 1);
+    			if (dirty & /*totalPages*/ 16) pagination_changes.totalPages = /*totalPages*/ ctx[4];
+    			pagination.$set(pagination_changes);
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(pagination.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(pagination.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div);
+    			destroy_component(pagination);
+    		}
+    	};
+    }
+
+    function create_fragment$8(ctx) {
+    	let label;
+    	let span0;
+    	let label_class_value;
+    	let t0;
+    	let input0;
+    	let t1;
+    	let div2;
+    	let div0;
+    	let input1;
+    	let t2;
+    	let span1;
+    	let t3;
+    	let div1;
+    	let ul;
+    	let t4;
+    	let current;
+    	let mounted;
+    	let dispose;
+    	let each_value = /*filtered*/ ctx[6].slice(/*toLoad*/ ctx[7], /*toLoad*/ ctx[7] + filePerPage);
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block$1(get_each_context$1(ctx, each_value, i));
+    	}
+
+    	let if_block = /*totalPages*/ ctx[4] > 1 && create_if_block$5(ctx);
+
+    	return {
+    		c() {
+    			label = element("label");
+    			span0 = element("span");
+    			span0.innerHTML = `<i class="fas fa-list svelte-bfixg2"></i>`;
+    			t0 = space();
+    			input0 = element("input");
+    			t1 = space();
+    			div2 = element("div");
+    			div0 = element("div");
+    			input1 = element("input");
+    			t2 = space();
+    			span1 = element("span");
+    			span1.innerHTML = `<i class="fas fa-times-circle svelte-bfixg2"></i>`;
+    			t3 = space();
+    			div1 = element("div");
+    			ul = element("ul");
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			t4 = space();
+    			if (if_block) if_block.c();
+    			attr(span0, "class", "p-sort svelte-bfixg2");
+    			attr(label, "class", label_class_value = "" + (null_to_empty("show-list" + (!/*hideList*/ ctx[3] ? " move" : "")) + " svelte-bfixg2"));
+    			attr(label, "for", "p-hide");
+    			set_style(label, "bottom", "35px");
+    			attr(input0, "type", "checkbox");
+    			attr(input0, "id", "p-hide");
+    			attr(input0, "class", "svelte-bfixg2");
+    			attr(input1, "type", "text");
+    			attr(input1, "placeholder", "Filter");
+    			attr(input1, "class", "form-control svelte-bfixg2");
+    			attr(span1, "class", "clear-filter svelte-bfixg2");
+    			attr(div0, "id", "v-filter");
+    			attr(div0, "class", "svelte-bfixg2");
+    			attr(ul, "class", "svelte-bfixg2");
+    			attr(div1, "id", "p-list");
+    			attr(div1, "class", "svelte-bfixg2");
+    			attr(div2, "id", "play-list");
+    			attr(div2, "class", "svelte-bfixg2");
+    			toggle_class(div2, "move", !/*$ToggleMenu*/ ctx[8]);
+    		},
+    		m(target, anchor) {
+    			insert(target, label, anchor);
+    			append(label, span0);
+    			insert(target, t0, anchor);
+    			insert(target, input0, anchor);
+    			input0.checked = /*hideList*/ ctx[3];
+    			insert(target, t1, anchor);
+    			insert(target, div2, anchor);
+    			append(div2, div0);
+    			append(div0, input1);
+    			set_input_value(input1, /*filters*/ ctx[0].filter);
+    			append(div0, t2);
+    			append(div0, span1);
+    			append(div2, t3);
+    			append(div2, div1);
+    			append(div1, ul);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(ul, null);
+    			}
+
+    			/*div1_binding*/ ctx[15](div1);
+    			append(div2, t4);
+    			if (if_block) if_block.m(div2, null);
+    			current = true;
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(input0, "change", /*input0_change_handler*/ ctx[13]),
+    					listen(input1, "input", /*input1_input_handler*/ ctx[14]),
+    					listen(span1, "click", /*clearFilter*/ ctx[10])
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, [dirty]) {
+    			if (!current || dirty & /*hideList*/ 8 && label_class_value !== (label_class_value = "" + (null_to_empty("show-list" + (!/*hideList*/ ctx[3] ? " move" : "")) + " svelte-bfixg2"))) {
+    				attr(label, "class", label_class_value);
+    			}
+
+    			if (dirty & /*hideList*/ 8) {
+    				input0.checked = /*hideList*/ ctx[3];
+    			}
+
+    			if (dirty & /*filters*/ 1 && input1.value !== /*filters*/ ctx[0].filter) {
+    				set_input_value(input1, /*filters*/ ctx[0].filter);
+    			}
+
+    			if (dirty & /*filtered, toLoad, filePerPage, fileId, formatTime*/ 194) {
+    				each_value = /*filtered*/ ctx[6].slice(/*toLoad*/ ctx[7], /*toLoad*/ ctx[7] + filePerPage);
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context$1(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block$1(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(ul, null);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value.length;
+    			}
+
+    			if (/*totalPages*/ ctx[4] > 1) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+
+    					if (dirty & /*totalPages*/ 16) {
+    						transition_in(if_block, 1);
+    					}
+    				} else {
+    					if_block = create_if_block$5(ctx);
+    					if_block.c();
+    					transition_in(if_block, 1);
+    					if_block.m(div2, null);
+    				}
+    			} else if (if_block) {
+    				group_outros();
+
+    				transition_out(if_block, 1, 1, () => {
+    					if_block = null;
+    				});
+
+    				check_outros();
+    			}
+
+    			if (dirty & /*$ToggleMenu*/ 256) {
+    				toggle_class(div2, "move", !/*$ToggleMenu*/ ctx[8]);
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(if_block);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(if_block);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(label);
+    			if (detaching) detach(t0);
+    			if (detaching) detach(input0);
+    			if (detaching) detach(t1);
+    			if (detaching) detach(div2);
+    			destroy_each(each_blocks, detaching);
+    			/*div1_binding*/ ctx[15](null);
+    			if (if_block) if_block.d();
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    const filePerPage = 100;
+
+    function instance$8($$self, $$props, $$invalidate) {
+    	let $ToggleMenu;
+    	component_subscribe($$self, ToggleMenu, $$value => $$invalidate(8, $ToggleMenu = $$value));
+    	const dispatch = createEventDispatcher();
+    	let { files = [] } = $$props;
+    	let { fileId } = $$props;
+    	let { filters = { filter: "" } } = $$props;
+    	let observer;
+    	let playList;
+    	let hideList = true;
+    	let totalPages = 0;
+    	let page = 1;
+    	let toLoad = 0;
+    	let filtered = [];
+
+    	const getPage = () => {
+    		let i = filtered.findIndex(f => f.Id === fileId);
+    		let pg = 1;
+    		while (pg * filePerPage < i && pg < totalPages) pg++;
+    		return pg;
+    	};
+
+    	const setObserver = () => {
+    		if (observer) {
+    			observer.disconnect();
+    		}
+
+    		if (playList) {
+    			let imgs = document.querySelectorAll("#play-list li img");
+
+    			observer = new IntersectionObserver(entries => {
+    					for (let entry of entries) {
+    						let img = entry.target;
+
+    						if (entry.isIntersecting) {
+    							img.src = img.dataset.src;
+    						} else {
+    							img.src = "";
+    						}
+    					}
+    				},
+    			{
+    					root: playList,
+    					rootMargin: "1000px",
+    					threshold: 0
+    				});
+
+    			imgs.forEach(lazyImg => {
+    				observer.observe(lazyImg);
+    			});
+    		}
+    	};
+
+    	const goToPage = pg => {
+    		pg = parseInt(pg.detail);
+    		if (pg < 1 || pg > totalPages || isNaN(pg)) return;
+    		$$invalidate(5, page = pg < 1 ? 1 : pg > totalPages ? totalPages : pg);
+    		setObserver();
+    	};
+
+    	const clearFilter = () => {
+    		console.log("dispath-clear");
+    		$$invalidate(0, filters.filter = "", filters);
+    		dispatch("clearfilter");
+    	};
+
+    	function click_handler(event) {
+    		bubble.call(this, $$self, event);
+    	}
+
+    	function input0_change_handler() {
+    		hideList = this.checked;
+    		$$invalidate(3, hideList);
+    	}
+
+    	function input1_input_handler() {
+    		filters.filter = this.value;
+    		$$invalidate(0, filters);
+    	}
+
+    	function div1_binding($$value) {
+    		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
+    			playList = $$value;
+    			$$invalidate(2, playList);
+    		});
+    	}
+
+    	$$self.$$set = $$props => {
+    		if ('files' in $$props) $$invalidate(11, files = $$props.files);
+    		if ('fileId' in $$props) $$invalidate(1, fileId = $$props.fileId);
+    		if ('filters' in $$props) $$invalidate(0, filters = $$props.filters);
+    	};
+
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty & /*hideList, playList*/ 12) {
+    			if (!hideList) {
+    				if (playList) {
+    					let current = document.querySelector("#play-list .active");
+
+    					if (current) {
+    						playList.scroll({ top: current.offsetTop - 250 });
+    						setObserver();
+
+    						setTimeout(
+    							() => {
+    								playList.scroll({ top: current.offsetTop - 250 });
+    							},
+    							300
+    						);
+    					}
+    				}
+    			}
+    		}
+
+    		if ($$self.$$.dirty & /*filters, files*/ 2049) {
+    			{
+    				if (filters.filter) {
+    					$$invalidate(6, filtered = files.filter(f => f.Name.toLocaleLowerCase().includes(filters.filter.toLocaleLowerCase())));
+    				} else {
+    					$$invalidate(6, filtered = files);
+    				}
+
+    				const tout = setTimeout(
+    					() => {
+    						setObserver();
+    						clearTimeout(tout);
+    					},
+    					50
+    				);
+    			}
+    		}
+
+    		if ($$self.$$.dirty & /*files, totalPages, filtered*/ 2128) {
+    			if (files.length > 100 && totalPages === 0) {
+    				$$invalidate(4, totalPages = Math.ceil(filtered.length / filePerPage));
+    				$$invalidate(5, page = getPage());
+    			}
+    		}
+
+    		if ($$self.$$.dirty & /*page, filtered*/ 96) {
+    			{
+    				let start = (page - 1) * filePerPage;
+
+    				if (start < filtered.length) {
+    					$$invalidate(7, toLoad = start);
+    				} else {
+    					$$invalidate(7, toLoad = 0);
+    				}
+    			}
+    		}
+    	};
+
+    	return [
+    		filters,
+    		fileId,
+    		playList,
+    		hideList,
+    		totalPages,
+    		page,
+    		filtered,
+    		toLoad,
+    		$ToggleMenu,
+    		goToPage,
+    		clearFilter,
+    		files,
+    		click_handler,
+    		input0_change_handler,
+    		input1_input_handler,
+    		div1_binding
+    	];
+    }
+
+    class PlayList extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$8, create_fragment$8, safe_not_equal, { files: 11, fileId: 1, filters: 0 });
+    	}
+    }
+
+    var pageObserver;
+    var imgObserver;
+    let imgs;
+    let currentPage;
+    const PageObserver = (setPage, container, loadImages) => {
+        imgs = container.querySelectorAll("img");
+        if (!pageObserver) {
+            pageObserver = new IntersectionObserver(
+                (entries) => {
+                    if (entries.length < imgs.length) {
+                        for (let entry of entries) {
+                            let img = entry.target;
+                            if (entry.isIntersecting) {
+                                setPage(parseInt(img.id));
+                                currentPage = img.id;
+                                let timg = imgs[currentPage];
+                                if (timg && !timg.src.includes("data:img")) {
+                                    loadImages(currentPage - 3, 8, 1);
+                                }
+                            }
+                        }
+                    }
+                },
+                { root: container }
+            );
+
+            imgs.forEach((lazyImg) => {
+                pageObserver.observe(lazyImg);
+            });
+        }
+
+        return pageObserver;
+    };
+
+    let mDown = false;
+    const onmousedown = () => {
+        mDown = true;
+    };
+
+    const onmouseup = () => {
+        const curPage = currentPage;
+        if (imgs[curPage] && !imgs[curPage].src) {
+            loadImages(curPage - 1, 6);
+            setTimeout(() => {
+                scrollInView(curPage);
+                setTimeout(() => {
+                    clearTimeout(tout);
+                    mDown = false;
+                }, 100);
+            }, 500);
+        } else {
+            mDown = false;
+        }
+    };
+
+    let tout;
+    let load = false;
+    const scrollImageLoader = (loadImages, container) => {
+        container.onmouseup = onmouseup;
+        container.onmousedown = onmousedown;
+
+        if (!imgObserver) {
+            imgObserver = new IntersectionObserver(
+                (entries) => {
+                    if (!mDown) {
+                        if (entries.length < imgs.length) {
+                            let pg, dir;
+                            for (let entry of entries) {
+                                if (entry.isIntersecting) {
+                                    pg = parseInt(entry.target.id);
+                                    dir = pg < currentPage ? -1 : 1;
+
+                                    const img = imgs[dir + pg];
+                                    if (img && !img.src.includes("data:img")) {
+                                        load = true;
+                                    }
+                                }
+                            }
+                            if (load) {
+                                load = false;
+                                if (tout) clearTimeout(tout);
+                                tout = setTimeout(() => {
+                                    loadImages(pg, 8, dir);
+                                    clearTimeout(tout);
+                                }, 50);
+                            }
+                        }
+                    }
+                },
+                {
+                    root: container,
+                    rootMargin: window.innerHeight * 2 + "px",
+                    threshold: 0,
+                }
+            );
+        }
+
+        imgs.forEach((lazyImg) => {
+            imgObserver.observe(lazyImg);
+        });
+    };
+
+    const disconnectObvrs = (container) => {
+        container.onmousedown = null;
+        container.onmouseup = null;
+        pageObserver && pageObserver.disconnect();
+        imgObserver && imgObserver.disconnect();
+        imgs = [];
+        pageObserver = null;
+        imgObserver = null;
+        imgs = null;
+        currentPage = null;
+    };
+
+    var lastEl = null;
+    const setfullscreen = (element) => {
+        try {
+            if (lastEl && element.tagName !== "BODY") {
+                if (document.fullscreenElement.tagName === "BODY") {
+                    document.exitFullscreen().then(() => {
+                        element.requestFullscreen();
+                    });
+                } else {
+                    document.exitFullscreen().then(() => {
+                        lastEl.requestFullscreen();
+                    });
+                }
+            } else {
+                if (!document.fullscreenElement) {
+                    element.requestFullscreen();
+                    if (element.tagName === "BODY") lastEl = element;
+                } else {
+                    document.exitFullscreen();
+                    lastEl = null;
+                }
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const KeyMap = {
+        PrevFile: {
+            name: "Ins",
+            keyCode: 45,
+            isctrl: true,
+            action: null,
+        },
+        NextFile: {
+            name: "Del",
+            keyCode: 46,
+            isctrl: true,
+            action: null,
+        },
+        SkipForward: {
+            name: "ArrowRight",
+            keyCode: 39,
+            isctrl: false,
+            action: null,
+        },
+        SkipBack: {
+            name: "ArrowLeft",
+            keyCode: 37,
+            isctrl: false,
+            action: null,
+        },
+        Fullscreen: {
+            name: "Enter",
+            keyCode: 13,
+            isctrl: false,
+            action: null,
+        },
+        VolumeUp: {
+            name: "ArrowUp",
+            keyCode: 38,
+            isctrl: false,
+            action: null,
+        },
+        VolumeDown: {
+            name: "ArrowDown",
+            keyCode: 40,
+            isctrl: false,
+            action: null,
+        },
+        PlayOrPause: {
+            name: "Space",
+            keyCode: 32,
+            isctrl: false,
+            action: null,
+        },
+        ShowList: {
+            name: "L",
+            keyCode: 30,
+            isctrl: false,
+            action: null,
+        },
+    };
+
+    const handleKeyboard = (e) => {
+        for (let key of Object.keys(KeyMap)) {
+            if (KeyMap[key].keyCode === e.keyCode) {
+                let { action, isctrl } = KeyMap[key];
+                if (action && e.ctrlKey === isctrl) action(e.ctrlKey);
+                break;
+            }
+        }
+    };
+
+    let tStart, tEnd;
+    let point = {};
+    let touching$1 = false;
+    let drag = false;
+    let moveY = { dis: 0, dir: 0 };
+    let moveX = { dis: 0, dir: 0 };
+
+    let controls = { nextPage: "", prevPage: "", nextFile: "", prevFile: "" };
+    const onTouchStart = (e) => {
+        touching$1 = true;
+        tStart = e.timeStamp;
+        let { pageX, pageY } = (e.touches && e.touches[0]) || e;
+        point = { x: pageX, y: pageY };
+    };
+
+    const onTouchMove = (e) => {
+        if (touching$1) {
+            let { pageX, pageY } = e.touches[0];
+            moveX.dir = pageX - point.x;
+            moveY.dir = pageY - point.y;
+            moveY.dis = Math.abs(moveY.dir);
+            moveX.dis = Math.abs(moveX.dir);
+            drag = true;
+        }
+    };
+
+    const onTouchEnd = (e) => {
+        touching$1 = false;
+        let {
+            file: { CurrentPos, Duration },
+            webtoon,
+            nextFile,
+            nextPage,
+            prevFile,
+            prevPage,
+            fullScreen,
+        } = controls;
+        if (!drag) {
+            tEnd = e.timeStamp;
+            let elapsed = tEnd - tStart;
+            if (elapsed > 70) {
+                let ww = window.innerWidth;
+                let wh = window.innerHeight;
+                if (point.y < wh * 0.33) {
+                    if (point.x < ww * 0.33) {
+                        console.log("left Y25%");
+                    } else if (point.x < ww * 0.66) {
+                        // center
+                        console.log("center Y25%");
+                    } else {
+                        // right
+                        console.log("right Y25%");
+                    }
+                } else if (point.y < wh * 0.8) {
+                    if (point.x < ww * 0.33) {
+                        console.log("left Y50%");
+                        nextPage();
+                    } else if (point.x < ww * 0.66) {
+                        fullScreen();
+                        console.log("center Y50%");
+                    } else {
+                        // right
+                        console.log("right Y50%");
+                        nextPage();
+                    }
+                    // 25% from the bottom
+                } else {
+                    if (point.x < ww * 0.33) {
+                        //left
+                        prevFile();
+                    } else if (point.x < ww * 0.66) {
+                        // center
+                        updateToggleMenu();
+                        console.log("center x");
+                    } else {
+                        // right
+                        nextFile();
+                        console.log("right x");
+                    }
+                }
+            }
+        } else {
+            if (moveX.dis > 100) {
+                if (moveX.dir > 0) {
+                    prevPage();
+                } else {
+                    nextPage();
+                }
+            } else if (moveY.dis > 180) {
+                if (moveY.dir > 0) {
+                    console.log("down");
+                    if (webtoon && CurrentPos === 0) {
+                        prevFile();
+                    }
+                } else {
+                    console.log("up");
+
+                    console.log(webtoon, CurrentPos, Duration - 1);
+                    if (webtoon && CurrentPos === Duration - 1) {
+                        nextFile();
+                    }
+                }
+            }
+        }
+        drag = false;
+    };
+
+    /* src\User\Component\MangaConfig.svelte generated by Svelte v3.49.0 */
+
+    function create_fragment$7(ctx) {
+    	let label0;
+    	let t0;
+    	let input0;
+    	let t1;
+    	let div6;
+    	let div1;
+    	let div0;
+    	let t3;
+    	let select;
+    	let option0;
+    	let option1;
+    	let option2;
+    	let t7;
+    	let div3;
+    	let div2;
+    	let t9;
+    	let input1;
+    	let input1_placeholder_value;
+    	let t10;
+    	let div5;
+    	let div4;
+    	let t12;
+    	let input2;
+    	let mounted;
+    	let dispose;
+
+    	return {
+    		c() {
+    			label0 = element("label");
+    			label0.innerHTML = `<i class="fas fa-cog svelte-1frc9ix"></i>`;
+    			t0 = space();
+    			input0 = element("input");
+    			t1 = space();
+    			div6 = element("div");
+    			div1 = element("div");
+    			div0 = element("div");
+    			div0.innerHTML = `<label for="img-fill" class="input-group-text svelte-1frc9ix">Ajust Image:</label>`;
+    			t3 = space();
+    			select = element("select");
+    			option0 = element("option");
+    			option0.textContent = "fill";
+    			option1 = element("option");
+    			option1.textContent = "cover";
+    			option2 = element("option");
+    			option2.textContent = "contain";
+    			t7 = space();
+    			div3 = element("div");
+    			div2 = element("div");
+    			div2.innerHTML = `<label for="img-width" class="input-group-text svelte-1frc9ix">Width</label>`;
+    			t9 = space();
+    			input1 = element("input");
+    			t10 = space();
+    			div5 = element("div");
+    			div4 = element("div");
+    			div4.innerHTML = `<label for="from-start" class="input-group-text svelte-1frc9ix">From Start</label>`;
+    			t12 = space();
+    			input2 = element("input");
+    			attr(label0, "for", "show");
+    			attr(label0, "class", "svelte-1frc9ix");
+    			attr(input0, "type", "checkbox");
+    			attr(input0, "name", "");
+    			attr(input0, "id", "show");
+    			attr(input0, "class", "svelte-1frc9ix");
+    			attr(div0, "class", "input-group-prepend svelte-1frc9ix");
+    			option0.__value = "fill";
+    			option0.value = option0.__value;
+    			attr(option0, "class", "svelte-1frc9ix");
+    			option1.__value = "cover";
+    			option1.value = option1.__value;
+    			attr(option1, "class", "svelte-1frc9ix");
+    			option2.__value = "contain";
+    			option2.value = option2.__value;
+    			attr(option2, "class", "svelte-1frc9ix");
+    			attr(select, "id", "img-fill");
+    			attr(select, "class", "form-control svelte-1frc9ix");
+    			if (/*imgAbjust*/ ctx[2] === void 0) add_render_callback(() => /*select_change_handler*/ ctx[14].call(select));
+    			attr(div1, "class", "input-group svelte-1frc9ix");
+    			attr(div2, "class", "input-group-prepend svelte-1frc9ix");
+    			attr(input1, "id", "img-width");
+    			attr(input1, "type", "number");
+    			attr(input1, "min", "30");
+    			attr(input1, "max", "100");
+    			attr(input1, "class", "form-control svelte-1frc9ix");
+    			attr(input1, "placeholder", input1_placeholder_value = /*config*/ ctx[0].width + '%');
+    			attr(div3, "class", "input-group svelte-1frc9ix");
+    			attr(div4, "class", "input-group-prepend svelte-1frc9ix");
+    			attr(input2, "id", "from-start");
+    			attr(input2, "type", "checkbox");
+    			attr(input2, "class", "form-control svelte-1frc9ix");
+    			attr(div5, "class", "input-group svelte-1frc9ix");
+    			attr(div6, "id", "content");
+    			attr(div6, "class", "svelte-1frc9ix");
+    			toggle_class(div6, "show", /*show*/ ctx[4]);
+    		},
+    		m(target, anchor) {
+    			insert(target, label0, anchor);
+    			insert(target, t0, anchor);
+    			insert(target, input0, anchor);
+    			input0.checked = /*show*/ ctx[4];
+    			insert(target, t1, anchor);
+    			insert(target, div6, anchor);
+    			append(div6, div1);
+    			append(div1, div0);
+    			append(div1, t3);
+    			append(div1, select);
+    			append(select, option0);
+    			append(select, option1);
+    			append(select, option2);
+    			select_option(select, /*imgAbjust*/ ctx[2]);
+    			append(div6, t7);
+    			append(div6, div3);
+    			append(div3, div2);
+    			append(div3, t9);
+    			append(div3, input1);
+    			set_input_value(input1, /*width*/ ctx[5]);
+    			append(div6, t10);
+    			append(div6, div5);
+    			append(div5, div4);
+    			append(div5, t12);
+    			append(div5, input2);
+    			input2.checked = /*isFromStart*/ ctx[3];
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(input0, "change", /*input0_change_handler*/ ctx[13]),
+    					listen(select, "change", /*select_change_handler*/ ctx[14]),
+    					listen(input1, "blur", /*blur*/ ctx[6]),
+    					listen(input1, "focus", /*focus*/ ctx[7]),
+    					listen(input1, "change", /*change*/ ctx[8]),
+    					listen(input1, "keydown", stop_propagation(/*keydown_handler*/ ctx[12])),
+    					listen(input1, "input", /*input1_input_handler*/ ctx[15]),
+    					listen(input2, "change", /*input2_change_handler*/ ctx[16]),
+    					listen(div6, "click", stop_propagation(prevent_default(/*click_handler*/ ctx[11])))
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, [dirty]) {
+    			if (dirty & /*show*/ 16) {
+    				input0.checked = /*show*/ ctx[4];
+    			}
+
+    			if (dirty & /*imgAbjust*/ 4) {
+    				select_option(select, /*imgAbjust*/ ctx[2]);
+    			}
+
+    			if (dirty & /*config*/ 1 && input1_placeholder_value !== (input1_placeholder_value = /*config*/ ctx[0].width + '%')) {
+    				attr(input1, "placeholder", input1_placeholder_value);
+    			}
+
+    			if (dirty & /*width*/ 32 && to_number(input1.value) !== /*width*/ ctx[5]) {
+    				set_input_value(input1, /*width*/ ctx[5]);
+    			}
+
+    			if (dirty & /*isFromStart*/ 8) {
+    				input2.checked = /*isFromStart*/ ctx[3];
+    			}
+
+    			if (dirty & /*show*/ 16) {
+    				toggle_class(div6, "show", /*show*/ ctx[4]);
+    			}
+    		},
+    		i: noop,
+    		o: noop,
+    		d(detaching) {
+    			if (detaching) detach(label0);
+    			if (detaching) detach(t0);
+    			if (detaching) detach(input0);
+    			if (detaching) detach(t1);
+    			if (detaching) detach(div6);
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    function instance$7($$self, $$props, $$invalidate) {
+    	let $ToggleMenu,
+    		$$unsubscribe_ToggleMenu = noop,
+    		$$subscribe_ToggleMenu = () => ($$unsubscribe_ToggleMenu(), $$unsubscribe_ToggleMenu = subscribe(ToggleMenu, $$value => $$invalidate(10, $ToggleMenu = $$value)), ToggleMenu);
+
+    	$$self.$$.on_destroy.push(() => $$unsubscribe_ToggleMenu());
+    	const dispatch = createEventDispatcher();
+    	let { config = {} } = $$props;
+    	let { ToggleMenu } = $$props;
+    	$$subscribe_ToggleMenu();
+    	let show = false;
+    	let width = "";
+    	let tWidth = config.width;
+    	let imgAbjust = config.imgAbjust || "";
+    	let isFromStart = false;
+
+    	const blur = () => {
+    		$$invalidate(5, width = "");
+    	};
+
+    	const focus = () => {
+    		$$invalidate(5, width = config.width);
+    	};
+
+    	let change = () => {
+    		$$invalidate(9, tWidth = width < 30 ? 30 : width > 100 ? 100 : width);
+    		$$invalidate(5, width = tWidth);
+    		localStorage.setItem("mWidth", width);
+    	};
+
+    	function click_handler(event) {
+    		bubble.call(this, $$self, event);
+    	}
+
+    	function keydown_handler(event) {
+    		bubble.call(this, $$self, event);
+    	}
+
+    	function input0_change_handler() {
+    		show = this.checked;
+    		($$invalidate(4, show), $$invalidate(10, $ToggleMenu));
+    	}
+
+    	function select_change_handler() {
+    		imgAbjust = select_value(this);
+    		$$invalidate(2, imgAbjust);
+    	}
+
+    	function input1_input_handler() {
+    		width = to_number(this.value);
+    		$$invalidate(5, width);
+    	}
+
+    	function input2_change_handler() {
+    		isFromStart = this.checked;
+    		$$invalidate(3, isFromStart);
+    	}
+
+    	$$self.$$set = $$props => {
+    		if ('config' in $$props) $$invalidate(0, config = $$props.config);
+    		if ('ToggleMenu' in $$props) $$subscribe_ToggleMenu($$invalidate(1, ToggleMenu = $$props.ToggleMenu));
+    	};
+
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty & /*isFromStart*/ 8) {
+    			{
+    				console.log("isF", isFromStart);
+    				dispatch("fromStart", isFromStart);
+    			}
+    		}
+
+    		if ($$self.$$.dirty & /*tWidth, imgAbjust*/ 516) {
+    			dispatch("mconfig", { width: tWidth, imgAbjust });
+    		}
+
+    		if ($$self.$$.dirty & /*$ToggleMenu*/ 1024) {
+    			if ($ToggleMenu) {
+    				$$invalidate(4, show = false);
+    			}
+    		}
+    	};
+
+    	return [
+    		config,
+    		ToggleMenu,
+    		imgAbjust,
+    		isFromStart,
+    		show,
+    		width,
+    		blur,
+    		focus,
+    		change,
+    		tWidth,
+    		$ToggleMenu,
+    		click_handler,
+    		keydown_handler,
+    		input0_change_handler,
+    		select_change_handler,
+    		input1_input_handler,
+    		input2_change_handler
+    	];
+    }
+
+    class MangaConfig extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$7, create_fragment$7, safe_not_equal, { config: 0, ToggleMenu: 1 });
+    	}
+    }
+
+    /* src\User\Component\MangaViewer.svelte generated by Svelte v3.49.0 */
+
+    function get_each_context(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[40] = list[i];
+    	child_ctx[42] = i;
+    	return child_ctx;
+    }
+
+    // (215:6) {:else}
+    function create_else_block$1(ctx) {
+    	let each_1_anchor;
+    	let each_value = Array(/*file*/ ctx[0].Duration).fill();
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
+    	}
+
+    	return {
+    		c() {
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			each_1_anchor = empty$1();
+    		},
+    		m(target, anchor) {
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(target, anchor);
+    			}
+
+    			insert(target, each_1_anchor, anchor);
+    		},
+    		p(ctx, dirty) {
+    			if (dirty[0] & /*config, images, file*/ 133) {
+    				each_value = Array(/*file*/ ctx[0].Duration).fill();
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value.length;
+    			}
+    		},
+    		d(detaching) {
+    			destroy_each(each_blocks, detaching);
+    			if (detaching) detach(each_1_anchor);
+    		}
+    	};
+    }
+
+    // (208:6) {#if !webtoon}
+    function create_if_block$4(ctx) {
+    	let img;
+    	let img_src_value;
+
+    	return {
+    		c() {
+    			img = element("img");
+    			set_style(img, "object-fit", /*config*/ ctx[7].imgAbjust);
+    			if (!src_url_equal(img.src, img_src_value = /*images*/ ctx[2][/*file*/ ctx[0].CurrentPos] && "data:img/jpeg;base64, " + /*images*/ ctx[2][/*file*/ ctx[0].CurrentPos])) attr(img, "src", img_src_value);
+    			attr(img, "alt", "Loading...");
+    			toggle_class(img, "empty-img", !/*images*/ ctx[2][/*file*/ ctx[0].CurrentPos]);
+    		},
+    		m(target, anchor) {
+    			insert(target, img, anchor);
+    		},
+    		p(ctx, dirty) {
+    			if (dirty[0] & /*config*/ 128) {
+    				set_style(img, "object-fit", /*config*/ ctx[7].imgAbjust);
+    			}
+
+    			if (dirty[0] & /*images, file*/ 5 && !src_url_equal(img.src, img_src_value = /*images*/ ctx[2][/*file*/ ctx[0].CurrentPos] && "data:img/jpeg;base64, " + /*images*/ ctx[2][/*file*/ ctx[0].CurrentPos])) {
+    				attr(img, "src", img_src_value);
+    			}
+
+    			if (dirty[0] & /*images, file*/ 5) {
+    				toggle_class(img, "empty-img", !/*images*/ ctx[2][/*file*/ ctx[0].CurrentPos]);
+    			}
+    		},
+    		d(detaching) {
+    			if (detaching) detach(img);
+    		}
+    	};
+    }
+
+    // (216:8) {#each Array(file.Duration).fill() as _, i}
+    function create_each_block(ctx) {
+    	let img;
+    	let img_src_value;
+
+    	return {
+    		c() {
+    			img = element("img");
+    			attr(img, "id", /*i*/ ctx[42]);
+    			set_style(img, "object-fit", /*config*/ ctx[7].imgAbjust);
+
+    			if (!src_url_equal(img.src, img_src_value = /*images*/ ctx[2][/*i*/ ctx[42]]
+    			? "data:img/jpeg;base64, " + /*images*/ ctx[2][/*i*/ ctx[42]]
+    			: "")) attr(img, "src", img_src_value);
+
+    			attr(img, "alt", "Loading...r");
+    			attr(img, "class", "svelte-16u82nq");
+    			toggle_class(img, "empty-img", !/*images*/ ctx[2][/*i*/ ctx[42]]);
+    		},
+    		m(target, anchor) {
+    			insert(target, img, anchor);
+    		},
+    		p(ctx, dirty) {
+    			if (dirty[0] & /*config*/ 128) {
+    				set_style(img, "object-fit", /*config*/ ctx[7].imgAbjust);
+    			}
+
+    			if (dirty[0] & /*images*/ 4 && !src_url_equal(img.src, img_src_value = /*images*/ ctx[2][/*i*/ ctx[42]]
+    			? "data:img/jpeg;base64, " + /*images*/ ctx[2][/*i*/ ctx[42]]
+    			: "")) {
+    				attr(img, "src", img_src_value);
+    			}
+
+    			if (dirty[0] & /*images*/ 4) {
+    				toggle_class(img, "empty-img", !/*images*/ ctx[2][/*i*/ ctx[42]]);
+    			}
+    		},
+    		d(detaching) {
+    			if (detaching) detach(img);
+    		}
+    	};
+    }
+
+    function create_fragment$6(ctx) {
+    	let div3;
+    	let span0;
+    	let i0;
+    	let t0;
+    	let t1;
+    	let t2;
+    	let div1;
+    	let div0;
+    	let div0_class_value;
+    	let t3;
+    	let div2;
+    	let span1;
+    	let t4;
+    	let span2;
+    	let input0;
+    	let t5;
+    	let label;
+    	let t6_value = (/*webtoon*/ ctx[1] ? "List" : "Pages") + "";
+    	let t6;
+    	let t7;
+    	let i2;
+    	let t8;
+    	let span3;
+    	let t9;
+    	let span4;
+    	let form;
+    	let input1;
+    	let t10;
+    	let span5;
+    	let t11;
+    	let span6;
+    	let mangaconfig;
+    	let t12;
+    	let span7;
+    	let current;
+    	let mounted;
+    	let dispose;
+
+    	function select_block_type(ctx, dirty) {
+    		if (!/*webtoon*/ ctx[1]) return create_if_block$4;
+    		return create_else_block$1;
+    	}
+
+    	let current_block_type = select_block_type(ctx);
+    	let if_block = current_block_type(ctx);
+
+    	mangaconfig = new MangaConfig({
+    			props: { config: /*config*/ ctx[7], ToggleMenu }
+    		});
+
+    	mangaconfig.$on("mconfig", /*onConfig*/ ctx[15]);
+
+    	return {
+    		c() {
+    			div3 = element("div");
+    			span0 = element("span");
+    			i0 = element("i");
+    			t0 = space();
+    			t1 = text(/*progress*/ ctx[5]);
+    			t2 = space();
+    			div1 = element("div");
+    			div0 = element("div");
+    			if_block.c();
+    			t3 = space();
+    			div2 = element("div");
+    			span1 = element("span");
+    			span1.innerHTML = `<i class="far fa-times-circle popup-msg" data-title="Close"></i>`;
+    			t4 = space();
+    			span2 = element("span");
+    			input0 = element("input");
+    			t5 = space();
+    			label = element("label");
+    			t6 = text(t6_value);
+    			t7 = space();
+    			i2 = element("i");
+    			t8 = space();
+    			span3 = element("span");
+    			span3.innerHTML = `<i class="fa fa-arrow-circle-left"></i>`;
+    			t9 = space();
+    			span4 = element("span");
+    			form = element("form");
+    			input1 = element("input");
+    			t10 = space();
+    			span5 = element("span");
+    			span5.innerHTML = `<i class="fa fa-arrow-circle-right"></i>`;
+    			t11 = space();
+    			span6 = element("span");
+    			create_component(mangaconfig.$$.fragment);
+    			t12 = space();
+    			span7 = element("span");
+    			span7.innerHTML = `<i class="fas fa-expand-arrows-alt popup-msg" data-title="Full Screen"></i>`;
+    			attr(i0, "class", "fas fa-sticky-note svelte-16u82nq");
+    			attr(span0, "class", "fullscreen-progress svelte-16u82nq");
+    			attr(div0, "class", div0_class_value = "" + (null_to_empty("img-current" + (/*webtoon*/ ctx[1] ? " webtoon-img" : "")) + " svelte-16u82nq"));
+    			set_style(div0, "width", /*config*/ ctx[7].width + "%");
+    			attr(div0, "tabindex", "0");
+    			attr(div1, "class", "viewer");
+    			attr(span1, "id", "hide-player");
+    			attr(input0, "type", "checkbox");
+    			attr(input0, "name", "");
+    			attr(input0, "id", "webtoon");
+    			attr(input0, "class", "svelte-16u82nq");
+    			attr(i2, "class", "fas fa-eye svelte-16u82nq");
+    			attr(label, "for", "webtoon");
+    			attr(label, "class", "svelte-16u82nq");
+    			attr(span2, "class", "web-toon");
+    			attr(span3, "class", "prev-page");
+    			attr(input1, "type", "text");
+    			input1.value = "";
+    			attr(input1, "placeholder", /*progress*/ ctx[5]);
+    			attr(form, "action", "");
+    			attr(span4, "class", "current-page");
+    			attr(span5, "class", "next-page");
+    			attr(span6, "class", "config svelte-16u82nq");
+    			attr(span7, "class", "btn-fullscr");
+    			attr(div2, "class", "controls svelte-16u82nq");
+    			attr(div3, "id", "manga-viewer");
+    			attr(div3, "tabindex", "0");
+    			attr(div3, "class", "svelte-16u82nq");
+    			toggle_class(div3, "hide", /*$ToggleMenu*/ ctx[8]);
+    		},
+    		m(target, anchor) {
+    			insert(target, div3, anchor);
+    			append(div3, span0);
+    			append(span0, i0);
+    			append(span0, t0);
+    			append(span0, t1);
+    			append(div3, t2);
+    			append(div3, div1);
+    			append(div1, div0);
+    			if_block.m(div0, null);
+    			/*div0_binding*/ ctx[22](div0);
+    			append(div3, t3);
+    			append(div3, div2);
+    			append(div2, span1);
+    			append(div2, t4);
+    			append(div2, span2);
+    			append(span2, input0);
+    			input0.checked = /*webtoon*/ ctx[1];
+    			append(span2, t5);
+    			append(span2, label);
+    			append(label, t6);
+    			append(label, t7);
+    			append(label, i2);
+    			append(div2, t8);
+    			append(div2, span3);
+    			append(div2, t9);
+    			append(div2, span4);
+    			append(span4, form);
+    			append(form, input1);
+    			/*input1_binding*/ ctx[24](input1);
+    			append(div2, t10);
+    			append(div2, span5);
+    			append(div2, t11);
+    			append(div2, span6);
+    			mount_component(mangaconfig, span6, null);
+    			append(div2, t12);
+    			append(div2, span7);
+    			current = true;
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(div0, "touchstart", onTouchStart),
+    					listen(div0, "touchend", onTouchEnd),
+    					listen(div0, "mousedown", onTouchStart),
+    					listen(div0, "mouseup", onTouchEnd),
+    					listen(div0, "touchmove", onTouchMove),
+    					listen(span1, "click", /*returnTo*/ ctx[14]),
+    					listen(input0, "change", /*input0_change_handler*/ ctx[23]),
+    					listen(span3, "click", /*prevPage*/ ctx[9]),
+    					listen(input1, "focus", /*onInputFocus*/ ctx[11]),
+    					listen(input1, "blur", /*onInputBlur*/ ctx[12]),
+    					listen(input1, "keydown", stop_propagation(/*keydown_handler*/ ctx[21])),
+    					listen(form, "submit", prevent_default(/*jumpToPage*/ ctx[13])),
+    					listen(span5, "click", /*nextPage*/ ctx[10]),
+    					listen(span7, "click", function () {
+    						if (is_function(/*Fullscreen*/ ctx[4].action)) /*Fullscreen*/ ctx[4].action.apply(this, arguments);
+    					})
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(new_ctx, dirty) {
+    			ctx = new_ctx;
+    			if (!current || dirty[0] & /*progress*/ 32) set_data(t1, /*progress*/ ctx[5]);
+
+    			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block) {
+    				if_block.p(ctx, dirty);
+    			} else {
+    				if_block.d(1);
+    				if_block = current_block_type(ctx);
+
+    				if (if_block) {
+    					if_block.c();
+    					if_block.m(div0, null);
+    				}
+    			}
+
+    			if (!current || dirty[0] & /*webtoon*/ 2 && div0_class_value !== (div0_class_value = "" + (null_to_empty("img-current" + (/*webtoon*/ ctx[1] ? " webtoon-img" : "")) + " svelte-16u82nq"))) {
+    				attr(div0, "class", div0_class_value);
+    			}
+
+    			if (!current || dirty[0] & /*config*/ 128) {
+    				set_style(div0, "width", /*config*/ ctx[7].width + "%");
+    			}
+
+    			if (dirty[0] & /*webtoon*/ 2) {
+    				input0.checked = /*webtoon*/ ctx[1];
+    			}
+
+    			if ((!current || dirty[0] & /*webtoon*/ 2) && t6_value !== (t6_value = (/*webtoon*/ ctx[1] ? "List" : "Pages") + "")) set_data(t6, t6_value);
+
+    			if (!current || dirty[0] & /*progress*/ 32) {
+    				attr(input1, "placeholder", /*progress*/ ctx[5]);
+    			}
+
+    			const mangaconfig_changes = {};
+    			if (dirty[0] & /*config*/ 128) mangaconfig_changes.config = /*config*/ ctx[7];
+    			mangaconfig.$set(mangaconfig_changes);
+
+    			if (dirty[0] & /*$ToggleMenu*/ 256) {
+    				toggle_class(div3, "hide", /*$ToggleMenu*/ ctx[8]);
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(mangaconfig.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(mangaconfig.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div3);
+    			if_block.d();
+    			/*div0_binding*/ ctx[22](null);
+    			/*input1_binding*/ ctx[24](null);
+    			destroy_component(mangaconfig);
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    function instance$6($$self, $$props, $$invalidate) {
+    	let $ToggleMenu;
+    	component_subscribe($$self, ToggleMenu, $$value => $$invalidate(8, $ToggleMenu = $$value));
+    	let { file } = $$props;
+    	let { KeyMap } = $$props;
+    	let { viewer } = $$props;
+    	const { NextFile, PrevFile, Fullscreen, SkipForward, SkipBack } = KeyMap;
+    	const socket = getContext("socket");
+    	const dispatch = createEventDispatcher();
+    	let webtoon;
+    	let progress = `${file.CurrentPos + 1}/${file.Duration}`;
+    	let images = [file.Duration];
+    	let loading = false;
+    	let lastfId;
+    	let imgContainer;
+    	let isObserver = false;
+    	let inputPage;
+    	let jumping = false;
+
+    	let config = {
+    		width: window.innerWidth < 600
+    		? 100
+    		: localStorage.getItem("mWidth") || 65,
+    		imgAbjust: "fill"
+    	};
+
+    	let indices = [];
+
+    	const loadImages = (pg, toPage, dir = 1) => {
+    		if (loading) return;
+    		$$invalidate(20, indices = getEmptyIndex(images, pg, toPage, dir, file.Duration));
+
+    		if (indices.length > 0) {
+    			socket.emit("loadzip-image", { Id: file.Id, indices });
+    			loading = true;
+    		} else if (jumping) {
+    			scrollInViewAndSetObserver();
+    		}
+    	};
+
+    	socket.on("image-loaded", data => {
+    		if (!data.last) {
+    			$$invalidate(2, images[data.page] = data.img, images);
+    		} else {
+    			loading = false;
+    			$$invalidate(20, indices = []);
+
+    			if (jumping && webtoon) {
+    				jumping = false;
+    				scrollInViewAndSetObserver(100);
+    			}
+    		}
+    	});
+
+    	const prevPage = () => {
+    		let pg = file.CurrentPos - 1;
+
+    		if (pg > -1) {
+    			if (webtoon) {
+    				scrollInView(pg);
+    			} else {
+    				if (!images[pg - 7] && !loading) {
+    					loadImages(pg, 8, -1);
+    				}
+    			}
+
+    			$$invalidate(0, file.CurrentPos = pg, file);
+    		} else {
+    			jumping = true;
+    			PrevFile.action();
+    		}
+    	};
+
+    	const nextPage = () => {
+    		let pg = file.CurrentPos + 1;
+
+    		if (pg < file.Duration) {
+    			if (webtoon) {
+    				scrollInView(pg);
+    			} else {
+    				if (!images[pg + 7] && !loading) {
+    					loadImages(pg, 8);
+    				}
+    			}
+
+    			$$invalidate(0, file.CurrentPos = pg, file);
+    		} else {
+    			jumping = true;
+    			disconnectObvrs(imgContainer);
+    			NextFile.action();
+    		}
+    	};
+
+    	const onInputFocus = () => {
+    		$$invalidate(6, inputPage.value = file.CurrentPos + 1, inputPage);
+    	};
+
+    	const onInputBlur = () => {
+    		$$invalidate(6, inputPage.value = "", inputPage);
+    	};
+
+    	const jumpToPage = event => {
+    		let val = parseInt(inputPage.value);
+    		if (isNaN(val)) return onInputFocus();
+
+    		val < 0
+    		? 0
+    		: val >= file.Duration ? file.Duration - 1 : val;
+
+    		$$invalidate(0, file.CurrentPos = val - 1, file);
+
+    		if (webtoon) {
+    			jumping = true;
+    			disconnectObvrs(imgContainer);
+    		}
+
+    		loadImages(val - 5, 10);
+    		onInputBlur();
+    	};
+
+    	const returnTo = () => dispatch("returnBack");
+    	SkipForward.action = nextPage;
+    	SkipBack.action = prevPage;
+
+    	const setPage = pg => {
+    		$$invalidate(0, file.CurrentPos = pg, file);
+    	};
+
+    	let scrollInViewAndSetObserver = (delay = 0) => {
+    		let tout = setTimeout(
+    			() => {
+    				scrollInView(file.CurrentPos);
+    				PageObserver(setPage, imgContainer, loadImages);
+    				scrollImageLoader(loadImages, imgContainer, file.CurrentPos);
+    				clearTimeout(tout);
+    			},
+    			delay
+    		);
+    	};
+
+    	Fullscreen.action = () => {
+    		if (webtoon) {
+    			disconnectObvrs(imgContainer);
+    			setfullscreen(viewer);
+    			scrollInViewAndSetObserver(200);
+    		} else {
+    			setfullscreen(viewer);
+    		}
+    	};
+
+    	const onConfig = ({ detail }) => {
+    		$$invalidate(7, config = detail);
+    	};
+
+    	controls.prevPage = prevPage;
+    	controls.nextPage = nextPage;
+    	controls.fullScreen = Fullscreen.action;
+    	controls.nextFile = NextFile.action;
+    	controls.prevFile = PrevFile.action;
+    	controls.file = file;
+
+    	onDestroy(() => {
+    		delete socket._callbacks["$image-loaded"];
+    		disconnectObvrs(imgContainer);
+    	});
+
+    	function keydown_handler(event) {
+    		bubble.call(this, $$self, event);
+    	}
+
+    	function div0_binding($$value) {
+    		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
+    			imgContainer = $$value;
+    			$$invalidate(3, imgContainer);
+    		});
+    	}
+
+    	function input0_change_handler() {
+    		webtoon = this.checked;
+    		$$invalidate(1, webtoon);
+    	}
+
+    	function input1_binding($$value) {
+    		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
+    			inputPage = $$value;
+    			$$invalidate(6, inputPage);
+    		});
+    	}
+
+    	$$self.$$set = $$props => {
+    		if ('file' in $$props) $$invalidate(0, file = $$props.file);
+    		if ('KeyMap' in $$props) $$invalidate(16, KeyMap = $$props.KeyMap);
+    		if ('viewer' in $$props) $$invalidate(17, viewer = $$props.viewer);
+    	};
+
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty[0] & /*file*/ 1) {
+    			$$invalidate(5, progress = `${parseInt(file.CurrentPos) + 1}/${file.Duration}`);
+    		}
+
+    		if ($$self.$$.dirty[0] & /*file, lastfId, imgContainer, images, indices*/ 1310733) {
+    			if (file.Id !== lastfId) {
+    				jumping = true;
+    				$$invalidate(2, images = []);
+    				$$invalidate(18, lastfId = file.Id);
+
+    				if (imgContainer) {
+    					disconnectObvrs(imgContainer);
+    				}
+
+    				$$invalidate(20, indices = getEmptyIndex(images, file.CurrentPos - 2, 8, 1, file.Duration));
+    				socket.emit("loadzip-image", { Id: file.Id, indices });
+    				controls.file = file;
+    			}
+    		}
+
+    		if ($$self.$$.dirty[0] & /*webtoon, isObserver, imgContainer*/ 524298) {
+    			if (webtoon) {
+    				controls.webtoon = webtoon;
+
+    				if (!isObserver) {
+    					$$invalidate(19, isObserver = true);
+    					scrollInViewAndSetObserver();
+    				}
+    			} else if (isObserver) {
+    				controls.webtoon = webtoon;
+    				$$invalidate(19, isObserver = false);
+    				disconnectObvrs(imgContainer);
+    			}
+    		}
+    	};
+
+    	return [
+    		file,
+    		webtoon,
+    		images,
+    		imgContainer,
+    		Fullscreen,
+    		progress,
+    		inputPage,
+    		config,
+    		$ToggleMenu,
+    		prevPage,
+    		nextPage,
+    		onInputFocus,
+    		onInputBlur,
+    		jumpToPage,
+    		returnTo,
+    		onConfig,
+    		KeyMap,
+    		viewer,
+    		lastfId,
+    		isObserver,
+    		indices,
+    		keydown_handler,
+    		div0_binding,
+    		input0_change_handler,
+    		input1_binding
+    	];
+    }
+
+    class MangaViewer extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$6, create_fragment$6, safe_not_equal, { file: 0, KeyMap: 16, viewer: 17 }, null, [-1, -1]);
+    	}
+    }
+
+    /* src\User\Component\Slider.svelte generated by Svelte v3.49.0 */
+    const get_default_slot_changes = dirty => ({ value: dirty & /*previewData*/ 8 });
+    const get_default_slot_context = ctx => ({ value: /*previewData*/ ctx[3].value });
+
+    // (221:4) {#if preview}
+    function create_if_block$3(ctx) {
+    	let span1;
+    	let span0;
+    	let span1_style_value;
+    	let current;
+    	const default_slot_template = /*#slots*/ ctx[14].default;
+    	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[13], get_default_slot_context);
+
+    	return {
+    		c() {
+    			span1 = element("span");
+    			span0 = element("span");
+    			if (default_slot) default_slot.c();
+    			attr(span0, "class", "rc-preview-content svelte-hkabeq");
+    			attr(span1, "class", "rc-preview svelte-hkabeq");
+    			attr(span1, "data-title", "00:00");
+    			attr(span1, "style", span1_style_value = `left: calc(${/*previewData*/ ctx[3].pos}% - ${/*previewRef*/ ctx[2] && /*previewRef*/ ctx[2].offsetWidth / 2}px)`);
+    		},
+    		m(target, anchor) {
+    			insert(target, span1, anchor);
+    			append(span1, span0);
+
+    			if (default_slot) {
+    				default_slot.m(span0, null);
+    			}
+
+    			/*span1_binding*/ ctx[15](span1);
+    			current = true;
+    		},
+    		p(ctx, dirty) {
+    			if (default_slot) {
+    				if (default_slot.p && (!current || dirty & /*$$scope, previewData*/ 8200)) {
+    					update_slot_base(
+    						default_slot,
+    						default_slot_template,
+    						ctx,
+    						/*$$scope*/ ctx[13],
+    						!current
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[13])
+    						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[13], dirty, get_default_slot_changes),
+    						get_default_slot_context
+    					);
+    				}
+    			}
+
+    			if (!current || dirty & /*previewData, previewRef*/ 12 && span1_style_value !== (span1_style_value = `left: calc(${/*previewData*/ ctx[3].pos}% - ${/*previewRef*/ ctx[2] && /*previewRef*/ ctx[2].offsetWidth / 2}px)`)) {
+    				attr(span1, "style", span1_style_value);
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(default_slot, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(default_slot, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(span1);
+    			if (default_slot) default_slot.d(detaching);
+    			/*span1_binding*/ ctx[15](null);
+    		}
+    	};
+    }
+
+    function create_fragment$5(ctx) {
+    	let div2;
+    	let div1;
+    	let div0;
+    	let div0_style_value;
+    	let t0;
+    	let span;
+    	let span_style_value;
+    	let t1;
+    	let current;
+    	let mounted;
+    	let dispose;
+    	let if_block = /*preview*/ ctx[0] && create_if_block$3(ctx);
+
+    	return {
+    		c() {
+    			div2 = element("div");
+    			div1 = element("div");
+    			div0 = element("div");
+    			t0 = space();
+    			span = element("span");
+    			t1 = space();
+    			if (if_block) if_block.c();
+    			attr(div0, "class", "rc-progress svelte-hkabeq");
+
+    			attr(div0, "style", div0_style_value = `border-radius: ${Math.round(/*progress*/ ctx[4]) === 100
+			? '0.3rem'
+			: '0.3rem 0px 0px 0.3rem'}; width: ${/*progress*/ ctx[4] > 0.3 ? /*progress*/ ctx[4] : 0}%`);
+
+    			attr(span, "class", "rc-thumb svelte-hkabeq");
+    			attr(span, "style", span_style_value = `left: calc(${/*progress*/ ctx[4]}% - 11px)`);
+    			attr(div1, "id", /*uniqId*/ ctx[5]);
+    			attr(div1, "class", "rc-track svelte-hkabeq");
+    			attr(div2, "class", "rc-slider svelte-hkabeq");
+    		},
+    		m(target, anchor) {
+    			insert(target, div2, anchor);
+    			append(div2, div1);
+    			append(div1, div0);
+    			append(div1, t0);
+    			append(div1, span);
+    			append(div1, t1);
+    			if (if_block) if_block.m(div1, null);
+    			/*div1_binding*/ ctx[16](div1);
+    			current = true;
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(span, "mousedown", /*handleThumb*/ ctx[8]),
+    					listen(div1, "mousedown", /*onMDown*/ ctx[6]),
+    					listen(div1, "touchstart", /*onMDown*/ ctx[6]),
+    					listen(div1, "mousemove", /*onPreview*/ ctx[7])
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, [dirty]) {
+    			if (!current || dirty & /*progress*/ 16 && div0_style_value !== (div0_style_value = `border-radius: ${Math.round(/*progress*/ ctx[4]) === 100
+			? '0.3rem'
+			: '0.3rem 0px 0px 0.3rem'}; width: ${/*progress*/ ctx[4] > 0.3 ? /*progress*/ ctx[4] : 0}%`)) {
+    				attr(div0, "style", div0_style_value);
+    			}
+
+    			if (!current || dirty & /*progress*/ 16 && span_style_value !== (span_style_value = `left: calc(${/*progress*/ ctx[4]}% - 11px)`)) {
+    				attr(span, "style", span_style_value);
+    			}
+
+    			if (/*preview*/ ctx[0]) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+
+    					if (dirty & /*preview*/ 1) {
+    						transition_in(if_block, 1);
+    					}
+    				} else {
+    					if_block = create_if_block$3(ctx);
+    					if_block.c();
+    					transition_in(if_block, 1);
+    					if_block.m(div1, null);
+    				}
+    			} else if (if_block) {
+    				group_outros();
+
+    				transition_out(if_block, 1, 1, () => {
+    					if_block = null;
+    				});
+
+    				check_outros();
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(if_block);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(if_block);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div2);
+    			if (if_block) if_block.d();
+    			/*div1_binding*/ ctx[16](null);
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    function instance$5($$self, $$props, $$invalidate) {
+    	let { $$slots: slots = {}, $$scope } = $$props;
+    	let { value } = $$props;
+    	let { preview = false } = $$props;
+    	let { min = 0 } = $$props;
+    	let { max = 100 } = $$props;
+    	let { onChange } = $$props;
+    	createEventDispatcher();
+    	let uniqId = "rc-" + new Date().getTime();
+    	let sliderRef;
+    	let previewRef;
+    	let previewData = 0;
+    	let progress = map(value, min, max, 0, 100);
+    	let isMdown = { is: false };
+
+    	const onMDown = e => {
+    		isMdown = { is: true, id: uniqId };
+    		let xpos;
+
+    		if (e.type === "touchstart") {
+    			xpos = e.touches[0].pageX - e.touches[0].target.getBoundingClientRect().left;
+    			document.addEventListener("touchmove", globalMMove);
+    		} else {
+    			xpos = e.offsetX;
+    			document.addEventListener("mousemove", globalMMove);
+    		}
+
+    		if (!isNaN(xpos)) {
+    			updateValue(xpos);
+    		}
+    	};
+
+    	const globalMMove = e => {
+    		if (isMdown.is && e.target.id === uniqId || e.type === "touchmove" && e.touches[0].target.id === uniqId) {
+    			let newPos;
+
+    			if (e.type === "touchmove") {
+    				newPos = e.touches[0].pageX - e.touches[0].target.getBoundingClientRect().left;
+    			} else {
+    				newPos = e.offsetX;
+    			}
+
+    			if (newPos > 0 && newPos < sliderRef.offsetWidth) {
+    				updateValue(newPos);
+    			}
+    		}
+    	};
+
+    	const onPreview = e => {
+    		if (preview) {
+    			var newPos = Math.floor(e.pageX - sliderRef.getBoundingClientRect().left);
+    			var pos = map(newPos - 1, 0, sliderRef.offsetWidth - 2, 0, 100).toFixed(0);
+    			let tempVal = Number(map(newPos - 1, 0, sliderRef.offsetWidth - 2, min, max).toFixed(2));
+    			pos = pos < 0 ? 0 : pos > 100 ? 100 : pos;
+    			let value = tempVal < 0 ? 0 : tempVal > max ? max : tempVal;
+    			$$invalidate(3, previewData = { pos, value });
+    		}
+    	};
+
+    	document.onmouseup = e => {
+    		isMdown = false;
+    		document.removeEventListener("mousemove", globalMMove);
+    		document.removeEventListener("touchmove", globalMMove);
+    	};
+
+    	const handleThumb = e => {
+    		isMdown = { is: true, id: uniqId };
+
+    		if (e.type === "touchstart") {
+    			document.addEventListener("touchmove", globalMMove);
+    		} else {
+    			document.addEventListener("mousemove", globalMMove);
+    		}
+
+    		e.stopPropagation();
+    	};
+
+    	const updateValue = val => {
+    		let tempVal = Number(map(val - 1, 0, sliderRef.offsetWidth - 2, min, max).toFixed(2));
+    		tempVal = tempVal < 0 ? 0 : tempVal > max ? max : tempVal;
+    		onChange(tempVal);
+    	};
+
+    	function span1_binding($$value) {
+    		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
+    			previewRef = $$value;
+    			$$invalidate(2, previewRef);
+    		});
+    	}
+
+    	function div1_binding($$value) {
+    		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
+    			sliderRef = $$value;
+    			$$invalidate(1, sliderRef);
+    		});
+    	}
+
+    	$$self.$$set = $$props => {
+    		if ('value' in $$props) $$invalidate(9, value = $$props.value);
+    		if ('preview' in $$props) $$invalidate(0, preview = $$props.preview);
+    		if ('min' in $$props) $$invalidate(10, min = $$props.min);
+    		if ('max' in $$props) $$invalidate(11, max = $$props.max);
+    		if ('onChange' in $$props) $$invalidate(12, onChange = $$props.onChange);
+    		if ('$$scope' in $$props) $$invalidate(13, $$scope = $$props.$$scope);
+    	};
+
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty & /*value, min, max*/ 3584) {
+    			$$invalidate(4, progress = map(value, min, max, 0, 100));
+    		}
+    	};
+
+    	return [
+    		preview,
+    		sliderRef,
+    		previewRef,
+    		previewData,
+    		progress,
+    		uniqId,
+    		onMDown,
+    		onPreview,
+    		handleThumb,
+    		value,
+    		min,
+    		max,
+    		onChange,
+    		$$scope,
+    		slots,
+    		span1_binding,
+    		div1_binding
+    	];
+    }
+
+    class Slider extends SvelteComponent {
+    	constructor(options) {
+    		super();
+
+    		init(this, options, instance$5, create_fragment$5, safe_not_equal, {
+    			value: 9,
+    			preview: 0,
+    			min: 10,
+    			max: 11,
+    			onChange: 12
+    		});
+    	}
+    }
+
+    const initialData = {
+      startX: 0,
+      endPosX: 0,
+      startY: 0,
+      endY: 0,
+      time: 0,
+    };
+
+    var touching = false;
+    var gestureDir = 0;
+    var touchData = { ...initialData };
+    let time = 0;
+    const setGesture = (player) => {
+      if (player) {
+        player.onmousedown = player.ontouchstart = (e) => {
+          touching = true;
+          time = e.timeStamp;
+
+          if (e.type !== "mousedown") {
+            let { pageX, pageY } = e.touches[0];
+            touchData = { time, startX: pageX, startY: pageY };
+          } else if (e.which === 1) {
+            player.paused ? player.play() : player.pause();
+          }
+        };
+
+        player.ontouchmove = (e) => {
+          if (touching) {
+            let { pageX, pageY } = e.touches[0];
+            let { startX, startY } = touchData;
+            let deltaX = pageX - startX;
+            let deltaY = pageY - startY;
+
+            if (gestureDir === 0 && (deltaX > 10 || deltaX < -10)) {
+              gestureDir = 1;
+            } else if (gestureDir === 0 && (deltaY > 10 || deltaY < -10)) {
+              gestureDir = 2;
+            }
+
+            if (gestureDir === 1 && !player.seeking) {
+              if (deltaX > 20 || deltaX < -20) {
+                let { duration, currentTime } = player;
+                let seek = currentTime + (deltaX > 0 ? 5 : -5);
+                player.currentTime = seek < 0 ? 0 : seek > duration ? duration : seek;
+                touchData = { time: e.timeStamp, startX: pageX, startY: pageY };
+              }
+            } else if (gestureDir === 2) {
+              if (deltaY > 2 || deltaY < -2) {
+                let vol = player.volume + (deltaY < 0 ? 0.03 : -0.03);
+                player.volume = vol < 0 ? 0 : vol > 1 ? 1 : vol;
+                touchData = { time: e.timeStamp, startX: pageX, startY: pageY };
+              }
+            }
+          }
+        };
+
+        player.onmouseup = player.ontouchend = (e) => {
+          touching = false;
+
+          touchData = { initialData };
+          gestureDir = 0;
+        };
+      }
+    };
+
+    /* src\User\Component\VideoPlayer.svelte generated by Svelte v3.49.0 */
+
+    function create_if_block$2(ctx) {
+    	let div4;
+    	let div3;
+    	let video;
+    	let track;
+    	let video_src_value;
+    	let video_poster_value;
+    	let video_is_paused = true;
+    	let t0;
+    	let div2;
+    	let div0;
+    	let span0;
+    	let t1;
+    	let t2;
+    	let slider;
+    	let t3;
+    	let div1;
+    	let span1;
+    	let t4;
+    	let span2;
+    	let t5;
+    	let label0;
+    	let input0;
+    	let t6;
+    	let i2;
+    	let i2_class_value;
+    	let t7;
+    	let span3;
+    	let t8;
+    	let span4;
+    	let t9;
+    	let span5;
+    	let input1;
+    	let input1_value_value;
+    	let t10;
+    	let label1;
+    	let input2;
+    	let input2_checked_value;
+    	let t11;
+    	let i5;
+    	let current;
+    	let mounted;
+    	let dispose;
+
+    	slider = new Slider({
+    			props: {
+    				min: 0,
+    				max: /*file*/ ctx[0].Duration,
+    				value: /*file*/ ctx[0].CurrentPos,
+    				onChange: /*onSeek*/ ctx[10],
+    				preview: true,
+    				$$slots: {
+    					default: [
+    						create_default_slot$1,
+    						({ value }) => ({ 33: value }),
+    						({ value }) => [0, value ? 4 : 0]
+    					]
+    				},
+    				$$scope: { ctx }
+    			}
+    		});
+
+    	return {
+    		c() {
+    			div4 = element("div");
+    			div3 = element("div");
+    			video = element("video");
+    			track = element("track");
+    			t0 = space();
+    			div2 = element("div");
+    			div0 = element("div");
+    			span0 = element("span");
+    			t1 = text(/*progress*/ ctx[3]);
+    			t2 = space();
+    			create_component(slider.$$.fragment);
+    			t3 = space();
+    			div1 = element("div");
+    			span1 = element("span");
+    			span1.innerHTML = `<i class="far fa-times-circle svelte-1cmvqct"></i>`;
+    			t4 = space();
+    			span2 = element("span");
+    			span2.innerHTML = `<i class="far fa-arrow-alt-circle-left svelte-1cmvqct"></i>`;
+    			t5 = space();
+    			label0 = element("label");
+    			input0 = element("input");
+    			t6 = space();
+    			i2 = element("i");
+    			t7 = space();
+    			span3 = element("span");
+    			span3.innerHTML = `<i class="far fa-arrow-alt-circle-right svelte-1cmvqct"></i>`;
+    			t8 = space();
+    			span4 = element("span");
+    			span4.innerHTML = `<i class="fas fa-expand-arrows-alt svelte-1cmvqct"></i>`;
+    			t9 = space();
+    			span5 = element("span");
+    			input1 = element("input");
+    			t10 = space();
+    			label1 = element("label");
+    			input2 = element("input");
+    			t11 = space();
+    			i5 = element("i");
+    			attr(track, "kind", "captions");
+    			attr(video, "class", "player svelte-1cmvqct");
+    			if (!src_url_equal(video.src, video_src_value = `/api/viewer/${/*file*/ ctx[0].Id}`)) attr(video, "src", video_src_value);
+    			attr(video, "preload", "metadata");
+    			video.controls = false;
+    			video.autoplay = true;
+    			attr(video, "poster", video_poster_value = /*file*/ ctx[0].Cover);
+    			video.loop = false;
+    			attr(span0, "id", "v-progress");
+    			attr(span0, "class", "svelte-1cmvqct");
+    			attr(div0, "class", "v-seeker svelte-1cmvqct");
+    			attr(span1, "class", "svelte-1cmvqct");
+    			attr(span2, "class", "prev-page svelte-1cmvqct");
+    			attr(input0, "type", "checkbox");
+    			attr(input0, "id", "v-play");
+    			attr(input0, "class", "svelte-1cmvqct");
+    			attr(i2, "class", i2_class_value = "" + (null_to_empty(`far fa-${/*mConfig*/ ctx[2].pause ? 'play' : 'pause'}-circle`) + " svelte-1cmvqct"));
+    			attr(label0, "for", "v-play");
+    			attr(label0, "class", "svelte-1cmvqct");
+    			attr(span3, "class", "next-page svelte-1cmvqct");
+    			attr(span4, "class", "svelte-1cmvqct");
+    			attr(input1, "type", "range");
+    			attr(input1, "min", 0);
+    			attr(input1, "max", 1);
+    			attr(input1, "step", 0.05);
+    			input1.value = input1_value_value = /*mConfig*/ ctx[2].volume;
+    			attr(input1, "class", "svelte-1cmvqct");
+    			attr(input2, "id", "v-mute");
+    			attr(input2, "type", "checkbox");
+    			attr(input2, "class", "vol-ctrl svelte-1cmvqct");
+    			input2.checked = input2_checked_value = /*mConfig*/ ctx[2].volume === 0;
+    			attr(i5, "class", "fas fa-volume-up popup-msg svelte-1cmvqct");
+    			attr(i5, "data-title", "Mute");
+    			attr(label1, "for", "v-mute");
+    			attr(label1, "class", "svelte-1cmvqct");
+    			attr(span5, "class", "v-vol svelte-1cmvqct");
+    			attr(div1, "class", "player-btns svelte-1cmvqct");
+    			attr(div2, "class", "player-controls svelte-1cmvqct");
+    			attr(div3, "class", "player-content svelte-1cmvqct");
+    			attr(div4, "class", "player-container svelte-1cmvqct");
+    			attr(div4, "tabindex", "0");
+    			toggle_class(div4, "isFullScreen", /*isFullScreen*/ ctx[4]);
+    		},
+    		m(target, anchor) {
+    			insert(target, div4, anchor);
+    			append(div4, div3);
+    			append(div3, video);
+    			append(video, track);
+    			/*video_binding*/ ctx[24](video);
+
+    			if (!isNaN(/*mConfig*/ ctx[2].volume)) {
+    				video.volume = /*mConfig*/ ctx[2].volume;
+    			}
+
+    			append(div3, t0);
+    			append(div3, div2);
+    			append(div2, div0);
+    			append(div0, span0);
+    			append(span0, t1);
+    			append(div0, t2);
+    			mount_component(slider, div0, null);
+    			append(div2, t3);
+    			append(div2, div1);
+    			append(div1, span1);
+    			append(div1, t4);
+    			append(div1, span2);
+    			append(div1, t5);
+    			append(div1, label0);
+    			append(label0, input0);
+    			append(label0, t6);
+    			append(label0, i2);
+    			append(div1, t7);
+    			append(div1, span3);
+    			append(div1, t8);
+    			append(div1, span4);
+    			append(div1, t9);
+    			append(div1, span5);
+    			append(span5, input1);
+    			append(span5, t10);
+    			append(span5, label1);
+    			append(label1, input2);
+    			append(label1, t11);
+    			append(label1, i5);
+    			/*div2_binding*/ ctx[27](div2);
+    			current = true;
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(video, "play", /*video_play_pause_handler*/ ctx[25]),
+    					listen(video, "pause", /*video_play_pause_handler*/ ctx[25]),
+    					listen(video, "volumechange", /*video_volumechange_handler*/ ctx[26]),
+    					listen(video, "contextmenu", prevent_default(/*contextmenu_handler*/ ctx[23])),
+    					listen(video, "loadedmetadata", /*onMeta*/ ctx[8]),
+    					listen(video, "timeupdate", /*updateTime*/ ctx[16]),
+    					listen(video, "click", /*hideControlsOnCLick*/ ctx[18]),
+    					listen(span1, "click", /*onReturn*/ ctx[9]),
+    					listen(span2, "click", /*PrevFile*/ ctx[7].action),
+    					listen(input0, "change", /*onPlay*/ ctx[17]),
+    					listen(span3, "click", /*NextFile*/ ctx[6].action),
+    					listen(span4, "click", /*fullScreen*/ ctx[12]),
+    					listen(input1, "input", /*volChange*/ ctx[13]),
+    					listen(input2, "change", /*onMuted*/ ctx[11]),
+    					listen(div2, "mousedown", stop_propagation(/*mousedown_handler*/ ctx[22])),
+    					listen(div4, "mousemove", /*hideControls*/ ctx[14]),
+    					listen(div4, "keydown", /*handleKeyboard*/ ctx[19]),
+    					listen(div4, "wheel", /*onWheel*/ ctx[15])
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, dirty) {
+    			if (!current || dirty[0] & /*file*/ 1 && !src_url_equal(video.src, video_src_value = `/api/viewer/${/*file*/ ctx[0].Id}`)) {
+    				attr(video, "src", video_src_value);
+    			}
+
+    			if (!current || dirty[0] & /*file*/ 1 && video_poster_value !== (video_poster_value = /*file*/ ctx[0].Cover)) {
+    				attr(video, "poster", video_poster_value);
+    			}
+
+    			if (dirty[0] & /*mConfig*/ 4 && video_is_paused !== (video_is_paused = /*mConfig*/ ctx[2].pause)) {
+    				video[video_is_paused ? "pause" : "play"]();
+    			}
+
+    			if (dirty[0] & /*mConfig*/ 4 && !isNaN(/*mConfig*/ ctx[2].volume)) {
+    				video.volume = /*mConfig*/ ctx[2].volume;
+    			}
+
+    			if (!current || dirty[0] & /*progress*/ 8) set_data(t1, /*progress*/ ctx[3]);
+    			const slider_changes = {};
+    			if (dirty[0] & /*file*/ 1) slider_changes.max = /*file*/ ctx[0].Duration;
+    			if (dirty[0] & /*file*/ 1) slider_changes.value = /*file*/ ctx[0].CurrentPos;
+
+    			if (dirty[1] & /*$$scope, value*/ 12) {
+    				slider_changes.$$scope = { dirty, ctx };
+    			}
+
+    			slider.$set(slider_changes);
+
+    			if (!current || dirty[0] & /*mConfig*/ 4 && i2_class_value !== (i2_class_value = "" + (null_to_empty(`far fa-${/*mConfig*/ ctx[2].pause ? 'play' : 'pause'}-circle`) + " svelte-1cmvqct"))) {
+    				attr(i2, "class", i2_class_value);
+    			}
+
+    			if (!current || dirty[0] & /*mConfig*/ 4 && input1_value_value !== (input1_value_value = /*mConfig*/ ctx[2].volume)) {
+    				input1.value = input1_value_value;
+    			}
+
+    			if (!current || dirty[0] & /*mConfig*/ 4 && input2_checked_value !== (input2_checked_value = /*mConfig*/ ctx[2].volume === 0)) {
+    				input2.checked = input2_checked_value;
+    			}
+
+    			if (dirty[0] & /*isFullScreen*/ 16) {
+    				toggle_class(div4, "isFullScreen", /*isFullScreen*/ ctx[4]);
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(slider.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(slider.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div4);
+    			/*video_binding*/ ctx[24](null);
+    			destroy_component(slider);
+    			/*div2_binding*/ ctx[27](null);
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    // (259:20) <Slider                          min={0}                          max={file.Duration}                          value={file.CurrentPos}                          onChange={onSeek}                          preview={true}                          let:value>
+    function create_default_slot$1(ctx) {
+    	let t_value = formatTime(/*value*/ ctx[33] + 2) + "";
+    	let t;
+
+    	return {
+    		c() {
+    			t = text(t_value);
+    		},
+    		m(target, anchor) {
+    			insert(target, t, anchor);
+    		},
+    		p(ctx, dirty) {
+    			if (dirty[1] & /*value*/ 4 && t_value !== (t_value = formatTime(/*value*/ ctx[33] + 2) + "")) set_data(t, t_value);
+    		},
+    		d(detaching) {
+    			if (detaching) detach(t);
+    		}
+    	};
+    }
+
+    function create_fragment$4(ctx) {
+    	let if_block_anchor;
+    	let current;
+    	let if_block = /*file*/ ctx[0].Id && create_if_block$2(ctx);
+
+    	return {
+    		c() {
+    			if (if_block) if_block.c();
+    			if_block_anchor = empty$1();
+    		},
+    		m(target, anchor) {
+    			if (if_block) if_block.m(target, anchor);
+    			insert(target, if_block_anchor, anchor);
+    			current = true;
+    		},
+    		p(ctx, dirty) {
+    			if (/*file*/ ctx[0].Id) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+
+    					if (dirty[0] & /*file*/ 1) {
+    						transition_in(if_block, 1);
+    					}
+    				} else {
+    					if_block = create_if_block$2(ctx);
+    					if_block.c();
+    					transition_in(if_block, 1);
+    					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+    				}
+    			} else if (if_block) {
+    				group_outros();
+
+    				transition_out(if_block, 1, 1, () => {
+    					if_block = null;
+    				});
+
+    				check_outros();
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(if_block);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(if_block);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (if_block) if_block.d(detaching);
+    			if (detaching) detach(if_block_anchor);
+    		}
+    	};
+    }
+
+    function instance$4($$self, $$props, $$invalidate) {
+    	let { KeyMap } = $$props;
+    	let { file } = $$props;
+    	let { viewer } = $$props;
+    	const { NextFile, PrevFile, SkipForward, SkipBack } = KeyMap;
+    	const dispatch = createEventDispatcher();
+
+    	let mConfig = {
+    		time: false,
+    		volume: 0.5,
+    		pause: false,
+    		muted: false
+    	};
+
+    	let player = {};
+    	let progress;
+    	let isFullScreen = false;
+    	let controls;
+
+    	const onMeta = e => {
+    		$$invalidate(1, player.currentTime = file.CurrentPos, player);
+    	};
+
+    	const onReturn = () => {
+    		dispatch("returnBack");
+    	};
+
+    	const onSeek = value => {
+    		$$invalidate(1, player.currentTime = value, player);
+    	};
+
+    	const onMuted = ({ target }) => {
+    		$$invalidate(1, player.muted = target.checked, player);
+    	};
+
+    	const fullScreen = () => {
+    		setfullscreen(viewer);
+    	};
+
+    	const volChange = ({ target: { value } }) => {
+    		$$invalidate(2, mConfig.volume = value, mConfig);
+    	};
+
+    	const onFullscreen = () => $$invalidate(4, isFullScreen = document.fullscreenElement !== null);
+
+    	onMount(() => {
+    		setGesture(player);
+    		window.addEventListener("fullscreenchange", onFullscreen);
+    		return () => window.removeEventListener("fullscreenchange", onFullscreen);
+    	});
+
+    	let tout;
+
+    	const hideControls = () => {
+    		if (isFullScreen && window.innerWidth > 1000) {
+    			$$invalidate(5, controls.style.bottom = 0, controls);
+    			clearTimeout(tout);
+
+    			tout = setTimeout(
+    				() => {
+    					$$invalidate(5, controls.style.bottom = -controls.offsetHeight + "px", controls);
+    				},
+    				5000
+    			);
+    		}
+    	};
+
+    	const onWheel = ({ deltaY }) => {
+    		let { volume } = mConfig;
+    		volume += deltaY < 0 ? 0.05 : -0.05;
+    		$$invalidate(2, mConfig.volume = volume < 0 ? 0 : volume > 1 ? 1 : volume, mConfig);
+    	};
+
+    	const updateTime = () => {
+    		$$invalidate(0, file.CurrentPos = player.currentTime, file);
+    	};
+
+    	const onPlay = ({ target: { checked } }) => !checked ? player.play() : player.pause();
+
+    	const hideControlsOnCLick = () => {
+    		if (isFullScreen) {
+    			if (controls.style.bottom == "0px") {
+    				$$invalidate(5, controls.style.bottom = -controls.offsetHeight + "px", controls);
+    				player.play();
+    			} else {
+    				$$invalidate(5, controls.style.bottom = 0, controls);
+    				player.pause();
+    			}
+    		}
+    	};
+
+    	const handleKeyboard = ({ keyCode, ctrlKey }) => {
+    		switch (keyCode) {
+    			case 13:
+    				{
+    					fullScreen();
+    					break;
+    				}
+    			case 39:
+    				{
+    					$$invalidate(1, player.currentTime += ctrlKey ? 10 : 5, player);
+    					break;
+    				}
+    			case 37:
+    				{
+    					$$invalidate(1, player.currentTime -= ctrlKey ? 10 : 5, player);
+    					break;
+    				}
+    			case 38:
+    				{
+    					let newVol = player.volume + 0.05;
+    					$$invalidate(1, player.volume = newVol > 1.0 ? 1 : newVol, player);
+    					break;
+    				}
+    			case 40:
+    				{
+    					let newVol = player.volume - 0.05;
+    					$$invalidate(1, player.volume = newVol < 0 ? 0 : newVol, player);
+    					break;
+    				}
+    			case 32:
+    				{
+    					player.paused ? player.play() : player.pause();
+    					break;
+    				}
+    		}
+
+    		console.log(keyCode);
+    	};
+
+    	function mousedown_handler(event) {
+    		bubble.call(this, $$self, event);
+    	}
+
+    	function contextmenu_handler(event) {
+    		bubble.call(this, $$self, event);
+    	}
+
+    	function video_binding($$value) {
+    		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
+    			player = $$value;
+    			$$invalidate(1, player);
+    		});
+    	}
+
+    	function video_play_pause_handler() {
+    		mConfig.pause = this.paused;
+    		$$invalidate(2, mConfig);
+    	}
+
+    	function video_volumechange_handler() {
+    		mConfig.volume = this.volume;
+    		$$invalidate(2, mConfig);
+    	}
+
+    	function div2_binding($$value) {
+    		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
+    			controls = $$value;
+    			$$invalidate(5, controls);
+    		});
+    	}
+
+    	$$self.$$set = $$props => {
+    		if ('KeyMap' in $$props) $$invalidate(20, KeyMap = $$props.KeyMap);
+    		if ('file' in $$props) $$invalidate(0, file = $$props.file);
+    		if ('viewer' in $$props) $$invalidate(21, viewer = $$props.viewer);
+    	};
+
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty[0] & /*player, file*/ 3) {
+    			if (player) {
+    				$$invalidate(3, progress = formatTime(file.CurrentPos) + "/" + formatTime(file.Duration));
+    			}
+    		}
+    	};
+
+    	return [
+    		file,
+    		player,
+    		mConfig,
+    		progress,
+    		isFullScreen,
+    		controls,
+    		NextFile,
+    		PrevFile,
+    		onMeta,
+    		onReturn,
+    		onSeek,
+    		onMuted,
+    		fullScreen,
+    		volChange,
+    		hideControls,
+    		onWheel,
+    		updateTime,
+    		onPlay,
+    		hideControlsOnCLick,
+    		handleKeyboard,
+    		KeyMap,
+    		viewer,
+    		mousedown_handler,
+    		contextmenu_handler,
+    		video_binding,
+    		video_play_pause_handler,
+    		video_volumechange_handler,
+    		div2_binding
+    	];
+    }
+
+    class VideoPlayer extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$4, create_fragment$4, safe_not_equal, { KeyMap: 20, file: 0, viewer: 21 }, null, [-1, -1]);
+    	}
+    }
+
+    /* src\User\pages\Viewer.svelte generated by Svelte v3.49.0 */
+
+    function create_if_block_1$1(ctx) {
+    	let videoplayer;
+    	let current;
+
+    	videoplayer = new VideoPlayer({
+    			props: {
+    				file: /*file*/ ctx[2],
+    				KeyMap,
+    				viewer: /*viewer*/ ctx[4]
+    			}
+    		});
+
+    	videoplayer.$on("returnBack", /*returnBack*/ ctx[10]);
+
+    	return {
+    		c() {
+    			create_component(videoplayer.$$.fragment);
+    		},
+    		m(target, anchor) {
+    			mount_component(videoplayer, target, anchor);
+    			current = true;
+    		},
+    		p(ctx, dirty) {
+    			const videoplayer_changes = {};
+    			if (dirty & /*file*/ 4) videoplayer_changes.file = /*file*/ ctx[2];
+    			if (dirty & /*viewer*/ 16) videoplayer_changes.viewer = /*viewer*/ ctx[4];
+    			videoplayer.$set(videoplayer_changes);
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(videoplayer.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(videoplayer.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			destroy_component(videoplayer, detaching);
+    		}
+    	};
+    }
+
+    // (155:2) {#if file.Type.includes("Manga")}
+    function create_if_block$1(ctx) {
+    	let mangaviewer;
+    	let current;
+
+    	mangaviewer = new MangaViewer({
+    			props: {
+    				viewer: /*viewer*/ ctx[4],
+    				file: /*file*/ ctx[2],
+    				KeyMap
+    			}
+    		});
+
+    	mangaviewer.$on("changefile", /*changeFile*/ ctx[9]);
+    	mangaviewer.$on("returnBack", /*returnBack*/ ctx[10]);
+
+    	return {
+    		c() {
+    			create_component(mangaviewer.$$.fragment);
+    		},
+    		m(target, anchor) {
+    			mount_component(mangaviewer, target, anchor);
+    			current = true;
+    		},
+    		p(ctx, dirty) {
+    			const mangaviewer_changes = {};
+    			if (dirty & /*viewer*/ 16) mangaviewer_changes.viewer = /*viewer*/ ctx[4];
+    			if (dirty & /*file*/ 4) mangaviewer_changes.file = /*file*/ ctx[2];
+    			mangaviewer.$set(mangaviewer_changes);
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(mangaviewer.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(mangaviewer.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			destroy_component(mangaviewer, detaching);
+    		}
+    	};
+    }
+
+    function create_fragment$3(ctx) {
+    	let div2;
+    	let div0;
+    	let span0;
+    	let t0_value = /*file*/ ctx[2].Name + "";
+    	let t0;
+    	let t1;
+    	let span2;
+    	let span1;
+    	let i;
+    	let t2;
+    	let t3_value = `${/*fileIndex*/ ctx[5] + 1} / ${/*playList*/ ctx[1].length}` + "";
+    	let t3;
+    	let t4;
+    	let div1;
+    	let t5;
+    	let playlist;
+    	let t6;
+    	let show_if;
+    	let show_if_1;
+    	let current_block_type_index;
+    	let if_block;
+    	let current;
+    	let mounted;
+    	let dispose;
+
+    	playlist = new PlayList({
+    			props: {
+    				fileId: /*fileId*/ ctx[0],
+    				files: /*playList*/ ctx[1],
+    				filters: /*filters*/ ctx[7]
+    			}
+    		});
+
+    	playlist.$on("click", /*selectFile*/ ctx[8]);
+    	playlist.$on("clearfilter", /*clearFilter*/ ctx[11]);
+    	const if_block_creators = [create_if_block$1, create_if_block_1$1];
+    	const if_blocks = [];
+
+    	function select_block_type(ctx, dirty) {
+    		if (dirty & /*file*/ 4) show_if = null;
+    		if (dirty & /*file*/ 4) show_if_1 = null;
+    		if (show_if == null) show_if = !!/*file*/ ctx[2].Type.includes("Manga");
+    		if (show_if) return 0;
+    		if (show_if_1 == null) show_if_1 = !!/*file*/ ctx[2].Type.includes("Video");
+    		if (show_if_1) return 1;
+    		return -1;
+    	}
+
+    	if (~(current_block_type_index = select_block_type(ctx, -1))) {
+    		if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+    	}
+
+    	return {
+    		c() {
+    			div2 = element("div");
+    			div0 = element("div");
+    			span0 = element("span");
+    			t0 = text(t0_value);
+    			t1 = space();
+    			span2 = element("span");
+    			span1 = element("span");
+    			i = element("i");
+    			t2 = space();
+    			t3 = text(t3_value);
+    			t4 = space();
+    			div1 = element("div");
+    			t5 = space();
+    			create_component(playlist.$$.fragment);
+    			t6 = space();
+    			if (if_block) if_block.c();
+    			attr(span0, "class", "svelte-160yte1");
+    			attr(div0, "class", "f-name svelte-160yte1");
+    			toggle_class(div0, "nomenu", /*$ToggleMenu*/ ctx[6]);
+    			attr(i, "class", "fas fa-file svelte-160yte1");
+    			attr(span1, "id", "files-prog");
+    			attr(span1, "class", "svelte-160yte1");
+    			attr(div1, "id", "clock");
+    			attr(div1, "class", "svelte-160yte1");
+    			attr(span2, "class", "info svelte-160yte1");
+    			toggle_class(span2, "top", /*file*/ ctx[2].Type.includes("Video"));
+    			attr(div2, "class", "viewer svelte-160yte1");
+    		},
+    		m(target, anchor) {
+    			insert(target, div2, anchor);
+    			append(div2, div0);
+    			append(div0, span0);
+    			append(span0, t0);
+    			/*div0_binding*/ ctx[15](div0);
+    			append(div2, t1);
+    			append(div2, span2);
+    			append(span2, span1);
+    			append(span1, i);
+    			append(span1, t2);
+    			append(span1, t3);
+    			append(span2, t4);
+    			append(span2, div1);
+    			append(div2, t5);
+    			mount_component(playlist, div2, null);
+    			append(div2, t6);
+
+    			if (~current_block_type_index) {
+    				if_blocks[current_block_type_index].m(div2, null);
+    			}
+
+    			/*div2_binding*/ ctx[16](div2);
+    			current = true;
+
+    			if (!mounted) {
+    				dispose = listen(div2, "keydown", handleKeyboard);
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, [dirty]) {
+    			if ((!current || dirty & /*file*/ 4) && t0_value !== (t0_value = /*file*/ ctx[2].Name + "")) set_data(t0, t0_value);
+
+    			if (dirty & /*$ToggleMenu*/ 64) {
+    				toggle_class(div0, "nomenu", /*$ToggleMenu*/ ctx[6]);
+    			}
+
+    			if ((!current || dirty & /*fileIndex, playList*/ 34) && t3_value !== (t3_value = `${/*fileIndex*/ ctx[5] + 1} / ${/*playList*/ ctx[1].length}` + "")) set_data(t3, t3_value);
+
+    			if (dirty & /*file*/ 4) {
+    				toggle_class(span2, "top", /*file*/ ctx[2].Type.includes("Video"));
+    			}
+
+    			const playlist_changes = {};
+    			if (dirty & /*fileId*/ 1) playlist_changes.fileId = /*fileId*/ ctx[0];
+    			if (dirty & /*playList*/ 2) playlist_changes.files = /*playList*/ ctx[1];
+    			playlist.$set(playlist_changes);
+    			let previous_block_index = current_block_type_index;
+    			current_block_type_index = select_block_type(ctx, dirty);
+
+    			if (current_block_type_index === previous_block_index) {
+    				if (~current_block_type_index) {
+    					if_blocks[current_block_type_index].p(ctx, dirty);
+    				}
+    			} else {
+    				if (if_block) {
+    					group_outros();
+
+    					transition_out(if_blocks[previous_block_index], 1, 1, () => {
+    						if_blocks[previous_block_index] = null;
+    					});
+
+    					check_outros();
+    				}
+
+    				if (~current_block_type_index) {
+    					if_block = if_blocks[current_block_type_index];
+
+    					if (!if_block) {
+    						if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+    						if_block.c();
+    					} else {
+    						if_block.p(ctx, dirty);
+    					}
+
+    					transition_in(if_block, 1);
+    					if_block.m(div2, null);
+    				} else {
+    					if_block = null;
+    				}
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(playlist.$$.fragment, local);
+    			transition_in(if_block);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(playlist.$$.fragment, local);
+    			transition_out(if_block);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div2);
+    			/*div0_binding*/ ctx[15](null);
+    			destroy_component(playlist);
+
+    			if (~current_block_type_index) {
+    				if_blocks[current_block_type_index].d();
+    			}
+
+    			/*div2_binding*/ ctx[16](null);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+    }
+
+    function instance$3($$self, $$props, $$invalidate) {
+    	let $ToggleMenu;
+    	component_subscribe($$self, ToggleMenu, $$value => $$invalidate(6, $ToggleMenu = $$value));
+    	let { folderId } = $$props;
+    	let { fileId } = $$props;
+    	const basePath = location.pathname.replace(/(^\/+|\/+$)/g, "").split("/").slice(0, 3).join("/");
+    	const socket = getContext("socket");
+    	const { Fullscreen, NextFile, PrevFile } = KeyMap;
+    	let files = [];
+    	let playList = [];
+    	let file = { Type: "" };
+    	let fileName;
+    	let viewer;
+    	let fileIndex = 1;
+    	let filters = { filter: "" };
+
+    	onMount(async () => {
+    		let { data } = await axios.post(`/api/viewer/folder`, { id: folderId });
+
+    		if (!data.fail) {
+    			$$invalidate(1, playList = files = data.files.sort((a, b) => {
+    				let n1 = a.Name.replace("-", ".").match(/\d+.\d+|\d+/);
+    				let n2 = b.Name.replace("-", ".").match(/\d+.\d+|\d+/);
+
+    				if (n1 && n2) {
+    					return Number(n1[0]) - Number(n2[0]);
+    				} else {
+    					return a.Name.replace("-", "Z").localeCompare(b.Name.replace("-", "Z"));
+    				}
+    			}));
+
+    			const first = playList[0];
+
+    			if (first) {
+    				window.title = first.Cover.split("/")[2];
+    			}
+    		}
+
+    		window.addEventListener("beforeunload", saveFile);
+
+    		return () => {
+    			window.removeEventListener("beforeunload", saveFile);
+    		};
+    	});
+
+    	const saveFile = () => {
+    		let { Id, CurrentPos } = file;
+    		socket.emit("file-update-pos", { Id, CurrentPos });
+    	};
+
+    	const selectFile = ({ target: { id } }) => {
+    		saveFile();
+    		console.log("filter: ", filters.filter);
+
+    		if (filters.filter) {
+    			$$invalidate(1, playList = files.filter(f => f.Name.toLocaleLowerCase().includes(filters.filter.toLocaleLowerCase())));
+    		} else {
+    			$$invalidate(1, playList = files);
+    		}
+
+    		navigate(`/${basePath}/${id}`);
+    	};
+
+    	const changeFile = (dir = 0) => {
+    		let temp = playList.findIndex(f => f.Id === fileId) + dir;
+
+    		if (fileIndex > -1 && fileIndex < playList.length - 1) {
+    			$$invalidate(5, fileIndex = temp);
+    			saveFile();
+    			navigate(`/${basePath}/${playList[fileIndex].Id}`);
+    		}
+    	};
+
+    	const returnBack = () => {
+    		saveFile();
+    		const pathname = localStorage.getItem("content");
+    		localStorage.setItem("fileId", file.Id);
+    		navigate(pathname);
+    	};
+
+    	NextFile.action = () => changeFile(1);
+    	NextFile.isctrl = true;
+    	PrevFile.action = () => changeFile(-1);
+    	PrevFile.isctrl = true;
+    	let lastId;
+    	let tout;
+
+    	const clearFilter = () => {
+    		console.log("clearfilter");
+    		$$invalidate(1, playList = files);
+    	};
+
+    	let runningClock;
+
+    	window.addEventListener("fullscreenchange", e => {
+    		if (document.fullscreenElement) {
+    			const clock = document.getElementById("clock");
+
+    			if (clock) {
+    				clock.innerText = new Date().toLocaleTimeString("en-US");
+
+    				runningClock = setInterval(
+    					() => {
+    						clock.innerText = new Date().toLocaleTimeString("en-US");
+    					},
+    					1000
+    				);
+    			}
+    		} else {
+    			clearInterval(runningClock);
+    			clock.innerText = "";
+    		}
+
+    		if ((/(android)|(iphone)/i).test(navigator.userAgent) && file.Type.includes("Video") && document.fullscreenElement) {
+    			window.screen.orientation.lock("landscape");
+    		} else {
+    			window.screen.orientation.unlock();
+    		}
+    	});
+
+    	function div0_binding($$value) {
+    		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
+    			fileName = $$value;
+    			((((($$invalidate(3, fileName), $$invalidate(2, file)), $$invalidate(13, lastId)), $$invalidate(14, tout)), $$invalidate(1, playList)), $$invalidate(0, fileId));
+    		});
+    	}
+
+    	function div2_binding($$value) {
+    		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
+    			viewer = $$value;
+    			$$invalidate(4, viewer);
+    		});
+    	}
+
+    	$$self.$$set = $$props => {
+    		if ('folderId' in $$props) $$invalidate(12, folderId = $$props.folderId);
+    		if ('fileId' in $$props) $$invalidate(0, fileId = $$props.fileId);
+    	};
+
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty & /*playList, fileId*/ 3) {
+    			if (playList.length > 0) {
+    				$$invalidate(2, file = playList.find(f => f.Id === fileId) || playList[0]);
+    				$$invalidate(5, fileIndex = playList.findIndex(f => f.Id === fileId));
+    			}
+    		}
+
+    		if ($$self.$$.dirty & /*file, lastId, tout, fileName*/ 24588) {
+    			if (file.Id != lastId) {
+    				$$invalidate(13, lastId = file.Id);
+    				clearTimeout(tout);
+    				$$invalidate(3, fileName.style.opacity = 1, fileName);
+
+    				$$invalidate(14, tout = setTimeout(
+    					() => {
+    						if (fileName) $$invalidate(3, fileName.style.opacity = 0, fileName);
+    					},
+    					5000
+    				));
+    			}
+    		}
+
+    		if ($$self.$$.dirty & /*fileId, folderId*/ 4097) {
+    			if (fileId) {
+    				if (socket) socket.emit("recent-folder", { CurrentFile: fileId, FolderId: folderId });
+    			}
+    		}
+    	};
+
+    	return [
+    		fileId,
+    		playList,
+    		file,
+    		fileName,
+    		viewer,
+    		fileIndex,
+    		$ToggleMenu,
+    		filters,
+    		selectFile,
+    		changeFile,
+    		returnBack,
+    		clearFilter,
+    		folderId,
+    		lastId,
+    		tout,
+    		div0_binding,
+    		div2_binding
+    	];
+    }
+
+    class Viewer extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$3, create_fragment$3, safe_not_equal, { folderId: 12, fileId: 0 });
+    	}
+    }
+
+    /* src\User\UserRoutes.svelte generated by Svelte v3.49.0 */
+
+    function create_default_slot_2(ctx) {
+    	let home;
+    	let current;
+    	home = new Home({});
+
+    	return {
+    		c() {
+    			create_component(home.$$.fragment);
+    		},
+    		m(target, anchor) {
+    			mount_component(home, target, anchor);
+    			current = true;
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(home.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(home.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			destroy_component(home, detaching);
+    		}
+    	};
+    }
+
+    // (40:2) <Route path="*">
+    function create_default_slot_1(ctx) {
+    	let div;
+
+    	return {
+    		c() {
+    			div = element("div");
+    			div.textContent = "Not found";
+    		},
+    		m(target, anchor) {
+    			insert(target, div, anchor);
+    		},
+    		p: noop,
+    		d(detaching) {
+    			if (detaching) detach(div);
+    		}
+    	};
+    }
+
+    // (23:0) <Router>
+    function create_default_slot(ctx) {
+    	let navbar;
+    	let t0;
+    	let route0;
+    	let t1;
+    	let route1;
+    	let t2;
+    	let route2;
+    	let t3;
+    	let route3;
+    	let t4;
+    	let route4;
+    	let t5;
+    	let route5;
+    	let t6;
+    	let route6;
+    	let t7;
+    	let route7;
+    	let t8;
+    	let route8;
+    	let t9;
+    	let route9;
+    	let t10;
+    	let route10;
+    	let current;
+    	navbar = new Navbar({ props: { navItems: /*navItems*/ ctx[0] } });
+    	navbar.$on("click", /*click_handler*/ ctx[1]);
+
+    	route0 = new Route({
+    			props: {
+    				path: "/videos/content/:id/:page/:filter",
+    				component: Content
+    			}
+    		});
+
+    	route1 = new Route({
+    			props: {
+    				path: "/videos/viewer/:folderId/:fileId",
+    				component: Viewer
+    			}
+    		});
+
+    	route2 = new Route({
+    			props: {
+    				path: "/videos/:dir/:page/:filter",
+    				component: Videos
+    			}
+    		});
+
+    	route3 = new Route({
+    			props: {
+    				path: "/mangas/content/:id/:page/:filter",
+    				component: Content
+    			}
+    		});
+
+    	route4 = new Route({
+    			props: {
+    				path: "/mangas/viewer/:folderId/:fileId",
+    				component: Viewer
+    			}
+    		});
+
+    	route5 = new Route({
+    			props: {
+    				path: "/mangas/:dir/:page/:filter",
+    				component: Mangas
+    			}
+    		});
+
+    	route6 = new Route({
+    			props: {
+    				path: "/favorites/content/:id/:page/:filter",
+    				component: Content
+    			}
+    		});
+
+    	route7 = new Route({
+    			props: {
+    				path: "/favorites/:id/:page/:filter",
+    				component: Favorites
+    			}
+    		});
+
+    	route8 = new Route({
+    			props: {
+    				path: "/favorites/viewer/:folderId/:fileId",
+    				component: Viewer
+    			}
+    		});
+
+    	route9 = new Route({
+    			props: {
+    				exact: true,
+    				path: "/",
+    				$$slots: { default: [create_default_slot_2] },
+    				$$scope: { ctx }
+    			}
+    		});
+
+    	route10 = new Route({
+    			props: {
+    				path: "*",
+    				$$slots: { default: [create_default_slot_1] },
+    				$$scope: { ctx }
+    			}
+    		});
+
+    	return {
+    		c() {
+    			create_component(navbar.$$.fragment);
+    			t0 = space();
+    			create_component(route0.$$.fragment);
+    			t1 = space();
+    			create_component(route1.$$.fragment);
+    			t2 = space();
+    			create_component(route2.$$.fragment);
+    			t3 = space();
+    			create_component(route3.$$.fragment);
+    			t4 = space();
+    			create_component(route4.$$.fragment);
+    			t5 = space();
+    			create_component(route5.$$.fragment);
+    			t6 = space();
+    			create_component(route6.$$.fragment);
+    			t7 = space();
+    			create_component(route7.$$.fragment);
+    			t8 = space();
+    			create_component(route8.$$.fragment);
+    			t9 = space();
+    			create_component(route9.$$.fragment);
+    			t10 = space();
+    			create_component(route10.$$.fragment);
+    		},
+    		m(target, anchor) {
+    			mount_component(navbar, target, anchor);
+    			insert(target, t0, anchor);
+    			mount_component(route0, target, anchor);
+    			insert(target, t1, anchor);
+    			mount_component(route1, target, anchor);
+    			insert(target, t2, anchor);
+    			mount_component(route2, target, anchor);
+    			insert(target, t3, anchor);
+    			mount_component(route3, target, anchor);
+    			insert(target, t4, anchor);
+    			mount_component(route4, target, anchor);
+    			insert(target, t5, anchor);
+    			mount_component(route5, target, anchor);
+    			insert(target, t6, anchor);
+    			mount_component(route6, target, anchor);
+    			insert(target, t7, anchor);
+    			mount_component(route7, target, anchor);
+    			insert(target, t8, anchor);
+    			mount_component(route8, target, anchor);
+    			insert(target, t9, anchor);
+    			mount_component(route9, target, anchor);
+    			insert(target, t10, anchor);
+    			mount_component(route10, target, anchor);
+    			current = true;
+    		},
+    		p(ctx, dirty) {
+    			const route9_changes = {};
+
+    			if (dirty & /*$$scope*/ 4) {
+    				route9_changes.$$scope = { dirty, ctx };
+    			}
+
+    			route9.$set(route9_changes);
+    			const route10_changes = {};
+
+    			if (dirty & /*$$scope*/ 4) {
+    				route10_changes.$$scope = { dirty, ctx };
+    			}
+
+    			route10.$set(route10_changes);
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(navbar.$$.fragment, local);
+    			transition_in(route0.$$.fragment, local);
+    			transition_in(route1.$$.fragment, local);
+    			transition_in(route2.$$.fragment, local);
+    			transition_in(route3.$$.fragment, local);
+    			transition_in(route4.$$.fragment, local);
+    			transition_in(route5.$$.fragment, local);
+    			transition_in(route6.$$.fragment, local);
+    			transition_in(route7.$$.fragment, local);
+    			transition_in(route8.$$.fragment, local);
+    			transition_in(route9.$$.fragment, local);
+    			transition_in(route10.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(navbar.$$.fragment, local);
+    			transition_out(route0.$$.fragment, local);
+    			transition_out(route1.$$.fragment, local);
+    			transition_out(route2.$$.fragment, local);
+    			transition_out(route3.$$.fragment, local);
+    			transition_out(route4.$$.fragment, local);
+    			transition_out(route5.$$.fragment, local);
+    			transition_out(route6.$$.fragment, local);
+    			transition_out(route7.$$.fragment, local);
+    			transition_out(route8.$$.fragment, local);
+    			transition_out(route9.$$.fragment, local);
+    			transition_out(route10.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			destroy_component(navbar, detaching);
+    			if (detaching) detach(t0);
+    			destroy_component(route0, detaching);
+    			if (detaching) detach(t1);
+    			destroy_component(route1, detaching);
+    			if (detaching) detach(t2);
+    			destroy_component(route2, detaching);
+    			if (detaching) detach(t3);
+    			destroy_component(route3, detaching);
+    			if (detaching) detach(t4);
+    			destroy_component(route4, detaching);
+    			if (detaching) detach(t5);
+    			destroy_component(route5, detaching);
+    			if (detaching) detach(t6);
+    			destroy_component(route6, detaching);
+    			if (detaching) detach(t7);
+    			destroy_component(route7, detaching);
+    			if (detaching) detach(t8);
+    			destroy_component(route8, detaching);
+    			if (detaching) detach(t9);
+    			destroy_component(route9, detaching);
+    			if (detaching) detach(t10);
+    			destroy_component(route10, detaching);
+    		}
+    	};
+    }
+
+    function create_fragment$2(ctx) {
+    	let router;
+    	let current;
+
+    	router = new Router({
+    			props: {
+    				$$slots: { default: [create_default_slot] },
+    				$$scope: { ctx }
+    			}
+    		});
+
+    	return {
+    		c() {
+    			create_component(router.$$.fragment);
+    		},
+    		m(target, anchor) {
+    			mount_component(router, target, anchor);
+    			current = true;
+    		},
+    		p(ctx, [dirty]) {
+    			const router_changes = {};
+
+    			if (dirty & /*$$scope*/ 4) {
+    				router_changes.$$scope = { dirty, ctx };
+    			}
+
+    			router.$set(router_changes);
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(router.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(router.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			destroy_component(router, detaching);
+    		}
+    	};
+    }
+
+    function instance$2($$self) {
+    	const navItems = [
+    		{ title: "Home", path: "/", class: "home" },
+    		{
+    			title: "Videos",
+    			path: "/videos",
+    			class: "film"
+    		},
+    		{
+    			title: "Mangas",
+    			path: "/mangas",
+    			class: "book"
+    		},
+    		{
+    			title: "Favorites",
+    			path: "/favorites",
+    			class: "heart"
+    		}
+    	];
+
+    	FavoritesStores.set(getContext("User").favorites);
+
+    	function click_handler(event) {
+    		bubble.call(this, $$self, event);
+    	}
+
+    	return [navItems, click_handler];
+    }
+
+    class UserRoutes extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$2, create_fragment$2, safe_not_equal, {});
+    	}
+    }
+
+    /* src\Login.svelte generated by Svelte v3.49.0 */
+
+    function create_fragment$1(ctx) {
+    	let div7;
+    	let form;
+    	let h3;
+    	let t1;
+    	let div1;
+    	let div0;
+    	let t2;
+    	let input0;
+    	let t3;
+    	let div2;
+    	let t4_value = /*error*/ ctx[1].name + "";
+    	let t4;
+    	let t5;
+    	let div4;
+    	let div3;
+    	let t6;
+    	let input1;
+    	let t7;
+    	let div5;
+    	let t8_value = /*error*/ ctx[1].password + "";
+    	let t8;
+    	let t9;
+    	let div6;
+    	let mounted;
+    	let dispose;
+
+    	return {
+    		c() {
+    			div7 = element("div");
+    			form = element("form");
+    			h3 = element("h3");
+    			h3.textContent = "Login";
+    			t1 = space();
+    			div1 = element("div");
+    			div0 = element("div");
+    			div0.innerHTML = `<label for="name" class="input-group-text svelte-c4yjcf"><i class="fas fa-user svelte-c4yjcf"></i></label>`;
+    			t2 = space();
+    			input0 = element("input");
+    			t3 = space();
+    			div2 = element("div");
+    			t4 = text(t4_value);
+    			t5 = space();
+    			div4 = element("div");
+    			div3 = element("div");
+    			div3.innerHTML = `<label for="password" class="input-group-text svelte-c4yjcf"><i class="fas fa-key svelte-c4yjcf"></i></label>`;
+    			t6 = space();
+    			input1 = element("input");
+    			t7 = space();
+    			div5 = element("div");
+    			t8 = text(t8_value);
+    			t9 = space();
+    			div6 = element("div");
+    			div6.innerHTML = `<button class="btn" tabindex="0">Submit</button>`;
+    			attr(h3, "class", "mb-4 svelte-c4yjcf");
+    			attr(div0, "class", "input-group-prepend");
+    			attr(input0, "id", "name");
+    			attr(input0, "type", "text");
+    			attr(input0, "class", "form-control");
+    			attr(input0, "name", "username");
+    			attr(input0, "placeholder", "Name");
+    			attr(input0, "tabindex", "0");
+    			attr(div1, "class", "input-group");
+    			attr(div2, "id", "name-errors");
+    			attr(div2, "class", "error text-left text-danger svelte-c4yjcf");
+    			attr(div3, "class", "input-group-prepend");
+    			attr(input1, "id", "password");
+    			attr(input1, "type", "password");
+    			attr(input1, "class", "form-control");
+    			attr(input1, "name", "Password");
+    			attr(input1, "placeholder", "Password");
+    			attr(input1, "autocomplete", "on");
+    			attr(input1, "tabindex", "0");
+    			attr(div4, "class", "input-group");
+    			attr(div5, "id", "pasword-errors");
+    			attr(div5, "class", "error text-left text-danger svelte-c4yjcf");
+    			attr(div6, "class", "form-footer");
+    			attr(form, "method", "post");
+    			attr(form, "class", "card bg-dark p-3 svelte-c4yjcf");
+    			attr(div7, "id", "login-container");
+    			attr(div7, "class", "svelte-c4yjcf");
+    		},
+    		m(target, anchor) {
+    			insert(target, div7, anchor);
+    			append(div7, form);
+    			append(form, h3);
+    			append(form, t1);
+    			append(form, div1);
+    			append(div1, div0);
+    			append(div1, t2);
+    			append(div1, input0);
+    			set_input_value(input0, /*user*/ ctx[0].username);
+    			append(form, t3);
+    			append(form, div2);
+    			append(div2, t4);
+    			append(form, t5);
+    			append(form, div4);
+    			append(div4, div3);
+    			append(div4, t6);
+    			append(div4, input1);
+    			set_input_value(input1, /*user*/ ctx[0].password);
+    			append(form, t7);
+    			append(form, div5);
+    			append(div5, t8);
+    			append(form, t9);
+    			append(form, div6);
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(input0, "input", /*input0_input_handler*/ ctx[3]),
+    					listen(input1, "input", /*input1_input_handler*/ ctx[4]),
+    					listen(form, "submit", /*onSubmit*/ ctx[2])
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, [dirty]) {
+    			if (dirty & /*user*/ 1 && input0.value !== /*user*/ ctx[0].username) {
+    				set_input_value(input0, /*user*/ ctx[0].username);
+    			}
+
+    			if (dirty & /*error*/ 2 && t4_value !== (t4_value = /*error*/ ctx[1].name + "")) set_data(t4, t4_value);
+
+    			if (dirty & /*user*/ 1 && input1.value !== /*user*/ ctx[0].password) {
+    				set_input_value(input1, /*user*/ ctx[0].password);
+    			}
+
+    			if (dirty & /*error*/ 2 && t8_value !== (t8_value = /*error*/ ctx[1].password + "")) set_data(t8, t8_value);
+    		},
+    		i: noop,
+    		o: noop,
+    		d(detaching) {
+    			if (detaching) detach(div7);
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    function instance$1($$self, $$props, $$invalidate) {
+    	const dispatch = createEventDispatcher();
+    	let user = { username: "", password: "" };
+    	let error = { name: "", password: "" };
+
+    	const onSubmit = event => {
+    		event.preventDefault();
+
+    		axios.post("/api/users/login", user).then(({ data }) => {
+    			if (data.isAutenticated) {
+    				dispatch("login", { ...data, Id: "" });
+    			} else {
+    				if (name) {
+    					$$invalidate(1, error.name = "User can't be empty", error);
+    				} else {
+    					$$invalidate(1, error.password = "Password can't be empty", error);
+    				}
+    			}
+    		}).catch(err => {
+    			if (err.toString().includes("Network Error")) {
+    				$$invalidate(1, error.password = "server offline", error);
+    			} else {
+    				$$invalidate(1, error.password = "Server Error", error);
+    			}
+    		});
+    	};
+
+    	function input0_input_handler() {
+    		user.username = this.value;
+    		$$invalidate(0, user);
+    	}
+
+    	function input1_input_handler() {
+    		user.password = this.value;
+    		$$invalidate(0, user);
+    	}
+
+    	return [user, error, onSubmit, input0_input_handler, input1_input_handler];
+    }
+
+    class Login extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$1, create_fragment$1, safe_not_equal, {});
+    	}
+    }
+
+    /* src\App.svelte generated by Svelte v3.49.0 */
+
+    function create_else_block_1(ctx) {
+    	let login;
+    	let current;
+    	login = new Login({});
+    	login.$on("login", /*logIn*/ ctx[3]);
+
+    	return {
+    		c() {
+    			create_component(login.$$.fragment);
+    		},
+    		m(target, anchor) {
+    			mount_component(login, target, anchor);
+    			current = true;
+    		},
+    		p: noop,
+    		i(local) {
+    			if (current) return;
+    			transition_in(login.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(login.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			destroy_component(login, detaching);
+    		}
+    	};
+    }
+
+    // (62:26) 
+    function create_if_block_1(ctx) {
+    	let show_if;
+    	let current_block_type_index;
+    	let if_block;
+    	let if_block_anchor;
+    	let current;
+    	const if_block_creators = [create_if_block_2, create_else_block];
+    	const if_blocks = [];
+
+    	function select_block_type_1(ctx, dirty) {
+    		if (dirty & /*user*/ 1) show_if = null;
+    		if (show_if == null) show_if = !!/*user*/ ctx[0].role.includes("Admin");
+    		if (show_if) return 0;
+    		return 1;
+    	}
+
+    	current_block_type_index = select_block_type_1(ctx, -1);
+    	if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+
+    	return {
+    		c() {
+    			if_block.c();
+    			if_block_anchor = empty$1();
+    		},
+    		m(target, anchor) {
+    			if_blocks[current_block_type_index].m(target, anchor);
+    			insert(target, if_block_anchor, anchor);
+    			current = true;
+    		},
+    		p(ctx, dirty) {
+    			let previous_block_index = current_block_type_index;
+    			current_block_type_index = select_block_type_1(ctx, dirty);
+
+    			if (current_block_type_index === previous_block_index) {
+    				if_blocks[current_block_type_index].p(ctx, dirty);
+    			} else {
+    				group_outros();
+
+    				transition_out(if_blocks[previous_block_index], 1, 1, () => {
+    					if_blocks[previous_block_index] = null;
+    				});
+
+    				check_outros();
+    				if_block = if_blocks[current_block_type_index];
+
+    				if (!if_block) {
+    					if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+    					if_block.c();
+    				} else {
+    					if_block.p(ctx, dirty);
+    				}
+
+    				transition_in(if_block, 1);
+    				if_block.m(if_block_anchor.parentNode, if_block_anchor);
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(if_block);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(if_block);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if_blocks[current_block_type_index].d(detaching);
+    			if (detaching) detach(if_block_anchor);
+    		}
+    	};
+    }
+
+    // (60:2) {#if isAuthenticating}
+    function create_if_block(ctx) {
+    	let div;
+
+    	return {
+    		c() {
+    			div = element("div");
+    			div.textContent = "Loading";
+    		},
+    		m(target, anchor) {
+    			insert(target, div, anchor);
+    		},
+    		p: noop,
+    		i: noop,
+    		o: noop,
+    		d(detaching) {
+    			if (detaching) detach(div);
+    		}
+    	};
+    }
+
+    // (65:4) {:else}
+    function create_else_block(ctx) {
+    	let userroutes;
+    	let current;
+    	userroutes = new UserRoutes({});
+    	userroutes.$on("click", /*logout*/ ctx[2]);
+
+    	return {
+    		c() {
+    			create_component(userroutes.$$.fragment);
+    		},
+    		m(target, anchor) {
+    			mount_component(userroutes, target, anchor);
+    			current = true;
+    		},
+    		p: noop,
+    		i(local) {
+    			if (current) return;
+    			transition_in(userroutes.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(userroutes.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			destroy_component(userroutes, detaching);
+    		}
+    	};
+    }
+
+    // (63:4) {#if user.role.includes("Admin")}
+    function create_if_block_2(ctx) {
+    	let adminroutes;
+    	let current;
+    	adminroutes = new AdminRoutes({});
+    	adminroutes.$on("click", /*logout*/ ctx[2]);
+
+    	return {
+    		c() {
+    			create_component(adminroutes.$$.fragment);
+    		},
+    		m(target, anchor) {
+    			mount_component(adminroutes, target, anchor);
+    			current = true;
+    		},
+    		p: noop,
+    		i(local) {
+    			if (current) return;
+    			transition_in(adminroutes.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(adminroutes.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			destroy_component(adminroutes, detaching);
+    		}
+    	};
+    }
+
+    function create_fragment(ctx) {
+    	let div;
+    	let current_block_type_index;
+    	let if_block;
+    	let current;
+    	const if_block_creators = [create_if_block, create_if_block_1, create_else_block_1];
+    	const if_blocks = [];
+
+    	function select_block_type(ctx, dirty) {
+    		if (/*isAuthenticating*/ ctx[1]) return 0;
+    		if (/*user*/ ctx[0].username) return 1;
+    		return 2;
+    	}
+
+    	current_block_type_index = select_block_type(ctx);
+    	if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+
+    	return {
+    		c() {
+    			div = element("div");
+    			if_block.c();
+    			attr(div, "id", "root");
+    		},
+    		m(target, anchor) {
+    			insert(target, div, anchor);
+    			if_blocks[current_block_type_index].m(div, null);
+    			current = true;
+    		},
+    		p(ctx, [dirty]) {
+    			let previous_block_index = current_block_type_index;
+    			current_block_type_index = select_block_type(ctx);
+
+    			if (current_block_type_index === previous_block_index) {
+    				if_blocks[current_block_type_index].p(ctx, dirty);
+    			} else {
+    				group_outros();
+
+    				transition_out(if_blocks[previous_block_index], 1, 1, () => {
+    					if_blocks[previous_block_index] = null;
+    				});
+
+    				check_outros();
+    				if_block = if_blocks[current_block_type_index];
+
+    				if (!if_block) {
+    					if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+    					if_block.c();
+    				} else {
+    					if_block.p(ctx, dirty);
+    				}
+
+    				transition_in(if_block, 1);
+    				if_block.m(div, null);
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(if_block);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(if_block);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div);
+    			if_blocks[current_block_type_index].d();
+    		}
+    	};
+    }
+
+    function isPwa() {
+    	return ["fullscreen", "standalone", "minimal-ui"].some(displayMode => window.matchMedia("(display-mode: " + displayMode + ")").matches);
+    }
+
+    function instance($$self, $$props, $$invalidate) {
+    	let socket;
+    	let user = { username: "" };
+    	let isAuthenticating = true;
+
+    	onMount(async () => {
+    		let resp = await axios.get("/api/users");
+
+    		if (resp.data.isAutenticated) {
+    			$$invalidate(0, user = resp.data);
+    		}
+
+    		$$invalidate(1, isAuthenticating = false);
+    	});
+
+    	const logout = async () => {
+    		$$invalidate(0, user = {});
+    		navigate("/login", { replace: true });
+    		if (socket) socket.close();
+
+    		if (isPwa()) {
+    			history.go(-(history.length - 2));
+    		}
+
+    		try {
+    			axios.get("/api/users/logout");
+    		} catch(error) {
+    			console.log(error);
+    		}
+    	};
+
+    	const logIn = _user => {
+    		$$invalidate(0, user = _user.detail);
+    		navigate("/", { replace: true });
+    	};
+
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty & /*user, socket*/ 17) {
+    			if (user.isAutenticated) {
+    				$$invalidate(4, socket = lookup("/"));
+    				setContext("socket", socket);
+    				setContext("User", user);
+
+    				socket.on("error", error => {
+    					console.log(error);
+    				});
+
+    				setContext("logout", logout);
+    			}
+    		}
+    	};
+
+    	return [user, isAuthenticating, logout, logIn, socket];
+    }
+
+    class App extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance, create_fragment, safe_not_equal, {});
+    	}
+    }
+
+    window.local = localStorage;
+
+    Storage.prototype.setObject = function (key, value) {
+        this.setItem(key, JSON.stringify(value));
+    };
+
+    Storage.prototype.getObject = function (key) {
+        let value = this.getItem(key);
+        if (value === "undefined") return {};
+        try {
+            value = JSON.parse(value);
+        } catch (err) {
+            console.log(err);
+        }
+        return value;
+    };
+
+    window.addEventListener("load", () => {
+        if ("serviceWorker" in navigator) {
+            try {
+                navigator.serviceWorker.register("/service-worker.js");
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    });
+
+    const app = new App({
+        target: document.body,
+    });
+
+    return app;
+
+})();

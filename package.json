@@ -4,11 +4,8 @@
     "scripts": {
         "build": "rollup -c",
         "dev": "rollup -c -w",
-        "start": "sirv public",
         "express": "nodemon app",
-        "production": "node app",
-        "test": "node test",
-        "mplayer": "cd ../WinMusicPlayer/ && npm start"
+        "production": "node app"
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^22.0.2",
