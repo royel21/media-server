@@ -1,9 +1,9 @@
 const initialData = {
-    startX: 0,
-    endPosX: 0,
-    startY: 0,
-    endY: 0,
-    time: 0,
+  startX: 0,
+  endPosX: 0,
+  startY: 0,
+  endY: 0,
+  time: 0,
 };
 
 var touching = false;
@@ -11,59 +11,56 @@ var gestureDir = 0;
 var touchData = { ...initialData };
 let time = 0;
 export const setGesture = (player) => {
-    //   const [touchData, setTouchData] = useState(initialData);
-    if (player) {
-        player.onmousedown = player.ontouchstart = (e) => {
-            touching = true;
-            time = e.timeStamp;
+  //   const [touchData, setTouchData] = useState(initialData);
+  if (player) {
+    player.onmousedown = player.ontouchstart = (e) => {
+      touching = true;
+      time = e.timeStamp;
 
-            if (e.type !== "mousedown") {
-                let { pageX, pageY } = e.touches[0];
-                touchData = { time, startX: pageX, startY: pageY };
-            } else if (e.which === 1) {
-                player.paused ? player.play() : player.pause();
-            }
-        };
+      if (e.type !== "mousedown") {
+        let { pageX, pageY } = e.touches[0];
+        touchData = { time, startX: pageX, startY: pageY };
+      } else if (e.which === 1) {
+        player.paused ? player.play() : player.pause();
+      }
+    };
 
-        player.ontouchmove = (e) => {
-            if (touching) {
-                let { pageX, pageY } = e.touches[0];
-                //   setTouchData({ ...touchData, endX: pageX, endY: pageY });
-                let { startX, startY } = touchData;
-                let deltaX = pageX - startX;
-                let deltaY = pageY - startY;
+    player.ontouchmove = (e) => {
+      if (touching) {
+        let { pageX, pageY } = e.touches[0];
+        //   setTouchData({ ...touchData, endX: pageX, endY: pageY });
+        let { startX, startY } = touchData;
+        let deltaX = pageX - startX;
+        let deltaY = pageY - startY;
 
-                if (gestureDir === 0 && (deltaX > 10 || deltaX < -10)) {
-                    gestureDir = 1;
-                } else if (gestureDir === 0 && (deltaY > 10 || deltaY < -10)) {
-                    gestureDir = 2;
-                }
+        if (gestureDir === 0 && (deltaX > 10 || deltaX < -10)) {
+          gestureDir = 1;
+        } else if (gestureDir === 0 && (deltaY > 10 || deltaY < -10)) {
+          gestureDir = 2;
+        }
 
-                if (gestureDir === 1 && !player.seeking) {
-                    if (deltaX > 20 || deltaX < -20) {
-                        let { duration, currentTime } = player;
-                        let seek = currentTime + (deltaX > 0 ? 5 : -5);
-                        player.currentTime =
-                            seek < 0 ? 0 : seek > duration ? duration : seek;
-                        touchData = { time: e.timeStamp, startX: pageX, startY: pageY };
-                    }
-                } else if (gestureDir === 2) {
-                    if (deltaY > 2 || deltaY < -2) {
-                        let vol = player.volume + (deltaY < 0 ? 0.03 : -0.03);
-                        player.volume = vol < 0 ? 0 : vol > 1 ? 1 : vol;
-                        touchData = { time: e.timeStamp, startX: pageX, startY: pageY };
-                    }
-                }
-            }
-        };
+        if (gestureDir === 1 && !player.seeking) {
+          if (deltaX > 20 || deltaX < -20) {
+            let { duration, currentTime } = player;
+            let seek = currentTime + (deltaX > 0 ? 5 : -5);
+            player.currentTime = seek < 0 ? 0 : seek > duration ? duration : seek;
+            touchData = { time: e.timeStamp, startX: pageX, startY: pageY };
+          }
+        } else if (gestureDir === 2) {
+          if (deltaY > 2 || deltaY < -2) {
+            let vol = player.volume + (deltaY < 0 ? 0.03 : -0.03);
+            player.volume = vol < 0 ? 0 : vol > 1 ? 1 : vol;
+            touchData = { time: e.timeStamp, startX: pageX, startY: pageY };
+          }
+        }
+      }
+    };
 
-        player.onmouseup = player.ontouchend = (e) => {
-            touching = false;
+    player.onmouseup = player.ontouchend = (e) => {
+      touching = false;
 
-            touchData = { initialData };
-            gestureDir = 0;
-        };
-    }
+      touchData = { initialData };
+      gestureDir = 0;
+    };
+  }
 };
-
-export default useGesture;

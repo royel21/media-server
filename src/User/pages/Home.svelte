@@ -10,7 +10,6 @@
   axios.get("/api/files/recents").then(({ data }) => {
     if (data instanceof Array) {
       files = data;
-      console.log(files);
     }
   });
 

@@ -20,15 +20,7 @@ export default {
     file: "public/build/bundle.js",
   },
   plugins: [
-    svelte({
-      // enable run-time checks when not in production
-      dev: !production,
-      // we'll extract any component CSS out into
-      // a separate file - better for performance
-      css: (css) => {
-        css.write("public/build/bundle.css");
-      },
-    }),
+    svelte(),
     css({ output: "public/extra.css" }),
     // If you have external dependencies installed from
     // npm, you'll most likely need these plugins. In
@@ -54,9 +46,12 @@ export default {
     production && terser(),
     dev({
       port: 5000,
-      proxy: {
-        "/*": "http://localhost:" + PORT,
-      },
+      proxy: [
+        {
+          from: "/*",
+          to: "http://localhost:" + PORT,
+        },
+      ],
     }),
   ],
   watch: {
