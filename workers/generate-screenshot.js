@@ -61,6 +61,8 @@ module.exports.genScreenShot = async (id, isFolder) => {
   let size = files.length;
   let progress = 0.01;
   let i = 1;
+  let lastDir = "";
+
   for (let f of files) {
     try {
       let pgr = i / size;
@@ -69,8 +71,13 @@ module.exports.genScreenShot = async (id, isFolder) => {
         progress += 0.01;
       }
 
+      if (lastDir !== f.Folder.Path) {
+        lastDir = f.Folder.Path;
+        console.log(f.Folder.Path);
+      }
+
       let coverPath = path.join(vCover, f.Cover || "");
-      process.stdout.write(`\t${parseFloat(pgr * 100).toFixed(2)}% `);
+      process.stdout.write(`\t${parseFloat(pgr * 100).toFixed(2)}%\n\r`);
       progress += 0.01;
 
       let exist = fs.existsSync(coverPath);
@@ -81,11 +88,12 @@ module.exports.genScreenShot = async (id, isFolder) => {
         continue;
       }
 
-      let fullPath = path.join(f.Folder.Path, f.Name);
+      let fullPath = path.join(f.Folder.Path, f.Name).replaceAll("\\", "/");
 
       if (f.Type.includes("Manga")) {
-        coverPath = path.join(vCover, "Manga", f.Folder.Name, f.Name + ".jpg");
+        coverPath = path.join(vCover, "Manga", f.Folder.Name, f.Name + ".jpg").replaceAll("\\", "/");
         let total = await thumbnails.ZipCover(fullPath, coverPath, exist);
+
         await f.update({
           Duration: total,
           Cover: "/" + path.join("Manga", f.Folder.Name, f.Name + ".jpg"),

@@ -35,7 +35,6 @@ module.exports = (server, sessionMeddle) => {
         socket.on("rename-folder", FileManager.renameFolder);
         socket.on("remove-folder", FileManager.removeFolder);
       } else {
-        // socket.on("file-update-view", FileManager.updateFileView);
         socket.on("file-update-pos", (data) => {
           userUpdate.updateFilePos(data, user);
         });

@@ -11,7 +11,6 @@ var gestureDir = 0;
 var touchData = { ...initialData };
 let time = 0;
 export const setGesture = (player) => {
-  //   const [touchData, setTouchData] = useState(initialData);
   if (player) {
     player.onmousedown = player.ontouchstart = (e) => {
       touching = true;
@@ -28,7 +27,6 @@ export const setGesture = (player) => {
     player.ontouchmove = (e) => {
       if (touching) {
         let { pageX, pageY } = e.touches[0];
-        //   setTouchData({ ...touchData, endX: pageX, endY: pageY });
         let { startX, startY } = touchData;
         let deltaX = pageX - startX;
         let deltaY = pageY - startY;

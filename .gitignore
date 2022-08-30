@@ -16,3 +16,4 @@ images/
 *.env
 *.db-journal
 ./rollup.config.js
+./images

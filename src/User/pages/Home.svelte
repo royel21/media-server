@@ -36,7 +36,7 @@
     localStorage.setItem("content", "/");
     navigate(`/${file.FilesType}/viewer/${file.Id}/${file.CurrentFile}`);
   };
-  // afterUpdate(scrollTo);
+
   let tscroll;
   const onScroll = (e) => {
     if (tscroll) clearTimeout(tscroll);

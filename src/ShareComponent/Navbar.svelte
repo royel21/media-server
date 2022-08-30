@@ -60,7 +60,7 @@
             <Link to={item.path + "/" + selected[item.title]} {getProps}>
               <span class="fa-icon">
                 <i class={"fas fa-" + item.class} />
-                {item.title}
+                <span class="nav-title">{item.title}</span>
                 <ul class="down-list">
                   {#each dirs[item.title].filter((d) => d.Type === item.title) as { Id, Name }}
                     <li
@@ -82,7 +82,7 @@
         <li class="nav-item">
           <Link to={item.path} {getProps}>
             <i class={"fas fa-" + item.class} />
-            {item.title}
+            <span class="nav-title">{item.title}</span>
           </Link>
         </li>
       {/if}
@@ -170,6 +170,12 @@
       display: inline-block;
       text-align: center;
       align-self: center;
+    }
+    .nav-title {
+      font-size: 16px;
+    }
+    .nav-item {
+      font-size: initial;
     }
   }
 </style>

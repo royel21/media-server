@@ -7,16 +7,16 @@
   const applyChanges = () => {
     updateConfig(Config);
   };
-const observer = new MutationObserver(([{ target }]) => (title = document.title.split(" ")[0]));
+  const observer = new MutationObserver(([{ target }]) => (title = document.title.split(" ")[0]));
 
-observer.observe(document.querySelector("title"), {
-  childList: true,
-});
+  observer.observe(document.querySelector("title"), {
+    childList: true,
+  });
 </script>
 
 <label id="user-label" class={User.role} for="show-config">
   <i class="fas fa-user-cog" />
-  <span>{User.username}</span>
+  <span class="nav-title">{User.username}</span>
 </label>
 <input type="checkbox" name="" id="show-config" />
 <div id="user-config" class={User.role.includes("User") ? "user-config" : "admin-config"}>
@@ -172,10 +172,6 @@ observer.observe(document.querySelector("title"), {
 
     #user-label span {
       display: inline-block;
-      height: 26px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
 
     #user-label.User {
@@ -186,12 +182,15 @@ observer.observe(document.querySelector("title"), {
       width: 120px;
       height: 22px;
     }
+    .nav-title {
+      font-size: 16px;
+    }
+  }
 
-    @media screen and (max-width: 430px) {
-      #user-config.admin-config {
-        top: 71px;
-        left: 0;
-      }
+  @media screen and (max-width: 430px) {
+    #user-config.admin-config {
+      top: 71px;
+      left: 0;
     }
   }
 </style>

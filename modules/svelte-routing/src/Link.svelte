@@ -22,7 +22,7 @@
     location: $location,
     href,
     isPartiallyCurrent,
-    isCurrent
+    isCurrent,
   });
 
   function onClick(event) {
@@ -30,14 +30,12 @@
 
     if (shouldNavigate(event)) {
       event.preventDefault();
-      // Don't push another entry to the history stack when the user
-      // clicks on a Link to the page they are currently on.
       const shouldReplace = $location.pathname === href || replace;
       navigate(href, { state, replace: shouldReplace });
     }
   }
 </script>
 
-<a href="{href}" aria-current="{ariaCurrent}" on:click="{onClick}" {...props}>
-  <slot></slot>
+<a {href} aria-current={ariaCurrent} on:click={onClick} {...props}>
+  <slot />
 </a>

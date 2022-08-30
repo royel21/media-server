@@ -55,7 +55,7 @@
       });
     }
   };
-  // afterUpdate(() => {});
+
   $: if (!hideList) {
     if (playList) {
       let current = document.querySelector("#play-list .active");

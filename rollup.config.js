@@ -14,14 +14,14 @@ const { PORT, DEV_PORT } = process.env;
 export default {
   input: "src/main.js",
   output: {
-    sourcemap: true,
+    sourcemap: false,
     format: "iife",
     name: "app",
-    file: "public/build/bundle.js",
+    file: "public/bundle.js",
   },
   plugins: [
     svelte(),
-    css({ output: "public/extra.css" }),
+    css({ output: "css/extra.css" }),
     // If you have external dependencies installed from
     // npm, you'll most likely need these plugins. In
     // some cases you'll need additional configuration -
