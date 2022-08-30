@@ -46,7 +46,9 @@
 
       if (typeof data === "object") {
         pageData = data;
-        folder = data.files[0].Folder;
+        if (data.files[0]) {
+          folder = data.files[0].Folder;
+        }
         lastRead = data.currentFile;
         selected = pageData.files.findIndex((f) => f.Id === lastRead) || 0;
       } else {
@@ -124,7 +126,6 @@
   });
 
   const onResetFiles = async () => {
-    const result = await axios.get(`/api/files/reset-recents/${folder.Id}`);
     await loadContent(page, filter, id, $PageConfig, type);
   };
 

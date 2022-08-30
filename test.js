@@ -1,33 +1,17 @@
-
-let sort = (a, b) => {
-    let n1 = a.Name.replace("-", ".").match(/\d+.\d+|\d+/);
-    let n2 = b.Name.replace("-", ".").match(/\d+.\d+|\d+/);
-    
-    if (n1 && n2) {
-        console.log("a")
-      return Number(n1[0]) - Number(n2[0]);
-    } else {
-        console.log("b")
-      return a.Name.replace("-", "Z").localeCompare(b.Name.replace("-", "Z"));
-    }
-  }
-
-
-  let datas = [
-      {Name:"99-2 ab"},
-      {Name:"99-1 ab"},
-      {Name:"99 ab"},
-      {Name:"200 ab"},
-      {Name:"1 ab"},
-      {Name:"2 ab"},
-      {Name:"12 ab"},
-      {Name:"21 ab"},
-      {Name:"2000 ab"}
-];
-
-console.log(datas.sort(sort));
 require("dotenv").config();
 const db = require("./models");
+
+let sortByName = (a, b) => {
+  let n1 = a.Name.replace("-", ".").match(/\d+.\d+|\d+/);
+  let n2 = b.Name.replace("-", ".").match(/\d+.\d+|\d+/);
+
+  if (n1 && n2) {
+    return Number(n1[0]) - Number(n2[0]);
+  } else {
+    return a.Name.replace("-", "Z").localeCompare(b.Name.replace("-", "Z"));
+  }
+};
+
 // db.sqlze.options.logging = console.log;
 // const test = async () => {
 
@@ -40,46 +24,84 @@ const db = require("./models");
 
 // test();
 // const { getFolders } = require("./routes/query-helper");
-const testDb = async () => {
-    // await db.init(true);
-    // console.time("time");
-    // let user = await db.user.findOne({
-    //     where: { Name: "Royel" },
-    //     include: [{ model: db.recent }, { model: db.favorite }],
-    // });
-    // const req = {
-    //     user,
-    //     params: { filetype: "videos", order: "nu", page: 1, items: 10, search: "" },
-    // };
-    // const res = {
-    //     json: (data) => {
-    //         for (let f of data.files) {
-    //             console.log(f.dataValues.Name);
-    //         }
-    //     },
-    // };
-    // await getFolders(req, res);
-    // console.timeEnd("time");
+const testDb = async ({ user, data }) => {
+  let files = { count: 0, rows: [] };
+  let searchs = [];
+  console.time("time");
+  for (let s of (data.search || "").split("|")) {
+    searchs.push({
+      Name: {
+        [db.Op.like]: "%" + s + "%",
+      },
+    });
+  }
+
+  let query = {
+    attributes: [
+      "Id",
+      "Name",
+      "Type",
+      "Duration",
+      "Cover",
+      "CreatedAt",
+      [
+        db.sqlze.literal(
+          "(Select LastPos from RecentFiles where FileId = File.Id and RecentId = '" + user.Recent.Id + "')"
+        ),
+        "CurrentPos",
+      ],
+      [
+        db.sqlze.literal(
+          "(Select LastRead from RecentFiles where FileId = File.Id and RecentId = '" + user.Recent.Id + "')"
+        ),
+        "LastRead",
+      ],
+    ],
+    where: {
+      [db.Op.or]: searchs,
+    },
+    offset: 1,
+    limit: 100,
+    include: [
+      {
+        model: db.folder,
+        where: {
+          Id: "47MnzX",
+        },
+      },
+    ],
+  };
+
+  files = await db.file.findAndCountAll(query);
+  files.rows.map((f) => f.dataValues);
+
+  // offset: (data.page - 1) * data.items,
+  //     limit: parseInt(data.items),
+
+  console.timeEnd("time");
+  console.log(files.rows.map((f) => f.Name));
 };
+
+testDb({ data: { search: "" }, user: { Recent: {} } });
 // testDb();
 // db.init().then(testDb);
 // const db = require("./models");
 // const { getOrderBy } = require("./routes/query-helper");
 // db.sqlze.options.logging = console.log;
-const getFolders = async (req, res) => {
-    const folders = await db.folder.findAll({
-        where: {
-            [db.Op.and]: {
-                Name: { [db.Op.like]: "% raw%" },
-                path: { [db.Op.notLike]: "%Webtoon Raw%" },
-            },
-        },
-    });
-    folders.forEach(async (f) => {
-        await f.update({ Path: f.Path.replace(/\/\//gi, "/Webtoon Raw/") });
-        console.log(f.Path, f.Path.replace(/\/\//gi, "/Webtoon Raw/"));
-    });
-};
+// const getFolders = async (req, res) => {
+//     const folders = await db.folder.findAll({
+//         where: {
+//             [db.Op.and]: {
+//                 Name: { [db.Op.like]: "% raw%" },
+//                 path: { [db.Op.notLike]: "%Webtoon Raw%" },
+//             },
+//         },
+//     });
+//     folders.forEach(async (f) => {
+//         await f.update({ Path: f.Path.replace(/\/\//gi, "/Webtoon Raw/") });
+//         console.log(f.Path, f.Path.replace(/\/\//gi, "/Webtoon Raw/"));
+//     });
+// };
 // getFolders();
 // const sharp = require("sharp");
 // const StreamZip = require("node-stream-zip");
@@ -133,13 +155,13 @@ const getFolders = async (req, res) => {
 //   }
 // });
 
-const fs = require("fs-extra");
-const path = require("path");
+// const fs = require("fs-extra");
+// const path = require("path");
 
-const bpath = "/mnt/5TBHDD/R18/HMangas/HMangas I-J";
-const from = path.join(bpath, "[Ishiba Yoshikazu, Rohgun] Sengoku Academy Fighting Maiden Nobunaga! ~Lewd Flower Profusion, The Great Swimsuit War~ [English] [Kizlan].zip");
-console.log(fs.existsSync(from));
-console.log(from)
+// const bpath = "/mnt/5TBHDD/R18/HMangas/HMangas I-J";
+// const from = path.join(bpath, "[Ishiba Yoshikazu, Rohgun] Sengoku Academy Fighting Maiden Nobunaga! ~Lewd Flower Profusion, The Great Swimsuit War~ [English] [Kizlan].zip");
+// console.log(fs.existsSync(from));
+// console.log(from)
 // const drivelist = require("drivelist");
 // const windir = require("win-explorer");
 // let file = windir.ListFiles("E:/Anime1/", { oneFile: true });

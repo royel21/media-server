@@ -70,6 +70,8 @@ const createFolderAndCover = async (dir, files, fd, isFolder) => {
     } catch (error) {
       console.log("line 74 create folder: ", Name, DirectoryId, folder, dir);
     }
+  } else {
+    await folder.update({ FileCount });
   }
 
   if (FilesType === "mangas") {

@@ -1,7 +1,12 @@
 const db = require("../models");
 
 const getOrderBy = (orderby, table = "") => {
-  let nameOrder = db.sqlze.literal("REPLACE(" + table + "Name, '[','0')");
+  let nameOrder = db.sqlze.literal("REPLACE(" + table + ".Name, '[','0')");
+
+  if (table === "File") {
+    nameOrder = db.sqlze.literal("CAST(`File`.`Name` as unsigned)");
+  }
+
   let order = [];
   switch (orderby) {
     case "nd": {
@@ -57,7 +62,7 @@ const getFiles = async (user, data, model) => {
         "LastRead",
       ],
     ],
-    order: getOrderBy(data.order, "File."),
+    order: getOrderBy(data.order, "File"),
     offset: (data.page - 1) * data.items,
     limit: parseInt(data.items),
     where: {
@@ -103,6 +108,7 @@ exports.getFilesList = async (user, res, type, params, model) => {
     totalFiles: data.count,
     totalPages: Math.ceil(data.count / params.items),
     currentFile: folder?.CurrentFile,
+    name: folder?.Name,
   };
   return res ? res.json(pagedata) : pagedata;
 };
@@ -129,7 +135,7 @@ exports.getFolders = async (req, res) => {
       },
       FilesType: filetype,
     },
-    order: getOrderBy(order, "Folders."),
+    order: getOrderBy(order, "Folders"),
     offset: (page - 1) * items,
     limit: parseInt(items),
   };
