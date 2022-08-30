@@ -3,9 +3,10 @@
   export let createDirectory;
   export let hideModal;
   let Type = "Mangas";
+  let IsAdult = false;
 
   const create = () => {
-    createDirectory(Type);
+    createDirectory(Type, IsAdult);
   };
 </script>
 
@@ -24,6 +25,15 @@
           <option value="Videos">Videos</option>
         </select>
       </div>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <label for="is-adult" class="input-group-text">Is Adult</label>
+        </div>
+        <input id="is-adult" type="checkbox" bind:checked={IsAdult} />
+        <label id="check-icon" for="is-adult" class="form-control">
+          <span class={`ad-icon fas fa-${IsAdult ? "check" : "times"}`} />
+        </label>
+      </div>
     </div>
     <div class="modal-footer">
       <button class="btn" on:click={hideModal}>Cancel</button>
@@ -35,5 +45,19 @@
 <style>
   .modal {
     width: 250px;
+  }
+  #is-adult {
+    display: none;
+  }
+  label {
+    width: 80px;
+  }
+  #check-icon {
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  #check-icon:active span {
+    transform: scale(1.1);
   }
 </style>

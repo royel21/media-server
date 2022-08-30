@@ -27,7 +27,7 @@ Router.get("/recents", (req, res) => {
 });
 
 Router.get("/dirs", (req, res) => {
-  db.directory.findAll().then((dirs) => {
+  db.directory.findAll({ where: { IsAdult: { [db.Op.lte]: req.user.AdultPass } } }).then((dirs) => {
     return res.send(dirs);
   });
 });

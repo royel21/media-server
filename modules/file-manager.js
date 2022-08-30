@@ -79,7 +79,7 @@ module.exports.loadContent = (data) => {
   }
 };
 //Scan all files of a direcotry
-module.exports.scanDir = async ({ Id, Path, Type, isFolder }) => {
+module.exports.scanDir = async ({ Id, Path, Type, isFolder, IsAdult }) => {
   //If is it root of disk return;
   if (!Id && !Path) return socket.emit("scan-info", "Id And Path both can't be null");
 
@@ -95,6 +95,7 @@ module.exports.scanDir = async ({ Id, Path, Type, isFolder }) => {
           FullPath: Path,
           Name: dirInfo.FileName,
           Type,
+          IsAdult,
         });
       }
     } else {
