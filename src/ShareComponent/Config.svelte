@@ -7,12 +7,11 @@
   const applyChanges = () => {
     updateConfig(Config);
   };
+const observer = new MutationObserver(([{ target }]) => (title = document.title.split(" ")[0]));
 
-  const observer = new MutationObserver(([{ target }]) => (title = document.title.split(" ")[0]));
-
-  observer.observe(document.querySelector("title"), {
-    childList: true,
-  });
+observer.observe(document.querySelector("title"), {
+  childList: true,
+});
 </script>
 
 <label id="user-label" class={User.role} for="show-config">
@@ -28,7 +27,7 @@
         <div class="input-group-prepend">
           <label for="orderby" class="input-group-text">Sort By:</label>
         </div>
-        <select id="orderby" class="form-control fa" bind:value={Config.order[title]}>
+        <select id="orderby" class="form-control fa" bind:value={Config.order[document.title.split(" ")[0]]}>
           <option value="nu">&#xf15d; Name</option>
           <option value="nd">&#xf15e; Name</option>
           <option value="du">&#xf162; Date</option>
