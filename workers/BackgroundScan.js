@@ -22,200 +22,198 @@ var DirectoryId;
 var folderCovers = [];
 
 const createFolderAndCover = async (dir, files, fd, isFolder) => {
-    let firstFile = files.find((a) => allExt.test(a.FileName));
-    if (!firstFile) return "";
-    let Name = path.basename(dir);
-    let FolderCover = path.join(coverPath, Name + ".jpg");
-    let FilesType = /\.(rar|zip)/gi.test(firstFile.FileName) ? "mangas" : "videos";
+  let firstFile = files.find((a) => allExt.test(a.FileName));
+  if (!firstFile) return "";
+  let Name = path.basename(dir);
+  let FolderCover = path.join(coverPath, Name + ".jpg");
+  let FilesType = /\.(rar|zip)/gi.test(firstFile.FileName) ? "mangas" : "videos";
 
-    if (!fs.existsSync(FolderCover)) {
-        let img = files.find((a) => /\.(jpg|jpeg|png|gif|webp)/i.test(a.FileName));
-        if (img) {
-            try {
-                await sharp(path.join(dir, img.FileName))
-                    .jpeg({ quality: 75 })
-                    .resize({ height: 160 })
-                    .toFile(FolderCover);
-            } catch (err) {
-                console.log("sharp error:", err, img.FileName);
-            }
-        } else {
-            if (firstFile) {
-                folderCovers.push({
-                    folder: true,
-                    filePath: path.join(dir, firstFile.FileName),
-                    coverPath: FolderCover,
-                    FilesType,
-                });
-            }
-        }
+  if (!fs.existsSync(FolderCover)) {
+    let img = files.find((a) => /\.(jpg|jpeg|png|gif|webp)/i.test(a.FileName));
+    if (img) {
+      try {
+        await sharp(path.join(dir, img.FileName)).jpeg({ quality: 75 }).resize({ height: 160 }).toFile(FolderCover);
+      } catch (err) {
+        console.log("sharp error:", err, img.FileName);
+      }
+    } else {
+      if (firstFile) {
+        folderCovers.push({
+          folder: true,
+          filePath: path.join(dir, firstFile.FileName),
+          coverPath: FolderCover,
+          FilesType,
+        });
+      }
     }
-    //Create Folder
-    let query = { where: { Name, FilesType } };
-    if (!isFolder) {
-        query.where.DirectoryId = DirectoryId;
-    }
-    let folder = await db.folder.findOne(query);
+  }
+  //Create Folder
+  let query = { where: { Name, FilesType } };
+  if (!isFolder) {
+    query.where.DirectoryId = DirectoryId;
+  }
+  let folder = await db.folder.findOne(query);
 
-    let FileCount = files.filter((f) => allExt.test(f.FileName)).length;
-    if (!folder) {
-        try {
-            let CreatedAt = fd.LastModified;
-            folder = await db.folder.create({
-                Name,
-                DirectoryId,
-                Cover: "/Folder/" + Name + ".jpg",
-                CreatedAt,
-                FileCount,
-                FilesType,
-                Path: dir,
-            });
-        } catch (error) {
-            console.log("line 74 create folder: ", Name, DirectoryId, folder, dir)
-        }
-        
+  let FileCount = files.filter((f) => allExt.test(f.FileName)).length;
+  if (!folder) {
+    try {
+      let CreatedAt = fd.LastModified;
+      folder = await db.folder.create({
+        Name,
+        DirectoryId,
+        Cover: "/Folder/" + Name + ".jpg",
+        CreatedAt,
+        FileCount,
+        FilesType,
+        Path: dir,
+      });
+    } catch (error) {
+      console.log("line 74 create folder: ", Name, DirectoryId, folder, dir);
     }
+  } else {
+    await folder.update({ FileCount });
+  }
 
-    if (FilesType === "mangas") {
-        let imgDir = path.join(imgPath, "Manga", Name);
-        if (!fs.existsSync(imgDir)) fs.mkdirsSync(imgDir);
-    }
+  if (FilesType === "mangas") {
+    let imgDir = path.join(imgPath, "Manga", Name);
+    if (!fs.existsSync(imgDir)) fs.mkdirsSync(imgDir);
+  }
 
-    return { Id: folder.Id, folder };
+  return { Id: folder.Id, folder };
 };
 
 var tempFiles = [];
 const PopulateDB = async (files, FolderId, folder) => {
-    let filteredFile = files.filter(
-        (f) => f.isDirectory || (allExt.test(f.FileName) && !f.isHidden)
-    );
-    let folderFiles = await db.file.findAll({ where: { FolderId } });
-    for (let f of filteredFile) {
-        try {
-            if (!f.isDirectory) {
-                let found = tempFiles.filter((v) => v.Name === f.FileName);
-                let vfound = folderFiles.find((fd) => fd.Name === f.FileName);
-
-                if (found.length === 0 && !vfound) {
-                    tempFiles.push({
-                        Name: f.FileName,
-                        Type: /rar|zip/gi.test(f.extension) ? "Manga" : "Video",
-                        FolderId,
-                        Size: f.Size,
-                        CreatedAt: f.LastModified,
-                    });
-                }
-            } else {
-                if (f.Files.length > 0) {
-                    console.log("folder: ", f.FileName);
-                    let result = await createFolderAndCover(f.FileName, f.Files, f);
-                    if (result.Id) {
-                        await PopulateDB(f.Files, result.Id, result.folder);
-                    }
-                }
-            }
-        } catch (error) {
-            console.log("folder-scan line:104", error);
-            break;
-        }
-    }
+  let filteredFile = files.filter((f) => f.isDirectory || (allExt.test(f.FileName) && !f.isHidden));
+  let folderFiles = await db.file.findAll({ where: { FolderId } });
+  for (let f of filteredFile) {
     try {
-        if (tempFiles.length > 0) {
-            await db.file.bulkCreate(tempFiles);
-            if (folder) {
-                await folder.update({ CreatedAt: new Date() });
-            }
+      if (!f.isDirectory) {
+        let found = tempFiles.filter((v) => v.Name === f.FileName);
+        let vfound = folderFiles.find((fd) => fd.Name === f.FileName);
+
+        if (found.length === 0 && !vfound) {
+          tempFiles.push({
+            Name: f.FileName,
+            Type: /rar|zip/gi.test(f.extension) ? "Manga" : "Video",
+            FolderId,
+            Size: f.Size,
+            CreatedAt: f.LastModified,
+          });
         }
-        tempFiles = [];
-    } catch (err) {
-        console.log("folder-scan line:102", err);
+      } else {
+        if (f.Files.length > 0) {
+          console.log("folder: ", f.FileName);
+          let result = await createFolderAndCover(f.FileName, f.Files, f);
+          if (result.Id) {
+            await PopulateDB(f.Files, result.Id, result.folder);
+          }
+        }
+      }
+    } catch (error) {
+      console.log("folder-scan line:104", error);
+      break;
     }
+  }
+  try {
+    if (tempFiles.length > 0) {
+      await db.file.bulkCreate(tempFiles);
+      if (folder) {
+        await folder.update({ CreatedAt: new Date() });
+      }
+    }
+    tempFiles = [];
+  } catch (err) {
+    console.log("folder-scan line:102", err);
+  }
 };
 
 const rmOrpFiles = async (folder) => {
-    const files = await folder.getFiles();
-    for (const file of files) {
-        if (!fs.existsSync(path.join(folder.Path, file.Name))) {
-            await file.destroy();
-        }
+  const files = await folder.getFiles();
+  for (const file of files) {
+    if (folder.Path && file.Name) {
+      if (!fs.existsSync(path.join(folder.Path, file.Name))) {
+        await file.destroy();
+      }
     }
+  }
 };
 
 const rmOrphanFiles = async (Id, isFolder) => {
-    console.log("remove olphan ");
-    if (isFolder) {
-        const folder = await db.folder.findByPk(Id);
-        if (fs.existsSync(folder.Path)) {
-            await rmOrpFiles(folder);
-        } else {
-            return true;
-        }
+  console.log("remove olphan ");
+  if (isFolder) {
+    const folder = await db.folder.findByPk(Id);
+    if (fs.existsSync(folder.Path)) {
+      await rmOrpFiles(folder);
     } else {
-        const directory = await db.directory.findByPk(Id);
-        if (fs.existsSync(directory.FullPath)) {
-            const folders = await directory.getFolders();
-            for (const folder of folders) {
-                if (fs.existsSync(folder.Path)) {
-                    await rmOrpFiles(folder);
-                } else {
-                    await folder.destroy();
-                    console.log("Remove", folder.Name);
-                }
-            }
-        } else {
-            return true;
-        }
+      return true;
     }
+  } else {
+    const directory = await db.directory.findByPk(Id);
+    if (fs.existsSync(directory.FullPath)) {
+      const folders = await directory.getFolders();
+      for (const folder of folders) {
+        if (fs.existsSync(folder.Path)) {
+          await rmOrpFiles(folder);
+        } else {
+          await folder.destroy();
+          console.log("Remove", folder.Name);
+        }
+      }
+    } else {
+      return true;
+    }
+  }
 };
 
 const scanDirectory = async ({ id, dir, isFolder }) => {
-    if (await rmOrphanFiles(id, isFolder)) return;
+  if (await rmOrphanFiles(id, isFolder)) return;
 
-    DirectoryId = id;
+  DirectoryId = id;
 
-    var fis = WinDrive.ListFilesRO(dir);
-    let result = {};
+  var fis = WinDrive.ListFilesRO(dir);
+  let result = {};
 
-    let folder = WinDrive.ListFiles(dir, { oneFile: true });
+  let folder = WinDrive.ListFiles(dir, { oneFile: true });
 
-    try {
-        if (!isFolder && fis.filter((f) => !f.isDirectory).length > 0) {
-            result = await createFolderAndCover(dir, fis, folder);
-        } else {
-            await createFolderAndCover(dir, fis, folder, true);
-            result.Id = id;
-        }
-        await PopulateDB(fis, result.Id);
-        console.log("job db end: ", id);
-        await foldersThumbNails(folderCovers);
-        console.log("job folder end:", id);
-        await genScreenShot(id, isFolder);
-        console.log("job screenshot end: ", result);
-    } catch (err) {
-        console.log("line 14:", err);
+  try {
+    if (!isFolder && fis.filter((f) => !f.isDirectory).length > 0) {
+      result = await createFolderAndCover(dir, fis, folder);
+    } else {
+      await createFolderAndCover(dir, fis, folder, true);
+      result.Id = id;
     }
+    await PopulateDB(fis, result.Id);
+    console.log("job db end: ", id);
+    await foldersThumbNails(folderCovers);
+    console.log("job folder end:", id);
+    await genScreenShot(id, isFolder);
+    console.log("job screenshot end: ", result);
+  } catch (err) {
+    console.log("line 14:", err);
+  }
 };
 
 const pendingJobs = [];
 const processJobs = async () => {
-    while (pendingJobs.length > 0) {
-        try {
-            let data = pendingJobs.pop();
-            await scanDirectory(data);
-            await db.directory.update({ IsLoading: false }, { where: { Id: data.id } });
-            process.send(data);
-        } catch (err) {
-            console.log("folder-scan line:135", err);
-        }
+  while (pendingJobs.length > 0) {
+    try {
+      let data = pendingJobs.pop();
+      await scanDirectory(data);
+      await db.directory.update({ IsLoading: false }, { where: { Id: data.id } });
+      process.send(data);
+    } catch (err) {
+      console.log("folder-scan line:135", err);
     }
-    process.exit();
+  }
+  process.exit();
 };
 var running = false;
 process.on("message", (data) => {
-    pendingJobs.push(data);
-    db.directory.update({ IsLoading: true }, { where: { Id: data.id } });
-    if (!running) {
-        running = true;
-        processJobs();
-    }
+  pendingJobs.push(data);
+  db.directory.update({ IsLoading: true }, { where: { Id: data.id } });
+  if (!running) {
+    running = true;
+    processJobs();
+  }
 });

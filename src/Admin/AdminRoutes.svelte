@@ -18,6 +18,16 @@
   ];
 </script>
 
+<Router>
+  <Navbar on:click {navItems} />
+  <div class="content">
+    <Route path="/folders/:page/:filter" component={Folders} />
+    <Route path="/content-manager/:tab" component={DiskManager} />
+    <Route path="/files/:page/:filter" component={Files} />
+    <Route path="/" component={User} />
+  </div>
+</Router>
+
 <style>
   .content {
     height: 100%;
@@ -30,13 +40,3 @@
     }
   }
 </style>
-
-<Router>
-  <Navbar on:click {navItems} />
-  <div class="content">
-    <Route path="/folders/:folderId/:page/:filter" component={Folders} />
-    <Route path="/content-manager/:tab" component={DiskManager} />
-    <Route path="/files/:page/:filter" component={Files} />
-    <Route path="/" component={User} />
-  </div>
-</Router>

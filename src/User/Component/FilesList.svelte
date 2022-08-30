@@ -26,6 +26,7 @@
   let selected = 0;
   let favClicked = null;
   let folder = {};
+  let lastRead = "";
 
   const cancelToken = axios.CancelToken;
   let cancel;
@@ -35,9 +36,7 @@
       if (cancel) {
         cancel();
       }
-      console.log(title);
-
-      let url = genUrl(pg, { items: config.items, order: config.order[title] }, flt, nType || type, curId);
+      let url = genUrl(pg, { items: config.items, order: config.order[title] || "nu" }, flt, nType || type, curId);
 
       let { data } = await axios.get(url, {
         cancelToken: new cancelToken(function executor(c) {
@@ -47,7 +46,11 @@
 
       if (typeof data === "object") {
         pageData = data;
-        folder = data.files[0].Folder;
+        if (data.files[0]) {
+          folder = data.files[0].Folder;
+        }
+        lastRead = data.currentFile;
+        selected = pageData.files.findIndex((f) => f.Id === lastRead) || 0;
       } else {
         logout();
       }
@@ -79,8 +82,12 @@
 
   const openFirstLast = async ({ target: { id } }) => {
     const { data } = await axios.get(`/api/files/first-last/${id}/${folder.Id}`);
-    console.log("f-l:", data);
     ProcessFile({ id: data.Id, dataset: { type: data.Type } }, socket);
+  };
+
+  const continueReading = async () => {
+    const { data } = await axios.get(`/api/files/file-data/${lastRead}`);
+    ProcessFile({ id: lastRead, dataset: { type: data.Type } }, socket);
   };
 
   const favClick = (event) => {
@@ -102,6 +109,10 @@
     }
   };
 
+  const scanfiles = () => {
+    socket.emit("scan-dir", { Id: folder.Id, isFolder: true });
+  };
+
   afterUpdate(() => {
     let sel = selected;
     let id = localStorage.getItem("fileId");
@@ -115,8 +126,6 @@
   });
 
   const onResetFiles = async () => {
-    const result = await axios.get(`/api/files/reset-recents/${folder.Id}`);
-    console.log("reset folder: ", result);
     await loadContent(page, filter, id, $PageConfig, type);
   };
 
@@ -134,13 +143,15 @@
   {#if isContent}
     <div id="info">
       <div id="img-info"><img src={folder.Cover} alt="Place Holder" /></div>
-      <div id="side">
-        <h4>{folder.Name}</h4>
-        <div id="btn-bar">
-          <button id="first" class="btn btn-secondary" on:click={openFirstLast}>First</button>
-          <button id="last" class="btn btn-secondary" on:click={openFirstLast}>Last</button>
-          <button class="btn btn-secondary" on:click={onResetFiles}>Reset All</button>
-        </div>
+      <h4>{folder.Name}</h4>
+      <div id="btn-bar">
+        {#if lastRead}
+          <button class="btn btn-secondary" on:click={continueReading}>Continue</button>
+        {/if}
+        <button id="first" class="btn btn-secondary" on:click={openFirstLast}>First</button>
+        <button id="last" class="btn btn-secondary" on:click={openFirstLast}>Last</button>
+        <button class="btn btn-secondary" on:click={onResetFiles}>Reset All</button>
+        <button class="btn btn-secondary" on:click={scanfiles}>Update</button>
       </div>
     </div>
   {/if}
@@ -209,12 +220,8 @@
     pointer-events: none;
   }
   #info {
-    display: flex;
-    justify-content: center;
     padding: 10px;
     text-align: center;
-    max-width: 1200px;
-    margin: 0 auto;
   }
   #img-info {
     padding: 5px;
@@ -225,27 +232,14 @@
   #info h4 {
     font-family: "Comic Sans MS", cursive;
     font-size: 2.4rem;
-    flex-grow: 1;
   }
-  #side {
-    display: flex;
-    flex-direction: column;
-    padding: 0 15px;
-  }
-  @media screen and (max-width: 850px) {
-    #info {
-      flex-direction: column;
-    }
-  }
+
   @media screen and (max-width: 420px) {
     .files-list {
       padding-bottom: 70px;
     }
     .scroll-container {
       padding-top: 70px;
-    }
-    #info h4 {
-      font-size: 1.8rem;
     }
   }
 </style>
