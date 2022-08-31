@@ -1,0 +1,3 @@
+CREATE DATABASE mediaserverdb2;
+CREATE USER admin@'10.0.0.%' IDENTIFIED BY 'media8427';
+GRANT ALL PRIVILEGES ON mediaserverdb2.* TO 'admin'@'10.%' IDENTIFIED BY 'media8427';
