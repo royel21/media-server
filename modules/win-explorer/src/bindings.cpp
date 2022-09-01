@@ -1,7 +1,7 @@
 #include "bindings.h"
 #include "string.h"
 #ifdef WIN32
-BOOL GetLastWriteTime(char *strDate, FILETIME ftWrite)
+BOOL GetLastWriteTime(char* strDate, FILETIME ftWrite)
 {
   DWORD dwRet;
   SYSTEMTIME st, stLocal;
@@ -9,7 +9,7 @@ BOOL GetLastWriteTime(char *strDate, FILETIME ftWrite)
   FileTimeToSystemTime(&ftWrite, &st);
   SystemTimeToTzSpecificLocalTime(NULL, &st, &stLocal);
   snprintf(strDate, 20, "%d-%02d-%02dT%02d:%02d:%02d", stLocal.wYear, stLocal.wMonth, stLocal.wDay,
-           stLocal.wHour, stLocal.wMinute, stLocal.wSecond);
+    stLocal.wHour, stLocal.wMinute, stLocal.wSecond);
   // Build a string showing the date and time.
 
   if (S_OK == dwRet)
@@ -26,7 +26,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports)
 NODE_API_MODULE(NODE_GYP_MODULE_NAME, Init);
 
 #ifdef WIN32
-Napi::Array Win_Explorer::ListFiles(const Napi::CallbackInfo &info)
+Napi::Array Win_Explorer::ListFiles(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
   if (!info[0].IsString())
@@ -44,16 +44,16 @@ Napi::Array Win_Explorer::ListFiles(const Napi::CallbackInfo &info)
   setlocale(LC_ALL, "C.UTF-8");
   WIN32_FIND_DATAW ffd;
   HANDLE hFind;
-  
+
   Napi::Boolean isOne = info[1].As<Napi::Boolean>();
   bool oneFile = isOne.ToBoolean();
-	if (!oneFile)
+  if (!oneFile)
   {
     str1.push_back('\\');
     str1.push_back('*');
   }
 
-  hFind = FindFirstFileW((wchar_t *)str1.c_str(), &ffd);
+  hFind = FindFirstFileW((wchar_t*)str1.c_str(), &ffd);
   if (hFind == INVALID_HANDLE_VALUE)
   {
     return objectArray;
@@ -69,7 +69,7 @@ Napi::Array Win_Explorer::ListFiles(const Napi::CallbackInfo &info)
       if (ffd.cFileName[0] == L'.' || ffd.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM)
         continue;
       Napi::Object file = Napi::Object::New(env);
-      file.Set("FileName", Napi::String::New(env, (const char16_t *)ffd.cFileName));
+      file.Set("Name", Napi::String::New(env, (const char16_t*)ffd.cFileName));
 
       bool isDir = ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ? true : false;
       file.Set("isDirectory", Napi::Boolean::New(env, isDir));
@@ -80,14 +80,14 @@ Napi::Array Win_Explorer::ListFiles(const Napi::CallbackInfo &info)
 
       if (!isDir)
       {
-        wchar_t *pstr = wcsrchr(ffd.cFileName, '.');
+        wchar_t* pstr = wcsrchr(ffd.cFileName, '.');
         int pos = (int)(pstr - ffd.cFileName + 1);
-        file.Set("extension", Napi::String::New(env, (const char16_t *)ffd.cFileName + pos));
+        file.Set("Extension", Napi::String::New(env, (const char16_t*)ffd.cFileName + pos));
         file.Set("Size", Napi::Number::New(env, ffd.nFileSizeLow));
       }
       else
       {
-        file.Set("extension", Napi::String::New(env, "none"));
+        file.Set("Extension", Napi::String::New(env, "none"));
       }
 
       objectArray[i++] = file;
@@ -104,7 +104,7 @@ Napi::Array Win_Explorer::ListFiles(const Napi::CallbackInfo &info)
   return objectArray;
 }
 #else
-Napi::Array Win_Explorer::ListFiles(const Napi::CallbackInfo &info)
+Napi::Array Win_Explorer::ListFiles(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
   if (!info[0].IsString())
@@ -119,18 +119,18 @@ Napi::Array Win_Explorer::ListFiles(const Napi::CallbackInfo &info)
   Napi::Array objectArray = Napi::Array::New(env);
 
   setlocale(LC_ALL, "C.UTF-8");
-  struct dirent *d_file;
+  struct dirent* d_file;
   int i = 0;
-  DIR *d_dir = opendir(str2.c_str());
-  if(d_dir != NULL){
+  DIR* d_dir = opendir(str2.c_str());
+  if (d_dir != NULL) {
 
-    while((d_file = readdir(d_dir))){
+    while ((d_file = readdir(d_dir))) {
 
       if (d_file->d_name[0] == '.') continue;
       if (strcmp(d_file->d_name, "..")) continue;
 
       Napi::Object file = Napi::Object::New(env);
-      file.Set("FileName", Napi::String::New(env, d_file->d_name));
+      file.Set("Name", Napi::String::New(env, d_file->d_name));
 
       bool isDir = d_file->d_type == DT_DIR;
       file.Set("isDirectory", Napi::Boolean::New(env, isDir));
@@ -141,21 +141,21 @@ Napi::Array Win_Explorer::ListFiles(const Napi::CallbackInfo &info)
       if (!isDir)
       {
         std::string str = std::string(d_file->d_name);
-        
-        
-        int pos = (int)str.find_last_of(".")+1;
 
-        file.Set("extension", Napi::String::New(env, (const char16_t *)d_file->d_name + pos));
+
+        int pos = (int)str.find_last_of(".") + 1;
+
+        file.Set("Extension", Napi::String::New(env, (const char16_t*)d_file->d_name + pos));
         std::string basePath = str2 + std::string(d_file->d_name);
 
         struct stat statbuf;
         stat(basePath.c_str(), &statbuf);
 
-        file.Set("Size", Napi::Number::New(env,  (intmax_t) statbuf.st_size));
+        file.Set("Size", Napi::Number::New(env, (intmax_t)statbuf.st_size));
       }
       else
       {
-        file.Set("extension", Napi::String::New(env, "none"));
+        file.Set("Extension", Napi::String::New(env, "none"));
       }
 
       objectArray[i++] = file;
@@ -169,13 +169,13 @@ Napi::Array Win_Explorer::ListFiles(const Napi::CallbackInfo &info)
 
 #define MAX 256
 #ifdef WIN32
-Napi::Array Win_Explorer::ListDrivesInfo(const Napi::CallbackInfo &info)
+Napi::Array Win_Explorer::ListDrivesInfo(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
   Napi::Array drivers = Napi::Array::New(env);
   int dr_type = 99;
   char dr_avail[MAX];
-  char *temp = dr_avail;
+  char* temp = dr_avail;
 
   GetLogicalDriveStrings(MAX, dr_avail);
   int i = 0;
@@ -194,16 +194,16 @@ Napi::Array Win_Explorer::ListDrivesInfo(const Napi::CallbackInfo &info)
   return drivers;
 }
 #else
-Napi::Array Win_Explorer::ListDrivesInfo(const Napi::CallbackInfo &info)
+Napi::Array Win_Explorer::ListDrivesInfo(const Napi::CallbackInfo& info)
 {
-   Napi::Env env = info.Env();
+  Napi::Env env = info.Env();
   Napi::Array drivers = Napi::Array::New(env);
 
   return drivers;
 }
 #endif
 
-bool checkFilter(std::vector<std::string> list, wchar_t *ex)
+bool checkFilter(std::vector<std::string> list, wchar_t* ex)
 {
   return false;
 }
@@ -212,9 +212,9 @@ bool checkFilter(std::vector<std::string> list, wchar_t *ex)
 Napi::Object Win_Explorer::Init(Napi::Env env, Napi::Object exports)
 {
   exports.Set(
-      "ListFiles", Napi::Function::New(env, Win_Explorer::ListFiles));
+    "ListFiles", Napi::Function::New(env, Win_Explorer::ListFiles));
   exports.Set(
-      "ListDrivesInfo", Napi::Function::New(env, Win_Explorer::ListDrivesInfo));
+    "ListDrivesInfo", Napi::Function::New(env, Win_Explorer::ListDrivesInfo));
 
   return exports;
 }

@@ -1,134 +1,21 @@
-const WinDrive = require("win-explorer");
-const fs = require("fs-extra");
+require("dotenv").config();
+const fs = require("fs");
 const path = require("path");
 const sharp = require("sharp");
-require("dotenv").config();
-// const { NormalizeName, Capitalize } = require("../Utils/StringUtil");
 
+const ThumbnailPath = process.env.IMAGES;
+
+const WinDrive = require("win-explorer");
 const db = require("../models");
+const { genFolderThumbnails, genFileThumbnails } = require("./ThumbNailGenerator");
 
-const { genScreenShot, foldersThumbNails } = require("./generate-screenshot");
+const ValidFiles = /\.(avi|avi2|mp4|mkv|ogg|webm|rar|zip)/i;
 
-const allExt = /\.(avi|avi2|mp4|mkv|ogg|webm|rar|zip)/i;
-const imgPath = process.env.IMAGES;
-//Create all Folders Needed
-const coverPath = path.join(imgPath, "Folder");
-fs.mkdirsSync(coverPath);
-fs.mkdirsSync(path.resolve(imgPath, "Manga"));
-fs.mkdirsSync(path.resolve(imgPath, "Video"));
+const IMGTYPES = /jpg|jpeg|png|gif|webp/i;
 
-var DirectoryId;
+let DirectoryId;
 
-var folderCovers = [];
-
-const createFolderAndCover = async (dir, files, fd, isFolder) => {
-  let firstFile = files.find((a) => allExt.test(a.FileName));
-  if (!firstFile) return "";
-  let Name = path.basename(dir);
-  let FolderCover = path.join(coverPath, Name + ".jpg");
-  let FilesType = /\.(rar|zip)/gi.test(firstFile.FileName) ? "mangas" : "videos";
-
-  if (!fs.existsSync(FolderCover)) {
-    let img = files.find((a) => /\.(jpg|jpeg|png|gif|webp)/i.test(a.FileName));
-    if (img) {
-      try {
-        await sharp(path.join(dir, img.FileName)).jpeg({ quality: 75 }).resize({ height: 160 }).toFile(FolderCover);
-      } catch (err) {
-        console.log("sharp error:", err, img.FileName);
-      }
-    } else {
-      if (firstFile) {
-        folderCovers.push({
-          folder: true,
-          filePath: path.join(dir, firstFile.FileName),
-          coverPath: FolderCover,
-          FilesType,
-        });
-      }
-    }
-  }
-  //Create Folder
-  let query = { where: { Name, FilesType } };
-  if (!isFolder) {
-    query.where.DirectoryId = DirectoryId;
-  }
-  let folder = await db.folder.findOne(query);
-
-  let FileCount = files.filter((f) => allExt.test(f.FileName)).length;
-  if (!folder) {
-    try {
-      let CreatedAt = fd.LastModified;
-      folder = await db.folder.create({
-        Name,
-        DirectoryId,
-        Cover: "/Folder/" + Name + ".jpg",
-        CreatedAt,
-        FileCount,
-        FilesType,
-        Path: dir,
-      });
-    } catch (error) {
-      console.log("line 74 create folder: ", Name, DirectoryId, folder, dir);
-    }
-  } else {
-    await folder.update({ FileCount });
-  }
-
-  if (FilesType === "mangas") {
-    let imgDir = path.join(imgPath, "Manga", Name);
-    if (!fs.existsSync(imgDir)) fs.mkdirsSync(imgDir);
-  }
-
-  return { Id: folder.Id, folder };
-};
-
-var tempFiles = [];
-const PopulateDB = async (files, FolderId, folder) => {
-  let filteredFile = files.filter((f) => f.isDirectory || (allExt.test(f.FileName) && !f.isHidden));
-  let folderFiles = await db.file.findAll({ where: { FolderId } });
-  for (let f of filteredFile) {
-    try {
-      if (!f.isDirectory) {
-        let found = tempFiles.filter((v) => v.Name === f.FileName);
-        let vfound = folderFiles.find((fd) => fd.Name === f.FileName);
-
-        if (found.length === 0 && !vfound) {
-          tempFiles.push({
-            Name: f.FileName,
-            Type: /rar|zip/gi.test(f.extension) ? "Manga" : "Video",
-            FolderId,
-            Size: f.Size,
-            CreatedAt: f.LastModified,
-          });
-        }
-      } else {
-        if (f.Files.length > 0) {
-          console.log("folder: ", f.FileName);
-          let result = await createFolderAndCover(f.FileName, f.Files, f);
-          if (result.Id) {
-            await PopulateDB(f.Files, result.Id, result.folder);
-          }
-        }
-      }
-    } catch (error) {
-      console.log("folder-scan line:104", error);
-      break;
-    }
-  }
-  try {
-    if (tempFiles.length > 0) {
-      await db.file.bulkCreate(tempFiles);
-      if (folder) {
-        await folder.update({ CreatedAt: new Date() });
-      }
-    }
-    tempFiles = [];
-  } catch (err) {
-    console.log("folder-scan line:102", err);
-  }
-};
-
-const rmOrpFiles = async (folder) => {
+const rmOrphanFiles = async (folder) => {
   const files = await folder.getFiles();
   for (const file of files) {
     if (folder.Path && file.Name) {
@@ -139,79 +26,136 @@ const rmOrpFiles = async (folder) => {
   }
 };
 
-const rmOrphanFiles = async (Id, isFolder) => {
-  console.log("remove olphan ");
-  if (isFolder) {
-    const folder = await db.folder.findByPk(Id);
-    if (fs.existsSync(folder.Path)) {
-      await rmOrpFiles(folder);
-    } else {
-      return true;
-    }
-  } else {
-    const directory = await db.directory.findByPk(Id);
-    if (fs.existsSync(directory.FullPath)) {
-      const folders = await directory.getFolders();
-      for (const folder of folders) {
-        if (fs.existsSync(folder.Path)) {
-          await rmOrpFiles(folder);
-        } else {
-          await folder.destroy();
-          console.log("Remove", folder.Name);
-        }
+const foldersPendingCover = [];
+
+const createFolderThumbnail = async (folder, files) => {
+  try {
+    let CoverPath = path.join(ThumbnailPath, "Folder", folder.Name + ".jpg");
+
+    if (!fs.existsSync(CoverPath)) {
+      let img = files.find((f) => IMGTYPES.test(f.Name));
+      //if folder contain a image use as thumbnail
+      if (img) {
+        let imgPath = path.join(folder.Path, img.Name);
+        await sharp(imgPath).jpeg({ quality: 75 }).resize(240).toFile(CoverPath);
+      } else {
+        //else push to list of folder for later process of thumbnail from first file
+        foldersPendingCover.push({
+          folder: true,
+          filePath: path.join(folder.Path, files[0].Name),
+          CoverPath,
+          FilesType: folder.FilesType,
+        });
       }
-    } else {
-      return true;
+    }
+  } catch (error) {
+    console.log("FolderCover:", error);
+  }
+};
+
+const createFolder = async ({ Name, Path, LastModified }, files) => {
+  const FilesType = /rar|zip/gi.test(files[0].Extension) ? "mangas" : "videos";
+  const FileCount = files.length;
+
+  return db.folder.create({
+    Name,
+    Path,
+    FileCount,
+    DirectoryId,
+    Cover: "/Folder/" + Name + ".jpg",
+    FilesType,
+    CreatedAt: LastModified,
+  });
+};
+
+const scanFolder = async (curfolder, files) => {
+  let isNoNewFolder = true;
+
+  let folder = await db.folder.findOne({ where: { Path: curfolder.Path } });
+
+  let folderFiles = [];
+
+  let filteredFiles = files.filter((f) => ValidFiles.test(f.Name) && !f.isHidden);
+
+  if (folder) {
+    await rmOrphanFiles(folder);
+    if (folder.FileCount !== filteredFiles.length) {
+      await folder.update({ FileCount: filteredFiles.length });
+    }
+    folderFiles = await folder.getFiles();
+  } else if (filteredFiles.length) {
+    folder = await createFolder(curfolder, filteredFiles);
+
+    isNoNewFolder = false;
+  }
+
+  if (folder && filteredFiles.length) {
+    await createFolderThumbnail(folder, files);
+  }
+
+  let tempFiles = [];
+  for (const f of files) {
+    if (f.isDirectory) {
+      await scanFolder(f, f.Files);
+      //Check if file is in folder
+    } else if (!folderFiles.find((fd) => fd.Name === f.Name) && ValidFiles.test(f.Name)) {
+      tempFiles.push({
+        Name: f.Name,
+        Type: /rar|zip/gi.test(f.Extension) ? "Manga" : "Video",
+        FolderId: folder.Id,
+        Size: f.Size,
+        CreatedAt: f.LastModified,
+        Cover: `/Manga/${folder.Name}/${f.Name}.jpg`,
+      });
+    }
+  }
+
+  if (tempFiles.length) {
+    await db.file.bulkCreate(tempFiles);
+    if (isNoNewFolder) {
+      await folder.update({ CreatedAt: new Date() });
     }
   }
 };
 
 const scanDirectory = async ({ id, dir, isFolder }) => {
-  if (await rmOrphanFiles(id, isFolder)) return;
-
   DirectoryId = id;
-
-  var fis = WinDrive.ListFilesRO(dir);
-  let result = {};
-
+  const fis = WinDrive.ListFilesRO(dir);
   let folder = WinDrive.ListFiles(dir, { oneFile: true });
+  folder.Path = dir;
+  console.log("scanning directory");
+  await scanFolder(folder, fis);
+  console.log("creating folder thumbnails");
+  await genFolderThumbnails(foldersPendingCover);
 
-  try {
-    if (!isFolder && fis.filter((f) => !f.isDirectory).length > 0) {
-      result = await createFolderAndCover(dir, fis, folder);
-    } else {
-      await createFolderAndCover(dir, fis, folder, true);
-      result.Id = id;
-    }
-    await PopulateDB(fis, result.Id);
-    console.log("job db end: ", id);
-    await foldersThumbNails(folderCovers);
-    console.log("job folder end:", id);
-    await genScreenShot(id, isFolder);
-    console.log("job screenshot end: ", result);
-  } catch (err) {
-    console.log("line 14:", err);
-  }
+  console.log("creating files thumbnails");
+
+  let folders = await db.folder.findAll({
+    order: ["Path"],
+    where: isFolder ? { Id: id } : { DirectoryId: id }, // query base on FolderId or DirectoryId
+    include: { model: db.file, order: ["Name"] },
+  });
+
+  await genFileThumbnails(folders);
 };
 
 const pendingJobs = [];
+
 const processJobs = async () => {
   while (pendingJobs.length > 0) {
-    try {
-      let data = pendingJobs.pop();
-      await scanDirectory(data);
-      await db.directory.update({ IsLoading: false }, { where: { Id: data.id } });
-      process.send(data);
-    } catch (err) {
-      console.log("folder-scan line:135", err);
-    }
+    let data = pendingJobs.pop();
+    await scanDirectory(data);
+    await db.directory.update({ IsLoading: false }, { where: { Id: data.id } });
+    process.send(data);
   }
   process.exit();
 };
+
 var running = false;
 process.on("message", (data) => {
   pendingJobs.push(data);
   db.directory.update({ IsLoading: true }, { where: { Id: data.id } });
+
   if (!running) {
     running = true;
     processJobs();

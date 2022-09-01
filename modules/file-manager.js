@@ -6,17 +6,15 @@ const winEx = require("win-explorer");
 const { nanoid } = require("nanoid");
 
 var io;
-var socket;
 var db;
 
-module.exports.setSocket = (_io, _socket, _db) => {
+module.exports.setSocket = (_io, _db) => {
   io = _io;
-  socket = _socket;
   db = _db;
 };
 
 var worker = null;
-const startWork = (model, isFolder) => {
+const startWork = async (model, isFolder) => {
   if (!worker) {
     worker = fork("./workers/BackgroundScan.js");
 
@@ -24,19 +22,22 @@ const startWork = (model, isFolder) => {
       io.sockets.emit("scan-finish", data);
     });
 
-    worker.on("exit", () => {
+    worker.on("exit", async () => {
       worker = null;
-      db.directory.update({ IsLoading: false }, { where: { IsLoading: true } }).then(() => {
-        io.sockets.emit("scan-finish", { all: true });
-        console.log("scan-finish");
-      });
+      await db.directory.update({ IsLoading: false }, { where: { IsLoading: true } });
+
+      io.sockets.emit("scan-finish", { all: true });
+      console.log("scan-finish");
     });
   }
+
   let data = {
     id: model.Id,
     dir: isFolder ? model.Path : model.FullPath,
     isFolder,
   };
+
+  await db.directory.update({ IsLoading: true }, { where: { Id: data.id } });
   worker.send(data);
 };
 // List all hdd
@@ -58,7 +59,7 @@ module.exports.diskLoader = () => {
       }
     });
     disks.sort((a, b) => a.Name.localeCompare(b.Name));
-    socket.emit("disk-loaded", disks);
+    io.sockets.emit("disk-loaded", disks);
   });
 };
 //Load content of a folder
@@ -75,13 +76,13 @@ module.exports.loadContent = (data) => {
         Content: [],
       });
     }
-    socket.emit("content-loaded", { data: tdata, Id: data.Id });
+    io.sockets.emit("content-loaded", { data: tdata, Id: data.Id });
   }
 };
 //Scan all files of a direcotry
 module.exports.scanDir = async ({ Id, Path, Type, isFolder, IsAdult }) => {
   //If is it root of disk return;
-  if (!Id && !Path) return socket.emit("scan-info", "Id And Path both can't be null");
+  if (!Id && !Path) return io.sockets.emit("scan-info", "Id And Path both can't be null");
 
   let msg;
   try {
@@ -111,7 +112,7 @@ module.exports.scanDir = async ({ Id, Path, Type, isFolder, IsAdult }) => {
         msg = `Directory ${model.Name} is already scanning content`;
       } else {
         msg = `Directory ${model.Name} scanning content`;
-        startWork(model, isFolder);
+        await startWork(model, isFolder);
       }
     } else {
       msg = "directory don't exist or can't add root of a disk";
@@ -126,7 +127,7 @@ module.exports.scanDir = async ({ Id, Path, Type, isFolder, IsAdult }) => {
     }
   }
 
-  socket.emit("scan-info", msg);
+  io.sockets.emit("scan-info", msg);
   console.log(msg);
 };
 /****************** Rename File *******************/
@@ -162,7 +163,7 @@ module.exports.renameFile = async ({ Id, Name }) => {
   } else {
     msg = "File not found on db";
   }
-  socket.emit("file-renamed", { success, msg, Name });
+  io.sockets.emit("file-renamed", { success, msg, Name });
 };
 /************ Remove file from db and system ***********************/
 
@@ -171,7 +172,9 @@ module.exports.removeFile = async ({ Id, Del }) => {
     where: { Id },
     include: { model: db.folder },
   });
+
   const message = { success: false, msg: "" };
+
   if (file) {
     try {
       await file.destroy();
@@ -196,7 +199,7 @@ module.exports.removeFile = async ({ Id, Del }) => {
   } else {
     message.msg = "File not found on db";
   }
-  socket.emit("file-removed", message);
+  io.sockets.emit("file-removed", message);
 };
 
 const getCoverPath = (name) => {
@@ -232,7 +235,7 @@ module.exports.renameFolder = async ({ Id, Name }) => {
     } catch (err) {
       console.log(err);
     }
-    socket.emit("folder-renamed", { success, msg, Name });
+    io.sockets.emit("folder-renamed", { success, msg, Name });
   }
 };
 
@@ -257,5 +260,5 @@ module.exports.removeFolder = async ({ Id, Del }) => {
       console.log(err);
     }
   }
-  socket.emit("folder-removed", { success });
+  io.sockets.emit("folder-removed", { success });
 };
