@@ -1,6 +1,9 @@
 const { nanoid } = require("nanoid");
+const path = require("path");
+const fs = require("fs");
+
 module.exports = (sequelize, DataTypes) => {
-  const { INTEGER, STRING, DATE, FLOAT } = DataTypes;
+  const { INTEGER, STRING, DATE, FLOAT, VIRTUAL } = DataTypes;
   const File = sequelize.define(
     "File",
     {
@@ -12,6 +15,12 @@ module.exports = (sequelize, DataTypes) => {
       },
       Name: {
         type: STRING,
+      },
+      Exists: {
+        type: VIRTUAL,
+        get() {
+          return fs.existsSync(this.Path);
+        },
       },
       Duration: {
         type: FLOAT(8, 2).UNSIGNED,
@@ -47,10 +56,16 @@ module.exports = (sequelize, DataTypes) => {
       hooks: {
         beforeValidate: function (item) {
           item.Id = nanoid(10);
+          if (item.Cover?.includes("\\")) {
+            item.Cover = item.Cover?.replace(/\\/gi, "/");
+          }
         },
         beforeBulkCreate(instances) {
           for (var item of instances) {
             item.Id = nanoid(10);
+            if (item.Cover?.includes("\\")) {
+              item.Cover = item.Cover?.replace(/\\/gi, "/");
+            }
           }
         },
       },

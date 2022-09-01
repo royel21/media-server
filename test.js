@@ -1,11 +1,19 @@
-// require("dotenv").config();
-// const db = require("./models");
+require("dotenv").config();
+const WinDir = require("win-explorer");
+const db = require("./models");
 
-// const testDb = async ({ user, data }) => {
-//   const dirs = await db.directory.findAll();
-//   console.log(dirs.map((d) => d.Name));
-// };
+const fs = require("fs-extra");
 
-// testDb({ data: { search: "" }, user: { Recent: {} } });
+const basePath = "F:\\Manga";
 
-console.log(process.env);
+const runTest = async () => {
+  let folders = await db.folder.findAll();
+
+  for (let folder of fs.readdirSync(basePath)) {
+    if (!folders.find((f) => f.Name === folder)) {
+      console.log(folder);
+    }
+  }
+};
+
+runTest();

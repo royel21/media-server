@@ -6,17 +6,17 @@ const winEx = require("win-explorer");
 const { nanoid } = require("nanoid");
 
 var io;
-var socket;
 var db;
 
-module.exports.setSocket = (_io, _socket, _db) => {
+const ImagesPath = process.env.IMAGES;
+
+module.exports.setSocket = (_io, _db) => {
   io = _io;
-  socket = _socket;
   db = _db;
 };
 
 var worker = null;
-const startWork = (model, isFolder) => {
+const startWork = async (model, isFolder) => {
   if (!worker) {
     worker = fork("./workers/BackgroundScan.js");
 
@@ -24,19 +24,22 @@ const startWork = (model, isFolder) => {
       io.sockets.emit("scan-finish", data);
     });
 
-    worker.on("exit", () => {
+    worker.on("exit", async () => {
       worker = null;
-      db.directory.update({ IsLoading: false }, { where: { IsLoading: true } }).then(() => {
-        io.sockets.emit("scan-finish", { all: true });
-        console.log("scan-finish");
-      });
+      await db.directory.update({ IsLoading: false }, { where: { IsLoading: true } });
+
+      io.sockets.emit("scan-finish", { all: true });
+      console.log("scan-finish");
     });
   }
+
   let data = {
     id: model.Id,
     dir: isFolder ? model.Path : model.FullPath,
     isFolder,
   };
+
+  await db.directory.update({ IsLoading: true }, { where: { Id: data.id } });
   worker.send(data);
 };
 // List all hdd
@@ -58,7 +61,7 @@ module.exports.diskLoader = () => {
       }
     });
     disks.sort((a, b) => a.Name.localeCompare(b.Name));
-    socket.emit("disk-loaded", disks);
+    io.sockets.emit("disk-loaded", disks);
   });
 };
 //Load content of a folder
@@ -75,13 +78,13 @@ module.exports.loadContent = (data) => {
         Content: [],
       });
     }
-    socket.emit("content-loaded", { data: tdata, Id: data.Id });
+    io.sockets.emit("content-loaded", { data: tdata, Id: data.Id });
   }
 };
 //Scan all files of a direcotry
 module.exports.scanDir = async ({ Id, Path, Type, isFolder, IsAdult }) => {
   //If is it root of disk return;
-  if (!Id && !Path) return socket.emit("scan-info", "Id And Path both can't be null");
+  if (!Id && !Path) return io.sockets.emit("scan-info", "Id And Path both can't be null");
 
   let msg;
   try {
@@ -111,7 +114,7 @@ module.exports.scanDir = async ({ Id, Path, Type, isFolder, IsAdult }) => {
         msg = `Directory ${model.Name} is already scanning content`;
       } else {
         msg = `Directory ${model.Name} scanning content`;
-        startWork(model, isFolder);
+        await startWork(model, isFolder);
       }
     } else {
       msg = "directory don't exist or can't add root of a disk";
@@ -126,7 +129,7 @@ module.exports.scanDir = async ({ Id, Path, Type, isFolder, IsAdult }) => {
     }
   }
 
-  socket.emit("scan-info", msg);
+  io.sockets.emit("scan-info", msg);
   console.log(msg);
 };
 /****************** Rename File *******************/
@@ -141,13 +144,15 @@ module.exports.renameFile = async ({ Id, Name }) => {
     let fromFile = path.join(file.Folder.Path, file.Name);
     let toFile = path.join(file.Folder.Path, Name);
 
-    let fromCover = path.join("../images", file.Cover);
-    let toCover = path.join(path.dirname(fromCover), Name + ".jpg");
+    let fromCover = path.join(ImagesPath, file.Cover);
+    let toCover = fromCover.replace(file.Name, Name);
 
     try {
       if (fs.existsSync(fromFile)) {
         fs.moveSync(fromFile, toFile);
-        await db.file.update({ Name, Type: file.Type, Cover: "" }, { where: { Id } });
+
+        file.update({ Name, Cover: toCover });
+
         success = true;
         if (fs.existsSync(fromCover)) {
           fs.moveSync(fromCover, toCover);
@@ -162,7 +167,7 @@ module.exports.renameFile = async ({ Id, Name }) => {
   } else {
     msg = "File not found on db";
   }
-  socket.emit("file-renamed", { success, msg, Name });
+  io.sockets.emit("file-renamed", { success, msg, Name });
 };
 /************ Remove file from db and system ***********************/
 
@@ -171,17 +176,23 @@ module.exports.removeFile = async ({ Id, Del }) => {
     where: { Id },
     include: { model: db.folder },
   });
+
   const message = { success: false, msg: "" };
+
   if (file) {
     try {
       await file.destroy();
       message.success = true;
       if (Del) {
-        let cover = path.join("../images", file.Type, file.Name + ".jpg");
+        let cover = path.join(ImagesPath, file.Cover);
+
         if (fs.existsSync(cover)) fs.removeSync(cover);
+
         let fPath = path.join(file.Folder.Path, file.Name);
+
         if (fs.existsSync(fPath)) {
           fs.removeSync(fPath);
+
           message.msg = `File ${file.Name} removed from server`;
         } else {
           message.msg = `File Don't exit on server was only remove from db`;
@@ -196,12 +207,10 @@ module.exports.removeFile = async ({ Id, Del }) => {
   } else {
     message.msg = "File not found on db";
   }
-  socket.emit("file-removed", message);
+  io.sockets.emit("file-removed", message);
 };
 
-const getCoverPath = (name) => {
-  return path.join("../images", "Folder", name + ".jpg");
-};
+const getCoverPath = (name) => path.join(ImagesPath, "Folder", name + ".jpg");
 
 module.exports.renameFolder = async ({ Id, Name }) => {
   let folder = await db.folder.findOne({
@@ -232,30 +241,41 @@ module.exports.renameFolder = async ({ Id, Name }) => {
     } catch (err) {
       console.log(err);
     }
-    socket.emit("folder-renamed", { success, msg, Name });
+    io.sockets.emit("folder-renamed", { success, msg, Name });
   }
 };
+
+const getFileType = ({ FilesType }) => (FilesType === "mangas" ? "Manga" : "Video");
 
 module.exports.removeFolder = async ({ Id, Del }) => {
   let folder = await db.folder.findByPk(Id);
   let success = false;
   if (folder) {
     try {
+      if (Del) {
+        //Remove Folder Thumbnail from images folder
+        let cPath = getCoverPath(folder.Name);
+        if (fs.existsSync(cPath)) {
+          fs.removeSync(cPath);
+        }
+
+        //Remove files Thumbnails from images folder
+        const imagesFolder = `${ImagesPath}/${getFileType(folder)}/${folder.Name}`;
+        if (fs.existsSync(imagesFolder)) {
+          fs.removeSync(imagesFolder);
+        }
+
+        //Remove All Files from Disk
+        if (fs.existsSync(folder.Path)) {
+          fs.removeSync(folder.Path);
+        }
+      }
+      // remove from Database
       await folder.destroy();
       success = true;
-
-      let cPath = getCoverPath(folder.Name);
-
-      if (fs.existsSync(cPath)) fs.removeSync(cPath);
-
-      if (Del && fs.existsSync(folder.Path)) {
-        fs.rmSync(folder.Path, { recursive: true, force: true });
-        fs.rmSync(`/mnt/5TBHDD/images/Manga/${folder.Name}`, { recursive: true, force: true });
-        console.log("folder-remove", folder.Path);
-      }
     } catch (err) {
       console.log(err);
     }
   }
-  socket.emit("folder-removed", { success });
+  io.sockets.emit("folder-removed", { success });
 };

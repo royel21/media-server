@@ -8,6 +8,6 @@
         "/workers/*",
         "/test.js",
         "/public/**/*",
-        "./query"
+        "modules/*"
     ]
 }

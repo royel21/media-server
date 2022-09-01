@@ -19,7 +19,7 @@ module.exports = (server, sessionMeddle) => {
       });
       if (!user) return;
       console.log("connected", socket.id);
-      FileManager.setSocket(io, socket, db);
+      FileManager.setSocket(io, db);
       userUpdate.setDb(db);
       mloader.setDb(db);
 

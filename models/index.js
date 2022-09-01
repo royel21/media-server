@@ -1,28 +1,15 @@
 const Sequelize = require("sequelize");
-const path = require("path");
 
-const db = {};
-const { dialect, pool } = require("./config");
-const Op = Sequelize.Op;
 const DataTypes = Sequelize.DataTypes;
-const { HOST, DB_USER, PASSWORD, DB } = process.env;
-const sequelize = new Sequelize(DB, DB_USER, PASSWORD, {
-  logging: console.log,
-  host: HOST,
-  dialect,
-  pool,
-  define: {
-    charset: "utf8",
-    collate: "utf8_general_ci",
-  },
-  logging: false,
-  dialectOptions: {
-    timezone: "Etc/GMT-4",
-  },
-});
 
-db.Op = Op;
-db.sqlze = sequelize;
+const { USERNAME, HOST, HOST2, DB_USER, PASSWORD, DB } = process.env;
+
+const config = require("./config");
+config.host = USERNAME === "rconsoro" ? HOST : HOST2;
+
+const sequelize = new Sequelize(DB, DB_USER, PASSWORD, config);
+
+const db = { Op: Sequelize.Op, sqlze: sequelize };
 
 db.user = require("./user")(sequelize, DataTypes);
 db.file = require("./file")(sequelize, DataTypes);

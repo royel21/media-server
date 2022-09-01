@@ -1,8 +1,8 @@
 <script>
   import { onMount, onDestroy, getContext } from "svelte";
+  import { navigate } from "svelte-routing";
   import axios from "axios";
 
-  import ItemList from "../Folders/ItemList.svelte";
   import Modal from "../Folders/Modal.svelte";
   import Filter from "../../ShareComponent/Filter.svelte";
   import Pagination from "../../ShareComponent/Pagination.svelte";
@@ -24,15 +24,14 @@
   };
 
   const loadFiles = async (pg) => {
-    let { data } = await axios.get(
-      `/api/admin/files/${pg}/${calRows()}/${filter || ""}`
-    );
+    let { data } = await axios.get(`/api/admin/files/${pg}/${calRows()}/${filter || ""}`);
 
     if (data.files) {
       items = data.files;
       totalPages = data.totalPages || 0;
       totalItems = data.totalItems || 0;
-      page = pg;
+      page = +pg;
+      navigate(`/files/${pg}/${filter || ""}`);
     }
   };
 
@@ -48,12 +47,7 @@
 
     socket.on("file-removed", (data) => {
       if (data.success) {
-        if (page === totalPages && items.length > 1) {
-          items = items.filter((f) => f.Id !== file.Id);
-        } else {
-          page = page > 1 ? page - 1 : page;
-          loadFiles(page);
-        }
+        loadFiles(page);
         hideModal();
       }
     });
@@ -70,7 +64,7 @@
   };
 
   const goToPage = (pg) => {
-    pg = parseInt(pg.detail);
+    pg = +pg.detail;
     if (pg < 1 || pg > totalPages) return;
     page = pg < 1 ? 1 : pg > totalPages ? totalPages : pg;
     loadFiles(page);
@@ -83,10 +77,11 @@
       let cList = el.classList.toString();
       if (/fa-edit/gi.test(cList)) {
         modalType = { title: "Edit File", Del: false, isFile: true };
+        showModal = true;
       } else {
-        modalType = { title: "Remove File", Del: true, isFile: true };
+        // modalType = { title: "Remove File", Del: true, isFile: true };
+        socket.emit("remove-file", { Id: file.Id, Del: true });
       }
-      showModal = true;
     }
   };
 
@@ -110,45 +105,13 @@
   };
 </script>
 
-<style>
-  .list-container {
-    height: calc(100% - 85px);
-    overflow-y: auto;
-  }
-  .file-list {
-    padding: 10px 10px 0px 10px;
-    height: 100%;
-  }
-  .controls {
-    display: flex;
-    justify-content: space-between;
-    border: none;
-    height: 45px;
-  }
-  .controls h4 {
-    flex-grow: 1;
-    width: 100%;
-    user-select: none;
-  }
-  .list-controls {
-    margin-top: 5px;
-    text-align: center;
-    width: 100%;
-  }
-
-  i {
-    font-size: 20px;
-    margin-right: 6px;
-  }
-</style>
-
 {#if showModal}
   <Modal {file} {modalType} on:submit={handleSubmit} on:click={hideModal} />
 {/if}
 
 <div class="file-list col-6">
   <div class="controls">
-    <Filter on:filter={onFilter} />
+    <Filter on:filter={onFilter} {filter} />
     <h4 class="text-center">{`${totalItems} - Files`}</h4>
   </div>
   <div class="list-container">
@@ -184,3 +147,35 @@
     <Pagination {page} {totalPages} on:gotopage={goToPage} />
   </div>
 </div>
+
+<style>
+  .list-container {
+    height: calc(100% - 85px);
+    overflow-y: auto;
+  }
+  .file-list {
+    padding: 10px 10px 0px 10px;
+    height: 100%;
+  }
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    border: none;
+    height: 45px;
+  }
+  .controls h4 {
+    flex-grow: 1;
+    width: 100%;
+    user-select: none;
+  }
+  .list-controls {
+    margin-top: 5px;
+    text-align: center;
+    width: 100%;
+  }
+
+  i {
+    font-size: 20px;
+    margin-right: 6px;
+  }
+</style>
