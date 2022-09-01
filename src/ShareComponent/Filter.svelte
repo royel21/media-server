@@ -8,7 +8,7 @@
     filter = "";
   };
 
-  const submitFilter = e => {
+  const submitFilter = (e) => {
     if (e.keyCode === 13) {
       dispatch("filter", (filter || "").replace(/%|\?/, ""));
     }
@@ -18,6 +18,24 @@
     dispatch("filter", (filter || "").replace(/%|\?/, ""));
   };
 </script>
+
+<div id="filter-control" class="input-group">
+  <div class="input-group-prepend">
+    <span class="btn-filter input-group-text" on:click={btnFilter}>
+      <i class="fas fa-search" />
+    </span>
+  </div>
+  <input
+    type="text"
+    class="form-control filter-file"
+    placeholder="Filter"
+    bind:value={filter}
+    on:keydown={submitFilter}
+  />
+  <span id="clear-filter" on:click={ClearFilter}>
+    <i class="fas fa-times-circle" />
+  </span>
+</div>
 
 <style>
   #filter-control {
@@ -51,20 +69,3 @@
     }
   }
 </style>
-
-<div id="filter-control" class="input-group">
-  <div class="input-group-prepend">
-    <span class="btn-filter input-group-text" on:click={btnFilter}>
-      <i class="fas fa-search" />
-    </span>
-  </div>
-  <input
-    type="text"
-    class="form-control filter-file"
-    placeholder="Filter"
-    bind:value={filter}
-    on:keydown={submitFilter} />
-  <span id="clear-filter" on:click={ClearFilter}>
-    <i class="fas fa-times-circle" />
-  </span>
-</div>

@@ -56,10 +56,16 @@ module.exports = (sequelize, DataTypes) => {
       hooks: {
         beforeValidate: function (item) {
           item.Id = nanoid(10);
+          if (item.Cover?.includes("\\")) {
+            item.Cover = item.Cover?.replace(/\\/gi, "/");
+          }
         },
         beforeBulkCreate(instances) {
           for (var item of instances) {
             item.Id = nanoid(10);
+            if (item.Cover?.includes("\\")) {
+              item.Cover = item.Cover?.replace(/\\/gi, "/");
+            }
           }
         },
       },

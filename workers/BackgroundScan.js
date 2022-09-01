@@ -1,26 +1,47 @@
+const { genFolderThumbnails, genFileThumbnails } = require("./ThumbNailGenerator");
 require("dotenv").config();
-const fs = require("fs");
-const path = require("path");
 const sharp = require("sharp");
+
+const fs = require("fs-extra");
+const path = require("path");
+const WinDrive = require("win-explorer");
+const db = require("../models");
 
 const ThumbnailPath = process.env.IMAGES;
 
-const WinDrive = require("win-explorer");
-const db = require("../models");
-const { genFolderThumbnails, genFileThumbnails } = require("./ThumbNailGenerator");
-
 const ValidFiles = /\.(avi|avi2|mp4|mkv|ogg|webm|rar|zip)/i;
 
-const IMGTYPES = /jpg|jpeg|png|gif|webp/i;
+const IMGTYPES = /\.(jpg|jpeg|png|gif|webp)$/i;
 
 let DirectoryId;
 
-const rmOrphanFiles = async (folder) => {
-  const files = await folder.getFiles();
-  for (const file of files) {
-    if (folder.Path && file.Name) {
-      if (!fs.existsSync(path.join(folder.Path, file.Name))) {
-        await file.destroy();
+if (path.join(ThumbnailPath, "Folder")) {
+  fs.mkdirsSync(path.join(ThumbnailPath, "Folder"));
+  fs.mkdirsSync(path.join(ThumbnailPath, "Manga"));
+  fs.mkdirsSync(path.join(ThumbnailPath, "Video"));
+}
+
+const rmOrphanFiles = async (Id, isFolder, folder) => {
+  if (isFolder) {
+    const files = await folder.getFiles();
+    for (const file of files) {
+      if (folder.Path && file.Name) {
+        if (!fs.existsSync(path.join(folder.Path, file.Name))) {
+          await file.destroy();
+        }
+      }
+    }
+  } else {
+    const folders = await db.folder.findAll({
+      where: isFolder ? { Id } : { DirectoryId },
+      include: { model: db.file, attributes: ["Name"] },
+    });
+
+    for (const f of folders) {
+      if (f.IsNoEmpty) {
+        rmOrphanFiles(null, true, f);
+      } else {
+        await f.destroy();
       }
     }
   }
@@ -49,7 +70,7 @@ const createFolderThumbnail = async (folder, files) => {
       }
     }
   } catch (error) {
-    console.log("FolderCover:", error);
+    console.log("FolderCover:", folder.Name, error);
   }
 };
 
@@ -78,10 +99,15 @@ const scanFolder = async (curfolder, files) => {
   let filteredFiles = files.filter((f) => ValidFiles.test(f.Name) && !f.isHidden);
 
   if (folder) {
-    await rmOrphanFiles(folder);
+    //if folder is alrady create update file count if needed
     if (folder.FileCount !== filteredFiles.length) {
       await folder.update({ FileCount: filteredFiles.length });
     }
+
+    if (!folder.CreatedAt.Compare(curfolder.LastModified)) {
+      folder.update({ CreatedAt: curfolder.LastModified });
+    }
+
     folderFiles = await folder.getFiles();
   } else if (filteredFiles.length) {
     folder = await createFolder(curfolder, filteredFiles);
@@ -99,13 +125,14 @@ const scanFolder = async (curfolder, files) => {
       await scanFolder(f, f.Files);
       //Check if file is in folder
     } else if (!folderFiles.find((fd) => fd.Name === f.Name) && ValidFiles.test(f.Name)) {
+      const Type = /rar|zip/gi.test(f.Extension) ? "Manga" : "Video";
       tempFiles.push({
         Name: f.Name,
-        Type: /rar|zip/gi.test(f.Extension) ? "Manga" : "Video",
+        Type,
         FolderId: folder.Id,
         Size: f.Size,
         CreatedAt: f.LastModified,
-        Cover: `/Manga/${folder.Name}/${f.Name}.jpg`,
+        Cover: `/${Type}/${folder.Name}/${f.Name}.jpg`,
       });
     }
   }
@@ -123,6 +150,8 @@ const scanDirectory = async ({ id, dir, isFolder }) => {
   const fis = WinDrive.ListFilesRO(dir);
   let folder = WinDrive.ListFiles(dir, { oneFile: true });
   folder.Path = dir;
+  console.log("cleaning direcory");
+  await rmOrphanFiles(id, isFolder);
   console.log("scanning directory");
   await scanFolder(folder, fis);
   console.log("creating folder thumbnails");
@@ -161,3 +190,7 @@ process.on("message", (data) => {
     processJobs();
   }
 });
+
+module.exports = {
+  scanDirectory,
+};

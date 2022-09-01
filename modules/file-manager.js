@@ -8,6 +8,8 @@ const { nanoid } = require("nanoid");
 var io;
 var db;
 
+const ImagesPath = process.env.IMAGES;
+
 module.exports.setSocket = (_io, _db) => {
   io = _io;
   db = _db;
@@ -142,13 +144,15 @@ module.exports.renameFile = async ({ Id, Name }) => {
     let fromFile = path.join(file.Folder.Path, file.Name);
     let toFile = path.join(file.Folder.Path, Name);
 
-    let fromCover = path.join("../images", file.Cover);
-    let toCover = path.join(path.dirname(fromCover), Name + ".jpg");
+    let fromCover = path.join(ImagesPath, file.Cover);
+    let toCover = fromCover.replace(file.Name, Name);
 
     try {
       if (fs.existsSync(fromFile)) {
         fs.moveSync(fromFile, toFile);
-        await db.file.update({ Name, Type: file.Type, Cover: "" }, { where: { Id } });
+
+        file.update({ Name, Cover: toCover });
+
         success = true;
         if (fs.existsSync(fromCover)) {
           fs.moveSync(fromCover, toCover);
@@ -180,11 +184,15 @@ module.exports.removeFile = async ({ Id, Del }) => {
       await file.destroy();
       message.success = true;
       if (Del) {
-        let cover = path.join("../images", file.Type, file.Name + ".jpg");
+        let cover = path.join(ImagesPath, file.Cover);
+
         if (fs.existsSync(cover)) fs.removeSync(cover);
+
         let fPath = path.join(file.Folder.Path, file.Name);
+
         if (fs.existsSync(fPath)) {
           fs.removeSync(fPath);
+
           message.msg = `File ${file.Name} removed from server`;
         } else {
           message.msg = `File Don't exit on server was only remove from db`;
@@ -202,9 +210,7 @@ module.exports.removeFile = async ({ Id, Del }) => {
   io.sockets.emit("file-removed", message);
 };
 
-const getCoverPath = (name) => {
-  return path.join("../images", "Folder", name + ".jpg");
-};
+const getCoverPath = (name) => path.join(ImagesPath, "Folder", name + ".jpg");
 
 module.exports.renameFolder = async ({ Id, Name }) => {
   let folder = await db.folder.findOne({
@@ -239,23 +245,34 @@ module.exports.renameFolder = async ({ Id, Name }) => {
   }
 };
 
+const getFileType = ({ FilesType }) => (FilesType === "mangas" ? "Manga" : "Video");
+
 module.exports.removeFolder = async ({ Id, Del }) => {
   let folder = await db.folder.findByPk(Id);
   let success = false;
   if (folder) {
     try {
+      if (Del) {
+        //Remove Folder Thumbnail from images folder
+        let cPath = getCoverPath(folder.Name);
+        if (fs.existsSync(cPath)) {
+          fs.removeSync(cPath);
+        }
+
+        //Remove files Thumbnails from images folder
+        const imagesFolder = `${ImagesPath}/${getFileType(folder)}/${folder.Name}`;
+        if (fs.existsSync(imagesFolder)) {
+          fs.removeSync(imagesFolder);
+        }
+
+        //Remove All Files from Disk
+        if (fs.existsSync(folder.Path)) {
+          fs.removeSync(folder.Path);
+        }
+      }
+      // remove from Database
       await folder.destroy();
       success = true;
-
-      let cPath = getCoverPath(folder.Name);
-
-      if (fs.existsSync(cPath)) fs.removeSync(cPath);
-
-      if (Del && fs.existsSync(folder.Path)) {
-        fs.rmSync(folder.Path, { recursive: true, force: true });
-        fs.rmSync(`/mnt/5TBHDD/images/Manga/${folder.Name}`, { recursive: true, force: true });
-        console.log("folder-remove", folder.Path);
-      }
     } catch (err) {
       console.log(err);
     }

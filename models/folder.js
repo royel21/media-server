@@ -1,6 +1,23 @@
 const { nanoid } = require("nanoid");
 const fs = require("fs");
 
+Date.prototype.addHours = function (h) {
+  this.setTime(this.getTime() + h * 60 * 60 * 1000);
+  return this;
+};
+
+Date.prototype.subHours = function (h) {
+  this.setTime(this.getTime() - h * 60 * 60 * 1000);
+  return this;
+};
+
+Date.prototype.Compare = function (d) {
+  d = new Date(d);
+  if (d instanceof Date) {
+    return this.getTime() == d.getTime();
+  }
+};
+
 module.exports = (sequelize, DataTypes) => {
   const { INTEGER, STRING, DATE, TEXT, BOOLEAN, VIRTUAL } = DataTypes;
   const Folder = sequelize.define(
@@ -28,12 +45,24 @@ module.exports = (sequelize, DataTypes) => {
           return fs.existsSync(this.Path);
         },
       },
+      IsNoEmpty: {
+        type: VIRTUAL,
+        get() {
+          return this.Exists && fs.readdirSync(this.Path).length;
+        },
+      },
       Cover: {
         type: STRING,
       },
       CreatedAt: {
         type: DATE,
         allowNull: false,
+      },
+      LastModified: {
+        type: VIRTUAL,
+        get() {
+          return this.CreatedAt.toISOString();
+        },
       },
       FileCount: {
         type: INTEGER,

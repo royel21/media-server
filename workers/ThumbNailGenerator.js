@@ -1,6 +1,6 @@
 const path = require("path");
 const fs = require("fs-extra");
-const { getVideoDuration, getVideoThumnail, ZipCover } = require("./ThumbnailUtils");
+const { getVideoThumnail, ZipCover } = require("./ThumbnailUtils");
 
 var thumbnailBasePath = process.env.IMAGES;
 
@@ -11,13 +11,11 @@ const genFileThumbnails = async (folders) => {
   folders.forEach((f) => (total += f.Files.length));
 
   for (let folder of folders) {
-    console.log("Folder -----", folder.Name);
+    console.log("---" + folder.Name);
     for (let file of folder.Files) {
       let Duration = 0;
 
       try {
-        if (file.Cover.includes("\\")) await file.update({ Cover: file.Cover.replaceAll("\\", "/") });
-
         let filePath = path.join(folder.Path, file.Name);
         let thumbPath = path.join(thumbnailBasePath, "Manga", folder.Name);
 
@@ -40,12 +38,13 @@ const genFileThumbnails = async (folders) => {
           }
         }
       } catch (err) {
-        console.log(folder.Pat, file.Name, err);
+        console.log(folder.Path, file.Name, err);
       }
 
       process.stdout.write(`-----${parseFloat((i++ / total) * 100).toFixed(2)}%-----\r`);
     }
   }
+  console.log("-----100%-----");
 };
 
 const genFolderThumbnails = async (folders) => {
@@ -53,12 +52,10 @@ const genFolderThumbnails = async (folders) => {
     try {
       if (s.FilesType.includes("mangas")) {
         if (/zip/gi.test(s.filePath)) {
-          await ZipCover(s.filePath, s.coverPath);
+          await ZipCover(s.filePath, s.CoverPath);
         }
       } else {
-        let duration = await getVideoDuration(s.filePath);
-        if (isNaN(duration)) continue;
-        await getVideoThumnail(s.filePath, s.coverPath, duration);
+        await getVideoThumnail(s.filePath, s.CoverPath, duration);
       }
     } catch (err) {
       console.log(err);

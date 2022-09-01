@@ -4,21 +4,21 @@ const path = require("path");
 
 const sharp = require("sharp");
 
-const IMGTYPES = /jpg|jpeg|png|gif|webp/i;
+const IMGTYPES = /\.(jpg|jpeg|png|gif|webp)$/i;
 
 var ffmpeg = "ffmpeg";
 var ffprobe = "ffprobe";
 
 const ZipCover = async (file, coverP, exist) => {
+  let zipfile;
   try {
-    const zipfile = new StreamZip.async({ file });
-
+    zipfile = new StreamZip.async({ file });
     const entries = Object.values(await zipfile.entries())
       .sort((a, b) => String(a.name).localeCompare(String(b.name)))
       .filter((entry) => !entry.isDirectory);
 
     if (!exist) {
-      const firstImg = entries.find((e) => IMGTYPES.test(e.name.split(".").pop()) && e.size > 1024 * 30);
+      const firstImg = entries.find((e) => IMGTYPES.test(e.name) && e.size > 1024 * 30);
       if (firstImg) {
         const buff = await zipfile.entryData(firstImg);
 
@@ -37,7 +37,11 @@ const ZipCover = async (file, coverP, exist) => {
     await zipfile.close();
     return entries.length;
   } catch (error) {
-    console.log("thumbnail error", path.basename(file), error);
+    console.log("thumbnail error", file, error);
+
+    if (zipfile) {
+      await zipfile.close();
+    }
     return 0;
   }
 };
@@ -62,10 +66,10 @@ const getVideoThumnail = async (video, toPath, exist) => {
 
   if (!exist && duration) {
     let pos = (duration * 0.237).toFixed(2);
-    let cmd = ffmpeg + ` -ss ${pos} -i "${video}" -y -vframes 1 -q:v 0 -vf scale=240:-1 "${toPath}"`;
+    let cmd = `${ffmpeg} -ss ${pos} -i "${video}" -y -vframes 1 -q:v 0 -vf scale=240:-1 "${toPath}"`;
 
-    const result = await new Promise((resolve, reject) => {
-      exec(cmd, (err, stdout, stderr) => {
+    await new Promise((resolve) => {
+      exec(cmd, (err) => {
         if (err) {
           resolve(false);
           console.log(err);
@@ -74,11 +78,10 @@ const getVideoThumnail = async (video, toPath, exist) => {
         resolve(true);
       });
     });
-    return result;
+    return duration;
   }
-  return duration;
+  return 0;
 };
-
 module.exports = {
   getVideoDuration,
   getVideoThumnail,
