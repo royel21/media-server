@@ -4,16 +4,21 @@ const db = require("./models");
 
 const fs = require("fs-extra");
 
-const basePath = "F:\\Manga";
+const basePath = "//10.0.0.4/sambashare/5TBHDD/mangas";
+console.time("list");
+const result = WinDir.ListFilesRO(basePath);
+console.timeEnd("list");
 
-const runTest = async () => {
-  let folders = await db.folder.findAll();
-
-  for (let folder of fs.readdirSync(basePath)) {
-    if (!folders.find((f) => f.Name === folder)) {
-      console.log(folder);
-    }
+console.log("files found", result.length, result[0].Files[0]);
+for (const f of result) {
+  if (f.Files.find((f) => f.isDirectory)) {
+    console.log(f.Name);
   }
-};
+}
 
-runTest();
+// const runTest = async () => {
+
+// };
+
+// runTest();
+///Furyou Taimashi Reina
