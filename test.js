@@ -4,7 +4,7 @@ const db = require("./models");
 
 const fs = require("fs-extra");
 
-const basePath = "//10.0.0.4/sambashare/5TBHDD/mangas";
+const basePath = "/mnt/5TBHDD/mangas";
 console.time("list");
 const result = WinDir.ListFilesRO(basePath);
 console.timeEnd("list");
