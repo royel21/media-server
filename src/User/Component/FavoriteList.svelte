@@ -1,7 +1,8 @@
 <script>
   import axios from "axios";
   import { createEventDispatcher } from "svelte";
-  import { FavoritesStores } from "../Stores/FavoritesStores";
+  import { FavoritesStores } from "../../User/Stores/FavoritesStores";
+
   export let Type;
   export let type;
   export let isFav;
@@ -44,6 +45,27 @@
   }
 </script>
 
+<span class="fav-control">
+  <span class="fav-icon">
+    {#if Type === "Folder"}
+      {#if type.startsWith("favorites")}
+        <i class="fas fa-trash-alt text-danger" bind:this={thisEl} />
+      {:else if isFav}
+        <i class="fas fa-star" />
+      {:else}
+        <i class="far fa-star" bind:this={thisEl} />
+      {/if}
+    {/if}
+  </span>
+  {#if showList}
+    <ul>
+      {#each $FavoritesStores as fav}
+        <li id={fav.Id} on:click={addToFav}>{fav.Name}</li>
+      {/each}
+    </ul>
+  {/if}
+</span>
+
 <style>
   .fav-control {
     position: relative;
@@ -78,24 +100,3 @@
     border-bottom: 1px solid;
   }
 </style>
-
-<span class="fav-control">
-  <span class="fav-icon">
-    {#if Type === 'Folder'}
-      {#if type.startsWith('favorites')}
-        <i class="fas fa-trash-alt text-danger" bind:this={thisEl} />
-      {:else if isFav}
-        <i class="fas fa-star" />
-      {:else}
-        <i class="far fa-star" bind:this={thisEl} />
-      {/if}
-    {/if}
-  </span>
-  {#if showList}
-    <ul>
-      {#each $FavoritesStores as fav}
-        <li id={fav.Id} on:click={addToFav}>{fav.Name}</li>
-      {/each}
-    </ul>
-  {/if}
-</span>

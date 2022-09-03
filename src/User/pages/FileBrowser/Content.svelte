@@ -1,6 +1,7 @@
 <script>
-  import FilesList from "../Component/FilesList.svelte";
   import { navigate } from "svelte-routing";
+
+  import FilesList from "../../Component/FilesList.svelte";
 
   export let page = 1;
   export let filter = "";

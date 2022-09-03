@@ -15,7 +15,7 @@ const getOrderBy = (orderby, table = "") => {
     du: ["CreatedAt", "DESC"],
     dd: ["CreatedAt", "ASC"],
   };
-  console.log(data[orderby] || [byName], table, data.order);
+
   return [data[orderby] || [byName]];
 };
 

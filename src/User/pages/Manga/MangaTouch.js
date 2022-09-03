@@ -1,4 +1,4 @@
-import { updateToggleMenu } from "../../ShareComponent/ToggleMenu";
+import { updateToggleMenu } from "../../../ShareComponent/ToggleMenu";
 let tStart, tEnd;
 let point = {};
 let touching = false;

@@ -1,4 +1,4 @@
-import { getFilesPerPage } from "./Utils";
+import { getFilesPerPage } from "./FilesUtils";
 const UP = 38;
 const DOWN = 40;
 const LEFT = 37;

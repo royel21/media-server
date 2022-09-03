@@ -1,12 +1,13 @@
 <script>
   import { onDestroy, getContext, createEventDispatcher } from "svelte";
-  import { PageObserver, disconnectObvrs, scrollImageLoader } from "./Observers";
-  import { setfullscreen } from "../pages/Util";
+
+  import { setfullscreen } from "../Utils";
   import { scrollInView, getEmptyIndex } from "./Utils";
+  import { PageObserver, disconnectObvrs, scrollImageLoader } from "./Observers";
   import { onTouchStart, onTouchEnd, onTouchMove, default as controls } from "./MangaTouch";
 
-  import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
-  import MangaConfig from "../Component/MangaConfig.svelte";
+  import { ToggleMenu } from "../../../ShareComponent/ToggleMenu";
+  import MangaConfig from "./MangaConfig.svelte";
 
   export let file;
   export let KeyMap;

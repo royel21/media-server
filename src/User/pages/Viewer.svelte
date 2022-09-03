@@ -2,12 +2,13 @@
   import axios from "axios";
   import { onMount, getContext } from "svelte";
   import { navigate } from "svelte-routing";
+
   import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
 
   import PlayList from "../Component/PlayList.svelte";
-  import MangaViewer from "../Component/MangaViewer.svelte";
-  import VideoPLayer from "../Component/VideoPlayer.svelte";
-  import { KeyMap, handleKeyboard } from "./Util";
+  import MangaViewer from "./Manga/MangaViewer.svelte";
+  import VideoPLayer from "./Video/VideoPlayer.svelte";
+  import { KeyMap, handleKeyboard } from "./Utils";
 
   export let folderId;
   export let fileId;
@@ -17,7 +18,7 @@
     .slice(0, 3)
     .join("/");
   const socket = getContext("socket");
-  const { Fullscreen, NextFile, PrevFile } = KeyMap;
+  const { NextFile, PrevFile } = KeyMap;
   let files = [];
   let observer;
   let playList = [];

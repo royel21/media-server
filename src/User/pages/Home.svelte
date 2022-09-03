@@ -1,11 +1,11 @@
 <script>
+  import axios from "axios";
   import { onMount } from "svelte";
   import { navigate } from "svelte-routing";
-  import axios from "axios";
+
   let files = [];
   let current = 0;
   let container;
-  let count;
 
   axios.get("/api/files/recents").then(({ data }) => {
     if (data instanceof Array) {

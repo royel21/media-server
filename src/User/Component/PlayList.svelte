@@ -1,8 +1,9 @@
 <script>
   import { createEventDispatcher } from "svelte";
-  import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
-  import { formatTime } from "./Utils";
+
   import Pagination from "../../ShareComponent/Pagination.svelte";
+  import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
+  import { formatTime } from "../Pages/Utils";
 
   const dispatch = createEventDispatcher();
 

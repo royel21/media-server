@@ -1,8 +1,6 @@
 <script>
-  import { FavoritesStores, addUpdateFavorite, removeFavorite } from "../Stores/FavoritesStores";
   import { navigate } from "svelte-routing";
-  import { onDestroy } from "svelte";
-  let show;
+  import { FavoritesStores, addUpdateFavorite, removeFavorite } from "../../Stores/FavoritesStores";
 
   export let id = "";
   let currentFav = {};
@@ -125,9 +123,9 @@
     color: black;
     background: white;
     height: max-content;
-    width: 300px;
+    width: 380px;
     bottom: -121px;
-    left: -138px;
+    left: -149px;
     padding: 5px;
     border-radius: 0.25rem;
     min-height: 240px;
@@ -212,18 +210,5 @@
   }
   .errors:empty {
     display: none;
-  }
-  tr td:first-child:hover:after {
-    content: attr(data-title);
-    display: inline-block;
-    padding: 0 5px;
-    position: absolute;
-    left: 15px;
-    width: max-content;
-    background-color: #ddd;
-    color: black;
-    font-weight: 600;
-    pointer-events: none;
-    border-radius: 0.25rem;
   }
 </style>

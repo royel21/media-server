@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher } from "svelte";
-  import { map } from "./Utils";
+  import { map } from "../Utils";
   export let value;
   export let preview = false;
   export let min = 0;
@@ -18,8 +18,7 @@
     isMdown = { is: true, id: uniqId };
     let xpos;
     if (e.type === "touchstart") {
-      xpos =
-        e.touches[0].pageX - e.touches[0].target.getBoundingClientRect().left;
+      xpos = e.touches[0].pageX - e.touches[0].target.getBoundingClientRect().left;
       document.addEventListener("touchmove", globalMMove);
     } else {
       xpos = e.offsetX;
@@ -32,14 +31,10 @@
   };
 
   const globalMMove = (e) => {
-    if (
-      (isMdown.is && e.target.id === uniqId) ||
-      (e.type === "touchmove" && e.touches[0].target.id === uniqId)
-    ) {
+    if ((isMdown.is && e.target.id === uniqId) || (e.type === "touchmove" && e.touches[0].target.id === uniqId)) {
       let newPos;
       if (e.type === "touchmove") {
-        newPos =
-          e.touches[0].pageX - e.touches[0].target.getBoundingClientRect().left;
+        newPos = e.touches[0].pageX - e.touches[0].target.getBoundingClientRect().left;
       } else {
         newPos = e.offsetX;
       }
@@ -52,12 +47,8 @@
   const onPreview = (e) => {
     if (preview) {
       var newPos = Math.floor(e.pageX - sliderRef.getBoundingClientRect().left);
-      var pos = map(newPos - 1, 0, sliderRef.offsetWidth - 2, 0, 100).toFixed(
-        0
-      );
-      let tempVal = Number(
-        map(newPos - 1, 0, sliderRef.offsetWidth - 2, min, max).toFixed(2)
-      );
+      var pos = map(newPos - 1, 0, sliderRef.offsetWidth - 2, 0, 100).toFixed(0);
+      let tempVal = Number(map(newPos - 1, 0, sliderRef.offsetWidth - 2, min, max).toFixed(2));
       pos = pos < 0 ? 0 : pos > 100 ? 100 : pos;
       let value = tempVal < 0 ? 0 : tempVal > max ? max : tempVal;
       previewData = { pos, value };
@@ -81,15 +72,44 @@
   };
 
   const updateValue = (val) => {
-    let tempVal = Number(
-      map(val - 1, 0, sliderRef.offsetWidth - 2, min, max).toFixed(2)
-    );
+    let tempVal = Number(map(val - 1, 0, sliderRef.offsetWidth - 2, min, max).toFixed(2));
     tempVal = tempVal < 0 ? 0 : tempVal > max ? max : tempVal;
     onChange(tempVal);
   };
 
   $: progress = map(value, min, max, 0, 100);
 </script>
+
+<div class="rc-slider">
+  <div
+    id={uniqId}
+    class="rc-track"
+    on:mousedown={onMDown}
+    on:touchstart={onMDown}
+    bind:this={sliderRef}
+    on:mousemove={onPreview}
+  >
+    <div
+      class="rc-progress"
+      style={`border-radius: ${Math.round(progress) === 100 ? "0.3rem" : "0.3rem 0px 0px 0.3rem"}; width: ${
+        progress > 0.3 ? progress : 0
+      }%`}
+    />
+    <span class="rc-thumb" style={`left: calc(${progress}% - 11px)`} on:mousedown={handleThumb} />
+    {#if preview}
+      <span
+        class="rc-preview"
+        data-title="00:00"
+        bind:this={previewRef}
+        style={`left: calc(${previewData.pos}% - ${previewRef && previewRef.offsetWidth / 2}px)`}
+      >
+        <span class="rc-preview-content">
+          <slot value={previewData.value} />
+        </span>
+      </span>
+    {/if}
+  </div>
+</div>
 
 <style>
   .rc-slider {
@@ -202,32 +222,3 @@
     transform: rotateZ(45deg);
   }
 </style>
-
-<div class="rc-slider">
-  <div
-    id={uniqId}
-    class="rc-track"
-    on:mousedown={onMDown}
-    on:touchstart={onMDown}
-    bind:this={sliderRef}
-    on:mousemove={onPreview}>
-    <div
-      class="rc-progress"
-      style={`border-radius: ${Math.round(progress) === 100 ? '0.3rem' : '0.3rem 0px 0px 0.3rem'}; width: ${progress > 0.3 ? progress : 0}%`} />
-    <span
-      class="rc-thumb"
-      style={`left: calc(${progress}% - 11px)`}
-      on:mousedown={handleThumb} />
-    {#if preview}
-      <span
-        class="rc-preview"
-        data-title="00:00"
-        bind:this={previewRef}
-        style={`left: calc(${previewData.pos}% - ${previewRef && previewRef.offsetWidth / 2}px)`}>
-        <span class="rc-preview-content">
-          <slot value={previewData.value} />
-        </span>
-      </span>
-    {/if}
-  </div>
-</div>

@@ -1,8 +1,8 @@
 <script>
   import { onMount, createEventDispatcher } from "svelte";
+
   import Slider from "./Slider.svelte";
-  import { setfullscreen } from "../pages/Util";
-  import { formatTime } from "../Component/Utils";
+  import { setfullscreen, formatTime } from "../Utils";
   import { setGesture } from "./VideoTouch";
 
   export let KeyMap;

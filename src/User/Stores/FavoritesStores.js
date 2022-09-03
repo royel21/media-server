@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
 import axios from "axios";
-import { sortByName } from "./Util";
+import { sortByName } from "./StoreUtils";
 
 const FavoritesStores = writable([]);
 

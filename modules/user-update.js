@@ -11,7 +11,6 @@ module.exports.updateFileView = async (data) => {
 };
 
 module.exports.recentFolder = async ({ FolderId, CurrentFile }, user) => {
-  console.log("folder update", FolderId, CurrentFile);
   let recent = await db.recentFolder.findOrCreate({
     where: { FolderId, RecentId: user.Recent.Id },
   });
@@ -19,7 +18,6 @@ module.exports.recentFolder = async ({ FolderId, CurrentFile }, user) => {
 };
 
 module.exports.updateFilePos = async (data, user) => {
-  console.log("recent-file", data);
   let recent = await db.recentFile.findOrCreate({
     where: { FileId: data.Id, RecentId: user.Recent.Id },
   });

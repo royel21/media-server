@@ -1,17 +1,17 @@
 <script>
+  import axios from "axios";
   import { afterUpdate, getContext } from "svelte";
   import { fade } from "svelte/transition";
   import { navigate } from "svelte-routing";
-  import axios from "axios";
 
-  import { PageConfig } from "../Stores/PageConfigStore";
+  import { PageConfig } from "../../User/Stores/PageConfigStore";
 
-  import { genUrl, FileTypes, ProcessFile } from "./Utils";
+  import { genUrl, FileTypes, ProcessFile } from "./FilesUtils";
   import { fileKeypress, selectItem, getElIndex, fileClicks } from "./FileEvents";
 
   import Pagination from "../../ShareComponent/Pagination.svelte";
   import Filter from "../../ShareComponent/Filter.svelte";
-  import FavoriteList from "../Component/FavoriteList.svelte";
+  import FavoriteList from "./FavoriteList.svelte";
 
   export let id = "";
   export let page = 1;

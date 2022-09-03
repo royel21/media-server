@@ -4,12 +4,12 @@
   import { FavoritesStores } from "./Stores/FavoritesStores";
 
   import Navbar from "../ShareComponent/Navbar.svelte";
-  import Home from "./pages/Home.svelte";
-  import Mangas from "./pages/Mangas.svelte";
-  import Videos from "./pages/Videos.svelte";
-  import Favorites from "./pages/Favorites.svelte";
-  import Content from "./pages/Content.svelte";
-  import Viewer from "./pages/Viewer.svelte";
+  import Home from "./Pages/Home.svelte";
+  import Mangas from "./Pages/Manga/Mangas.svelte";
+  import Videos from "./Pages/Video/Videos.svelte";
+  import Favorites from "./Pages/FileBrowser/Favorites.svelte";
+  import Content from "./Pages/FileBrowser/Content.svelte";
+  import Viewer from "./Pages/Viewer.svelte";
 
   const navItems = [
     { title: "Home", path: "/", class: "home" },

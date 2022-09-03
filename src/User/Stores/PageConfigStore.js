@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import { getObject, setObject } from "./Util";
+import { getObject, setObject } from "./StoreUtils";
 
 const initConfig = {
   order: {

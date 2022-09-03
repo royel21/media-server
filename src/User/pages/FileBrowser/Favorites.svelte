@@ -1,8 +1,8 @@
 <script>
-  import { FavoritesStores } from "../Stores/FavoritesStores";
-  import FavoriteManager from "../Component/FavoriteManager.svelte";
+  import { FavoritesStores } from "../../Stores/FavoritesStores";
+  import FavoriteManager from "./FavoriteManager.svelte";
+  import FilesList from "../../Component/FilesList.svelte";
 
-  import FilesList from "../Component/FilesList.svelte";
   export let page = 1;
   export let filter = "";
   export let id = $FavoritesStores[0].Id;
