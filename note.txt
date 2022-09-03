@@ -1,2 +1,5 @@
 removes:
 Kaiko Sareta Ankoku Heishi (30-dai) No Slow Na Second Life -> The Slow Second Life Of A Dismissed Dark Soldier
+
+#set times-zone
+sudo timedatectl set-timezone America/Santo_Domingo
