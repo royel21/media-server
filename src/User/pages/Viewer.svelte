@@ -1,6 +1,6 @@
 <script>
   import axios from "axios";
-  import { onMount, afterUpdate, getContext } from "svelte";
+  import { onMount, getContext } from "svelte";
   import { navigate } from "svelte-routing";
   import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
 
@@ -61,7 +61,6 @@
 
   const selectFile = ({ target: { id } }) => {
     saveFile();
-    console.log("filter: ", filters.filter);
     if (filters.filter) {
       playList = files.filter((f) => f.Name.toLocaleLowerCase().includes(filters.filter.toLocaleLowerCase()));
     } else {
@@ -105,7 +104,6 @@
   }
 
   const clearFilter = () => {
-    console.log("clearfilter");
     playList = files;
   };
 

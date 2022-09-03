@@ -38,10 +38,7 @@ const selectItem = (index) => {
     let sctop = scroll + scrollElement.offsetHeight;
 
     if (top - sctop + 1 > 0) {
-      scroll =
-        top + 31 > itemContainer.offsetHeight
-          ? itemContainer.offsetHeight - 10
-          : scroll + (top - sctop);
+      scroll = top + 31 > itemContainer.offsetHeight ? itemContainer.offsetHeight - 10 : scroll + (top - sctop);
     }
 
     scrollElement.scroll({
@@ -75,7 +72,6 @@ const fileKeypress = (e, page, goToPage, processFile) => {
     selectedIndex = getElIndex(file.parentElement.querySelector(".active"));
     switch (e.keyCode) {
       case ENTER: {
-        console.log("file", e.target);
         processFile(e.target);
         break;
       }

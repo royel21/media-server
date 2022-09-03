@@ -1,25 +1,23 @@
 import { writable } from "svelte/store";
 import axios from "axios";
+import { sortByName } from "./Util";
 
 const FavoritesStores = writable([]);
 
+const favApi = "/api/files/favorites/";
+
 const addUpdateFavorite = async (fav) => {
-  const { data } = await axios.post("/api/files/favorites/add-edit", fav);
+  const { data } = await axios.post(favApi + "create-update", fav);
   if (data.Id) {
-    FavoritesStores.update((favs) => {
-      return (favs = [...favs.filter((f) => f.Id !== fav.Id), data].sort((f1, f2) =>
-        f1.Name.localeCompare(f2.Name)
-      ));
-    });
+    FavoritesStores.update((favs) => [...favs.filter((f) => f.Id !== fav.Id), data].sort(sortByName));
   }
   return data;
 };
 
 const removeFavorite = async (Id, Type) => {
-  const { data } = await axios.delete("/api/files/favorites/remove", {
+  const { data } = await axios.delete(favApi + "remove", {
     data: { Id, Type },
   });
-  console.log(data);
   if (data.removed) {
     FavoritesStores.update((favs) => (favs = favs.filter((fav) => fav.Id !== Id)));
   }

@@ -47,8 +47,8 @@ Router.post("/content", (req, res) => {
     for (let d of dirs) {
       tdata.push({
         Id: getNewId(),
-        Name: d.FileName,
-        Path: path.join(Path, d.FileName),
+        Name: d.Name,
+        Path: path.join(Path, d.Name),
         Content: [],
       });
     }

@@ -73,8 +73,8 @@ module.exports.loadContent = (data) => {
     for (let d of dirs) {
       tdata.push({
         Id: nanoid(5),
-        Name: d.FileName,
-        Path: path.join(data.Path, d.FileName),
+        Name: d.Name,
+        Path: path.join(data.Path, d.Name),
         Content: [],
       });
     }
@@ -96,7 +96,7 @@ module.exports.scanDir = async ({ Id, Path, Type, isFolder, IsAdult }) => {
       if (dirInfo && !["c:\\", "C:\\", "/"].includes(Path)) {
         model = await db.directory.create({
           FullPath: Path,
-          Name: dirInfo.FileName,
+          Name: dirInfo.Name,
           Type,
           IsAdult,
         });

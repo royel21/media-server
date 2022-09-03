@@ -3,55 +3,25 @@ var Router = express.Router();
 const fs = require("fs");
 const path = require("path");
 const db = require("../models");
+const { qryCurrentPos } = require("./query-helper");
 
-const getAttributes = (user, file) => {
-  return [
-    "Id",
-    "Name",
-    "Type",
-    "Duration",
-    "Cover",
-    "FolderId",
-    "ViewCount",
-    [
-      db.sqlze.literal(
-        `IFNULL((Select LastPos from RecentFiles where FileId = ${file}.Id and RecentId = '${user.Recent.Id}'), 0)`
-      ),
-      "CurrentPos",
-    ],
-  ];
-};
+const getFiles = async ({ user, body }, res, type) => {
+  const { Recent, UserConfig } = user;
 
-const getFiles = async (req, res, type) => {
-  let user = req.user;
-  const id = req.body.id;
   let table = await db[type].findOne({
-    where: { Id: id },
+    where: { Id: body.id },
     order: [db.sqlze.literal("REPLACE(`Files`.`Name`, '[','0')")],
     include: {
       model: db.file,
-      attributes: getAttributes(user, "Files"),
+      attributes: ["Id", "Name", "Type", "Duration", "Cover", "FolderId", "ViewCount", qryCurrentPos(Recent, "Files")],
     },
   });
 
   res.send({
     files: table.Files.map((f) => f.dataValues),
-    config: user.UserConfig.dataValues.Config,
+    config: UserConfig.dataValues.Config,
   });
 };
-
-Router.post("/file/", (req, res) => {
-  let id = req.body.id;
-
-  db.file.findOne({ where: { Id: id }, attributes: getAttributes(req.user, "File") }).then((file) => {
-    if (file) {
-      let config = req.user.UserConfig.dataValues.Config;
-      res.send({ files: [], file: file.dataValues, config });
-    } else {
-      res.send({ fail: true, msg: "File Not Found" });
-    }
-  });
-});
 
 Router.post("/folder/", (req, res) => {
   getFiles(req, res, "folder");
@@ -61,7 +31,7 @@ Router.post("/favorites/", (req, res) => {
   getFiles(req, res, "favorite");
 });
 
-Router.get("/:id", (req, res) => {
+Router.get("video/:id", (req, res) => {
   db.file
     .findOne({
       attributes: ["Id", "Name", "Size"],

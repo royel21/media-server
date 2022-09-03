@@ -81,7 +81,6 @@
   };
 
   const clearFilter = () => {
-    console.log("dispath-clear");
     filters.filter = "";
     dispatch("clearfilter");
   };
@@ -112,16 +111,16 @@
   }
 </script>
 
-<label class={"show-list" + (!hideList ? " move" : "")} for="p-hide" style="bottom: 35px">
+<label class={"show-list" + (!hideList ? " move" : "")} for="p-hide" style="bottom: 35px" title="play-list">
   <span class="p-sort">
     <i class="fas fa-list" />
   </span>
 </label>
 
-<input type="checkbox" id="p-hide" bind:checked={hideList} />
+<input name="show-hide-play-list" type="checkbox" id="p-hide" bind:checked={hideList} />
 <div id="play-list" class:move={!$ToggleMenu}>
   <div id="v-filter">
-    <input type="text" bind:value={filters.filter} placeholder="Filter" class="form-control" />
+    <input name="clear-filters" type="text" bind:value={filters.filter} placeholder="Filter" class="form-control" />
     <span class="clear-filter" on:click={clearFilter}>
       <i class="fas fa-times-circle" />
     </span>
@@ -185,13 +184,13 @@
     overflow: hidden;
   }
   #play-list.move {
-    top: 34px;
+    top: 37px;
   }
   #p-list {
     overflow-y: auto;
-    height: calc(100% - 35px);
+    height: calc(100% - 31px);
     overflow-x: hidden;
-    padding-bottom: 40px;
+    padding-bottom: 35px;
   }
 
   #p-hide:checked + #play-list {
@@ -288,7 +287,6 @@
   #play-list #v-filter .form-control {
     border-radius: 0;
     padding: 0.2rem 0.5rem;
-    margin-top: 3px;
   }
   #play-list .clear-filter {
     right: 6px;
@@ -312,7 +310,7 @@
   .b-control {
     text-align: center;
     position: absolute;
-    bottom: 0;
+    bottom: 4px;
     width: 100%;
   }
   @media screen and (max-width: 600px) {
@@ -323,7 +321,8 @@
     }
 
     #play-list.move {
-      top: 66px;
+      top: 56px;
+      bottom: 43px;
     }
   }
 </style>

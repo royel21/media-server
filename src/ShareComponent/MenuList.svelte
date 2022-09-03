@@ -2,10 +2,17 @@
   export let items;
   export let title;
   export let itemClass;
-  let selected = items[0] ? items[0].Id : "";
-
-  $: console.log(items, selected);
 </script>
+
+<label for={title}>
+  <i class={"fas fa-" + itemClass} />
+  {title}
+  <ul class="down-list">
+    {#each items as item}
+      <li class="list-item" id="{item.Id}}">{item.Name}</li>
+    {/each}
+  </ul>
+</label>
 
 <style>
   label {
@@ -40,13 +47,3 @@
     background-color: rgba(0, 0, 0, 0.3);
   }
 </style>
-
-<label for={title}>
-  <i class={'fas fa-' + itemClass} />
-  {title}
-  <ul class="down-list">
-    {#each items as item}
-      <li class="list-item" id="{item.Id}}">{item.Name}</li>
-    {/each}
-  </ul>
-</label>

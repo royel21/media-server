@@ -1,56 +1,56 @@
 const Router = require("express").Router();
 const db = require("../../models");
 
-const getData = async (req, res) => {
-    let { page, items, filter } = req.params;
-    let offset = (page - 1) * items || 0;
-    let limit = parseInt(items) || 10;
-    let folders = await db.folder.findAndCountAll({
-        order: ["Name"],
-        offset,
-        limit,
-        where: {
-            Name: { [db.Op.like]: `%${filter || ""}%` },
-        },
-    });
+const getData = async ({ params }, res) => {
+  const { page, items, filter, folderId } = params;
 
-    let totalPages = Math.ceil(folders.count / items);
-    res.send({
-        folders: folders.rows,
-        totalPages,
-        totalItems: folders.count,
-    });
+  // calculate the start and end of the query check sql limit
+  let limit = +items || 10;
+  let offset = (page - 1) * limit || 0;
+
+  let table = folderId ? "File" : "Folders";
+
+  const query = {
+    attributes: ["Id", "Name", "Type"],
+    order: [db.sqlze.literal(`CAST(${table}.Name as unsigned), REPLACE(${table}.Name, '[','0')`)], // used for natural ordering
+    where: {
+      [db.Op.and]: {
+        Name: { [db.Op.like]: `%${filter || ""}%` },
+      },
+    },
+    offset,
+    limit,
+  };
+
+  let result;
+  // if contain folderId this is a file query we will need the folderId
+  if (folderId) {
+    query.where.FolderId = folderId;
+    result = await db.file.findAndCountAll(query);
+  } else {
+    query.attributes.push("Path"); // add Path to folder query
+    result = await db.folder.findAndCountAll(query);
+  }
+
+  let totalPages = Math.ceil(result.count / query.limit);
+
+  res.send({
+    items: result.rows,
+    totalPages,
+    totalItems: result.count,
+  });
 };
 
 Router.get("/:page/:items/:filter?", (req, res) => {
-    getData(req, res).catch((err) => {
-        console.log(err);
-    });
+  getData(req, res).catch((err) => {
+    console.log(err);
+  });
 });
 
 Router.get("/files/:folderId/:page/:items/:filter?", (req, res) => {
-    let { folderId, page, items, filter } = req.params;
-    let offset = (page - 1) * items || 0;
-    let limit = parseInt(items) || 10;
-    db.file
-        .findAndCountAll({
-            order: [db.sqlze.literal(`REPLACE(Name, '[','0')`)],
-            where: {
-                [db.Op.and]: {
-                    FolderId: folderId,
-                    Name: { [db.Op.like]: `%${filter || ""}%` },
-                },
-            },
-            offset,
-            limit,
-        })
-        .then((result) => {
-            res.send({
-                files: result.rows,
-                totalPages: Math.ceil(result.count / items),
-                totalItems: result.count,
-            });
-        });
+  getData(req, res).catch((err) => {
+    console.log(err);
+  });
 });
 
 module.exports = Router;

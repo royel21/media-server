@@ -1,31 +1,22 @@
 const db = require("../models");
 
+const qryCurrentPos = (Recent, table) => [
+  db.sqlze.literal(
+    `IFNULL((Select LastPos from RecentFiles where FileId = ${table}.Id and RecentId = '${Recent.Id}'), 0)`
+  ),
+  "CurrentPos",
+];
+
 const getOrderBy = (orderby, table = "") => {
-  let nameOrder = db.sqlze.literal("REPLACE(" + table + ".Name, '[','0')");
+  let desc = /nd/.test(orderby) ? "DESC" : "";
+  let byName = db.sqlze.literal(`CAST(${table}.Name as unsigned) ${desc}, REPLACE(${table}.Name, '[','0') ${desc}`);
 
-  if (table === "File") {
-    nameOrder = db.sqlze.literal("CAST(`File`.`Name` as unsigned)");
-  }
-
-  let order = [];
-  switch (orderby) {
-    case "nd": {
-      order.push([nameOrder, "DESC"]);
-      break;
-    }
-    case "du": {
-      order.push(["CreatedAt", "DESC"]);
-      break;
-    }
-    case "dd": {
-      order.push(["CreatedAt", "ASC"]);
-      break;
-    }
-    default: {
-      order.push(nameOrder);
-    }
-  }
-  return order;
+  const data = {
+    du: ["CreatedAt", "DESC"],
+    dd: ["CreatedAt", "ASC"],
+  };
+  console.log(data[orderby] || [byName], table, data.order);
+  return [data[orderby] || [byName]];
 };
 
 const getFiles = async (user, data, model) => {
@@ -40,6 +31,7 @@ const getFiles = async (user, data, model) => {
       },
     });
   }
+  const LastRead = "(Select LastRead from RecentFiles where FileId = File.Id and RecentId = '" + user.Recent.Id + "')";
 
   let query = {
     attributes: [
@@ -49,22 +41,12 @@ const getFiles = async (user, data, model) => {
       "Duration",
       "Cover",
       "CreatedAt",
-      [
-        db.sqlze.literal(
-          "(Select LastPos from RecentFiles where FileId = File.Id and RecentId = '" + user.Recent.Id + "')"
-        ),
-        "CurrentPos",
-      ],
-      [
-        db.sqlze.literal(
-          "(Select LastRead from RecentFiles where FileId = File.Id and RecentId = '" + user.Recent.Id + "')"
-        ),
-        "LastRead",
-      ],
+      qryCurrentPos(user.Recent, "File"),
+      [db.sqlze.literal(LastRead), "LastRead"],
     ],
     order: getOrderBy(data.order, "File"),
-    offset: (data.page - 1) * data.items,
-    limit: parseInt(data.items),
+    offset: (data.page - 1) * +data.items,
+    limit: +data.items,
     where: {
       [db.Op.or]: searchs,
     },
@@ -93,30 +75,13 @@ const getFiles = async (user, data, model) => {
   return files;
 };
 
-exports.getFilesList = async (user, res, type, params, model) => {
-  let data = {};
-  let folder;
-
-  try {
-    data = await getFiles(user, { type, ...params }, model);
-    folder = await db.recentFolder.findOne({ where: { FolderId: params.id } });
-  } catch (err) {
-    console.log(err);
-  }
-  let pagedata = {
-    files: data.rows,
-    totalFiles: data.count,
-    totalPages: Math.ceil(data.count / params.items),
-    currentFile: folder?.CurrentFile,
-    name: folder?.Name,
-  };
-  return res ? res.json(pagedata) : pagedata;
-};
-
-exports.getFolders = async (req, res) => {
+const getFolders = async (req, res) => {
   const { filetype, dirid, order, page, items, search } = req.params;
+  let limit = +items || 16;
+
   let favs = req.user.Favorites.map((f) => f.Id).join("','");
-  let favSelect = "Select FolderId from FavoriteFolders where `Folders`.`Id` = FolderId and FavoriteId IN";
+
+  let favSelect = `( Select FolderId from FavoriteFolders where \`Folders\`.\`Id\` = FolderId and FavoriteId IN ('${favs}'))`;
 
   let query = {
     attributes: [
@@ -127,7 +92,7 @@ exports.getFolders = async (req, res) => {
       "FilesType",
       "CreatedAt",
       "FileCount",
-      [db.sqlze.literal(`( ${favSelect} ('${favs}'))`), "isFav"],
+      [db.sqlze.literal(favSelect), "isFav"],
     ],
     where: {
       Name: {
@@ -136,39 +101,26 @@ exports.getFolders = async (req, res) => {
       FilesType: filetype,
     },
     order: getOrderBy(order, "Folders"),
-    offset: (page - 1) * items,
-    limit: parseInt(items),
+    offset: (page - 1) * limit,
+    limit,
   };
+
   if (["mangas", "videos"].includes(filetype)) {
     query.where.DirectoryId = dirid;
   }
+
   let result = await db.folder.findAndCountAll(query);
+
   return res.json({
     files: result.rows,
     totalFiles: result.count,
-    totalPages: Math.ceil(result.count / items),
+    totalPages: Math.ceil(result.count / limit),
   });
 };
 
-exports.getFolderContent = async (req) => {
-  const { id, order, page, items, search } = req.params;
-
-  let result = await db.folder.findAndCountAll({
-    where: {
-      Id: id,
-      Name: {
-        [db.Op.like]: `%${search || ""}%`,
-      },
-    },
-    order: [["Name", order === "nu" ? "ASC" : "DESC"]],
-    offset: (page - 1) * items,
-    limit: parseInt(items),
-  });
-  return {
-    files: result.rows,
-    totalFiles: result.count,
-    totalPages: result.count / items,
-  };
+module.exports = {
+  getFiles,
+  getFolders,
+  getOrderBy,
+  qryCurrentPos,
 };
-
-exports.getOrderBy = getOrderBy;

@@ -23,10 +23,10 @@
   const loadFolders = async (pg) => {
     let { data } = await axios.get(`/api/admin/folders/${pg}/${calRows()}/${filter || ""}`);
 
-    if (data.folders) {
-      let tmp = data.folders[0];
+    if (data.items) {
+      let tmp = data.items[0];
       folderId = tmp ? tmp.Id : "";
-      items = data.folders;
+      items = data.items;
       totalPages = data.totalPages;
       totalItems = data.totalItems;
       page = pg;

@@ -14,7 +14,7 @@ const { PORT } = process.env;
 export default {
   input: "src/main.js",
   output: {
-    sourcemap: false,
+    sourcemap: true,
     format: "iife",
     name: "app",
     file: "public/bundle.js",

@@ -10,11 +10,6 @@ export const Observer = (container) => {
             let item = entry.target;
             if (entry.isIntersecting) {
               item.classList.add("on-view");
-              if (lastOffset < item.offsetLeft) {
-                console.log("right");
-              } else {
-                console.log("left");
-              }
               lastOffset = item.offsetLeft;
             } else {
               item.classList.remove("on-view");

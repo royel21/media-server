@@ -1,8 +1,8 @@
 <script>
-  import { beforeUpdate, afterUpdate, onDestroy, getContext, createEventDispatcher } from "svelte";
+  import { onDestroy, getContext, createEventDispatcher } from "svelte";
   import { PageObserver, disconnectObvrs, scrollImageLoader } from "./Observers";
   import { setfullscreen } from "../pages/Util";
-  import { scrollInView, IndexOfUndefined, getEmptyIndex } from "./Utils";
+  import { scrollInView, getEmptyIndex } from "./Utils";
   import { onTouchStart, onTouchEnd, onTouchMove, default as controls } from "./MangaTouch";
 
   import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
@@ -18,7 +18,6 @@
   let webtoon;
   let progress = `${file.CurrentPos + 1}/${file.Duration}`;
   let images = [file.Duration];
-  let tempImages = [];
   let loading = false;
   let lastfId;
   let imgContainer;
@@ -30,7 +29,6 @@
     imgAbjust: "fill",
   };
   //emptyImage observer
-  let imageObserver;
   let indices = [];
   const loadImages = (pg, toPage, dir = 1) => {
     if (loading) return;
@@ -230,7 +228,7 @@
       <i class="far fa-times-circle popup-msg" data-title="Close" />
     </span>
     <span class="web-toon">
-      <input type="checkbox" name="" id="webtoon" bind:checked={webtoon} />
+      <input type="checkbox" name="webtoon" id="webtoon" bind:checked={webtoon} />
       <label for="webtoon">
         {webtoon ? "List" : "Pages"}
         <i class="fas fa-eye" />
@@ -242,6 +240,7 @@
     <span class="current-page">
       <form action="" on:submit|preventDefault={jumpToPage}>
         <input
+          name="page-selector"
           type="text"
           bind:this={inputPage}
           value={""}

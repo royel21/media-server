@@ -1,39 +1,38 @@
 const Router = require("express").Router();
-const fs = require("fs-extra");
-const path = require("path");
 
 const db = require("../../models");
 
-Router.get("/:page/:items/:filter?", (req, res) => {
-    let { page, items, filter } = req.params;
+Router.get("/:page/:items/:filter?", async (req, res) => {
+  const { page, items, filter } = req.params;
 
-    db.file
-        .findAndCountAll({
-            order: [db.sqlze.literal("REPLACE(File.Name, '[','0')")],
-            attribute: ["Id", "Name", "FullPath", "ViewCount"],
-            offset: ((page || 1) - 1) * items,
-            limit: parseInt(items) || 12,
-            where: {
-                Name: {
-                    [db.Op.like]: "%" + (filter || "") + "%",
-                },
-            },
-            include: { model: db.folder },
-        })
-        .then((files) => {
-            let data = {
-                files: [],
-                totalPages: Math.ceil(files.count / items),
-                totalItems: files.count,
-            };
+  const limit = +items || 12;
 
-            data.files = files.rows.map((f) => f.dataValues);
+  const query = {
+    order: ["Name"],
+    attributes: [
+      "Id",
+      "Name",
+      "FolderId",
+      [db.sqlze.literal("(Select Path from Folders where Id=`File`.`FolderId`)"), "Path"],
+    ],
+    offset: ((+page || 1) - 1) * limit,
+    limit,
+    where: {
+      Name: {
+        [db.Op.like]: `%${filter || ""}%`,
+      },
+    },
+  };
 
-            res.send(data);
-        })
-        .catch((err) => {
-            res.send({ msg: "Server Error 500" });
-        });
+  let files = await db.file.findAndCountAll(query);
+
+  let data = {
+    files: files.rows.map((f) => f.dataValues),
+    totalPages: Math.ceil(files.count / limit),
+    totalItems: files.count,
+  };
+
+  res.send(data);
 });
 
 module.exports = Router;

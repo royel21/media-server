@@ -1,33 +1,42 @@
 <script>
+  import { createEventDispatcher } from "svelte";
   import { PageConfig, updateConfig } from "../User/Stores/PageConfigStore";
   export let User;
-  let title = document.title.split(" ")[0];
+
+  const dispatch = createEventDispatcher();
 
   const Config = { ...$PageConfig };
   const applyChanges = () => {
     updateConfig(Config);
   };
-  const observer = new MutationObserver(([{ target }]) => (title = document.title.split(" ")[0]));
 
-  observer.observe(document.querySelector("title"), {
-    childList: true,
-  });
+  const logout = () => {
+    if (User.role.includes("Administrator")) {
+      dispatch("click");
+    }
+  };
 </script>
 
-<label id="user-label" class={User.role} for="show-config">
+<label id="user-label" class={User.role} for="show-config" on:click={logout} title="show-config">
   <i class="fas fa-user-cog" />
   <span class="nav-title">{User.username}</span>
 </label>
-<input type="checkbox" name="" id="show-config" />
-<div id="user-config" class={User.role.includes("User") ? "user-config" : "admin-config"}>
-  <div id="sep"><span on:click> <i class="fas fa-sign-out-alt" /> Log out </span></div>
-  {#if !User.role.includes("Administrator")}
+{#if !User.role.includes("Administrator")}
+  <input type="checkbox" name="" id="show-config" title="show-config" />
+  <div id="user-config" class={User.role.includes("User") ? "user-config" : "admin-config"}>
+    <div id="sep"><span on:click> <i class="fas fa-sign-out-alt" /> Log out </span></div>
+
     <div id="config-content">
       <div class="input-group">
         <div class="input-group-prepend">
           <label for="orderby" class="input-group-text">Sort By:</label>
         </div>
-        <select id="orderby" class="form-control fa" bind:value={Config.order[document.title.split(" ")[0]]}>
+        <select
+          id="orderby"
+          name="select-sort"
+          class="form-control fa"
+          bind:value={Config.order[document.title.split(" ")[0]]}
+        >
           <option value="nu">&#xf15d; Name</option>
           <option value="nd">&#xf15e; Name</option>
           <option value="du">&#xf162; Date</option>
@@ -38,15 +47,23 @@
         <div class="input-group-prepend">
           <label for="items" class="input-group-text">File per Page:</label>
         </div>
-        <input id="items" type="number" min="0" max="500" bind:value={Config.items} class="form-control" />
+        <input
+          id="items"
+          name="item-number"
+          type="number"
+          min="0"
+          max="500"
+          bind:value={Config.items}
+          class="form-control"
+        />
         <span id="fpp-tips">0 = auto, max 500</span>
       </div>
       <div class="bottom-controls">
         <span id="btn-save" class="btn" on:click={applyChanges}>Save</span>
       </div>
     </div>
-  {/if}
-</div>
+  </div>
+{/if}
 
 <style>
   #sep {

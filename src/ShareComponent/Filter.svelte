@@ -41,8 +41,9 @@
   #filter-control {
     position: relative;
     flex-shrink: 1;
-    width: 250px;
+    width: 100%;
     pointer-events: all;
+    max-width: 350px;
   }
   #filter-control > * {
     height: 32px;

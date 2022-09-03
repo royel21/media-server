@@ -24,8 +24,8 @@
     let rows = calRows(".list-container");
     let { data } = await axios.get(`/api/admin/folders/files/${folderId}/${pg}/${rows}/${filter || ""}`);
 
-    if (data.files) {
-      items = data.files;
+    if (data.items) {
+      items = data.items;
       totalPages = data.totalPages;
       totalItems = data.totalItems;
       page = pg;

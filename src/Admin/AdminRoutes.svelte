@@ -11,7 +11,7 @@
     { title: "Files", path: "/files", class: "file" },
     { title: "Folders", path: "/folders", class: "folder" },
     {
-      title: "Content Manager",
+      title: "Manager",
       path: "/content-manager/tab-1",
       class: "sitemap",
     },

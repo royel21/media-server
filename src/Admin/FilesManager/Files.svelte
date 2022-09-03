@@ -118,9 +118,9 @@
     <table class="table table-bordered table-dark">
       <thead>
         <tr>
-          <td>Actions</td>
-          <td>Name</td>
-          <td>Path</td>
+          <th>Actions</th>
+          <th>Name</th>
+          <th>Path</th>
         </tr>
       </thead>
       <tbody>
@@ -129,14 +129,14 @@
             <td colspan="3">No Files Found</td>
           </tr>
         {:else}
-          {#each items as { Id, Name, Type, Folder }}
+          {#each items as { Id, Name, Path }}
             <tr id={Id} on:click={itemClick}>
               <td>
                 <i class="fas fa-edit" />
                 <i class="fas fa-trash-alt" />
               </td>
               <td>{Name}</td>
-              <td>{Folder.Path}</td>
+              <td>{Path}</td>
             </tr>
           {/each}
         {/if}

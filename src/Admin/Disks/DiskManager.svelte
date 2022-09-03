@@ -9,6 +9,34 @@
   }
 </script>
 
+<div class="card bg-dark text-light admin-manager">
+  <div class="nav nav-tabs controls">
+    <div class="nav-item">
+      <input type="radio" bind:group={tab} value="tab-1" id="tab1" />
+      <label class="nav-link" for="tab1">
+        <i class="fas fa-folder" />
+        <span id="dirs">Directories</span>
+      </label>
+    </div>
+    <div class="nav-item">
+      <input type="radio" bind:group={tab} value="tab-2" id="tab2" />
+      <label class="nav-link" for="tab2">
+        <div class="fas fa-hdd" />
+        <span id="disks">Server</span>
+      </label>
+    </div>
+  </div>
+  {#if tab.includes("tab-1")}
+    <div id="tabs-content" in:fly={{ y: 200, duration: 200 }} out:fly={{ y: 200, duration: 200 }}>
+      <Directories />
+    </div>
+  {:else}
+    <div id="tabs-content" in:fly={{ y: 200, duration: 200 }} out:fly={{ y: 200, duration: 200 }}>
+      <Tree />
+    </div>
+  {/if}
+</div>
+
 <style>
   .admin-manager {
     position: relative;
@@ -75,37 +103,3 @@
     overflow-x: hidden;
   }
 </style>
-
-<div class="card bg-dark text-light admin-manager">
-  <div class="nav nav-tabs controls">
-    <div class="nav-item">
-      <input type="radio" bind:group={tab} value="tab-1" id="tab1" />
-      <label class="nav-link" for="tab1">
-        <i class="fas fa-folder" />
-        <span id="dirs">Directories</span>
-      </label>
-    </div>
-    <div class="nav-item">
-      <input type="radio" bind:group={tab} value="tab-2" id="tab2" />
-      <label class="nav-link" for="tab2">
-        <div class="fas fa-hdd" />
-        <span id="disks">Server</span>
-      </label>
-    </div>
-  </div>
-  {#if tab.includes('tab-1')}
-    <div
-      id="tabs-content"
-      in:fly={{ y: 200, duration: 200 }}
-      out:fly={{ y: 200, duration: 200 }}>
-      <Directories />
-    </div>
-  {:else}
-    <div
-      id="tabs-content"
-      in:fly={{ y: 200, duration: 200 }}
-      out:fly={{ y: 200, duration: 200 }}>
-      <Tree />
-    </div>
-  {/if}
-</div>

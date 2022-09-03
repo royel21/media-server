@@ -1,5 +1,5 @@
 <script>
-  import { onMount, createEventDispatcher } from "svelte";
+  import { createEventDispatcher } from "svelte";
   import axios from "axios";
   export let items = [];
   export let type;
@@ -7,32 +7,39 @@
 
   const dispatch = createEventDispatcher();
 
-  const expandFolder = event => {
+  const expandFolder = async (event) => {
     let li = event.target.closest("li");
-    let item = items.find(d => d.Id.toString() === li.id);
+    let item = items.find((d) => d.Id.toString() === li.id);
     if (item.Content.length === 0) {
-      axios
-        .post("/api/admin/directories/Content", { Path: item.Path })
-        .then(({ data }) => {
-          item.Content = data.data;
-          items = items;
-        });
+      const { data } = await axios.post("/api/admin/directories/Content", { Path: item.Path });
+      item.Content = data.data;
+      items = items;
     } else {
       item.Content = [];
       items = items;
     }
   };
-  const scanDirectory = event => {
+  const scanDirectory = (event) => {
     let li = event.target.closest("li");
-    item = items.find(d => d.Id.toString() === li.id);
+    item = items.find((d) => d.Id.toString() === li.id);
     dispatch("scanDir", item);
   };
-
-  const hideModal = () => {
-    item = {};
-    showModal = false;
-  };
 </script>
+
+{#each items as { Content, Id, Name }}
+  <li id={Id} class="tree-item">
+    <span class="dir" on:click={scanDirectory}>
+      <i class={`fa fa-${type} mr-1`} />
+      {Name}
+    </span>
+    <span class="caret" on:click={expandFolder}>▶</span>
+    {#if Content.length > 0}
+      <ul class="tree-node">
+        <svelte:self type="folder" items={Content} on:scanDir />
+      </ul>
+    {/if}
+  </li>
+{/each}
 
 <style>
   .tree-item {
@@ -82,18 +89,3 @@
     background-color: #007bff;
   }
 </style>
-
-{#each items as { Content, Id, Name }}
-  <li id={Id} class="tree-item">
-    <span class="dir" on:click={scanDirectory}>
-      <i class={`fa fa-${type} mr-1`} />
-      {Name}
-    </span>
-    <span class="caret" on:click={expandFolder}>▶</span>
-    {#if Content.length > 0}
-      <ul class="tree-node">
-        <svelte:self type="folder" items={Content} on:scanDir />
-      </ul>
-    {/if}
-  </li>
-{/each}
