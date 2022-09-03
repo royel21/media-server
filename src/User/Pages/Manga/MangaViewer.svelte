@@ -16,7 +16,7 @@
   const socket = getContext("socket");
   const dispatch = createEventDispatcher();
 
-  let webtoon = localStorage.get("webtoon");
+  let webtoon = localStorage.getItem("webtoon") === "true";
   let progress = `${file.CurrentPos + 1}/${file.Duration}`;
   let images = [file.Duration];
   let loading = false;
@@ -171,7 +171,9 @@
     disconnectObvrs(imgContainer);
   }
 
-  $: localStorage.set("webtoon", webtoon);
+  $: {
+    localStorage.setItem("webtoon", webtoon);
+  }
 
   controls.prevPage = prevPage;
   controls.nextPage = nextPage;
