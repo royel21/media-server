@@ -16,7 +16,7 @@
   const socket = getContext("socket");
   const dispatch = createEventDispatcher();
 
-  let webtoon;
+  let webtoon = localStorage.get("webtoon");
   let progress = `${file.CurrentPos + 1}/${file.Duration}`;
   let images = [file.Duration];
   let loading = false;
@@ -113,10 +113,6 @@
 
   SkipForward.action = nextPage;
   SkipBack.action = prevPage;
-  const onCancelContextM = (e) => {
-    e.preventDefault();
-    return false;
-  };
 
   const setPage = (pg) => {
     file.CurrentPos = pg;
@@ -174,6 +170,8 @@
     isObserver = false;
     disconnectObvrs(imgContainer);
   }
+
+  $: localStorage.set("webtoon", webtoon);
 
   controls.prevPage = prevPage;
   controls.nextPage = nextPage;
