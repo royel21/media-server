@@ -322,7 +322,7 @@
 
     #play-list.move {
       top: 56px;
-      bottom: 43px;
+      bottom: 31px;
     }
   }
 </style>
