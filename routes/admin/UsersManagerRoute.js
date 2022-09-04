@@ -22,7 +22,7 @@ const validate = async (req, remove) => {
 
   const result = { user, isValid: true };
   // we have only one Admin
-  if (adminsCount) {
+  if (user.Role.includes("Administrator") && adminsCount) {
     // can't be remove, deactivate or change role
     result.isValid = !(remove || /admin/gi.test(Role) || /Active/gi.test(State));
   }
