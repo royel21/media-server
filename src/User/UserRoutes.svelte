@@ -18,6 +18,7 @@
     { title: "Favorites", path: "/favorites", class: "heart" },
   ];
   FavoritesStores.set(getContext("User").favorites);
+  document.title = "Media Server";
 </script>
 
 <Router>
