@@ -126,6 +126,7 @@
   });
 
   const onResetFiles = async () => {
+    await axios.get(`/api/files/reset-recents/${folder.Id}`);
     await loadContent(page, filter, id, $PageConfig, type);
   };
 
