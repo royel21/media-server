@@ -16,6 +16,8 @@
       class: "sitemap",
     },
   ];
+
+  document.title = "Content Manager";
 </script>
 
 <Router>

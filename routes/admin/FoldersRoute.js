@@ -12,7 +12,7 @@ const getData = async ({ params }, res) => {
 
   const query = {
     attributes: ["Id", "Name", "Type"],
-    order: [db.sqlze.literal(`CAST(${table}.Name as unsigned), REPLACE(${table}.Name, '[','0')`)], // used for natural ordering
+    order: [db.sqlze.literal(`REPLACE(${table}.Name, '[','0'), CAST(${table}.Name as unsigned)`)], // used for natural ordering
     where: {
       [db.Op.and]: {
         Name: { [db.Op.like]: `%${filter || ""}%` },

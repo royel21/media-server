@@ -51,11 +51,17 @@
         hideModal();
       }
     });
+
+    socket.on("scan-finish", (data) => {
+      let liItem = document.body.querySelector(`#${data.id} .fas`);
+      if (liItem) liItem.classList.remove("fa-spin");
+    });
   });
 
   onDestroy(() => {
     delete socket._callbacks["$folder-renamed"];
     delete socket._callbacks["$folder-removed"];
+    delete socket._callbacks["$scan-finish"];
   });
 
   const onFilter = (flt) => {
@@ -88,6 +94,8 @@
         showModal = true;
       } else {
         socket.emit("scan-dir", { Id: folder.Id, isFolder: true });
+        let liItem = document.body.querySelector(`#${folder.Id} .fas`);
+        if (liItem) liItem.classList.add("fa-spin");
       }
     }
   };

@@ -163,6 +163,7 @@ module.exports.renameFile = async ({ Id, Name }) => {
       }
     } catch (err) {
       console.log(err);
+      msg = err.toString();
     }
   } else {
     msg = "File not found on db";

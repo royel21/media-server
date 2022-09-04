@@ -39,6 +39,8 @@
         file.Name = data.Name;
         items = items;
         hideModal();
+      } else {
+        modalType.error = data.msg;
       }
     });
 
@@ -51,6 +53,8 @@
           loadFiles(page);
         }
         hideModal();
+      } else {
+        modalType.error = data.msg;
       }
     });
   });

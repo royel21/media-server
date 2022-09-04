@@ -22,26 +22,32 @@ if (path.join(ThumbnailPath, "Folder")) {
 }
 
 const rmOrphanFiles = async (Id, isFolder, folder) => {
-  if (isFolder) {
-    const files = await folder.getFiles();
-    for (const file of files) {
+  if (folder) {
+    for (const file of folder.Files) {
       if (folder.Path && file.Name) {
         if (!fs.existsSync(path.join(folder.Path, file.Name))) {
-          await file.destroy();
+          try {
+            await file.destroy();
+          } catch (error) {
+            console.log(folder.Path, file.Name, error.toString());
+          }
         }
       }
     }
   } else {
     const folders = await db.folder.findAll({
       where: isFolder ? { Id } : { DirectoryId },
-      include: { model: db.file, attributes: ["Name"] },
+      include: { model: db.file, attributes: ["Id", "Name"] },
     });
-
     for (const f of folders) {
       if (f.IsNoEmpty) {
-        rmOrphanFiles(null, true, f);
+        await rmOrphanFiles(null, true, f);
       } else {
-        await f.destroy();
+        try {
+          await f.destroy();
+        } catch (error) {
+          console.log(f.Name, error.toString());
+        }
       }
     }
   }
@@ -147,6 +153,7 @@ const scanFolder = async (curfolder, files) => {
 
 const scanDirectory = async ({ id, dir, isFolder }) => {
   DirectoryId = id;
+
   const fis = WinDrive.ListFilesRO(dir);
   let folder = WinDrive.ListFiles(dir, { oneFile: true });
   folder.Path = dir;
