@@ -49,9 +49,12 @@
     socket = socketClient("/");
     setContext("socket", socket);
     setContext("User", user);
-    socket.on("error", (error) => {
+    socket.io.on("error", (error) => {
       console.log(error);
     });
+
+    socket.on("reload", () => logout());
+
     setContext("logout", logout);
   }
 </script>

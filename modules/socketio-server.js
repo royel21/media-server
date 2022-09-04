@@ -12,6 +12,7 @@ module.exports = (server, sessionMeddle) => {
 
   io.on("connection", async (socket) => {
     let isAuth = socket.request.session.passport;
+
     if (isAuth) {
       const user = await db.user.findOne({
         where: { Name: isAuth.user },
@@ -58,4 +59,8 @@ module.exports = (server, sessionMeddle) => {
       });
     }
   });
+
+  setTimeout(() => {
+    io.sockets.emit("reload");
+  }, 2000);
 };

@@ -20,7 +20,6 @@
   export let title = "";
 
   const socket = getContext("socket");
-  const logout = getContext("logout");
   const baseData = { files: [], totalPages: 0, totalFiles: 0 };
   let pageData = baseData;
   let selected = 0;
@@ -51,8 +50,6 @@
         }
         lastRead = data.currentFile;
         selected = pageData.files.findIndex((f) => f.Id === lastRead) || 0;
-      } else {
-        logout();
       }
     } catch (error) {
       console.log(error);
