@@ -57,10 +57,8 @@ module.exports = (server, sessionMeddle) => {
         mloader.removeZip(socket.id);
         console.log("disconnected: ", socket.id);
       });
+    } else {
+      io.sockets.emit("reload");
     }
   });
-
-  setTimeout(() => {
-    io.sockets.emit("reload");
-  }, 2000);
 };
