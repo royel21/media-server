@@ -29,6 +29,7 @@ const getData = async ({ params }, res) => {
     result = await db.file.findAndCountAll(query);
   } else {
     query.attributes.push("Path"); // add Path to folder query
+    query.where[db.Op.and].Path = { [db.Op.like]: `%${filter || ""}%` };
     result = await db.folder.findAndCountAll(query);
   }
 
