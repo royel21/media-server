@@ -11,7 +11,7 @@ const getData = async ({ params }, res) => {
   let table = folderId ? "File" : "Folders";
 
   const query = {
-    attributes: ["Id", "Name", "Type"],
+    attributes: ["Id", "Name", "Type", "Cover"],
     order: [db.sqlze.literal(`REPLACE(${table}.Name, '[','0'), CAST(${table}.Name as unsigned)`)], // used for natural ordering
     where: {
       [db.Op.and]: {

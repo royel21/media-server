@@ -5,7 +5,8 @@
         "build": "rollup -c",
         "dev": "rollup -c -w",
         "express": "nodemon app",
-        "production": "node app"
+        "production": "node app",
+        "update-remote": "powershell ssh -t royel@10.0.0.4 \"bash -s '<' update.sh'&' sudo pm2 restart all\""
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^22.0.2",

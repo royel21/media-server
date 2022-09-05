@@ -13,19 +13,21 @@
   export let page = 1;
   export let filter = "";
   export let folderId;
+
+  let fimage;
   let totalPages = 1;
   let totalItems = 0;
   let items = [];
   let folder = {};
   let showModal = false;
   let modalType = {};
+  let showImage;
 
   const loadFolders = async (pg) => {
     let { data } = await axios.get(`/api/admin/folders/${pg}/${calRows()}/${filter || ""}`);
-
     if (data.items) {
       let tmp = data.items[0];
-      folderId = tmp ? tmp.Id : "";
+      folderId = tmp?.Id;
       items = data.items;
       totalPages = data.totalPages;
       totalItems = data.totalItems;
@@ -79,8 +81,10 @@
 
   const itemClick = ({ target }) => {
     let el = target;
+    folderId = el.id || el.closest("li").id;
+
     if (el.tagName === "LI") {
-      folderId = el.id;
+      folder = items.find((f) => f.Id === folderId);
       dispatch("folderid", folderId);
     } else {
       folder = items.find((f) => f.Id === el.closest("li").id);
@@ -119,10 +123,24 @@
     showModal = false;
     folder = {};
   };
+
+  const onShowImage = (e) => {
+    if (e.type === "mouseenter") {
+      showImage = items.find((i) => i.Id === e.currentTarget.id)?.Cover;
+    } else {
+      showImage = false;
+    }
+  };
 </script>
 
 {#if showModal}
   <Modal file={folder} {modalType} on:submit={handleSubmit} on:click={hideModal} />
+{/if}
+
+{#if showImage}
+  <div class="thumbnail">
+    <img src={showImage} alt="folder" />
+  </div>
 {/if}
 
 <ItemList
@@ -133,7 +151,22 @@
   {totalPages}
   {totalItems}
   {filter}
+  {onShowImage}
   on:filter={onFilter}
   on:gotopage={gotopage}
   on:click={itemClick}
 />
+
+<style>
+  .thumbnail {
+    position: absolute;
+    right: 18px;
+    top: 47px;
+    pointer-events: none;
+    z-index: 99;
+  }
+  .thumbnail img {
+    width: 160px;
+    object-fit: fill;
+  }
+</style>
