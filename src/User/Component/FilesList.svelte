@@ -220,6 +220,7 @@
   #info {
     padding: 10px;
     text-align: center;
+    padding-top: 0px;
   }
   #img-info {
     padding: 5px;
@@ -229,7 +230,7 @@
   }
   #info h4 {
     font-family: "Comic Sans MS", cursive;
-    font-size: 2.4rem;
+    font-size: 2.2rem;
   }
 
   @media screen and (max-width: 420px) {
@@ -238,6 +239,13 @@
     }
     .scroll-container {
       padding-top: 70px;
+    }
+    #info h4 {
+      font-family: "Comic Sans MS", cursive;
+      font-size: 1.2rem;
+    }
+    #info img {
+      max-height: 180px;
     }
   }
 </style>
