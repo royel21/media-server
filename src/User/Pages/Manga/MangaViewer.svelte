@@ -194,11 +194,11 @@
   </span>
   <div class="viewer">
     <div
-      on:touchstart={onTouchStart}
-      on:touchend={onTouchEnd}
+      on:touchstart|passive={onTouchStart}
+      on:touchend|passive={onTouchEnd}
       on:mousedown={onTouchStart}
       on:mouseup={onTouchEnd}
-      on:touchmove={onTouchMove}
+      on:touchmove|passive={onTouchMove}
       class={"img-current" + (webtoon ? " webtoon-img" : "")}
       bind:this={imgContainer}
       style="width: {config.width}%;"

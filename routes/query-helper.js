@@ -1,4 +1,5 @@
 const db = require("../models");
+const { getFilter } = require("./utils");
 
 const qryCurrentPos = (Recent, table) => [
   db.sqlze.literal(
@@ -77,6 +78,8 @@ const getFiles = async (user, data, model) => {
 
 const getFolders = async (req, res) => {
   const { filetype, dirid, order, page, items, search } = req.params;
+  let filterTerm = search || "";
+
   let limit = +items || 16;
 
   let favs = req.user.Favorites.map((f) => f.Id).join("','");
@@ -95,9 +98,7 @@ const getFolders = async (req, res) => {
       [db.sqlze.literal(favSelect), "isFav"],
     ],
     where: {
-      Name: {
-        [db.Op.like]: `%${search || ""}%`,
-      },
+      Name: getFilter(filterTerm),
       FilesType: filetype,
     },
     order: getOrderBy(order, "Folders"),

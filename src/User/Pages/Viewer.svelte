@@ -22,11 +22,16 @@
   let files = [];
   let observer;
   let playList = [];
-  let file = { Type: "" };
+  let file = { Name: "", Type: "", Cover: "" };
   let fileName;
   let viewer;
   let fileIndex = 1;
   let filters = { filter: "" };
+
+  const getName = (f) => {
+    let part = f.Cover.replace(".jpg", "").split("/").slice(2, 4)?.join("/");
+    return f.Name.length < 5 ? part : f.Name;
+  };
 
   onMount(async () => {
     let { data } = await axios.post(`/api/viewer/folder`, { id: folderId });
@@ -49,9 +54,7 @@
     window.addEventListener("beforeunload", saveFile);
     return () => {
       window.removeEventListener("beforeunload", saveFile);
-      if (observer) {
-        observer.disconnect();
-      }
+      observer?.disconnect();
     };
   });
 
@@ -63,7 +66,7 @@
   const selectFile = ({ target: { id } }) => {
     saveFile();
     if (filters.filter) {
-      playList = files.filter((f) => f.Name.toLocaleLowerCase().includes(filters.filter.toLocaleLowerCase()));
+      playList = files.filter((f) => f.Name.contains(filters.filter));
     } else {
       playList = files;
     }
@@ -72,12 +75,13 @@
   };
 
   const changeFile = (dir = 0) => {
-    let temp = playList.findIndex((f) => f.Id === fileId) + dir;
-
-    if (fileIndex > -1 && fileIndex < playList.length - 1) {
-      fileIndex = temp;
-      saveFile();
-      navigate(`/${basePath}/${playList[fileIndex].Id}`);
+    if (playList.length) {
+      let temp = playList.findIndex((f) => f.Id === fileId) + dir;
+      if (temp > -1 && temp < playList.length) {
+        fileIndex = temp;
+        saveFile();
+        navigate(`/${basePath}/${playList[fileIndex].Id}`);
+      }
     }
   };
 
@@ -141,7 +145,7 @@
 
 <div class="viewer" bind:this={viewer} on:keydown={handleKeyboard}>
   <div class="f-name" bind:this={fileName} class:nomenu={$ToggleMenu}>
-    <span>{file.Name}</span>
+    <span>{getName(file)}</span>
   </div>
   <span class="info" class:top={file.Type.includes("Video")}>
     <span id="files-prog">

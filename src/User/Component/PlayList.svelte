@@ -92,7 +92,7 @@
   }
   $: {
     if (filters.filter) {
-      filtered = files.filter((f) => f.Name.toLocaleLowerCase().includes(filters.filter.toLocaleLowerCase()));
+      filtered = files.filter((f) => f.Name.contains(filters.filter));
     } else {
       filtered = files;
     }

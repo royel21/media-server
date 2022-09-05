@@ -18,6 +18,7 @@ const getFiles = async ({ user, body }, res, type) => {
   });
 
   res.send({
+    Name: table.Name,
     files: table.Files.map((f) => f.dataValues),
     config: UserConfig.dataValues.Config,
   });

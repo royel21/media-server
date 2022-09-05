@@ -8,11 +8,6 @@
   export let page = 1;
   export let totalPages = 0;
   export let totalItems = 0;
-  export let onShowImage;
-
-  const onShow = (e) => {
-    onShowImage && onShowImage(e);
-  };
 </script>
 
 <div id={title} class="file-list col-6">
@@ -28,12 +23,12 @@
         {#each items as { Id, Name, Type, Path }}
           <li
             id={Id}
-            title={Path || Name}
             class="list-group-item"
             class:active={folderId === Id}
             on:click
-            on:mouseenter={(e) => onShow(e)}
-            on:mouseleave={(e) => onShow(e)}
+            on:mouseenter
+            on:mouseleave
+            on:mousemove
           >
             {#if Type.includes("Folder")}
               <i class="fas fa-sync" />

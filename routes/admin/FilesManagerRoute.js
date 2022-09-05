@@ -1,9 +1,11 @@
 const Router = require("express").Router();
 
 const db = require("../../models");
+const { getFilter } = require("../utils");
 
 Router.get("/:page/:items/:filter?", async (req, res) => {
   const { page, items, filter } = req.params;
+  let filterTerm = filter || "";
 
   const limit = +items || 12;
 
@@ -18,9 +20,7 @@ Router.get("/:page/:items/:filter?", async (req, res) => {
     offset: ((+page || 1) - 1) * limit,
     limit,
     where: {
-      Name: {
-        [db.Op.like]: `%${filter || ""}%`,
-      },
+      Name: getFilter(filterTerm),
     },
   };
 

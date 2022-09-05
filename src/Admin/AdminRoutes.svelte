@@ -17,7 +17,7 @@
     },
   ];
 
-  document.title = "Content Manager";
+  document.title = process.env.AdminTitle || "Content Manager";
 </script>
 
 <Router>

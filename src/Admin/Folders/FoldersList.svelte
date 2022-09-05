@@ -22,6 +22,7 @@
   let showModal = false;
   let modalType = {};
   let showImage;
+  let fullPathPos = {};
 
   const loadFolders = async (pg) => {
     let { data } = await axios.get(`/api/admin/folders/${pg}/${calRows()}/${filter || ""}`);
@@ -125,10 +126,14 @@
   };
 
   const onShowImage = (e) => {
-    if (e.type === "mouseenter") {
-      showImage = items.find((i) => i.Id === e.currentTarget.id)?.Cover;
-    } else {
-      showImage = false;
+    const found = items.find((i) => i.Id === e.currentTarget.id);
+    showImage = e.type.includes("mouseenter") ? found : false;
+  };
+
+  const showPath = (e) => {
+    if (showImage) {
+      fullPathPos.x = e.pageX - 10;
+      fullPathPos.y = e.pageY - 25;
     }
   };
 </script>
@@ -139,8 +144,9 @@
 
 {#if showImage}
   <div class="thumbnail">
-    <img src={showImage} alt="folder" />
+    <img src={showImage.Cover} alt="folder" />
   </div>
+  <span id="f-path" style={`left: ${fullPathPos.x}px; top:${fullPathPos.y}px;`}>{showImage.Path}</span>
 {/if}
 
 <ItemList
@@ -155,6 +161,9 @@
   on:filter={onFilter}
   on:gotopage={gotopage}
   on:click={itemClick}
+  on:mouseenter={onShowImage}
+  on:mouseleave={onShowImage}
+  on:mousemove={showPath}
 />
 
 <style>
@@ -162,11 +171,27 @@
     position: absolute;
     right: 18px;
     top: 47px;
-    pointer-events: none;
     z-index: 99;
+    pointer-events: none;
+    padding: 0px 1px;
+    border-radius: 0.25rem;
+    border: 1px solid black;
+    background-color: black;
   }
   .thumbnail img {
-    width: 160px;
+    width: 180px;
     object-fit: fill;
+  }
+  #f-path {
+    display: inline-block;
+    position: absolute;
+    z-index: 99;
+    background-color: rgb(88, 86, 86);
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    padding: 1px 4px;
+    border-radius: 0.25rem;
+    border: 1px solid white;
   }
 </style>

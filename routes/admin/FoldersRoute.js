@@ -1,8 +1,10 @@
 const Router = require("express").Router();
 const db = require("../../models");
+const { getFilter } = require("../utils");
 
 const getData = async ({ params }, res) => {
   const { page, items, filter, folderId } = params;
+  let filterTerm = filter || "";
 
   // calculate the start and end of the query check sql limit
   let limit = +items || 10;
@@ -12,11 +14,9 @@ const getData = async ({ params }, res) => {
 
   const query = {
     attributes: ["Id", "Name", "Type", "Cover"],
-    order: [db.sqlze.literal(`REPLACE(${table}.Name, '[','0'), CAST(${table}.Name as unsigned)`)], // used for natural ordering
+    order: [db.sqlze.literal(`CAST(${table}.Name as unsigned), REPLACE(${table}.Name, '[','0')`)], // used for natural ordering
     where: {
-      [db.Op.and]: {
-        Name: { [db.Op.like]: `%${filter || ""}%` },
-      },
+      Name: getFilter(filterTerm),
     },
     offset,
     limit,
@@ -29,7 +29,7 @@ const getData = async ({ params }, res) => {
     result = await db.file.findAndCountAll(query);
   } else {
     query.attributes.push("Path"); // add Path to folder query
-    query.where[db.Op.and].Path = { [db.Op.like]: `%${filter || ""}%` };
+    query.where.Path = getFilter(filterTerm);
     result = await db.folder.findAndCountAll(query);
   }
 

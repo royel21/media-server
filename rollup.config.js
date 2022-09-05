@@ -6,10 +6,17 @@ import { terser } from "rollup-plugin-terser";
 import css from "rollup-plugin-css-only";
 import dev from "rollup-plugin-dev";
 import dotenv from "dotenv";
+import replace from "@rollup/plugin-replace";
 dotenv.config();
 
 const production = !process.env.ROLLUP_WATCH;
 const { PORT } = process.env;
+
+const values = {};
+
+for (const [k, v] of Object.entries(process.env)) {
+  values[`process.env.${k}`] = `'${v}'`;
+}
 
 export default {
   input: "src/main.js",
@@ -27,6 +34,11 @@ export default {
       dedupe: ["svelte"],
     }),
     commonjs(),
+    replace({
+      include: ["src/**/*.ts", "src/**/*.svelte"],
+      preventAssignment: true,
+      values,
+    }),
 
     // In dev mode, call `npm run express` once
     // the bundle has been generated
