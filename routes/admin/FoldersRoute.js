@@ -14,10 +14,8 @@ const getData = async ({ params }, res) => {
 
   const query = {
     attributes: ["Id", "Name", "Type", "Cover"],
-    order: [db.sqlze.literal(`CAST(${table}.Name as unsigned), REPLACE(${table}.Name, '[','0')`)], // used for natural ordering
-    where: {
-      Name: getFilter(filterTerm),
-    },
+    order: [db.sqlze.literal(`REPLACE(${table}.Name, '[','0')`)], // used for natural ordering
+    where: {},
     offset,
     limit,
   };
@@ -26,6 +24,8 @@ const getData = async ({ params }, res) => {
   // if contain folderId this is a file query we will need the folderId
   if (folderId) {
     query.where.FolderId = folderId;
+    query.where.Name = getFilter(filterTerm);
+    query.order = [db.sqlze.literal(`CAST(${table}.Name as unsigned), REPLACE(${table}.Name, '[','0')`)];
     result = await db.file.findAndCountAll(query);
   } else {
     query.attributes.push("Path"); // add Path to folder query

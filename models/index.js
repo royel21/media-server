@@ -6,6 +6,7 @@ const { USERNAME, HOST, HOST2, DB_USER, PASSWORD, DB } = process.env;
 
 const config = require("./config");
 config.host = USERNAME === "rconsoro" ? HOST : HOST2;
+config.logging = console.log;
 
 const sequelize = new Sequelize(DB, DB_USER, PASSWORD, config);
 
