@@ -1,6 +1,5 @@
 <script>
   import axios from "axios";
-  import { onMount } from "svelte";
   import { navigate } from "svelte-routing";
 
   let files = [];
@@ -49,20 +48,6 @@
       });
     }, 100);
   };
-
-  const resize = () => {
-    if (container) {
-      let tFile = document.querySelector(".file");
-      if (tFile) count = container.offsetWidth / tFile.offsetWidth;
-    }
-  };
-  onMount(() => {
-    resize();
-    window.onresize = resize;
-    return () => {
-      window.onresize = null;
-    };
-  });
 </script>
 
 <div class="content">

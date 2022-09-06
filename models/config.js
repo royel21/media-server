@@ -13,5 +13,6 @@ module.exports = {
   },
   dialectOptions: {
     timezone: "Etc/GMT-4",
+    multipleStatements: true,
   },
 };

@@ -102,6 +102,7 @@
       clearTimeout(tout);
     }, 50);
   }
+
   $: {
     let start = (page - 1) * filePerPage;
     if (start < filtered.length) {
@@ -117,7 +118,15 @@
     <i class="fas fa-list" />
   </span>
 </label>
-
+<div
+  id="p-bg"
+  class:hidelist={!hideList}
+  on:click|stopPropagation|preventDefault={() => {
+    hideList = true;
+    console.log("toggle");
+  }}
+  tabindex="-1"
+/>
 <input name="show-hide-play-list" type="checkbox" id="p-hide" bind:checked={hideList} />
 <div id="play-list" class:move={!$ToggleMenu}>
   <div id="v-filter">
@@ -149,6 +158,20 @@
 </div>
 
 <style>
+  #p-bg.hidelist {
+    display: block;
+  }
+
+  #p-bg {
+    display: none;
+    position: absolute;
+    top: 36px;
+    right: 220px;
+    bottom: 34px;
+    width: 100%;
+    z-index: 999;
+  }
+
   label {
     margin: 0;
   }

@@ -10,11 +10,13 @@ const getData = async ({ params }, res) => {
   let limit = +items || 10;
   let offset = (page - 1) * limit || 0;
 
-  let table = folderId ? "File" : "Folders";
-
   const query = {
     attributes: ["Id", "Name", "Type", "Cover"],
-    order: [db.sqlze.literal(`REPLACE(${table}.Name, '[','0')`)], // used for natural ordering
+    order: [
+      db.sqlze.literal(
+        `Name REGEXP '^\\d*[^\\da-z&\\.\\\' \\-\\"\\!\\@\\#\\$\\%\\^\\*\\(\\)\\;\\:\\\\,\\?\\/\\~\\\`\\|\\_\\-]' DESC, Name + 0, Name`
+      ),
+    ], // used for natural ordering
     where: {},
     offset,
     limit,
@@ -25,7 +27,6 @@ const getData = async ({ params }, res) => {
   if (folderId) {
     query.where.FolderId = folderId;
     query.where.Name = getFilter(filterTerm);
-    query.order = [db.sqlze.literal(`CAST(${table}.Name as unsigned), REPLACE(${table}.Name, '[','0')`)];
     result = await db.file.findAndCountAll(query);
   } else {
     query.attributes.push("Path"); // add Path to folder query
