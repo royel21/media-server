@@ -10,7 +10,11 @@ const qryCurrentPos = (Recent, table) => [
 
 const getOrderBy = (orderby, table = "") => {
   let desc = /nd/.test(orderby) ? "DESC" : "";
-  let byName = db.sqlze.literal(`CAST(${table}.Name as unsigned) ${desc}, REPLACE(${table}.Name, '[','0') ${desc}`);
+  let byName = db.sqlze.literal(`REPLACE(${table}.Name, '[','0') ${desc}`);
+
+  if (table === "File") {
+    byName = db.sqlze.literal(`CAST(${table}.Name as unsigned) ${desc}, REPLACE(${table}.Name, '[','0') ${desc}`);
+  }
 
   const data = {
     du: ["CreatedAt", "DESC"],
