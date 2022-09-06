@@ -32,6 +32,7 @@
         }
       });
   };
+  document.title = "Media Server";
 </script>
 
 <div id="login-container">
