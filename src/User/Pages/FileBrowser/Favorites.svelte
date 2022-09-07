@@ -5,12 +5,13 @@
 
   export let page = 1;
   export let filter = "";
-  export let id = $FavoritesStores[0].Id;
+  export let id;
+  let favId = id || $FavoritesStores[0].Id;
 
-  let type = `favorites/${id}`;
-  $: type = `favorites/${id}`;
+  let type = `favorites/${favId}`;
+  $: type = `favorites/${favId}`;
 </script>
 
-<FilesList title="Favorites" {type} {filter} {page} {id}>
-  <FavoriteManager {id} />
+<FilesList title="Favorites" {type} {filter} {page} {favId}>
+  <FavoriteManager {id} slot="controls" />
 </FilesList>

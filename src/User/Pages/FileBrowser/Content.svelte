@@ -18,7 +18,7 @@
 </script>
 
 <FilesList title={"Content"} {type} {filter} {page} {id}>
-  <div class="first-controls" on:click={exitFolder}>
+  <div class="first-controls" slot="controls" on:click={exitFolder}>
     <i class="fas fa-arrow-circle-up" />
   </div>
 </FilesList>

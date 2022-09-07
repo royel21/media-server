@@ -6,7 +6,7 @@
   let currentFav = {};
   let error;
 
-  const saveFavorite = (event) => {
+  const saveFavorite = () => {
     currentFav.Type == "";
     addUpdateFavorite(currentFav).then((result) => {
       if (result.Id !== id) {

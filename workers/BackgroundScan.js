@@ -75,6 +75,11 @@ const createFolderThumbnail = async (folder, files) => {
         });
       }
     }
+
+    let note = files.filter((f) => /.json/.test(f.Name));
+    if (note && folder.Description != note.Description) {
+      await folder.update({ Description: note.Desctiption });
+    }
   } catch (error) {
     console.log("FolderCover:", folder.Name, error);
   }

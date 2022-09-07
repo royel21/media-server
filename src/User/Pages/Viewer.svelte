@@ -29,7 +29,7 @@
   let filters = { filter: "" };
 
   const getName = (f) => {
-    let part = f.Cover.replace(".jpg", "").split("/").slice(2, 4)?.join("/");
+    let part = f.Cover?.replace(".jpg", "").split("/").slice(2, 4)?.join("/");
     return f.Name.length < 5 ? part : f.Name;
   };
 
@@ -48,7 +48,7 @@
       });
       const first = playList[0];
       if (first) {
-        window.title = first.Cover.split("/")[2];
+        window.title = first.Cover?.split("/")[2] || "";
       }
     }
     window.addEventListener("beforeunload", saveFile);

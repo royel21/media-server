@@ -26,19 +26,31 @@ Router.get("/folder-content/:id/:order/:page?/:items?/:search?", async (req, res
   }
 });
 
-Router.get("/recents", async (req, res) => {
-  let folders = await req.user.Recent.getFolders({
-    limit: 50,
-    order: [[db.sqlze.literal("RecentFolders.LastRead"), "DESC"]],
-  });
+Router.get("/recents/:items/:page?", async (req, res) => {
+  const { page, items } = req.params;
+  const p = +page || 1;
+  const limit = +items || 16;
 
-  let result = folders.map((f) => ({
-    ...f.RecentFolders.dataValues,
-    ...f.dataValues,
-    RecentFolders: "",
+  const recents = await db.recentFolder.findAndCountAll({
+    order: [["LastRead", "DESC"]],
+    where: { RecentId: req.user.Recent.Id },
+    include: { model: db.folder },
+    offset: (p - 1) * limit,
+    limit,
+  });
+  //Map Folder
+  const folders = recents.rows.map((rc) => ({
+    ...rc.dataValues,
+    ...rc.Folder.dataValues,
   }));
 
-  res.send(result);
+  res.send({
+    items: folders,
+    page: p,
+    totalFiles: recents.count,
+    totalPages: Math.ceil(recents.count / limit),
+    valid: true,
+  });
 });
 
 Router.get("/dirs", async (req, res) => {

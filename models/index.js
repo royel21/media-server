@@ -42,6 +42,8 @@ db.folder.belongsToMany(db.recent, {
   through: { model: db.recentFolder, onDelete: "cascade" },
 });
 
+db.recentFolder.belongsTo(db.folder);
+
 db.recent.belongsToMany(db.file, { through: { model: db.recentFile } });
 db.file.belongsToMany(db.recent, {
   through: { model: db.recentFile, onDelete: "cascade" },

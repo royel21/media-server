@@ -12,21 +12,22 @@
   const pagerClick = (e) => {
     window.localStorage.setItem("selected", 0);
     let li = e.target;
+
     switch (e.target.id) {
       case "prev-page": {
-        dispatch("gotopage", page - 1);
+        handlerPage(page - 1);
         break;
       }
       case "next-page": {
-        dispatch("gotopage", +page + 1);
+        handlerPage(+page + 1);
         break;
       }
       case "first-page": {
-        dispatch("gotopage", 1);
+        handlerPage(1);
         break;
       }
       case "last-page": {
-        dispatch("gotopage", totalPages);
+        handlerPage(totalPages);
         break;
       }
       case "current-page": {
@@ -37,6 +38,15 @@
       }
     }
   };
+
+  const handlerPage = (p) => {
+    let pg = +p;
+    if (!isNaN(pg)) {
+      pg = Math.max(Math.min(pg, totalPages), 0);
+      dispatch("gotopage", pg);
+    }
+  };
+
   const onShowinput = () => {
     showinput = true;
   };
@@ -47,12 +57,9 @@
   const init = (el) => {
     el.focus();
   };
+
   const handleChange = (event) => {
-    let pg = parseInt(event.target.value);
-    if (!isNaN(pg)) {
-      pg = pg < 1 ? 1 : pg > totalPages ? totalPages : pg;
-      dispatch("gotopage", pg);
-    }
+    handlerPage(event.target.value);
   };
 </script>
 

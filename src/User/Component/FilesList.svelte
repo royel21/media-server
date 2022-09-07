@@ -153,6 +153,7 @@
       </div>
     </div>
   {/if}
+  <slot name="header" />
   <div class="files-list" on:keydown={handleKeydown} on:click={favClick}>
     {#each pageData.files as { Id, Name, Type, Cover, CurrentPos, Duration, isFav, FileCount }, i}
       <div class="file" id={Id} data-type={Type} tabIndex="0" in:fade>
@@ -164,7 +165,9 @@
             <span class="file-progress">
               {#if Type.includes("Folder")}
                 {FileCount}
-              {:else}{FileTypes[Type].formatter(CurrentPos, Duration)}{/if}
+              {:else}
+                {FileTypes[Type].formatter(CurrentPos, Duration)}
+              {/if}
             </span>
             <FavoriteList {isFav} {type} {Type} {favClicked} favId={id} on:removeFile={removeFile} />
           </div>
@@ -178,39 +181,13 @@
   </div>
 </div>
 <div class="controls">
-  <slot />
+  <slot name="controls" />
   <Filter {filter} on:filter={fileFilter} />
   <Pagination page={parseInt(page || 1)} totalPages={pageData.totalPages} on:gotopage={goToPage} />
   <span class="items">{pageData.totalFiles}</span>
 </div>
 
 <style>
-  .scroll-container {
-    position: relative;
-    height: 100%;
-    min-height: 100%;
-    overflow-y: auto;
-    padding-top: 39px;
-  }
-
-  .files-list {
-    display: flex;
-    align-content: flex-start;
-    flex-wrap: wrap;
-    padding-bottom: 50px;
-  }
-  .controls {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 5px 4px 5px;
-    z-index: 1;
-    pointer-events: none;
-  }
-
   .file-btn-left {
     cursor: pointer;
   }
@@ -234,12 +211,6 @@
   }
 
   @media screen and (max-width: 420px) {
-    .files-list {
-      padding-bottom: 70px;
-    }
-    .scroll-container {
-      padding-top: 70px;
-    }
     #info h4 {
       font-family: "Comic Sans MS", cursive;
       font-size: 1.2rem;
