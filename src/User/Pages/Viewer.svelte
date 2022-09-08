@@ -30,7 +30,7 @@
 
   const getName = (f) => {
     let part = f.Cover?.replace(".jpg", "").split("/").slice(2, 4)?.join("/");
-    return f.Name.length < 5 ? part : f.Name;
+    return f.Name.length < 9 ? part : f.Name;
   };
 
   onMount(async () => {
