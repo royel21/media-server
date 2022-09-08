@@ -52,6 +52,7 @@
     overflow-y: auto;
   }
   .controls {
+    position: initial;
     display: flex;
     justify-content: space-between;
     padding: 5px 0;
