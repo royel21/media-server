@@ -7,7 +7,7 @@
 
   import Filter from "../../ShareComponent/Filter.svelte";
   import Pagination from "../../ShareComponent/Pagination.svelte";
-  import { updateToggleMenu } from "../../ShareComponent/ToggleMenu";
+  import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
 
   let current = 0;
   let filter = "";
@@ -30,7 +30,7 @@
 
   const fileFilter = () => {};
 
-  updateToggleMenu();
+  ToggleMenu.set(false);
 
   document.title = "Home";
 </script>
