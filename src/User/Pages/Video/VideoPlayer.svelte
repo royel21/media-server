@@ -310,5 +310,8 @@
     .v-vol {
       position: initial;
     }
+    .player-content {
+      width: 100%;
+    }
   }
 </style>
