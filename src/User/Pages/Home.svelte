@@ -7,6 +7,7 @@
 
   import Filter from "../../ShareComponent/Filter.svelte";
   import Pagination from "../../ShareComponent/Pagination.svelte";
+  import { updateToggleMenu } from "../../ShareComponent/ToggleMenu";
 
   let current = 0;
   let filter = "";
@@ -28,6 +29,9 @@
   onMount(() => goToPage({ detail: 1 }));
 
   const fileFilter = () => {};
+
+  updateToggleMenu();
+
   document.title = "Home";
 </script>
 
