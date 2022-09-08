@@ -14,7 +14,6 @@ const db = { Op: Sequelize.Op, sqlze: sequelize };
 
 db.user = require("./user")(sequelize, DataTypes);
 db.file = require("./file")(sequelize, DataTypes);
-db.category = require("./category")(sequelize, DataTypes);
 db.folder = require("./folder")(sequelize, DataTypes);
 db.favorite = require("./favorites")(sequelize, DataTypes);
 db.recent = require("./recents")(sequelize, DataTypes);
@@ -24,13 +23,6 @@ db.directory = require("./directories")(sequelize, DataTypes);
 db.recentFile = require("./recent-file")(sequelize, DataTypes);
 db.recentFolder = require("./recent-folder")(sequelize, DataTypes);
 db.favoriteFolder = require("./favorite-folder")(sequelize, DataTypes);
-db.folderCategory = require("./folder-category")(sequelize, DataTypes);
-
-db.category.belongsToMany(db.folder, { through: { model: db.folderCategory } });
-
-db.folder.belongsToMany(db.category, {
-  through: { model: db.folderCategory, onDelete: "cascade" },
-});
 
 db.favorite.belongsToMany(db.folder, { through: { model: db.favoriteFolder } });
 db.folder.belongsToMany(db.favorite, {

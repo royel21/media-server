@@ -926,6 +926,8 @@ input[type="range"]:focus::-ms-fill-upper {
 @media screen and (max-width: 420px) {
   .files-list {
     padding-bottom: 70px;
+    width: 370px;
+    margin: auto;
   }
   .scroll-container {
     padding-top: 55px;

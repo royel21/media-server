@@ -10,7 +10,7 @@
 </script>
 
 <div class="card bg-dark text-light admin-manager">
-  <div class="nav nav-tabs controls">
+  <div class="nav nav-tabs disk-controls">
     <div class="nav-item">
       <input type="radio" bind:group={tab} value="tab-1" id="tab1" />
       <label class="nav-link" for="tab1">
@@ -43,6 +43,10 @@
     height: 100%;
     padding: 10px 0 0 0;
   }
+  .disk-controls {
+    padding: 0 5px 4px 5px;
+    user-select: none;
+  }
   .nav {
     display: flex;
     justify-content: space-evenly;
@@ -57,13 +61,13 @@
   input[type="radio"] {
     display: none;
   }
-  .controls.nav label {
+  .disk-controls.nav label {
     display: inline-block;
     margin: 0;
     cursor: pointer;
     color: white;
   }
-  .controls .nav-link .fas {
+  .disk-controls .nav-link .fas {
     font-size: 30px;
   }
   .nav-link span {

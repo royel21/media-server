@@ -39,6 +39,10 @@ module.exports = (sequelize, DataTypes) => {
       Name: {
         type: STRING,
       },
+      Genres: {
+        type: STRING(150),
+        defaultValue: "",
+      },
       Exists: {
         type: VIRTUAL,
         get() {

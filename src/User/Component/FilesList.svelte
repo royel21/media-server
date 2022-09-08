@@ -24,7 +24,7 @@
   let pageData = baseData;
   let selected = 0;
   let favClicked = null;
-  let folder = {};
+  let folder = { Genres: "" };
   let lastRead = "";
 
   const cancelToken = axios.CancelToken;
@@ -137,22 +137,35 @@
   let isContent = location.pathname.includes("content");
 </script>
 
-<div class={"scroll-container"} class:r-content={isContent}>
-  {#if isContent}
-    <div id="info">
+{#if isContent}
+  <div id="info">
+    <div id="info-content">
       <div id="img-info"><img src={folder.Cover} alt="Place Holder" /></div>
-      <h4>{folder.Name}</h4>
-      <div id="btn-bar">
-        {#if lastRead}
-          <button class="btn btn-secondary" on:click={continueReading}>Continue</button>
-        {/if}
-        <button id="first" class="btn btn-secondary" on:click={openFirstLast}>First</button>
-        <button id="last" class="btn btn-secondary" on:click={openFirstLast}>Last</button>
-        <button class="btn btn-secondary" on:click={onResetFiles}>Reset All</button>
-        <button class="btn btn-secondary" on:click={scanfiles}>Update</button>
+      <div id="name-gen-tag">
+        <span id="manga-name"><span>{folder.Name}</span></span>
+        <div class="genres-list">
+          <span class="gen-tag">Genres: </span>
+          {#each folder.Genres.split(", ") as genre}
+            {" "}<a href="/"> {genre}</a>
+          {/each}
+        </div>
+        <div class="m-desc">
+          <span class="desc-text"><span class="gen-tag">Description: </span>{folder.Description || ""}</span>
+        </div>
+        <div id="btn-bar">
+          {#if lastRead}
+            <button class="btn btn-secondary" on:click={continueReading}>Continue</button>
+          {/if}
+          <button id="first" class="btn btn-secondary" on:click={openFirstLast}>First</button>
+          <button id="last" class="btn btn-secondary" on:click={openFirstLast}>Last</button>
+          <button class="btn btn-secondary" on:click={onResetFiles}>Reset All</button>
+          <button class="btn btn-secondary" on:click={scanfiles}>Update</button>
+        </div>
       </div>
     </div>
-  {/if}
+  </div>
+{/if}
+<div class="scroll-container" class:r-content={isContent}>
   <slot name="header" />
   <div class="files-list" on:keydown={handleKeydown} on:click={favClick}>
     {#each pageData.files as { Id, Name, Type, Cover, CurrentPos, Duration, isFav, FileCount }, i}
@@ -188,6 +201,12 @@
 </div>
 
 <style>
+  .scroll-container.r-content {
+    padding-top: 0;
+    height: calc(100% - 251px);
+    min-height: calc(100% - 251px);
+    padding-bottom: 40px;
+  }
   .file-btn-left {
     cursor: pointer;
   }
@@ -195,28 +214,121 @@
     pointer-events: none;
   }
   #info {
-    padding: 10px;
+    z-index: 999;
+    padding: 2px;
     text-align: center;
-    padding-top: 0px;
+    padding-top: 40px;
   }
   #img-info {
-    padding: 5px;
+    padding: 4px 4px 0 4px;
+    border-right: 1px solid;
+  }
+  #info-content {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    max-width: 700px;
+    margin: auto;
+    background-color: #14243d;
+    border-radius: 0.25rem;
+    border: 1px solid white;
   }
   #info img {
-    max-height: 200px;
+    max-height: 186px;
   }
-  #info h4 {
-    font-family: "Comic Sans MS", cursive;
-    font-size: 2.2rem;
+  .m-desc {
+    text-align: start;
+    height: 54px;
   }
-
-  @media screen and (max-width: 420px) {
-    #info h4 {
-      font-family: "Comic Sans MS", cursive;
-      font-size: 1.2rem;
+  .m-desc .desc-text {
+    display: inline-block;
+    height: 100%;
+    overflow: hidden;
+    background-color: #14243d;
+    text-align: start;
+    padding: 0 5px;
+  }
+  .m-desc .desc-text:hover {
+    position: absolute;
+    left: -1px;
+    width: 100.5%;
+    height: 300px;
+    overflow: auto;
+    z-index: 99;
+    border-right: 1px solid;
+    border-left: 1px solid;
+    border-bottom: 1px solid;
+    border-bottom-left-radius: 0.4rem;
+    border-bottom-right-radius: 0.4rem;
+  }
+  #name-gen-tag {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-grow: 1;
+  }
+  #manga-name {
+    display: inline-block;
+    font-family: cursive;
+    text-align: start;
+    font-size: 1rem;
+    height: 54px;
+    overflow: hidden;
+  }
+  #manga-name:hover span {
+    position: absolute;
+  }
+  #manga-name span {
+    display: inline-block;
+    background-color: #14243d;
+    padding: 0 5px;
+  }
+  #name-gen-tag > *:not(:last-child) {
+    border-bottom: 1px solid;
+    width: 100%;
+  }
+  .genres-list {
+    text-align: start;
+    padding: 0 5px;
+    min-height: 20%;
+  }
+  .gen-tag {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  .genres-list a {
+    cursor: pointer;
+  }
+  .genres-list a:hover {
+    text-decoration: underline;
+  }
+  #btn-bar {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 5px 0;
+    width: 100%;
+  }
+  #info-content .btn {
+    width: 92px;
+  }
+  @media screen and (max-width: 600px) {
+    #info {
+      padding-top: 70px;
     }
-    #info img {
-      max-height: 180px;
+    .gen-tag {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    #info-content .btn {
+      padding: 0.255rem 0.25rem;
+      font-size: 0.8rem;
+      width: initial;
+    }
+    .scroll-container.r-content {
+      padding-top: 0;
+      height: calc(100% - 251px);
+      min-height: calc(100% - 251px);
+      padding-bottom: 40px;
     }
   }
 </style>
