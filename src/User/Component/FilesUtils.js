@@ -1,4 +1,5 @@
 import { navigate } from "svelte-routing";
+import { formatTime } from "../Pages/Utils";
 
 const isMobile = /(android)|(iphone)/i.test(navigator.userAgent);
 const scrollW = isMobile ? 15 : 0;

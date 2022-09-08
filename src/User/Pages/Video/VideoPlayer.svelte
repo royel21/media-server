@@ -9,7 +9,7 @@
   export let file;
   export let viewer;
 
-  const { NextFile, PrevFile, SkipForward, SkipBack } = KeyMap;
+  const { NextFile, PrevFile } = KeyMap;
   const dispatch = createEventDispatcher();
   let mConfig = { time: false, volume: 0.5, pause: false, muted: false };
   let player = {};
@@ -207,7 +207,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 100%;
+    width: 65%;
     max-width: 1280px;
     max-height: 780px;
     margin: 10px;
@@ -293,6 +293,19 @@
   .isFullScreen .v-vol {
     position: initial;
   }
+
+  @media screen and (max-width: 1600px) {
+    .player-content {
+      width: 70%;
+    }
+  }
+
+  @media screen and (max-width: 1300px) {
+    .player-content {
+      width: 80%;
+    }
+  }
+
   @media screen and (max-width: 600px) {
     .v-vol {
       position: initial;

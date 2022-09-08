@@ -32,7 +32,8 @@ Router.post("/favorites/", (req, res) => {
   getFiles(req, res, "favorite");
 });
 
-Router.get("video/:id", (req, res) => {
+Router.get("/video/:id", (req, res) => {
+  console.log("video:", req.params.id);
   db.file
     .findOne({
       attributes: ["Id", "Name", "Size"],
