@@ -7,7 +7,8 @@
         "express": "nodemon server/app",
         "production": "node server/app",
         "update-remote": "powershell ssh royel@10.0.0.4 \"bash -s '<' update.sh\"",
-        "restart-server": "powershell ssh -t royel@10.0.0.4 sudo pm2 restart all"
+        "restart-server": "powershell ssh -t royel@10.0.0.4 sudo pm2 restart all",
+        "update-adult": "cd ../media-server-adult&&git pull origin&& yarn build"
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^22.0.2",
