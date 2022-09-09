@@ -3,11 +3,12 @@
   export let key;
   export let label;
   export let style;
+  export let rows;
 </script>
 
 <div class="input-body" {style}>
   <div for="Name" class="input-text">{label || key}</div>
-  <textarea name="Name" class="input-control" rows="3" bind:value={file[key]} />
+  <textarea name="Name" class="input-control" {rows} bind:value={file[key]} />
 </div>
 
 <style>

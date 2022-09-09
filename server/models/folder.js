@@ -77,7 +77,7 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
       },
       Description: {
-        type: TEXT,
+        type: TEXT + "COLLATE 'utf8mb4_bin'",
       },
       Status: {
         type: BOOLEAN,

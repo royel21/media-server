@@ -25,9 +25,9 @@
             </label>
           </div>
         {:else}
-          <Input {file} key="Name" style="margin-bottom: 5px" />
-          <Input {file} key="Genres" style="margin-bottom: 5px" />
-          <Input {file} key="Description" style="margin-bottom: 5px" />
+          <Input {file} key="Name" style="margin-bottom: 5px" rows="3" />
+          <Input {file} key="Genres" style="margin-bottom: 5px" rows="2" />
+          <Input {file} key="Description" style="margin-bottom: 5px" rows="3" />
         {/if}
       </div>
       <div class="error">{modalType.error || ""}</div>
