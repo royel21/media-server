@@ -80,7 +80,7 @@ app.use((e, _, res, __) => {
 });
 const { PORT, PORT2, IP, HOME_IP } = process.env;
 const host = process.env.USERNAME === "rconsoro" ? IP : HOME_IP;
-const port = process.env.USERNAME === "rconsoro" ? PORT : PORT2;
+const port = process.env.USERNAME === "rconsoro" ? PORT2 : PORT;
 
 db.init().then(() => {
   let server = https
