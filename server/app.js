@@ -78,8 +78,9 @@ app.use((e, _, res, __) => {
     return res.redirect("/notfound");
   }
 });
-const { PORT, IP, HOME_IP } = process.env;
+const { PORT, PORT2, IP, HOME_IP } = process.env;
 const host = process.env.USERNAME === "rconsoro" ? IP : HOME_IP;
+const port = process.env.USERNAME === "rconsoro" ? PORT : PORT2;
 
 db.init().then(() => {
   let server = https
@@ -90,11 +91,11 @@ db.init().then(() => {
       // },
       app
     )
-    .listen(PORT, host);
+    .listen(port, host);
 
-  console.log(`Node server is running.. at http://${host}:${PORT}`);
+  console.log(`Node server is running.. at http://${host}:${port}`);
 
   return require("./websocket/socketio-server")(server, sessionMeddle);
 });
 
-console.log(process.env.NODE_ENV, PORT);
+console.log(process.env.NODE_ENV, port);

@@ -99,8 +99,12 @@
   #menu {
     display: flex;
     position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
     z-index: 1000;
     justify-content: space-between;
+    padding: 0;
     user-select: none;
     background-color: #343a40;
     transition: 0.3s all;
