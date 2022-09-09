@@ -1,5 +1,5 @@
 let LocalStrategy = require("passport-local").Strategy;
-let db = require("../models");
+let db = require("./models");
 
 module.exports = (passport) => {
   passport.serializeUser((user, done) => {
@@ -12,11 +12,7 @@ module.exports = (passport) => {
         where: {
           Name: username,
         },
-        include: [
-          { model: db.userConfig },
-          { model: db.recent },
-          { model: db.favorite, attributes: ["Id", "Name"] },
-        ],
+        include: [{ model: db.userConfig }, { model: db.recent }, { model: db.favorite, attributes: ["Id", "Name"] }],
       })
       .then((user) => {
         if (user) {

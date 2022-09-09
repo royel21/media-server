@@ -4,8 +4,8 @@
     "scripts": {
         "build": "rollup -c",
         "dev": "rollup -c -w",
-        "express": "nodemon app",
-        "production": "node app",
+        "express": "nodemon server/app",
+        "production": "node server/app",
         "update-remote": "powershell ssh royel@10.0.0.4 \"bash -s '<' update.sh\"",
         "restart-server": "powershell ssh -t royel@10.0.0.4 sudo pm2 restart all"
     },

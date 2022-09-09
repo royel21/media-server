@@ -8,7 +8,7 @@ const cors = require("cors");
 
 require("dotenv").config();
 const db = require("./models");
-require("./helpers/passport")(passport);
+require("./passport")(passport);
 
 var app = express();
 app.use(cors());
@@ -67,18 +67,17 @@ app.use("/api/admin/directories", DirectoriesRoute);
 app.use("/api/admin/files", FilesManagerRoute);
 app.use("/api/admin/folders", FoldersRoute);
 
-app.get("/*", (req, res) => {
+app.get("/*", (_, res) => {
   return res.sendFile(path.join(__dirname + "/public/index.html"));
 });
 
-app.use((e, req, res, next) => {
+app.use((e, _, res, __) => {
   if (e.message.includes("Failed to decode param")) {
     return res.redirect("/notfound");
   }
 });
-
-const port = process.env.PORT;
-const host = process.env.USERNAME === "rconsoro" ? process.env.IP : process.env.HOME_IP;
+const { PORT, IP, HOME_IP } = process.env;
+const host = process.env.USERNAME === "rconsoro" ? IP : HOME_IP;
 
 db.init().then(() => {
   let server = https
@@ -89,11 +88,11 @@ db.init().then(() => {
       // },
       app
     )
-    .listen(port, host);
+    .listen(PORT, host);
 
-  console.log(`Node server is running.. at http://${host}:${port}`);
+  console.log(`Node server is running.. at http://${host}:${PORT}`);
 
-  return require("./modules/socketio-server")(server, sessionMeddle);
+  return require("./websocket/socketio-server")(server, sessionMeddle);
 });
 
-console.log(process.env.NODE_ENV, port);
+console.log(process.env.NODE_ENV, PORT);
