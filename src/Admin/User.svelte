@@ -61,46 +61,12 @@
   });
 </script>
 
-<style>
-  .manager {
-    height: 100%;
-    padding: 0;
-    overflow-x: auto;
-    overflow-y: hidden;
-  }
-  .controls {
-    padding: 5px;
-  }
-  #u-manager .controls .btn {
-    position: absolute;
-    left: 10px;
-    font-size: initial;
-    padding: 0.4rem 0.6rem;
-    line-height: 1.6;
-  }
-
-  #u-manager .controls .btn i {
-    font-size: 20px;
-  }
-
-  .table td:first-child,
-  .table th:first-child {
-    width: 100px;
-    padding: 0.4rem 0.8rem;
-    vertical-align: middle;
-    text-align: center;
-  }
-</style>
-
 {#if showModal}
-  <ModalUser
-    {foundUser}
-    on:closeModal={hideModal}
-    on:updateusers={updateUsers} />
+  <ModalUser {foundUser} on:closeModal={hideModal} on:updateusers={updateUsers} />
 {/if}
 <div id="u-manager" class="card bg-dark manager">
   <div class="remove-error">{error}</div>
-  <div class="controls">
+  <div class="u-controls">
     <span class="btn" on:click={saveEdit}>
       <i class="fas fa-user-plus" />
     </span>
@@ -131,7 +97,7 @@
             <td>{user.Name}</td>
             <td>{user.Role}</td>
             <td>{user.State}</td>
-            <td>{user.AdultPass ? 'true' : 'false'}</td>
+            <td>{user.AdultPass ? "true" : "false"}</td>
           </tr>
         {/each}
       {:else}
@@ -142,3 +108,34 @@
     </tbody>
   </table>
 </div>
+
+<style>
+  .manager {
+    height: 100%;
+    padding: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .u-controls {
+    padding: 5px;
+  }
+  #u-manager .u-controls .btn {
+    position: absolute;
+    left: 10px;
+    font-size: initial;
+    padding: 0.4rem 0.6rem;
+    line-height: 1.6;
+  }
+
+  #u-manager .u-controls .btn i {
+    font-size: 20px;
+  }
+
+  .table td:first-child,
+  .table th:first-child {
+    width: 100px;
+    padding: 0.4rem 0.8rem;
+    vertical-align: middle;
+    text-align: center;
+  }
+</style>

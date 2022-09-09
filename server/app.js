@@ -19,6 +19,8 @@ app.use(cookieParser());
 app.use(express.static(process.env.IMAGES));
 app.use(express.static(__dirname + "/public"));
 
+global.appPath = __dirname;
+
 const userRoutes = require("./routes/UserRoutes");
 const filesRoutes = require("./routes/FilesRoutes");
 const favoriteRoutes = require("./routes/FavoriteRoutes");

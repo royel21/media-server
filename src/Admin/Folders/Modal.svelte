@@ -1,5 +1,7 @@
 <script>
   import { fade } from "svelte/transition";
+  import Input from "./Input.svelte";
+
   export let file;
   export let modalType;
 </script>
@@ -7,18 +9,11 @@
 <div class="modal-container">
   <div class="modal card" transition:fade={{ duration: 200 }}>
     <div class="modal-header">
-      <h3>{modalType.title}</h3>
+      <h4>{modalType.title}</h4>
     </div>
     <form action="#" on:submit|preventDefault>
       <div class="modal-body">
-        {#if !modalType.Del}
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <label for="Name" class="input-group-text">Name</label>
-            </div>
-            <input type="text" name="Name" class="form-control" value={file.Name} />
-          </div>
-        {:else}
+        {#if modalType.Del}
           <p>Are you sure you want to remove <strong>{file.Name}</strong></p>
           <div class="input-group">
             <div class="input-group-prepend">
@@ -29,6 +24,10 @@
               <i class="fas fa-times" />
             </label>
           </div>
+        {:else}
+          <Input {file} key="Name" style="margin-bottom: 5px" />
+          <Input {file} key="Genres" style="margin-bottom: 5px" />
+          <Input {file} key="Description" style="margin-bottom: 5px" />
         {/if}
       </div>
       <div class="error">{modalType.error || ""}</div>
@@ -43,6 +42,9 @@
 </div>
 
 <style>
+  .modal {
+    width: 400px;
+  }
   .del-label {
     width: fit-content;
   }
@@ -64,5 +66,10 @@
   .error {
     color: red;
     font-weight: 600;
+  }
+  @media screen and (max-width: 450px) {
+    .modal {
+      width: 380px;
+    }
   }
 </style>

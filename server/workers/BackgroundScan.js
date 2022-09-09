@@ -31,13 +31,15 @@ const rmOrphanFiles = async (Id, isFolder, folder) => {
           } catch (error) {
             console.log(folder.Path, file.Name, error.toString());
           }
+        } else if (!file.Cover) {
+          await file.update({ Cover: `/${file.Type}/${folder.Name}/${file.Name}.jpg` });
         }
       }
     }
   } else {
     const folders = await db.folder.findAll({
       where: isFolder ? { Id } : { DirectoryId },
-      include: { model: db.file, attributes: ["Id", "Name"] },
+      include: { model: db.file, attributes: ["Id", "Name", "Type"] },
     });
     for (const f of folders) {
       if (f.IsNoEmpty) {

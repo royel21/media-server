@@ -10,6 +10,13 @@
   };
 </script>
 
+<div class="card bg-dark admin-manager ">
+  <div class="rows">
+    <FolderList on:folderid={folderid} page={parseInt(page) || 1} {folderId} {filter} />
+    <FilesList {folderId} />
+  </div>
+</div>
+
 <style>
   .rows {
     display: flex;
@@ -26,15 +33,7 @@
       overflow-x: auto;
     }
   }
+  .rows {
+    min-width: 795px;
+  }
 </style>
-
-<div class="card bg-dark admin-manager ">
-  <div class="rows">
-    <FolderList
-      on:folderid={folderid}
-      page={parseInt(page) || 1}
-      {folderId}
-      {filter} />
-    <FilesList {folderId} />
-  </div>
-</div>

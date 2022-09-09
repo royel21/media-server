@@ -2,6 +2,8 @@
   import { fade } from "svelte/transition";
   export let createDirectory;
   export let hideModal;
+  export let Name;
+
   let Type = "Mangas";
   let IsAdult = false;
 
@@ -13,7 +15,7 @@
 <div class="modal-container">
   <div class="modal card" transition:fade={{ duration: 200 }}>
     <div class="modal-header">
-      <h3>Create</h3>
+      <h3>Add <strong>{Name}</strong> To Directories</h3>
     </div>
     <div class="modal-body">
       <div class="input-group">
@@ -44,7 +46,7 @@
 
 <style>
   .modal {
-    width: 250px;
+    width: 400px;
   }
   #is-adult {
     display: none;
@@ -59,5 +61,9 @@
   }
   #check-icon:active span {
     transform: scale(1.1);
+  }
+  strong {
+    color: black;
+    font-size: 16px;
   }
 </style>

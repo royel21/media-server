@@ -33,7 +33,7 @@
 </script>
 
 {#if showModal}
-  <DirectoryModal {createDirectory} {hideModal} />
+  <DirectoryModal {createDirectory} {hideModal} Name={item.Name} />
 {/if}
 
 <div class="tree-title">

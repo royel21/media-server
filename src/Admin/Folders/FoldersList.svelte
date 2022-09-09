@@ -14,7 +14,6 @@
   export let filter = "";
   export let folderId;
 
-  let fimage;
   let totalPages = 1;
   let totalItems = 0;
   let items = [];
@@ -37,35 +36,6 @@
       navigate(`/folders/${pg}/${filter || ""}`);
     }
   };
-
-  onMount(() => {
-    loadFolders(page);
-    socket.on("folder-renamed", (data) => {
-      if (data.success) {
-        folder.Name = data.Name;
-        items = items;
-        hideModal();
-      }
-    });
-
-    socket.on("folder-removed", (data) => {
-      if (data.success) {
-        loadFolders(page);
-        hideModal();
-      }
-    });
-
-    socket.on("scan-finish", (data) => {
-      let liItem = document.body.querySelector(`#${data.id} .fas`);
-      if (liItem) liItem.classList.remove("fa-spin");
-    });
-  });
-
-  onDestroy(() => {
-    delete socket._callbacks["$folder-renamed"];
-    delete socket._callbacks["$folder-removed"];
-    delete socket._callbacks["$scan-finish"];
-  });
 
   const onFilter = (flt) => {
     filter = flt.detail;
@@ -92,7 +62,7 @@
       let cList = el.classList.toString();
 
       if (/fa-edit/gi.test(cList)) {
-        modalType = { title: "Edit Folder", Del: false };
+        modalType = { title: "Edit Folder Properties", Del: false };
         showModal = true;
       } else if (/fa-trash-alt/gi.test(cList)) {
         modalType = { title: "Remove Folder", Del: true };
@@ -111,11 +81,11 @@
       let Del = event.target.querySelector("input").checked;
       socket.emit("remove-folder", { Id: folder.Id, Del });
     } else {
-      let Name = event.target.querySelector("input").value;
-      if (!Name) {
+      if (!folder.Name) {
         modalType.error = "Name Can't be empty";
       } else {
-        socket.emit("rename-folder", { Id: folder.Id, Name });
+        console.log("rename");
+        socket.emit("rename-folder", folder);
       }
     }
   };
@@ -132,10 +102,39 @@
 
   const showPath = (e) => {
     if (showImage) {
-      fullPathPos.x = e.pageX - 10;
-      fullPathPos.y = e.pageY - 25;
+      fullPathPos.x = e.pageX + 10;
+      fullPathPos.y = e.pageY + 10;
     }
   };
+
+  onMount(() => {
+    loadFolders(page);
+    socket.on("folder-renamed", (data) => {
+      if (data.success && data.Id) {
+        folder.Name = data.Name;
+        items = items;
+        hideModal();
+      }
+    });
+
+    socket.on("folder-removed", (data) => {
+      if (data.success && data.Id) {
+        loadFolders(page);
+        hideModal();
+      }
+    });
+
+    socket.on("scan-finish", (data) => {
+      let liItem = document.body.querySelector(`#${data.id} .fas`);
+      if (liItem) liItem.classList.remove("fa-spin");
+    });
+  });
+
+  onDestroy(() => {
+    delete socket._callbacks["$folder-renamed"];
+    delete socket._callbacks["$folder-removed"];
+    delete socket._callbacks["$scan-finish"];
+  });
 </script>
 
 {#if showModal}
@@ -184,7 +183,7 @@
   }
   #f-path {
     display: inline-block;
-    position: absolute;
+    position: fixed;
     z-index: 99;
     background-color: rgb(88, 86, 86);
     font-size: 14px;
@@ -193,5 +192,15 @@
     padding: 1px 4px;
     border-radius: 0.25rem;
     border: 1px solid white;
+    pointer-events: none;
+  }
+  @media screen and (max-width: 600px) {
+    .thumbnail {
+      right: 11px;
+      top: 47px;
+    }
+    .thumbnail img {
+      width: 120px;
+    }
   }
 </style>

@@ -110,7 +110,7 @@
 {/if}
 
 <div class="file-list col-6">
-  <div class="controls">
+  <div class="f-controls">
     <Filter on:filter={onFilter} {filter} />
     <h4 class="text-center">{`${totalItems} - Files`}</h4>
   </div>
@@ -151,19 +151,19 @@
 <style>
   .list-container {
     height: calc(100% - 85px);
-    overflow-y: auto;
+    overflow: auto;
   }
   .file-list {
     padding: 10px 10px 0px 10px;
     height: 100%;
   }
-  .controls {
+  .f-controls {
     display: flex;
     justify-content: space-between;
     border: none;
     height: 45px;
   }
-  .controls h4 {
+  .f-controls h4 {
     flex-grow: 1;
     width: 100%;
     user-select: none;
@@ -177,5 +177,9 @@
   i {
     font-size: 20px;
     margin-right: 6px;
+  }
+  .table {
+    width: 100%;
+    min-width: max-content;
   }
 </style>

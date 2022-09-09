@@ -18,7 +18,7 @@ module.exports.setSocket = (_io, _db) => {
 var worker = null;
 const startWork = async (model, isFolder) => {
   if (!worker) {
-    worker = fork("./workers/BackgroundScan.js");
+    worker = fork(appPath + "/workers/BackgroundScan.js");
 
     worker.on("message", (data) => {
       io.sockets.emit("scan-finish", data);
@@ -213,36 +213,42 @@ module.exports.removeFile = async ({ Id, Del }) => {
 
 const getCoverPath = (name) => path.join(ImagesPath, "Folder", name + ".jpg");
 
-module.exports.renameFolder = async ({ Id, Name }) => {
+module.exports.renameFolder = async ({ Id, Name, Description, Genres }) => {
   let folder = await db.folder.findOne({
     where: { Id },
     include: { model: db.directory },
   });
 
   let success = false;
-  let msg = "Folder not found on system";
+  let msg = "Folder not found on DB";
   if (folder) {
-    try {
-      let basePath = folder.Directory.FullPath;
+    if (folder.Name !== Name) {
+      try {
+        let basePath = folder.Directory.FullPath;
 
-      const oldPath = path.join(basePath, folder.Name);
-      const Path = path.join(basePath, Name);
-      const Cover = getCoverPath(Name);
+        const oldPath = path.join(basePath, folder.Name);
+        const Path = path.join(basePath, Name);
+        const Cover = getCoverPath(Name);
 
-      if (fs.existsSync(oldPath)) {
-        fs.moveSync(oldPath, Path);
-        msg = "Folder Rename Successfully";
+        if (fs.existsSync(oldPath)) {
+          fs.moveSync(oldPath, Path);
+          msg = "Folder Rename Successfully";
 
-        let oldCover = getCoverPath(folder.Name);
-        if (fs.existsSync(oldCover)) fs.moveSync(oldCover, Cover);
+          let oldCover = getCoverPath(folder.Name);
+          if (fs.existsSync(oldCover)) fs.moveSync(oldCover, Cover);
+        }
+
+        await folder.update({ Name, Path, Cover, Description, Genres });
+        success = true;
+      } catch (err) {
+        console.log(err);
       }
-
-      await folder.update({ Name, Path, Cover });
+    } else {
       success = true;
-    } catch (err) {
-      console.log(err);
+      await folder.update({ Description, Genres });
     }
-    io.sockets.emit("folder-renamed", { success, msg, Name });
+
+    io.sockets.emit("folder-renamed", { Id, success, msg, Name });
   }
 };
 

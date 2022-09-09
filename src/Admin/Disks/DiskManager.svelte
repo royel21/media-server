@@ -104,6 +104,5 @@
     height: calc(100% - 62px);
     padding: 5px 8px;
     overflow-y: auto;
-    overflow-x: hidden;
   }
 </style>
