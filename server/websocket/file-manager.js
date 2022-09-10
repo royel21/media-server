@@ -248,7 +248,7 @@ module.exports.renameFolder = async ({ Id, Name, Description, Genres }) => {
       await folder.update({ Description, Genres });
     }
 
-    io.sockets.emit("folder-renamed", { Id, success, msg, Name });
+    io.sockets.emit("folder-renamed", { Id, success, msg, folder: { ...folder.dataValues } });
   }
 };
 
@@ -262,6 +262,7 @@ module.exports.removeFolder = async ({ Id, Del }) => {
       if (Del) {
         //Remove Folder Thumbnail from images folder
         let cPath = getCoverPath(folder.Name);
+
         if (fs.existsSync(cPath)) {
           fs.removeSync(cPath);
         }
@@ -284,5 +285,5 @@ module.exports.removeFolder = async ({ Id, Del }) => {
       console.log(err);
     }
   }
-  io.sockets.emit("folder-removed", { success });
+  io.sockets.emit("folder-removed", { success, Id });
 };

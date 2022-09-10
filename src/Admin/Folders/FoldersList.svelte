@@ -84,7 +84,6 @@
       if (!folder.Name) {
         modalType.error = "Name Can't be empty";
       } else {
-        console.log("rename");
         socket.emit("rename-folder", folder);
       }
     }
@@ -111,8 +110,10 @@
     loadFolders(page);
     socket.on("folder-renamed", (data) => {
       if (data.success && data.Id) {
-        folder.Name = data.Name;
-        items = items;
+        let index = items.findIndex((f) => f.Id === data.Id);
+        if (index !== -1) {
+          items[index] = data.folder;
+        }
         hideModal();
       }
     });
