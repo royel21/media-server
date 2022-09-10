@@ -27,7 +27,7 @@
         {:else}
           <Input {file} key="Name" style="margin-bottom: 5px" rows="3" />
           <Input {file} key="Genres" style="margin-bottom: 5px" rows="2" />
-          <Input {file} key="Description" style="margin-bottom: 5px" rows="3" />
+          <Input {file} key="Description" style="margin-bottom: 5px" rows="4" />
         {/if}
       </div>
       <div class="error">{modalType.error || ""}</div>
