@@ -18,6 +18,7 @@
   export let filter = "";
   export let type = "";
   export let title = "";
+  export let onGenres;
 
   const socket = getContext("socket");
   const baseData = { files: [], totalPages: 0, totalFiles: 0 };
@@ -116,7 +117,6 @@
     let el = document.getElementById(id);
     if (id && el) {
       sel = getElIndex(el);
-      localStorage.removeItem("fileId");
     }
 
     selectItem(sel);
@@ -146,7 +146,7 @@
         <div class="genres-list">
           <span class="gen-tag">Genres: </span>
           {#each folder.Genres.split(", ") as genre}
-            {" "}<a href="/"> {genre}</a>
+            {" "}<a href="/" on:click|preventDefault={onGenres}> {genre}</a>
           {/each}
         </div>
         <div class="m-desc">
@@ -248,11 +248,14 @@
     text-align: start;
     padding: 0 5px;
   }
+
   .m-desc .desc-text:hover {
     position: absolute;
     left: -1px;
-    width: 100.5%;
-    height: 300px;
+    width: 100.3%;
+    height: -moz-available;
+    height: -webkit-fill-available;
+    height: fill-available;
     overflow: auto;
     z-index: 99;
     border-right: 1px solid;
@@ -329,6 +332,9 @@
       height: calc(100% - 251px);
       min-height: calc(100% - 251px);
       padding-bottom: 40px;
+    }
+    .m-desc .desc-text:hover {
+      width: 100.5%;
     }
   }
 </style>

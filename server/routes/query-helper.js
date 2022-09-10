@@ -96,13 +96,17 @@ const getFolders = async (req, res) => {
       "Name",
       "Cover",
       "Type",
+      "Genres",
       "FilesType",
       "CreatedAt",
       "FileCount",
       [db.sqlze.literal(favSelect), "isFav"],
     ],
     where: {
-      Name: getFilter(filterTerm),
+      [db.Op.or]: {
+        Name: getFilter(filterTerm),
+        Genres: getFilter(filterTerm),
+      },
       FilesType: filetype,
     },
     order: getOrderBy(order, "Folders"),
@@ -113,7 +117,7 @@ const getFolders = async (req, res) => {
   if (["mangas", "videos"].includes(filetype)) {
     query.where.DirectoryId = dirid;
   }
-
+  console.log(query);
   let result = await db.folder.findAndCountAll(query);
 
   return res.json({
