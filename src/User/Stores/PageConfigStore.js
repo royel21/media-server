@@ -10,7 +10,7 @@ const initConfig = {
 const conf = getObject("config");
 
 let PageConfig;
-if (conf.Home?.sort) {
+if (conf?.Home?.sort) {
   PageConfig = writable(conf);
 } else {
   PageConfig = writable(initConfig);
