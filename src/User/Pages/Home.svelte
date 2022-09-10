@@ -56,7 +56,7 @@
             </span>
           </div>
           <div class="file-cover" on:dblclick|stopPropagation={openFolder}>
-            <img src={Cover} alt="No Cover Found" />
+            <img src={Cover} alt="Cover Not Found" />
           </div>
           <div class="file-name">{Name}</div>
         </div>

@@ -3,9 +3,12 @@
   import { PageConfig, updateConfig } from "../User/Stores/PageConfigStore";
   export let User;
 
+  const getKey = () => document.title.split(" ")[0];
+
   const dispatch = createEventDispatcher();
 
   const Config = { ...$PageConfig };
+
   const applyChanges = () => {
     updateConfig(Config);
   };
@@ -15,6 +18,8 @@
       dispatch("click");
     }
   };
+
+  console.log($PageConfig, Config, getKey());
 </script>
 
 <label id="user-label" class={User.role} for="show-config" on:click={logout} title="show-config">
@@ -31,12 +36,7 @@
         <div class="input-group-prepend">
           <label for="orderby" class="input-group-text">Sort By:</label>
         </div>
-        <select
-          id="orderby"
-          name="select-sort"
-          class="form-control fa"
-          bind:value={Config.order[document.title.split(" ")[0]]}
-        >
+        <select id="orderby" name="select-sort" class="form-control fa" bind:value={Config[getKey()].sort}>
           <option value="nu">&#xf15d; Name</option>
           <option value="nd">&#xf15e; Name</option>
           <option value="du">&#xf162; Date</option>
@@ -53,7 +53,7 @@
           type="number"
           min="0"
           max="500"
-          bind:value={Config.items}
+          bind:value={Config[getKey()].items}
           class="form-control"
         />
         <span id="fpp-tips">0 = auto, max 500</span>

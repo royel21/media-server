@@ -117,7 +117,7 @@ const getFolders = async (req, res) => {
   if (["mangas", "videos"].includes(filetype)) {
     query.where.DirectoryId = dirid;
   }
-  console.log(query);
+
   let result = await db.folder.findAndCountAll(query);
 
   return res.json({

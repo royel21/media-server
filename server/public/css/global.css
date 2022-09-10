@@ -597,17 +597,25 @@ input::-webkit-inner-spin-button {
   max-height: none;
 }
 
-.file-cover img[alt]:after {
+img {
+  position: relative;
+  color: transparent;
+}
+img[alt] {
+  font-size: 16px;
+}
+img[alt]:after {
   position: absolute;
   top: -3px;
   left: -1px;
   background-color: rgba(52, 58, 64, 0.99);
   font-family: "Helvetica";
   font-weight: 300;
-  content: attr(alt);
+  content: "Cover Not Found";
   border-radius: 5px;
   padding: 2px 5px;
-  min-width: 100%;
+  min-width: 101%;
+  color: white;
 }
 
 .file-name {
