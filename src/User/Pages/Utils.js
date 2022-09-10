@@ -1,3 +1,7 @@
+export const isMobile = /(android)|(iphone)/i.test(navigator.userAgent);
+export const isVideo = (file) => file.Type.includes("Video");
+export const isManga = (file) => file.Type.includes("Manga");
+
 export function formatTime(time) {
   if (time === 0) return "00:00";
 
@@ -43,6 +47,18 @@ export const setfullscreen = (element) => {
     }
   } catch (err) {
     console.log(err);
+  }
+};
+
+let tout;
+export const showFileName = () => {
+  const tagName = document.querySelector(".viewer .f-name");
+  if (tagName) {
+    clearTimeout(tout);
+    tagName.style.opacity = 1;
+    tout = setTimeout(() => {
+      tagName.style.opacity = 0;
+    }, 5000);
   }
 };
 

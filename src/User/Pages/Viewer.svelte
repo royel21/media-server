@@ -8,7 +8,7 @@
   import PlayList from "../Component/PlayList.svelte";
   import MangaViewer from "./Manga/MangaViewer.svelte";
   import VideoPLayer from "./Video/VideoPlayer.svelte";
-  import { KeyMap, handleKeyboard } from "./Utils";
+  import { KeyMap, handleKeyboard, isMobile, isVideo, isManga, showFileName } from "./Utils";
 
   export let folderId;
   export let fileId;
@@ -32,31 +32,6 @@
     let part = f.Cover?.replace(".jpg", "").split("/").slice(2, 4)?.join("/");
     return f.Name.length < 9 ? part : f.Name;
   };
-
-  onMount(async () => {
-    let { data } = await axios.post(`/api/viewer/folder`, { id: folderId });
-    if (!data.fail) {
-      playList = files = data.files.sort((a, b) => {
-        let n1 = a.Name.replace("-", ".").match(/\d+.\d+|\d+/);
-        let n2 = b.Name.replace("-", ".").match(/\d+.\d+|\d+/);
-
-        if (n1 && n2) {
-          return Number(n1[0]) - Number(n2[0]);
-        } else {
-          return a.Name.replace("-", "Z").localeCompare(b.Name.replace("-", "Z"));
-        }
-      });
-      const first = playList[0];
-      if (first) {
-        window.title = first.Cover?.split("/")[2] || "";
-      }
-    }
-    window.addEventListener("beforeunload", saveFile);
-    return () => {
-      window.removeEventListener("beforeunload", saveFile);
-      observer?.disconnect();
-    };
-  });
 
   const saveFile = () => {
     let { Id, CurrentPos } = file;
@@ -97,15 +72,35 @@
   PrevFile.action = () => changeFile(-1);
   PrevFile.isctrl = true;
 
+  onMount(async () => {
+    let { data } = await axios.post(`/api/viewer/folder`, { id: folderId });
+    if (!data.fail) {
+      playList = files = data.files.sort((a, b) => {
+        let n1 = a.Name.replace("-", ".").match(/\d+.\d+|\d+/);
+        let n2 = b.Name.replace("-", ".").match(/\d+.\d+|\d+/);
+
+        if (n1 && n2) {
+          return Number(n1[0]) - Number(n2[0]);
+        } else {
+          return a.Name.replace("-", "Z").localeCompare(b.Name.replace("-", "Z"));
+        }
+      });
+      const first = playList[0];
+      if (first) {
+        window.title = first.Cover?.split("/")[2] || "";
+      }
+    }
+    window.addEventListener("beforeunload", saveFile);
+    return () => {
+      window.removeEventListener("beforeunload", saveFile);
+      observer?.disconnect();
+    };
+  });
+
   let lastId;
-  let tout;
   $: if (file.Id != lastId) {
     lastId = file.Id;
-    clearTimeout(tout);
-    fileName.style.opacity = 1;
-    tout = setTimeout(() => {
-      if (fileName) fileName.style.opacity = 0;
-    }, 5000);
+    showFileName();
   }
 
   const clearFilter = () => {
@@ -131,7 +126,7 @@
       clearInterval(runningClock);
       clock.innerText = "";
     }
-    if (/(android)|(iphone)/i.test(navigator.userAgent) && file.Type.includes("Video") && document.fullscreenElement) {
+    if (isMobile && isVideo(file) && document.fullscreenElement) {
       window.screen.orientation.lock("landscape");
     } else {
       window.screen.orientation.unlock();
@@ -147,7 +142,7 @@
   <div class="f-name" bind:this={fileName} class:nomenu={$ToggleMenu}>
     <span>{getName(file)}</span>
   </div>
-  <span class="info" class:top={file.Type.includes("Video")}>
+  <span class="info" class:top={isVideo(file)}>
     <span id="files-prog">
       <i class="fas fa-file" />
       {`${fileIndex + 1} / ${playList.length}`}
@@ -155,9 +150,9 @@
     <div id="clock" />
   </span>
   <PlayList {fileId} files={playList} on:click={selectFile} {filters} on:clearfilter={clearFilter} />
-  {#if file.Type.includes("Manga")}
+  {#if isManga(file)}
     <MangaViewer {viewer} {file} on:changefile={changeFile} on:returnBack={returnBack} {KeyMap} />
-  {:else if file.Type.includes("Video")}
+  {:else if isVideo(file)}
     <VideoPLayer {file} {KeyMap} on:returnBack={returnBack} {viewer} />
   {/if}
 </div>

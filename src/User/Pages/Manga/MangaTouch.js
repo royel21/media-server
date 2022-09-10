@@ -1,4 +1,5 @@
 import { updateToggleMenu } from "../../../ShareComponent/ToggleMenu";
+import { showFileName } from "../Utils";
 let tStart, tEnd;
 let point = {};
 let touching = false;
@@ -7,6 +8,7 @@ let moveY = { dis: 0, dir: 0 };
 let moveX = { dis: 0, dir: 0 };
 
 let controls = { nextPage: "", prevPage: "", nextFile: "", prevFile: "" };
+
 export const onTouchStart = (e) => {
   touching = true;
   tStart = e.timeStamp;
@@ -42,41 +44,39 @@ export const onTouchEnd = (e) => {
     if (elapsed > 70) {
       let ww = window.innerWidth;
       let wh = window.innerHeight;
+      //Top
       if (point.y < wh * 0.33) {
         if (point.x < ww * 0.33) {
-          // console.log("left Y25%");
+          //top-left
         } else if (point.x < ww * 0.66) {
-          // center
-          // console.log("center Y25%");
+          //top-center
+          showFileName();
         } else {
-          // right
-          // console.log("right Y25%");
+          //top-right
         }
+        Center;
       } else if (point.y < wh * 0.8) {
         if (point.x < ww * 0.33) {
-          // console.log("left Y50%");
+          //center-left
           nextPage();
         } else if (point.x < ww * 0.66) {
+          //center-center
           fullScreen();
-          //   console.log("center Y50%");
         } else {
-          // right
-          //   console.log("right Y50%");
+          // center-right
           nextPage();
         }
-        // 25% from the bottom
+        // 25% of the screen from the bottom
       } else {
         if (point.x < ww * 0.33) {
-          //left
+          //bottom-left
           prevFile();
         } else if (point.x < ww * 0.66) {
-          // center
+          // bottom-center
           updateToggleMenu();
-          //   console.log("center x");
         } else {
-          // right
+          // bottom-right
           nextFile();
-          //   console.log("right x");
         }
       }
     }
