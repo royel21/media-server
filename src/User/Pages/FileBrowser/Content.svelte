@@ -14,8 +14,8 @@
   const sortBy = [
     { value: "nu", label: "\u2B07 Name" },
     { value: "nd", label: "\u2B06 Name" },
-    { value: "du", label: "\u2B07 Date" },
     { value: "dd", label: "\u2B06 Date" },
+    { value: "du", label: "\u2B07 Date" },
   ];
 
   const menu = document.querySelector("#menu");

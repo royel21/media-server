@@ -3,15 +3,11 @@
   import { PageConfig, updateConfig } from "../User/Stores/PageConfigStore";
   export let User;
 
-  const getKey = () => document.title.split(" ")[0];
+  let title = document.title.split(" ")[0];
 
   const dispatch = createEventDispatcher();
 
   const Config = { ...$PageConfig };
-
-  const applyChanges = () => {
-    updateConfig(Config);
-  };
 
   const logout = () => {
     if (User.role.includes("Administrator")) {
@@ -19,7 +15,13 @@
     }
   };
 
-  console.log($PageConfig, Config, getKey());
+  const observer = new MutationObserver(() => (title = document.title.split(" ")[0]));
+
+  observer.observe(document.querySelector("title"), {
+    childList: true,
+  });
+
+  $: updateConfig(Config);
 </script>
 
 <label id="user-label" class={User.role} for="show-config" on:click={logout} title="show-config">
@@ -36,7 +38,7 @@
         <div class="input-group-prepend">
           <label for="orderby" class="input-group-text">Sort By:</label>
         </div>
-        <select id="orderby" name="select-sort" class="form-control fa" bind:value={Config[getKey()].sort}>
+        <select id="orderby" name="select-sort" class="form-control fa" bind:value={Config[title].sort}>
           <option value="nu">&#xf15d; Name</option>
           <option value="nd">&#xf15e; Name</option>
           <option value="du">&#xf162; Date</option>
@@ -53,13 +55,10 @@
           type="number"
           min="0"
           max="500"
-          bind:value={Config[getKey()].items}
+          bind:value={Config[title].items}
           class="form-control"
         />
         <span id="fpp-tips">0 = auto, max 500</span>
-      </div>
-      <div class="bottom-controls">
-        <span id="btn-save" class="btn" on:click={applyChanges}>Save</span>
       </div>
     </div>
   </div>

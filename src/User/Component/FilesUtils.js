@@ -32,6 +32,7 @@ export const getFilesPerPage = (i) => {
 };
 
 export const genUrl = (page = 1, { order = "nu", items }, filter, type, id, dir) => {
+  items = +items;
   let itemsperpage = (items || 0) === 0 ? getFilesPerPage(3) : items;
   if (type.includes("content")) {
     type = `folder-content/${id}`;

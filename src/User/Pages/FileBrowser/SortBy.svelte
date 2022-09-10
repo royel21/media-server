@@ -4,15 +4,13 @@
   export let items = [];
 
   const Config = { ...$PageConfig };
-  const applyChanges = () => {
-    updateConfig(Config);
-    console.log(Config);
-  };
+
+  $: updateConfig(Config);
 </script>
 
 <div class="sortby">
   <label for="orderby">{label}</label>
-  <select id="orderby" name="select-sort" class="fa" on:change={applyChanges} bind:value={Config.Content.sort}>
+  <select id="orderby" name="select-sort" class="fa" bind:value={Config.Content.sort}>
     {#each items as { value, label }}
       <option {value}>{label}</option>
     {/each}
@@ -20,7 +18,7 @@
 </div>
 <div>
   <label for="items">Items: </label>
-  <input id="items" name="items" type="text" on:change={applyChanges} bind:value={Config.Content.items} />
+  <input id="items" name="items" type="number" bind:value={Config.Content.items} min="0" max="500" />
 </div>
 
 <style>

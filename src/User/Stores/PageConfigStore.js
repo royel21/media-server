@@ -13,7 +13,6 @@ let PageConfig;
 if (conf.Home?.sort) {
   PageConfig = writable(conf);
 } else {
-  console.log("init config");
   PageConfig = writable(initConfig);
 }
 
