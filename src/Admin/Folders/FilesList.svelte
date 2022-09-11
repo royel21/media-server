@@ -98,8 +98,7 @@
       let Del = event.target.querySelector("input").checked;
       socket.emit("remove-file", { Id: file.Id, Del });
     } else {
-      let Name = event.target.querySelector("input").value;
-      if (!Name) {
+      if (!file.Name) {
         modalType.error = "Name Can't be empty";
       } else {
         socket.emit("rename-file", { Id: file.Id, Name: file.Name });
