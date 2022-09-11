@@ -330,7 +330,6 @@
   }
   #manga-viewer .webtoon-img img[alt] {
     position: relative;
-    min-height: 100%;
     background-color: grey;
   }
   img[alt]:after {
