@@ -102,7 +102,7 @@
       if (!Name) {
         modalType.error = "Name Can't be empty";
       } else {
-        socket.emit("rename-file", { Id: file.Id, Name });
+        socket.emit("rename-file", { Id: file.Id, Name: file.Name });
       }
     }
   };
