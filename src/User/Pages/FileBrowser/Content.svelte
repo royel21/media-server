@@ -1,4 +1,6 @@
 <script>
+  import axios from "axios";
+
   import { getContext, onDestroy } from "svelte";
 
   import { navigate } from "svelte-routing";
