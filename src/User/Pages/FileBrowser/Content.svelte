@@ -71,7 +71,10 @@
 
 <div id="info">
   <div id="info-content">
-    <div id="img-info"><img src={folderinfo.Cover} alt="Cover Not Found" /></div>
+    <div id="img-info">
+      <span class:completed={folderinfo.Status}>{folderinfo.Status ? "Completed" : "On Going"}</span>
+      <img src={folderinfo.Cover} alt="Cover Not Found" />
+    </div>
     <div id="name-gen-tag">
       <span id="manga-name"><span>{folderinfo.Name}</span></span>
       <div class="genres-list">
@@ -146,6 +149,7 @@
     padding-top: 5px;
   }
   #img-info {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -153,6 +157,23 @@
     padding: 4px 4px 0 4px;
     border-right: 1px solid;
   }
+  #img-info span {
+    display: inline-block;
+    position: absolute;
+    left: 7px;
+    bottom: 7px;
+    z-index: 99;
+    background-color: darkgreen;
+    padding: 0 5px;
+    border-radius: 0.25rem;
+    font-size: 10px;
+    font-weight: 600;
+  }
+
+  #img-info span.completed {
+    background-color: red;
+  }
+
   #info-content {
     position: relative;
     display: flex;
