@@ -20,7 +20,7 @@
       {#if items.length < 1}
         <li class="list-group-item empty-list">{`Not ${title} Found`}</li>
       {:else}
-        {#each items as { Id, Name, Type, Path }}
+        {#each items as { Id, Name, Type, Status }}
           <li
             id={Id}
             class="list-group-item"
@@ -31,7 +31,7 @@
             on:mousemove
           >
             {#if Type.includes("Folder")}
-              <i class="fas fa-sync" />
+              <i class="fas fa-sync" class:completed={Status} />
             {/if}
             <i class="fas fa-edit" />
             <i class="fas fa-trash-alt" />
@@ -93,5 +93,8 @@
   }
   .active i:not(.fa-trash-alt) {
     color: white;
+  }
+  .fas.completed {
+    color: red;
   }
 </style>

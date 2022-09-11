@@ -32,6 +32,7 @@ const getData = async ({ params }, res) => {
     query.attributes.push("Path"); // add Path to folder query
     query.attributes.push("Description"); // add Description to folder query
     query.attributes.push("Genres"); // add Genres to folder query
+    query.attributes.push("Status"); // add Genres to folder query
     query.where.Path = getFilter(filterTerm);
     result = await db.folder.findAndCountAll(query);
   }

@@ -99,6 +99,7 @@ const getFolders = async (req, res) => {
       "Genres",
       "FilesType",
       "CreatedAt",
+      "Status",
       "FileCount",
       [db.sqlze.literal(favSelect), "isFav"],
     ],

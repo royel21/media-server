@@ -121,7 +121,7 @@
 <div class="scroll-container" class:r-content={isContent}>
   <slot name="header" />
   <div class="files-list" on:keydown={handleKeydown} on:click={favClick}>
-    {#each pageData.files as { Id, Name, Type, Cover, CurrentPos, Duration, isFav, FileCount }, i}
+    {#each pageData.files as { Id, Name, Type, Cover, CurrentPos, Duration, isFav, FileCount, Status }, i}
       <div class="file" id={Id} data-type={Type} tabIndex="0" in:fade>
         <div class="file-info">
           <div class="file-btns">
@@ -139,6 +139,9 @@
           </div>
           <div class="file-cover" on:dblclick|stopPropagation={openFile}>
             <img src={Cover} alt="No Cover Found" />
+            {#if Type.includes("Folder")}
+              <span class:completed={Status}>{Status ? "Completed" : "OnGoing"}</span>
+            {/if}
           </div>
           <div class="file-name">{Name}</div>
         </div>
@@ -166,5 +169,28 @@
   }
   .scroll-container::-webkit-scrollbar-thumb {
     border-radius: 0.4rem;
+  }
+  .file-cover {
+    position: relative;
+  }
+  .file-cover span {
+    display: inline-block;
+    width: max-content;
+    position: absolute;
+    left: 32px;
+    bottom: 7px;
+    z-index: 99;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 0 5px;
+    border-radius: 1.25rem;
+    background-color: darkgreen;
+  }
+  .file-cover .completed {
+    background-color: red;
+  }
+  .file-cover:hover span {
+    left: 2px;
+    bottom: 2px;
   }
 </style>
