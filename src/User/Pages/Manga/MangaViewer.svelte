@@ -218,7 +218,7 @@
             id={i}
             style="object-fit: {config.imgAbjust}"
             src={images[i] ? "data:img/jpeg;base64, " + images[i] : ""}
-            alt="Loading...r"
+            alt="Loading... Please Wait"
           />
         {/each}
       {/if}
@@ -327,5 +327,14 @@
   }
   #manga-viewer .fa-sticky-note {
     font-size: 16px;
+  }
+  #manga-viewer .webtoon-img img[alt] {
+    position: relative;
+    min-height: 100%;
+    background-color: grey;
+  }
+  img[alt]:after {
+    text-align: center;
+    top: 50%;
   }
 </style>

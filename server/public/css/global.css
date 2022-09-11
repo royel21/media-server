@@ -611,7 +611,7 @@ img[alt]:after {
   background-color: rgba(52, 58, 64, 0.99);
   font-family: "Helvetica";
   font-weight: 300;
-  content: "Cover Not Found";
+  content: attr(alt);
   border-radius: 5px;
   padding: 2px 5px;
   min-width: 101%;
@@ -735,7 +735,6 @@ img[alt]:after {
   content: "Loading Images";
   position: absolute;
   top: 46%;
-  left: calc(50% - 108px);
   font-size: 30px;
   z-index: 2;
 }
