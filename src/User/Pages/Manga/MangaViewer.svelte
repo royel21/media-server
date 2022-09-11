@@ -332,8 +332,145 @@
     position: relative;
     background-color: grey;
   }
+
+  /***************************Manga Viewer**************************************/
+
+  #manga-viewer {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    outline: none;
+  }
+
+  #manga-viewer .viewer {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    padding-top: 37px;
+    padding-bottom: 33px;
+  }
+
+  #manga-viewer .img-current {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 65%;
+    min-height: 100%;
+    height: 100%;
+    outline: none;
+  }
+
+  #manga-viewer .img-current img {
+    -webkit-user-drag: none;
+    width: 100%;
+    max-height: 100%;
+    max-width: 100%;
+    position: relative;
+    object-fit: cover;
+  }
+
+  #manga-viewer .webtoon-img {
+    display: flex;
+    flex-direction: column;
+    justify-content: initial;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  #manga-viewer .webtoon-img img {
+    height: auto;
+    width: 100%;
+    max-height: initial;
+  }
+
+  #manga-viewer .img-current .empty-img {
+    position: relative;
+    color: black;
+    min-height: 100%;
+    min-width: 600px;
+  }
+
+  #manga-viewer .empty-img:before {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: " ";
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+    background-color: rgb(218, 214, 214);
+  }
+
+  #manga-viewer .empty-img:after {
+    content: "Loading Images";
+    position: absolute;
+    top: 46%;
+    font-size: 30px;
+    z-index: 2;
+  }
+
+  #manga-viewer .controls > span {
+    padding: 4px 8px;
+    max-height: initial;
+  }
+
+  #manga-viewer i {
+    font-size: 25px;
+    transition: 0.1s all;
+  }
+
+  #manga-viewer .current-page input {
+    position: relative;
+    top: -1px;
+    height: 26px;
+    max-width: 80px;
+    text-align: center;
+    min-width: 70px;
+    outline: none;
+    border: none;
+    border-radius: 0.25rem;
+  }
+
+  :fullscreen #manga-viewer .viewer {
+    padding: 0;
+  }
+
+  :fullscreen #manga-viewer.hide .controls {
+    opacity: 0;
+  }
+
+  :fullscreen #manga-viewer.hide .controls span {
+    transform: translateY(34px);
+    transition: 0.3s all;
+  }
   img[alt]:after {
     text-align: center;
     top: 50%;
+  }
+
+  #manga-viewer.hide .controls {
+    bottom: -34px;
+  }
+
+  #manga-viewer.hide .viewer {
+    padding: 0;
+  }
+
+  @media screen and (max-width: 600px) {
+    #manga-viewer .img-current {
+      transform: initial;
+      width: 100%;
+    }
+    #manga-viewer .controls > span {
+      padding: 4px 5px;
+    }
+    #manga-viewer .img-current .empty-img {
+      width: 100%;
+    }
+    #manga-viewer .img-current.webtoon-img img:not(.empty-img) {
+      height: auto;
+    }
   }
 </style>
