@@ -239,7 +239,6 @@ module.exports.renameFolder = async ({ Id, Name, Description, Genres, Status }) 
         }
 
         await folder.update({ Name, Path, Cover, Description, Genres, Status });
-        folder.sync();
         success = true;
       } catch (err) {
         console.log(err);
