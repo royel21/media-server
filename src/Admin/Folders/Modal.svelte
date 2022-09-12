@@ -1,5 +1,6 @@
 <script>
   import { fade } from "svelte/transition";
+  import CheckBox from "../Component/CheckBox.svelte";
   import Input from "./Input.svelte";
 
   export let file;
@@ -29,6 +30,7 @@
           {#if file.Type === "Folder"}
             <Input {file} key="Genres" style="margin-bottom: 5px" rows="2" />
             <Input {file} key="Description" style="margin-bottom: 5px" rows="4" />
+            <CheckBox label="Completed" key="Status" item={file} />
           {/if}
         {/if}
       </div>

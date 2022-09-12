@@ -136,7 +136,6 @@
     delete socket._callbacks["$folder-removed"];
     delete socket._callbacks["$scan-finish"];
   });
-  $: console.log(items);
 </script>
 
 {#if showModal}

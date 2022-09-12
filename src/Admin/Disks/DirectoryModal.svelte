@@ -1,14 +1,23 @@
 <script>
   import { fade } from "svelte/transition";
+  import CheckBox from "../Component/CheckBox.svelte";
+  import Select from "../Component/Select.svelte";
   export let createDirectory;
   export let hideModal;
   export let Name;
 
-  let Type = "Mangas";
-  let IsAdult = false;
+  let values = {
+    Type: "Mangas",
+    IsAdult: false,
+  };
+
+  const options = [
+    { name: "Mangas", value: "Mangas" },
+    { name: "Videos", value: "Videos" },
+  ];
 
   const create = () => {
-    createDirectory(Type, IsAdult);
+    createDirectory(values.Type, values.IsAdult);
   };
 </script>
 
@@ -18,24 +27,8 @@
       <h3>Add <strong>{Name}</strong> To Directories</h3>
     </div>
     <div class="modal-body">
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <label for="Name" class="input-group-text">Type</label>
-        </div>
-        <select class="form-control" name="Type" bind:value={Type}>
-          <option value="Mangas">Mangas</option>
-          <option value="Videos">Videos</option>
-        </select>
-      </div>
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <label for="is-adult" class="input-group-text">Is Adult</label>
-        </div>
-        <input id="is-adult" type="checkbox" bind:checked={IsAdult} />
-        <label id="check-icon" for="is-adult" class="form-control">
-          <span class={`ad-icon fas fa-${IsAdult ? "check" : "times"}`} />
-        </label>
-      </div>
+      <Select labelWidth="80px" mb="10px" item={values} key="Type" {options} />
+      <CheckBox labelWidth="80px" mb="10px" label="Is Adult" key="IsAdult" item={values} />
     </div>
     <div class="modal-footer">
       <button class="btn" on:click={hideModal}>Cancel</button>
@@ -46,21 +39,11 @@
 
 <style>
   .modal {
-    width: 400px;
+    width: 300px;
   }
-  #is-adult {
-    display: none;
-  }
-  label {
-    width: 80px;
-  }
-  #check-icon {
-    text-align: center;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  #check-icon:active span {
-    transform: scale(1.1);
+  .modal h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
   }
   strong {
     color: black;
