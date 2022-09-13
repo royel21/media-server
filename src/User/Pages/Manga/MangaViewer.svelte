@@ -178,7 +178,7 @@
     socket.off("connect", onConnect);
   });
 
-  // $: localStorage.setItem("webtoon", webtoon);
+  $: localStorage.setItem("webtoon", webtoon);
 </script>
 
 <div id="manga-viewer" tabIndex="0" class:hide={$ToggleMenu}>
