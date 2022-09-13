@@ -12,11 +12,7 @@ const getData = async ({ params }, res) => {
 
   const query = {
     attributes: ["Id", "Name", "Type", "Cover"],
-    order: [
-      db.sqlze.literal(
-        `Name REGEXP '^\\d*[^\\da-z&\\.\\\' \\-\\"\\!\\@\\#\\$\\%\\^\\*\\(\\)\\;\\:\\\\,\\?\\/\\~\\\`\\|\\_\\-]' DESC, Name + 0, Name`
-      ),
-    ], // used for natural ordering
+    order: [db.sqlze.literal(`REPLACE(Name, '[', '0'), CAST(Name AS UNSIGNED)`)], // used for natural ordering
     where: {},
     offset,
     limit,
