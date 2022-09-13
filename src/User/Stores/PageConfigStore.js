@@ -2,19 +2,24 @@ import { writable } from "svelte/store";
 import { getObject, setObject } from "./StoreUtils";
 
 const initConfig = {
-  Home: { items: 0, sort: "nd" },
-  Content: { items: 0, sort: "nd" },
-  Mangas: { items: 0, sort: "nd" },
-  Videos: { items: 0, sort: "nd" },
+  Home: { items: 0, sort: "nu" },
+  Content: { items: 0, sort: "nu" },
+  Mangas: { items: 0, sort: "nu" },
+  Videos: { items: 0, sort: "nu" },
+  Favorites: { items: 0, sort: "nu" },
 };
-const conf = getObject("config");
+const checkConfig = () => {
+  const config = getObject("config") || initConfig;
 
-let PageConfig;
-if (conf?.Home?.sort) {
-  PageConfig = writable(conf);
-} else {
-  PageConfig = writable(initConfig);
-}
+  for (const k in initConfig) {
+    if (!config[k]) {
+      config[k] = initConfig[k];
+    }
+  }
+  return config;
+};
+
+const PageConfig = writable(checkConfig());
 
 const updateConfig = async (config) => {
   PageConfig.update((cfg) => (cfg = config));
