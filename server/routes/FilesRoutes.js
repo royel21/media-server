@@ -3,6 +3,8 @@ const Router = require("express").Router();
 const db = require("../models");
 const { getFiles, getFolders } = require("./query-helper");
 
+const sortName = (a, b) => a.Name.localeCompare(b.Name);
+
 Router.get("/folder-content/:id/:order/:page?/:items?/:search?", async (req, res) => {
   const { id, order, page, items, search } = req.params;
 
@@ -34,15 +36,19 @@ Router.get("/recents/:items/:page?", async (req, res) => {
   const recents = await db.recentFolder.findAndCountAll({
     order: [["LastRead", "DESC"]],
     where: { RecentId: req.user.Recent.Id },
-    include: { model: db.folder },
+    include: { model: db.folder, attributes: ["Id", "Name", "FileCount", "Cover", "FilesType", "Type", "Status"] },
     offset: (p - 1) * limit,
     limit,
   });
   //Map Folder
-  const folders = recents.rows.map((rc) => ({
-    ...rc.dataValues,
-    ...rc.Folder.dataValues,
-  }));
+  const folders = recents.rows.map((rc) => {
+    delete rc.dataValues.Folder;
+    delete rc.dataValues.LastRead;
+    return {
+      ...rc.dataValues,
+      ...rc.Folder.dataValues,
+    };
+  });
 
   res.send({
     items: folders,
@@ -54,8 +60,18 @@ Router.get("/recents/:items/:page?", async (req, res) => {
 });
 
 Router.get("/dirs", async (req, res) => {
-  const dirs = await db.directory.findAll({ where: { IsAdult: { [db.Op.lte]: req.user.AdultPass } } });
-  return res.send(dirs);
+  const dirs = await db.directory.findAll({
+    attributes: ["Id", "Name", "Type"],
+    where: { IsAdult: { [db.Op.lte]: req.user.AdultPass } },
+  });
+
+  let Mangas = dirs.filter((d) => d.Type === "Mangas").sort(sortName);
+  let Videos = dirs.filter((d) => d.Type === "Videos").sort(sortName);
+
+  return res.send({
+    Mangas,
+    Videos,
+  });
 });
 
 Router.get("/file-data/:id", async (req, res) => {

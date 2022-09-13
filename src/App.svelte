@@ -19,22 +19,22 @@
   }
 
   onMount(async () => {
-    let resp = await axios.get("/api/users");
-    if (resp.data.isAutenticated) {
-      user = resp.data;
+    let { data } = await axios.get("/api/users");
+    if (data.isAutenticated) {
+      user = data;
     }
     isAuthenticating = false;
   });
 
   const logout = async () => {
-    user = {};
-    navigate("/login", { replace: true });
-    if (socket) socket.close();
-    if (isPwa()) {
-      history.go(-(history.length - 2));
-    }
     try {
       axios.get("/api/users/logout");
+      navigate("/login", { replace: true });
+      user = {};
+
+      socket?.close();
+
+      if (isPwa()) history.go(-(history.length - 2));
     } catch (error) {
       console.log(error);
     }

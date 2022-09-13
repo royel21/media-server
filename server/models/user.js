@@ -47,19 +47,23 @@ module.exports = (sequelize, DataTypes) => {
             user.Id = nanoid(10);
           }
         },
-        beforeCreate: (user) => {
-          user.Password = bcrypt.hashSync(user.Password, bcrypt.genSaltSync(8), null);
+        beforeCreate: (user, opt) => {
+          if (opt.encript) {
+            user.Password = bcrypt.hashSync(user.Password, bcrypt.genSaltSync(8), null);
+          }
           user.CreatedAt = new Date();
         },
         beforeUpdate: (user, opt) => {
-          if (opt.fields.includes("Password")) {
+          if (opt.fields.includes("Password") && opt.encript) {
             user.Password = bcrypt.hashSync(user.Password, bcrypt.genSaltSync(8), null);
           }
         },
-        beforeBulkCreate: (users) => {
+        beforeBulkCreate: (users, opt) => {
           for (var user of users) {
             user.Id = nanoid(10);
-            user.Password = bcrypt.hashSync(user.Password, bcrypt.genSaltSync(8), null);
+            if (opt.encript) {
+              user.Password = bcrypt.hashSync(user.Password, bcrypt.genSaltSync(8), null);
+            }
             user.CreatedAt = new Date();
           }
         },
