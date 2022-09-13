@@ -1,12 +1,13 @@
 <script>
-  import { createEventDispatcher } from "svelte";
+  import { onDestroy } from "svelte";
+
   import { map } from "../Utils";
   export let value;
   export let preview = false;
   export let min = 0;
   export let max = 100;
   export let onChange;
-  const dispatch = createEventDispatcher();
+
   let uniqId = "rc-" + new Date().getTime();
   let sliderRef;
   let previewRef;
@@ -19,10 +20,10 @@
     let xpos;
     if (e.type === "touchstart") {
       xpos = e.touches[0].pageX - e.touches[0].target.getBoundingClientRect().left;
-      document.addEventListener("touchmove", globalMMove);
+      document.on("touchmove", globalMMove);
     } else {
       xpos = e.offsetX;
-      document.addEventListener("mousemove", globalMMove);
+      document.on("mousemove", globalMMove);
     }
 
     if (!isNaN(xpos)) {
@@ -48,25 +49,25 @@
     if (preview) {
       var newPos = Math.floor(e.pageX - sliderRef.getBoundingClientRect().left);
       var pos = map(newPos - 1, 0, sliderRef.offsetWidth - 2, 0, 100).toFixed(0);
-      let tempVal = Number(map(newPos - 1, 0, sliderRef.offsetWidth - 2, min, max).toFixed(2));
-      pos = pos < 0 ? 0 : pos > 100 ? 100 : pos;
-      let value = tempVal < 0 ? 0 : tempVal > max ? max : tempVal;
+      let tempVal = map(newPos - 1, 0, sliderRef.offsetWidth - 2, min, max).toFixed(2);
+      pos = Number.clamp(pos, 0, 100);
+      let value = Number.clamp(tempVal, 0, max);
       previewData = { pos, value };
     }
   };
 
   document.onmouseup = (e) => {
     isMdown = false;
-    document.removeEventListener("mousemove", globalMMove);
-    document.removeEventListener("touchmove", globalMMove);
+    document.off("mousemove", globalMMove);
+    document.off("touchmove", globalMMove);
   };
 
   const handleThumb = (e) => {
     isMdown = { is: true, id: uniqId };
     if (e.type === "touchstart") {
-      document.addEventListener("touchmove", globalMMove);
+      document.on("touchmove", globalMMove);
     } else {
-      document.addEventListener("mousemove", globalMMove);
+      document.on("mousemove", globalMMove);
     }
     e.stopPropagation();
   };
@@ -78,6 +79,11 @@
   };
 
   $: progress = map(value, min, max, 0, 100);
+
+  onDestroy(() => {
+    document.off("mousemove", globalMMove);
+    document.off("touchmove", globalMMove);
+  });
 </script>
 
 <div class="rc-slider">

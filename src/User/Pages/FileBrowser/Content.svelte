@@ -125,7 +125,7 @@
     height: 26px;
     padding: 0 5px;
     font-size: 16px;
-    z-index: 999;
+    z-index: 9;
     background-color: #14243d;
     border-radius: 0.25rem;
   }
@@ -162,7 +162,7 @@
     position: absolute;
     left: 7px;
     bottom: 7px;
-    z-index: 99;
+    z-index: 9;
     background-color: darkgreen;
     padding: 0 5px;
     border-radius: 0.25rem;
@@ -246,7 +246,7 @@
     height: -webkit-fill-available;
     height: fill-available;
     overflow: auto;
-    z-index: 99;
+    z-index: 10;
     border-right: 1px solid;
     border-left: 1px solid;
     border-bottom: 1px solid;

@@ -44,23 +44,23 @@ export const onTouchEnd = (e) => {
     if (elapsed > 70) {
       let ww = window.innerWidth;
       let wh = window.innerHeight;
-      //Top
+      // Top
       if (point.y < wh * 0.33) {
         if (point.x < ww * 0.33) {
-          //top-left
+          // top-left
         } else if (point.x < ww * 0.66) {
-          //top-center
+          // top-center
           showFileName();
         } else {
           //top-right
         }
-        Center;
+        // Center
       } else if (point.y < wh * 0.8) {
         if (point.x < ww * 0.33) {
-          //center-left
+          //c enter-left
           nextPage();
         } else if (point.x < ww * 0.66) {
-          //center-center
+          // center-center
           fullScreen();
         } else {
           // center-right
@@ -69,7 +69,7 @@ export const onTouchEnd = (e) => {
         // 25% of the screen from the bottom
       } else {
         if (point.x < ww * 0.33) {
-          //bottom-left
+          // bottom-left
           prevFile();
         } else if (point.x < ww * 0.66) {
           // bottom-center

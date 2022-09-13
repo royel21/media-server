@@ -8,7 +8,7 @@ const paginationInput = (li, page, totalPages, dispatch) => {
 
     let newInput = li.querySelector("input");
 
-    newInput.addEventListener("focusout", (e) => {
+    newInput.on("focusout", (e) => {
       li.textContent = `${page} / ${totalPages}`;
     });
 

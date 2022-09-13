@@ -49,9 +49,13 @@ const createUser = async (req) => {
     UserConfig: { Name, Config },
   };
 
-  let newUser = await db.user.create(user, {
-    include: [db.recent, db.favorite, db.userConfig],
-  });
+  let newUser = await db.user.create(
+    user,
+    {
+      include: [db.recent, db.favorite, db.userConfig],
+    },
+    { encript: true }
+  );
 
   return {
     user: { ...newUser.dataValues, Password: "" },
@@ -67,7 +71,7 @@ const createUpdate = async (req) => {
     if (valid.user) {
       let data = { Id: "", ...req.body };
       if (!data.Password) delete data.Password;
-      await valid.user.update(data);
+      await valid.user.update(data, { encript: true });
 
       result = { fail: false, user: req.body };
     } else {

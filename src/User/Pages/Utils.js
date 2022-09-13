@@ -50,6 +50,17 @@ export const setfullscreen = (element) => {
   }
 };
 
+export const sortFileByName = () => (a, b) => {
+  let n1 = a.Name.replace("-", ".").match(/\d+.\d+|\d+/);
+  let n2 = b.Name.replace("-", ".").match(/\d+.\d+|\d+/);
+
+  if (n1 && n2) {
+    return Number(n1[0]) - Number(n2[0]);
+  } else {
+    return a.Name.replace("-", "Z").localeCompare(b.Name.replace("-", "Z"));
+  }
+};
+
 let tout;
 export const showFileName = () => {
   const tagName = document.querySelector(".viewer .f-name");

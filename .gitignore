@@ -22,3 +22,6 @@ bundle.js
 extra.css
 notes.json
 notes-adult.json
+zserver/app.js
+db.json
+mediaserver.sqlite

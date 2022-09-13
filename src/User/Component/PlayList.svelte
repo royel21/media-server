@@ -57,6 +57,18 @@
     }
   };
 
+  const goToPage = (pg) => {
+    pg = parseInt(pg.detail);
+    if (pg < 1 || pg > totalPages || isNaN(pg)) return;
+    page = pg < 1 ? 1 : pg > totalPages ? totalPages : pg;
+    setObserver();
+  };
+
+  const clearFilter = () => {
+    filters.filter = "";
+    dispatch("clearfilter");
+  };
+
   $: if (!hideList) {
     if (playList) {
       let current = document.querySelector("#play-list .active");
@@ -74,33 +86,15 @@
     }
   }
 
-  const goToPage = (pg) => {
-    pg = parseInt(pg.detail);
-    if (pg < 1 || pg > totalPages || isNaN(pg)) return;
-    page = pg < 1 ? 1 : pg > totalPages ? totalPages : pg;
-    setObserver();
-  };
-
-  const clearFilter = () => {
-    filters.filter = "";
-    dispatch("clearfilter");
-  };
-
   $: if (files.length > 100 && totalPages === 0) {
     totalPages = Math.ceil(filtered.length / filePerPage);
     page = getPage();
   }
-  $: {
-    if (filters.filter) {
-      filtered = files.filter((f) => f.Name.contains(filters.filter));
-    } else {
-      filtered = files;
-    }
 
-    const tout = setTimeout(() => {
-      setObserver();
-      clearTimeout(tout);
-    }, 50);
+  $: if (filters.filter) {
+    filtered = files.filter((f) => f.Name.contains(filters.filter));
+  } else {
+    filtered = files;
   }
 
   $: {
