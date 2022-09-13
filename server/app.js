@@ -10,15 +10,6 @@ require("dotenv").config();
 const db = require("./models");
 require("./passport")(passport);
 
-var app = express();
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-
-app.use(express.static(process.env.IMAGES));
-app.use(express.static(__dirname + "/public"));
-
 global.appPath = __dirname;
 
 const userRoutes = require("./routes/UserRoutes");
@@ -31,6 +22,20 @@ const UsersManagerRoute = require("./routes/admin/UsersManagerRoute");
 const DirectoriesRoute = require("./routes/admin/DirectoriesRoute");
 const FilesManagerRoute = require("./routes/admin/FilesManagerRoute");
 const FoldersRoute = require("./routes/admin/FoldersRoute");
+const compression = require("compression");
+
+const app = express();
+
+app.use(compression());
+
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+
+app.use(express.static(process.env.IMAGES));
+app.use(express.static(__dirname + "/public"));
+
 const sessionMeddle = session({
   name: process.env.SESSION,
   secret: "2491eb2c-595d-4dc8-8427",
