@@ -16,6 +16,12 @@ module.exports = (sequelize, DataTypes) => {
       Name: {
         type: STRING,
       },
+      Path: {
+        type: VIRTUAL,
+        get() {
+          return path.join(this?.Folder.Path || "", this.Name);
+        },
+      },
       Exists: {
         type: VIRTUAL,
         get() {
