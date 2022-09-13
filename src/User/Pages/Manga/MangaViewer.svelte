@@ -1,5 +1,5 @@
 <script>
-  import { onDestroy, getContext, createEventDispatcher } from "svelte";
+  import { onDestroy, getContext, createEventDispatcher, afterUpdate } from "svelte";
 
   import { setfullscreen } from "../Utils";
   import { scrollInView, getEmptyIndex } from "./Utils";
@@ -19,100 +19,73 @@
   let webtoon = localStorage.getItem("webtoon") === "true";
   let progress = `${file.CurrentPos + 1}/${file.Duration}`;
   let images = [file.Duration];
-  let loading = false;
-  let lastfId;
   let imgContainer;
-  let isObserver = false;
   let inputPage;
-  let jumping = false;
+
+  let viewerState = {
+    isLoading: false,
+    jumping: false,
+    lastId: file?.Id,
+  };
   let config = {
     width: window.innerWidth < 600 ? 100 : localStorage.getItem("mWidth") || 65,
     imgAbjust: "fill",
   };
   //emptyImage observer
-  let indices = [];
   const loadImages = (pg, toPage, dir = 1) => {
-    if (loading) return;
-    indices = getEmptyIndex(images, pg, toPage, dir, file.Duration, indices);
-    if (indices.length > 0) {
-      socket.emit("loadzip-image", { Id: file.Id, indices });
-      loading = true;
-    } else if (jumping) {
-      scrollInViewAndSetObserver();
+    if ((!viewerState.loading && !isNaN(pg) && !isNaN(toPage)) || !isNaN(dir)) {
+      const indices = getEmptyIndex(images, pg, toPage, dir, file.Duration);
+      if (indices.length) {
+        viewerState.loading = true;
+        socket.emit("loadzip-image", { Id: file.Id, indices });
+      } else if (viewerState.jumping) {
+        scrollInViewAndSetObserver();
+      }
     }
   };
 
-  socket.on("image-loaded", (data) => {
-    if (!data.last) {
-      images[data.page] = data.img;
-    } else {
-      loading = false;
-      indices = [];
-      if (jumping && webtoon) {
-        jumping = false;
-        scrollInViewAndSetObserver(100);
-      }
-    }
-  });
-
-  const prevPage = () => {
-    let pg = file.CurrentPos - 1;
-    if (pg > -1) {
+  const changePage = (dir, action) => {
+    let pg = file.CurrentPos + dir;
+    if (pg > -1 && pg < file.Duration) {
       if (webtoon) {
         scrollInView(pg);
-      } else {
-        if (!images[pg - 7] && !loading) {
-          loadImages(pg, 8, -1);
-        }
+      } else if (!images[pg + 7 * dir] && !viewerState.loading) {
+        loadImages(pg, 8, -1);
       }
       file.CurrentPos = pg;
     } else {
-      jumping = true;
-      PrevFile.action();
-    }
-  };
-
-  const nextPage = () => {
-    let pg = file.CurrentPos + 1;
-    if (pg < file.Duration) {
-      if (webtoon) {
-        scrollInView(pg);
-      } else {
-        if (!images[pg + 7] && !loading) {
-          loadImages(pg, 8);
-        }
-      }
-      file.CurrentPos = pg;
-    } else {
-      jumping = true;
+      viewerState.jumping = true;
       disconnectObvrs(imgContainer);
-      NextFile.action();
+      action();
     }
   };
 
+  const prevPage = () => changePage(-1, PrevFile.action);
+  const nextPage = () => changePage(1, NextFile.action);
+
+  //Replace Placeholder with current page on focus
   const onInputFocus = () => {
     inputPage.value = file.CurrentPos + 1;
+    inputPage.focus();
   };
+  //clear Input on focusout and show placeholder
+  const onInputBlur = () => (inputPage.value = "");
+  //Set page and load image for the next position
+  const jumpToPage = () => {
+    console.log("jump-to-page");
+    let val = +inputPage.value;
 
-  const onInputBlur = () => {
-    inputPage.value = "";
-  };
-  const jumpToPage = (event) => {
-    let val = parseInt(inputPage.value);
-    if (isNaN(val)) return onInputFocus();
-    val < 0 ? 0 : val >= file.Duration ? file.Duration - 1 : val;
+    val = val.clamp(1, file.Duration);
     file.CurrentPos = val - 1;
     if (webtoon) {
-      jumping = true;
+      viewerState.jumping = true;
       disconnectObvrs(imgContainer);
     }
     loadImages(val - 5, 10);
     onInputBlur();
   };
-  const returnTo = () => dispatch("returnBack");
 
-  SkipForward.action = nextPage;
-  SkipBack.action = prevPage;
+  const returnTo = () => dispatch("returnBack");
 
   const setPage = (pg) => {
     file.CurrentPos = pg;
@@ -121,7 +94,7 @@
   let scrollInViewAndSetObserver = (delay = 0) => {
     let tout = setTimeout(() => {
       scrollInView(file.CurrentPos);
-      PageObserver(setPage, imgContainer, loadImages);
+      PageObserver(setPage, imgContainer, loadImages, viewerState);
       scrollImageLoader(loadImages, imgContainer, file.CurrentPos);
       clearTimeout(tout);
     }, delay);
@@ -131,7 +104,7 @@
     if (webtoon) {
       disconnectObvrs(imgContainer);
       setfullscreen(viewer);
-      scrollInViewAndSetObserver(200);
+      scrollInViewAndSetObserver(150);
     } else {
       setfullscreen(viewer);
     }
@@ -141,39 +114,31 @@
     config = detail;
   };
 
-  $: progress = `${parseInt(file.CurrentPos) + 1}/${file.Duration}`;
-
-  $: if (file.Id !== lastfId) {
-    jumping = true;
-    images = [];
-    lastfId = file.Id;
-    if (imgContainer) {
-      disconnectObvrs(imgContainer);
+  const onImageData = (data) => {
+    if (data.id === file.Id) {
+      if (!data.last) {
+        images[data.page] = data.img;
+      } else {
+        viewerState.loading = false;
+        if (viewerState.jumping && webtoon) {
+          viewerState.jumping = false;
+          scrollInViewAndSetObserver(200);
+        }
+      }
+    } else {
+      viewerState.loading = false;
     }
-    indices = getEmptyIndex(images, file.CurrentPos - 2, 8, 1, file.Duration);
-    socket.emit("loadzip-image", {
-      Id: file.Id,
-      indices,
-    });
+  };
 
-    controls.file = file;
-  }
+  const onConnect = () => loadImages(file.CurrentPos - 2, 8);
+  const onDisconnect = () => (viewerState.loading = false);
 
-  $: if (webtoon) {
-    controls.webtoon = webtoon;
-    if (!isObserver) {
-      isObserver = true;
-      scrollInViewAndSetObserver();
-    }
-  } else if (isObserver) {
-    controls.webtoon = webtoon;
-    isObserver = false;
-    disconnectObvrs(imgContainer);
-  }
+  socket.on("connect", onConnect);
+  socket.on("image-loaded", onImageData);
+  socket.on("disconnect", onDisconnect);
 
-  $: {
-    localStorage.setItem("webtoon", webtoon);
-  }
+  SkipForward.action = nextPage;
+  SkipBack.action = prevPage;
 
   controls.prevPage = prevPage;
   controls.nextPage = nextPage;
@@ -181,10 +146,39 @@
   controls.nextFile = NextFile.action;
   controls.prevFile = PrevFile.action;
   controls.file = file;
-  onDestroy(() => {
-    delete socket._callbacks["$image-loaded"];
-    disconnectObvrs(imgContainer);
+
+  $: progress = `${parseInt(file.CurrentPos) + 1}/${file.Duration}`;
+
+  $: {
+    if (!webtoon) disconnectObvrs(imgContainer);
+    controls.webtoon = webtoon;
+  }
+
+  //reload on file change
+  $: if (file.Id !== viewerState.lastfId) {
+    viewerState.jumping = true;
+    viewerState.loading = false;
+    images = [];
+    if (imgContainer) disconnectObvrs(imgContainer);
+    loadImages(file.CurrentPos - 2, 8);
+    controls.file = file;
+  }
+
+  afterUpdate(() => {
+    if (file.Id !== viewerState.lastfId) {
+      viewerState.lastfId = file.Id;
+      scrollInView(file.CurrentPos);
+    }
   });
+
+  onDestroy(() => {
+    disconnectObvrs(imgContainer);
+    socket.off("image-loaded", onImageData);
+    socket.off("disconnect", onDisconnect);
+    socket.off("connect", onConnect);
+  });
+
+  // $: localStorage.setItem("webtoon", webtoon);
 </script>
 
 <div id="manga-viewer" tabIndex="0" class:hide={$ToggleMenu}>
@@ -242,7 +236,7 @@
       <form action="" on:submit|preventDefault={jumpToPage}>
         <input
           name="page-selector"
-          type="text"
+          type="number"
           bind:this={inputPage}
           value={""}
           placeholder={progress}
@@ -276,7 +270,7 @@
     background-color: rgba(0, 0, 0, 0.8);
     padding: initial;
     transition: 0.3s all;
-    z-index: 1;
+    z-index: 4;
     pointer-events: all;
     user-select: none;
   }
@@ -323,7 +317,7 @@
     opacity: 1;
     transition: 0.5s all;
     font-size: 16px;
-    z-index: 1;
+    z-index: 4;
   }
   #manga-viewer .fa-sticky-note {
     font-size: 16px;

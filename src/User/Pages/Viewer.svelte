@@ -8,7 +8,7 @@
   import PlayList from "../Component/PlayList.svelte";
   import MangaViewer from "./Manga/MangaViewer.svelte";
   import VideoPLayer from "./Video/VideoPlayer.svelte";
-  import { KeyMap, handleKeyboard, isMobile, isVideo, isManga, showFileName } from "./Utils";
+  import { KeyMap, handleKeyboard, isMobile, isVideo, isManga, showFileName, sortFileByName } from "./Utils";
 
   export let folderId;
   export let fileId;
@@ -20,10 +20,8 @@
   const socket = getContext("socket");
   const { NextFile, PrevFile } = KeyMap;
   let files = [];
-  let observer;
   let playList = [];
   let file = { Name: "", Type: "", Cover: "" };
-  let fileName;
   let viewer;
   let fileIndex = 1;
   let filters = { filter: "" };
@@ -75,26 +73,10 @@
   onMount(async () => {
     let { data } = await axios.post(`/api/viewer/folder`, { id: folderId });
     if (!data.fail) {
-      playList = files = data.files.sort((a, b) => {
-        let n1 = a.Name.replace("-", ".").match(/\d+.\d+|\d+/);
-        let n2 = b.Name.replace("-", ".").match(/\d+.\d+|\d+/);
-
-        if (n1 && n2) {
-          return Number(n1[0]) - Number(n2[0]);
-        } else {
-          return a.Name.replace("-", "Z").localeCompare(b.Name.replace("-", "Z"));
-        }
-      });
+      playList = files = data.files.sort(sortFileByName);
       const first = playList[0];
-      if (first) {
-        window.title = first.Cover?.split("/")[2] || "";
-      }
+      window.title = playList[0]?.Cover?.split("/")[2] || "";
     }
-    window.addEventListener("beforeunload", saveFile);
-    return () => {
-      window.removeEventListener("beforeunload", saveFile);
-      observer?.disconnect();
-    };
   });
 
   let lastId;
@@ -133,13 +115,11 @@
     }
   });
 
-  $: if (fileId) {
-    if (socket) socket.emit("recent-folder", { CurrentFile: fileId, FolderId: folderId });
-  }
+  $: if (fileId) socket?.emit("recent-folder", { CurrentFile: fileId, FolderId: folderId });
 </script>
 
 <div class="viewer" bind:this={viewer} on:keydown={handleKeyboard}>
-  <div class="f-name" bind:this={fileName} class:nomenu={$ToggleMenu}>
+  <div class="f-name" class:nomenu={$ToggleMenu}>
     <span>{getName(file)}</span>
   </div>
   <span class="info" class:top={isVideo(file)}>
@@ -189,7 +169,7 @@
     bottom: 0px;
     pointer-events: none;
     border-radius: 0.25rem 0 0 0;
-    z-index: 1;
+    z-index: 4;
     padding: 2px 5px;
     background-color: rgba(0, 0, 0, 0.8);
   }

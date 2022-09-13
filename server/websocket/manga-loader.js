@@ -1,92 +1,45 @@
 const StreamZip = require("node-stream-zip");
-const path = require("path");
-const fs = require("fs-extra");
-var db;
-var users = {};
-const iUser = { lastId: "" };
+const { existsSync } = require("fs-extra");
+const db = require("../models");
 
-module.exports.removeZip = (id) => {
-  delete users[id];
-};
-
-module.exports.setDb = (_db) => {
-  db = _db;
-};
-
-const loadZipImages = async (data, socket, curUser) => {
-  if (!curUser) return;
-
+const loadZipImages = async (data, socket) => {
   let { Id, indices } = data;
-  //get last user or create
-  if (!users[curUser.Id]) {
-    users[curUser.Id] = iUser;
-  }
 
-  let user = users[curUser.Id];
-  if (user.lastId === Id) {
+  let file = await db.file.findOne({
+    attributes: ["Id", "Name"],
+    where: { Id },
+    include: { model: db.folder },
+  });
+
+  if (file && existsSync(file.Path)) {
     try {
+      const zip = new StreamZip.async({
+        file: file.Path,
+        storeEntries: true,
+      });
+
+      const entries = Object.values(await zip.entries())
+        .sort((a, b) => String(a.name).localeCompare(String(b.name)))
+        .filter((entry) => !entry.isDirectory);
+
       for (let i of indices) {
-        let entry = user.entries[i];
-        if (entry) {
+        if (entries[i]) {
+          const img = await zip.entryData(entries[i]);
           socket.emit("image-loaded", {
             page: i,
-            img: user.zip.entryDataSync(entry).toString("base64"),
-            id: data.Id,
+            img: img.toString("base64"),
+            id: file.Id,
           });
         }
       }
-      socket.emit("image-loaded", { last: true });
+      await zip?.close();
+      socket.emit("image-loaded", { last: true, id: file.Id });
     } catch (error) {
-      users[curUser.Id].lastId = "";
-      loadZipImages(data, socket);
+      socket.emit("image-loaded", { error: "some error" });
+      console.log(error);
     }
   } else {
-    let file = await db.file.findOne({
-      attributes: ["Id", "Name"],
-      where: { Id },
-      include: { model: db.folder },
-    });
-    if (file) {
-      user.lastId = Id;
-      let filePath = path.resolve(file.Folder.Path, file.Name);
-      if (fs.existsSync(filePath)) {
-        user.zip = new StreamZip({
-          file: filePath,
-          storeEntries: true,
-        });
-
-        user.zip.on("ready", () => {
-          let entries = Object.values(user.zip.entries())
-            .sort((a, b) => {
-              return String(a.name).localeCompare(String(b.name));
-            })
-            .filter((entry) => {
-              return !entry.isDirectory;
-            });
-
-          user.entries = entries;
-
-          for (let i of indices) {
-            if (user.entries[i]) {
-              socket.emit("image-loaded", {
-                page: i,
-                img: user.zip.entryDataSync(user.entries[i]).toString("base64"),
-                id: file.Id,
-              });
-            }
-          }
-          socket.emit("image-loaded", { last: true });
-        });
-
-        user.zip.on("error", (err) => {
-          socket.emit("image-loaded", { error: "some error" });
-          console.log(err);
-          user.zip.close();
-        });
-      } else {
-        socket.emit("manga-error", { error: "File Not Found" });
-      }
-    }
+    socket.emit("manga-error", { error: "File Not Found" });
   }
 };
 
