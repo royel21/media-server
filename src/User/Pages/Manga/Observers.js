@@ -104,8 +104,10 @@ export const scrollImageLoader = (loadImages, container) => {
 };
 
 export const disconnectObvrs = (container) => {
-  container.onmousedown = null;
-  container.onmouseup = null;
+  if (container) {
+    container.onmousedown = null;
+    container.onmouseup = null;
+  }
   pageObserver?.disconnect();
   imgObserver?.disconnect();
   imgs = [];

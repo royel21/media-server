@@ -5,19 +5,24 @@
   export let config = {};
   export let ToggleMenu;
   let show = false;
-  let width = config.width;
+  let width = "";
+  let tWidth = config.width;
   let imgAbjust = config.imgAbjust || "";
 
-  const blur = () => (width = "");
-
-  const focus = () => (width = config.width);
-
-  let change = () => {
-    width = Number.clamp(width, 30, 100);
-    localStorage.setItem("mWidth", Number.clamp(+width, 30, 100));
+  const blur = () => {
+    width = "";
+  };
+  const focus = () => {
+    width = config.width;
   };
 
-  $: dispatch("mconfig", { width, imgAbjust });
+  let change = () => {
+    tWidth = width < 30 ? 30 : width > 100 ? 100 : width;
+    width = tWidth;
+    localStorage.setItem("mWidth", width);
+  };
+
+  $: dispatch("mconfig", { width: tWidth, imgAbjust });
   $: if ($ToggleMenu) {
     show = false;
   }

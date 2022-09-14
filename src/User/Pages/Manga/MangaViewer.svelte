@@ -50,7 +50,7 @@
       if (webtoon) {
         scrollInView(pg);
       } else if (!images[pg + 7 * dir] && !viewerState.loading) {
-        loadImages(pg, 8, -1);
+        loadImages(pg + 7, 4, dir);
       }
       file.CurrentPos = pg;
     } else {
@@ -104,7 +104,7 @@
     if (webtoon) {
       disconnectObvrs(imgContainer);
       setfullscreen(viewer);
-      scrollInViewAndSetObserver(150);
+      scrollInViewAndSetObserver(100);
     } else {
       setfullscreen(viewer);
     }
