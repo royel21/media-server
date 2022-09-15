@@ -25,11 +25,13 @@ db.recentFolder = require("./recent-folder")(sequelize, DataTypes);
 db.favoriteFolder = require("./favorite-folder")(sequelize, DataTypes);
 
 db.favorite.belongsToMany(db.folder, { through: { model: db.favoriteFolder } });
+
 db.folder.belongsToMany(db.favorite, {
   through: { model: db.favoriteFolder, onDelete: "cascade" },
 });
 
 db.recent.belongsToMany(db.folder, { through: { model: db.recentFolder } });
+
 db.folder.belongsToMany(db.recent, {
   through: { model: db.recentFolder, onDelete: "cascade" },
 });

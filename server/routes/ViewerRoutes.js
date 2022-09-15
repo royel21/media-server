@@ -13,9 +13,14 @@ const getFiles = async ({ user, body }, res, type) => {
     order: [db.sqlze.literal("REPLACE(`Files`.`Name`, '[','0')")],
     include: {
       model: db.file,
-      attributes: ["Id", "Name", "Type", "Duration", "Cover", "FolderId", "ViewCount", qryCurrentPos(Recent, "Files")],
+      attributes: ["Id", "Name", "Type", "Duration", "FolderId", "ViewCount", qryCurrentPos(Recent, "Files")],
     },
   });
+
+  if (type === "favorite") {
+    const folder = await db.folder.findOne({ where: { Id: body.id }, attributes: ["Name"] });
+    table.Name = folder.Name;
+  }
 
   res.send({
     Name: table.Name,
@@ -33,7 +38,6 @@ Router.post("/favorites/", (req, res) => {
 });
 
 Router.get("/video/:id", (req, res) => {
-  console.log("video:", req.params.id);
   db.file
     .findOne({
       attributes: ["Id", "Name", "Size"],

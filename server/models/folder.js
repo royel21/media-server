@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
       Exists: {
         type: VIRTUAL,
         get() {
-          return fs.existsSync(this.Path);
+          return fs.existsSync(this.Path || "");
         },
       },
       IsNoEmpty: {
@@ -56,7 +56,10 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       Cover: {
-        type: STRING,
+        type: VIRTUAL,
+        get() {
+          return `/Folder/${this.Name}.jpg`;
+        },
       },
       CreatedAt: {
         type: DATE,
@@ -65,7 +68,7 @@ module.exports = (sequelize, DataTypes) => {
       LastModified: {
         type: VIRTUAL,
         get() {
-          return this.CreatedAt.toISOString();
+          return this.CreatedAt?.toISOString();
         },
       },
       FileCount: {

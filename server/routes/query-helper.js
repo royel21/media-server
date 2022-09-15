@@ -1,19 +1,19 @@
 const db = require("../models");
 const { getFilter } = require("./utils");
 
+const { literal } = db.sqlze;
+
 const qryCurrentPos = (Recent, table) => [
-  db.sqlze.literal(
-    `IFNULL((Select LastPos from RecentFiles where FileId = ${table}.Id and RecentId = '${Recent.Id}'), 0)`
-  ),
+  literal(`IFNULL((Select LastPos from RecentFiles where FileId = ${table}.Id and RecentId = '${Recent.Id}'), 0)`),
   "CurrentPos",
 ];
 
 const getOrderBy = (orderby, table = "") => {
   let desc = /nd/.test(orderby) ? "DESC" : "";
-  let byName = db.sqlze.literal(`REPLACE(${table}.Name, '[','0') ${desc}`);
+  let byName = literal(`REPLACE(${table}.Name, '[','0') ${desc}`);
 
   if (table === "File") {
-    byName = db.sqlze.literal(`CAST(${table}.Name as unsigned) ${desc}, REPLACE(${table}.Name, '[','0') ${desc}`);
+    byName = literal(`CAST(${table}.Name as unsigned) ${desc}, REPLACE(${table}.Name, '[','0') ${desc}`);
   }
 
   const data = {
@@ -24,7 +24,7 @@ const getOrderBy = (orderby, table = "") => {
   return [data[orderby] || [byName]];
 };
 
-const getFiles = async (user, data, model) => {
+const getFiles = async (user, data) => {
   let files = { count: 0, rows: [] };
   let searchs = [];
   let search = data.search || "";
@@ -47,37 +47,24 @@ const getFiles = async (user, data, model) => {
       "Cover",
       "CreatedAt",
       qryCurrentPos(user.Recent, "File"),
-      [db.sqlze.literal(LastRead), "LastRead"],
+      [literal(LastRead), "LastRead"],
     ],
     order: getOrderBy(data.order, "File"),
     offset: (data.page - 1) * +data.items,
     limit: +data.items,
     where: {
       [db.Op.or]: searchs,
+      FolderId: data.id,
     },
   };
   // by file type manga or video => future audio
-  if (data.type)
+  if (data.type) {
     query.where.Type = {
       [db.Op.like]: `%${data.type || ""}%`,
     };
-
-  // if we are getting files from a model folder-content include in the result
-  if (model) {
-    query.include = [
-      {
-        model,
-        where: {
-          Id: data.id,
-        },
-      },
-    ];
   }
 
-  files = await db.file.findAndCountAll(query);
-  files.rows.map((f) => f.dataValues);
-
-  return files;
+  return db.file.findAndCountAll(query);
 };
 
 const getFolders = async (req, res) => {
@@ -101,7 +88,7 @@ const getFolders = async (req, res) => {
       "CreatedAt",
       "Status",
       "FileCount",
-      [db.sqlze.literal(favSelect), "isFav"],
+      [literal(favSelect), "isFav"],
     ],
     where: {
       [db.Op.or]: {

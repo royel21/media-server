@@ -74,6 +74,7 @@ Router.get("/:id/:order/:page/:items/:search?", async (req, res) => {
     const limit = +items || 16;
 
     let result = await db.folder.findAndCountAll({
+      attributes: ["Id", "Name", "FileCount", "Type", "CreatedAt"],
       where: {
         Name: {
           [db.Op.like]: `%${search || ""}%`,
@@ -86,6 +87,7 @@ Router.get("/:id/:order/:page/:items/:search?", async (req, res) => {
           where: {
             Id: id,
           },
+          required: true,
         },
       ],
       order: getOrderBy(order, "Folders"),
@@ -93,14 +95,19 @@ Router.get("/:id/:order/:page/:items/:search?", async (req, res) => {
       limit,
     });
 
+    const files = result.rows.map((r) => {
+      delete r.dataValues.Favorites;
+      return { ...r.dataValues, Cover: r.Cover };
+    });
+
     return res.json({
-      files: result.rows,
+      files,
       totalFiles: result.count,
       totalPages: Math.ceil(result.count / limit),
       valid: true,
     });
   } catch (error) {
-    console.log(err);
+    console.log(error);
     res.send({ fail: true, msg: "server error" });
   }
 });

@@ -36,6 +36,7 @@ export const onTouchEnd = (e) => {
     nextPage,
     prevFile,
     prevPage,
+    jumpTo,
     fullScreen,
   } = controls;
   if (!drag) {
@@ -48,11 +49,12 @@ export const onTouchEnd = (e) => {
       if (point.y < wh * 0.33) {
         if (point.x < ww * 0.33) {
           // top-left
+          jumpTo(0);
         } else if (point.x < ww * 0.66) {
           // top-center
           showFileName();
         } else {
-          //top-right
+          jumpTo(Duration);
         }
         // Center
       } else if (point.y < wh * 0.8) {

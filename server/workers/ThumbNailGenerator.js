@@ -17,7 +17,7 @@ const genFileThumbnails = async (folders) => {
 
       try {
         let filePath = path.join(folder.Path, file.Name);
-        let thumbPath = path.join(thumbnailBasePath, "Manga", folder.Name);
+        let thumbPath = path.join(thumbnailBasePath, file.Type, folder.Name);
 
         if (!fs.existsSync(thumbPath)) {
           fs.mkdirsSync(thumbPath);
@@ -55,7 +55,7 @@ const genFolderThumbnails = async (folders) => {
           await ZipCover(s.filePath, s.CoverPath);
         }
       } else {
-        await getVideoThumnail(s.filePath, s.CoverPath, duration);
+        await getVideoThumnail(s.filePath, s.CoverPath);
       }
     } catch (err) {
       console.log(err);

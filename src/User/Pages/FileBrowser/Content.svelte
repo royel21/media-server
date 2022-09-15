@@ -53,12 +53,12 @@
   };
 
   const onResetFiles = async () => {
-    await apiUtils.files(["reset-recents", folderinfo.Id]);
-    id = folderinfo.Id;
+    await apiUtils.files(["reset-recents", folderinfo?.Id]);
+    id = folderinfo?.Id;
   };
 
   const scanfiles = () => {
-    socket.emit("scan-dir", { Id: folderinfo.Id, isFolder: true });
+    socket.emit("scan-dir", { Id: folderinfo?.Id, isFolder: true });
   };
 
   const setLastRead = (data) => (lastRead = data);
@@ -71,19 +71,19 @@
 <div id="info">
   <div id="info-content">
     <div id="img-info">
-      <span class:completed={folderinfo.Status}>{folderinfo.Status ? "Completed" : "On Going"}</span>
-      <img src={folderinfo.Cover} alt="Cover Not Found" />
+      <span class:completed={folderinfo?.Status}>{folderinfo?.Status ? "Completed" : "On Going"}</span>
+      <img src={folderinfo?.Cover} alt="Cover Not Found" />
     </div>
     <div id="name-gen-tag">
-      <span id="manga-name"><span>{folderinfo.Name}</span></span>
+      <span id="manga-name"><span>{folderinfo?.Name}</span></span>
       <div class="genres-list">
         <span class="gen-tag">Genres: </span>
-        {#each folderinfo.Genres.split(", ") as genre}
+        {#each folderinfo?.Genres?.split(", ") || [] as genre}
           <span on:click|preventDefault={onGenres}> {genre}</span>
         {/each}
       </div>
       <div class="m-desc">
-        <span class="desc-text"><span class="gen-tag">Description: </span>{folderinfo.Description || ""}</span>
+        <span class="desc-text"><span class="gen-tag">Description: </span>{folderinfo?.Description || ""}</span>
       </div>
       <div id="btn-bar">
         {#if lastRead}

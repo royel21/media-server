@@ -62,7 +62,7 @@ const getVideoDuration = async (vPath) => {
 };
 
 const getVideoThumnail = async (video, toPath, exist) => {
-  let duration = getVideoDuration(video);
+  let duration = await getVideoDuration(video);
 
   if (!exist && duration) {
     let pos = (duration * 0.237).toFixed(2);

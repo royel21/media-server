@@ -25,11 +25,7 @@
   let viewer;
   let fileIndex = 1;
   let filters = { filter: "" };
-
-  const getName = (f) => {
-    let part = f.Cover?.replace(".jpg", "").split("/").slice(2, 4)?.join("/");
-    return f.Name.length < 9 ? part : f.Name;
-  };
+  let folderName = "";
 
   const saveFile = () => {
     let { Id, CurrentPos } = file;
@@ -73,6 +69,7 @@
   onMount(async () => {
     let data = await apiUtils.post(`viewer/folder`, { id: folderId });
     if (!data.fail) {
+      folderName = data.Name;
       playList = files = data.files.sort(sortFileByName);
       window.title = playList[0]?.Cover?.split("/")[2] || "";
     }
@@ -119,7 +116,7 @@
 
 <div class="viewer" bind:this={viewer} on:keydown={handleKeyboard}>
   <div class="f-name" class:nomenu={$ToggleMenu}>
-    <span>{getName(file)}</span>
+    <span>{`${folderName} - ${file.Name}`}</span>
   </div>
   <span class="info" class:top={isVideo(file)}>
     <span id="files-prog">

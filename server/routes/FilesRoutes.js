@@ -5,23 +5,27 @@ const { getFiles, getFolders } = require("./query-helper");
 const { getFilter } = require("./utils");
 
 const sortName = (a, b) => a.Name.localeCompare(b.Name);
+const { literal } = db.sqlze;
 
 Router.get("/folder-content/:id/:order/:page?/:items?/:search?", async (req, res) => {
   const { id, order, page, items, search } = req.params;
 
   let data = {};
-  let folder;
 
   try {
     data = await getFiles(req.user, { id, order, page, items, search }, db.folder);
-    folder = await db.recentFolder.findOne({ where: { FolderId: id } });
+    const folder = await db.folder.findOne({
+      attributes: {
+        include: [[literal("(Select currentFile from RecentFolders where FolderId = `Folders`.`Id`)"), "currentFile"]],
+      },
+      where: { Id: id },
+    });
 
     res.json({
-      files: data.rows,
+      files: data.rows.map((d) => ({ ...d.dataValues, Cover: `/${d.Type}/${folder.Name}/${d.Name}.jpg` })),
       totalFiles: data.count,
       totalPages: Math.ceil(data.count / items),
-      currentFile: folder?.CurrentFile,
-      name: folder?.Name,
+      folder: { ...folder.dataValues, Cover: folder.Cover },
       valid: true,
     });
   } catch (err) {
@@ -64,6 +68,7 @@ Router.get("/recents/:items/:page?/:filter?", async (req, res) => {
     return {
       ...rc.dataValues,
       ...rc.Folder.dataValues,
+      Cover: rc.Folder.Cover,
     };
   });
 

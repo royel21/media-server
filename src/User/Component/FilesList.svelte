@@ -37,8 +37,8 @@
     if (data.valid) {
       pageData = data;
       if (data.files[0] && setFolderInfo && setLastRead) {
-        setFolderInfo(data.files[0].Folder);
-        setLastRead(data.currentFile);
+        setFolderInfo(data.folder);
+        setLastRead(data.folder.currentFile);
       }
       selected = pageData.files.findIndex((f) => f.Id === data.currentFile) || 0;
     } else {

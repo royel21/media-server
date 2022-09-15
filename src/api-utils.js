@@ -32,6 +32,7 @@ export const getItemsList = async (url) => {
     if (cancel) cancel();
 
     const { data } = await axios.get(url, { cancelToken: new axios.CancelToken((c) => (cancel = c)) });
+    console.log(url, data);
     return data;
   } catch (error) {
     return { valid: false, error };

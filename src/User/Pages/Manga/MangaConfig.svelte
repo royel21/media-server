@@ -1,13 +1,12 @@
 <script>
-  import { createEventDispatcher } from "svelte";
-
-  const dispatch = createEventDispatcher();
-  export let config = {};
+  import { clamp } from "../Utils";
+  export let onConfig;
   export let ToggleMenu;
+
+  let config = localStorage.getObject("mangaConfig") || { width: 65, imgAbjust: "fill" };
+
   let show = false;
   let width = "";
-  let tWidth = config.width;
-  let imgAbjust = config.imgAbjust || "";
 
   const blur = () => {
     width = "";
@@ -16,16 +15,14 @@
     width = config.width;
   };
 
-  let change = () => {
-    tWidth = width < 30 ? 30 : width > 100 ? 100 : width;
-    width = tWidth;
-    localStorage.setItem("mWidth", width);
+  let change = ({ target: { value } }) => {
+    width = clamp(value, 30, 100);
+    config.width = width;
   };
 
-  $: dispatch("mconfig", { width: tWidth, imgAbjust });
-  $: if ($ToggleMenu) {
-    show = false;
-  }
+  $: if ($ToggleMenu) show = false;
+  $: onConfig(config);
+  $: localStorage.setObject("mangaConfig", config);
 </script>
 
 <label for="show"> <i class="fas fa-cog" /></label>
@@ -33,7 +30,7 @@
 <div id="content" class:show on:click|stopPropagation|preventDefault>
   <div class="input-group">
     <div class="input-group-prepend"><label for="img-fill" class="input-group-text">Ajust Image:</label></div>
-    <select id="img-fill" name="image-fill" class="form-control" bind:value={imgAbjust}>
+    <select id="img-fill" name="image-fill" class="form-control" bind:value={config.imgAbjust}>
       <option value="fill">fill</option>
       <option value="cover">cover</option>
       <option value="contain">contain</option>

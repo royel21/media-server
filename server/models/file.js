@@ -49,7 +49,10 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: 0,
       },
       Cover: {
-        type: STRING,
+        type: VIRTUAL,
+        get() {
+          return `/${this.Type}/${this.FolderName}/${this.Name}.jpg`;
+        },
       },
     },
     {

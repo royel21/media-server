@@ -1,7 +1,7 @@
 <script>
   import { onDestroy, getContext, createEventDispatcher, afterUpdate } from "svelte";
 
-  import { clamp, setfullscreen } from "../Utils";
+  import { clamp, isMobile, setfullscreen } from "../Utils";
   import { scrollInView, getEmptyIndex } from "./Utils";
   import { PageObserver, disconnectObvrs, scrollImageLoader } from "./Observers";
   import { onTouchStart, onTouchEnd, onTouchMove, default as controls } from "./MangaTouch";
@@ -17,6 +17,7 @@
   const dispatch = createEventDispatcher();
 
   let webtoon = localStorage.getItem("webtoon") === "true";
+  let config = localStorage.getObject("mangaConfig") || { width: 65, imgAbjust: "fill" };
   let progress = `${file.CurrentPos + 1}/${file.Duration}`;
   let images = [file.Duration];
   let imgContainer;
@@ -26,10 +27,6 @@
     isLoading: false,
     jumping: false,
     lastId: file?.Id,
-  };
-  let config = {
-    width: window.innerWidth < 600 ? 100 : localStorage.getItem("mWidth") || 65,
-    imgAbjust: "fill",
   };
   //emptyImage observer
   const loadImages = (pg, toPage, dir = 1) => {
@@ -63,6 +60,16 @@
   const prevPage = () => changePage(-1, PrevFile.action);
   const nextPage = () => changePage(1, NextFile.action);
 
+  const jumpTo = (val) => {
+    val = clamp(val, 1, file.Duration);
+    file.CurrentPos = val - 1;
+    if (webtoon) {
+      viewerState.jumping = true;
+      disconnectObvrs(imgContainer);
+    }
+    loadImages(val - 5, 10);
+  };
+
   //Replace Placeholder with current page on focus
   const onInputFocus = () => {
     inputPage.value = file.CurrentPos + 1;
@@ -72,16 +79,7 @@
   const onInputBlur = () => (inputPage.value = "");
   //Set page and load image for the next position
   const jumpToPage = () => {
-    console.log("jump-to-page");
-    let val = +inputPage.value;
-
-    val = clamp(val, 1, file.Duration);
-    file.CurrentPos = val - 1;
-    if (webtoon) {
-      viewerState.jumping = true;
-      disconnectObvrs(imgContainer);
-    }
-    loadImages(val - 5, 10);
+    jumpTo(+inputPage.value);
     onInputBlur();
   };
 
@@ -110,9 +108,7 @@
     }
   };
 
-  const onConfig = ({ detail }) => {
-    config = detail;
-  };
+  const onConfig = (cfg) => (config = cfg);
 
   const onImageData = (data) => {
     if (data.id === file.Id) {
@@ -142,6 +138,7 @@
 
   controls.prevPage = prevPage;
   controls.nextPage = nextPage;
+  controls.jumpTo = jumpTo;
   controls.fullScreen = Fullscreen.action;
   controls.nextFile = NextFile.action;
   controls.prevFile = PrevFile.action;
@@ -179,6 +176,7 @@
   });
 
   $: localStorage.setItem("webtoon", webtoon);
+  $: console.log("width: ", config.width);
 </script>
 
 <div id="manga-viewer" tabIndex="0" class:hide={$ToggleMenu}>
@@ -193,9 +191,10 @@
       on:mousedown={onTouchStart}
       on:mouseup={onTouchEnd}
       on:touchmove|passive={onTouchMove}
-      class={"img-current" + (webtoon ? " webtoon-img" : "")}
+      class="img-current"
+      class:webtoon-img={webtoon}
       bind:this={imgContainer}
-      style="width: {config.width}%;"
+      style={`width: ${isMobile ? 100 : config.width}%;`}
       tabindex="0"
     >
       {#if !webtoon}
@@ -250,7 +249,7 @@
       <i class="fa fa-arrow-circle-right" />
     </span>
     <span class="config">
-      <MangaConfig {config} on:mconfig={onConfig} {ToggleMenu} />
+      <MangaConfig {onConfig} {ToggleMenu} />
     </span>
     <span class="btn-fullscr" on:click={Fullscreen.action}>
       <i class="fas fa-expand-arrows-alt popup-msg" data-title="Full Screen" />
