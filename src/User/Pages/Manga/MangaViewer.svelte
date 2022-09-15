@@ -147,8 +147,12 @@
   $: progress = `${parseInt(file.CurrentPos) + 1}/${file.Duration}`;
 
   $: {
-    if (!webtoon) disconnectObvrs(imgContainer);
     controls.webtoon = webtoon;
+    if (!webtoon) {
+      disconnectObvrs(imgContainer);
+    } else {
+      scrollInViewAndSetObserver(200);
+    }
   }
 
   //reload on file change
@@ -156,7 +160,7 @@
     viewerState.jumping = true;
     viewerState.loading = false;
     images = [];
-    if (imgContainer) disconnectObvrs(imgContainer);
+    disconnectObvrs(imgContainer);
     loadImages(file.CurrentPos - 2, 8);
     controls.file = file;
   }
@@ -176,7 +180,6 @@
   });
 
   $: localStorage.setItem("webtoon", webtoon);
-  $: console.log("width: ", config.width);
 </script>
 
 <div id="manga-viewer" tabIndex="0" class:hide={$ToggleMenu}>
