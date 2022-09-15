@@ -28,12 +28,12 @@ export const FileTypes = {
 export const getFilesPerPage = (i) => {
   let fwidth = document.body.offsetWidth;
   let items = parseInt((fwidth - scrollW) / itemW);
-  return items * i;
+  return items * i || 0;
 };
 
 export const genUrl = (page = 1, { order = "nu", items }, filter, type, id, dir) => {
-  items = +items;
-  let itemsperpage = (items || 0) === 0 ? getFilesPerPage(3) : items;
+  let itemsperpage = +items || getFilesPerPage(3);
+
   if (type.includes("content")) {
     type = `folder-content/${id}`;
   }
@@ -50,23 +50,20 @@ export const genUrl = (page = 1, { order = "nu", items }, filter, type, id, dir)
 
 export const ProcessFile = (file, socket, type) => {
   const curPath = location.pathname;
-  let Type = curPath.replace(/(^\/+|\/+$)/g, "").split("/")[0];
   switch (file.dataset.type) {
     case "Manga":
     case "Video": {
-      let segment = curPath
-        .replace(/(^\/+|\/+$)/g, "")
-        .split("/")
-        .slice(0, 3);
-      segment[1] = "viewer";
-      let url = `/${segment.join("/")}/${file.id}`;
+      let segment = curPath.replace("content", "viewer").split("/").slice(0, 4);
+
+      let url = `${segment.join("/")}/${file.id}`;
       localStorage.setItem("content", curPath);
       localStorage.setItem("fileId", file.id);
+
       navigate(url);
       if (socket)
         socket.emit("recent-folder", {
           CurrentFile: file.id,
-          FolderId: segment[2],
+          FolderId: segment[3],
         });
       break;
     }
@@ -75,6 +72,7 @@ export const ProcessFile = (file, socket, type) => {
         folder: file.id,
         pathname: curPath,
       });
+      let Type = location.pathname.split("/")[1];
       navigate(`/${type || Type}/content/${file.id}/`);
     }
   }

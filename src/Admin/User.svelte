@@ -1,7 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import axios from "axios";
-
+  import apiUtils from "../api-utils";
   import ModalUser from "./Component/ModalUser.svelte";
 
   let users = [];
@@ -22,21 +21,16 @@
     showModal = true;
   };
 
-  const removeUser = (e) => {
+  const removeUser = async (e) => {
     let tr = e.target.closest("tr");
     let Role = tr.children[1].innerText;
     if (tr) {
-      axios
-        .delete("/api/admin/users/remove", {
-          data: { Id: tr.id, Role },
-        })
-        .then(({ data }) => {
-          if (data.removed) {
-            users = users.filter((u) => u.Id !== tr.id);
-          } else {
-            error = data.msg;
-          }
-        });
+      const data = await apiUtils.post("admin/users/remove", { Id: tr.id, Role });
+      if (data.removed) {
+        users = users.filter((u) => u.Id !== tr.id);
+      } else {
+        error = data.msg;
+      }
     }
   };
 
@@ -53,11 +47,10 @@
   };
 
   onMount(async () => {
-    axios.get("/api/admin/users").then(({ data }) => {
-      if (data.users) {
-        users = data.users;
-      }
-    });
+    const data = await apiUtils.admin(["users"]);
+    if (data.users) {
+      users = data.users;
+    }
   });
 </script>
 

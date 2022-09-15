@@ -1,5 +1,6 @@
 <script>
   import { createEventDispatcher } from "svelte";
+  import { clamp } from "../User/Pages/Utils";
   import paginationInput from "./PageInput";
 
   const dispatch = createEventDispatcher();
@@ -42,7 +43,7 @@
   const handlerPage = (p) => {
     let pg = +p;
     if (!isNaN(pg)) {
-      pg = Math.max(Math.min(pg, totalPages), 0);
+      pg = clamp(pg, 1, totalPages);
       dispatch("gotopage", pg);
     }
   };

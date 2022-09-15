@@ -1,9 +1,8 @@
 <script>
-  import axios from "axios";
-
   import { getContext, onDestroy } from "svelte";
 
   import { navigate } from "svelte-routing";
+  import apiUtils from "../../../api-utils";
 
   import FilesList from "../../Component/FilesList.svelte";
   import { ProcessFile } from "../../Component/FilesUtils";
@@ -34,12 +33,12 @@
   localStorage.setItem("fileId", folder);
 
   const openFirstLast = async ({ target: { id } }) => {
-    const { data } = await axios.get(`/api/files/first-last/${id}/${folderinfo.Id}`);
+    const data = await apiUtils.files(["first-last", id, folderinfo]);
     ProcessFile({ id: data.Id, dataset: { type: data.Type } }, socket);
   };
 
   const continueReading = async () => {
-    const { data } = await axios.get(`/api/files/file-data/${lastRead}`);
+    const data = await apiUtils.files(["file-data", lastRead]);
     ProcessFile({ id: lastRead, dataset: { type: data.Type } }, socket);
   };
 
@@ -54,7 +53,7 @@
   };
 
   const onResetFiles = async () => {
-    await axios.get(`/api/files/reset-recents/${folderinfo.Id}`);
+    await apiUtils.files(["reset-recents", folderinfo.Id]);
     id = folderinfo.Id;
   };
 

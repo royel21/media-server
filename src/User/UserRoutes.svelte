@@ -1,5 +1,4 @@
 <script>
-  import axios from "axios";
   import { getContext, onMount } from "svelte";
   import { Router, Route } from "svelte-routing";
   import { FavoritesStores } from "./Stores/FavoritesStores";
@@ -12,6 +11,7 @@
   import Content from "./Pages/FileBrowser/Content.svelte";
   import Viewer from "./Pages/Viewer.svelte";
   import NavItem from "./Component/NavItem.svelte";
+  import apiUtils from "../api-utils";
 
   const navItems = [
     { title: "Home", path: "/", class: "home" },
@@ -29,7 +29,7 @@
   const selectDir = ({ target: { id, title } }) => (selected[title] = id);
 
   onMount(async () => {
-    const { data } = await axios.get("/api/files/dirs/");
+    const data = await apiUtils.files(["dirs/"]);
     selected.Mangas = data.Mangas[0]?.Id || "";
     selected.Videos = data.Videos[0]?.Id || "";
     dirs = data;
@@ -51,13 +51,8 @@
   <Route path="/mangas/:dir/:page/:filter" component={Mangas} />
 
   <Route path="/favorites/content/:id/:page/:filter" component={Content} />
-  <Route path="/favorites/:id/:page/:filter" component={Favorites} />
   <Route path="/favorites/viewer/:folderId/:fileId" component={Viewer} />
+  <Route path="/favorites/:id/:page/:filter" component={Favorites} />
 
-  <Route exact path="/">
-    <Home />
-  </Route>
-  <Route path="*">
-    <div>Not found</div>
-  </Route>
+  <Route path="/:page/:filter" component={Home} />
 </Router>

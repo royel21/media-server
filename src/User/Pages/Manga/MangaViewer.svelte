@@ -1,7 +1,7 @@
 <script>
   import { onDestroy, getContext, createEventDispatcher, afterUpdate } from "svelte";
 
-  import { setfullscreen } from "../Utils";
+  import { clamp, setfullscreen } from "../Utils";
   import { scrollInView, getEmptyIndex } from "./Utils";
   import { PageObserver, disconnectObvrs, scrollImageLoader } from "./Observers";
   import { onTouchStart, onTouchEnd, onTouchMove, default as controls } from "./MangaTouch";
@@ -33,8 +33,8 @@
   };
   //emptyImage observer
   const loadImages = (pg, toPage, dir = 1) => {
-    if ((!viewerState.loading && !isNaN(pg) && !isNaN(toPage)) || !isNaN(dir)) {
-      const indices = getEmptyIndex(images, pg, toPage, dir, file.Duration);
+    if (!viewerState.loading && !isNaN(pg) && !isNaN(toPage)) {
+      const indices = getEmptyIndex(images, pg, toPage, dir || 1, file.Duration);
       if (indices.length) {
         viewerState.loading = true;
         socket.emit("loadzip-image", { Id: file.Id, indices });
@@ -49,8 +49,8 @@
     if (pg > -1 && pg < file.Duration) {
       if (webtoon) {
         scrollInView(pg);
-      } else if (!images[pg + 7 * dir] && !viewerState.loading) {
-        loadImages(pg + 7, 4, dir);
+      } else if (!viewerState.loading && !images[pg + 6 * dir]) {
+        loadImages(pg, 11, dir);
       }
       file.CurrentPos = pg;
     } else {
@@ -75,7 +75,7 @@
     console.log("jump-to-page");
     let val = +inputPage.value;
 
-    val = val.clamp(1, file.Duration);
+    val = clamp(val, 1, file.Duration);
     file.CurrentPos = val - 1;
     if (webtoon) {
       viewerState.jumping = true;

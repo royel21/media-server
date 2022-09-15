@@ -1,5 +1,4 @@
 <script>
-  import axios from "axios";
   import { createEventDispatcher } from "svelte";
   import { FavoritesStores } from "../../User/Stores/FavoritesStores";
 
@@ -15,10 +14,7 @@
   const addToFav = async (event) => {
     let FolderId = event.target.closest(".file").id;
     let FavoriteId = event.target.id;
-    const { data } = await axios.post("/api/files/favorites/add-folder", {
-      FolderId,
-      FavoriteId,
-    });
+    const data = await apiUtils.postFav("add-folder", { FolderId, FavoriteId });
 
     if (data.success) {
       thisEl.className = "fas fa-star";
@@ -26,10 +22,8 @@
   };
 
   const removeFile = async (FolderId) => {
-    let { data } = await axios.post("/api/files/favorites/remove-folder", {
-      id: favId,
-      fid: FolderId,
-    });
+    let data = await apiUtils.postFav("remove-folder", { id: favId, fid: FolderId });
+
     if (data.removed) {
       dispath("removeFile", FolderId);
     }

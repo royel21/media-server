@@ -1,22 +1,21 @@
 <script>
   import { createEventDispatcher } from "svelte";
   import { fade } from "svelte/transition";
-  import axios from "axios";
+  import apiUtils from "../../api-utils";
 
   export let foundUser = { AdultPass: false, Password: "" };
 
   const dispatch = createEventDispatcher();
   let error = "";
 
-  const submit = (e) => {
+  const submit = async (e) => {
     if (!foundUser.Name) return (error = "Name Can't be empty");
-    axios.post("/api/admin/users/create-update", foundUser).then(({ data }) => {
-      if (!data.fail) {
-        dispatch("updateusers", data.user);
-      } else {
-        error = data.msg;
-      }
-    });
+    const result = await apiUtils.post("admin/users/create-update".foundUser);
+    if (!result.fail) {
+      dispatch("updateusers", result.user);
+    } else {
+      error = result.msg;
+    }
   };
 
   const closeModal = () => {

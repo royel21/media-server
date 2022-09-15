@@ -1,10 +1,10 @@
 <script>
   import { onMount, onDestroy, getContext } from "svelte";
-  import axios from "axios";
   import { calRows } from "./Utils";
 
   import ItemList from "./ItemList.svelte";
   import Modal from "./Modal.svelte";
+  import apiUtils from "../../api-utils";
 
   const socket = getContext("socket");
 
@@ -22,7 +22,7 @@
 
   const loadFiles = async (pg) => {
     let rows = calRows(".list-container");
-    let { data } = await axios.get(`/api/admin/folders/files/${folderId}/${pg}/${rows}/${filter || ""}`);
+    let data = await apiUtils.admin(["folders", "files", folderId, pg, rows, filter]);
 
     if (data.items) {
       items = data.items;

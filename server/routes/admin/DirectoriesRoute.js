@@ -22,7 +22,7 @@ Router.get("/", (req, res) => {
     });
 });
 
-Router.delete("/remove", (req, res) => {
+Router.post("/remove", (req, res) => {
   let { Id } = req.body;
   db.directory
     .destroy({ where: { Id } })

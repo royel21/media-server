@@ -1,12 +1,12 @@
 <script>
   import { onMount, onDestroy, getContext, createEventDispatcher } from "svelte";
   import { navigate } from "svelte-routing";
-  import { clamp } from "./Utils";
 
   import ItemList from "./ItemList.svelte";
   import Modal from "./Modal.svelte";
-  import axios from "axios";
   import { calRows } from "./Utils";
+  import { clamp } from "../../User/Pages/Utils";
+  import apiUtils from "../../api-utils";
   const dispatch = createEventDispatcher();
   const socket = getContext("socket");
 
@@ -24,7 +24,7 @@
   let fullPathPos = {};
 
   const loadFolders = async (pg) => {
-    let { data } = await axios.get(`/api/admin/folders/${pg}/${calRows()}/${filter || ""}`);
+    let data = await apiUtils.admin(["folders", pg, calRows(), filter]);
     if (data.items) {
       let tmp = data.items[0];
       folderId = tmp?.Id;

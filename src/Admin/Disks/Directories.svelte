@@ -1,13 +1,12 @@
 <script>
   import { onDestroy, onMount, getContext } from "svelte";
-  import axios from "axios";
+  import apiUtils from "../../api-utils";
 
   const socket = getContext("socket");
   let dirs = [];
   let msg = "";
   onMount(async () => {
-    let resp = await axios.get("/api/admin/directories");
-    dirs = resp.data;
+    dirs = await apiUtils.admin(["directories"]);
     socket.on("scan-finish", ({ id }) => {
       if (id) {
         let dir = dirs.find((d) => d.Id === id);
@@ -26,21 +25,16 @@
     delete socket._callbacks["$scan-info"];
   });
 
-  const removeDir = (e) => {
+  const removeDir = async (e) => {
     let tr = e.target.closest("tr");
     if (tr) {
-      axios
-        .delete("/api/admin/directories/remove", {
-          data: { Id: tr.id },
-        })
-        .then(({ data }) => {
-          if (data.removed) {
-            dirs = dirs.filter((d) => d.Id !== tr.id);
-            dirs = dirs;
-          } else {
-            msg = data.msg;
-          }
-        });
+      const result = await apiUtils.post("admin/directories/remove", { Id: tr.id });
+      if (result.removed) {
+        dirs = dirs.filter((d) => d.Id !== tr.id);
+        dirs = dirs;
+      } else {
+        msg = result.msg;
+      }
     }
   };
 

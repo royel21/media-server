@@ -89,7 +89,7 @@ Router.post("/create-update", async (req, res) => {
   return res.send(result);
 });
 
-Router.delete("/remove", async (req, res) => {
+Router.post("/remove", async (req, res) => {
   let valid = await validate(req, true);
   const result = { removed: true };
 

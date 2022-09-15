@@ -1,4 +1,4 @@
-import { getFilesPerPage } from "./FilesUtils";
+import { getFilesPerPage, ProcessFile } from "./FilesUtils";
 const UP = 38;
 const DOWN = 40;
 const LEFT = 37;
@@ -62,7 +62,7 @@ const fileClicks = (event) => {
   selectItem(getElIndex(file));
 };
 
-const fileKeypress = (e, page, goToPage, processFile) => {
+const fileKeypress = (e, page, goToPage) => {
   let file = document.querySelector(".file");
   let selected = 0;
   if (file) {
@@ -72,7 +72,7 @@ const fileKeypress = (e, page, goToPage, processFile) => {
     selectedIndex = getElIndex(file.parentElement.querySelector(".active"));
     switch (e.keyCode) {
       case ENTER: {
-        processFile(e.target);
+        ProcessFile(e.target);
         break;
       }
       case LEFT: {

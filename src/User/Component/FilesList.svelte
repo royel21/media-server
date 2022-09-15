@@ -1,5 +1,4 @@
 <script>
-  import axios from "axios";
   import { afterUpdate, getContext } from "svelte";
   import { fade } from "svelte/transition";
   import { navigate } from "svelte-routing";
@@ -12,6 +11,8 @@
   import Pagination from "../../ShareComponent/Pagination.svelte";
   import Filter from "../../ShareComponent/Filter.svelte";
   import FavoriteList from "./FavoriteList.svelte";
+  import { clamp } from "../Pages/Utils";
+  import { getItemsList } from "../../api-utils";
 
   export let id = "";
   export let page = 1;
@@ -27,55 +28,38 @@
   let selected = 0;
   let favClicked = null;
 
-  const cancelToken = axios.CancelToken;
-  let cancel;
-
   const loadContent = async (pg = 1, flt = "", curId = "", config, nType) => {
     const { items, sort } = config[title];
-    try {
-      if (cancel) {
-        cancel();
-      }
-      let url = genUrl(pg, { items, order: sort || "nu" }, flt, nType || type, curId);
+    let url = genUrl(pg, { items, order: sort || "nu" }, flt, nType || type, curId);
 
-      let { data } = await axios.get(url, {
-        cancelToken: new cancelToken(function executor(c) {
-          cancel = c;
-        }),
-      });
+    const data = await getItemsList(url);
 
-      if (typeof data === "object") {
-        pageData = data;
-        if (data.files[0] && setFolderInfo && setLastRead) {
-          setFolderInfo(data.files[0].Folder);
-          setLastRead(data.currentFile);
-        }
-        selected = pageData.files.findIndex((f) => f.Id === data.currentFile) || 0;
+    if (data.valid) {
+      pageData = data;
+      if (data.files[0] && setFolderInfo && setLastRead) {
+        setFolderInfo(data.files[0].Folder);
+        setLastRead(data.currentFile);
       }
-    } catch (error) {
-      console.log(error);
+      selected = pageData.files.findIndex((f) => f.Id === data.currentFile) || 0;
+    } else {
+      console.log(data.error);
     }
   };
 
-  const goToPage = async (pg, sel) => {
-    pg = parseInt(pg.detail);
+  const goToPage = async ({ detail }, sel) => {
+    let pg = +detail;
     let { totalPages } = pageData;
-    if (pg < 1 || pg > totalPages || isNaN(pg)) return;
-    pg = pg < 1 ? 1 : pg > totalPages ? totalPages : pg;
+    pg = clamp(pg, 1, totalPages);
     navigate(`/${type}/${pg}/${filter || ""}`);
-    selected = sel || 0;
-  };
-  const fileFilter = (event) => {
-    filter = event.detail;
-    navigate(`/${type}/${1}/${filter || ""}`);
+    selected = sel;
   };
 
-  const handleKeydown = (event) => {
-    fileKeypress(event, page, goToPage, ProcessFile, selected);
-  };
+  const fileFilter = ({ detail }) => navigate(`/${type}/${1}/${detail || ""}`);
 
-  const openFile = (event) => {
-    ProcessFile(event.target.closest(".file"), socket);
+  const handleKeydown = (event) => fileKeypress(event, page, goToPage);
+
+  const openFile = ({ target }) => {
+    ProcessFile(target.closest(".file"), socket);
   };
 
   const favClick = (event) => {
@@ -85,12 +69,10 @@
     favClicked = target;
   };
 
-  const removeFile = (event) => {
-    pageData.files = pageData.files.filter((f) => f.Id !== event.detail);
-    if (pageData.totalPages > 1) {
-      if (pageData.files.length === 0) {
-        page -= 1;
-      }
+  const removeFile = ({ detail }) => {
+    pageData.files = pageData.files.filter((f) => f.Id !== detail);
+    if (!pageData.files.length) {
+      page -= 1;
       loadContent(page, filter || "", $PageConfig);
     } else {
       pageData = pageData;
@@ -112,9 +94,9 @@
 
   $: loadContent(page, filter, id, $PageConfig, type);
 
-  $: if (pageData.totalPages && parseInt(page) > pageData.totalPages) {
-    navigate(`/${type}/${page - 1}/${filter || ""}`);
-  }
+  // $: if (+page > pageData?.totalPages) {
+  //   navigate(`/${type}/${page}/${filter || ""}`);
+  // }
   let isContent = location.pathname.includes("content");
 </script>
 
@@ -179,7 +161,7 @@
     position: absolute;
     left: 32px;
     bottom: 7px;
-    z-index: 99;
+    z-index: 1;
     font-size: 11px;
     font-weight: 600;
     padding: 0 5px;

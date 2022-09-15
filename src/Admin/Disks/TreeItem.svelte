@@ -1,6 +1,5 @@
 <script>
   import { createEventDispatcher } from "svelte";
-  import axios from "axios";
   export let items = [];
   export let type;
   let item = {};
@@ -11,7 +10,7 @@
     let li = event.target.closest("li");
     let item = items.find((d) => d.Id.toString() === li.id);
     if (item.Content.length === 0) {
-      const { data } = await axios.post("/api/admin/directories/Content", { Path: item.Path });
+      const data = await apiUtils.post("admin/directories/Content", { Path: item.Path });
       item.Content = data.data;
       items = items;
     } else {

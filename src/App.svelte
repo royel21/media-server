@@ -1,12 +1,12 @@
 <script>
   import { onMount, setContext } from "svelte";
   import { navigate } from "svelte-routing";
-  import axios from "axios";
   import socketClient from "socket.io-client";
   //Pages
   import AdminRoutes from "./Admin/AdminRoutes.svelte";
   import UserRoutes from "./User/UserRoutes.svelte";
   import Login from "./Login.svelte";
+  import apiUtils from "./api-utils";
 
   let socket;
   let user = { username: "" };
@@ -19,7 +19,7 @@
   }
 
   onMount(async () => {
-    let { data } = await axios.get("/api/users");
+    let data = await apiUtils.get(["users"]);
     if (data.isAutenticated) {
       user = data;
     }
@@ -28,7 +28,7 @@
 
   const logout = async () => {
     try {
-      axios.get("/api/users/logout");
+      apiUtils.get(["users", "logout"]);
       navigate("/login", { replace: true });
       user = {};
 

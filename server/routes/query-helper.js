@@ -125,6 +125,7 @@ const getFolders = async (req, res) => {
     files: result.rows,
     totalFiles: result.count,
     totalPages: Math.ceil(result.count / limit),
+    valid: true,
   });
 };
 

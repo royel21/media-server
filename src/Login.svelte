@@ -1,6 +1,6 @@
 <script>
-  import axios from "axios";
   import { createEventDispatcher } from "svelte";
+  import apiUtils from "./api-utils";
 
   const dispatch = createEventDispatcher();
 
@@ -9,28 +9,26 @@
     password: "",
   };
   let error = { name: "", password: "" };
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
-    axios
-      .post("/api/users/login", user)
-      .then(({ data }) => {
-        if (data.isAutenticated) {
-          dispatch("login", { ...data, Id: "" });
+    try {
+      const data = await apiUtils.post("users/login", user);
+      if (data.isAutenticated) {
+        dispatch("login", { ...data, Id: "" });
+      } else {
+        if (name) {
+          error.name = "User can't be empty";
         } else {
-          if (name) {
-            error.name = "User can't be empty";
-          } else {
-            error.password = "Password can't be empty";
-          }
+          error.password = "Password can't be empty";
         }
-      })
-      .catch((err) => {
-        if (err.toString().includes("Network Error")) {
-          error.password = "server offline";
-        } else {
-          error.password = "Server Error";
-        }
-      });
+      }
+    } catch (err) {
+      if (err.toString().includes("Network Error")) {
+        error.password = "server offline";
+      } else {
+        error.password = "Server Error";
+      }
+    }
   };
   document.title = "Media Server";
 </script>

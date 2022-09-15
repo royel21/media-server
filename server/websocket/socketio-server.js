@@ -22,8 +22,7 @@ module.exports = (server, sessionMeddle) => {
 
       console.log("connected", socket.id);
 
-      FileManager.setSocket(io, db);
-      userUpdate.setDb(db);
+      FileManager.setSocket(io);
 
       socket.on("scan-dir", FileManager.scanDir);
 

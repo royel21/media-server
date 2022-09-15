@@ -2,7 +2,8 @@ const db = require("../models");
 
 const mapFilter = (f) => ({ [db.Op.like]: `%${f || ""}%` });
 
-const getFilter = (filter) => {
+const getFilter = (data) => {
+  const filter = data || "";
   const isOr = filter.includes("&");
 
   return {

@@ -2,6 +2,7 @@ const Router = require("express").Router();
 
 const db = require("../models");
 const { getFiles, getFolders } = require("./query-helper");
+const { getFilter } = require("./utils");
 
 const sortName = (a, b) => a.Name.localeCompare(b.Name);
 
@@ -21,22 +22,38 @@ Router.get("/folder-content/:id/:order/:page?/:items?/:search?", async (req, res
       totalPages: Math.ceil(data.count / items),
       currentFile: folder?.CurrentFile,
       name: folder?.Name,
+      valid: true,
     });
   } catch (err) {
     console.log(err);
     res.send({});
   }
 });
+Router.post("/recents/remove", async ({ body }, res) => {
+  if (body.Id) {
+    const recent = await db.recentFolder.findOne({ where: { FolderId: body.Id } });
+    if (recent) await recent.destroy();
+    return res.send({ valid: recent !== null });
+  }
+  return res.send({ valid: false, msg: "Invalid Id" });
+});
 
-Router.get("/recents/:items/:page?", async (req, res) => {
-  const { page, items } = req.params;
+Router.get("/recents/:items/:page?/:filter?", async (req, res) => {
+  const { page, items, filter } = req.params;
   const p = +page || 1;
   const limit = +items || 16;
 
   const recents = await db.recentFolder.findAndCountAll({
     order: [["LastRead", "DESC"]],
     where: { RecentId: req.user.Recent.Id },
-    include: { model: db.folder, attributes: ["Id", "Name", "FileCount", "Cover", "FilesType", "Type", "Status"] },
+    include: {
+      model: db.folder,
+      attributes: ["Id", "Name", "FileCount", "Cover", "FilesType", "Type", "Status"],
+      where: {
+        Path: getFilter(filter),
+      },
+      required: true,
+    },
     offset: (p - 1) * limit,
     limit,
   });
@@ -71,6 +88,7 @@ Router.get("/dirs", async (req, res) => {
   return res.send({
     Mangas,
     Videos,
+    valid: true,
   });
 });
 

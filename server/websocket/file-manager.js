@@ -4,16 +4,13 @@ const fs = require("fs-extra");
 const path = require("path");
 const winEx = require("win-explorer");
 const { nanoid } = require("nanoid");
+const db = require("../models");
 
 var io;
-var db;
 
 const ImagesPath = process.env.IMAGES;
 
-module.exports.setSocket = (_io, _db) => {
-  io = _io;
-  db = _db;
-};
+module.exports.setSocket = (_io) => (io = _io);
 
 var worker = null;
 const startWork = async (model, isFolder) => {
@@ -85,27 +82,28 @@ module.exports.loadContent = (data) => {
 module.exports.scanDir = async ({ Id, Path, Type, isFolder, IsAdult }) => {
   //If is it root of disk return;
   if (!Id && !Path) return io.sockets.emit("scan-info", "Id And Path both can't be null");
+  if (/^([a-z]:\\|^\/)$/gi.test(path)) io.sockets.emit("scan-info", "Can't add root of a disk");
 
   let msg;
   try {
     let model;
 
-    if (!Id) {
-      let dirInfo = winEx.ListFiles(Path || "", { oneFile: true });
+    if (Id) {
+      if (isFolder) {
+        model = await db.folder.findOne({ where: { Id } });
+      } else {
+        model = await db.directory.findOne({ where: { Id } });
+      }
+    } else {
+      const dirInfo = winEx.ListFiles(Path || "", { oneFile: true });
 
-      if (dirInfo && !["c:\\", "C:\\", "/"].includes(Path)) {
+      if (dirInfo) {
         model = await db.directory.create({
           FullPath: Path,
           Name: dirInfo.Name,
           Type,
           IsAdult,
         });
-      }
-    } else {
-      if (!isFolder) {
-        model = await db.directory.findOne({ where: { Id } });
-      } else {
-        model = await db.folder.findOne({ where: { Id } });
       }
     }
 

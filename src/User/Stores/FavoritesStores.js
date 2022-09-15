@@ -1,13 +1,11 @@
 import { writable } from "svelte/store";
-import axios from "axios";
 import { sortByName } from "./StoreUtils";
+import apiUtils from "../../api-utils";
 
 const FavoritesStores = writable([]);
 
-const favApi = "/api/files/favorites/";
-
 const addUpdateFavorite = async (fav) => {
-  const { data } = await axios.post(favApi + "create-update", fav);
+  const data = await apiUtils.postFav("create-update", fav);
   if (data.Id) {
     FavoritesStores.update((favs) => [...favs.filter((f) => f.Id !== fav.Id), data].sort(sortByName));
   }
@@ -15,13 +13,11 @@ const addUpdateFavorite = async (fav) => {
 };
 
 const removeFavorite = async (Id, Type) => {
-  const { data } = await axios.delete(favApi + "remove", {
-    data: { Id, Type },
-  });
-  if (data.removed) {
+  const result = await apiUtils.postFav("remove", { Id, Type });
+  if (result.removed) {
     FavoritesStores.update((favs) => (favs = favs.filter((fav) => fav.Id !== Id)));
   }
-  return data;
+  return result;
 };
 
 export { FavoritesStores, addUpdateFavorite, removeFavorite };

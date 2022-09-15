@@ -11,7 +11,7 @@ const loadZipImages = async (data, socket) => {
     include: { model: db.folder },
   });
 
-  if (file && existsSync(file.Path)) {
+  if (file && file.Exists) {
     try {
       const zip = new StreamZip.async({
         file: file.Path,

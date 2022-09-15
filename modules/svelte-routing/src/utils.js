@@ -110,9 +110,7 @@ function rankRoutes(routes) {
     routes
       .map(rankRoute)
       // If two routes have the exact same score, we go by index instead
-      .sort((a, b) =>
-        a.score < b.score ? 1 : a.score > b.score ? -1 : a.index - b.index
-      )
+      .sort((a, b) => (a.score < b.score ? 1 : a.score > b.score ? -1 : a.index - b.index))
   );
 }
 
@@ -178,6 +176,7 @@ function pick(routes, uri) {
         params[splatName] = uriSegments.slice(index).map(decodeURIComponent).join("/");
         break;
       }
+
       if (!routeSegment.includes(":") && routeSegment !== uriSegment) {
         missed = true;
         break;
@@ -187,12 +186,6 @@ function pick(routes, uri) {
       if (dynamicMatch && !isRootUri) {
         const value = decodeURIComponent(uriSegment);
         params[dynamicMatch[1]] = value === "undefined" ? undefined : value;
-      } else if (routeSegment !== uriSegment) {
-        // Current segments don't match, not dynamic, not splat, so no match
-        // uri:   /users/123/settings
-        // route: /users/:id/profile
-        missed = true;
-        break;
       }
     }
 
@@ -205,7 +198,7 @@ function pick(routes, uri) {
       break;
     }
   }
-
+  // console.log(match, default_)
   return match || default_ || null;
 }
 
@@ -305,9 +298,7 @@ function resolve(to, base) {
  * @param {string} path
  */
 function combinePaths(basepath, path) {
-  return `${stripSlashes(
-    path === "/" ? basepath : `${stripSlashes(basepath)}/${stripSlashes(path)}`
-  )}/`;
+  return `${stripSlashes(path === "/" ? basepath : `${stripSlashes(basepath)}/${stripSlashes(path)}`)}/`;
 }
 
 /**
@@ -316,9 +307,7 @@ function combinePaths(basepath, path) {
  */
 function shouldNavigate(event) {
   return (
-    !event.defaultPrevented &&
-    event.button === 0 &&
-    !(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey)
+    !event.defaultPrevented && event.button === 0 && !(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey)
   );
 }
 

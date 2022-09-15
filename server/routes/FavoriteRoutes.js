@@ -23,7 +23,7 @@ Router.post("/create-update", async (req, res) => {
   }
 });
 
-Router.delete("/remove", async (req, res) => {
+Router.post("/remove", async (req, res) => {
   try {
     let { Id } = req.body;
     let favs = await req.user.getFavorites();
@@ -97,6 +97,7 @@ Router.get("/:id/:order/:page/:items/:search?", async (req, res) => {
       files: result.rows,
       totalFiles: result.count,
       totalPages: Math.ceil(result.count / limit),
+      valid: true,
     });
   } catch (error) {
     console.log(err);

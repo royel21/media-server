@@ -1,5 +1,4 @@
 <script>
-  import axios from "axios";
   import { onMount, getContext } from "svelte";
   import { navigate } from "svelte-routing";
 
@@ -9,6 +8,7 @@
   import MangaViewer from "./Manga/MangaViewer.svelte";
   import VideoPLayer from "./Video/VideoPlayer.svelte";
   import { KeyMap, handleKeyboard, isMobile, isVideo, isManga, showFileName, sortFileByName } from "./Utils";
+  import apiUtils from "../../api-utils";
 
   export let folderId;
   export let fileId;
@@ -71,10 +71,9 @@
   PrevFile.isctrl = true;
 
   onMount(async () => {
-    let { data } = await axios.post(`/api/viewer/folder`, { id: folderId });
+    let data = await apiUtils.post(`viewer/folder`, { id: folderId });
     if (!data.fail) {
       playList = files = data.files.sort(sortFileByName);
-      const first = playList[0];
       window.title = playList[0]?.Cover?.split("/")[2] || "";
     }
   });

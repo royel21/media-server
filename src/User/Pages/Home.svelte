@@ -1,6 +1,5 @@
 <script>
-  import axios from "axios";
-  import { onMount } from "svelte";
+  import api from "../../api-utils";
   import { navigate } from "svelte-routing";
   import { getFilesPerPage } from "../Component/FilesUtils";
   import { fileKeypress, selectItem, getElIndex, fileClicks } from "../Component/FileEvents";
@@ -8,31 +7,44 @@
   import Filter from "../../ShareComponent/Filter.svelte";
   import Pagination from "../../ShareComponent/Pagination.svelte";
   import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
+  import { clamp } from "./Utils";
+
+  export let page = 1;
+  export let filter = "";
 
   let current = 0;
-  let filter = "";
-  let pageData = { items: [], page: 1, totalPages: 0, totalFiles: 0 };
+  let pageData = { items: [], page: page || 1, totalPages: 0, totalFiles: 0 };
 
-  const goToPage = async ({ detail }) => {
-    const { data } = await axios.get(`/api/files/recents/${getFilesPerPage(3)}/${+detail}`);
-    if (data.valid) {
-      pageData = data;
-    }
+  const loadContent = async (pg, flt = "") => {
+    pg = clamp(pg, 1, pageData.totalPages);
+    const data = await api.files(["recents", getFilesPerPage(3), pg, flt]);
+    if (data.valid) pageData = data;
   };
+
+  const goToPage = async ({ detail }) => navigate(`/${+detail}/${filter || ""}`);
 
   const openFolder = ({ target }) => {
-    let file = pageData.items.find((f) => f.Id === target.closest(".file").id);
-    localStorage.setItem("content", "/");
-    navigate(`/${file.FilesType}/viewer/${file.Id}/${file.CurrentFile}`);
+    let { Id, FilesType, CurrentFile } = pageData.items.find((f) => f.Id === target.closest(".file").id);
+    localStorage.setItem("content", location.pathname);
+
+    navigate(`/${FilesType}/viewer/${Id}/${CurrentFile}`);
   };
 
-  onMount(() => goToPage({ detail: 1 }));
+  const handleKeydown = (event) => fileKeypress(event, pageData.page, goToPage);
 
-  const fileFilter = () => {};
+  const fileFilter = ({ detail }) => navigate(`/${1}/${detail || ""}`);
+
+  const removeRecent = async ({ currentTarget }) => {
+    const Id = currentTarget.closest(".file")?.id;
+    const result = await api.post("files/recents/remove", { Id });
+    if (result.valid) loadContent(page, filter);
+  };
 
   ToggleMenu.set(false);
 
-  document.title = "Home";
+  $: loadContent(page, filter);
+
+  $: document.title = page ? `Home - Page ${pageData.page}` : "Home";
 </script>
 
 <div class="scroll-container">
@@ -42,7 +54,7 @@
       Last View
     </span>
   </div>
-  <div class="files-list">
+  <div class="files-list" on:keydown={handleKeydown} on:click={fileClicks}>
     {#each pageData.items as { Id, Name, Type, Cover, FileCount, FilesType }, i}
       <div class="file" class:current={i === current} id={Id} data-type={Type} data-types={FilesType} tabIndex="0">
         <div class="file-info">
@@ -51,7 +63,7 @@
               <i class={"fas fa-folder"} />
             </span>
             <span class="file-progress">{FileCount}</span>
-            <span class="remove">
+            <span class="remove" on:click={removeRecent}>
               <i class="fas fa-trash-alt" />
             </span>
           </div>

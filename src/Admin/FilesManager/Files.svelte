@@ -1,11 +1,11 @@
 <script>
   import { onMount, onDestroy, getContext } from "svelte";
   import { navigate } from "svelte-routing";
-  import axios from "axios";
 
   import Modal from "../Folders/Modal.svelte";
   import Filter from "../../ShareComponent/Filter.svelte";
   import Pagination from "../../ShareComponent/Pagination.svelte";
+  import apiUtils from "../../api-utils";
 
   const socket = getContext("socket");
   export let page = 1;
@@ -24,7 +24,7 @@
   };
 
   const loadFiles = async (pg) => {
-    let { data } = await axios.get(`/api/admin/files/${pg}/${calRows()}/${filter || ""}`);
+    const data = await apiUtils.admin(["files", pg, calRows(), filter]);
 
     if (data.files) {
       items = data.files;

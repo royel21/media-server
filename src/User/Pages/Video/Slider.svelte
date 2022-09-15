@@ -1,7 +1,7 @@
 <script>
   import { onDestroy } from "svelte";
 
-  import { map } from "../Utils";
+  import { map, clamp } from "../Utils";
   export let value;
   export let preview = false;
   export let min = 0;
@@ -15,11 +15,16 @@
   let progress = map(value, min, max, 0, 100);
 
   let isMdown = { is: false };
+
+  const getLeft = (t) => t.getBoundingClientRect().left;
+
   const onMDown = (e) => {
     isMdown = { is: true, id: uniqId };
     let xpos;
+    let tch = e.touches[0];
+
     if (e.type === "touchstart") {
-      xpos = e.touches[0].pageX - e.touches[0].target.getBoundingClientRect().left;
+      xpos = tch.pageX - getLeft(tch.target);
       document.on("touchmove", globalMMove);
     } else {
       xpos = e.offsetX;
@@ -32,10 +37,13 @@
   };
 
   const globalMMove = (e) => {
-    if ((isMdown.is && e.target.id === uniqId) || (e.type === "touchmove" && e.touches[0].target.id === uniqId)) {
+    let tch = e.touches[0];
+    let id = tch.target.id || e.target.id;
+
+    if (isMdown.is && e.target.id === uniqId) {
       let newPos;
       if (e.type === "touchmove") {
-        newPos = e.touches[0].pageX - e.touches[0].target.getBoundingClientRect().left;
+        newPos = tch.pageX - getLeft(tch.target);
       } else {
         newPos = e.offsetX;
       }
@@ -47,11 +55,11 @@
 
   const onPreview = (e) => {
     if (preview) {
-      var newPos = Math.floor(e.pageX - sliderRef.getBoundingClientRect().left);
+      var newPos = Math.floor(e.pageX - getLeft(sliderRef));
       var pos = map(newPos - 1, 0, sliderRef.offsetWidth - 2, 0, 100).toFixed(0);
       let tempVal = map(newPos - 1, 0, sliderRef.offsetWidth - 2, min, max).toFixed(2);
-      pos = Number.clamp(pos, 0, 100);
-      let value = Number.clamp(tempVal, 0, max);
+      pos = clamp(pos, 0, 100);
+      let value = clamp(tempVal, 0, max);
       previewData = { pos, value };
     }
   };
@@ -107,7 +115,7 @@
         class="rc-preview"
         data-title="00:00"
         bind:this={previewRef}
-        style={`left: calc(${previewData.pos}% - ${previewRef && previewRef.offsetWidth / 2}px)`}
+        style={`left: calc(${previewData.pos}% - ${(previewRef?.offsetWidth || 0) / 2}px)`}
       >
         <span class="rc-preview-content">
           <slot value={previewData.value} />
