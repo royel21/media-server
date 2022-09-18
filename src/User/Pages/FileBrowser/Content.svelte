@@ -33,7 +33,7 @@
   localStorage.setItem("fileId", folder);
 
   const openFirstLast = async ({ target: { id } }) => {
-    const data = await apiUtils.files(["first-last", id, folderinfo]);
+    const data = await apiUtils.files(["first-last", id, folderinfo.Id]);
     ProcessFile({ id: data.Id, dataset: { type: data.Type } }, socket);
   };
 
