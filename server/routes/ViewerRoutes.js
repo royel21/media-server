@@ -17,13 +17,9 @@ const getFiles = async ({ user, body }, res, type) => {
     },
   });
 
-  if (type === "favorite") {
-    const folder = await db.folder.findOne({ where: { Id: body.id }, attributes: ["Name"] });
-    table.Name = folder.Name;
-  }
-
+  const folder = await db.folder.findOne({ where: { Id: body.id }, attributes: ["Name"] });
   res.send({
-    Name: table.Name,
+    Name: folder.Name,
     files: table.Files.map((d) => ({ ...d.dataValues, Cover: `/${d.Type}/${folder.Name}/${d.Name}.jpg` })),
     config: UserConfig.dataValues.Config,
   });

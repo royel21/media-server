@@ -66,7 +66,7 @@ export const setfullscreen = (element) => {
   }
 };
 
-export const sortFileByName = () => (a, b) => {
+export const sortFileByName = (a, b) => {
   let n1 = a.Name.replace("-", ".").match(/\d+.\d+|\d+/);
   let n2 = b.Name.replace("-", ".").match(/\d+.\d+|\d+/);
 
