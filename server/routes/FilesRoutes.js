@@ -22,10 +22,10 @@ Router.get("/folder-content/:id/:order/:page?/:items?/:search?", async (req, res
     });
 
     res.json({
-      files: data.rows.map((d) => ({ ...d.dataValues, Cover: `/${d.Type}/${folder.Name}/${d.Name}.jpg` })),
+      files: data.rows.map((d) => ({ ...d.dataValues, Cover: encodeURI(`/${d.Type}/${folder.Name}/${d.Name}.jpg`) })),
       totalFiles: data.count,
       totalPages: Math.ceil(data.count / items),
-      folder: { ...folder.dataValues, Cover: folder.Cover },
+      folder: { ...folder.dataValues, Cover: encodeURI(folder.Cover) },
       valid: true,
     });
   } catch (err) {
@@ -68,7 +68,7 @@ Router.get("/recents/:items/:page?/:filter?", async (req, res) => {
     return {
       ...rc.dataValues,
       ...rc.Folder.dataValues,
-      Cover: rc.Folder.Cover,
+      Cover: encodeURI(rc.Folder.Cover),
     };
   });
 
