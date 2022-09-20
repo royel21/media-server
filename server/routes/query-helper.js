@@ -109,7 +109,7 @@ const getFolders = async (req, res) => {
   let result = await db.folder.findAndCountAll(query);
 
   return res.json({
-    files: result.rows,
+    files: result.rows.map((fd) => ({ ...fd.dataValues, Cover: encodeURI(fd.Cover) })),
     totalFiles: result.count,
     totalPages: Math.ceil(result.count / limit),
     valid: true,
