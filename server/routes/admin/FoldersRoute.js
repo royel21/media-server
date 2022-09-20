@@ -31,6 +31,7 @@ const getData = async ({ params }, res) => {
     query.attributes.push("Status"); // add Genres to folder query
     query.where.Path = getFilter(filterTerm);
     result = await db.folder.findAndCountAll(query);
+    result.rows = result.rows.map((fd) => ({ ...fd.dataValues, Cover: encodeURI(fd.Cover) }));
   }
 
   let totalPages = Math.ceil(result.count / query.limit);
