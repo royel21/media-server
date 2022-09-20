@@ -44,6 +44,7 @@ const getFiles = async (user, data) => {
       "Name",
       "Type",
       "Duration",
+      "Cover",
       "CreatedAt",
       qryCurrentPos(user.Recent, "File"),
       [literal(LastRead), "LastRead"],
@@ -80,6 +81,7 @@ const getFolders = async (req, res) => {
     attributes: [
       "Id",
       "Name",
+      "Cover",
       "Type",
       "Genres",
       "FilesType",
