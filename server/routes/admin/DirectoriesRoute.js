@@ -9,17 +9,22 @@ const getNewId = () => {
   return Math.random().toString(36).slice(-5);
 };
 
-Router.get("/", (req, res) => {
-  db.directory
-    .findAll({ order: ["FullPath"] })
-    .then((data) => {
-      let dirs = data.map((d) => d.dataValues);
-      res.send(dirs);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.send({ err: true, msg: "Server Error 500" });
-    });
+Router.get("/", async (req, res) => {
+  const data = await db.directory.findAll({
+    attributes: [
+      "Id",
+      "Name",
+      "FullPath",
+      "Type",
+      "IsAdult",
+      [db.sqlze.literal("(Select COUNT(Folders.Id) from Folders where DirectoryId = Directory.Id)"), "FolderCount"],
+      [db.sqlze.literal("(Select SUM(FileCount) from Folders where DirectoryId = Directory.Id)"), "TotalFiles"],
+    ],
+    order: ["FullPath"],
+  });
+  console.log(data);
+  let dirs = data.map((d) => d.dataValues);
+  res.send(dirs);
 });
 
 Router.post("/remove", (req, res) => {

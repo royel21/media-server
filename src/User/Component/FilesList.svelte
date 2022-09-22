@@ -1,12 +1,12 @@
 <script>
-  import { afterUpdate, getContext } from "svelte";
+  import { afterUpdate, getContext, onMount } from "svelte";
   import { fade } from "svelte/transition";
   import { navigate } from "svelte-routing";
 
   import { PageConfig } from "../../User/Stores/PageConfigStore";
 
   import { genUrl, FileTypes, ProcessFile } from "./FilesUtils";
-  import { fileKeypress, selectItem, getElIndex, fileClicks } from "./FileEvents";
+  import { fileKeypress, selectItem, getElIndex } from "./FileEvents";
 
   import Pagination from "../../ShareComponent/Pagination.svelte";
   import Filter from "../../ShareComponent/Filter.svelte";
@@ -22,10 +22,11 @@
   export let setLastRead;
   export let setFolderInfo;
 
+  let selected = +localStorage.getItem(title) || 0;
+
   const socket = getContext("socket");
   const baseData = { files: [], totalPages: 0, totalFiles: 0 };
   let pageData = baseData;
-  let selected = 0;
   let favClicked = null;
 
   const loadContent = async (pg = 1, flt = "", curId = "", config, nType) => {
@@ -56,7 +57,7 @@
 
   const fileFilter = ({ detail }) => navigate(`/${type}/${1}/${detail || ""}`);
 
-  const handleKeydown = (event) => fileKeypress(event, page, goToPage);
+  const handleKeydown = (event) => fileKeypress(event, page, goToPage, title);
 
   const openFile = ({ target }) => {
     ProcessFile(target.closest(".file"), socket);
@@ -64,9 +65,15 @@
 
   const favClick = (event) => {
     let { target } = event;
-    fileClicks(event);
-    selected = getElIndex(target.closest(".file"));
-    favClicked = target;
+    if (target.classList.contains("far")) {
+      favClicked = target;
+    } else {
+      const file = target.closest(".file");
+      localStorage.setItem(title, file.id);
+      selected = getElIndex(file);
+      selectItem(selected);
+      favClicked = false;
+    }
   };
 
   const removeFile = ({ detail }) => {
@@ -80,23 +87,31 @@
   };
 
   afterUpdate(() => {
-    let sel = selected;
-    let id = localStorage.getItem("fileId");
+    let sel = 0;
+    let id = localStorage.getItem(title);
     let el = document.getElementById(id);
-    if (id && el) {
+    if (el) {
       sel = getElIndex(el);
     }
 
     selectItem(sel);
   });
 
+  const reloadDir = (data) => {
+    if (data.id === id) {
+      loadContent(page, filter, id, $PageConfig, type);
+    }
+  };
+
+  onMount(() => {
+    socket.on("scan-finish", reloadDir);
+    return () => socket.off("scan-finish", reloadDir);
+  });
+
   $: document.title = `${title} Page ${page || ""}`;
 
   $: loadContent(page, filter, id, $PageConfig, type);
 
-  // $: if (+page > pageData?.totalPages) {
-  //   navigate(`/${type}/${page}/${filter || ""}`);
-  // }
   let isContent = location.pathname.includes("content");
 </script>
 

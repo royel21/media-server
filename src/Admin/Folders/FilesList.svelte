@@ -46,12 +46,11 @@
 
     socket.on("file-removed", (data) => {
       if (data.success) {
-        if (page === totalPages && items.length > 1) {
-          items = items.filter((f) => f.Id !== file.Id);
-        } else {
-          page = page > 1 ? page - 1 : page;
-          loadFiles(page);
+        if (items.length == 1 && page === totalPages && page > 1) {
+          page = page - 1;
         }
+
+        loadFiles(page);
         hideModal();
       } else {
         modalType.error = data.msg;
@@ -76,8 +75,7 @@
     loadFiles(page);
   };
 
-  const itemClick = (event) => {
-    let el = event.target;
+  const itemClick = ({ target: el }) => {
     if (el.tagName !== "LI") {
       file = items.find((f) => f.Id === el.closest("li").id);
       let cList = el.classList.toString();

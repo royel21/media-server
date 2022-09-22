@@ -2,7 +2,7 @@
   import api from "../../api-utils";
   import { navigate } from "svelte-routing";
   import { getFilesPerPage } from "../Component/FilesUtils";
-  import { fileKeypress, selectItem, getElIndex, fileClicks } from "../Component/FileEvents";
+  import { fileKeypress, selectItem, getElIndex } from "../Component/FileEvents";
 
   import Filter from "../../ShareComponent/Filter.svelte";
   import Pagination from "../../ShareComponent/Pagination.svelte";
@@ -54,7 +54,7 @@
       Last View
     </span>
   </div>
-  <div class="files-list" on:keydown={handleKeydown} on:click={fileClicks}>
+  <div class="files-list" on:keydown={handleKeydown}>
     {#each pageData.items as { Id, Name, Type, Cover, FileCount, FilesType }, i}
       <div class="file" class:current={i === current} id={Id} data-type={Type} data-types={FilesType} tabIndex="0">
         <div class="file-info">

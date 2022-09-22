@@ -57,15 +57,11 @@ const selectItem = (index) => {
   return nextEl;
 };
 
-const fileClicks = (event) => {
-  let file = event.target.closest(".file");
-  selectItem(getElIndex(file));
-};
-
-const fileKeypress = (e, page, goToPage) => {
+const fileKeypress = (e, page, goToPage, title) => {
   let file = document.querySelector(".file");
   let selected = 0;
   if (file) {
+    localStorage.setItem(title, file.Id);
     let wasProcesed = false;
     let colNum = calCol();
     let totalitem = document.querySelectorAll(".file").length;
@@ -136,4 +132,4 @@ const fileKeypress = (e, page, goToPage) => {
   }
 };
 
-export { fileClicks, fileKeypress, selectItem, getElIndex };
+export { fileKeypress, selectItem, getElIndex };

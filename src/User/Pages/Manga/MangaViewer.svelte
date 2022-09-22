@@ -36,7 +36,8 @@
         viewerState.loading = true;
         socket.emit("loadzip-image", { Id: file.Id, indices });
       } else if (viewerState.jumping) {
-        scrollInViewAndSetObserver();
+        // if we came from pager and all image all loaded
+        connectObservers();
       }
     }
   };
@@ -89,7 +90,7 @@
     file.CurrentPos = pg;
   };
 
-  let scrollInViewAndSetObserver = (delay = 0) => {
+  let connectObservers = (delay = 0) => {
     let tout = setTimeout(() => {
       scrollInView(file.CurrentPos);
       PageObserver(setPage, imgContainer, loadImages, viewerState);
@@ -102,7 +103,7 @@
     if (webtoon) {
       disconnectObvrs(imgContainer);
       setfullscreen(viewer);
-      scrollInViewAndSetObserver(100);
+      connectObservers(100);
     } else {
       setfullscreen(viewer);
     }
@@ -118,7 +119,7 @@
         viewerState.loading = false;
         if (viewerState.jumping && webtoon) {
           viewerState.jumping = false;
-          scrollInViewAndSetObserver(200);
+          connectObservers(50);
         }
       }
     } else {
@@ -151,7 +152,7 @@
     if (!webtoon) {
       disconnectObvrs(imgContainer);
     } else {
-      scrollInViewAndSetObserver(200);
+      connectObservers(100);
     }
   }
 

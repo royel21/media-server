@@ -26,7 +26,6 @@ const startWork = async (model, isFolder) => {
       await db.directory.update({ IsLoading: false }, { where: { IsLoading: true } });
 
       io.sockets.emit("scan-finish", { all: true });
-      console.log("scan-finish");
     });
   }
 
@@ -180,7 +179,6 @@ module.exports.removeFile = async ({ Id, Del }) => {
 
   if (file) {
     try {
-      await file.destroy();
       message.success = true;
       if (Del) {
         let cover = path.join(ImagesPath, file.Cover);
@@ -199,6 +197,8 @@ module.exports.removeFile = async ({ Id, Del }) => {
       } else {
         message.msg = `File ${file.Name} removed from DB`;
       }
+      await file.destroy();
+      await file.Folder.update({ FileCount: file.Folder.FileCount - 1 });
     } catch (err) {
       console.log(err);
       message.msg = "Server Error 500";

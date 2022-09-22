@@ -96,7 +96,7 @@
 
   #login-container label {
     padding: 0 15px;
-    min-width: 28px;
+    min-width: 35px;
   }
 
   #login-container label i {

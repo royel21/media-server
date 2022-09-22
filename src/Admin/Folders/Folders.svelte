@@ -27,11 +27,7 @@
   .card {
     padding: 0;
     height: 100%;
-  }
-  @media screen and (max-width: 630px) {
-    .admin-manager {
-      overflow-x: auto;
-    }
+    width: fit-content;
   }
   .rows {
     min-width: 795px;

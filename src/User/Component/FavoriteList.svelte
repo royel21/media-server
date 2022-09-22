@@ -29,7 +29,7 @@
     }
   };
 
-  $: if (favClicked === thisEl && thisEl) {
+  $: if (favClicked === thisEl) {
     showList = thisEl.classList.contains("far");
     if (thisEl.classList.contains("fa-trash-alt")) {
       removeFile(thisEl.closest(".file").id);

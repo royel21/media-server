@@ -12,6 +12,9 @@
   export let filter = "";
   export let id = "";
 
+  let showMore = false;
+  let descRef;
+
   const sortBy = [
     { value: "nu", label: "\u2B07 Name" },
     { value: "nd", label: "\u2B06 Name" },
@@ -30,7 +33,7 @@
   let type = `${segment[0]}/${segment[1]}/${id}`;
 
   let { pathname, folder } = localStorage.getObject("folder");
-  localStorage.setItem("fileId", folder);
+  localStorage.setItem("Manga", folder);
 
   const openFirstLast = async ({ target: { id } }) => {
     const data = await apiUtils.files(["first-last", id, folderinfo.Id]);
@@ -64,7 +67,15 @@
   const setLastRead = (data) => (lastRead = data);
   const setFolderInfo = (data) => (folderinfo = data);
 
+  const onShowMore = () => {
+    if (showMore) {
+      descRef.scrollTop = 0;
+    }
+    showMore = !showMore;
+  };
+
   onDestroy(() => (menu.style.display = "flex"));
+
   menu.style.display = "none";
 </script>
 
@@ -82,8 +93,11 @@
           <span on:click|preventDefault={onGenres}> {genre}</span>
         {/each}
       </div>
-      <div class="m-desc">
-        <span class="desc-text"><span class="gen-tag">Description: </span>{folderinfo?.Description || ""}</span>
+      <div class="m-desc" class:show-more={showMore} on:click={onShowMore} title="Click To Show More">
+        <span bind:this={descRef} class="desc-text">
+          <span class="gen-tag">Description: </span>
+          {folderinfo?.Description}
+        </span>
       </div>
       <div id="btn-bar">
         {#if lastRead}
@@ -215,6 +229,7 @@
     background-color: #14243d;
     text-align: start;
     padding: 0 5px;
+    cursor: pointer;
   }
 
   #manga-name {
@@ -237,13 +252,10 @@
     border-bottom: 1px solid;
     width: 100%;
   }
-  .m-desc .desc-text:hover {
+  .m-desc.show-more .desc-text {
     position: absolute;
     left: -1px;
     width: 100.3%;
-    height: -moz-available;
-    height: -webkit-fill-available;
-    height: fill-available;
     overflow: auto;
     z-index: 10;
     border-right: 1px solid;
