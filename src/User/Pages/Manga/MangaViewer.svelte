@@ -119,7 +119,8 @@
         viewerState.loading = false;
         if (viewerState.jumping && webtoon) {
           viewerState.jumping = false;
-          connectObservers(50);
+          PageObserver(setPage, imgContainer, loadImages, viewerState);
+          scrollImageLoader(loadImages, imgContainer, file.CurrentPos);
         }
       }
     } else {
