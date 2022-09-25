@@ -27,7 +27,7 @@
   .card {
     padding: 0;
     height: 100%;
-    width: fit-content;
+    min-width: 795px;
   }
   .rows {
     min-width: 795px;
