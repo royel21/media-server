@@ -1,5 +1,6 @@
 <script>
   import { createEventDispatcher } from "svelte";
+  import apiUtils from "../../api-utils";
   export let items = [];
   export let type;
   let item = {};

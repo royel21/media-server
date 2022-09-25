@@ -126,8 +126,7 @@
     });
 
     socket.on("scan-finish", (data) => {
-      let liItem = document.body.querySelector(`#${data.id} .fas`);
-      if (liItem) liItem.classList.remove("fa-spin");
+      document.getElementById(data.id).querySelector(".fas")?.classList.remove("fa-spin");
     });
   });
 
