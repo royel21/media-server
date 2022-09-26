@@ -24,7 +24,7 @@ module.exports = (server, sessionMeddle) => {
 
       FileManager.setSocket(io);
 
-      socket.on("scan-dir", FileManager.scanDir);
+      socket.on("scan-dir", (data) => FileManager.scanDir(data, user));
 
       if (user.Role.includes("Administrator")) {
         socket.on("load-disks", FileManager.diskLoader);
@@ -40,11 +40,12 @@ module.exports = (server, sessionMeddle) => {
         socket.on("recent-folder", (data) => userUpdate.recentFolder(data, user));
         socket.on("video-config", (data) => userUpdate.updateConfig(data, user));
         socket.on("loadzip-image", (data) => mloader.loadZipImages(data, socket));
+        socket.on("reset-recent", (data) => FileManager.resetRecent(data, user));
       }
 
       socket.on("disconnect", () => console.log("disconnected: ", socket.id));
     } else {
-      io.sockets.emit("reload");
+      io.sockets.emit("logout");
     }
   });
 };

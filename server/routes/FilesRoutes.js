@@ -102,12 +102,6 @@ Router.get("/file-data/:id", async (req, res) => {
   return res.send(file.dataValues);
 });
 
-Router.get("/reset-recents/:folderid", async ({ params }, res) => {
-  const files = await db.file.findAll({ where: { FolderId: params.folderid } });
-  await db.recentFile.update({ LastPos: 0 }, { where: { FileId: files.map((f) => f.Id) } });
-  res.send("done");
-});
-
 Router.get("/first-last/:isfirst/:folderid", async (req, res) => {
   let files = await db.file.findAll({
     order: ["Name"],

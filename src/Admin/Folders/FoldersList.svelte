@@ -108,7 +108,7 @@
 
   onMount(() => {
     loadFolders(page);
-    socket.on("folder-renamed", (data) => {
+    const onFolderRename = (data) => {
       if (data.success && data.Id) {
         let index = items.findIndex((f) => f.Id === data.Id);
         if (index !== -1) {
@@ -116,24 +116,28 @@
         }
         hideModal();
       }
-    });
+    };
 
-    socket.on("folder-removed", (data) => {
+    const onFolderRemove = (data) => {
       if (data.success && data.Id) {
         loadFolders(page);
         hideModal();
       }
-    });
+    };
 
-    socket.on("scan-finish", (data) => {
-      document.getElementById(data.id).querySelector(".fas")?.classList.remove("fa-spin");
-    });
+    const scanFinish = (data) => {
+      document.getElementById(data.Id).querySelector(".fas")?.classList.remove("fa-spin");
+    };
+
+    socket.on("folder-renamed", onFolderRename);
+    socket.on("folder-removed", onFolderRemove);
+    socket.on("reload", scanFinish);
   });
 
   onDestroy(() => {
-    delete socket._callbacks["$folder-renamed"];
-    delete socket._callbacks["$folder-removed"];
-    delete socket._callbacks["$scan-finish"];
+    socket.off("folder-renamed", onFolderRename);
+    socket.off("folder-removed", onFolderRemove);
+    socket.off("reload", scanFinish);
   });
 </script>
 

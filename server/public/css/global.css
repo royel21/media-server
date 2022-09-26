@@ -379,6 +379,14 @@ h3 {
   background-color: rgba(252, 1, 1, 0.856);
 }
 
+.fa-icon {
+  cursor: pointer;
+}
+
+.fa-icon:active {
+  transform: scale(1.1);
+}
+
 .list-group {
   display: flex;
   flex-direction: column;

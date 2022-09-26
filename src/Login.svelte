@@ -14,7 +14,7 @@
     try {
       const data = await apiUtils.post("users/login", user);
       if (data.isAutenticated) {
-        dispatch("login", { ...data, Id: "" });
+        dispatch("login", { ...data });
       } else {
         if (name) {
           error.name = "User can't be empty";

@@ -13,12 +13,12 @@ const ImagesPath = process.env.IMAGES;
 module.exports.setSocket = (_io) => (io = _io);
 
 var worker = null;
-const startWork = async (model, isFolder) => {
+const startWork = async (model, isFolder, user) => {
   if (!worker) {
     worker = fork(appPath + "/workers/BackgroundScan.js");
 
-    worker.on("message", (data) => {
-      io.sockets.emit("scan-finish", data);
+    worker.on("message", () => {
+      io.sockets.emit("reload", { Id: model.Id, user: user.Id });
     });
 
     worker.on("exit", async () => {
@@ -60,6 +60,14 @@ module.exports.diskLoader = () => {
     io.sockets.emit("disk-loaded", disks);
   });
 };
+
+module.exports.resetRecent = async (data, user) => {
+  if (user.Recent) {
+    const files = await db.file.findAll({ where: { FolderId: data.Id } });
+    await db.recentFile.update({ LastPos: 0 }, { where: { FileId: files.map((f) => f.Id), RecentId: user.Recent.Id } });
+  }
+  io.sockets.emit("reload", { Id: data.Id, user: user.Id });
+};
 //Load content of a folder
 module.exports.loadContent = (data) => {
   //If is it root of disk return;
@@ -78,7 +86,7 @@ module.exports.loadContent = (data) => {
   }
 };
 //Scan all files of a direcotry
-module.exports.scanDir = async ({ Id, Path, Type, isFolder, IsAdult }) => {
+module.exports.scanDir = async ({ Id, Path, Type, isFolder, IsAdult }, user) => {
   //If is it root of disk return;
   if (!Id && !Path) return io.sockets.emit("scan-info", "Id And Path both can't be null");
   if (/^([a-z]:\\|^\/)$/gi.test(path)) io.sockets.emit("scan-info", "Can't add root of a disk");
@@ -111,7 +119,7 @@ module.exports.scanDir = async ({ Id, Path, Type, isFolder, IsAdult }) => {
         msg = `Directory ${model.Name} is already scanning content`;
       } else {
         msg = `Directory ${model.Name} scanning content`;
-        await startWork(model, isFolder);
+        await startWork(model, isFolder, user);
       }
     } else {
       msg = "directory don't exist or can't add root of a disk";

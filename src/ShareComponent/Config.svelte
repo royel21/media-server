@@ -21,7 +21,9 @@
     childList: true,
   });
 
-  $: updateConfig(Config);
+  const save = () => {
+    updateConfig(Config);
+  };
 </script>
 
 <label id="user-label" class={User.role} for="show-config" on:click={logout} title="show-config">
@@ -61,6 +63,7 @@
         <span id="fpp-tips">0 = auto, max 500</span>
       </div>
     </div>
+    <div><span class="fas fa-save fa-icon" on:click={save} /></div>
   </div>
 {/if}
 
@@ -175,6 +178,10 @@
   option {
     font-family: "Font Awesome 5 Free", "sans-serif";
     font-weight: 600;
+  }
+  .fa-icon {
+    font-size: 25px;
+    color: white;
   }
   @media screen and (max-width: 480px) {
     #user-config.user-config {

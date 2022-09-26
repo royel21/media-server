@@ -7,6 +7,7 @@
   import UserRoutes from "./User/UserRoutes.svelte";
   import Login from "./Login.svelte";
   import apiUtils from "./api-utils";
+  import { updateUser } from "./ShareStore/UserStore";
 
   let socket;
   let user = { username: "" };
@@ -34,6 +35,7 @@
 
       socket?.close();
 
+      // updateUser();
       if (isPwa()) history.go(-(history.length - 2));
     } catch (error) {
       console.log(error);
@@ -49,11 +51,13 @@
     socket = socketClient("/");
     setContext("socket", socket);
     setContext("User", user);
+    updateUser(user);
+
     socket.io.on("error", (error) => {
       console.log(error);
     });
-
-    socket.on("reload", () => logout());
+    socket.off("logout", () => logout());
+    socket.on("logout", () => logout());
 
     setContext("logout", logout);
   }

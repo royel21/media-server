@@ -13,6 +13,7 @@
   import FavoriteList from "./FavoriteList.svelte";
   import { clamp } from "../Pages/Utils";
   import { getItemsList } from "../../api-utils";
+  import { UserStore } from "../../ShareStore/UserStore";
 
   export let id = "";
   export let page = 1;
@@ -21,6 +22,7 @@
   export let title = "";
   export let setLastRead;
   export let setFolderInfo;
+  export let handleClick;
 
   let selected = +localStorage.getItem(title) || 0;
 
@@ -60,21 +62,25 @@
   const handleKeydown = (event) => fileKeypress(event, page, goToPage, title);
 
   const openFile = ({ target }) => {
+    const el = target.closest(".file");
+    localStorage.setItem(title, el.id);
     ProcessFile(target.closest(".file"), socket);
   };
 
   const favClick = (event) => {
+    if (handleClick) handleClick(event);
     let { target } = event;
     if (target.classList.contains("far")) {
       favClicked = target;
     } else {
-      const file = target.closest(".file");
-      if (file) {
-        localStorage.setItem(title, file.id);
-        selected = getElIndex(file);
-      }
-      selectItem(selected);
       favClicked = false;
+    }
+
+    const file = target.closest(".file");
+    if (file) {
+      localStorage.setItem(title, file.id);
+      selected = getElIndex(file);
+      selectItem(selected);
     }
   };
 
@@ -95,19 +101,20 @@
     if (el) {
       sel = getElIndex(el);
     }
-
     selectItem(sel);
   });
 
   const reloadDir = (data) => {
-    if (data.id === id) {
+    if (data.Id === id && $UserStore.Id === data.user) {
       loadContent(page, filter, id, $PageConfig, type);
     }
   };
 
   onMount(() => {
-    socket.on("scan-finish", reloadDir);
-    return () => socket.off("scan-finish", reloadDir);
+    socket.on("reload", reloadDir);
+    return () => {
+      socket.off("reload", reloadDir);
+    };
   });
 
   $: document.title = `${title} Page ${page || ""}`;

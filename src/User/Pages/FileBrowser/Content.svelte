@@ -14,13 +14,7 @@
 
   let showMore = false;
   let descRef;
-
-  const sortBy = [
-    { value: "nu", label: "\u2B07 Name" },
-    { value: "nd", label: "\u2B06 Name" },
-    { value: "dd", label: "\u2B06 Date" },
-    { value: "du", label: "\u2B07 Date" },
-  ];
+  let showConfig = false;
 
   const menu = document.querySelector("#menu");
 
@@ -56,8 +50,7 @@
   };
 
   const onResetFiles = async () => {
-    await apiUtils.files(["reset-recents", folderinfo?.Id]);
-    id = folderinfo?.Id;
+    socket.emit("reset-recent", { Id: folderinfo?.Id });
   };
 
   const scanfiles = () => {
@@ -73,6 +66,8 @@
     }
     showMore = !showMore;
   };
+  //Toggle File List Config
+  const handleClick = (e) => (showConfig = !e);
 
   onDestroy(() => (menu.style.display = "flex"));
 
@@ -113,8 +108,8 @@
 </div>
 
 <fieldset>
-  <legend><span>Files List - <SortBy label="Sort By:" items={sortBy} /></span></legend>
-  <FilesList title={"Content"} {type} {filter} {page} {id} {setFolderInfo} {setLastRead}>
+  <legend><span>Files List - <SortBy label="Sort By:" {showConfig} toggleConfig={handleClick} /></span></legend>
+  <FilesList title={"Content"} {type} {filter} {page} {id} {setFolderInfo} {setLastRead} {handleClick}>
     <div class="first-controls" slot="controls" on:click={exitFolder}>
       <i class="fas fa-arrow-circle-up" />
     </div>
@@ -132,15 +127,8 @@
     margin-top: 10px;
   }
   legend {
-    position: absolute;
-    top: -10px;
-    left: calc(50% - 161.1px);
     height: 26px;
     padding: 0 5px;
-    font-size: 16px;
-    z-index: 9;
-    background-color: #14243d;
-    border-radius: 0.25rem;
   }
   legend span {
     display: flex;

@@ -21,7 +21,7 @@ const checkConfig = () => {
 
 const PageConfig = writable(checkConfig());
 
-const updateConfig = async (config) => {
+const updateConfig = (config) => {
   PageConfig.update((cfg) => (cfg = config));
   setObject("config", config);
   return config;

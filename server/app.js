@@ -26,12 +26,12 @@ const compression = require("compression");
 
 const app = express();
 
-app.use(compression());
-
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use(compression());
 
 app.use(express.static(process.env.IMAGES));
 app.use(express.static(__dirname + "/public"));

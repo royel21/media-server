@@ -22,6 +22,7 @@
   let images = [file.Duration];
   let imgContainer;
   let inputPage;
+  let isFullscreen = false;
 
   let viewerState = {
     isLoading: false,
@@ -96,16 +97,17 @@
       PageObserver(setPage, imgContainer, loadImages, viewerState);
       scrollImageLoader(loadImages, imgContainer, file.CurrentPos);
       clearTimeout(tout);
+      viewerState.jumping = false;
     }, delay);
   };
 
   Fullscreen.action = () => {
     if (webtoon) {
       disconnectObvrs(imgContainer);
-      setfullscreen(viewer);
+      isFullscreen = setfullscreen(viewer);
       connectObservers(100);
     } else {
-      setfullscreen(viewer);
+      isFullscreen = setfullscreen(viewer);
     }
   };
 
@@ -118,9 +120,7 @@
       } else {
         viewerState.loading = false;
         if (viewerState.jumping && webtoon) {
-          viewerState.jumping = false;
-          PageObserver(setPage, imgContainer, loadImages, viewerState);
-          scrollImageLoader(loadImages, imgContainer, file.CurrentPos);
+          connectObservers(100);
         }
       }
     } else {
@@ -189,7 +189,7 @@
     <i class="fas fa-sticky-note" />
     {progress}
   </span>
-  <div class="viewer">
+  <div class="viewer" class:isFullscreen>
     <div
       on:touchstart|passive={onTouchStart}
       on:touchend|passive={onTouchEnd}
@@ -431,7 +431,7 @@
     border-radius: 0.25rem;
   }
 
-  :fullscreen #manga-viewer .viewer {
+  #manga-viewer .viewer.isFullscreen {
     padding: 0;
   }
 

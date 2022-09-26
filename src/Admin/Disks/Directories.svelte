@@ -7,22 +7,26 @@
   let msg = "";
   onMount(async () => {
     dirs = await apiUtils.admin(["directories"]);
-    socket.on("scan-finish", ({ id }) => {
-      if (id) {
-        let dir = dirs.find((d) => d.Id === id);
+
+    const reloadDir = ({ Id }) => {
+      let dir = dirs.find((d) => d.Id === Id);
+      if (dir) {
         dir.IsLoading = false;
         dirs = dirs;
       }
-    });
+    };
 
-    socket.on("scan-info", (info) => {
+    socket.on("reload", reloadDir);
+
+    const scanInfo = (info) => {
       console.log(info);
-    });
+    };
+    socket.on("scan-info", scanInfo);
   });
 
   onDestroy(() => {
-    delete socket._callbacks["$scan-finish"];
-    delete socket._callbacks["$scan-info"];
+    socket.off("reload", reloadDir);
+    socket.off("scan-info", scanInfo);
   });
 
   const removeDir = async (e) => {

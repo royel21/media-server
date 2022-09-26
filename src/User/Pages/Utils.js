@@ -59,11 +59,13 @@ export const setfullscreen = (element) => {
       } else {
         document.exitFullscreen();
         lastEl = null;
+        return false;
       }
     }
   } catch (err) {
     console.log(err);
   }
+  return true;
 };
 
 export const sortFileByName = (a, b) => {

@@ -155,7 +155,7 @@ const scanFolder = async (curfolder, files) => {
 
 const scanDirectory = async ({ id, dir, isFolder }) => {
   DirectoryId = id;
-
+  console.log(dir);
   const fis = WinDrive.ListFilesRO(dir);
   let folder = WinDrive.ListFiles(dir, { oneFile: true });
   folder.Path = dir;

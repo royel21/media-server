@@ -22,7 +22,7 @@ Router.get("/", async (req, res) => {
     ],
     order: ["FullPath"],
   });
-  console.log(data);
+
   let dirs = data.map((d) => d.dataValues);
   res.send(dirs);
 });
