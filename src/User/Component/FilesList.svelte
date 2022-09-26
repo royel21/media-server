@@ -69,8 +69,10 @@
       favClicked = target;
     } else {
       const file = target.closest(".file");
-      localStorage.setItem(title, file.id);
-      selected = getElIndex(file);
+      if (file) {
+        localStorage.setItem(title, file.id);
+        selected = getElIndex(file);
+      }
       selectItem(selected);
       favClicked = false;
     }
