@@ -10,7 +10,7 @@
 
   const submit = async (e) => {
     if (!foundUser.Name) return (error = "Name Can't be empty");
-    const result = await apiUtils.post("admin/users/create-update".foundUser);
+    const result = await apiUtils.post("admin/users/create-update", foundUser);
     if (!result.fail) {
       dispatch("updateusers", result.user);
     } else {
