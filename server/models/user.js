@@ -54,7 +54,7 @@ module.exports = (sequelize, DataTypes) => {
           user.CreatedAt = new Date();
         },
         beforeUpdate: (user, opt) => {
-          if (opt.fields.includes("Password") && opt.encript) {
+          if (opt.encript) {
             user.Password = bcrypt.hashSync(user.Password, bcrypt.genSaltSync(8), null);
           }
         },
