@@ -13,6 +13,14 @@
   import NavItem from "./Component/NavItem.svelte";
   import apiUtils from "../api-utils";
 
+  const sortLastCompleted = (a, b) => {
+    if (a.Name.includes("Completed") || b.Name.includes("Completed")) {
+      return -1;
+    } else {
+      return a.Name.LocaleCompare(b.Name);
+    }
+  };
+
   const navItems = [
     { title: "Home", path: "/", class: "home" },
     { title: "Videos", path: "/videos", class: "film" },
@@ -32,6 +40,9 @@
     const data = await apiUtils.files(["dirs/"]);
     selected.Mangas = data.Mangas[0]?.Id || "";
     selected.Videos = data.Videos[0]?.Id || "";
+    data.Mangas.sort(sortLastCompleted);
+    data.Videos.sort(sortLastCompleted);
+    console.log(data);
     dirs = data;
   });
 

@@ -22,11 +22,10 @@
       console.log(info);
     };
     socket.on("scan-info", scanInfo);
-  });
-
-  onDestroy(() => {
-    socket.off("reload", reloadDir);
-    socket.off("scan-info", scanInfo);
+    return () => {
+      socket.off("reload", reloadDir);
+      socket.off("scan-info", scanInfo);
+    };
   });
 
   const removeDir = async (e) => {
