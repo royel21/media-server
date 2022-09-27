@@ -17,7 +17,7 @@
     if (a.Name?.includes("Completed") || b.Name?.includes("Completed")) {
       return -1;
     } else {
-      return a.Name?.LocaleCompare(b?.Name);
+      return a.Name?.localeCompare(b?.Name);
     }
   };
 
