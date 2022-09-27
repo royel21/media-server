@@ -154,7 +154,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 140px;
+    max-width: 100%;
     padding: 4px 4px 0 4px;
     border-right: 1px solid;
   }
@@ -288,6 +288,9 @@
     }
     .m-desc .desc-text:hover {
       width: 100.5%;
+    }
+    #img-info {
+      width: 140px;
     }
   }
 </style>
