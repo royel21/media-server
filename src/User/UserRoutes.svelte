@@ -14,10 +14,10 @@
   import apiUtils from "../api-utils";
 
   const sortLastCompleted = (a, b) => {
-    if (a.Name.includes("Completed") || b.Name.includes("Completed")) {
+    if (a.Name?.includes("Completed") || b.Name?.includes("Completed")) {
       return -1;
     } else {
-      return a.Name.LocaleCompare(b.Name);
+      return a.Name?.LocaleCompare(b?.Name);
     }
   };
 
