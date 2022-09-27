@@ -292,5 +292,8 @@
     #img-info {
       width: 140px;
     }
+    #info img {
+      max-height: 130px;
+    }
   }
 </style>
