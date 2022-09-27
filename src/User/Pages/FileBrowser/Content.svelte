@@ -187,6 +187,7 @@
   }
   #info img {
     max-height: 186px;
+    max-width: 100%;
   }
   img[alt]:after {
     font-size: 16px;
@@ -291,9 +292,6 @@
     }
     #img-info {
       width: 140px;
-    }
-    #info img {
-      max-width: 100%;
     }
   }
 </style>
