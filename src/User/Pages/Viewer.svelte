@@ -12,6 +12,8 @@
 
   export let folderId;
   export let fileId;
+  let lastId = fileId;
+
   const basePath = location.pathname
     .replace(/(^\/+|\/+$)/g, "")
     .split("/")
@@ -74,11 +76,10 @@
       window.title = playList[0]?.Cover?.split("/")[2] || "";
     }
   });
-
-  let lastId;
   $: if (file.Id != lastId) {
     lastId = file.Id;
     showFileName();
+    socket?.emit("recent-folder", { CurrentFile: fileId, FolderId: folderId });
   }
 
   const clearFilter = () => {
@@ -110,8 +111,6 @@
       window.screen.orientation.unlock();
     }
   });
-
-  $: if (fileId) socket?.emit("recent-folder", { CurrentFile: fileId, FolderId: folderId });
 </script>
 
 <div class="viewer" bind:this={viewer} on:keydown={handleKeyboard}>

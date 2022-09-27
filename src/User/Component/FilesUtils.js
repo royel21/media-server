@@ -60,11 +60,6 @@ export const ProcessFile = (file, socket, type) => {
       localStorage.setItem("fileId", file.id);
 
       navigate(url);
-      if (socket)
-        socket.emit("recent-folder", {
-          CurrentFile: file.id,
-          FolderId: segment[3],
-        });
       break;
     }
     default: {

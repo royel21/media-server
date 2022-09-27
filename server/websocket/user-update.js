@@ -14,7 +14,7 @@ module.exports.recentFolder = async ({ FolderId, CurrentFile }, user) => {
     });
     await recent[0].update({ LastRead: new Date(), CurrentFile: CurrentFile });
   } catch (error) {
-    console.log(error);
+    console.log("update-recent-error", error);
   }
 };
 
