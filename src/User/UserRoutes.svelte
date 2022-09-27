@@ -38,11 +38,10 @@
 
   onMount(async () => {
     const data = await apiUtils.files(["dirs/"]);
-    selected.Mangas = data.Mangas[0]?.Id || "";
-    selected.Videos = data.Videos[0]?.Id || "";
     data.Mangas.sort(sortLastCompleted);
     data.Videos.sort(sortLastCompleted);
-    console.log(data);
+    selected.Mangas = data.Mangas[0]?.Id || "";
+    selected.Videos = data.Videos[0]?.Id || "";
     dirs = data;
   });
 
