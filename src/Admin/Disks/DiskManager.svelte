@@ -2,7 +2,6 @@
   import { navigate } from "svelte-routing";
   import Tree from "./Tree.svelte";
   import Directories from "./Directories.svelte";
-  import { fly } from "svelte/transition";
   export let tab = "tab-1";
   $: {
     navigate(`/content-manager/${tab || "tab-1"}`, { replace: true });
@@ -27,11 +26,11 @@
     </div>
   </div>
   {#if tab.includes("tab-1")}
-    <div id="tabs-content" in:fly={{ y: 200, duration: 200 }} out:fly={{ y: 200, duration: 200 }}>
+    <div id="tabs-content">
       <Directories />
     </div>
   {:else}
-    <div id="tabs-content" in:fly={{ y: 200, duration: 200 }} out:fly={{ y: 200, duration: 200 }}>
+    <div id="tabs-content">
       <Tree />
     </div>
   {/if}
@@ -44,7 +43,6 @@
     padding: 10px 0 0 0;
   }
   .disk-controls {
-    padding: 0 5px 4px 5px;
     user-select: none;
   }
   .nav {

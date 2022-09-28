@@ -1,15 +1,14 @@
-const StreamZip = require("node-stream-zip");
-const { exec, execFileSync } = require("child_process");
-const path = require("path");
+import StreamZip from "node-stream-zip";
+import { exec, execFileSync } from "child_process";
 
-const sharp = require("sharp");
+import sharp from "sharp";
 
 const IMGTYPES = /\.(jpg|jpeg|png|gif|webp)$/i;
 
 var ffmpeg = "ffmpeg";
 var ffprobe = "ffprobe";
 
-const ZipCover = async (file, coverP, exist) => {
+export const ZipCover = async (file, coverP, exist) => {
   let zipfile;
   try {
     zipfile = new StreamZip.async({ file });
@@ -46,7 +45,7 @@ const ZipCover = async (file, coverP, exist) => {
   }
 };
 
-const getVideoDuration = async (vPath) => {
+export const getVideoDuration = async (vPath) => {
   try {
     let tempVal = execFileSync(
       ffprobe,
@@ -61,7 +60,7 @@ const getVideoDuration = async (vPath) => {
   }
 };
 
-const getVideoThumnail = async (video, toPath, exist) => {
+export const getVideoThumnail = async (video, toPath, exist) => {
   let duration = await getVideoDuration(video);
 
   if (!exist && duration) {
@@ -81,9 +80,4 @@ const getVideoThumnail = async (video, toPath, exist) => {
     return duration;
   }
   return 0;
-};
-module.exports = {
-  getVideoDuration,
-  getVideoThumnail,
-  ZipCover,
 };

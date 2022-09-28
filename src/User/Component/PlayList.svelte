@@ -3,7 +3,7 @@
 
   import Pagination from "../../ShareComponent/Pagination.svelte";
   import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
-  import { formatTime } from "../Pages/Utils";
+  import { formatTime } from "../Pages/pagesUtils";
 
   const dispatch = createEventDispatcher();
 

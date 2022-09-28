@@ -1,13 +1,7 @@
-export const getProps = ({ location, href, isPartiallyCurrent }) => {
-  let isActive = false;
-  if (href === "/" && location.pathname === "/") isActive = true;
-
-  if (href !== "/" && isPartiallyCurrent) {
-    isActive = true;
-  }
-
-  if (isActive) {
+export const getProps = ({ location, href }) => {
+  if (href.split("/")[1] === location.pathname.split("/")[1]) {
     return { class: "active" };
   }
+
   return {};
 };

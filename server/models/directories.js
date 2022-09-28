@@ -1,5 +1,6 @@
-const { nanoid } = require("nanoid");
-module.exports = (sequelize, DataTypes) => {
+import { nanoid } from "nanoid";
+
+export default (sequelize, DataTypes) => {
   const { STRING, BOOLEAN } = DataTypes;
 
   const Directory = sequelize.define(

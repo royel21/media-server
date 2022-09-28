@@ -1,7 +1,7 @@
 <script>
   import { onDestroy } from "svelte";
 
-  import { map, clamp } from "../Utils";
+  import { map, clamp } from "../../../ShareComponent/utils";
   export let value;
   export let preview = false;
   export let min = 0;

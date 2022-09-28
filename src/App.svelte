@@ -6,7 +6,7 @@
   import AdminRoutes from "./Admin/AdminRoutes.svelte";
   import UserRoutes from "./User/UserRoutes.svelte";
   import Login from "./Login.svelte";
-  import apiUtils from "./api-utils";
+  import apiUtils from "./apiUtils";
   import { updateUser } from "./ShareStore/UserStore";
 
   let socket;
@@ -30,8 +30,8 @@
   const logout = async () => {
     try {
       apiUtils.get(["users", "logout"]);
-      navigate("/login", { replace: true });
-      user = {};
+      navigate("/login", { replace: true, state: "" });
+      user = { username: "" };
 
       socket?.close();
 
@@ -44,7 +44,7 @@
 
   const logIn = (_user) => {
     user = _user.detail;
-    navigate("/", { replace: true });
+    navigate("/", { replace: true, state: "" });
   };
 
   $: if (user.isAutenticated) {
@@ -68,9 +68,9 @@
     <div>Loading</div>
   {:else if user.username}
     {#if user.role.includes("Admin")}
-      <AdminRoutes on:click={logout} />
+      <AdminRoutes />
     {:else}
-      <UserRoutes on:click={logout} />
+      <UserRoutes />
     {/if}
   {:else}
     <Login on:login={logIn} />

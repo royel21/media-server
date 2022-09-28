@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import apiUtils from "../api-utils";
+  import apiUtils from "../apiUtils";
   import ModalUser from "./Component/ModalUser.svelte";
 
   let users = [];

@@ -1,10 +1,14 @@
 <script>
+  import { getContext } from "svelte";
   import { Router, Route } from "svelte-routing";
   import Navbar from "../ShareComponent/Navbar.svelte";
   import User from "./User.svelte";
   import Folders from "./Folders/Folders.svelte";
   import DiskManager from "./Disks/DiskManager.svelte";
   import Files from "./FilesManager/Files.svelte";
+
+  const logout = getContext("logout");
+  const user = getContext("User");
 
   const navItems = [
     { title: "Users", path: "/", class: "users" },
@@ -17,11 +21,16 @@
     },
   ];
 
-  document.title = process.env.AdminTitle || "Content Manager";
+  document.title = "Content Manager";
 </script>
 
 <Router>
-  <Navbar on:click {navItems} />
+  <Navbar on:click {navItems}>
+    <span id="admin-label" on:click={logout} slot="user">
+      <i class="fas fa-sign-out-alt" />
+      <span class="nav-title">{user.username}</span>
+    </span>
+  </Navbar>
   <div class="content">
     <Route path="/folders/:page/:filter" component={Folders} />
     <Route path="/content-manager/:tab" component={DiskManager} />
@@ -31,6 +40,10 @@
 </Router>
 
 <style>
+  #admin-label {
+    padding: 0 5px;
+    cursor: pointer;
+  }
   .content {
     width: 100%;
     height: 100%;

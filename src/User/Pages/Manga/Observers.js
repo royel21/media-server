@@ -1,4 +1,4 @@
-import { scrollInView } from "./Utils";
+import { scrollInView } from "./mangaUtils";
 
 var pageObserver;
 var imgObserver;

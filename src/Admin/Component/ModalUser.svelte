@@ -1,7 +1,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
   import { fade } from "svelte/transition";
-  import apiUtils from "../../api-utils";
+  import apiUtils from "../../apiUtils";
 
   export let foundUser = { AdultPass: false, Password: "" };
 

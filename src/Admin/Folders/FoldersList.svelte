@@ -1,12 +1,12 @@
 <script>
-  import { onMount, onDestroy, getContext, createEventDispatcher } from "svelte";
+  import { onMount, getContext, createEventDispatcher } from "svelte";
   import { navigate } from "svelte-routing";
 
   import ItemList from "./ItemList.svelte";
   import Modal from "./Modal.svelte";
   import { calRows } from "./Utils";
-  import { clamp } from "../../User/Pages/Utils";
-  import apiUtils from "../../api-utils";
+  import apiUtils from "../../apiUtils";
+  import { clamp } from "../../ShareComponent/utils";
   const dispatch = createEventDispatcher();
   const socket = getContext("socket");
 
@@ -106,43 +106,48 @@
     }
   };
 
+  const onFolderRename = (data) => {
+    if (data.success && data.Id) {
+      let index = items.findIndex((f) => f.Id === data.Id);
+      if (index !== -1) {
+        items[index] = data.folder;
+      }
+      hideModal();
+    }
+  };
+
+  const onFolderRemove = (data) => {
+    if (data.success && data.Id) {
+      if (items.length === 1 && totalPages > 1) {
+        loadFolders(page - 1);
+      } else {
+        loadFolders(page);
+      }
+
+      hideModal();
+    }
+  };
+
+  const scanFinish = (data) => {
+    document.getElementById(data.Id).querySelector(".fas")?.classList.remove("fa-spin");
+  };
+
   onMount(() => {
     loadFolders(page);
-    const onFolderRename = (data) => {
-      if (data.success && data.Id) {
-        let index = items.findIndex((f) => f.Id === data.Id);
-        if (index !== -1) {
-          items[index] = data.folder;
-        }
-        hideModal();
-      }
-    };
-
-    const onFolderRemove = (data) => {
-      if (data.success && data.Id) {
-        loadFolders(page);
-        hideModal();
-      }
-    };
-
-    const scanFinish = (data) => {
-      document.getElementById(data.Id).querySelector(".fas")?.classList.remove("fa-spin");
-    };
 
     socket.on("folder-renamed", onFolderRename);
     socket.on("folder-removed", onFolderRemove);
     socket.on("reload", scanFinish);
-  });
-
-  onDestroy(() => {
-    socket.off("folder-renamed", onFolderRename);
-    socket.off("folder-removed", onFolderRemove);
-    socket.off("reload", scanFinish);
+    return () => {
+      socket.off("folder-renamed", onFolderRename);
+      socket.off("folder-removed", onFolderRemove);
+      socket.off("reload", scanFinish);
+    };
   });
 </script>
 
 {#if showModal}
-  <Modal file={folder} {modalType} on:submit={handleSubmit} on:click={hideModal} />
+  <Modal file={folder} {modalType} on:submit={handleSubmit} on:click={hideModal} on:keydown{handleSubmit} />
 {/if}
 
 {#if showImage}

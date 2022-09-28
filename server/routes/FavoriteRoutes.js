@@ -1,9 +1,11 @@
-const Router = require("express").Router();
+import { Router } from "express";
+import db from "../models/index.js";
 
-const db = require("../models");
-const { getOrderBy } = require("./query-helper");
+import { getOrderBy } from "./query-helper.js";
 
-Router.post("/create-update", async (req, res) => {
+const routes = Router();
+
+routes.post("/create-update", async (req, res) => {
   if (!req.body.Name) return res.send(false);
 
   try {
@@ -23,7 +25,7 @@ Router.post("/create-update", async (req, res) => {
   }
 });
 
-Router.post("/remove", async (req, res) => {
+routes.post("/remove", async (req, res) => {
   try {
     let { Id } = req.body;
     let favs = await req.user.getFavorites();
@@ -42,7 +44,7 @@ Router.post("/remove", async (req, res) => {
   }
 });
 
-Router.post("/add-folder", async (req, res) => {
+routes.post("/add-folder", async (req, res) => {
   const { FavoriteId, FolderId } = req.body;
 
   try {
@@ -54,7 +56,7 @@ Router.post("/add-folder", async (req, res) => {
   }
 });
 
-Router.post("/remove-folder", async (req, res) => {
+routes.post("/remove-folder", async (req, res) => {
   try {
     const { id, fid } = req.body;
     let result = await db.favoriteFolder.destroy({
@@ -68,7 +70,7 @@ Router.post("/remove-folder", async (req, res) => {
   }
 });
 
-Router.get("/:id/:order/:page/:items/:search?", async (req, res) => {
+routes.get("/:id/:order/:page/:items/:search?", async (req, res) => {
   try {
     const { id, order, page, items, search } = req.params;
     const limit = +items || 16;
@@ -112,4 +114,4 @@ Router.get("/:id/:order/:page/:items/:search?", async (req, res) => {
   }
 });
 
-module.exports = Router;
+export default routes;

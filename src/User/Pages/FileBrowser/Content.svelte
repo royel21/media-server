@@ -2,7 +2,7 @@
   import { getContext, onDestroy } from "svelte";
 
   import { navigate } from "svelte-routing";
-  import apiUtils from "../../../api-utils";
+  import apiUtils from "../../../apiUtils";
 
   import FilesList from "../../Component/FilesList.svelte";
   import { ProcessFile } from "../../Component/FilesUtils";
@@ -40,7 +40,7 @@
   };
 
   const exitFolder = () => {
-    navigate(pathname, { replace: true });
+    navigate(pathname, { replace: true, state: "" });
   };
 
   const onGenres = ({ currentTarget }) => {

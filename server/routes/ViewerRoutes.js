@@ -1,9 +1,12 @@
-var express = require("express");
-var Router = express.Router();
-const fs = require("fs");
-const path = require("path");
-const db = require("../models");
-const { qryCurrentPos } = require("./query-helper");
+import { Router } from "express";
+import db from "../models/index.js";
+
+import { existsSync, createReadStream } from "fs";
+import { join } from "path";
+
+import { qryCurrentPos } from "./query-helper.js";
+
+const routes = Router();
 
 const getFiles = async ({ user, body }, res, type) => {
   const { Recent, UserConfig } = user;
@@ -25,15 +28,15 @@ const getFiles = async ({ user, body }, res, type) => {
   });
 };
 
-Router.post("/folder/", (req, res) => {
+routes.post("/folder/", (req, res) => {
   getFiles(req, res, "folder");
 });
 
-Router.post("/favorites/", (req, res) => {
+routes.post("/favorites/", (req, res) => {
   getFiles(req, res, "favorite");
 });
 
-Router.get("/video/:id", (req, res) => {
+routes.get("/video/:id", (req, res) => {
   db.file
     .findOne({
       attributes: ["Id", "Name", "Size"],
@@ -42,7 +45,7 @@ Router.get("/video/:id", (req, res) => {
     })
     .then((file) => {
       if (file) {
-        let filePath = path.join(file.Folder.Path, file.Name);
+        let filePath = join(file.Folder.Path, file.Name);
         var total = file.Size;
         var range = req.headers.range;
         if (!range) {
@@ -54,7 +57,7 @@ Router.get("/video/:id", (req, res) => {
         var start = parseInt(positions[0], 10);
 
         if (start === 0) {
-          if (!fs.existsSync(filePath)) return res.sendStatus(404);
+          if (!existsSync(filePath)) return res.sendStatus(404);
         }
 
         // same code as accepted answer
@@ -75,11 +78,10 @@ Router.get("/video/:id", (req, res) => {
           "Content-Type": "video/mp4",
         });
 
-        var stream = fs
-          .createReadStream(filePath, {
-            start: start,
-            end: end,
-          })
+        var stream = createReadStream(filePath, {
+          start: start,
+          end: end,
+        })
           .on("open", function () {
             stream.pipe(res);
           })
@@ -93,4 +95,4 @@ Router.get("/video/:id", (req, res) => {
 });
 
 //export this Router to use in our index.js
-module.exports = Router;
+export default routes;

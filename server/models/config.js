@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   mariadb: {
     dialect: "mariadb",
     logging: false,

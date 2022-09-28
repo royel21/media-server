@@ -1,30 +1,26 @@
 <script>
-  import { onDestroy, onMount, getContext } from "svelte";
-  import apiUtils from "../../api-utils";
+  import { onMount, getContext } from "svelte";
+  import apiUtils from "../../apiUtils";
+  import RConsole from "../Component/RConsole.svelte";
 
   const socket = getContext("socket");
   let dirs = [];
   let msg = "";
+
+  const reloadDir = ({ Id }) => {
+    let dir = dirs.find((d) => d.Id === Id);
+    if (dir) {
+      dir.IsLoading = false;
+      dirs = dirs;
+    }
+  };
+
   onMount(async () => {
     dirs = await apiUtils.admin(["directories"]);
 
-    const reloadDir = ({ Id }) => {
-      let dir = dirs.find((d) => d.Id === Id);
-      if (dir) {
-        dir.IsLoading = false;
-        dirs = dirs;
-      }
-    };
-
     socket.on("reload", reloadDir);
-
-    const scanInfo = (info) => {
-      console.log(info);
-    };
-    socket.on("scan-info", scanInfo);
     return () => {
       socket.off("reload", reloadDir);
-      socket.off("scan-info", scanInfo);
     };
   });
 
@@ -51,47 +47,53 @@
 </script>
 
 <div class="message">{msg}</div>
-<table id="dir-list" class="table table-dark table-hover table-bordered">
-  <thead>
-    <tr>
-      <th>Actions</th>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Folder Count</th>
-      <th>Total Files</th>
-      <th>Is Adult</th>
-      <th>Full Path</th>
-    </tr>
-  </thead>
-  <tbody>
-    {#if dirs.length < 0}
-      <tr class="text-center">
-        <td colSpan="4">Not Directory Added</td>
+<div class="table-container">
+  <table id="dir-list" class="table table-dark table-hover table-bordered">
+    <thead>
+      <tr>
+        <th>Actions</th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Folder Count</th>
+        <th>Total Files</th>
+        <th>Is Adult</th>
+        <th>Full Path</th>
       </tr>
-    {:else}
-      {#each dirs as { Id, Name, IsLoading, FullPath, Type, FolderCount, TotalFiles, IsAdult }}
-        <tr id={Id} key={Id}>
-          <td>
-            <span class="dir-sync" on:click={rescan}>
-              <i class={"fas fa-sync" + (IsLoading ? " fa-spin" : "")} />
-            </span>
-            <span class="dir-remove ml-2" on:click={removeDir}>
-              <i class="fas fa-trash-alt" />
-            </span>
-          </td>
-          <td><div>{Name}</div></td>
-          <td>{Type}</td>
-          <td>{FolderCount}</td>
-          <td>{TotalFiles}</td>
-          <td>{IsAdult}</td>
-          <td>{FullPath}</td>
+    </thead>
+    <tbody>
+      {#if dirs.length < 0}
+        <tr class="text-center">
+          <td colSpan="4">Not Directory Added</td>
         </tr>
-      {/each}
-    {/if}
-  </tbody>
-</table>
+      {:else}
+        {#each dirs as { Id, Name, IsLoading, FullPath, Type, FolderCount, TotalFiles, IsAdult }}
+          <tr id={Id} key={Id}>
+            <td>
+              <span class="dir-sync" on:click={rescan}>
+                <i class={"fas fa-sync" + (IsLoading ? " fa-spin" : "")} />
+              </span>
+              <span class="dir-remove ml-2" on:click={removeDir}>
+                <i class="fas fa-trash-alt" />
+              </span>
+            </td>
+            <td><div>{Name}</div></td>
+            <td>{Type}</td>
+            <td>{FolderCount}</td>
+            <td>{TotalFiles}</td>
+            <td>{IsAdult}</td>
+            <td>{FullPath}</td>
+          </tr>
+        {/each}
+      {/if}
+    </tbody>
+  </table>
+</div>
+<RConsole />
 
 <style>
+  .table-container {
+    height: calc(100% - 180px);
+  }
   .message {
     display: none;
   }

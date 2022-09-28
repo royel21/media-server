@@ -1,15 +1,10 @@
 <script>
-  import { getContext } from "svelte";
   import { Link } from "svelte-routing";
-
-  import Config from "./Config.svelte";
   import { ToggleMenu } from "./ToggleMenu";
   import { getProps } from "./DataUtils";
 
   export let navItems;
   export let filters = [];
-
-  const User = getContext("User");
 
   let menuToggle = false;
 
@@ -20,7 +15,7 @@
   <ul class="navbar-nav">
     {#each navItems as item}
       {#if filters.includes(item.title)}
-        <slot {item} />
+        <slot {item} name="nav-item" />
       {:else}
         <li class="nav-item">
           <Link to={item.path} {getProps}>
@@ -33,7 +28,7 @@
   </ul>
   <ul class="navbar-nav">
     <li id="p-config" class="nav-item">
-      <Config {User} on:click />
+      <slot name="user" />
     </li>
   </ul>
 </nav>
@@ -59,13 +54,16 @@
     display: flex;
     justify-content: left;
   }
+  .nav-item:hover {
+    background-color: rgb(2 177 242);
+  }
   #p-config {
     position: relative;
     color: white;
+    height: 100%;
   }
   @media screen and (max-width: 460px) {
     #p-config {
-      display: inline-block;
       text-align: center;
       align-self: center;
     }

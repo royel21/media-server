@@ -1,15 +1,17 @@
-const Router = require("express").Router();
-const fs = require("fs-extra");
-const path = require("path");
-const winEx = require("win-explorer");
+import { Router } from "express";
+import db from "../../models/index.js";
 
-const db = require("../../models");
+import { existsSync } from "fs";
+import { join } from "path";
+import { ListFiles } from "win-explorer";
 
 const getNewId = () => {
   return Math.random().toString(36).slice(-5);
 };
 
-Router.get("/", async (req, res) => {
+const routes = Router();
+
+routes.get("/", async (req, res) => {
   const data = await db.directory.findAll({
     attributes: [
       "Id",
@@ -27,7 +29,7 @@ Router.get("/", async (req, res) => {
   res.send(dirs);
 });
 
-Router.post("/remove", (req, res) => {
+routes.post("/remove", (req, res) => {
   let { Id } = req.body;
   db.directory
     .destroy({ where: { Id } })
@@ -44,16 +46,16 @@ Router.post("/remove", (req, res) => {
     });
 });
 
-Router.post("/content", (req, res) => {
+routes.post("/content", (req, res) => {
   let { Id, Path } = req.body;
-  if (fs.existsSync(Path)) {
-    let dirs = winEx.ListFiles(Path, { directory: true });
+  if (existsSync(Path)) {
+    let dirs = ListFiles(Path, { directory: true });
     let tdata = [];
     for (let d of dirs) {
       tdata.push({
         Id: getNewId(),
         Name: d.Name,
-        Path: path.join(Path, d.Name),
+        Path: join(Path, d.Name),
         Content: [],
       });
     }
@@ -61,4 +63,4 @@ Router.post("/content", (req, res) => {
   }
 });
 
-module.exports = Router;
+export default routes;

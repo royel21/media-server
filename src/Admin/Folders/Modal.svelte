@@ -12,7 +12,7 @@
     <div class="modal-header">
       <h4>{modalType.title}</h4>
     </div>
-    <form action="#" on:submit|preventDefault>
+    <form action="#" on:submit|preventDefault on:keydown>
       <div class="modal-body">
         {#if modalType.Del}
           <p>Are you sure you want to remove <strong>{file.Name}</strong></p>

@@ -55,8 +55,9 @@
   .down-list li:not(:last-child) {
     border-bottom: 1px solid;
   }
+  .nav-item:hover,
   .down-list li:hover {
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgb(2 177 242);
   }
 
   .down-list li:last-child {

@@ -2,7 +2,7 @@
   import { onMount, createEventDispatcher } from "svelte";
 
   import Slider from "./Slider.svelte";
-  import { setfullscreen, formatTime } from "../Utils";
+  import { setfullscreen, formatTime } from "../pagesUtils";
   import { setGesture } from "./VideoTouch";
 
   export let KeyMap;

@@ -1,28 +1,42 @@
-const Sequelize = require("sequelize");
+import Sequelize from "sequelize";
+import user from "./user.js";
+import file from "./file.js";
+import folder from "./folder.js";
+import favorite from "./favorites.js";
+import recent from "./recents.js";
+import userConfig from "./userconfig.js";
+import directory from "./directories.js";
+import favoriteFolder from "./favorite-folder.js";
+import recentFolder from "./recent-folder.js";
+import recentFile from "./recent-file.js";
+
+import dbconfig from "./config.js";
+import { config } from "dotenv";
+config();
 
 const DataTypes = Sequelize.DataTypes;
 
 const { USERNAME, HOST, HOST2, DB_USER, PASSWORD, DB, CONNECTOR } = process.env;
 
-const config = require("./config");
-config[CONNECTOR].host = USERNAME === "rconsoro" ? HOST : HOST2;
+dbconfig[CONNECTOR].host = USERNAME === "rconsoro" ? HOST : HOST2;
 // config.logging = console.log;
 
-const sequelize = new Sequelize(DB, DB_USER, PASSWORD, config[CONNECTOR]);
+const sequelize = new Sequelize(DB, DB_USER, PASSWORD, dbconfig[CONNECTOR]);
 
-const db = { Op: Sequelize.Op, sqlze: sequelize };
-
-db.user = require("./user")(sequelize, DataTypes);
-db.file = require("./file")(sequelize, DataTypes);
-db.folder = require("./folder")(sequelize, DataTypes);
-db.favorite = require("./favorites")(sequelize, DataTypes);
-db.recent = require("./recents")(sequelize, DataTypes);
-db.userConfig = require("./userconfig")(sequelize, DataTypes);
-db.directory = require("./directories")(sequelize, DataTypes);
-
-db.recentFile = require("./recent-file")(sequelize, DataTypes);
-db.recentFolder = require("./recent-folder")(sequelize, DataTypes);
-db.favoriteFolder = require("./favorite-folder")(sequelize, DataTypes);
+const db = {
+  Op: Sequelize.Op,
+  sqlze: sequelize,
+  user: user(sequelize, DataTypes),
+  file: file(sequelize, DataTypes),
+  folder: folder(sequelize, DataTypes),
+  favorite: favorite(sequelize, DataTypes),
+  recent: recent(sequelize, DataTypes),
+  userConfig: userConfig(sequelize, DataTypes),
+  directory: directory(sequelize, DataTypes),
+  favoriteFolder: favoriteFolder(sequelize, DataTypes),
+  recentFolder: recentFolder(sequelize, DataTypes),
+  recentFile: recentFile(sequelize, DataTypes),
+};
 
 db.favorite.belongsToMany(db.folder, { through: { model: db.favoriteFolder } });
 
@@ -94,4 +108,4 @@ db.init = async (force) => {
   }
 };
 
-module.exports = db;
+export default db;

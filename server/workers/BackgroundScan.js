@@ -1,11 +1,20 @@
-const { genFolderThumbnails, genFileThumbnails } = require("./ThumbNailGenerator");
-require("dotenv").config();
-const sharp = require("sharp");
+import { genFolderThumbnails, genFileThumbnails } from "./ThumbNailGenerator.js";
+import { config } from "dotenv";
 
-const fs = require("fs-extra");
-const path = require("path");
-const WinDrive = require("win-explorer");
-const db = require("../models");
+config();
+
+import sharp from "sharp";
+import fs from "fs-extra";
+import path from "path";
+import WinDrive from "win-explorer";
+import db from "../models/index.js";
+
+Date.prototype.Compare = function (d) {
+  d = new Date(d);
+  if (d instanceof Date) {
+    return this.getTime() == d.getTime();
+  }
+};
 
 const ThumbnailPath = process.env.IMAGES;
 
@@ -160,10 +169,13 @@ const scanDirectory = async ({ id, dir, isFolder }) => {
   let folder = WinDrive.ListFiles(dir, { oneFile: true });
   folder.Path = dir;
   console.log("cleaning direcory");
+  process.send({ event: "info", text: "cleaning direcory" });
   await rmOrphanFiles(id, isFolder);
   console.log("scanning directory");
+  process.send({ event: "info", text: "scanning directory" });
   await scanFolder(folder, fis);
   console.log("creating folder thumbnails");
+  process.send({ event: "info", text: "creating folder thumbnails" });
   await genFolderThumbnails(foldersPendingCover);
 
   console.log("creating files thumbnails");
@@ -175,6 +187,7 @@ const scanDirectory = async ({ id, dir, isFolder }) => {
   });
 
   await genFileThumbnails(folders);
+  process.send({ event: "scan-finish", text: "scan-finish" });
 };
 
 const pendingJobs = [];
@@ -199,7 +212,3 @@ process.on("message", (data) => {
     processJobs();
   }
 });
-
-module.exports = {
-  scanDirectory,
-};

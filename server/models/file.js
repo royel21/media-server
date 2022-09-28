@@ -1,8 +1,8 @@
-const { nanoid } = require("nanoid");
-const path = require("path");
-const fs = require("fs");
+import path from "path";
+import fs from "fs";
+import { nanoid } from "nanoid";
 
-module.exports = (sequelize, DataTypes) => {
+export default (sequelize, DataTypes) => {
   const { INTEGER, STRING, DATE, FLOAT, VIRTUAL } = DataTypes;
   const File = sequelize.define(
     "File",

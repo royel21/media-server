@@ -1,24 +1,30 @@
-const { fork } = require("child_process");
-const drivelist = require("drivelist");
-const fs = require("fs-extra");
-const path = require("path");
-const winEx = require("win-explorer");
-const { nanoid } = require("nanoid");
-const db = require("../models");
+import { fork } from "child_process";
+import drivelist from "drivelist";
+import fs from "fs-extra";
+import path from "path";
+import winEx from "win-explorer";
+import { nanoid } from "nanoid";
+import db from "../models/index.js";
 
 var io;
 
 const ImagesPath = process.env.IMAGES;
 
-module.exports.setSocket = (_io) => (io = _io);
+const setSocket = (_io) => (io = _io);
 
 var worker = null;
 const startWork = async (model, isFolder, user) => {
   if (!worker) {
     worker = fork(appPath + "/workers/BackgroundScan.js");
 
-    worker.on("message", () => {
-      io.sockets.emit("reload", { Id: model.Id, user: user.Id });
+    worker.on("message", (data) => {
+      if (data.event === "scan-finish") {
+        io.sockets.emit("scan-finish", { Id: model.Id, user: user.Id });
+      } else if (data.event === "info") {
+        io.sockets.emit("info", { Id: model.Id, user: user.Id, ...data });
+      } else {
+        io.sockets.emit("reload", { Id: model.Id, user: user.Id });
+      }
     });
 
     worker.on("exit", async () => {
@@ -39,7 +45,7 @@ const startWork = async (model, isFolder, user) => {
   worker.send(data);
 };
 // List all hdd
-module.exports.diskLoader = () => {
+const diskLoader = () => {
   drivelist.list().then((drives) => {
     let disks = [];
     drives.forEach((drive) => {
@@ -61,7 +67,7 @@ module.exports.diskLoader = () => {
   });
 };
 
-module.exports.resetRecent = async (data, user) => {
+const resetRecent = async (data, user) => {
   if (user.Recent) {
     const files = await db.file.findAll({ where: { FolderId: data.Id } });
     await db.recentFile.update({ LastPos: 0 }, { where: { FileId: files.map((f) => f.Id), RecentId: user.Recent.Id } });
@@ -69,7 +75,7 @@ module.exports.resetRecent = async (data, user) => {
   io.sockets.emit("reload", { Id: data.Id, user: user.Id });
 };
 //Load content of a folder
-module.exports.loadContent = (data) => {
+const loadContent = (data) => {
   //If is it root of disk return;
   if (fs.existsSync(data.Path)) {
     let dirs = winEx.ListFiles(data.Path, { directory: true });
@@ -86,7 +92,7 @@ module.exports.loadContent = (data) => {
   }
 };
 //Scan all files of a direcotry
-module.exports.scanDir = async ({ Id, Path, Type, isFolder, IsAdult }, user) => {
+const scanDir = async ({ Id, Path, Type, isFolder, IsAdult }, user) => {
   //If is it root of disk return;
   if (!Id && !Path) return io.sockets.emit("scan-info", "Id And Path both can't be null");
   if (/^([a-z]:\\|^\/)$/gi.test(path)) io.sockets.emit("scan-info", "Can't add root of a disk");
@@ -138,7 +144,7 @@ module.exports.scanDir = async ({ Id, Path, Type, isFolder, IsAdult }, user) => 
   console.log(msg);
 };
 /****************** Rename File *******************/
-module.exports.renameFile = async ({ Id, Name }) => {
+const renameFile = async ({ Id, Name }) => {
   let file = await db.file.findOne({
     where: { Id },
     include: { model: db.folder },
@@ -177,7 +183,7 @@ module.exports.renameFile = async ({ Id, Name }) => {
 };
 /************ Remove file from db and system ***********************/
 
-module.exports.removeFile = async ({ Id, Del }) => {
+const removeFile = async ({ Id, Del }) => {
   let file = await db.file.findOne({
     where: { Id },
     include: { model: db.folder },
@@ -219,7 +225,7 @@ module.exports.removeFile = async ({ Id, Del }) => {
 
 const getCoverPath = (name) => path.join(ImagesPath, "Folder", name + ".jpg");
 
-module.exports.renameFolder = async ({ Id, Name, Description, Genres, Status }) => {
+const renameFolder = async ({ Id, Name, Description, Genres, Status }) => {
   let folder = await db.folder.findOne({
     where: { Id },
     include: { model: db.directory },
@@ -260,7 +266,7 @@ module.exports.renameFolder = async ({ Id, Name, Description, Genres, Status }) 
 
 const getFileType = ({ FilesType }) => (FilesType === "mangas" ? "Manga" : "Video");
 
-module.exports.removeFolder = async ({ Id, Del }) => {
+const removeFolder = async ({ Id, Del }) => {
   let folder = await db.folder.findByPk(Id);
   let success = false;
   if (folder) {
@@ -292,4 +298,16 @@ module.exports.removeFolder = async ({ Id, Del }) => {
     }
   }
   io.sockets.emit("folder-removed", { success, Id });
+};
+
+export default {
+  removeFolder,
+  renameFolder,
+  removeFile,
+  renameFile,
+  scanDir,
+  loadContent,
+  resetRecent,
+  diskLoader,
+  setSocket,
 };

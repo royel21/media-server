@@ -1,11 +1,12 @@
-const FileManager = require("./file-manager");
-const userUpdate = require("./user-update");
-const mloader = require("./manga-loader");
+import FileManager from "./file-manager.js";
+import userUpdate from "./user-update.js";
+import mloader from "./manga-loader.js";
+import { Server } from "socket.io";
 
-const db = require("../models");
+import db from "../models/index.js";
 
-module.exports = (server, sessionMeddle) => {
-  const io = require("socket.io")(server, { serveClient: false, cookie: true });
+export default (server, sessionMeddle) => {
+  const io = new Server(server, { serveClient: false, cookie: true });
 
   io.use((socket, next) => sessionMeddle(socket.request, {}, next));
 

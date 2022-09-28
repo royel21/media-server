@@ -1,8 +1,9 @@
 "use strict";
 
-const bcrypt = require("bcrypt");
-const { nanoid } = require("nanoid");
-module.exports = (sequelize, DataTypes) => {
+import { compareSync, hashSync, genSaltSync } from "bcrypt";
+import { nanoid } from "nanoid";
+
+export default (sequelize, DataTypes) => {
   const { STRING, DATE, BOOLEAN } = DataTypes;
   const User = sequelize.define(
     "User",
@@ -49,20 +50,20 @@ module.exports = (sequelize, DataTypes) => {
         },
         beforeCreate: (user, opt) => {
           if (opt.encript) {
-            user.Password = bcrypt.hashSync(user.Password, bcrypt.genSaltSync(8), null);
+            user.Password = hashSync(user.Password, genSaltSync(8), null);
           }
           user.CreatedAt = new Date();
         },
         beforeUpdate: (user, opt) => {
           if (opt.encript) {
-            user.Password = bcrypt.hashSync(user.Password, bcrypt.genSaltSync(8), null);
+            user.Password = hashSync(user.Password, genSaltSync(8), null);
           }
         },
         beforeBulkCreate: (users, opt) => {
           for (var user of users) {
             user.Id = nanoid(10);
             if (opt.encript) {
-              user.Password = bcrypt.hashSync(user.Password, bcrypt.genSaltSync(8), null);
+              user.Password = hashSync(user.Password, genSaltSync(8), null);
             }
             user.CreatedAt = new Date();
           }
@@ -72,12 +73,8 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   User.prototype.validPassword = function (password) {
-    return new Promise((resolve, rejected) => {
-      bcrypt.compare(password, this.Password, (err, result) => {
-        if (err) rejected(err);
-        resolve(result);
-      });
-    });
+    return compareSync(password, this.Password);
   };
+
   return User;
 };

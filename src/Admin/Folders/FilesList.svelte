@@ -1,10 +1,11 @@
 <script>
-  import { onMount, onDestroy, getContext } from "svelte";
+  import { onMount, getContext } from "svelte";
   import { calRows } from "./Utils";
 
   import ItemList from "./ItemList.svelte";
   import Modal from "./Modal.svelte";
-  import apiUtils from "../../api-utils";
+  import apiUtils from "../../apiUtils";
+  import { clamp } from "../../ShareComponent/utils";
 
   const socket = getContext("socket");
 
@@ -32,36 +33,38 @@
     }
   };
 
+  const onFileRename = (data) => {
+    if (data.success) {
+      file.Name = data.Name;
+      items = items;
+      hideModal();
+    } else {
+      modalType.error = data.msg;
+    }
+  };
+
+  const onFileRemove = (data) => {
+    if (data.success) {
+      if (items.length === 1 && totalPages > 1) {
+        loadFiles(page - 1);
+      } else {
+        loadFiles(page);
+      }
+
+      hideModal();
+    } else {
+      modalType.error = data.msg;
+    }
+  };
+
   onMount(async () => {
     loadFiles(1);
-    socket.on("file-renamed", (data) => {
-      if (data.success) {
-        file.Name = data.Name;
-        items = items;
-        hideModal();
-      } else {
-        modalType.error = data.msg;
-      }
-    });
-
-    socket.on("file-removed", (data) => {
-      if (data.success) {
-        if (page === totalPages && items.length > 1) {
-          items = items.filter((f) => f.Id !== file.Id);
-        } else {
-          page = page > 1 ? page - 1 : page;
-          loadFiles(page);
-        }
-        hideModal();
-      } else {
-        modalType.error = data.msg;
-      }
-    });
-  });
-
-  onDestroy(() => {
-    delete socket._callbacks["$file-renamed"];
-    delete socket._callbacks["$file-removed"];
+    socket.on("file-renamed", onFileRename);
+    socket.on("file-removed", onFileRemove);
+    return () => {
+      socket.off("file-renamed", onFileRename);
+      socket.off("file-removed", onFileRemove);
+    };
   });
 
   const onFilter = (event) => {
@@ -70,10 +73,10 @@
   };
 
   const goToPage = (pg) => {
-    pg = parseInt(pg.detail);
-    if (pg < 1 || pg > totalPages) return;
-    page = pg < 1 ? 1 : pg > totalPages ? totalPages : pg;
-    loadFiles(page);
+    pg = clamp(+pg.detail, 1, totalPages);
+    if (pg !== page) {
+      loadFiles(pg);
+    }
   };
 
   const itemClick = (event) => {

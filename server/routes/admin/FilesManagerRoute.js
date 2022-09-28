@@ -1,9 +1,11 @@
-const Router = require("express").Router();
+import { Router } from "express";
+import db from "../../models/index.js";
 
-const db = require("../../models");
-const { getFilter } = require("../utils");
+import { getFilter } from "../utils.js";
 
-Router.get("/:page/:items/:filter?", async (req, res) => {
+const routes = Router();
+
+routes.get("/:page/:items/:filter?", async (req, res) => {
   const { page, items, filter } = req.params;
   let filterTerm = filter || "";
 
@@ -35,4 +37,4 @@ Router.get("/:page/:items/:filter?", async (req, res) => {
   res.send(data);
 });
 
-module.exports = Router;
+export default routes;

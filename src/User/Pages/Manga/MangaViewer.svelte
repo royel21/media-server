@@ -1,8 +1,8 @@
 <script>
   import { onDestroy, getContext, createEventDispatcher, afterUpdate } from "svelte";
-
-  import { clamp, isMobile, setfullscreen } from "../Utils";
-  import { scrollInView, getEmptyIndex } from "./Utils";
+  import { clamp } from "../../../ShareComponent/utils";
+  import { isMobile, setfullscreen } from "../pagesUtils";
+  import { scrollInView, getEmptyIndex } from "./mangaUtils";
   import { PageObserver, disconnectObvrs, scrollImageLoader } from "./Observers";
   import { onTouchStart, onTouchEnd, onTouchMove, default as controls } from "./MangaTouch";
 

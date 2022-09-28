@@ -5,7 +5,7 @@
   import Modal from "../Folders/Modal.svelte";
   import Filter from "../../ShareComponent/Filter.svelte";
   import Pagination from "../../ShareComponent/Pagination.svelte";
-  import apiUtils from "../../api-utils";
+  import apiUtils from "../../apiUtils";
 
   const socket = getContext("socket");
   export let page = 1;

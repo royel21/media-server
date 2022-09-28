@@ -1,9 +1,11 @@
-const Router = require("express").Router();
-const KeysMap = require("./KeysMap");
+import { Router } from "express";
+import db from "../../models/index.js";
 
-const db = require("../../models");
+import KeysMap from "./KeysMap.js";
 
-Router.get("/", async (_, res) => {
+const routes = Router();
+
+routes.get("/", async (_, res) => {
   const result = await db.user.findAll({ order: ["Name"] });
   // remove password from users
   const users = result.map((u) => ({ ...u.dataValues, Password: "" }));
@@ -78,12 +80,12 @@ const createUpdate = async (req) => {
   return result;
 };
 
-Router.post("/create-update", async (req, res) => {
+routes.post("/create-update", async (req, res) => {
   const result = await (req.body.Id ? createUpdate(req) : createUser(req));
   return res.send(result);
 });
 
-Router.post("/remove", async (req, res) => {
+routes.post("/remove", async (req, res) => {
   let valid = await validate(req, true);
   const result = { removed: true };
 
@@ -100,4 +102,4 @@ Router.post("/remove", async (req, res) => {
   return res.send(result);
 });
 
-module.exports = Router;
+export default routes;

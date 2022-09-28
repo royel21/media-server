@@ -1,13 +1,16 @@
-const Router = require("express").Router();
+import { Router } from "express";
+import db from "../models/index.js";
 
-const db = require("../models");
-const { getFiles, getFolders } = require("./query-helper");
-const { getFilter } = require("./utils");
+import { getFiles, getFolders } from "./query-helper.js";
+
+import { getFilter } from "./utils.js";
+
+const routes = Router();
 
 const sortName = (a, b) => a.Name.localeCompare(b.Name);
 const { literal } = db.sqlze;
 
-Router.get("/folder-content/:id/:order/:page?/:items?/:search?", async (req, res) => {
+routes.get("/folder-content/:id/:order/:page?/:items?/:search?", async (req, res) => {
   const { id, order, page, items, search } = req.params;
 
   let data = {};
@@ -33,7 +36,7 @@ Router.get("/folder-content/:id/:order/:page?/:items?/:search?", async (req, res
     res.send({});
   }
 });
-Router.post("/recents/remove", async ({ body }, res) => {
+routes.post("/recents/remove", async ({ body }, res) => {
   if (body.Id) {
     const recent = await db.recentFolder.findOne({ where: { FolderId: body.Id } });
     if (recent) await recent.destroy();
@@ -42,7 +45,7 @@ Router.post("/recents/remove", async ({ body }, res) => {
   return res.send({ valid: false, msg: "Invalid Id" });
 });
 
-Router.get("/recents/:items/:page?/:filter?", async (req, res) => {
+routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
   const { page, items, filter } = req.params;
   const p = +page || 1;
   const limit = +items || 16;
@@ -81,7 +84,7 @@ Router.get("/recents/:items/:page?/:filter?", async (req, res) => {
   });
 });
 
-Router.get("/dirs", async (req, res) => {
+routes.get("/dirs", async (req, res) => {
   const dirs = await db.directory.findAll({
     attributes: ["Id", "Name", "Type"],
     where: { IsAdult: { [db.Op.lte]: req.user.AdultPass } },
@@ -97,12 +100,12 @@ Router.get("/dirs", async (req, res) => {
   });
 });
 
-Router.get("/file-data/:id", async (req, res) => {
+routes.get("/file-data/:id", async (req, res) => {
   let file = await db.file.findOne({ where: { Id: req.params.id } });
   return res.send(file.dataValues);
 });
 
-Router.get("/first-last/:isfirst/:folderid", async (req, res) => {
+routes.get("/first-last/:isfirst/:folderid", async (req, res) => {
   let files = await db.file.findAll({
     order: ["Name"],
     where: { FolderId: req.params.folderid },
@@ -116,8 +119,8 @@ Router.get("/first-last/:isfirst/:folderid", async (req, res) => {
   }
 });
 
-Router.get("/folders/:order/:page?/:items?/:search?", getFolders);
+routes.get("/folders/:order/:page?/:items?/:search?", getFolders);
 
-Router.get("/:filetype/:dirid/:order/:page?/:items?/:search?", getFolders);
+routes.get("/:filetype/:dirid/:order/:page?/:items?/:search?", getFolders);
 
-module.exports = Router;
+export default routes;

@@ -1,24 +1,7 @@
-const { nanoid } = require("nanoid");
-const fs = require("fs");
+import { readdirSync, existsSync } from "fs";
+import { nanoid } from "nanoid";
 
-Date.prototype.addHours = function (h) {
-  this.setTime(this.getTime() + h * 60 * 60 * 1000);
-  return this;
-};
-
-Date.prototype.subHours = function (h) {
-  this.setTime(this.getTime() - h * 60 * 60 * 1000);
-  return this;
-};
-
-Date.prototype.Compare = function (d) {
-  d = new Date(d);
-  if (d instanceof Date) {
-    return this.getTime() == d.getTime();
-  }
-};
-
-module.exports = (sequelize, DataTypes) => {
+export default (sequelize, DataTypes) => {
   const { INTEGER, STRING, DATE, TEXT, BOOLEAN, VIRTUAL } = DataTypes;
   const Folder = sequelize.define(
     "Folders",
@@ -46,13 +29,13 @@ module.exports = (sequelize, DataTypes) => {
       Exists: {
         type: VIRTUAL,
         get() {
-          return fs.existsSync(this.Path || "");
+          return existsSync(this.Path || "");
         },
       },
       IsNoEmpty: {
         type: VIRTUAL,
         get() {
-          return this.Exists && fs.readdirSync(this.Path).length;
+          return this.Exists && readdirSync(this.Path).length;
         },
       },
       Cover: {
@@ -84,6 +67,10 @@ module.exports = (sequelize, DataTypes) => {
       },
       Status: {
         type: BOOLEAN,
+      },
+      IsAdult: {
+        type: INTEGER,
+        defaultValue: 0,
       },
     },
     {

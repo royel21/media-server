@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
 import { sortByName } from "./StoreUtils";
-import apiUtils from "../../api-utils";
+import apiUtils from "../../apiUtils";
 
 const FavoritesStores = writable([]);
 

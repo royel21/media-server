@@ -1,3 +1,5 @@
+import { clamp } from "./utils";
+
 const paginationInput = (li, page, totalPages, dispatch) => {
   let input = li.querySelector("input");
   if (!input) {

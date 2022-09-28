@@ -1,5 +1,5 @@
 <script>
-  import api from "../../api-utils";
+  import api from "../../apiUtils";
   import { navigate } from "svelte-routing";
   import { getFilesPerPage } from "../Component/FilesUtils";
   import { fileKeypress, selectItem, getElIndex } from "../Component/FileEvents";
@@ -7,7 +7,7 @@
   import Filter from "../../ShareComponent/Filter.svelte";
   import Pagination from "../../ShareComponent/Pagination.svelte";
   import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
-  import { clamp } from "./Utils";
+  import { clamp } from "../../ShareComponent/utils";
 
   export let page = 1;
   export let filter = "";
@@ -44,7 +44,7 @@
 
   $: loadContent(page, filter);
 
-  $: document.title = page ? `Home - Page ${pageData.page}` : "Home";
+  $: document.title = page ? `Home - Page - ${pageData.page}` : "Home";
 </script>
 
 <div class="scroll-container">

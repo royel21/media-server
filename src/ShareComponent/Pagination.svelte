@@ -1,7 +1,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
-  import { clamp } from "../User/Pages/Utils";
   import paginationInput from "./PageInput";
+  import { clamp } from "./utils";
 
   const dispatch = createEventDispatcher();
 

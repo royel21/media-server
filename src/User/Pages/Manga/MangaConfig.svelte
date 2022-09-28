@@ -1,5 +1,5 @@
 <script>
-  import { clamp } from "../Utils";
+  import { clamp } from "../../../ShareComponent/utils";
   export let onConfig;
   export let ToggleMenu;
 

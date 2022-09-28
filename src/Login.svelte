@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher } from "svelte";
-  import apiUtils from "./api-utils";
+  import { post } from "./apiUtils.js";
 
   const dispatch = createEventDispatcher();
 
@@ -12,15 +12,13 @@
   const onSubmit = async (event) => {
     event.preventDefault();
     try {
-      const data = await apiUtils.post("users/login", user);
+      const data = await post("users/login", user);
       if (data.isAutenticated) {
         dispatch("login", { ...data });
+      } else if (user.username) {
+        error.name = "User can't be empty";
       } else {
-        if (name) {
-          error.name = "User can't be empty";
-        } else {
-          error.password = "Password can't be empty";
-        }
+        error.password = "Password can't be empty";
       }
     } catch (err) {
       if (err.toString().includes("Network Error")) {
@@ -96,7 +94,7 @@
 
   #login-container label {
     padding: 0 15px;
-    min-width: 35px;
+    min-width: 60px;
   }
 
   #login-container label i {

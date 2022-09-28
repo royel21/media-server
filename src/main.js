@@ -1,6 +1,5 @@
+import "./global.css";
 import App from "./App.svelte";
-
-window.local = localStorage;
 
 //LocalStorage
 Storage.prototype.setObject = function (key, value) {

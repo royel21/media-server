@@ -1,10 +1,10 @@
-const path = require("path");
-const fs = require("fs-extra");
-const { getVideoThumnail, ZipCover } = require("./ThumbnailUtils");
+import { join } from "path";
+import { existsSync } from "fs";
+import { getVideoThumnail, ZipCover } from "./ThumbnailUtils.js";
 
 var thumbnailBasePath = process.env.IMAGES;
 
-const genFileThumbnails = async (folders) => {
+export const genFileThumbnails = async (folders) => {
   let total = 0;
   let i = 0;
 
@@ -12,19 +12,23 @@ const genFileThumbnails = async (folders) => {
 
   for (let folder of folders) {
     console.log("---" + folder.Name);
+    process.send({
+      event: "info",
+      text: `${parseFloat((i++ / total) * 100).toFixed(2)}% - ${folder.Name}`,
+    });
     for (let file of folder.Files) {
       let Duration = 0;
 
       try {
-        let filePath = path.join(folder.Path, file.Name);
-        let thumbPath = path.join(thumbnailBasePath, file.Type, folder.Name);
+        let filePath = join(folder.Path, file.Name);
+        let thumbPath = join(thumbnailBasePath, file.Type, folder.Name);
 
-        if (!fs.existsSync(thumbPath)) {
-          fs.mkdirsSync(thumbPath);
+        if (!existsSync(thumbPath)) {
+          mkdirsSync(thumbPath);
         }
 
-        let coverPath = path.join(thumbPath, file.Name + ".jpg");
-        let exist = fs.existsSync(coverPath);
+        let coverPath = join(thumbPath, file.Name + ".jpg");
+        let exist = existsSync(coverPath);
 
         if (file.Duration === 0 || !exist) {
           if (file.Type.includes("Manga")) {
@@ -45,9 +49,10 @@ const genFileThumbnails = async (folders) => {
     }
   }
   console.log("-----100%-----");
+  process.send({ event: "info", text: "-----100%-----" });
 };
 
-const genFolderThumbnails = async (folders) => {
+export const genFolderThumbnails = async (folders) => {
   for (let s of folders) {
     try {
       if (s.FilesType.includes("mangas")) {
@@ -61,9 +66,4 @@ const genFolderThumbnails = async (folders) => {
       console.log(err);
     }
   }
-};
-
-module.exports = {
-  genFolderThumbnails,
-  genFileThumbnails,
 };

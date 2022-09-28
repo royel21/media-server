@@ -1,30 +1,34 @@
-const https = require("http");
-const express = require("express");
-const path = require("path");
-const session = require("express-session");
-const passport = require("passport");
-const cookieParser = require("cookie-parser");
-const cors = require("cors");
+import https from "http";
+import express from "express";
+import path from "path";
+import session from "express-session";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import { config } from "dotenv";
+import compression from "compression";
 
-require("dotenv").config();
-const db = require("./models");
-require("./passport")(passport);
+import passportConfig from "./passport.js";
+import websocketConfig from "./websocket/socketio-server.js";
+import { fileURLToPath } from "url";
 
-global.appPath = __dirname;
+config();
 
-const userRoutes = require("./routes/UserRoutes");
-const filesRoutes = require("./routes/FilesRoutes");
-const favoriteRoutes = require("./routes/FavoriteRoutes");
-const ViewerRoutes = require("./routes/ViewerRoutes");
+import db from "./models/index.js";
 
-// Administrator
-const UsersManagerRoute = require("./routes/admin/UsersManagerRoute");
-const DirectoriesRoute = require("./routes/admin/DirectoriesRoute");
-const FilesManagerRoute = require("./routes/admin/FilesManagerRoute");
-const FoldersRoute = require("./routes/admin/FoldersRoute");
-const compression = require("compression");
+const __filename = fileURLToPath(import.meta.url);
+global.appPath = path.dirname(__filename);
+
+import userRoutes from "./routes/UserRoutes.js";
+import filesRoutes from "./routes/FilesRoutes.js";
+import favoriteRoutes from "./routes/FavoriteRoutes.js";
+import ViewerRoutes from "./routes/ViewerRoutes.js";
+import UsersManagerRoute from "./routes/admin/UsersManagerRoute.js";
+import DirectoriesRoute from "./routes/admin/DirectoriesRoute.js";
+import FilesManagerRoute from "./routes/admin/FilesManagerRoute.js";
+import FoldersRoute from "./routes/admin/FoldersRoute.js";
 
 const app = express();
+const passport = passportConfig();
 
 app.use(cors());
 app.use(express.json());
@@ -34,7 +38,7 @@ app.use(cookieParser());
 app.use(compression());
 
 app.use(express.static(process.env.IMAGES));
-app.use(express.static(__dirname + "/public"));
+app.use(express.static(global.appPath + "/public"));
 
 const sessionMeddle = session({
   name: process.env.SESSION,
@@ -53,7 +57,7 @@ app.use("/api/users", userRoutes);
 
 app.use((req, res, next) => {
   if (!/login|api\/users\/login/gi.test(req.url) && !req.user) {
-    return res.redirect("/login");
+    return res.redirect("/");
   }
   return next();
 });
@@ -90,17 +94,17 @@ const port = process.env.USERNAME === "rconsoro" ? PORT2 : PORT;
 db.init().then(() => {
   let server = https
     .createServer(
-      // {
-      //   key: fs.readFileSync("./cert/server.key"),
-      //   cert: fs.readFileSync("./cert/server.cert")
-      // },
+      {
+        // key: fs.readFileSync("./cert/key.pem"),
+        // cert: fs.readFileSync("./cert/cert.pem")
+      },
       app
     )
     .listen(port, host);
 
   console.log(`Node server is running.. at http://${host}:${port}`);
 
-  return require("./websocket/socketio-server")(server, sessionMeddle);
+  return websocketConfig(server, sessionMeddle);
 });
 
 console.log(process.env.NODE_ENV, port);

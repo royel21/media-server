@@ -1,14 +1,15 @@
-const db = require("../models");
-const { getFilter } = require("./utils");
+import db from "../models/index.js";
+
+import { getFilter } from "./utils.js";
 
 const { literal } = db.sqlze;
 
-const qryCurrentPos = (Recent, table) => [
+export const qryCurrentPos = (Recent, table) => [
   literal(`IFNULL((Select LastPos from RecentFiles where FileId = ${table}.Id and RecentId = '${Recent.Id}'), 0)`),
   "CurrentPos",
 ];
 
-const getOrderBy = (orderby, table = "") => {
+export const getOrderBy = (orderby, table = "") => {
   let desc = /nd/.test(orderby) ? "DESC" : "";
   let byName = literal(`REPLACE(${table}.Name, '[','0') ${desc}`);
 
@@ -24,7 +25,7 @@ const getOrderBy = (orderby, table = "") => {
   return [data[orderby] || [byName]];
 };
 
-const getFiles = async (user, data) => {
+export const getFiles = async (user, data) => {
   let files = { count: 0, rows: [] };
   let searchs = [];
   let search = data.search || "";
@@ -67,7 +68,7 @@ const getFiles = async (user, data) => {
   return db.file.findAndCountAll(query);
 };
 
-const getFolders = async (req, res) => {
+export const getFolders = async (req, res) => {
   const { filetype, dirid, order, page, items, search } = req.params;
   let filterTerm = search || "";
 
@@ -114,11 +115,4 @@ const getFolders = async (req, res) => {
     totalPages: Math.ceil(result.count / limit),
     valid: true,
   });
-};
-
-module.exports = {
-  getFiles,
-  getFolders,
-  getOrderBy,
-  qryCurrentPos,
 };

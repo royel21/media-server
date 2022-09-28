@@ -1,6 +1,8 @@
-const Router = require("express").Router();
-const db = require("../../models");
-const { getFilter } = require("../utils");
+import { Router } from "express";
+import db from "../../models/index.js";
+import { getFilter } from "../utils.js";
+
+const routes = Router();
 
 const getData = async ({ params }, res) => {
   const { page, items, filter, folderId } = params;
@@ -43,16 +45,16 @@ const getData = async ({ params }, res) => {
   });
 };
 
-Router.get("/:page/:items/:filter?", (req, res) => {
+routes.get("/:page/:items/:filter?", (req, res) => {
   getData(req, res).catch((err) => {
     console.log(err);
   });
 });
 
-Router.get("/files/:folderId/:page/:items/:filter?", (req, res) => {
+routes.get("/files/:folderId/:page/:items/:filter?", (req, res) => {
   getData(req, res).catch((err) => {
     console.log(err);
   });
 });
 
-module.exports = Router;
+export default routes;

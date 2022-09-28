@@ -1,19 +1,13 @@
 <script>
-  import { createEventDispatcher } from "svelte";
-  import { PageConfig, updateConfig } from "../User/Stores/PageConfigStore";
-  export let User;
+  import { getContext } from "svelte";
+  import { PageConfig, updateConfig } from "../Stores/PageConfigStore";
+
+  const User = getContext("User");
+  const logout = getContext("logout");
 
   let title = document.title.split(" ")[0];
 
-  const dispatch = createEventDispatcher();
-
   const Config = { ...$PageConfig };
-
-  const logout = () => {
-    if (User.role.includes("Administrator")) {
-      dispatch("click");
-    }
-  };
 
   const observer = new MutationObserver(() => (title = document.title.split(" ")[0]));
 
@@ -26,46 +20,44 @@
   };
 </script>
 
-<label id="user-label" class={User.role} for="show-config" on:click={logout} title="show-config">
+<label id="user-label" class={User.role} for="show-config" title="show-config">
   <i class="fas fa-user-cog" />
   <span class="nav-title">{User.username}</span>
 </label>
-{#if !User.role.includes("Administrator")}
-  <input type="checkbox" name="" id="show-config" title="show-config" />
-  <div id="user-config" class={User.role.includes("User") ? "user-config" : "admin-config"}>
-    <div id="sep"><span on:click> <i class="fas fa-sign-out-alt" /> Log out </span></div>
+<input type="checkbox" name="" id="show-config" title="show-config" />
+<div id="user-config" class={User.role.includes("User") ? "user-config" : "admin-config"}>
+  <div id="sep"><span on:click={logout}> <i class="fas fa-sign-out-alt" /> Log out </span></div>
 
-    <div id="config-content">
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <label for="orderby" class="input-group-text">Sort By:</label>
-        </div>
-        <select id="orderby" name="select-sort" class="form-control fa" bind:value={Config[title].sort}>
-          <option value="nu">&#xf15d; Name</option>
-          <option value="nd">&#xf15e; Name</option>
-          <option value="du">&#xf162; Date</option>
-          <option value="dd">&#xf163; Date</option>
-        </select>
+  <div id="config-content">
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <label for="orderby" class="input-group-text">Sort By:</label>
       </div>
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <label for="items" class="input-group-text">File per Page:</label>
-        </div>
-        <input
-          id="items"
-          name="item-number"
-          type="number"
-          min="0"
-          max="500"
-          bind:value={Config[title].items}
-          class="form-control"
-        />
-        <span id="fpp-tips">0 = auto, max 500</span>
-      </div>
+      <select id="orderby" name="select-sort" class="form-control fa" bind:value={Config[title].sort}>
+        <option value="nu">&#xf15d; Name</option>
+        <option value="nd">&#xf15e; Name</option>
+        <option value="du">&#xf162; Date</option>
+        <option value="dd">&#xf163; Date</option>
+      </select>
     </div>
-    <div><span class="fas fa-save fa-icon" on:click={save} /></div>
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <label for="items" class="input-group-text">File per Page:</label>
+      </div>
+      <input
+        id="items"
+        name="item-number"
+        type="number"
+        min="0"
+        max="500"
+        bind:value={Config[title].items}
+        class="form-control"
+      />
+      <span id="fpp-tips">0 = auto, max 500</span>
+    </div>
   </div>
-{/if}
+  <div><span class="fas fa-save fa-icon" on:click={save} /></div>
+</div>
 
 <style>
   #sep {
@@ -76,6 +68,7 @@
     align-self: center;
     margin-right: 5px;
     height: 32px;
+    padding: 0 5px;
   }
   #show-config:checked + #user-config {
     visibility: visible;
@@ -181,7 +174,6 @@
   }
   .fa-icon {
     font-size: 25px;
-    color: white;
   }
   @media screen and (max-width: 480px) {
     #user-config.user-config {
@@ -191,10 +183,6 @@
     #user-label.User {
       height: initial;
       text-align: center;
-    }
-
-    #user-label span {
-      display: inline-block;
     }
 
     #user-label.User {

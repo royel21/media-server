@@ -1,5 +1,5 @@
-const { nanoid } = require("nanoid");
-module.exports = (sequelize, { STRING }) => {
+import { nanoid } from "nanoid";
+export default (sequelize, { STRING }) => {
   const Recent = sequelize.define(
     "Recents",
     {

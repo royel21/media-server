@@ -1,13 +1,12 @@
-const db = require("../models");
+import db from "../models/index.js";
 
-module.exports.updateFileView = async (data) => {
+const updateFileView = async (data) => {
   let file = db.file.findByPk(data.id);
   if (file) {
     await file.update({ ViewCount: file.ViewCount + 1 });
   }
 };
-
-module.exports.recentFolder = async ({ FolderId, CurrentFile }, user) => {
+const recentFolder = async ({ FolderId, CurrentFile }, user) => {
   try {
     let recent = await db.recentFolder.findOrCreate({
       where: { FolderId, RecentId: user.Recent.Id },
@@ -18,7 +17,7 @@ module.exports.recentFolder = async ({ FolderId, CurrentFile }, user) => {
   }
 };
 
-module.exports.updateFilePos = async (data, user) => {
+const updateFilePos = async (data, user) => {
   try {
     let recent = await db.recentFile.findOrCreate({
       where: { FileId: data.Id, RecentId: user.Recent.Id },
@@ -29,7 +28,7 @@ module.exports.updateFilePos = async (data, user) => {
   }
 };
 
-module.exports.updateConfig = async (data, user) => {
+const updateConfig = async (data, user) => {
   try {
     let Config = JSON.parse(user.UserConfig.Config);
 
@@ -44,4 +43,11 @@ module.exports.updateConfig = async (data, user) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+export default {
+  updateConfig,
+  updateFilePos,
+  recentFolder,
+  updateFileView,
 };

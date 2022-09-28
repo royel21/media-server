@@ -11,7 +11,8 @@
   import Content from "./Pages/FileBrowser/Content.svelte";
   import Viewer from "./Pages/Viewer.svelte";
   import NavItem from "./Component/NavItem.svelte";
-  import apiUtils from "../api-utils";
+  import apiUtils from "../apiUtils";
+  import Config from "./Component/Config.svelte";
 
   const sortLastCompleted = (a, b) => {
     if (a.Name?.includes("Completed") || b.Name?.includes("Completed")) {
@@ -50,7 +51,8 @@
 
 <Router>
   <Navbar on:click {navItems} filters={["Mangas", "Videos"]} let:item>
-    <NavItem {dirs} {selectDir} {selected} {item} />
+    <NavItem {dirs} {selectDir} {selected} {item} slot="nav-item" />
+    <Config slot="user" />
   </Navbar>
   <Route path="/videos/content/:id/:page/:filter" component={Content} />
   <Route path="/videos/viewer/:folderId/:fileId" component={Viewer} />

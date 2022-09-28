@@ -1,6 +1,5 @@
-const StreamZip = require("node-stream-zip");
-const { existsSync } = require("fs-extra");
-const db = require("../models");
+import StreamZip from "node-stream-zip";
+import db from "../models/index.js";
 
 const loadZipImages = async (data, socket) => {
   let { Id, indices } = data;
@@ -43,4 +42,6 @@ const loadZipImages = async (data, socket) => {
   }
 };
 
-module.exports.loadZipImages = loadZipImages;
+export default {
+  loadZipImages,
+};

@@ -7,8 +7,8 @@
   import PlayList from "../Component/PlayList.svelte";
   import MangaViewer from "./Manga/MangaViewer.svelte";
   import VideoPLayer from "./Video/VideoPlayer.svelte";
-  import { KeyMap, handleKeyboard, isMobile, isVideo, isManga, showFileName, sortFileByName } from "./Utils";
-  import apiUtils from "../../api-utils";
+  import { KeyMap, handleKeyboard, isMobile, isVideo, isManga, showFileName, sortFileByName } from "./pagesUtils";
+  import apiUtils from "../../apiUtils";
 
   export let folderId;
   export let fileId;

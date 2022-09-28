@@ -1,4 +1,4 @@
-module.exports = (sequelize, { STRING, INTEGER, DATE }) => {
+export default (sequelize, { STRING, INTEGER, DATE }) => {
   const RecentFolder = sequelize.define(
     "RecentFolders",
     {

@@ -11,8 +11,8 @@
   import Pagination from "../../ShareComponent/Pagination.svelte";
   import Filter from "../../ShareComponent/Filter.svelte";
   import FavoriteList from "./FavoriteList.svelte";
-  import { clamp } from "../Pages/Utils";
-  import { getItemsList } from "../../api-utils";
+  import { clamp } from "../../ShareComponent/utils";
+  import { getItemsList } from "../../apiUtils";
   import { UserStore } from "../../ShareStore/UserStore";
 
   export let id = "";

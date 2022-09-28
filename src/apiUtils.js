@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const post = async (route, params) => {
+export const post = async (route, params) => {
   try {
     const { data } = await axios.post(`/api/${route}`, params);
     return data;
@@ -11,7 +11,7 @@ const post = async (route, params) => {
 
 let cancel;
 
-const get = async (route) => {
+export const get = async (route) => {
   const p = route.filter((p) => p).join("/");
 
   try {
