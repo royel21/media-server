@@ -27,13 +27,12 @@ export const FileTypes = {
 
 export const getFilesPerPage = (i) => {
   let fwidth = document.body.offsetWidth;
-  let items = parseInt((fwidth - scrollW) / itemW);
+  let items = Math.floor((fwidth - scrollW) / itemW);
   return items * i || 0;
 };
 
 export const genUrl = (page = 1, { order = "nu", items }, filter, type, id, dir) => {
   let itemsperpage = +items || getFilesPerPage(3);
-
   if (type.includes("content")) {
     type = `folder-content/${id}`;
   }

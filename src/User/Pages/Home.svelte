@@ -8,6 +8,7 @@
   import Pagination from "../../ShareComponent/Pagination.svelte";
   import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
   import { clamp } from "../../ShareComponent/utils";
+  import { PageConfig } from "../Stores/PageConfigStore";
 
   export let page = 1;
   export let filter = "";
@@ -17,7 +18,8 @@
 
   const loadContent = async (pg, flt = "") => {
     pg = clamp(pg, 1, pageData.totalPages);
-    const data = await api.files(["recents", getFilesPerPage(3), pg, flt]);
+    const items = $PageConfig.Home.items || getFilesPerPage(3);
+    const data = await api.files(["recents", items, pg, flt]);
     if (data.valid) pageData = data;
   };
 
@@ -42,7 +44,7 @@
 
   ToggleMenu.set(false);
 
-  $: loadContent(page, filter);
+  $: $PageConfig, loadContent(page, filter);
 
   $: document.title = page ? `Home - Page - ${pageData.page}` : "Home";
 </script>
