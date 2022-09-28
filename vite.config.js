@@ -13,7 +13,7 @@ export default defineConfig({
   },
   server: {
     host: "10.0.0.12",
-    port: 3001,
+    port: 3005,
     proxy: {
       "^/(api|Folder|Manga|Video|css|webfonts)/": {
         target: `http://10.0.0.12:${process.env.PORT}`,
