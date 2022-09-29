@@ -58,6 +58,7 @@ routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
       attributes: ["Id", "Name", "FileCount", "Cover", "FilesType", "Type", "Status"],
       where: {
         Path: getFilter(filter),
+        IsAdult: { [db.Op.lte]: req.user.AdultPass },
       },
       required: true,
     },
