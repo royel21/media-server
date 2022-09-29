@@ -29,8 +29,9 @@
           <Input {file} key="Name" style="margin-bottom: 5px" rows="3" />
           {#if file.Type === "Folder"}
             <Input {file} key="Genres" style="margin-bottom: 5px" rows="2" />
-            <Input {file} key="Description" style="margin-bottom: 5px" rows="4" />
-            <CheckBox label="Completed" key="Status" item={file} />
+            <Input {file} key="Description" rows="4" />
+            <CheckBox label="Completed" key="Status" item={file} my="5px" />
+            <CheckBox label="Is Adult" key="IsAdult" item={file} />
           {/if}
         {/if}
       </div>

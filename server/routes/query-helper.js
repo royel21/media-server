@@ -96,6 +96,7 @@ export const getFolders = async (req, res) => {
         Name: getFilter(filterTerm),
         Genres: getFilter(filterTerm),
       },
+      IsAdult: { [db.Op.lte]: req.user.AdultPass },
       FilesType: filetype,
     },
     order: getOrderBy(order, "Folders"),

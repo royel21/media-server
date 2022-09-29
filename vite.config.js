@@ -3,6 +3,10 @@ import { svelte } from "@sveltejs/vite-plugin-svelte";
 import { config } from "dotenv";
 config();
 
+const host = process.env.IP;
+const port = process.env.DEV_PORT;
+const serverPort = process.env.PORT;
+
 // https://vitejs.dev/config/
 export default defineConfig({
   root: "./src",
@@ -12,17 +16,17 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
-    host: "10.0.0.12",
-    port: 3005,
+    host,
+    port,
     proxy: {
       "^/(api|Folder|Manga|Video|css|webfonts)/": {
-        target: `http://10.0.0.12:${process.env.PORT}`,
+        target: `http://${host}:${serverPort}`,
       },
       "^/(serviceWorker.js|manifest.json|home.png|favicon.png)": {
-        target: `http://10.0.0.12:${process.env.PORT}`,
+        target: `http://${host}:${serverPort}`,
       },
       "/socket.io": {
-        target: `ws://10.0.0.12:${process.env.PORT}`,
+        target: `ws://${host}:${serverPort}`,
         ws: true,
       },
     },
