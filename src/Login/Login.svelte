@@ -2,12 +2,14 @@
   import Button from "../ShareComponent/Button.svelte";
   import Input from "../ShareComponent/Input.svelte";
 
+  let width = "65px";
+  let error = { name: "", password: "" };
+
   let user = {
     username: "",
     password: "",
   };
-  let width = "65px";
-  let error = { name: "", password: "" };
+
   const onSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -47,7 +49,7 @@
   <div id="login-container">
     <form method="post" on:submit={onSubmit}>
       <h3 class="mb-4">Login</h3>
-      <Input {width} icon="fas fa-user" name="username" bind:value={user.username} placeholder="Name" />
+      <Input {width} icon="fas fa-user" name="username" bind:value={user.username} placeholder="Name" {error} />
       <Input
         {width}
         my="10px"
@@ -56,6 +58,7 @@
         type="password"
         bind:value={user.password}
         placeholder="Password"
+        {error}
       />
       <div class="form-footer">
         <Button label="Submit" tabindex="0" />

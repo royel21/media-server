@@ -30,8 +30,8 @@
     {/if}
   </span>
   <input use:typeAction {name} bind:value {placeholder} />
-  {#if error}
-    <div class="error">{error}</div>
+  {#if error && error[name]}
+    <div class="error">{error[name]}</div>
   {/if}
 </div>
 
