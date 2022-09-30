@@ -43,11 +43,17 @@
   #admin-label {
     padding: 0 5px;
     cursor: pointer;
+    text-align: center;
   }
   .content {
     width: 100%;
-    height: 100%;
+    height: calc(100% - 37px);
     padding: 10px;
     overflow-x: auto;
+  }
+  @media screen and (max-width: 480px) {
+    .content {
+      height: calc(100% - 67px);
+    }
   }
 </style>
