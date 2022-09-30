@@ -94,7 +94,7 @@
     position: sticky;
     padding-top: 5px;
     text-align: center;
-    z-index: 999;
+    z-index: 9;
   }
   .title span {
     display: inline-block;

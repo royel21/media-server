@@ -36,11 +36,7 @@
 <style>
   #menu {
     display: flex;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
+    width: 100%;
     justify-content: space-between;
     padding: 0;
     user-select: none;
@@ -61,11 +57,5 @@
     position: relative;
     color: white;
     height: 100%;
-  }
-  @media screen and (max-width: 460px) {
-    #p-config {
-      text-align: center;
-      align-self: center;
-    }
   }
 </style>

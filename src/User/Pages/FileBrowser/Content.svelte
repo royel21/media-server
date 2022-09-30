@@ -1,5 +1,5 @@
 <script>
-  import { getContext, onDestroy } from "svelte";
+  import { getContext, onMount } from "svelte";
 
   import { navigate } from "svelte-routing";
   import apiUtils from "../../../apiUtils";
@@ -68,10 +68,12 @@
   };
   //Toggle File List Config
   const handleClick = (e) => (showConfig = !e);
-
-  onDestroy(() => (menu.style.display = "flex"));
-
-  menu.style.display = "none";
+  onMount(() => {
+    menu.style.display = "none";
+    return () => {
+      menu.style.display = "flex";
+    };
+  });
 </script>
 
 <div id="info">
@@ -271,7 +273,7 @@
     width: 100%;
   }
   #info-content .btn {
-    width: 92px;
+    width: 80px;
   }
   @media screen and (max-width: 600px) {
     fieldset {
@@ -283,8 +285,8 @@
       font-weight: 600;
     }
     #info-content .btn {
-      padding: 0.255rem 0.25rem;
-      font-size: 0.8rem;
+      padding: 0.1rem 0.2rem;
+      font-size: 12px;
       width: initial;
     }
     .m-desc .desc-text:hover {

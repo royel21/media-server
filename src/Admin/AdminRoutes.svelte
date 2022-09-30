@@ -26,7 +26,7 @@
 
 <Router>
   <Navbar on:click {navItems}>
-    <span id="admin-label" on:click={logout} slot="user">
+    <span id="admin-label" on:click={logout} slot="user" title="Log Out">
       <i class="fas fa-sign-out-alt" />
       <span class="nav-title">{user.username}</span>
     </span>

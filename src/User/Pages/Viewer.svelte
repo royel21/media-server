@@ -1,5 +1,5 @@
 <script>
-  import { onMount, getContext } from "svelte";
+  import { onMount, getContext, onDestroy } from "svelte";
   import { navigate } from "svelte-routing";
 
   import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
@@ -13,6 +13,7 @@
   export let folderId;
   export let fileId;
   let lastId = fileId;
+  const menu = document.querySelector("#menu");
 
   const basePath = location.pathname
     .replace(/(^\/+|\/+$)/g, "")
@@ -111,6 +112,10 @@
       window.screen.orientation.unlock();
     }
   });
+
+  onDestroy(() => (menu.style.display = "flex"));
+
+  menu.style.display = "none";
 </script>
 
 <div class="viewer" bind:this={viewer} on:keydown={handleKeyboard}>
@@ -140,7 +145,7 @@
   .f-name {
     display: inline-block;
     position: fixed;
-    top: 44px;
+    top: 10px;
     opacity: 0;
     text-align: center;
     pointer-events: none;
@@ -184,13 +189,5 @@
   }
   #clock:empty {
     display: none;
-  }
-  @media screen and (max-width: 600px) {
-    .f-name {
-      top: 80px;
-    }
-    .f-name.nomenu {
-      top: 10px;
-    }
   }
 </style>

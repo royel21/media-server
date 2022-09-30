@@ -1,5 +1,5 @@
 <script>
-  import { onDestroy, getContext, createEventDispatcher, afterUpdate } from "svelte";
+  import { getContext, createEventDispatcher, afterUpdate } from "svelte";
   import { clamp } from "../../../ShareComponent/utils";
   import { isMobile, setfullscreen } from "../pagesUtils";
   import { scrollInView, getEmptyIndex } from "./mangaUtils";
@@ -174,13 +174,6 @@
     }
   });
 
-  onDestroy(() => {
-    disconnectObvrs(imgContainer);
-    socket.off("image-loaded", onImageData);
-    socket.off("disconnect", onDisconnect);
-    socket.off("connect", onConnect);
-  });
-
   $: localStorage.setItem("webtoon", webtoon);
 </script>
 
@@ -345,7 +338,6 @@
     justify-content: center;
     height: 100%;
     width: 100%;
-    padding-top: 37px;
     padding-bottom: 33px;
   }
 

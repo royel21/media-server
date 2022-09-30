@@ -165,28 +165,32 @@ const scanFolder = async (curfolder, files) => {
 const scanDirectory = async ({ id, dir, isFolder }) => {
   DirectoryId = id;
   console.log(dir);
-  const fis = WinDrive.ListFilesRO(dir);
-  let folder = WinDrive.ListFiles(dir, { oneFile: true });
-  folder.Path = dir;
-  console.log("cleaning direcory");
-  process.send({ event: "info", text: "cleaning direcory" });
-  await rmOrphanFiles(id, isFolder);
-  console.log("scanning directory");
-  process.send({ event: "info", text: "scanning directory" });
-  await scanFolder(folder, fis);
-  console.log("creating folder thumbnails");
-  process.send({ event: "info", text: "creating folder thumbnails" });
-  await genFolderThumbnails(foldersPendingCover);
+  if (fs.existsSync(dir)) {
+    const fis = WinDrive.ListFilesRO(dir);
+    let folder = WinDrive.ListFiles(dir, { oneFile: true });
+    folder.Path = dir;
+    console.log("cleaning direcory");
+    process.send({ event: "info", text: "cleaning direcory" });
+    await rmOrphanFiles(id, isFolder);
+    console.log("scanning directory");
+    process.send({ event: "info", text: "scanning directory" });
+    await scanFolder(folder, fis);
+    console.log("creating folder thumbnails");
+    process.send({ event: "info", text: "creating folder thumbnails" });
+    await genFolderThumbnails(foldersPendingCover);
 
-  console.log("creating files thumbnails");
+    console.log("creating files thumbnails");
 
-  let folders = await db.folder.findAll({
-    order: ["Path"],
-    where: isFolder ? { Id: id } : { DirectoryId: id }, // query base on FolderId or DirectoryId
-    include: { model: db.file, order: ["Name"] },
-  });
+    let folders = await db.folder.findAll({
+      order: ["Path"],
+      where: isFolder ? { Id: id } : { DirectoryId: id }, // query base on FolderId or DirectoryId
+      include: { model: db.file, order: ["Name"] },
+    });
 
-  await genFileThumbnails(folders);
+    await genFileThumbnails(folders);
+  } else {
+    console.log("Not found:", dir);
+  }
   process.send({ event: "scan-finish", text: "scan-finish" });
 };
 

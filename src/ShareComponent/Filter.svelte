@@ -2,6 +2,7 @@
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
   export let filter = "";
+  export let maxWidth;
 
   const ClearFilter = () => {
     dispatch("filter", "");
@@ -31,6 +32,7 @@
     placeholder="Filter"
     bind:value={filter}
     on:keydown={submitFilter}
+    style={`max-width: ${maxWidth || "initial"}`}
   />
   <span id="clear-filter" on:click={ClearFilter}>
     <i class="fas fa-times-circle" />

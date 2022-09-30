@@ -157,7 +157,7 @@
 </div>
 <div class="controls">
   <slot name="controls" />
-  <Filter {filter} on:filter={fileFilter} />
+  <Filter {filter} on:filter={fileFilter} maxWidth="250px" />
   <Pagination page={parseInt(page || 1)} totalPages={pageData.totalPages} on:gotopage={goToPage} />
   <span class="items">{pageData.totalFiles}</span>
 </div>

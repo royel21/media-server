@@ -20,7 +20,7 @@
   };
 </script>
 
-<label id="user-label" class={User.role} for="show-config" title="show-config">
+<label id="user-label" class={User.role} for="show-config" title="Show Config">
   <i class="fas fa-user-cog" />
   <span class="nav-title">{User.username}</span>
 </label>
@@ -92,6 +92,7 @@
     z-index: 2;
     color: black;
     background: rgb(221, 170, 94);
+    z-index: 10;
   }
 
   #config-content {
@@ -175,7 +176,7 @@
   .fa-icon {
     font-size: 25px;
   }
-  @media screen and (max-width: 480px) {
+  @media screen and (max-width: 500px) {
     #user-config.user-config {
       top: 73px;
       right: 23px;
@@ -196,9 +197,6 @@
     .nav-title {
       font-size: 16px;
     }
-  }
-
-  @media screen and (max-width: 430px) {
     #user-config.admin-config {
       top: 71px;
       left: 0;
