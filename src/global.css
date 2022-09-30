@@ -233,7 +233,7 @@ input[type="text"]:not(:placeholder-shown) + span {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  background-color: #fff;
+  background-color: #343a40;
   background-clip: border-box;
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 0.25rem;

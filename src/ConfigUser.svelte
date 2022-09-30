@@ -1,0 +1,57 @@
+<script>
+  import { onMount, setContext } from "svelte";
+  import socketClient from "socket.io-client";
+  import { updateUser } from "./ShareStore/UserStore";
+  import Loading from "./ShareComponent/Loading.svelte";
+
+  let socket;
+  let user = { username: "" };
+  function isPwa() {
+    return ["fullscreen", "standalone", "minimal-ui"].some(
+      (displayMode) => window.matchMedia("(display-mode: " + displayMode + ")").matches
+    );
+  }
+
+  const logout = async () => {
+    try {
+      await fetch("/api/users/logout");
+      user = { username: "" };
+
+      socket?.close();
+      if (isPwa()) history.go(-(history.length - 2));
+      location.href = "/";
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  onMount(async () => {
+    let data = await fetch("/api/users").then((response) => response.json());
+    if (data.isAutenticated) {
+      user = data;
+    } else {
+      location.href = "/login";
+    }
+  });
+
+  $: if (user.isAutenticated) {
+    socket = socketClient("/");
+    setContext("socket", socket);
+    setContext("User", user);
+
+    socket.io.on("error", (error) => {
+      console.log(error);
+    });
+    socket.off("logout", () => logout());
+    socket.on("logout", () => logout());
+
+    setContext("logout", logout);
+    updateUser(user);
+  }
+</script>
+
+{#if user.isAutenticated}
+  <slot />
+{:else}
+  <Loading />
+{/if}

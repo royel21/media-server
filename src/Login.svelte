@@ -1,6 +1,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
   import { post } from "./apiUtils.js";
+  import Input from "./ShareComponent/Input.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -13,14 +14,20 @@
     event.preventDefault();
     try {
       const data = await post("users/login", user);
+      console.log(data);
       if (data.isAutenticated) {
-        dispatch("login", { ...data });
+        if (data.role.includes("Admin")) {
+          location.href = "/admin/";
+        } else {
+          dispatch("login", { ...data });
+        }
       } else if (user.username) {
         error.name = "User can't be empty";
       } else {
         error.password = "Password can't be empty";
       }
     } catch (err) {
+      console.log(err);
       if (err.toString().includes("Network Error")) {
         error.password = "server offline";
       } else {

@@ -4,7 +4,7 @@
   import Directories from "./Directories.svelte";
   export let tab = "tab-1";
   $: {
-    navigate(`/content-manager/${tab || "tab-1"}`, { replace: true });
+    navigate(`/admin/content-manager/${tab || "tab-1"}`, { replace: true });
   }
 </script>
 

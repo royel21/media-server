@@ -31,7 +31,7 @@
       totalPages = data.totalPages || 0;
       totalItems = data.totalItems || 0;
       page = +pg;
-      navigate(`/files/${pg}/${filter || ""}`);
+      navigate(`/admin/files/${pg}/${filter || ""}`);
     }
   };
 

@@ -7,16 +7,16 @@
   import DiskManager from "./Disks/DiskManager.svelte";
   import Files from "./FilesManager/Files.svelte";
 
-  const logout = getContext("logout");
-  const user = getContext("User");
+  let logout = getContext("logout");
+  let user = getContext("User");
 
   const navItems = [
-    { title: "Users", path: "/", class: "users" },
-    { title: "Files", path: "/files", class: "file" },
-    { title: "Folders", path: "/folders", class: "folder" },
+    { title: "Users", path: "/admin", class: "users" },
+    { title: "Files", path: "/admin/files", class: "file" },
+    { title: "Folders", path: "/admin/folders", class: "folder" },
     {
       title: "Manager",
-      path: "/content-manager/tab-1",
+      path: "/admin/content-manager/tab-1",
       class: "sitemap",
     },
   ];
@@ -32,10 +32,10 @@
     </span>
   </Navbar>
   <div class="content">
-    <Route path="/folders/:page/:filter" component={Folders} />
-    <Route path="/content-manager/:tab" component={DiskManager} />
-    <Route path="/files/:page/:filter" component={Files} />
-    <Route path="/" component={User} />
+    <Route path="/admin/folders/:page/:filter" component={Folders} />
+    <Route path="/admin/content-manager/:tab" component={DiskManager} />
+    <Route path="/admin/files/:page/:filter" component={Files} />
+    <Route path="/admin" component={User} />
   </div>
 </Router>
 

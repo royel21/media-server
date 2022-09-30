@@ -27,5 +27,4 @@ db.json
 mediaserver.sqlite
 datas.json
 build/
-server/public/assets
-server/public/index.html
+server/public/*

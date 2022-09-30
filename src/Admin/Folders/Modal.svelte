@@ -1,7 +1,7 @@
 <script>
   import { fade } from "svelte/transition";
   import CheckBox from "../Component/CheckBox.svelte";
-  import Input from "./Input.svelte";
+  import Input from "./TextAreaInput.svelte";
 
   export let file;
   export let modalType;

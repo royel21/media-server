@@ -33,7 +33,7 @@
       totalItems = data.totalItems;
       page = pg;
       dispatch("folderid", folderId);
-      navigate(`/folders/${pg}/${filter || ""}`);
+      navigate(`/admin/folders/${pg}/${filter || ""}`);
     }
   };
 

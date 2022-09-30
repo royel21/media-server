@@ -22,7 +22,11 @@
   onMount(async () => {
     let data = await apiUtils.get(["users"]);
     if (data.isAutenticated) {
-      user = data;
+      if (data.role.includes("Admin")) {
+        location.href = "/Admin";
+      } else {
+        user = data;
+      }
     }
     isAuthenticating = false;
   });
@@ -30,7 +34,7 @@
   const logout = async () => {
     try {
       apiUtils.get(["users", "logout"]);
-      navigate("/login", { replace: true, state: "" });
+      navigate("/", { replace: true, state: "" });
       user = { username: "" };
 
       socket?.close();
@@ -67,11 +71,7 @@
   {#if isAuthenticating}
     <div>Loading</div>
   {:else if user.username}
-    {#if user.role.includes("Admin")}
-      <AdminRoutes />
-    {:else}
-      <UserRoutes />
-    {/if}
+    <UserRoutes />
   {:else}
     <Login on:login={logIn} />
   {/if}
