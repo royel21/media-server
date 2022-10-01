@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher } from "svelte";
-  import { FavoritesStores } from "../../User/Stores/FavoritesStores";
+  import { FavoritesStores } from "../../user/Stores/FavoritesStores";
 
   export let Type;
   export let type;

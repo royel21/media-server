@@ -81,16 +81,15 @@ app.use("/api/admin/folders", FoldersRoute);
 const getPath = (type) => path.join(global.appPath, "public", type, "index.html");
 
 app.get("/login/*", (_, res) => {
-  console.log("login");
-  return res.sendFile(getPath("Login"));
+  return res.sendFile(getPath("login"));
 });
 
 app.get("/admin/*", (_, res) => {
-  return res.sendFile(getPath("Admin"));
+  return res.sendFile(getPath("admin"));
 });
 
 app.get("/*", (_, res) => {
-  return res.sendFile(getPath("User"));
+  return res.sendFile(getPath("user"));
 });
 
 app.use((e, _, res, __) => {

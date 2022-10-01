@@ -3,8 +3,8 @@
   import { navigate } from "svelte-routing";
   import socketClient from "socket.io-client";
   //Pages
-  import AdminRoutes from "./Admin/AdminRoutes.svelte";
-  import UserRoutes from "./User/UserRoutes.svelte";
+  import AdminRoutes from "./admin/AdminRoutes.svelte";
+  import UserRoutes from "./user/UserRoutes.svelte";
   import Login from "./Login.svelte";
   import apiUtils from "./apiUtils";
   import { updateUser } from "./ShareStore/UserStore";
@@ -23,7 +23,7 @@
     let data = await apiUtils.get(["users"]);
     if (data.isAutenticated) {
       if (data.role.includes("Admin")) {
-        location.href = "/Admin";
+        location.href = "/admin";
       } else {
         user = data;
       }

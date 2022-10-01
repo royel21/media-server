@@ -3,7 +3,7 @@
   import { fade } from "svelte/transition";
   import { navigate } from "svelte-routing";
 
-  import { PageConfig } from "../../User/Stores/PageConfigStore";
+  import { PageConfig } from "../../user/Stores/PageConfigStore";
 
   import { genUrl, FileTypes, ProcessFile } from "./FilesUtils";
   import { fileKeypress, selectItem, getElIndex } from "./FileEvents";

@@ -18,9 +18,9 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        login: fileURLToPath(new URL("./src/Login/index.html", import.meta.url)),
-        admin: fileURLToPath(new URL("./src/Admin/index.html", import.meta.url)),
-        user: fileURLToPath(new URL("./src/User/index.html", import.meta.url)),
+        login: fileURLToPath(new URL("./src/login/index.html", import.meta.url)),
+        admin: fileURLToPath(new URL("./src/admin/index.html", import.meta.url)),
+        user: fileURLToPath(new URL("./src/user/index.html", import.meta.url)),
       },
     },
   },
