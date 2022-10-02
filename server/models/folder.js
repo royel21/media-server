@@ -83,12 +83,10 @@ export default (sequelize, DataTypes) => {
       hooks: {
         beforeValidate: function (item) {
           item.Id = nanoid(6);
-          item.Cover = `/${item.Type}/${encodeURI(item.Name)}.jpg`;
         },
         beforeBulkCreate: (instances) => {
           for (var item of instances) {
             item.Id = nanoid(6);
-            item.Cover = `/${item.Type}/${item.Name.replace("#", "%23")}.jpg`;
           }
         },
       },
