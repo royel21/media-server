@@ -28,7 +28,7 @@
     if (data.items) {
       let tmp = data.items[0];
       folderId = tmp?.Id;
-      items = data.items;
+      items = data.items.map((d) => ({ ...d, Name: d.Path.split(/\/|\\/g).pop() }));
       totalPages = data.totalPages;
       totalItems = data.totalItems;
       page = pg;
@@ -152,7 +152,7 @@
 
 {#if showImage}
   <div class="thumbnail">
-    <img src={showImage.Cover} alt="Cover Not Found" />
+    <img src={encodeURI(`/Folder/${showImage.Name}.jpg`)} alt="Cover Not Found" />
   </div>
   <span id="f-path" style={`left: ${fullPathPos.x}px; top:${fullPathPos.y}px;`}>{showImage.Path}</span>
 {/if}

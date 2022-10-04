@@ -18,6 +18,7 @@ routes.get("/", async (req, res) => {
       "Name",
       "FullPath",
       "Type",
+      "FirstInList",
       "IsAdult",
       [db.sqlze.literal("(Select COUNT(Folders.Id) from Folders where DirectoryId = Directory.Id)"), "FolderCount"],
       [db.sqlze.literal("(Select SUM(FileCount) from Folders where DirectoryId = Directory.Id)"), "TotalFiles"],
@@ -61,6 +62,17 @@ routes.post("/content", (req, res) => {
     }
     res.send({ data: tdata, Id });
   }
+});
+
+routes.post("/update", async (req, res) => {
+  const { body } = req;
+  const dir = await db.directory.findOne({ where: { Id: body.id } });
+  let success = false;
+  if (dir) {
+    await dir.update(body);
+    success = true;
+  }
+  res.send({ success });
 });
 
 export default routes;

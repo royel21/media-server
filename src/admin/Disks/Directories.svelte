@@ -15,6 +15,19 @@
     }
   };
 
+  const updateDir = async ({ currentTarget }) => {
+    const { id, dataset } = currentTarget;
+    let tr = currentTarget.closest("tr");
+    let name = dataset.name;
+    let index = dirs.findIndex((d) => d.Id === tr.id);
+    if (dirs[index]) {
+      const data = await apiUtils.post("admin/directories/update", { id: tr.id, [name]: !dirs[index][name] });
+      if (data.success) {
+        dirs[index][name] = !dirs[index][name];
+      }
+    }
+  };
+
   onMount(async () => {
     dirs = await apiUtils.admin(["directories"]);
 
@@ -58,6 +71,7 @@
         <th>Total Files</th>
         <th>Is Adult</th>
         <th>Full Path</th>
+        <th>First In List</th>
       </tr>
     </thead>
     <tbody>
@@ -66,7 +80,7 @@
           <td colSpan="4">Not Directory Added</td>
         </tr>
       {:else}
-        {#each dirs as { Id, Name, IsLoading, FullPath, Type, FolderCount, TotalFiles, IsAdult }}
+        {#each dirs as { Id, Name, IsLoading, FullPath, Type, FolderCount, TotalFiles, IsAdult, FirstInList }}
           <tr id={Id} key={Id}>
             <td>
               <span class="dir-sync" on:click={rescan}>
@@ -80,8 +94,9 @@
             <td>{Type}</td>
             <td>{FolderCount}</td>
             <td>{TotalFiles}</td>
-            <td>{IsAdult}</td>
+            <td data-name="IsAdult" on:click={updateDir}>{IsAdult}</td>
             <td>{FullPath}</td>
+            <td data-name="FirstInList" on:click={updateDir}>{FirstInList}</td>
           </tr>
         {/each}
       {/if}
@@ -120,5 +135,9 @@
   th:nth-child(5) {
     max-width: 135px;
     width: 135px;
+  }
+  td:nth-child(6),
+  td:last-child {
+    cursor: pointer;
   }
 </style>

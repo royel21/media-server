@@ -1,9 +1,8 @@
 <script>
   export let type = "text";
-  export let label;
-  export let icon;
   export let value;
   export let name;
+  export let label;
   export let placeholder;
   export let error;
   export let mr = 0;
@@ -23,17 +22,17 @@
 
 <div class="input-control" {style}>
   <span style={`width: ${width};`}>
-    {#if icon}
-      <i class={icon} />
+    {#if label}
+      {label || name}
     {:else}
-      {name || label}
+      <slot name="label" />
     {/if}
   </span>
   <input use:typeAction {name} bind:value {placeholder} />
-  {#if error && error[name]}
-    <div class="error">{error[name]}</div>
-  {/if}
 </div>
+{#if error && error[name]}
+  <div class="error">{error[name]}</div>
+{/if}
 
 <style>
   .input-control {
@@ -42,12 +41,11 @@
     align-items: stretch;
   }
   .error {
-    padding: 8px 0;
+    margin-top: 10px;
     color: firebrick;
     font-weight: 600;
   }
 
-  span,
   input {
     padding: 0.3rem 0.5rem;
     border-radius: 0.25rem;
@@ -55,13 +53,10 @@
   }
 
   span {
-    text-align: center;
-    white-space: nowrap;
-    font-size: 1.5rem;
     background-color: #e9ecef;
     border: 1px solid #ced4da;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
   }
 
   input {

@@ -1,42 +1,49 @@
 <script>
   import Button from "../ShareComponent/Button.svelte";
   import Input from "../ShareComponent/Input.svelte";
+  import UserIcon from "../icons/user-solid.svelte";
+  import KeyIcon from "../icons/key-solid.svelte";
 
   let width = "65px";
   let error = { name: "", password: "" };
 
-  let user = {
-    username: "",
-    password: "",
-  };
+  let style = `
+    fill: #495057;
+    height: 27px;
+    padding-top: 5px;
+  `;
 
-  const onSubmit = async (event) => {
-    event.preventDefault();
+  let user = { username: "", password: "" };
+
+  const onSubmit = async () => {
+    error = { username: "", password: "" };
     try {
-      console.log(JSON.stringify(user));
-      const data = await await fetch("/api/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(user),
-      }).then((res) => res.json());
-
-      if (data.isAutenticated) {
-        if (data.role.includes("Admin")) {
-          location.href = "/admin/";
-        } else {
-          location.href = "/";
-        }
-      } else if (user.username) {
-        error.name = "User can't be empty";
-      } else {
+      console.log("login", user, error);
+      if (!user.username) {
+        error.username = "User can't be empty";
+      } else if (!user.password) {
         error.password = "Password can't be empty";
+      } else {
+        const data = await await fetch("/api/users/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(user),
+        }).then((res) => res.json());
+
+        if (data.isAutenticated) {
+          if (data.role.includes("Admin")) {
+            location.href = "/admin/";
+          } else {
+            location.href = "/";
+          }
+        }
       }
     } catch (err) {
       console.log(err);
       if (err.toString().includes("Network Error")) {
-        error.password = "server offline";
+        error.password = "Not Network Connection";
       } else {
         error.password = "Server Error";
       }
@@ -47,9 +54,11 @@
 
 <div id="root">
   <div id="login-container">
-    <form method="post" on:submit={onSubmit}>
+    <form method="post" on:submit|preventDefault={onSubmit}>
       <h3 class="mb-4">Login</h3>
-      <Input {width} icon="fas fa-user" name="username" bind:value={user.username} placeholder="Name" {error} />
+      <Input {width} icon="fas fa-user" name="username" bind:value={user.username} placeholder="Name" {error}>
+        <UserIcon slot="label" {style} />
+      </Input>
       <Input
         {width}
         my="10px"
@@ -59,9 +68,11 @@
         bind:value={user.password}
         placeholder="Password"
         {error}
-      />
+      >
+        <KeyIcon slot="label" {style} />
+      </Input>
       <div class="form-footer">
-        <Button label="Submit" tabindex="0" />
+        <Button label="Submit" type="submit" tabindex="0" />
       </div>
     </form>
   </div>
@@ -84,23 +95,6 @@
     align-items: center;
     min-height: 100%;
   }
-  form {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    background-color: #343a40;
-    background-clip: border-box;
-    border-radius: 0.25rem;
-    border: 1px solid white;
-    padding: 5px;
-    color: white;
-  }
-
-  h3 {
-    font-size: 1.7rem;
-    margin: 1rem 0;
-  }
 
   #login-container {
     display: flex;
@@ -111,9 +105,20 @@
   }
 
   #login-container form {
-    text-align: center;
+    background-color: #343a40;
+    background-clip: border-box;
     border-radius: 0.25rem;
-    border: 1px solid;
-    min-width: 320px;
+    border: 1px solid white;
+    padding: 5px;
+    color: white;
+    text-align: center;
+  }
+
+  h3 {
+    font-size: 1.7rem;
+    margin: 1rem 0;
+  }
+  .form-footer {
+    margin-top: 10px;
   }
 </style>

@@ -51,7 +51,7 @@ export default (sequelize, DataTypes) => {
       Cover: {
         type: VIRTUAL,
         get() {
-          return `/${this.Type}/${this.FolderName}/${this.Name}.jpg`;
+          return this.Folder ? `/${this.Type}/${this.Folder.Name}/${this.Name}.jpg` : "";
         },
       },
     },

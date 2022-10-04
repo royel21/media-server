@@ -13,7 +13,7 @@ const getData = async ({ params }, res) => {
   let offset = (page - 1) * limit || 0;
 
   const query = {
-    attributes: ["Id", "Name", "Type", "Cover"],
+    attributes: ["Id", "Name", "Type"],
     order: [db.sqlze.literal(`REPLACE(Name, '[', '0'), CAST(Name AS UNSIGNED)`)], // used for natural ordering
     where: {},
     offset,
@@ -28,13 +28,17 @@ const getData = async ({ params }, res) => {
     result = await db.file.findAndCountAll(query);
   } else {
     query.attributes.push("Path"); // add Path to folder query
-    query.attributes.push("Description"); // add Description to folder query
-    query.attributes.push("Genres"); // add Genres to folder query
     query.attributes.push("Status"); // add Genres to folder query
-    query.where.Path = getFilter(filterTerm);
+    query.where[db.Op.or] = { Path: filters, AltName: filters };
     result = await db.folder.findAndCountAll(query);
-    result.rows = result.rows.map((fd) => ({ ...fd.dataValues, Cover: encodeURI(fd.Cover) }));
+
+    result.rows = result.rows.map((fd) => {
+      delete fd.dataValues.Name;
+      return { ...fd.dataValues };
+    });
   }
+
+  const dir = await db.directory.findOne({ where: { Id: result[0]?.DirectoryId || "" } });
 
   let totalPages = Math.ceil(result.count / query.limit);
 
@@ -45,13 +49,19 @@ const getData = async ({ params }, res) => {
   });
 };
 
-routes.get("/:page/:items/:filter?", (req, res) => {
+routes.get("/folder/:folderId", async (req, res) => {
+  console.log("folder-data");
+  const folder = await db.Folder.findOne({ where: { Id: req.params.folderId || "" } });
+  res.send({ Description: folder?.Description, Genres: folder?.Genres, AltName: folder.AltName });
+});
+
+routes.get("/files/:folderId/:page/:items/:filter?", (req, res) => {
   getData(req, res).catch((err) => {
     console.log(err);
   });
 });
 
-routes.get("/files/:folderId/:page/:items/:filter?", (req, res) => {
+routes.get("/:page/:items/:filter?", (req, res) => {
   getData(req, res).catch((err) => {
     console.log(err);
   });

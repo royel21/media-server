@@ -33,6 +33,10 @@ export default (sequelize, DataTypes) => {
         type: BOOLEAN,
         defaultValue: false,
       },
+      FirstInList: {
+        type: BOOLEAN,
+        defaultValue: false,
+      },
     },
     {
       hooks: {

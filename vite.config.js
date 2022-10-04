@@ -27,10 +27,6 @@ export default defineConfig({
   server: {
     host,
     port,
-    optimizeDeps: {
-      include: ["esm-dep > cjs-dep"],
-      exclude: ["src/Admin/index.html", "src/Admin/App.svelte"],
-    },
     proxy: {
       "^/(api|Folder|Manga|Video|css|webfonts)/": {
         target: `http://${host}:${serverPort}`,

@@ -1,10 +1,10 @@
 <script>
   import AdminRoutes from "./AdminRoutes.svelte";
-  import ConfigUser from "../ConfigUser.svelte";
+  import ConfigPage from "../ConfigPage.svelte";
 </script>
 
 <div id="root">
-  <ConfigUser>
+  <ConfigPage>
     <AdminRoutes />
-  </ConfigUser>
+  </ConfigPage>
 </div>

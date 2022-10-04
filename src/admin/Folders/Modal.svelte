@@ -1,10 +1,20 @@
 <script>
+  import { onMount } from "svelte";
   import { fade } from "svelte/transition";
+  import apiUtils from "../../apiUtils";
   import CheckBox from "../Component/CheckBox.svelte";
   import Input from "./TextAreaInput.svelte";
 
   export let file;
   export let modalType;
+
+  onMount(async () => {
+    const data = await apiUtils.admin(["folders", "folder", file.Id]);
+    console.log("data:", data);
+    file.Description = data.Description;
+    file.Genres = data.Genres;
+    file.AltName = data.AltName;
+  });
 </script>
 
 <div class="modal-container">
@@ -28,6 +38,7 @@
         {:else}
           <Input {file} key="Name" style="margin-bottom: 5px" rows="3" />
           {#if file.Type === "Folder"}
+            <Input {file} key="AltName" style="margin-bottom: 5px" rows="3" />
             <Input {file} key="Genres" style="margin-bottom: 5px" rows="2" />
             <Input {file} key="Description" rows="4" />
             <CheckBox label="Completed" key="Status" item={file} my="5px" />

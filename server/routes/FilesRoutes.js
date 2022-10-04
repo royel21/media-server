@@ -55,7 +55,7 @@ routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
     where: { RecentId: req.user.Recent.Id },
     include: {
       model: db.folder,
-      attributes: ["Id", "Name", "FileCount", "Cover", "FilesType", "Type", "Status"],
+      attributes: ["Id", "Name", "FileCount", "FilesType", "Type", "Status"],
       where: {
         Path: getFilter(filter),
         IsAdult: { [db.Op.lte]: req.user.AdultPass },
@@ -87,7 +87,7 @@ routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
 
 routes.get("/dirs", async (req, res) => {
   const dirs = await db.directory.findAll({
-    attributes: ["Id", "Name", "Type"],
+    attributes: ["Id", "Name", "Type", "FirstInList"],
     where: { IsAdult: { [db.Op.lte]: req.user.AdultPass } },
   });
 

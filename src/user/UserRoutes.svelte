@@ -15,7 +15,7 @@
   import Config from "./Component/Config.svelte";
 
   const sortLastCompleted = (a, b) => {
-    if (a.Name?.includes("Completed") || b.Name?.includes("Completed")) {
+    if (a.FirstInList) {
       return -1;
     } else {
       return a.Name?.localeCompare(b?.Name);

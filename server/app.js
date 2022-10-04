@@ -35,7 +35,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use(compression());
+app.use(
+  compression({
+    filter: function (req, res) {
+      return true;
+    },
+  })
+);
 
 app.use(express.static(process.env.IMAGES));
 app.use(express.static(global.appPath + "/public"));

@@ -77,7 +77,7 @@ export const getFolders = async (req, res) => {
   let favs = req.user.Favorites.map((f) => f.Id).join("','");
 
   let favSelect = `( Select FolderId from FavoriteFolders where \`Folders\`.\`Id\` = FolderId and FavoriteId IN ('${favs}'))`;
-
+  let filter = getFilter(filterTerm);
   let query = {
     attributes: [
       "Id",
@@ -93,8 +93,9 @@ export const getFolders = async (req, res) => {
     ],
     where: {
       [db.Op.or]: {
-        Name: getFilter(filterTerm),
-        Genres: getFilter(filterTerm),
+        Name: filter,
+        AltName: filter,
+        Genres: filter,
       },
       IsAdult: { [db.Op.lte]: req.user.AdultPass },
       FilesType: filetype,

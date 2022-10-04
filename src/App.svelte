@@ -11,7 +11,6 @@
 
   let socket;
   let user = { username: "" };
-  let isAuthenticating = true;
 
   function isPwa() {
     return ["fullscreen", "standalone", "minimal-ui"].some(
@@ -22,19 +21,14 @@
   onMount(async () => {
     let data = await apiUtils.get(["users"]);
     if (data.isAutenticated) {
-      if (data.role.includes("Admin")) {
-        location.href = "/admin";
-      } else {
-        user = data;
-      }
+      user = data;
     }
-    isAuthenticating = false;
   });
 
   const logout = async () => {
     try {
       apiUtils.get(["users", "logout"]);
-      navigate("/", { replace: true, state: "" });
+      navigate("/login", { replace: true, state: "" });
       user = { username: "" };
 
       socket?.close();
@@ -48,7 +42,7 @@
 
   const logIn = (_user) => {
     user = _user.detail;
-    navigate("/", { replace: true, state: "" });
+    navigate("/" + (user.role.includes("Admin") ? "admin" : ""), { replace: true, state: "" });
   };
 
   $: if (user.isAutenticated) {
@@ -67,12 +61,12 @@
   }
 </script>
 
-<div id="root">
-  {#if isAuthenticating}
-    <div>Loading</div>
-  {:else if user.username}
-    <UserRoutes />
+{#if user.username}
+  {#if user.role.includes("Admin")}
+    <AdminRoutes />
   {:else}
-    <Login on:login={logIn} />
+    <UserRoutes />
   {/if}
-</div>
+{:else}
+  <Login on:login={logIn} />
+{/if}

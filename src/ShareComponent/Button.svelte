@@ -1,9 +1,14 @@
 <script>
   export let label;
   export let tabindex;
+  export let type = "button";
+
+  function typeAction(node) {
+    node.type = type;
+  }
 </script>
 
-<button on:click {tabindex}>{label}</button>
+<button use:typeAction on:click {tabindex}>{label}</button>
 
 <style>
   button {
@@ -13,19 +18,21 @@
     vertical-align: middle;
     cursor: pointer;
     -webkit-user-select: none;
-    -moz-user-select: none;
     user-select: none;
-    border: 1px solid transparent;
     padding: 0.25rem 0.35rem;
     font-size: 1rem;
     line-height: 1.5;
     border-radius: 0.25rem;
-    color: white;
+    color: #fff;
     transition: 0.3s all;
-    background-color: grey;
-    background-image: linear-gradient(-120deg, #888888, #555555, #888888);
+    background-color: gray;
+    border: 1px solid transparent;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
+      box-shadow 0.15s ease-in-out;
   }
   button:hover {
-    background-image: linear-gradient(-160deg, #888888, #555555, #444444);
+    color: #fff;
+    background-color: #5a6268;
+    border-color: #545b62;
   }
 </style>
