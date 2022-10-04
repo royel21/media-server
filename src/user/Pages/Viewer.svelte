@@ -120,7 +120,9 @@
 
 <div class="viewer" bind:this={viewer} on:keydown={handleKeyboard}>
   <div class="f-name" class:nomenu={$ToggleMenu}>
-    <span>{`${folderName} - ${file.Name}`}</span>
+    <div class="name-c">
+      <span>{`${folderName} - ${file.Name}`}</span>
+    </div>
   </div>
   <span class="info" class:top={isVideo(file)}>
     <span id="files-prog">
@@ -143,25 +145,26 @@
     height: 100%;
   }
   .f-name {
-    display: inline-block;
+    display: flex;
     position: fixed;
     top: 10px;
     opacity: 0;
-    text-align: center;
+    justify-content: center;
     pointer-events: none;
     z-index: 99;
     width: 100%;
     transition: 5s opacity;
   }
-  :fullscreen .f-name {
-    top: 5px;
-  }
-  .f-name span {
-    max-width: 400px;
+  .name-c {
+    max-width: 750px;
     border-radius: 0.25rem;
     padding: 4px 10px;
     background-color: rgba(0, 0, 0, 0.8);
   }
+  :fullscreen .f-name {
+    top: 5px;
+  }
+
   .info {
     display: inline-block;
     position: fixed;
@@ -189,5 +192,11 @@
   }
   #clock:empty {
     display: none;
+  }
+
+  @media screen and (max-width: 600px) {
+    .name-c {
+      max-width: calc(100% - 30px);
+    }
   }
 </style>

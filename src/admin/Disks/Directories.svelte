@@ -70,36 +70,33 @@
         <th>Folder Count</th>
         <th>Total Files</th>
         <th>Is Adult</th>
-        <th>Full Path</th>
         <th>First In List</th>
+        <th>Full Path</th>
       </tr>
     </thead>
     <tbody>
-      {#if dirs.length < 0}
-        <tr class="text-center">
-          <td colSpan="4">Not Directory Added</td>
+      {#each dirs as { Id, Name, IsLoading, FullPath, Type, FolderCount, TotalFiles, IsAdult, FirstInList }}
+        <tr id={Id} key={Id}>
+          <td>
+            <span class="dir-sync" on:click={rescan}>
+              <i class={"fas fa-sync" + (IsLoading ? " fa-spin" : "")} />
+            </span>
+            <span class="dir-remove ml-2" on:click={removeDir}>
+              <i class="fas fa-trash-alt" />
+            </span>
+          </td>
+          <td><div>{Name}</div></td>
+          <td>{Type}</td>
+          <td>{FolderCount}</td>
+          <td>{TotalFiles}</td>
+          <td data-name="IsAdult" on:click={updateDir}>{IsAdult}</td>
+          <td data-name="FirstInList" on:click={updateDir}>{FirstInList}</td>
+          <td>{FullPath}</td>
         </tr>
-      {:else}
-        {#each dirs as { Id, Name, IsLoading, FullPath, Type, FolderCount, TotalFiles, IsAdult, FirstInList }}
-          <tr id={Id} key={Id}>
-            <td>
-              <span class="dir-sync" on:click={rescan}>
-                <i class={"fas fa-sync" + (IsLoading ? " fa-spin" : "")} />
-              </span>
-              <span class="dir-remove ml-2" on:click={removeDir}>
-                <i class="fas fa-trash-alt" />
-              </span>
-            </td>
-            <td><div>{Name}</div></td>
-            <td>{Type}</td>
-            <td>{FolderCount}</td>
-            <td>{TotalFiles}</td>
-            <td data-name="IsAdult" on:click={updateDir}>{IsAdult}</td>
-            <td>{FullPath}</td>
-            <td data-name="FirstInList" on:click={updateDir}>{FirstInList}</td>
-          </tr>
-        {/each}
-      {/if}
+      {/each}
+      <tr class="only">
+        <td colSpan="4">Not Directory Added</td>
+      </tr>
     </tbody>
   </table>
 </div>
@@ -126,18 +123,19 @@
     min-width: 150px;
     width: 10%;
   }
-  th:nth-child(3),
-  th:nth-child(6) {
-    max-width: 100px;
+  th:nth-child(3) {
+    min-width: 100px;
     width: 100px;
   }
   th:nth-child(4),
   th:nth-child(5) {
-    max-width: 135px;
     width: 135px;
+    min-width: 135px;
   }
   td:nth-child(6),
-  td:last-child {
+  td:nth-child(7) {
     cursor: pointer;
+    width: 120px;
+    min-width: 120px;
   }
 </style>

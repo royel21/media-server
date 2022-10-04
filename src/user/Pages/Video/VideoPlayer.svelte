@@ -34,9 +34,9 @@
   const onMuted = ({ target }) => {
     player.muted = target.checked;
   };
-  const fullScreen = () => {
-    setfullscreen(viewer);
-  };
+
+  const fullScreen = () => setfullscreen(viewer);
+
   const volChange = ({ target: { value } }) => {
     mConfig.volume = value;
   };

@@ -27,6 +27,7 @@ export const PageTitles = {
 
 var lastEl = null;
 export const setfullscreen = (element) => {
+  console.log("enter full");
   try {
     if (lastEl && element.tagName !== "BODY") {
       if (document.fullscreenElement.tagName === "BODY") {

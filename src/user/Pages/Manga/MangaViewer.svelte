@@ -67,7 +67,6 @@
     file.CurrentPos = val - 1;
     if (webtoon) {
       viewerState.jumping = true;
-      disconnectObvrs(imgContainer);
     }
     loadImages(val - 5, 10);
   };

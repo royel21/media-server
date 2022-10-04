@@ -28,3 +28,5 @@ export const map = function (value, in_min, in_max, out_min, out_max) {
 export const clamp = (num, min, max) => {
   return Math.min(Math.max(num, min), max) || min;
 };
+
+export const sortByName = (f1, f2) => f1.Name.localeCompare(f2.Name);

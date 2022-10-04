@@ -11,7 +11,7 @@
   let user = getContext("User");
 
   const navItems = [
-    { title: "Users", path: "/admin", class: "users" },
+    { title: "Users", path: "/admin/", class: "users" },
     { title: "Files", path: "/admin/files", class: "file" },
     { title: "Folders", path: "/admin/folders", class: "folder" },
     {
@@ -35,15 +35,17 @@
     <Route path="/admin/folders/:page/:filter" component={Folders} />
     <Route path="/admin/content-manager/:tab" component={DiskManager} />
     <Route path="/admin/files/:page/:filter" component={Files} />
-    <Route path="/admin" component={User} />
+    <Route path="/admin/" component={User} />
   </div>
 </Router>
 
 <style>
   #admin-label {
-    padding: 0 5px;
+    padding: 5px;
     cursor: pointer;
     text-align: center;
+    overflow: hidden;
+    max-height: 66px;
   }
   .content {
     width: 100%;

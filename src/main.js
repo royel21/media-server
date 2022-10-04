@@ -22,14 +22,6 @@ String.prototype.contains = function (val) {
   return this.toLocaleLowerCase().includes(val.toLocaleLowerCase());
 };
 
-window.on = (e, callback, opts) => {
-  window.addEventListener(e, callback, opts);
-};
-
-window.off = (e, callback) => {
-  window.removeEventListener(e, callback);
-};
-
 window.addEventListener("load", () => {
   if ("serviceWorker" in navigator) {
     try {

@@ -57,7 +57,9 @@
     selected = sel;
   };
 
-  const fileFilter = ({ detail }) => navigate(`/${type}/${1}/${detail || ""}`);
+  const fileFilter = ({ detail }) => {
+    if (detail) navigate(`/${type}/${1}/${detail || ""}`);
+  };
 
   const handleKeydown = (event) => fileKeypress(event, page, goToPage, title);
 
@@ -165,7 +167,9 @@
 <style>
   .scroll-container.r-content {
     padding-top: 15px;
-    padding-bottom: 40px;
+    padding-bottom: 0px;
+    height: calc(100% - 44px);
+    min-height: calc(100% - 44px);
   }
   .file-btn-left {
     cursor: pointer;

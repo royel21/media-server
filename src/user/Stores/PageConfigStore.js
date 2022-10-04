@@ -1,5 +1,4 @@
 import { writable } from "svelte/store";
-import { getObject, setObject } from "./StoreUtils";
 
 const initConfig = {
   Home: { items: 0, sort: "nu" },
@@ -9,7 +8,11 @@ const initConfig = {
   Favorites: { items: 0, sort: "nu" },
 };
 const checkConfig = () => {
-  const config = getObject("config") || initConfig;
+  let config = initConfig;
+  const tconfig = JSON.parse(localStorage.getItem("config"));
+  if (tconfig) {
+    config = tconfig;
+  }
 
   for (const k in initConfig) {
     if (!config[k]) {
@@ -23,7 +26,7 @@ const PageConfig = writable(checkConfig());
 
 const updateConfig = (config) => {
   PageConfig.update((cfg) => (cfg = config));
-  setObject("config", config);
+  localStorage.setObject("config", config);
   return config;
 };
 export { PageConfig, updateConfig };
