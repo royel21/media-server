@@ -11,12 +11,12 @@
 
   const submitFilter = (e) => {
     if (e.keyCode === 13) {
-      dispatch("filter", (filter || "").replace(/%|\?/, ""));
+      dispatch("filter", (filter || "").trim().replace(/%|\?/, ""));
     }
   };
 
   const btnFilter = () => {
-    dispatch("filter", (filter || "").replace(/%|\?/, ""));
+    dispatch("filter", (filter || "").trim().replace(/%|\?/, ""));
   };
 </script>
 

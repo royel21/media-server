@@ -72,7 +72,7 @@ export default (sequelize, DataTypes) => {
         type: BOOLEAN,
       },
       IsAdult: {
-        type: INTEGER,
+        type: BOOLEAN,
         defaultValue: 0,
       },
     },

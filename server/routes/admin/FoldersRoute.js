@@ -53,7 +53,12 @@ const getData = async ({ params }, res) => {
 
 routes.get("/folder/:folderId", async (req, res) => {
   const folder = await db.folder.findOne({ where: { Id: req.params.folderId || "" } });
-  res.send({ Description: folder?.Description, Genres: folder?.Genres, AltName: folder.AltName });
+  res.send({
+    Description: folder?.Description,
+    Genres: folder?.Genres,
+    AltName: folder.AltName,
+    IsAdult: folder.IsAdult,
+  });
 });
 
 routes.get("/files/:folderId/:page/:items/:filter?", (req, res) => {

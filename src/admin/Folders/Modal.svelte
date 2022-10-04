@@ -9,10 +9,13 @@
   export let modalType;
 
   onMount(async () => {
-    const data = await apiUtils.admin(["folders", "folder", file.Id]);
-    file.Description = data.Description;
-    file.Genres = data.Genres;
-    file.AltName = data.AltName;
+    if (file.Type === "Folder") {
+      const data = await apiUtils.admin(["folders", "folder", file.Id]);
+      file.Description = data.Description;
+      file.Genres = data.Genres;
+      file.AltName = data.AltName;
+      file.IsAdult = data.IsAdult;
+    }
   });
 </script>
 
