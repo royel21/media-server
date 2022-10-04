@@ -22,14 +22,21 @@
   let modalType = {};
 
   const loadFiles = async (pg) => {
-    let rows = calRows(".list-container");
-    let data = await apiUtils.admin(["folders", "files", folderId, pg, rows, filter]);
+    if (folderId) {
+      let rows = calRows(".list-container");
+      let data = await apiUtils.admin(["folders", "files", folderId, pg, rows, filter]);
 
-    if (data.items) {
-      items = data.items;
-      totalPages = data.totalPages;
-      totalItems = data.totalItems;
-      page = pg;
+      if (data.items) {
+        items = data.items;
+        totalPages = data.totalPages;
+        totalItems = data.totalItems;
+        page = pg;
+      }
+    } else {
+      items = [];
+      page = 0;
+      totalPages = 0;
+      totalItems = 0;
     }
   };
 

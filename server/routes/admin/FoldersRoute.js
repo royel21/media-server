@@ -21,6 +21,8 @@ const getData = async ({ params }, res) => {
   };
 
   let result;
+  let filters = getFilter(filterTerm);
+
   // if contain folderId this is a file query we will need the folderId
   if (folderId) {
     query.where.FolderId = folderId;
@@ -50,8 +52,7 @@ const getData = async ({ params }, res) => {
 };
 
 routes.get("/folder/:folderId", async (req, res) => {
-  console.log("folder-data");
-  const folder = await db.Folder.findOne({ where: { Id: req.params.folderId || "" } });
+  const folder = await db.folder.findOne({ where: { Id: req.params.folderId || "" } });
   res.send({ Description: folder?.Description, Genres: folder?.Genres, AltName: folder.AltName });
 });
 

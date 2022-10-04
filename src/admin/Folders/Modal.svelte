@@ -10,7 +10,6 @@
 
   onMount(async () => {
     const data = await apiUtils.admin(["folders", "folder", file.Id]);
-    console.log("data:", data);
     file.Description = data.Description;
     file.Genres = data.Genres;
     file.AltName = data.AltName;

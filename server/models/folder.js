@@ -22,6 +22,9 @@ export default (sequelize, DataTypes) => {
       Name: {
         type: STRING,
       },
+      AltName: {
+        type: TEXT,
+      },
       Genres: {
         type: STRING(150),
         defaultValue: "",
