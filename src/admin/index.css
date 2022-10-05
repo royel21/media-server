@@ -1,0 +1,132 @@
+.table {
+  margin: 0;
+}
+
+.table thead {
+  user-select: none;
+}
+
+.table th,
+.table td {
+  padding: 0.5rem 1rem;
+}
+
+.table td:only-child {
+  text-align: center;
+}
+
+.table td:first-child,
+.table th:first-child {
+  width: 100px;
+  padding: 0.4rem 0.8rem;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.table {
+  width: 100%;
+  margin-bottom: 1rem;
+  border-collapse: collapse;
+}
+
+.only:not(:first-child) {
+  display: none;
+  text-align: center;
+}
+
+.table-bordered thead th,
+.table-bordered thead td {
+  border-bottom-width: 2px;
+}
+
+.table-bordered th,
+.table-bordered td {
+  border: 1px solid #dee2e6;
+}
+
+.table-dark th,
+.table-dark td,
+.table-dark thead th {
+  border-color: #454d55;
+  border-top-color: rgb(69, 77, 85);
+  border-right-color: rgb(69, 77, 85);
+  border-bottom-color: rgb(69, 77, 85);
+  border-left-color: rgb(69, 77, 85);
+}
+
+.table span:last-child {
+  margin-left: 0.5rem;
+}
+
+/*************Modal*************************/
+
+.modal-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 99;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.modal {
+  display: block;
+  z-index: 99;
+  min-height: initial;
+  min-width: initial;
+  height: max-content;
+  width: 350px;
+  background-color: cadetblue;
+}
+
+.modal-header > * {
+  text-align: center;
+  user-select: none;
+}
+
+.modal .errors {
+  color: rgb(226, 35, 35);
+  font-size: 20px;
+}
+
+.modal label,
+.modal .form-control {
+  padding: 5px;
+  margin: 4px 0;
+}
+
+.modal label {
+  width: 55px;
+  justify-content: space-evenly;
+  user-select: none;
+  font-weight: 600;
+}
+
+.modal label i {
+  font-size: 20px;
+}
+
+.modal-header h3 {
+  margin-bottom: 0;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: center;
+  padding: 5px;
+}
+
+.modal-footer .btn {
+  min-width: 75px;
+  margin: 0 10%;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

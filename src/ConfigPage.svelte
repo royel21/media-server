@@ -1,7 +1,6 @@
 <script>
   import { onMount, setContext } from "svelte";
   import socketClient from "socket.io-client";
-  import { updateUser } from "./ShareStore/UserStore";
   import Loading from "./ShareComponent/Loading.svelte";
 
   let socket;
@@ -46,7 +45,6 @@
     socket.on("logout", () => logout());
 
     setContext("logout", logout);
-    updateUser(user);
   }
 </script>
 

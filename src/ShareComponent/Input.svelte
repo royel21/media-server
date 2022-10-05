@@ -13,7 +13,10 @@
   export let my = 0;
   export let width;
 
-  let style = `margin: ${mt || my} ${mr || mx} ${mb || my} ${ml || mx}`;
+  let style = ``;
+  if (mx || my || mt || mb || ml || mr) {
+    style = `margin: ${mt || my} ${mr || mx} ${mb || my} ${ml || mx}`;
+  }
 
   function typeAction(node) {
     node.type = type;

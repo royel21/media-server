@@ -1,5 +1,5 @@
 <script>
-  import { getContext, createEventDispatcher, afterUpdate } from "svelte";
+  import { getContext, createEventDispatcher, afterUpdate, onMount } from "svelte";
   import { clamp } from "../../../ShareComponent/utils";
   import { isMobile, setfullscreen } from "../pagesUtils";
   import { scrollInView, getEmptyIndex } from "./mangaUtils";
@@ -48,7 +48,8 @@
     if (pg > -1 && pg < file.Duration) {
       if (webtoon) {
         scrollInView(pg);
-      } else if (!viewerState.loading && !images[pg + 6 * dir]) {
+      }
+      if (!viewerState.loading && !images[pg + 6 * dir]) {
         loadImages(pg, 11, dir);
       }
       file.CurrentPos = pg;
@@ -118,21 +119,15 @@
         images[data.page] = data.img;
       } else {
         viewerState.loading = false;
-        if (viewerState.jumping && webtoon) {
-          connectObservers(100);
+        console.log("finish-loading");
+        if (webtoon) {
+          connectObservers(50);
         }
       }
     } else {
       viewerState.loading = false;
     }
   };
-
-  const onConnect = () => loadImages(file.CurrentPos - 2, 8);
-  const onDisconnect = () => (viewerState.loading = false);
-
-  socket.on("connect", onConnect);
-  socket.on("image-loaded", onImageData);
-  socket.on("disconnect", onDisconnect);
 
   SkipForward.action = nextPage;
   SkipBack.action = prevPage;
@@ -149,11 +144,7 @@
 
   $: {
     controls.webtoon = webtoon;
-    if (!webtoon) {
-      disconnectObvrs(imgContainer);
-    } else {
-      connectObservers(100);
-    }
+    console.log("set observer");
   }
 
   //reload on file change
@@ -161,15 +152,34 @@
     viewerState.jumping = true;
     viewerState.loading = false;
     images = [];
+    controls.file = file;
     disconnectObvrs(imgContainer);
     loadImages(file.CurrentPos - 2, 8);
-    controls.file = file;
   }
+
+  const onConnect = () => loadImages(file.CurrentPos - 2, 8);
+  const onDisconnect = () => (viewerState.loading = false);
+
+  onMount(() => {
+    socket.on("connect", onConnect);
+    socket.on("image-loaded", onImageData);
+    socket.on("disconnect", onDisconnect);
+    return () => {
+      socket.off("connect", onConnect);
+      socket.off("image-loaded", onImageData);
+      socket.off("disconnect", onDisconnect);
+    };
+  });
 
   afterUpdate(() => {
     if (file.Id !== viewerState.lastfId) {
       viewerState.lastfId = file.Id;
+      console.log("pos: scrollinview", file.CurrentPos);
       scrollInView(file.CurrentPos);
+    }
+
+    if (!webtoon) {
+      disconnectObvrs(imgContainer);
     }
   });
 
@@ -365,6 +375,7 @@
     justify-content: initial;
     overflow-y: auto;
     overflow-x: hidden;
+    overflow-anchor: auto;
   }
 
   #manga-viewer .webtoon-img img {

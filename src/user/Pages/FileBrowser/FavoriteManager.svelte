@@ -76,7 +76,7 @@
     </div>
     <div class="errors">{error || ""}</div>
     <div class="modal-body">
-      <table class="table table-bordered bg-light table-hover">
+      <table>
         <thead>
           <tr>
             <th>Name</th>
@@ -178,7 +178,7 @@
     background: #ddd;
     border-bottom: 2px solid white;
   }
-  .table tr {
+  table tr {
     border: initial;
   }
   tbody tr:last-child td {

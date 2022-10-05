@@ -29,31 +29,6 @@ body {
   width: 100%;
 }
 
-.scroll-container {
-  position: relative;
-  height: calc(100% - 38px);
-  min-height: calc(100% - 38px);
-  overflow-y: auto;
-}
-
-.files-list {
-  display: flex;
-  align-content: flex-start;
-  flex-wrap: wrap;
-  padding-bottom: 50px;
-}
-.controls {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  justify-content: space-between;
-  padding: 0 5px 4px 5px;
-  z-index: 1;
-  pointer-events: none;
-}
-
 a {
   color: white;
   text-decoration: none;
@@ -86,42 +61,6 @@ li {
 
 #menu .nav-item {
   display: inherit;
-}
-
-.btn {
-  display: inline-block;
-  font-weight: 400;
-  color: #212529;
-  text-align: center;
-  vertical-align: middle;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-  border: 1px solid transparent;
-  padding: 0.2rem 0.3rem;
-  font-size: 1rem;
-  line-height: 1.5;
-  border-radius: 0.25rem;
-  color: white;
-  transition: 0.3s all;
-  background-color: grey;
-  background-image: linear-gradient(-120deg, #888888, #555555, #888888);
-}
-
-.btn:hover {
-  color: white;
-  background-image: linear-gradient(-160deg, #888888, #555555, #444444);
-}
-
-.btn:focus {
-  outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-}
-
-.btn:active {
-  transform: scale(1.2);
-  transition: 0.25s;
 }
 
 input,
@@ -222,11 +161,6 @@ input[type="text"]:not(:placeholder-shown) + span {
   box-shadow: inset 0 0 6px rgba(15, 1, 228, 0.9);
 }
 
-.file.active .file-info {
-  background-color: rgba(0, 15, 150) !important;
-  box-shadow: 0 0 10px;
-}
-
 .card {
   position: relative;
   display: flex;
@@ -239,42 +173,37 @@ input[type="text"]:not(:placeholder-shown) + span {
   border: 1px solid white;
   padding: 5px;
 }
-
-.table {
-  margin: 0;
-}
-
-.table thead {
-  user-select: none;
-}
-
-.table th,
-.table td {
-  padding: 0.5rem 1rem;
-}
-
-.table td:only-child {
+.btn {
+  display: inline-block;
+  font-weight: 400;
+  color: #212529;
   text-align: center;
-}
-
-.table td:first-child,
-.table th:first-child {
-  width: 100px;
-  padding: 0.4rem 0.8rem;
   vertical-align: middle;
-  text-align: center;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: 0.2rem 0.3rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 0.25rem;
+  color: white;
+  transition: 0.3s all;
+  background-color: grey;
+  background-image: linear-gradient(-120deg, #888888, #555555, #888888);
 }
 
-.table {
-  width: 100%;
-  margin-bottom: 1rem;
-  border-collapse: collapse;
+.btn:hover {
+  color: white;
+  background-image: linear-gradient(-160deg, #888888, #555555, #444444);
 }
 
-.only:not(:first-child) {
-  display: none;
-  text-align: center;
+.btn:focus {
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
+
 /* Directory Style */
 
 i,
@@ -285,7 +214,7 @@ label i {
   user-select: none;
 }
 
-i:active,
+.fa:active,
 a:active i,
 label:active i,
 span:active i,
@@ -307,30 +236,6 @@ h3 {
 
 .text-center {
   text-align: center;
-}
-
-.table-bordered thead th,
-.table-bordered thead td {
-  border-bottom-width: 2px;
-}
-
-.table-bordered th,
-.table-bordered td {
-  border: 1px solid #dee2e6;
-}
-
-.table-dark th,
-.table-dark td,
-.table-dark thead th {
-  border-color: #454d55;
-  border-top-color: rgb(69, 77, 85);
-  border-right-color: rgb(69, 77, 85);
-  border-bottom-color: rgb(69, 77, 85);
-  border-left-color: rgb(69, 77, 85);
-}
-
-.table span:last-child {
-  margin-left: 0.5rem;
 }
 
 .fa,
@@ -434,319 +339,8 @@ h3 {
 #current-page input {
   height: 30px;
 }
-
-/*************Modal*************************/
-
-.modal-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  z-index: 99;
-  background-color: rgba(0, 0, 0, 0.3);
-}
-
-.modal {
-  display: block;
-  z-index: 99;
-  min-height: initial;
-  min-width: initial;
-  height: max-content;
-  width: 350px;
-  background-color: cadetblue;
-}
-
-.modal-header > * {
-  text-align: center;
-  user-select: none;
-}
-
-.modal .errors {
-  color: rgb(226, 35, 35);
-  font-size: 20px;
-}
-
-.modal label,
-.modal .form-control {
-  padding: 5px;
-  margin: 4px 0;
-}
-
-.modal label {
-  width: 55px;
-  justify-content: space-evenly;
-  user-select: none;
-  font-weight: 600;
-}
-
-.modal label i {
-  font-size: 20px;
-}
-
-.modal-header h3 {
-  margin-bottom: 0;
-}
-
-.modal-footer {
-  display: flex;
-  justify-content: center;
-  padding: 5px;
-}
-
-.modal-footer .btn {
-  min-width: 75px;
-  margin: 0 10%;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/***************File Style****************************/
-
-.items {
-  color: #fff;
-  background-color: #007bff;
-  padding: 0.25em 0.7em;
-  font-size: 75%;
-  font-weight: 700;
-  line-height: 2;
-  border-radius: 0.25rem;
-}
-
-.file {
-  position: relative;
-  outline: none;
-  background-color: transparent;
-  padding: 5px;
-  width: 200px;
-  min-width: 200px;
-  height: 270px;
-  transition: 0.2s all;
-}
-
-.file-info {
-  text-align: center;
-  width: 190px;
-  height: 260px;
-  min-height: 260px;
-  padding: 5px;
-  background-color: rgba(52, 58, 64, 0.99);
-  border-radius: 5px;
-  cursor: pointer;
-  overflow: hidden;
-}
-
-.file-info:hover {
-  position: absolute;
-  height: fit-content;
-  box-shadow: 0 0 10px;
-  z-index: 1;
-}
-
-.file-btns {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 1.4em;
-  height: 26px;
-  z-index: 1;
-  user-select: none;
-  cursor: initial;
-}
-
-.file-progress {
-  font-size: 14px;
-  font-family: monospace;
-  font-weight: 600;
-  pointer-events: none;
-  height: fit-content;
-}
-
-.file-btn-left:empty {
-  display: none;
-}
-
-.file-btns i {
-  cursor: pointer;
-}
-
-.file-del {
-  color: brown;
-}
-
-.file-cover {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 180px;
-  overflow: hidden;
-}
-
-.file-cover img {
-  max-width: 190px;
-  max-height: 170px;
-  pointer-events: none;
-  position: relative;
-  user-select: none;
-}
-
-.file-cover:hover > img {
-  max-width: none;
-  max-height: none;
-}
-
-img {
-  position: relative;
-  color: transparent;
-}
-img[alt] {
-  font-size: 16px;
-}
-img[alt]:after {
-  position: absolute;
-  top: -3px;
-  left: -1px;
-  background-color: rgba(52, 58, 64, 0.99);
-  font-family: "Helvetica";
-  font-weight: 300;
-  content: attr(alt);
-  border-radius: 5px;
-  padding: 2px 5px;
-  min-width: 101%;
-  color: white;
-}
-
-.file-name {
-  position: relative;
-  text-align: center;
-  user-select: text;
-}
-
-.file-name:hover,
-.file-info:hover .file-name {
-  display: inline-block;
-  z-index: 999;
-  top: 5px;
-  line-height: 1.5;
-}
-
-.file-btns i:active {
-  transform: scale(1.3);
-}
-
-.fas.fa-star {
-  color: rgb(255, 238, 0);
-}
-
-/************************/
-
-.first-controls {
-  position: absolute;
-  z-index: 99;
-}
-
-.first-controls input[type="checkbox"]:not(:checked) + div {
-  visibility: hidden;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.first-controls .fas {
-  font-size: 30px;
-}
-
-.first-controls + div {
-  margin-left: 40px;
-}
-
-input[type="range"] {
-  -webkit-appearance: none;
-  /* Hides the slider so that custom slider can be made */
-  width: 100%;
-  /* Specific width is required for Firefox. */
-  background: transparent;
-  /* Otherwise white in Chrome */
-}
-
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-}
-
-input[type="range"]:focus {
-  outline: none;
-  /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
-}
-
-/* Special styling for WebKit/Blink */
-
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  border: 1px solid #000000;
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-  background: #ffffff;
-  cursor: pointer;
-  margin-top: -6px;
-  /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  /* Add cool effects to your sliders! */
-}
-
-/* All the same stuff for Firefox */
-
-input[type="range"]::-moz-range-thumb {
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  border: 1px solid #000000;
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-  background: #ffffff;
-  cursor: pointer;
-}
-
-input[type="range"]::-webkit-slider-runnable-track {
-  width: 100%;
-  height: 8.4px;
-  cursor: pointer;
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  background: #3071a9;
-  border-radius: 0.25rem;
-  border: 0.2px solid #010101;
-  margin-top: 0.5px;
-}
-
-input[type="range"]:focus::-webkit-slider-runnable-track {
-  background: #367ebd;
-}
-
-input[type="range"]::-moz-range-track {
-  width: 100%;
-  height: 8.4px;
-  cursor: pointer;
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  background: #3071a9;
-  border-radius: 1.3px;
-  border: 0.2px solid #010101;
-}
-
-:fullscreen #play-list.move {
-  top: 0;
-}
-
 /****************************************************************/
 @media screen and (max-width: 500px) {
-  .scroll-container {
-    height: calc(100% - 67px);
-    min-height: calc(100% - 67px);
-  }
   #menu a {
     text-align: center;
   }

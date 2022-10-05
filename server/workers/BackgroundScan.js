@@ -32,16 +32,15 @@ if (path.join(ThumbnailPath, "Folder")) {
 
 const rmOrphanFiles = async (Id, isFolder, folder) => {
   if (folder) {
+    const tfiles = fs.readdirSync(folder.Path);
     for (const file of folder.Files) {
       if (folder.Path && file.Name) {
-        if (!fs.existsSync(path.join(folder.Path, file.Name))) {
+        if (!tfiles.includes(file.Name)) {
           try {
             await file.destroy();
           } catch (error) {
             console.log(folder.Path, file.Name, error.toString());
           }
-        } else if (!file.Cover) {
-          await file.update({ Cover: `/${file.Type}/${folder.Name}/${file.Name}.jpg` });
         }
       }
     }

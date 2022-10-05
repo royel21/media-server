@@ -86,10 +86,6 @@ app.use("/api/admin/folders", FoldersRoute);
 
 const getPath = (type) => path.join(global.appPath, "public", type, "index.html");
 
-app.get("/login/*", (_, res) => {
-  return res.sendFile(getPath("login"));
-});
-
 app.get("/admin/*", (_, res) => {
   return res.sendFile(getPath("admin"));
 });

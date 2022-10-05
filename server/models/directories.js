@@ -14,7 +14,6 @@ export default (sequelize, DataTypes) => {
       },
       Name: {
         type: STRING,
-        unique: true,
         allowNull: false,
       },
       FullPath: {

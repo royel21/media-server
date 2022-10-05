@@ -1,4 +1,6 @@
 import "./global.css";
+import "./user/index.css";
+import "./admin/index.css";
 import App from "./App.svelte";
 
 //LocalStorage

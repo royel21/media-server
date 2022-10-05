@@ -7,7 +7,6 @@
   import UserRoutes from "./user/UserRoutes.svelte";
   import Login from "./Login.svelte";
   import apiUtils from "./apiUtils";
-  import { updateUser } from "./ShareStore/UserStore";
 
   let socket;
   let user = { username: "" };
@@ -49,7 +48,6 @@
     socket = socketClient("/");
     setContext("socket", socket);
     setContext("User", user);
-    updateUser(user);
 
     socket.io.on("error", (error) => {
       console.log(error);

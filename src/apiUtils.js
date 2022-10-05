@@ -1,9 +1,14 @@
-import axios from "axios";
+// import axios from "axios";
 
 export const post = async (route, params) => {
   try {
-    const { data } = await axios.post(`/api/${route}`, params);
-    return data;
+    return await fetch(`/api/${route}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(params),
+    }).then((res) => res.json()); //await axios.post(`/api/${route}`, params);
   } catch (error) {
     return { error, valid: false };
   }
@@ -15,8 +20,9 @@ export const get = async (route) => {
   const p = route.filter((p) => p).join("/");
 
   try {
-    const { data } = await axios.get(`/api/${p}`);
-    return data;
+    // const { data } = await axios.get(`/api/${p}`);
+    return await fetch(`/api/${p}`).then((res) => res.json());
+    // return data;
   } catch (error) {
     return { error, valid: false };
   }
@@ -27,12 +33,17 @@ export const postFav = async (route, params) => post("files/favorites/" + route,
 const admin = async (path) => get(["admin", ...path]);
 const files = async (path) => get(["files", ...path]);
 
+let controller;
+
 export const getItemsList = async (url) => {
   try {
-    if (cancel) cancel();
+    if (controller) {
+      controller.abort();
+    }
 
-    const { data } = await axios.get(url, { cancelToken: new axios.CancelToken((c) => (cancel = c)) });
-    return data;
+    controller = new AbortController();
+
+    return await fetch(url, { signal: controller.signal }).then((res) => res.json()); //await axios.get(url, { cancelToken: new axios.CancelToken((c) => (cancel = c)) });
   } catch (error) {
     return { valid: false, error };
   }

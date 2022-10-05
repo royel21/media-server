@@ -13,7 +13,6 @@
   import FavoriteList from "./FavoriteList.svelte";
   import { clamp } from "../../ShareComponent/utils";
   import { getItemsList } from "../../apiUtils";
-  import { UserStore } from "../../ShareStore/UserStore";
 
   export let id = "";
   export let page = 1;
@@ -27,6 +26,7 @@
   let selected = +localStorage.getItem(title) || 0;
 
   const socket = getContext("socket");
+  const user = getContext("User");
   const baseData = { files: [], totalPages: 0, totalFiles: 0 };
   let pageData = baseData;
   let favClicked = null;
@@ -107,7 +107,7 @@
   });
 
   const reloadDir = (data) => {
-    if (data.Id === id && $UserStore.Id === data.user) {
+    if (data.Id === id && user.Id === data.user) {
       loadContent(page, filter, id, $PageConfig, type);
     }
   };
