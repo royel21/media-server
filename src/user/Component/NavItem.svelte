@@ -10,6 +10,10 @@
   let selectedId;
 
   $: if (dirs) {
+    let found = dirs[item.title].find((i) => i.IsAdult);
+    if (found) {
+      found.First = true;
+    }
     items = dirs[item.title];
     selectedId = selected[item.title];
   }
@@ -20,8 +24,15 @@
     <i class={"fas fa-" + item.class} />
     <span class="nav-title">{item.title}</span>
     <ul class="down-list">
-      {#each items as { Id, Name }}
-        <li class="list-item" id={Id} class:selected={Id === selectedId} on:click={selectDir} title={item.title}>
+      {#each items as { Id, Name, First }}
+        <li
+          class="list-item"
+          id={Id}
+          class:selected={Id === selectedId}
+          on:click={selectDir}
+          title={item.title}
+          class:adult={First}
+        >
           {Name}
         </li>
       {/each}
@@ -52,8 +63,8 @@
     font-size: 12px;
   }
 
-  .down-list li:not(:last-child) {
-    border-bottom: 1px solid;
+  .adult {
+    border-top: 1px solid;
   }
   .nav-item:hover,
   .down-list li:hover {

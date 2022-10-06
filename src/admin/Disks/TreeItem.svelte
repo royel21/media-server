@@ -34,7 +34,7 @@
     </span>
     <span class="caret" on:click={expandFolder}>▶</span>
     {#if Content.length > 0}
-      <ul class="tree-node">
+      <ul class="tree-node usn">
         <svelte:self type="folder" items={Content} on:scanDir />
       </ul>
     {/if}
@@ -47,7 +47,6 @@
   }
   ul {
     margin-left: 29px;
-    user-select: none;
   }
   li {
     min-height: 30px;

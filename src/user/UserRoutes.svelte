@@ -14,14 +14,6 @@
   import apiUtils from "../apiUtils";
   import Config from "./Component/Config.svelte";
 
-  const sortLastCompleted = (a, b) => {
-    if (a.FirstInList) {
-      return -1;
-    } else {
-      return a.Name?.localeCompare(b?.Name);
-    }
-  };
-
   const navItems = [
     { title: "Home", path: "/", class: "home" },
     { title: "Videos", path: "/videos", class: "film" },
@@ -39,8 +31,6 @@
 
   onMount(async () => {
     const data = await apiUtils.files(["dirs/"]);
-    data.Mangas.sort(sortLastCompleted);
-    data.Videos.sort(sortLastCompleted);
     selected.Mangas = data.Mangas[0]?.Id || "";
     selected.Videos = data.Videos[0]?.Id || "";
     dirs = data;

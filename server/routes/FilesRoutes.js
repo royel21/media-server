@@ -52,7 +52,7 @@ routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
 
   const recents = await db.recentFolder.findAndCountAll({
     order: [["LastRead", "DESC"]],
-    where: { RecentId: req.user.Recent.Id },
+    where: { RecentId: req.user?.Recent.Id },
     include: {
       model: db.folder,
       attributes: ["Id", "Name", "FileCount", "FilesType", "Type", "Status"],
@@ -87,12 +87,13 @@ routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
 
 routes.get("/dirs", async (req, res) => {
   const dirs = await db.directory.findAll({
-    attributes: ["Id", "Name", "Type", "FirstInList"],
+    order: ["FirstInList"],
+    attributes: ["Id", "Name", "Type", "FirstInList", "IsAdult"],
     where: { IsAdult: { [db.Op.lte]: req.user.AdultPass } },
   });
 
-  let Mangas = dirs.filter((d) => d.Type === "Mangas").sort(sortName);
-  let Videos = dirs.filter((d) => d.Type === "Videos").sort(sortName);
+  let Mangas = dirs.filter((d) => d.Type === "Mangas");
+  let Videos = dirs.filter((d) => d.Type === "Videos");
 
   return res.send({
     Mangas,

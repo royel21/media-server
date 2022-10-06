@@ -180,9 +180,6 @@ input[type="text"]:not(:placeholder-shown) + span {
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
   border: 1px solid transparent;
   padding: 0.2rem 0.3rem;
   font-size: 1rem;
@@ -211,7 +208,6 @@ span i,
 label i {
   cursor: pointer;
   font-size: 20px;
-  user-select: none;
 }
 
 .fa:active,
@@ -240,7 +236,16 @@ h3 {
 
 .fa,
 .fas,
-.far {
+.far,
+.usn,
+label i,
+span i,
+.btn,
+.table thead,
+.modal label,
+.modal-header > * {
+  -webkit-user-select: none;
+  -moz-user-select: none;
   user-select: none;
 }
 

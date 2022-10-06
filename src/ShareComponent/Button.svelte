@@ -36,7 +36,7 @@
   }
 </script>
 
-<button {style} class={clazz} use:typeAction on:click {tabindex}><slot /></button>
+<button {style} class={"usn " + clazz} use:typeAction on:click {tabindex}><slot /></button>
 
 <style>
   button {
@@ -45,8 +45,6 @@
     text-align: center;
     vertical-align: middle;
     cursor: pointer;
-    -webkit-user-select: none;
-    user-select: none;
     padding: 0.25rem 0.35rem;
     font-size: 1rem;
     line-height: 1.5;

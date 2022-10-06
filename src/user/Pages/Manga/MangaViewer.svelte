@@ -54,7 +54,7 @@
       }
       file.CurrentPos = pg;
     } else {
-      viewerState.jumping = true;
+      viewerState.jumping = webtoon;
       disconnectObvrs(imgContainer);
       action();
     }
@@ -66,9 +66,7 @@
   const jumpTo = (val) => {
     val = clamp(val, 1, file.Duration);
     file.CurrentPos = val - 1;
-    if (webtoon) {
-      viewerState.jumping = true;
-    }
+    viewerState.jumping = webtoon;
     loadImages(val - 5, 10);
   };
 
@@ -119,13 +117,10 @@
         images[data.page] = data.img;
       } else {
         viewerState.loading = false;
-        console.log("finish-loading");
-        if (webtoon) {
+        if (viewerState.jumping) {
           connectObservers(50);
         }
       }
-    } else {
-      viewerState.loading = false;
     }
   };
 
@@ -144,7 +139,6 @@
 
   $: {
     controls.webtoon = webtoon;
-    console.log("set observer");
   }
 
   //reload on file change
@@ -174,7 +168,6 @@
   afterUpdate(() => {
     if (file.Id !== viewerState.lastfId) {
       viewerState.lastfId = file.Id;
-      console.log("pos: scrollinview", file.CurrentPos);
       scrollInView(file.CurrentPos);
     }
 
@@ -224,7 +217,7 @@
       {/if}
     </div>
   </div>
-  <div class="controls">
+  <div class="controls usn">
     <span id="hide-player" on:click={returnTo}>
       <i class="far fa-times-circle popup-msg" data-title="Close" />
     </span>
@@ -277,8 +270,6 @@
     padding: initial;
     transition: 0.3s all;
     z-index: 4;
-    pointer-events: all;
-    user-select: none;
   }
 
   #webtoon {
@@ -375,7 +366,6 @@
     justify-content: initial;
     overflow-y: auto;
     overflow-x: hidden;
-    overflow-anchor: auto;
   }
 
   #manga-viewer .webtoon-img img {

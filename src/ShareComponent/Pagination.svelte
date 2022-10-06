@@ -65,7 +65,7 @@
 </script>
 
 {#if totalPages > 1}
-  <div id="pager" on:click={pagerClick}>
+  <div id="pager" class="usn" on:click={pagerClick}>
     <ul class="pagination">
       <li id="first-page" class="page-link" class:d-none={hideFL}>
         <i class="fas fa-angle-double-left" />
@@ -73,7 +73,7 @@
       <li id="prev-page" class="page-link" class:border-r-left={hideFL}>
         <i class="fas fa-angle-left" />
       </li>
-      <li id="current-page" class="page-link" on:click={onShowinput}>
+      <li class="page-link current-page" on:click={onShowinput}>
         {#if showinput}
           <input
             on:blur={hideInput}
@@ -102,7 +102,6 @@
     width: fit-content;
     padding: 0;
     pointer-events: all;
-    user-select: none;
   }
   .pagination {
     display: flex;
@@ -116,11 +115,11 @@
     height: 32px;
     cursor: pointer;
   }
-  #pager li:not(#current-page) {
+  #pager li:not(.current-page) {
     line-height: 2;
     padding: 0 15px;
   }
-  #pager #current-page {
+  #pager .current-page {
     min-width: 70px;
     max-width: 85px;
     text-align: center;
@@ -142,9 +141,7 @@
   .fas {
     pointer-events: none;
   }
-  #current-page {
-    user-select: none;
-  }
+
   .d-none {
     display: none;
   }

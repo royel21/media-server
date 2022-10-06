@@ -11,7 +11,7 @@
   ToggleMenu.subscribe((value) => (menuToggle = value));
 </script>
 
-<nav id="menu" class="navbar" class:hide={menuToggle}>
+<nav id="menu" class="navbar usn" class:hide={menuToggle}>
   <ul class="navbar-nav">
     {#each navItems as item}
       {#if filters.includes(item.title)}
@@ -39,7 +39,6 @@
     width: 100%;
     justify-content: space-between;
     padding: 0;
-    user-select: none;
     background-color: #343a40;
     transition: 0.3s all;
   }

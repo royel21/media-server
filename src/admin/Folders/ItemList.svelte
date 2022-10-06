@@ -13,7 +13,7 @@
 <div id={title} class="file-list col-6">
   <div class="controls">
     <Filter on:filter {filter} />
-    <h4 class="text-center">{`${totalItems} - ${title}`}</h4>
+    <h4 class="text-center usn">{`${totalItems} - ${title}`}</h4>
   </div>
   <div class="list-container">
     <ul class="list-group text-dark">
@@ -62,7 +62,6 @@
   .controls h4 {
     flex-grow: 1;
     width: 100%;
-    user-select: none;
     width: 200px;
   }
   .col-6 {

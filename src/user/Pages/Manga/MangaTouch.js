@@ -89,12 +89,10 @@ export const onTouchEnd = (e) => {
       } else {
         nextPage();
       }
-    } else if (moveY.dis > 180) {
-      if (moveY.dir > 0) {
-        if (webtoon && CurrentPos === 0) {
-          prevFile();
-        }
-      } else if (webtoon && CurrentPos === Duration - 1) {
+    } else if (webtoon && moveY.dis > 250) {
+      if (moveY.dir > 0 && CurrentPos === 0) {
+        prevFile();
+      } else if (CurrentPos === Duration - 1) {
         nextFile();
       }
     }

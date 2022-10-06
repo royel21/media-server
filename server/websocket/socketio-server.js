@@ -46,7 +46,7 @@ export default (server, sessionMeddle) => {
 
       socket.on("disconnect", () => console.log("disconnected: ", socket.id));
     } else {
-      io.sockets.emit("logout");
+      socket.emit("logout");
     }
   });
 };

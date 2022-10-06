@@ -27,9 +27,8 @@
 </script>
 
 <div class="r-console">
-  <span class="fa-icon fas fa-trash-alt" on:click={onClear} />
-
   {#if items.length}
+    <span class="fa-icon fas fa-trash-alt" on:click={onClear} />
     <div class="text-list" bind:this={ref}>
       {#each items as item}<div>{item}</div>{/each}
     </div>
@@ -50,6 +49,9 @@
     font-weight: 600;
     padding: 5px;
     overflow-x: auto;
+  }
+  .text-list > div {
+    white-space: nowrap;
   }
   .fa-icon {
     position: absolute;

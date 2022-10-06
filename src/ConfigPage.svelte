@@ -4,7 +4,7 @@
   import Loading from "./ShareComponent/Loading.svelte";
 
   let socket;
-  let user = { username: "" };
+  export let user = { username: "" };
 
   function isPwa() {
     return ["fullscreen", "standalone", "minimal-ui"].some(
@@ -49,7 +49,7 @@
 </script>
 
 {#if user.isAutenticated}
-  <slot />
+  <slot {user} />
 {:else}
   <Loading />
 {/if}

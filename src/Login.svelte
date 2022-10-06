@@ -73,7 +73,7 @@
     <div id="pasword-errors" class="error text-left text-danger">
       {error.password}
     </div>
-    <div class="form-footer"><button class="btn" tabindex="0">Submit</button></div>
+    <div class="form-footer"><button class="btn" type="submit" tabindex="0">Submit</button></div>
   </form>
 </div>
 
@@ -83,6 +83,8 @@
     justify-content: center;
     align-items: center;
     height: 100%;
+    -webkit-user-select: none;
+    -moz-user-select: none;
     user-select: none;
   }
 

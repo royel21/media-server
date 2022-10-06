@@ -31,9 +31,9 @@
   <div id="config-content">
     <div class="input-group">
       <div class="input-group-prepend">
-        <label for="orderby" class="input-group-text">Sort By:</label>
+        <label for="order-by" class="input-group-text">Sort By:</label>
       </div>
-      <select id="orderby" name="select-sort" class="form-control fa" bind:value={Config[title].sort}>
+      <select id="order-by" class="form-control" bind:value={Config[title].sort}>
         <option value="nu">&#xf15d; Name</option>
         <option value="nd">&#xf15e; Name</option>
         <option value="du">&#xf162; Date</option>
@@ -168,7 +168,7 @@
   #user-config div:last-child {
     text-align: center;
   }
-  #orderby,
+  #order-by,
   option {
     font-family: "Font Awesome 5 Free", "sans-serif";
     font-weight: 600;

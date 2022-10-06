@@ -2,6 +2,9 @@
     "verbose": false,
     "ignore": [
         "./modules/*",
-        "src/**/*"
+        "src/**/*",
+        "./*.js",
+        "./*.json",
+        "./*.txt"
     ]
 }

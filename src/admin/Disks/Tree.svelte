@@ -40,14 +40,13 @@
   <i class="fas fa-server" />
   <span class="tree-name">Server</span>
 </div>
-<ul class="tree-view">
+<ul class="tree-view usn">
   <TreeItem type="hdd" items={content} on:scanDir={scanDir} />
 </ul>
 
 <style>
   ul {
     margin-left: 40px;
-    user-select: none;
     padding-bottom: 5px;
   }
 </style>

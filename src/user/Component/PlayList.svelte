@@ -132,7 +132,7 @@
   <div id="p-list" bind:this={playList}>
     <ul>
       {#each filtered.slice(toLoad, toLoad + filePerPage) as { Id, Name, Cover, CurrentPos, Duration, Type }}
-        <li id={Id} class={Id === fileId ? "active" : ""} on:click>
+        <li id={Id} class={"usn " + (Id === fileId ? "active" : "")} on:click>
           <span class="cover">
             <img data-src={Cover} src="" alt="" />
             <span class="duration">
@@ -251,7 +251,6 @@
     border-bottom: 1px solid;
     height: 225px;
     cursor: pointer;
-    user-select: none;
   }
 
   #play-list #p-list li:last-child {

@@ -132,7 +132,7 @@
     {#each pageData.files as { Id, Name, Type, Cover, CurrentPos, Duration, isFav, FileCount, Status }, i}
       <div class="file" id={Id} data-type={Type} tabIndex="0" in:fade>
         <div class="file-info">
-          <div class="file-btns">
+          <div class="file-btns usn">
             <span class="file-btn-left" on:click|stopPropagation={openFile}>
               <i class={"fas fa-" + FileTypes[Type].class} />
             </span>
@@ -145,7 +145,7 @@
             </span>
             <FavoriteList {isFav} {type} {Type} {favClicked} favId={id} on:removeFile={removeFile} />
           </div>
-          <div class="file-cover" on:dblclick|stopPropagation={openFile}>
+          <div class="file-cover usn" on:dblclick|stopPropagation={openFile}>
             <img src={Cover} alt="No Cover Found" />
             {#if Type.includes("Folder")}
               <span class:completed={Status}>{Status ? "Completed" : "OnGoing"}</span>

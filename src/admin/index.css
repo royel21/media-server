@@ -2,13 +2,9 @@
   margin: 0;
 }
 
-.table thead {
-  user-select: none;
-}
-
 .table th,
 .table td {
-  padding: 0.5rem 1rem;
+  padding: 0.2rem 0.5rem;
 }
 
 .table td:only-child {
@@ -85,7 +81,6 @@
 
 .modal-header > * {
   text-align: center;
-  user-select: none;
 }
 
 .modal .errors {
@@ -102,7 +97,6 @@
 .modal label {
   width: 55px;
   justify-content: space-evenly;
-  user-select: none;
   font-weight: 600;
 }
 

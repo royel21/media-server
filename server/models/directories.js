@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 
 export default (sequelize, DataTypes) => {
-  const { STRING, BOOLEAN } = DataTypes;
+  const { STRING, BOOLEAN, INTEGER } = DataTypes;
 
   const Directory = sequelize.define(
     "Directory",
@@ -33,8 +33,8 @@ export default (sequelize, DataTypes) => {
         defaultValue: false,
       },
       FirstInList: {
-        type: BOOLEAN,
-        defaultValue: false,
+        type: INTEGER(3),
+        defaultValue: 0,
       },
     },
     {

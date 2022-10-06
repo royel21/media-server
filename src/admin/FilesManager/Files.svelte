@@ -112,7 +112,7 @@
 <div class="file-list col-6">
   <div class="f-controls">
     <Filter on:filter={onFilter} {filter} />
-    <h4 class="text-center">{`${totalItems} - Files`}</h4>
+    <h4 class="text-center usn">{`${totalItems} - Files`}</h4>
   </div>
   <div class="list-container">
     <table class="table table-bordered table-dark">
@@ -166,7 +166,6 @@
   .f-controls h4 {
     flex-grow: 1;
     width: 100%;
-    user-select: none;
   }
   .list-controls {
     margin-top: 5px;

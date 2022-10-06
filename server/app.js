@@ -62,7 +62,7 @@ app.use(passport.session());
 app.use("/api/users", userRoutes);
 
 app.use((req, res, next) => {
-  if (req.url === "/" && !/login|api\/users\/login/gi.test(req.url) && !req.user) {
+  if (!req.user) {
     return res.redirect("/login");
   }
   return next();
@@ -84,14 +84,8 @@ app.use("/api/admin/directories", DirectoriesRoute);
 app.use("/api/admin/files", FilesManagerRoute);
 app.use("/api/admin/folders", FoldersRoute);
 
-const getPath = (type) => path.join(global.appPath, "public", type, "index.html");
-
-app.get("/admin/*", (_, res) => {
-  return res.sendFile(getPath("admin"));
-});
-
 app.get("/*", (_, res) => {
-  return res.sendFile(getPath("user"));
+  return res.sendFile(path.join(global.appPath, "public", "user", "index.html"));
 });
 
 app.use((e, _, res, __) => {

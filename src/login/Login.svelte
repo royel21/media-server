@@ -8,6 +8,16 @@
 
   let user = { username: "", password: "" };
 
+  const getUrl = ({ role }) => `/${/admin/gi.test(role) ? "admin" : ""}`;
+
+  const onError = (err) => {
+    if (err.toString().includes("Network Error")) {
+      error.password = "Not Network Connection";
+    } else {
+      error.password = "Server Not Available";
+    }
+  };
+
   const onSubmit = async () => {
     error = { username: "", password: "" };
     try {
@@ -25,26 +35,22 @@
         }).then((res) => res.json());
 
         if (data.isAutenticated) {
-          if (data.role.includes("Admin")) {
-            location.href = "/admin/";
-          } else {
-            location.href = "/";
-          }
+          location.href = getUrl(data);
         }
       }
     } catch (err) {
-      if (err.toString().includes("Network Error")) {
-        error.password = "Not Network Connection";
-      } else {
-        error.password = "Server Error";
-      }
+      onError(err);
     }
   };
 
   onMount(async () => {
-    let data = await fetch("/api/users").then((response) => response.json());
-    if (data.isAutenticated) {
-      location.href = `/${data.role.includes("Admin") ? "admin" : ""}`;
+    try {
+      const data = await fetch("/api/users").then((response) => response.json());
+      if (data.isAutenticated) {
+        location.href = getUrl(data);
+      }
+    } catch (err) {
+      onError(err);
     }
   });
   document.title = "Media Server";
@@ -68,7 +74,7 @@
       <KeyIcon slot="label" />
     </Input>
     <div class="form-footer">
-      <button on:click={onSubmit}>Submit</button>
+      <span on:click={onSubmit}>Submit</span>
     </div>
   </div>
 </div>
@@ -83,6 +89,8 @@
     margin: 0;
     padding: 0;
     background: radial-gradient(ellipse at center, #14243d 0, #030611 100%);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+      "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   }
   #root {
     min-height: 100%;
@@ -93,6 +101,8 @@
     top: calc(50% - 150px);
     left: calc(50% - 150px);
     width: 300px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
     user-select: none;
     background-color: #343a40;
     background-clip: border-box;
@@ -111,14 +121,12 @@
     margin-top: 10px;
   }
 
-  button {
+  span {
     display: inline-block;
     font-weight: 400;
     text-align: center;
     vertical-align: middle;
     cursor: pointer;
-    -webkit-user-select: none;
-    user-select: none;
     padding: 0.25rem 0.35rem;
     font-size: 1rem;
     line-height: 1.5;
@@ -129,18 +137,15 @@
     transition: 0.15s all ease-in-out;
   }
 
-  button:hover {
+  span:hover {
     color: #fff;
     background-color: gray;
     border-color: #545b62;
   }
 
-  button:active {
+  span:active {
     transform: scale(1.2);
     transition: 0.25s;
-  }
-  button:not(:last-child) {
-    margin-right: 10px;
   }
 
   :global(svg) {

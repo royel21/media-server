@@ -1,11 +1,13 @@
 <script>
   import { onMount, getContext } from "svelte";
   import apiUtils from "../../apiUtils";
-  import RConsole from "../Component/RConsole.svelte";
+  import RConsole from "./RConsole.svelte";
 
   const socket = getContext("socket");
   let dirs = [];
   let msg = "";
+  let dir;
+  let showInput = false;
 
   const reloadDir = ({ Id }) => {
     let dir = dirs.find((d) => d.Id === Id);
@@ -28,15 +30,6 @@
     }
   };
 
-  onMount(async () => {
-    dirs = await apiUtils.admin(["directories"]);
-
-    socket.on("reload", reloadDir);
-    return () => {
-      socket.off("reload", reloadDir);
-    };
-  });
-
   const removeDir = async (e) => {
     let tr = e.target.closest("tr");
     if (tr) {
@@ -57,6 +50,31 @@
     dir.IsLoading = true;
     dirs = dirs;
   };
+
+  const onShowInput = ({ target }) => {
+    let tr = target.closest("tr");
+    let found = dirs.find((d) => d.Id === tr.id);
+    if (found) {
+      dir = found;
+      showInput = true;
+    }
+  };
+
+  const hideInput = () => {
+    apiUtils.post("admin/directories/update", { id: dir.Id, FirstInList: dir.FirstInList });
+    showInput = false;
+  };
+
+  const focusInput = (node) => node?.focus();
+
+  onMount(async () => {
+    dirs = await apiUtils.admin(["directories"]);
+
+    socket.on("reload", reloadDir);
+    return () => {
+      socket.off("reload", reloadDir);
+    };
+  });
 </script>
 
 <div class="message">{msg}</div>
@@ -70,7 +88,7 @@
         <th>Folder Count</th>
         <th>Total Files</th>
         <th>Is Adult</th>
-        <th>First In List</th>
+        <th>Order In Menu</th>
         <th>Full Path</th>
       </tr>
     </thead>
@@ -90,7 +108,13 @@
           <td>{FolderCount}</td>
           <td>{TotalFiles}</td>
           <td data-name="IsAdult" on:click={updateDir}>{IsAdult}</td>
-          <td data-name="FirstInList" on:click={updateDir}>{FirstInList}</td>
+          <td class="order" on:click|stopPropagation={onShowInput}>
+            {#if showInput && Id === dir.Id}
+              <input bind:value={dir.FirstInList} on:blur={hideInput} use:focusInput />
+            {:else}
+              {FirstInList}
+            {/if}
+          </td>
           <td>{FullPath}</td>
         </tr>
       {/each}
@@ -129,13 +153,25 @@
   }
   th:nth-child(4),
   th:nth-child(5) {
-    width: 135px;
-    min-width: 135px;
+    width: 115px;
+    min-width: 115px;
   }
   td:nth-child(6),
   td:nth-child(7) {
     cursor: pointer;
-    width: 120px;
-    min-width: 120px;
+    width: 130px;
+    min-width: 130px;
+  }
+  td:nth-child(7) {
+    text-align: center;
+  }
+  .order:has(input) {
+    padding: 0;
+  }
+  .order input {
+    width: 100%;
+    height: 36px;
+    outline: none;
+    text-align: center;
   }
 </style>

@@ -9,7 +9,7 @@
 </script>
 
 <div class="card bg-dark text-light admin-manager">
-  <div class="nav nav-tabs disk-controls">
+  <div class="nav nav-tabs disk-controls usn">
     <div class="nav-item">
       <input type="radio" bind:group={tab} value="tab-1" id="tab1" />
       <label class="nav-link" for="tab1">
@@ -42,9 +42,7 @@
     height: 100%;
     padding: 10px 0 0 0;
   }
-  .disk-controls {
-    user-select: none;
-  }
+
   .nav {
     display: flex;
     justify-content: space-evenly;
@@ -52,8 +50,6 @@
   }
   .nav-link {
     padding: 5px 10px;
-    border-radius: 0.25rem 0.25rem 0 0;
-    user-select: none;
   }
 
   input[type="radio"] {

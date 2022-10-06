@@ -41,7 +41,7 @@ Napi::Array Win_Explorer::ListFiles(const Napi::CallbackInfo& info)
   Napi::Array objectArray = Napi::Array::New(env);
   char strDate[20];
 
-  setlocale(LC_ALL, "C.UTF-8");
+  setlocale(LC_ALL, "C.utf-8");
   WIN32_FIND_DATAW ffd;
   HANDLE hFind;
 
@@ -118,7 +118,7 @@ Napi::Array Win_Explorer::ListFiles(const Napi::CallbackInfo& info)
 
   Napi::Array objectArray = Napi::Array::New(env);
 
-  setlocale(LC_ALL, "C.UTF-8");
+  setlocale(LC_ALL, "C.utf-8");
   struct dirent* d_file;
   int i = 0;
   DIR* d_dir = opendir(str2.c_str());

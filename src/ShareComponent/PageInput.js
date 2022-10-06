@@ -1,6 +1,6 @@
 import { clamp } from "./utils";
 
-const paginationInput = (li, page, totalPages, dispatch) => {
+const paginationInput = (li, page, totalPages, dispatch, min) => {
   let input = li.querySelector("input");
   if (!input) {
     li.textContent = "";
@@ -16,8 +16,7 @@ const paginationInput = (li, page, totalPages, dispatch) => {
 
     newInput.onkeydown = (event) => {
       if (event.keyCode === 13) {
-        page = clamp(+newInput.value, 1, totalPages);
-        console.log(page);
+        page = clamp(+newInput.value, min || 1, totalPages);
         dispatch("gotopage", page);
         newInput = null;
       }

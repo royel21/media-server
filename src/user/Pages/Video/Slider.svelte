@@ -94,7 +94,7 @@
   });
 </script>
 
-<div class="rc-slider">
+<div class="rc-slider usn">
   <div
     id={uniqId}
     class="rc-track"
@@ -134,7 +134,6 @@
     height: 10px;
     cursor: pointer;
     padding: 0 20px;
-    user-select: none;
   }
 
   .rc-slider .rc-track,
