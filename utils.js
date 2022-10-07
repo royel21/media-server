@@ -1,12 +1,14 @@
-const fs = require("fs-extra");
-const path = require("path");
-const sharp = require("sharp");
-const WinDir = require("win-explorer");
+import fs from "fs-extra";
+import path from "path";
+import sharp from "sharp";
+import WinDir from "win-explorer";
 
-require("dotenv").config();
-const db = require("./server/models");
+import zipper from "zip-local";
 
-module.exports.cleanDir = (basePath) => {
+// require("dotenv").config();
+// const db = require("./server/models");
+
+export const cleanDir = (basePath) => {
   const result = WinDir.ListFilesRO(basePath);
   for (const f of result) {
     let emptyDirs = f.Files.filter((f) => f.isDirectory);
@@ -20,12 +22,40 @@ module.exports.cleanDir = (basePath) => {
   }
 };
 
-const resize = (imgs) => {
+let baseDir = "";
+
+export const resize = async (p) => {
+  if (!baseDir) baseDir = p;
+
+  const imgs = fs.readdirSync(p);
+
   for (let img of imgs) {
-    sharp(fs.readFileSync(img))
-      .jpeg({ quality: 75 })
-      .resize({ width: 1080 })
-      .toFile("dir/" + img);
+    let file = path.join(p, img);
+
+    if (fs.statSync(file).isDirectory()) {
+      resize(file);
+    } else {
+      if (!fs.existsSync(path.join(p, "outdir"))) fs.mkdirSync(path.join(p, "outdir"));
+
+      await sharp(file).jpeg({ quality: 75 }).toFile(path.join(p, "outdir", img));
+    }
+  }
+  if (p === baseDir) baseDir = "";
+};
+
+const compressDirs = (baseDir) => {
+  const dirs = fs.readdirSync(baseDir);
+  for (let dir of dirs) {
+    const toZip = path.join(baseDir, dir);
+    zipper.sync
+      .zip(toZip)
+      .compress()
+      .save(toZip + ".zip");
   }
 };
-resize(["./00.jpg"]);
+
+export default {
+  resize,
+  cleanDir,
+  compressDirs,
+};

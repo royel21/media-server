@@ -38,7 +38,7 @@ app.use(cookieParser());
 app.use(
   compression({
     filter: function (req, res) {
-      return true;
+      return !/.woff/g.test(req.url);
     },
   })
 );
@@ -84,8 +84,18 @@ app.use("/api/admin/directories", DirectoriesRoute);
 app.use("/api/admin/files", FilesManagerRoute);
 app.use("/api/admin/folders", FoldersRoute);
 
+const getPath = (type) => path.join(global.appPath, "public", type, "index.html");
+
+app.get("/login/*", (_, res) => {
+  return res.sendFile(getPath("login"));
+});
+
+app.get("/admin/*", (_, res) => {
+  return res.sendFile(getPath("admin"));
+});
+
 app.get("/*", (_, res) => {
-  return res.sendFile(path.join(global.appPath, "public", "user", "index.html"));
+  return res.sendFile(getPath("user"));
 });
 
 app.use((e, _, res, __) => {
@@ -93,6 +103,7 @@ app.use((e, _, res, __) => {
     return res.redirect("/notfound");
   }
 });
+
 const { PORT, PORT2, IP, HOME_IP } = process.env;
 const host = process.env.USERNAME === "rconsoro" ? IP : HOME_IP;
 const port = process.env.USERNAME === "rconsoro" ? PORT2 : PORT;

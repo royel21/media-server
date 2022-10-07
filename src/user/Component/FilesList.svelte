@@ -58,7 +58,7 @@
   };
 
   const fileFilter = ({ detail }) => {
-    if (detail) navigate(`/${type}/${1}/${detail || ""}`);
+    navigate(`/${type}/${1}/${detail || ""}`);
   };
 
   const handleKeydown = (event) => fileKeypress(event, page, goToPage, title);

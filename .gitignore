@@ -28,3 +28,4 @@ mediaserver.sqlite
 datas.json
 build/
 server/public/*
+./images/*

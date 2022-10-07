@@ -15,24 +15,28 @@
   const logout = async () => {
     try {
       await fetch("/api/users/logout");
-
-      socket?.close();
-      if (isPwa()) {
-        history.go(-(history.length - 2));
-      } else {
-        location.href = "/";
-      }
     } catch (error) {
       console.log(error);
+    }
+
+    socket?.close();
+    if (isPwa()) {
+      history.go(-(history.length - 2));
+    } else {
+      location.href = "/";
     }
   };
 
   onMount(async () => {
-    let data = await fetch("/api/users").then((response) => response.json());
-    if (data.isAutenticated) {
-      user = data;
-    } else {
-      location.href = "/login";
+    try {
+      let data = await fetch("/api/users").then((response) => response.json());
+      if (data.isAutenticated) {
+        user = data;
+      } else {
+        location.href = "/login";
+      }
+    } catch (error) {
+      console.log("configPage-error", error);
     }
   });
 
