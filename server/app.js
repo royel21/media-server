@@ -38,7 +38,7 @@ app.use(cookieParser());
 app.use(
   compression({
     filter: function (req, res) {
-      return !/.woff/g.test(req.url);
+      return true;
     },
   })
 );
