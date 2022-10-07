@@ -20,12 +20,12 @@
   };
 </script>
 
-<label id="user-label" class={User.role} for="show-config" title="Show Config">
+<label id="user-label" for="show-config" title="Show Config">
   <i class="fas fa-user-cog" />
   <span class="nav-title">{User.username}</span>
 </label>
 <input type="checkbox" name="" id="show-config" title="show-config" />
-<div id="user-config" class={User.role.includes("User") ? "user-config" : "admin-config"}>
+<div id="user-config">
   <div id="sep"><span on:click={logout}> <i class="fas fa-sign-out-alt" /> Log out </span></div>
 
   <div id="config-content">
@@ -177,29 +177,20 @@
     font-size: 25px;
   }
   @media screen and (max-width: 500px) {
-    #user-config.user-config {
+    #user-config {
       top: 73px;
       right: 23px;
     }
-    #user-label.User {
+    #user-label {
       height: initial;
       text-align: center;
     }
 
-    #user-label.User {
+    #user-label {
       max-width: 100px;
-    }
-
-    #user-label.Administrator span {
-      width: 120px;
-      height: 22px;
     }
     .nav-title {
       font-size: 16px;
-    }
-    #user-config.admin-config {
-      top: 71px;
-      left: 0;
     }
   }
 </style>
