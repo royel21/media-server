@@ -69,8 +69,7 @@
         showModal = true;
       } else {
         socket.emit("scan-dir", { Id: folder.Id, isFolder: true });
-        let liItem = document.body.querySelector(`#${folder.Id} .fas`);
-        if (liItem) liItem.classList.add("fa-spin");
+        document.getElementById(folder.Id)?.querySelector(`.fas`)?.classList.add("fa-spin");
       }
     }
   };
