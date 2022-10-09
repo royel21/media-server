@@ -14,7 +14,7 @@ const getData = async ({ params }, res) => {
 
   const query = {
     attributes: ["Id", "Name", "Type"],
-    order: [db.sqlze.literal(`REPLACE(Name, '[', '0'), CAST(Name AS UNSIGNED)`)], // used for natural ordering
+    order: [db.sqlze.literal(`REPLACE(Name, '[', '-'), CAST(Name AS UNSIGNED)`)], // used for natural ordering
     where: {},
     offset,
     limit,
