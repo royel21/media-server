@@ -26,6 +26,7 @@ import UsersManagerRoute from "./routes/admin/UsersManagerRoute.js";
 import DirectoriesRoute from "./routes/admin/DirectoriesRoute.js";
 import FilesManagerRoute from "./routes/admin/FilesManagerRoute.js";
 import FoldersRoute from "./routes/admin/FoldersRoute.js";
+import user from "./models/user.js";
 
 const app = express();
 const passport = passportConfig();
@@ -90,12 +91,8 @@ app.get("/login/*", (_, res) => {
   return res.sendFile(getPath("login"));
 });
 
-app.get("/admin/*", (_, res) => {
-  return res.sendFile(getPath("admin"));
-});
-
-app.get("/*", (_, res) => {
-  return res.sendFile(getPath("user"));
+app.get("/*", ({ user: { Role } }, res) => {
+  return res.sendFile(getPath(Role.includes("Admmin") ? "admin" : "user"));
 });
 
 app.use((e, _, res, __) => {
