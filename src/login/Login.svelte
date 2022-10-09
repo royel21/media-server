@@ -36,9 +36,12 @@
 
         if (data.isAutenticated) {
           location.href = getUrl(data);
+        } else {
+          error.password = data.info.message;
         }
       }
     } catch (err) {
+      console.log(err);
       onError(err);
     }
   };

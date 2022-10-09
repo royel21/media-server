@@ -26,7 +26,6 @@ import UsersManagerRoute from "./routes/admin/UsersManagerRoute.js";
 import DirectoriesRoute from "./routes/admin/DirectoriesRoute.js";
 import FilesManagerRoute from "./routes/admin/FilesManagerRoute.js";
 import FoldersRoute from "./routes/admin/FoldersRoute.js";
-import user from "./models/user.js";
 
 const app = express();
 const passport = passportConfig();
@@ -45,7 +44,7 @@ app.use(
 );
 
 app.use(express.static(process.env.IMAGES));
-app.use(express.static(global.appPath + "/public"));
+app.use(express.static(global.appPath + "/public/static"));
 
 const sessionMeddle = session({
   name: process.env.SESSION,
@@ -91,8 +90,18 @@ app.get("/login/*", (_, res) => {
   return res.sendFile(getPath("login"));
 });
 
-app.get("/*", ({ user: { Role } }, res) => {
-  return res.sendFile(getPath(Role.includes("Admmin") ? "admin" : "user"));
+app.get("/admin/*", ({ user, url }, res) => {
+  if (user.Role.includes("User")) {
+    return res.redirect("/user");
+  }
+  return res.sendFile(getPath("admin"));
+});
+
+app.get("/*", ({ user, url }, res) => {
+  if (user.Role.includes("Admin")) {
+    return res.redirect("/admin");
+  }
+  return res.sendFile(getPath("user"));
 });
 
 app.use((e, _, res, __) => {
