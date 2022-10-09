@@ -14,7 +14,7 @@ export default defineConfig({
   root: "./src",
   plugins: [svelte()],
   build: {
-    outDir: "../server/public/",
+    outDir: "../server/public/static",
     emptyOutDir: true,
     rollupOptions: {
       input: {
