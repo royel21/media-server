@@ -87,7 +87,7 @@ app.use("/api/admin/folders", FoldersRoute);
 const getPath = (type) => path.join(global.appPath, "public", type, "index.html");
 
 app.get("/login/*", (_, res) => {
-  return res.sendFile(getPath("login"));
+  return res.sendFile(getPath("/static/login"));
 });
 
 app.get("/admin/*", ({ user, url }, res) => {
@@ -99,7 +99,7 @@ app.get("/admin/*", ({ user, url }, res) => {
 
 app.get("/*", ({ user, url }, res) => {
   if (user.Role.includes("Admin")) {
-    return res.redirect("/admin");
+    return res.redirect("/admin/");
   }
   return res.sendFile(getPath("user"));
 });
