@@ -310,7 +310,6 @@
     }
 
     #play-list.move {
-      top: 56px;
       bottom: 31px;
     }
   }
