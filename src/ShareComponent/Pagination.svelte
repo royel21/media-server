@@ -121,7 +121,8 @@
   }
   #pager .current-page {
     min-width: 70px;
-    max-width: 85px;
+    width: 100px;
+    max-width: 100px;
     text-align: center;
     font-size: 14px;
     padding: 0 4px;

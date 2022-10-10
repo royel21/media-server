@@ -12,6 +12,8 @@
   export let file;
   export let KeyMap;
   export let viewer;
+  export let changePages;
+
   const { NextFile, PrevFile, Fullscreen, SkipForward, SkipBack } = KeyMap;
   const socket = getContext("socket");
   const dispatch = createEventDispatcher();
@@ -52,7 +54,8 @@
       if (!viewerState.loading && !images[pg + 6 * dir]) {
         loadImages(pg, 11, dir);
       }
-      file.CurrentPos = pg;
+      // file.CurrentPos = pg;
+      changePages(pg);
     } else {
       viewerState.jumping = webtoon;
       disconnectObvrs(imgContainer);
@@ -65,7 +68,8 @@
 
   const jumpTo = (val) => {
     val = clamp(val, 1, file.Duration);
-    file.CurrentPos = val - 1;
+    // file.CurrentPos = val - 1;
+    changePages(val - 1);
     viewerState.jumping = webtoon;
     loadImages(val - 5, 10);
   };
@@ -85,14 +89,10 @@
 
   const returnTo = () => dispatch("returnBack");
 
-  const setPage = (pg) => {
-    file.CurrentPos = pg;
-  };
-
   let connectObservers = (delay = 0) => {
     let tout = setTimeout(() => {
       scrollInView(file.CurrentPos);
-      PageObserver(setPage, imgContainer, loadImages, viewerState);
+      PageObserver(changePages, imgContainer, loadImages, viewerState);
       scrollImageLoader(loadImages, imgContainer, file.CurrentPos);
       clearTimeout(tout);
       viewerState.jumping = false;
@@ -139,6 +139,11 @@
 
   $: {
     controls.webtoon = webtoon;
+    if (webtoon) {
+      connectObservers(50);
+    } else {
+      disconnectObvrs(imgContainer);
+    }
   }
 
   //reload on file change

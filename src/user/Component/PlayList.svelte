@@ -1,31 +1,26 @@
 <script>
-  import { createEventDispatcher } from "svelte";
+  import { clamp } from "../../ShareComponent/utils";
+  import { afterUpdate } from "svelte";
 
   import Pagination from "../../ShareComponent/Pagination.svelte";
   import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
   import { formatTime } from "../Pages/pagesUtils";
 
-  const dispatch = createEventDispatcher();
-
   export let files = [];
   export let fileId;
-  export let filters = { filter: "" };
+  export let onFilter;
 
+  let list = [];
+  const pageData = {
+    pg: 0,
+    totalPages: 0,
+    totalFiles: 0,
+  };
   const filePerPage = 100;
+
   let observer;
   let playList;
   let hideList = true;
-  let totalPages = 0;
-  let page = 1;
-  let toLoad = 0;
-  let filtered = [];
-
-  const getPage = () => {
-    let i = filtered.findIndex((f) => f.Id === fileId);
-    let pg = 1;
-    while (pg * filePerPage < i && pg < totalPages) pg++;
-    return pg;
-  };
 
   const setObserver = () => {
     if (observer) {
@@ -58,52 +53,39 @@
   };
 
   const goToPage = (pg) => {
-    pg = parseInt(pg.detail);
-    if (pg < 1 || pg > totalPages || isNaN(pg)) return;
-    page = pg < 1 ? 1 : pg > totalPages ? totalPages : pg;
+    pageData.pg = clamp(pg.detail, 1, pageData.totalPages);
+  };
+
+  const hidePlayList = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    hideList = true;
+  };
+
+  afterUpdate(() => {
+    let current = document.getElementById(fileId);
+    playList.scroll({ top: Math.max(current?.offsetTop - 250, 0) });
     setObserver();
+  });
+
+  const getPage = () => {
+    let index = files.findIndex((f) => f.Id === fileId);
+    return Math.floor(index / filePerPage);
   };
 
-  const clearFilter = () => {
-    filters.filter = "";
-    dispatch("clearfilter");
+  const sliceFiles = () => {
+    const start = pageData.pg * filePerPage || 0;
+    return files.slice(start, start + filePerPage);
   };
 
-  $: if (!hideList) {
-    if (playList) {
-      let current = document.querySelector("#play-list .active");
-      if (current) {
-        playList.scroll({
-          top: current.offsetTop - 250,
-        });
-        setObserver();
-        setTimeout(() => {
-          playList.scroll({
-            top: current.offsetTop - 250,
-          });
-        }, 300);
-      }
-    }
+  $: if (files.length) {
+    pageData.totalFiles = files.length;
+    pageData.pg = getPage();
+    pageData.totalPages = Math.ceil(files.length / filePerPage);
   }
 
-  $: if (files.length > 100 && totalPages === 0) {
-    totalPages = Math.ceil(filtered.length / filePerPage);
-    page = getPage();
-  }
-
-  $: if (filters.filter) {
-    filtered = files.filter((f) => f.Name.contains(filters.filter));
-  } else {
-    filtered = files;
-  }
-
-  $: {
-    let start = (page - 1) * filePerPage;
-    if (start < filtered.length) {
-      toLoad = start;
-    } else {
-      toLoad = 0;
-    }
+  $: if (pageData.pg) {
+    list = sliceFiles(files);
   }
 </script>
 
@@ -112,26 +94,18 @@
     <i class="fas fa-list" />
   </span>
 </label>
-<div
-  id="p-bg"
-  class:hidelist={!hideList}
-  on:click|stopPropagation|preventDefault={() => {
-    hideList = true;
-    console.log("toggle");
-  }}
-  tabindex="-1"
-/>
+<div id="p-bg" class:hidelist={!hideList} on:click={hidePlayList} tabindex="-1" />
 <input name="show-hide-play-list" type="checkbox" id="p-hide" bind:checked={hideList} />
 <div id="play-list" class:move={!$ToggleMenu}>
   <div id="v-filter">
-    <input name="clear-filters" type="text" bind:value={filters.filter} placeholder="Filter" class="form-control" />
-    <span class="clear-filter" on:click={clearFilter}>
+    <input name="clear-filters" type="text" on:change={onFilter} placeholder="Filter" class="form-control" />
+    <span class="clear-filter" on:click={onFilter}>
       <i class="fas fa-times-circle" />
     </span>
   </div>
   <div id="p-list" bind:this={playList}>
     <ul>
-      {#each filtered.slice(toLoad, toLoad + filePerPage) as { Id, Name, Cover, CurrentPos, Duration, Type }}
+      {#each list as { Id, Name, Cover, CurrentPos, Duration, Type }}
         <li id={Id} class={"usn " + (Id === fileId ? "active" : "")} on:click>
           <span class="cover">
             <img data-src={Cover} src="" alt="" />
@@ -144,9 +118,9 @@
       {/each}
     </ul>
   </div>
-  {#if totalPages > 1}
+  {#if pageData.totalPages > 1}
     <div class="b-control">
-      <Pagination page={parseInt(page || 1)} {totalPages} on:gotopage={goToPage} hideFL={true} />
+      <Pagination page={pageData.pg} totalPages={pageData.totalPages} on:gotopage={goToPage} hideFL={true} />
     </div>
   {/if}
 </div>
@@ -178,6 +152,7 @@
     background-color: black;
     padding: 4px 6px;
     border-radius: 0.25rem;
+    cursor: pointer;
   }
   .show-list i {
     font-size: 20px;
@@ -200,9 +175,6 @@
     transition: 0.3s all;
     z-index: 11;
     overflow: hidden;
-  }
-  #play-list.move {
-    top: 37px;
   }
   #p-list {
     overflow-y: auto;
@@ -327,7 +299,7 @@
   .b-control {
     text-align: center;
     position: absolute;
-    bottom: 4px;
+    bottom: 0px;
     width: 100%;
   }
   @media screen and (max-width: 600px) {

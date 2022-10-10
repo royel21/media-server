@@ -27,7 +27,6 @@
   let file = { Name: "", Type: "", Cover: "" };
   let viewer;
   let fileIndex = 1;
-  let filters = { filter: "" };
   let folderName = "";
 
   const saveFile = () => {
@@ -35,14 +34,12 @@
     socket.emit("file-update-pos", { Id, CurrentPos });
   };
 
+  const onFilter = ({ target: { value = "" } }) => {
+    playList = files.filter((f) => f.Name.contains(value));
+  };
+
   const selectFile = ({ target: { id } }) => {
     saveFile();
-    if (filters.filter) {
-      playList = files.filter((f) => f.Name.contains(filters.filter));
-    } else {
-      playList = files;
-    }
-
     navigate(`/${basePath}/${id}`);
   };
 
@@ -77,20 +74,10 @@
       window.title = playList[0]?.Cover?.split("/")[2] || "";
     }
   });
-  $: if (file.Id != lastId) {
-    lastId = file.Id;
-    showFileName();
-    socket?.emit("recent-folder", { CurrentFile: fileId, FolderId: folderId });
-  }
 
   const clearFilter = () => {
     playList = files;
   };
-
-  $: if (playList.length > 0) {
-    file = playList.find((f) => f.Id === fileId) || playList[0];
-    fileIndex = playList.findIndex((f) => f.Id === fileId);
-  }
 
   let runningClock;
   window.addEventListener("fullscreenchange", (e) => {
@@ -115,6 +102,21 @@
 
   onDestroy(() => (menu.style.display = "flex"));
 
+  const changePages = (page) => {
+    file.CurrentPos = page;
+  };
+
+  $: if (file.Id != lastId) {
+    lastId = file.Id;
+    showFileName();
+    socket?.emit("recent-folder", { CurrentFile: fileId, FolderId: folderId });
+  }
+
+  $: if (playList.length > 0) {
+    file = files.find((f) => f.Id === fileId) || files[0];
+    fileIndex = playList.findIndex((f) => f.Id === fileId);
+  }
+
   menu.style.display = "none";
 </script>
 
@@ -131,9 +133,9 @@
     </span>
     <div id="clock" />
   </span>
-  <PlayList {fileId} files={playList} on:click={selectFile} {filters} on:clearfilter={clearFilter} />
+  <PlayList {fileId} files={playList} on:click={selectFile} {onFilter} />
   {#if isManga(file)}
-    <MangaViewer {viewer} {file} on:changefile={changeFile} on:returnBack={returnBack} {KeyMap} />
+    <MangaViewer {viewer} {file} on:changefile={changeFile} on:returnBack={returnBack} {changePages} {KeyMap} />
   {:else if isVideo(file)}
     <VideoPLayer {file} {KeyMap} on:returnBack={returnBack} {viewer} />
   {/if}
