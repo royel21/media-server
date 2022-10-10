@@ -20,8 +20,11 @@
     }
 
     socket?.close();
-    if (isPwa()) history.go(-(history.length - 2));
-    location.href = "/";
+    if (isPwa()) {
+      history.go(-(history.length - 2));
+    } else {
+      location.href = "/";
+    }
   };
 
   onMount(async () => {
