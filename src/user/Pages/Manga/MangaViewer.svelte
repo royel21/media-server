@@ -223,7 +223,7 @@
     </div>
   </div>
   <div class="controls usn">
-    <span id="hide-player" on:click={returnTo}>
+    <span class="h-p" on:click={returnTo}>
       <i class="far fa-times-circle popup-msg" data-title="Close" />
     </span>
     <span class="web-toon">
@@ -451,6 +451,11 @@
 
   #manga-viewer.hide .viewer {
     padding: 0;
+  }
+
+  .h-p i {
+    position: relative;
+    top: 2px;
   }
 
   @media screen and (max-width: 600px) {

@@ -20,6 +20,7 @@ routes.get("/", async (req, res) => {
       "Type",
       "FirstInList",
       "IsAdult",
+      "IsLoading",
       [db.sqlze.literal("(Select COUNT(Folders.Id) from Folders where DirectoryId = Directory.Id)"), "FolderCount"],
       [db.sqlze.literal("(Select SUM(FileCount) from Folders where DirectoryId = Directory.Id)"), "TotalFiles"],
     ],

@@ -1,0 +1,1 @@
+rsync -av ./server/public/static/{admin,user} ./server/public/

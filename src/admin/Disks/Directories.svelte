@@ -8,6 +8,7 @@
   let msg = "";
   let dir;
   let showInput = false;
+  let count = 0;
 
   const reloadDir = ({ Id }) => {
     let dir = dirs.find((d) => d.Id === Id);
@@ -69,6 +70,9 @@
 
   onMount(async () => {
     dirs = await apiUtils.admin(["directories"]);
+    if (dirs) {
+      dirs.forEach((d) => (count += d.FolderCount));
+    }
 
     socket.on("reload", reloadDir);
     return () => {
@@ -85,7 +89,7 @@
         <th>Actions</th>
         <th>Name</th>
         <th>Type</th>
-        <th>Folder Count</th>
+        <th>Folder {count}</th>
         <th>Total Files</th>
         <th>Is Adult</th>
         <th>Order In Menu</th>
@@ -119,7 +123,7 @@
         </tr>
       {/each}
       <tr class="only">
-        <td colSpan="4">Not Directory Added</td>
+        <td colSpan="8">Go to Server and Select Root Directory of files</td>
       </tr>
     </tbody>
   </table>

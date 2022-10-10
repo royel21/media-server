@@ -5,6 +5,9 @@
         "src/**/*",
         "./*.js",
         "./*.json",
-        "./*.txt"
+        "./*.txt",
+        "./server/public/*/**",
+        "./*.sqlite",
+        "./*.db"
     ]
 }

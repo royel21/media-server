@@ -1,6 +1,7 @@
 import { join } from "path";
 import { existsSync, mkdirSync, readdirSync } from "fs";
 import { getVideoThumnail, ZipCover } from "./ThumbnailUtils.js";
+import db from "../models/index.js";
 
 var thumbnailBasePath = process.env.IMAGES;
 
@@ -27,6 +28,8 @@ export const genFileThumbnails = async (folders) => {
       files = readdirSync(thumbPath);
     }
 
+    let toUpdate = [];
+
     for (let file of folder.Files) {
       let Duration = 0;
 
@@ -45,7 +48,8 @@ export const genFileThumbnails = async (folders) => {
           }
 
           if (file.Duration !== Duration) {
-            await file.update({ Duration });
+            toUpdate.push({ Id: file.Id, Duration });
+            // await file.update({ Duration });
           }
         } catch (err) {
           console.log(folder.Path, file.Name, err);
@@ -53,6 +57,7 @@ export const genFileThumbnails = async (folders) => {
       }
       i++;
     }
+    await db.file.bulkCreate(toUpdate, { updateOnDuplicate: ["Duration"] });
   }
   console.log("-----100%-----");
   process.send({ event: "info", text: "-----100%-----" });

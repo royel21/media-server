@@ -90,7 +90,7 @@
     font-size: 20px;
     margin-right: 6px;
   }
-  .active i:not(.fa-trash-alt) {
+  .active i:not(.fa-trash-alt, .completed) {
     color: white;
   }
   .fas.completed {

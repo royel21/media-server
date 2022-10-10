@@ -19,7 +19,7 @@ const DataTypes = Sequelize.DataTypes;
 const { USERNAME, HOST, HOST2, DB_USER, PASSWORD, DB, CONNECTOR } = process.env;
 
 dbconfig[CONNECTOR].host = USERNAME === "rconsoro" ? HOST : HOST2;
-// config.logging = console.log;
+// dbconfig[CONNECTOR].logging = console.log;
 
 const sequelize = new Sequelize(DB, DB_USER, PASSWORD, dbconfig[CONNECTOR]);
 
@@ -103,6 +103,7 @@ db.init = async (force) => {
       },
       {
         include: [db.recent, db.favorite, db.userConfig],
+        encript: true,
       }
     );
   }

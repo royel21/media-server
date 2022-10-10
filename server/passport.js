@@ -32,7 +32,7 @@ export default () => {
         },
         include: [{ model: db.userConfig }, { model: db.recent }, { model: db.favorite, attributes: ["Id", "Name"] }],
       });
-      const isValid = user.validPassword(password);
+      const isValid = user?.validPassword(password);
       if (isValid) {
         done(null, user);
       } else {

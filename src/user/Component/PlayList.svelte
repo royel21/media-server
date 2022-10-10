@@ -52,10 +52,6 @@
     }
   };
 
-  const goToPage = (pg) => {
-    pageData.pg = clamp(pg.detail, 1, pageData.totalPages);
-  };
-
   const hidePlayList = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -78,13 +74,18 @@
     return files.slice(start, start + filePerPage);
   };
 
+  const goToPage = (pg) => {
+    pageData.pg = clamp(pg.detail - 1, 0, pageData.totalPages - 1);
+    list = sliceFiles(files);
+  };
+
   $: if (files.length) {
     pageData.totalFiles = files.length;
     pageData.pg = getPage();
     pageData.totalPages = Math.ceil(files.length / filePerPage);
   }
 
-  $: if (pageData.pg) {
+  $: if (!hideList) {
     list = sliceFiles(files);
   }
 </script>
@@ -120,7 +121,7 @@
   </div>
   {#if pageData.totalPages > 1}
     <div class="b-control">
-      <Pagination page={pageData.pg} totalPages={pageData.totalPages} on:gotopage={goToPage} hideFL={true} />
+      <Pagination page={pageData.pg + 1} totalPages={pageData.totalPages} on:gotopage={goToPage} hideFL={true} />
     </div>
   {/if}
 </div>
@@ -133,11 +134,11 @@
   #p-bg {
     display: none;
     position: absolute;
-    top: 36px;
+    top: 0;
     right: 220px;
     bottom: 34px;
     width: 100%;
-    z-index: 999;
+    z-index: 10;
   }
 
   label {
@@ -148,7 +149,7 @@
     right: 5px;
     bottom: 40px;
     transition: 0.3s all;
-    z-index: 10;
+    z-index: 11;
     background-color: black;
     padding: 4px 6px;
     border-radius: 0.25rem;

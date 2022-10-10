@@ -160,13 +160,13 @@ const renameFile = async ({ Id, Name }) => {
 
     try {
       if (fs.existsSync(fromFile)) {
-        fs.moveSync(fromFile, toFile);
+        fs.moveSync(fromFile, toFile, { overwrite: true });
 
         file.update({ Name, Cover: toCover });
 
         success = true;
         if (fs.existsSync(fromCover)) {
-          fs.moveSync(fromCover, toCover);
+          fs.moveSync(fromCover, toCover, { overwrite: true });
         }
         msg = `File ${file.Name} was rename to ${Name} successfully`;
       } else {
@@ -226,7 +226,6 @@ const removeFile = async ({ Id, Del }) => {
 const getCoverPath = (name) => path.join(ImagesPath, "Folder", name + ".jpg");
 
 const renameFolder = async ({ Id, Name, Description, Genres, Status, IsAdult, AltName }) => {
-  console.log(IsAdult);
   let folder = await db.folder.findOne({
     where: { Id },
     include: { model: db.directory },
@@ -244,11 +243,11 @@ const renameFolder = async ({ Id, Name, Description, Genres, Status, IsAdult, Al
         const Cover = getCoverPath(Name);
 
         if (fs.existsSync(oldPath)) {
-          fs.moveSync(oldPath, Path);
+          fs.moveSync(oldPath, Path, { overwrite: true });
           msg = "Folder Rename Successfully";
 
           let oldCover = getCoverPath(folder.Name);
-          if (fs.existsSync(oldCover)) fs.moveSync(oldCover, Cover);
+          if (fs.existsSync(oldCover)) fs.moveSync(oldCover, Cover, { overwrite: true });
         }
 
         await folder.update({ Name, Path, Cover, Description, Genres, Status, IsAdult, AltName });

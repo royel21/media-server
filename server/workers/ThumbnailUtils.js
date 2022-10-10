@@ -8,15 +8,18 @@ const IMGTYPES = /\.(jpg|jpeg|png|gif|webp)$/i;
 var ffmpeg = "ffmpeg";
 var ffprobe = "ffprobe";
 
+const sortByName = (a, b) => String(a.name).localeCompare(String(b.name));
+
 export const ZipCover = async (file, coverP, exist) => {
   let zipfile;
   try {
     zipfile = new StreamZip.async({ file });
-    const entries = Object.values(await zipfile.entries())
-      .sort((a, b) => String(a.name).localeCompare(String(b.name)))
-      .filter((entry) => !entry.isDirectory);
 
     if (!exist) {
+      const entries = Object.values(await zipfile.entries())
+        .sort(sortByName)
+        .filter((entry) => !entry.isDirectory);
+
       const firstImg = entries.find((e) => IMGTYPES.test(e.name) && e.size > 1024 * 30);
       if (firstImg) {
         const buff = await zipfile.entryData(firstImg);
@@ -32,15 +35,12 @@ export const ZipCover = async (file, coverP, exist) => {
         await sharData.jpeg({ quality: 75 }).resize(240).toFile(coverP);
       }
     }
-
+    const count = zipfile.entriesCount;
     await zipfile.close();
-    return entries.length;
+    return count;
   } catch (error) {
     console.log("thumbnail error", file, error);
-
-    if (zipfile) {
-      await zipfile.close();
-    }
+    await zipfile?.close();
     return 0;
   }
 };
