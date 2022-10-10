@@ -8,6 +8,12 @@
 
   let user = { username: "", password: "" };
 
+  function isPwa() {
+    return ["fullscreen", "standalone", "minimal-ui"].some(
+      (displayMode) => window.matchMedia("(display-mode: " + displayMode + ")").matches
+    );
+  }
+
   const getUrl = ({ role }) => `/${/admin/gi.test(role) ? "admin" : ""}`;
 
   const onError = (err) => {
@@ -51,7 +57,7 @@
       const data = await fetch("/api/users").then((response) => response.json());
       if (data.isAutenticated) {
         location.href = getUrl(data);
-      }
+      } else if (isPwa()) history.go(-(history.length - 2));
     } catch (err) {
       onError(err);
     }

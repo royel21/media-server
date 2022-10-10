@@ -6,12 +6,6 @@
   let socket;
   export let user = { username: "" };
 
-  function isPwa() {
-    return ["fullscreen", "standalone", "minimal-ui"].some(
-      (displayMode) => window.matchMedia("(display-mode: " + displayMode + ")").matches
-    );
-  }
-
   const logout = async () => {
     try {
       await fetch("/api/users/logout");
@@ -20,7 +14,6 @@
     }
 
     socket?.close();
-    if (isPwa()) history.go(-(history.length - 2));
     location.href = "/";
   };
 
