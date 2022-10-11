@@ -29,3 +29,6 @@ datas.json
 build/
 server/public/*
 ./images/*
+./backup/*
+backup/db1.json
+backup/db2.json
