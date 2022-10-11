@@ -7,7 +7,6 @@ const routes = Router();
 
 routes.get("/:page/:items/:filter?", async (req, res) => {
   const { page, items, filter } = req.params;
-  let filterTerm = filter || "";
 
   const limit = +items || 12;
 
@@ -22,7 +21,7 @@ routes.get("/:page/:items/:filter?", async (req, res) => {
     offset: ((+page || 1) - 1) * limit,
     limit,
     where: {
-      Name: getFilter(filterTerm),
+      Name: getFilter(filter),
     },
   };
 

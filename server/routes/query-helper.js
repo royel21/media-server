@@ -70,14 +70,13 @@ export const getFiles = async (user, data) => {
 
 export const getFolders = async (req, res) => {
   const { filetype, dirid, order, page, items, search } = req.params;
-  let filterTerm = search || "";
 
   let limit = +items || 16;
 
   let favs = req.user.Favorites.map((f) => f.Id).join("','");
 
   let favSelect = `( Select FolderId from FavoriteFolders where \`Folders\`.\`Id\` = FolderId and FavoriteId IN ('${favs}'))`;
-  let filter = getFilter(filterTerm);
+  let filter = getFilter(search);
   let query = {
     attributes: [
       "Id",

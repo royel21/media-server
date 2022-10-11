@@ -26,7 +26,7 @@ const getData = async ({ params }, res) => {
   // if contain folderId this is a file query we will need the folderId
   if (folderId) {
     query.where.FolderId = folderId;
-    query.where.Name = getFilter(filterTerm);
+    query.where.Name = filters;
     result = await db.file.findAndCountAll(query);
   } else {
     query.attributes.push("Path"); // add Path to folder query

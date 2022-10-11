@@ -11,7 +11,8 @@
     "build-linux": "vite build&&./move.sh",
     "server": "node server/app",
     "serv-dev": "nodemon server/app",
-    "updateDb": "node db.js"
+    "updateDb": "node db.js updateDb",
+    "saveDb": "node db.js saveDb"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.2",
