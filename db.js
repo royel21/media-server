@@ -19,7 +19,7 @@ const updateDb = async () => {
 
 const saveDb = async () => {
   let datas = [];
-  const folders = await db.folders.findAll();
+  const folders = await db.folder.findAll();
   for (let folder of folders) {
     if (!datas.find((f) => compare(f, folder))) {
       datas.push({
@@ -33,7 +33,7 @@ const saveDb = async () => {
     }
     i++;
   }
-  fs.writeJSONSync(`backup/${process.env.DB}.json`, data);
+  fs.writeJSONSync(`backup/${process.env.DB}.json`, datas);
   console.log("save", i);
 };
 
