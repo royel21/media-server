@@ -12,14 +12,14 @@ const updateDb = async () => {
       i++;
     }
   };
-
+  console.log(process.env.CDB);
   await update(fs.readJsonSync(`backup/${process.env.DB}.json`));
   console.log("update", i);
 };
 
 const saveDb = async () => {
   let datas = [];
-  const folders = await db.folder.findAll();
+  const folders = await db.folder.findAll({ order: ["Name"] });
   for (let folder of folders) {
     if (!datas.find((f) => compare(f, folder))) {
       datas.push({

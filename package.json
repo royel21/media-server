@@ -11,7 +11,7 @@
     "build-linux": "vite build&&./move.sh",
     "server": "node server/app",
     "serv-dev": "nodemon server/app",
-    "updateDb": "node db.js updateDb",
+    "updateDb": "set CDB=mediaserverdb&&node db.js updateDb",
     "saveDb": "node db.js saveDb"
   },
   "devDependencies": {

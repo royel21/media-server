@@ -21,9 +21,9 @@
 
     socket?.close();
     if (isPwa()) {
-      history.go(-(history.length - 2));
+      history.go(-(history.length - 1));
     } else {
-      location.href = "/";
+      location.href = "/login";
     }
   };
 
