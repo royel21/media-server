@@ -9,6 +9,7 @@
   let dir;
   let showInput = false;
   let count = 0;
+  let allFiles = 0;
 
   const reloadDir = ({ Id }) => {
     let dir = dirs.find((d) => d.Id === Id);
@@ -71,7 +72,10 @@
   onMount(async () => {
     dirs = await apiUtils.admin(["directories"]);
     if (dirs) {
-      dirs.forEach((d) => (count += d.FolderCount));
+      dirs.forEach((d) => {
+        count += d.FolderCount;
+        allFiles += d.TotalFiles;
+      });
     }
 
     socket.on("reload", reloadDir);
@@ -90,7 +94,7 @@
         <th>Name</th>
         <th>Type</th>
         <th>Folder {count}</th>
-        <th>Total Files</th>
+        <th>Total Files {allFiles}</th>
         <th>Is Adult</th>
         <th>Order In Menu</th>
         <th>Full Path</th>
@@ -157,8 +161,8 @@
   }
   th:nth-child(4),
   th:nth-child(5) {
-    width: 115px;
-    min-width: 115px;
+    min-width: 155px;
+    width: 155px;
   }
   td:nth-child(6),
   td:nth-child(7) {

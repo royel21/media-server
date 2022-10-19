@@ -9,6 +9,8 @@ import path from "path";
 import WinDrive from "win-explorer";
 import db from "../models/index.js";
 
+let folders = [];
+
 Date.prototype.Compare = function (d) {
   d = new Date(d);
   if (d instanceof Date) {
@@ -31,11 +33,10 @@ if (path.join(ThumbnailPath, "Folder")) {
 }
 
 const sendMessage = (text, event = "info") => {
-  // console.log(text);
   process.send({ event, text });
 };
 
-const rmOrphanFiles = async (folders, folder) => {
+const rmOrphanFiles = async (Id, isFolder, folder) => {
   if (folder) {
     const tfiles = fs.readdirSync(folder.Path);
     for (const file of folder.Files) {
@@ -52,7 +53,7 @@ const rmOrphanFiles = async (folders, folder) => {
   } else {
     for (const f of folders) {
       if (f.IsNoEmpty) {
-        await rmOrphanFiles(null, f);
+        await rmOrphanFiles(null, true, f);
       } else {
         try {
           await f.destroy();
@@ -92,40 +93,27 @@ const createFolderThumbnail = async (folder, files) => {
 };
 
 const createFolder = async ({ Name, Path, LastModified }, files) => {
-  let folder = {};
-  try {
-    const FilesType = /rar|zip/gi.test(files[0].Extension) ? "mangas" : "videos";
-    const FileCount = files.length;
-    const data = {
-      Name,
-      Path,
-      FileCount,
-      DirectoryId,
-      FilesType,
-      CreatedAt: LastModified,
-    };
-    folder = await db.folder.create(data);
-  } catch (error) {
-    console.log(Name, error.toString());
-    folder = await db.folder.findOne({ where: { Name, Path } });
-    await folder.destroy();
-    folder = await db.folder.create(data);
-  }
-  return folder;
+  const FilesType = /rar|zip/gi.test(files[0].Extension) ? "mangas" : "videos";
+  const FileCount = files.length;
+
+  return db.folder.create({
+    Name,
+    Path,
+    FileCount,
+    DirectoryId,
+    FilesType,
+    CreatedAt: LastModified,
+  });
 };
 
-const scanFolder = async (curfolder, files, first, folders) => {
+const scanFolder = async (curfolder, files) => {
   let isNoNewFolder = true;
 
+  let folder = folders.find((fd) => fd.Path === curfolder.Path);
+
+  let folderFiles = [];
+
   let filteredFiles = files.filter((f) => ValidFiles.test(f.Name) && !f.isHidden);
-
-  if (!filteredFiles.length && !first) {
-    console.log(curfolder.Path);
-    return;
-  }
-
-  let folder = folders.find((f) => f.Path === curfolder.Path || f.Name === curfolder.Name);
-
   if (folder) {
     //if folder is alrady create update file count if needed
     if (folder.FileCount !== filteredFiles.length) {
@@ -133,11 +121,13 @@ const scanFolder = async (curfolder, files, first, folders) => {
     }
 
     if (!folder.CreatedAt.Compare(curfolder.LastModified)) {
-      await folder.update({ CreatedAt: curfolder.LastModified });
+      folder.update({ CreatedAt: curfolder.LastModified });
     }
+
+    folderFiles = await folder.Files;
   } else if (filteredFiles.length) {
     folder = await createFolder(curfolder, filteredFiles);
-    folder.Files = [];
+
     isNoNewFolder = false;
   }
 
@@ -148,9 +138,9 @@ const scanFolder = async (curfolder, files, first, folders) => {
   let tempFiles = [];
   for (const f of files) {
     if (f.isDirectory) {
-      await scanFolder(f, f.Files, false, folders);
+      await scanFolder(f, f.Files);
       //Check if file is in folder
-    } else if (!folder.Files.find((fd) => fd.Name === f.Name) && ValidFiles.test(f.Name)) {
+    } else if (!folderFiles.find((fd) => fd.Name === f.Name) && ValidFiles.test(f.Name)) {
       const Type = /rar|zip/gi.test(f.Extension) ? "Manga" : "Video";
       tempFiles.push({
         Name: f.Name,
@@ -163,7 +153,9 @@ const scanFolder = async (curfolder, files, first, folders) => {
   }
 
   if (tempFiles.length) {
-    await db.file.bulkCreate(tempFiles);
+    console.log("create", curfolder.Name);
+    folder.Files = [...(await db.file.bulkCreate(tempFiles)), ...folder.Files];
+    folders.push(folder);
     if (isNoNewFolder) {
       await folder.update({ CreatedAt: new Date() });
     }
@@ -172,38 +164,44 @@ const scanFolder = async (curfolder, files, first, folders) => {
 
 const getFolders = async (id, isFolder) => {
   return db.folder.findAll({
-    attributes: ["Id", "Name", "FileCount", "CreatedAt"],
+    order: ["Path"],
+    attributes: ["Id", "Name", "FileCount", "CreatedAt", "FilesType", "Path"],
     where: isFolder ? { Id: id } : { DirectoryId: id },
     include: { model: db.file, attributes: ["Id", "Name", "Type"] },
   });
 };
 
-export const scanDirectory = async ({ id, dir, isFolder }) => {
+const scanDirectory = async ({ id, dir, isFolder }) => {
   DirectoryId = id;
   console.log(dir);
   if (fs.existsSync(dir)) {
     const fis = WinDrive.ListFilesRO(dir);
+    console.time("m1");
     let folder = WinDrive.ListFiles(dir, { oneFile: true });
     folder.Path = dir;
-    sendMessage("cleaning direcory");
-
-    console.time("time");
-    let folders = await getFolders(id, isFolder);
-    console.timeEnd("time");
-
-    rmOrphanFiles(folders);
-
-    sendMessage("scanning directory");
-    console.time("time");
-    await scanFolder(folder, fis, true, folders);
-    console.timeEnd("time");
-    sendMessage("Creating thumbnails");
-    await genFolderThumbnails(foldersPendingCover);
 
     folders = await getFolders(id, isFolder);
+    console.timeEnd("m1");
+
+    console.time("m2");
+    sendMessage("cleaning direcory");
+    await rmOrphanFiles(id, isFolder);
+    console.timeEnd("m2");
+
+    sendMessage("scanning directory");
+    console.time("m3");
+    await scanFolder(folder, fis);
+    console.timeEnd("m3");
+    sendMessage("creating folder thumbnails");
+    await genFolderThumbnails(foldersPendingCover);
+
+    sendMessage("creating files thumbnails");
+    console.time("m4");
+
     await genFileThumbnails(folders, sendMessage);
+    console.timeEnd("m4");
   } else {
-    sendMessage("Direcotry Not found:" + dir);
+    sendMessage("Not found:", dir);
   }
   sendMessage("scan-finish", "scan-finish");
 };
