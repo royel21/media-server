@@ -121,7 +121,7 @@ const scanFolder = async (curfolder, files) => {
     }
 
     if (!folder.CreatedAt.Compare(curfolder.LastModified)) {
-      folder.update({ CreatedAt: curfolder.LastModified });
+      await folder.update({ CreatedAt: curfolder.LastModified });
     }
 
     folderFiles = await folder.Files;
