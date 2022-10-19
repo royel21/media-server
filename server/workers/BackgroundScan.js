@@ -155,11 +155,13 @@ const scanFolder = async (curfolder, files) => {
   if (tempFiles.length) {
     console.log("create", curfolder.Name);
     await db.file.bulkCreate(tempFiles);
-    folder.Files = await folder.getFiles();
-    folders.push(folder);
+
     if (isNoNewFolder) {
       await folder.update({ CreatedAt: new Date() });
+    } else {
+      folder.Files = await folder.getFiles();
     }
+    folders.push(folder);
   }
 };
 
