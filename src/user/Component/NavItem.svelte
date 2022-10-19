@@ -24,14 +24,14 @@
     <i class={"fas fa-" + item.class} />
     <span class="nav-title">{item.title}</span>
     <ul class="down-list">
-      {#each items as { Id, Name, First }}
+      {#each items as { Id, Name, IsAdult }}
         <li
           class="list-item"
           id={Id}
           class:selected={Id === selectedId}
           on:click={selectDir}
           title={item.title}
-          class:adult={First}
+          class:adult={IsAdult}
         >
           {Name}
         </li>
@@ -62,10 +62,13 @@
     font-weight: bold;
     font-size: 12px;
   }
-
-  .adult {
-    border-top: 1px solid;
+  .down-list li:not(:last-child) {
+    border-bottom: 1px solid;
   }
+  .adult {
+    background-color: firebrick;
+  }
+
   .nav-item:hover,
   .down-list li:hover {
     background-color: rgb(2 177 242);

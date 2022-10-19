@@ -6,6 +6,7 @@
   import Folders from "./Folders/Folders.svelte";
   import DiskManager from "./Disks/DiskManager.svelte";
   import Files from "./FilesManager/Files.svelte";
+  import Redirect from "./Component/Redirect.svelte";
 
   let logout = getContext("logout");
   let user = getContext("User");
@@ -36,6 +37,7 @@
     <Route path="/admin/content-manager/:tab" component={DiskManager} />
     <Route path="/admin/files/:page/:filter" component={Files} />
     <Route path="/admin/" component={User} />
+    <Route path="/"><Redirect to="/admin/" /></Route>
   </div>
 </Router>
 

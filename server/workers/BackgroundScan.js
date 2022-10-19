@@ -30,7 +30,12 @@ if (path.join(ThumbnailPath, "Folder")) {
   fs.mkdirsSync(path.join(ThumbnailPath, "Video"));
 }
 
-const rmOrphanFiles = async (Id, isFolder, folder) => {
+const sendMessage = (text, event = "info") => {
+  // console.log(text);
+  process.send({ event, text });
+};
+
+const rmOrphanFiles = async (folders, folder) => {
   if (folder) {
     const tfiles = fs.readdirSync(folder.Path);
     for (const file of folder.Files) {
@@ -45,13 +50,9 @@ const rmOrphanFiles = async (Id, isFolder, folder) => {
       }
     }
   } else {
-    const folders = await db.folder.findAll({
-      where: isFolder ? { Id } : { DirectoryId },
-      include: { model: db.file, attributes: ["Id", "Name", "Type"] },
-    });
     for (const f of folders) {
       if (f.IsNoEmpty) {
-        await rmOrphanFiles(null, true, f);
+        await rmOrphanFiles(null, f);
       } else {
         try {
           await f.destroy();
@@ -91,28 +92,39 @@ const createFolderThumbnail = async (folder, files) => {
 };
 
 const createFolder = async ({ Name, Path, LastModified }, files) => {
-  const FilesType = /rar|zip/gi.test(files[0].Extension) ? "mangas" : "videos";
-  const FileCount = files.length;
-
-  return db.folder.create({
-    Name,
-    Path,
-    FileCount,
-    DirectoryId,
-    Cover: "/Folder/" + Name + ".jpg",
-    FilesType,
-    CreatedAt: LastModified,
-  });
+  let folder = {};
+  try {
+    const FilesType = /rar|zip/gi.test(files[0].Extension) ? "mangas" : "videos";
+    const FileCount = files.length;
+    const data = {
+      Name,
+      Path,
+      FileCount,
+      DirectoryId,
+      FilesType,
+      CreatedAt: LastModified,
+    };
+    folder = await db.folder.create(data);
+  } catch (error) {
+    console.log(Name, error.toString());
+    folder = await db.folder.findOne({ where: { Name, Path } });
+    await folder.destroy();
+    folder = await db.folder.create(data);
+  }
+  return folder;
 };
 
-const scanFolder = async (curfolder, files) => {
+const scanFolder = async (curfolder, files, first, folders) => {
   let isNoNewFolder = true;
 
-  let folder = await db.folder.findOne({ where: { Path: curfolder.Path } });
-
-  let folderFiles = [];
-
   let filteredFiles = files.filter((f) => ValidFiles.test(f.Name) && !f.isHidden);
+
+  if (!filteredFiles.length && !first) {
+    console.log(curfolder.Path);
+    return;
+  }
+
+  let folder = folders.find((f) => f.Path === curfolder.Path || f.Name === curfolder.Name);
 
   if (folder) {
     //if folder is alrady create update file count if needed
@@ -121,13 +133,11 @@ const scanFolder = async (curfolder, files) => {
     }
 
     if (!folder.CreatedAt.Compare(curfolder.LastModified)) {
-      folder.update({ CreatedAt: curfolder.LastModified });
+      await folder.update({ CreatedAt: curfolder.LastModified });
     }
-
-    folderFiles = await folder.getFiles();
   } else if (filteredFiles.length) {
     folder = await createFolder(curfolder, filteredFiles);
-
+    folder.Files = [];
     isNoNewFolder = false;
   }
 
@@ -138,9 +148,9 @@ const scanFolder = async (curfolder, files) => {
   let tempFiles = [];
   for (const f of files) {
     if (f.isDirectory) {
-      await scanFolder(f, f.Files);
+      await scanFolder(f, f.Files, false, folders);
       //Check if file is in folder
-    } else if (!folderFiles.find((fd) => fd.Name === f.Name) && ValidFiles.test(f.Name)) {
+    } else if (!folder.Files.find((fd) => fd.Name === f.Name) && ValidFiles.test(f.Name)) {
       const Type = /rar|zip/gi.test(f.Extension) ? "Manga" : "Video";
       tempFiles.push({
         Name: f.Name,
@@ -148,7 +158,6 @@ const scanFolder = async (curfolder, files) => {
         FolderId: folder.Id,
         Size: f.Size,
         CreatedAt: f.LastModified,
-        Cover: `/${Type}/${folder.Name}/${f.Name}.jpg`,
       });
     }
   }
@@ -161,36 +170,42 @@ const scanFolder = async (curfolder, files) => {
   }
 };
 
-const scanDirectory = async ({ id, dir, isFolder }) => {
+const getFolders = async (id, isFolder) => {
+  return db.folder.findAll({
+    attributes: ["Id", "Name", "FileCount", "CreatedAt"],
+    where: isFolder ? { Id: id } : { DirectoryId: id },
+    include: { model: db.file, attributes: ["Id", "Name", "Type"] },
+  });
+};
+
+export const scanDirectory = async ({ id, dir, isFolder }) => {
   DirectoryId = id;
   console.log(dir);
   if (fs.existsSync(dir)) {
     const fis = WinDrive.ListFilesRO(dir);
     let folder = WinDrive.ListFiles(dir, { oneFile: true });
     folder.Path = dir;
-    console.log("cleaning direcory");
-    process.send({ event: "info", text: "cleaning direcory" });
-    await rmOrphanFiles(id, isFolder);
-    console.log("scanning directory");
-    process.send({ event: "info", text: "scanning directory" });
-    await scanFolder(folder, fis);
-    console.log("creating folder thumbnails");
-    process.send({ event: "info", text: "creating folder thumbnails" });
+    sendMessage("cleaning direcory");
+
+    console.time("time");
+    let folders = await getFolders(id, isFolder);
+    console.timeEnd("time");
+
+    rmOrphanFiles(folders);
+
+    sendMessage("scanning directory");
+    console.time("time");
+    await scanFolder(folder, fis, true, folders);
+    console.timeEnd("time");
+    sendMessage("Creating thumbnails");
     await genFolderThumbnails(foldersPendingCover);
 
-    console.log("creating files thumbnails");
-
-    let folders = await db.folder.findAll({
-      order: ["Path"],
-      where: isFolder ? { Id: id } : { DirectoryId: id }, // query base on FolderId or DirectoryId
-      include: { model: db.file, order: ["Name"] },
-    });
-
-    await genFileThumbnails(folders);
+    folders = await getFolders(id, isFolder);
+    await genFileThumbnails(folders, sendMessage);
   } else {
-    console.log("Not found:", dir);
+    sendMessage("Direcotry Not found:" + dir);
   }
-  process.send({ event: "scan-finish", text: "scan-finish" });
+  sendMessage("scan-finish", "scan-finish");
 };
 
 const pendingJobs = [];

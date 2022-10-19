@@ -12,6 +12,7 @@
     "server": "node server/app",
     "serv-dev": "nodemon server/app",
     "updateDb": "set CDB=mediaserverdb&&node db.js updateDb",
+    "updateAd_Db": "set CDB=mediaserver_adultdb&&node db.js updateDb",
     "saveDb": "node db.js saveDb"
   },
   "devDependencies": {

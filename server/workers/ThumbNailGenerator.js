@@ -5,18 +5,14 @@ import db from "../models/index.js";
 
 var thumbnailBasePath = process.env.IMAGES;
 
-export const genFileThumbnails = async (folders) => {
+export const genFileThumbnails = async (folders, sendMessage) => {
   let total = 0;
   let i = 0;
 
   folders.forEach((f) => (total += f.Files.length));
 
   for (let folder of folders) {
-    console.log(`${parseFloat((i++ / total) * 100).toFixed(2)}% - ${folder.Name}`);
-    process.send({
-      event: "info",
-      text: `${parseFloat((i++ / total) * 100).toFixed(2)}% - ${folder.Name}`,
-    });
+    sendMessage(`${parseFloat((i / total) * 100).toFixed(2)}% - ${folder.Name}`);
 
     let files = [];
 
@@ -49,7 +45,6 @@ export const genFileThumbnails = async (folders) => {
 
           if (file.Duration !== Duration) {
             toUpdate.push({ Id: file.Id, Duration });
-            // await file.update({ Duration });
           }
         } catch (err) {
           console.log(folder.Path, file.Name, err);
@@ -59,8 +54,7 @@ export const genFileThumbnails = async (folders) => {
     }
     await db.file.bulkCreate(toUpdate, { updateOnDuplicate: ["Duration"] });
   }
-  console.log("-----100%-----");
-  process.send({ event: "info", text: "-----100%-----" });
+  sendMessage("-----100%-----");
 };
 
 export const genFolderThumbnails = async (folders) => {

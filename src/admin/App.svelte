@@ -3,8 +3,6 @@
   import ConfigPage from "../ConfigPage.svelte";
 </script>
 
-<div id="root">
-  <ConfigPage>
-    <AdminRoutes />
-  </ConfigPage>
-</div>
+<ConfigPage>
+  <AdminRoutes />
+</ConfigPage>
