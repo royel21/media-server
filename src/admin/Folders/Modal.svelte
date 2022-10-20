@@ -3,10 +3,12 @@
   import { fade } from "svelte/transition";
   import apiUtils from "../../apiUtils";
   import CheckBox from "../Component/CheckBox.svelte";
+  import Select from "../Component/Select.svelte";
   import Input from "./TextAreaInput.svelte";
 
   export let file;
   export let modalType;
+  let options = [];
 
   onMount(async () => {
     if (file.Type === "Folder") {
@@ -15,8 +17,14 @@
       file.Genres = data.Genres;
       file.AltName = data.AltName;
       file.IsAdult = data.IsAdult;
+      options = data.dirs.map((d) => ({ Id: d.Id, Name: d.FullPath }));
     }
   });
+
+  const onChange = ({ target: { name, value, checked, type } }) => {
+    if (type === "checkbox") value = checked;
+    file[name] = value;
+  };
 </script>
 
 <div class="modal-container">
@@ -45,6 +53,10 @@
             <Input {file} key="Description" rows="4" />
             <CheckBox label="Completed" key="Status" item={file} my="5px" />
             <CheckBox label="Is Adult" key="IsAdult" item={file} />
+            <CheckBox mt="5px" key="Transfer" item={file} {onChange} />
+            {#if file.Transfer}
+              <Select label="Directories" mt="5px" key="DirectoryId" {options} item={file} />
+            {/if}
           {/if}
         {/if}
       </div>

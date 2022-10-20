@@ -25,7 +25,6 @@ export const genFileThumbnails = async (folders, sendMessage) => {
     }
 
     let toUpdate = [];
-
     for (let file of folder.Files) {
       let Duration = 0;
 

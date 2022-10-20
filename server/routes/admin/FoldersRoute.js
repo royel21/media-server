@@ -53,11 +53,13 @@ const getData = async ({ params }, res) => {
 
 routes.get("/folder/:folderId", async (req, res) => {
   const folder = await db.folder.findOne({ where: { Id: req.params.folderId || "" } });
+  const dirs = await db.directory.findAll({ order: ["Name"] });
   res.send({
     Description: folder?.Description,
     Genres: folder?.Genres,
     AltName: folder.AltName,
     IsAdult: folder.IsAdult,
+    dirs,
   });
 });
 

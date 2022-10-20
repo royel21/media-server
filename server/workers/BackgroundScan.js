@@ -170,7 +170,7 @@ const getFolders = async (id, isFolder) => {
     order: ["Path"],
     attributes: ["Id", "Name", "FileCount", "CreatedAt", "FilesType", "Path"],
     where: isFolder ? { Id: id } : { DirectoryId: id },
-    include: { model: db.file, attributes: ["Id", "Name", "Type"] },
+    include: { model: db.file, attributes: ["Id", "Name", "Type", "Duration"] },
   });
 };
 

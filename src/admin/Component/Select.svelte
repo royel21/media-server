@@ -12,14 +12,13 @@
   export let my = 0;
 
   let style = `margin: ${mt || my} ${mr || mx} ${mb || my} ${ml || mx};`;
-  /*margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; */
 </script>
 
-<div class="check-control">
-  <span class="check-label" {style}>{label || key}</span>
+<div class="check-control" {style}>
+  <span class="check-label">{label || key}</span>
   <select bind:value={item[key]} class="select-control" style="width: ${labelWidth};">
-    {#each options as { value, name }}
-      <option {value}>{name}</option>
+    {#each options as { Id, Name }}
+      <option value={Id}>{Name}</option>
     {/each}
   </select>
 </div>
@@ -43,7 +42,7 @@
     line-height: 1.8;
   }
   .select-control {
-    text-align: center;
+    text-align: left;
     flex-grow: 1;
     margin: 0;
     font-size: 18px;

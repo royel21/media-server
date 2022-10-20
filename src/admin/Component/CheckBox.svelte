@@ -9,13 +9,16 @@
   export let mr = 0;
   export let mx = 0;
   export let my = 0;
+  export let onChange = (e) => {};
 
   let style = `margin: ${mt || my} ${mr || mx} ${mb || my} ${ml || mx};`;
 </script>
 
 <div class="check-control" {style}>
-  <span class="check-label" style="width: ${labelWidth};">{label}</span>
-  <label class={`fas fa-${item[key] ? "check" : "times"}`}><input type="checkbox" bind:checked={item[key]} /> </label>
+  <span class="check-label" style="width: ${labelWidth};">{label || key}</span>
+  <label class={`fas fa-${item[key] ? "check" : "times"}`}>
+    <input type="checkbox" bind:checked={item[key]} on:change={onChange} />
+  </label>
 </div>
 
 <style>

@@ -225,7 +225,7 @@ const removeFile = async ({ Id, Del }) => {
 
 const getCoverPath = (name) => path.join(ImagesPath, "Folder", name + ".jpg");
 
-const renameFolder = async ({ Id, Name, Description, Genres, Status, IsAdult, AltName }) => {
+const renameFolder = async ({ Id, Name, Description, Genres, Status, IsAdult, AltName, Transfer, DirectoryId }) => {
   let folder = await db.folder.findOne({
     where: { Id },
     include: { model: db.directory },
@@ -259,6 +259,21 @@ const renameFolder = async ({ Id, Name, Description, Genres, Status, IsAdult, Al
       success = true;
       await folder.update({ Description, Genres, Status, IsAdult, AltName });
     }
+
+    if (Transfer) {
+      const dir = await db.directory.findOne({ where: { Id: DirectoryId } });
+      if (dir) {
+        const oldPath = folder.Path;
+        const newPath = folder.Path.replace(folder.Directory.FullPath, dir.FullPath);
+        try {
+          fs.moveSync(oldPath, newPath);
+          folder.update({ DirectoryId, Path: newPath });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+
     await folder.reload();
     io.sockets.emit("folder-renamed", { Id, success, msg, folder: { ...folder.dataValues } });
   }
