@@ -23,8 +23,10 @@
   let progress = `${file.CurrentPos + 1}/${file.Duration}`;
   let images = [file.Duration];
   let imgContainer;
+  let viewerRef;
   let inputPage;
   let isFullscreen = false;
+  controls.webtoon = webtoon;
 
   let viewerState = {
     isLoading: false,
@@ -137,7 +139,7 @@
 
   $: progress = `${parseInt(file.CurrentPos) + 1}/${file.Duration}`;
 
-  $: {
+  $: if (controls.webtoon !== webtoon) {
     controls.webtoon = webtoon;
     if (webtoon) {
       connectObservers(50);
@@ -175,11 +177,25 @@
       viewerState.lastfId = file.Id;
       scrollInView(file.CurrentPos);
     }
-
-    if (!webtoon) {
-      disconnectObvrs(imgContainer);
-    }
+    viewerRef.onwheel = scroller;
   });
+
+  function scroller(event) {
+    const scrollable = document.querySelector(".scrollable");
+    if (scrollable) {
+      switch (event.deltaMode) {
+        case 0: //DOM_DELTA_PIXEL		Chrome
+          scrollable.scrollTop += event.deltaY;
+          break;
+        case 1: //DOM_DELTA_LINE		Firefox
+          scrollable.scrollTop += 15 * event.deltaY;
+          break;
+        case 2: //DOM_DELTA_PAGE
+          scrollable.scrollTop += 0.03 * event.deltaY;
+          break;
+      }
+    }
+  }
 
   $: localStorage.setItem("webtoon", webtoon);
 </script>
@@ -189,18 +205,17 @@
     <i class="fas fa-sticky-note" />
     {progress}
   </span>
-  <div class="viewer" class:isFullscreen>
+  <div class="viewer" class:isFullscreen bind:this={viewerRef}>
     <div
+      class="img-current scrollable"
+      class:webtoon-img={webtoon}
+      bind:this={imgContainer}
+      style={`width: ${isMobile ? 100 : config.width}%;`}
       on:touchstart|passive={onTouchStart}
       on:touchend|passive={onTouchEnd}
       on:mousedown={onTouchStart}
       on:mouseup={onTouchEnd}
       on:touchmove|passive={onTouchMove}
-      class="img-current"
-      class:webtoon-img={webtoon}
-      bind:this={imgContainer}
-      style={`width: ${isMobile ? 100 : config.width}%;`}
-      tabindex="0"
     >
       {#if !webtoon}
         <img
@@ -339,13 +354,13 @@
   }
 
   #manga-viewer .viewer {
+    position: relative;
     display: flex;
     justify-content: center;
     height: 100%;
     width: 100%;
     padding-bottom: 33px;
   }
-
   #manga-viewer .img-current {
     display: flex;
     justify-content: center;

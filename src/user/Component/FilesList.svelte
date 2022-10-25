@@ -22,6 +22,8 @@
   export let setLastRead;
   export let setFolderInfo;
   export let handleClick;
+  let ver = 1;
+  let folder;
 
   let selected = +localStorage.getItem(title) || 0;
 
@@ -39,8 +41,10 @@
 
     if (data.valid) {
       pageData = data;
+
       if (data.files[0] && setFolderInfo && setLastRead) {
         setFolderInfo(data.folder);
+        folder = data.folder.Name;
         setLastRead(data.folder.currentFile);
       }
       selected = pageData.files.findIndex((f) => f.Id === data.currentFile) || 0;
@@ -108,8 +112,14 @@
 
   const reloadDir = (data) => {
     if (data.Id === id && user.Id === data.user) {
-      loadContent(page, filter, id, $PageConfig, type);
+      loadContent(page, filter, id, $PageConfig, type).then(() => ver++);
     }
+  };
+
+  const getCover = (Type, Name) => {
+    if (folder) Name = `${folder}/${Name}`;
+
+    return encodeURI(`/${Type}/${Name}.jpg`);
   };
 
   onMount(() => {
@@ -129,7 +139,7 @@
 <div class="scroll-container" class:r-content={isContent}>
   <slot name="header" />
   <div class="files-list" on:keydown={handleKeydown} on:click={favClick}>
-    {#each pageData.files as { Id, Name, Type, Cover, CurrentPos, Duration, isFav, FileCount, Status }, i}
+    {#each pageData.files as { Id, Name, Type, CurrentPos, Duration, isFav, FileCount, Status }, i}
       <div class="file" id={Id} data-type={Type} tabIndex="0" in:fade>
         <div class="file-info">
           <div class="file-btns usn">
@@ -146,7 +156,7 @@
             <FavoriteList {isFav} {type} {Type} {favClicked} favId={id} on:removeFile={removeFile} />
           </div>
           <div class="file-cover usn" on:dblclick|stopPropagation={openFile}>
-            <img src={Cover} alt="No Cover Found" />
+            <img src={getCover(Type, Name) + `?v=${ver}`} alt="No Cover Found" />
             {#if Type.includes("Folder")}
               <span class:completed={Status}>{Status ? "Completed" : "OnGoing"}</span>
             {/if}

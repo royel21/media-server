@@ -142,6 +142,7 @@ const scanFolder = async (curfolder, files) => {
       //Check if file is in folder
     } else if (!folderFiles.find((fd) => fd.Name === f.Name) && ValidFiles.test(f.Name)) {
       const Type = /rar|zip/gi.test(f.Extension) ? "Manga" : "Video";
+
       tempFiles.push({
         Name: f.Name,
         Type,
@@ -153,14 +154,12 @@ const scanFolder = async (curfolder, files) => {
   }
 
   if (tempFiles.length) {
-    console.log("create", curfolder.Name);
     await db.file.bulkCreate(tempFiles);
 
     if (isNoNewFolder) {
       await folder.update({ CreatedAt: new Date() });
-    } else {
-      folder.Files = await folder.getFiles();
     }
+    folder.Files = await folder.getFiles();
     folders.push(folder);
   }
 };

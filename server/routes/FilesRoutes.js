@@ -7,7 +7,6 @@ import { getFilter } from "./utils.js";
 
 const routes = Router();
 
-const sortName = (a, b) => a.Name.localeCompare(b.Name);
 const { literal } = db.sqlze;
 
 routes.get("/folder-content/:id/:order/:page?/:items?/:search?", async (req, res) => {
@@ -18,14 +17,19 @@ routes.get("/folder-content/:id/:order/:page?/:items?/:search?", async (req, res
   try {
     data = await getFiles(req.user, { id, order, page, items, search }, db.folder);
     const folder = await db.folder.findOne({
-      attributes: {
-        include: [[literal("(Select currentFile from RecentFolders where FolderId = `Folders`.`Id`)"), "currentFile"]],
-      },
+      attributes: [
+        "Id",
+        "Name",
+        "Description",
+        "Status",
+        "Genres",
+        [literal("(Select currentFile from RecentFolders where FolderId = `Folders`.`Id`)"), "currentFile"],
+      ],
       where: { Id: id },
     });
 
     res.json({
-      files: data.rows.map((d) => ({ ...d.dataValues, Cover: encodeURI(`/${d.Type}/${folder.Name}/${d.Name}.jpg`) })),
+      files: data.rows.map((d) => ({ ...d.dataValues })),
       totalFiles: data.count,
       totalPages: Math.ceil(data.count / items),
       folder: { ...folder.dataValues, Cover: encodeURI(folder.Cover) },

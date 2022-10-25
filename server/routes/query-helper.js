@@ -26,7 +26,6 @@ export const getOrderBy = (orderby, table = "") => {
 };
 
 export const getFiles = async (user, data) => {
-  let files = { count: 0, rows: [] };
   let searchs = [];
   let search = data.search || "";
 
@@ -37,19 +36,9 @@ export const getFiles = async (user, data) => {
       },
     });
   }
-  const LastRead = "(Select LastRead from RecentFiles where FileId = File.Id and RecentId = '" + user.Recent.Id + "')";
 
   let query = {
-    attributes: [
-      "Id",
-      "Name",
-      "Type",
-      "Duration",
-      "Cover",
-      "CreatedAt",
-      qryCurrentPos(user.Recent, "File"),
-      [literal(LastRead), "LastRead"],
-    ],
+    attributes: ["Id", "Name", "Type", "Duration", "Cover", "CreatedAt", qryCurrentPos(user.Recent, "File")],
     order: getOrderBy(data.order, "File"),
     offset: (data.page - 1) * +data.items,
     limit: +data.items,
