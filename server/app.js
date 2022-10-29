@@ -1,4 +1,4 @@
-import https from "https";
+import https from "http";
 import express from "express";
 import path from "path";
 import session from "express-session";
@@ -119,14 +119,14 @@ db.init().then(() => {
   let server = https
     .createServer(
       {
-        key: fs.readFileSync(global.appPath + "/security/localhost.key"),
-        cert: fs.readFileSync(global.appPath + "/security/localhost.crt"),
+        // key: fs.readFileSync(global.appPath + "/security/localhost.key"),
+        // cert: fs.readFileSync(global.appPath + "/security/localhost.crt"),
       },
       app
     )
     .listen(port, host);
 
-  console.log(`Node server is running.. at https://${host}:${port}`);
+  console.log(`Node server is running.. at http://${host}:${port}`);
 
   return websocketConfig(server, sessionMeddle);
 });
