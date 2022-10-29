@@ -31,3 +31,4 @@ server/public/*
 ./images/*
 backup/*
 /server/security/*
+note.txt
