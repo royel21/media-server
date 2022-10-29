@@ -113,6 +113,7 @@
 
   const onConfig = (cfg) => (config = cfg);
 
+  // receive data from server
   const onImageData = (data) => {
     if (data.id === file.Id) {
       if (!data.last) {
@@ -120,7 +121,8 @@
       } else {
         viewerState.loading = false;
         if (viewerState.jumping) {
-          connectObservers(50);
+          PageObserver(changePages, imgContainer, loadImages, viewerState);
+          scrollImageLoader(loadImages, imgContainer, file.CurrentPos);
         }
       }
     }
@@ -177,25 +179,7 @@
       viewerState.lastfId = file.Id;
       scrollInView(file.CurrentPos);
     }
-    viewerRef.onwheel = scroller;
   });
-
-  function scroller(event) {
-    const scrollable = document.querySelector(".scrollable");
-    if (scrollable) {
-      switch (event.deltaMode) {
-        case 0: //DOM_DELTA_PIXEL		Chrome
-          scrollable.scrollTop += event.deltaY;
-          break;
-        case 1: //DOM_DELTA_LINE		Firefox
-          scrollable.scrollTop += 15 * event.deltaY;
-          break;
-        case 2: //DOM_DELTA_PAGE
-          scrollable.scrollTop += 0.03 * event.deltaY;
-          break;
-      }
-    }
-  }
 
   $: localStorage.setItem("webtoon", webtoon);
 </script>

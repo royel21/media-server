@@ -24,6 +24,7 @@
   let fullPathPos = {};
 
   const loadFolders = async (pg) => {
+    let flt = filter.replace(/|:|\?|\^|"|\*|<|>|\t|\n/gi, "");
     let data = await apiUtils.admin(["folders", pg, calRows(), filter]);
     if (data.items) {
       let tmp = data.items[0];

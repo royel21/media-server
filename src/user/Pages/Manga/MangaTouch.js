@@ -6,10 +6,12 @@ let touching = false;
 let drag = false;
 let moveY = { dis: 0, dir: 0 };
 let moveX = { dis: 0, dir: 0 };
+let scroller;
 
 let controls = { nextPage: "", prevPage: "", nextFile: "", prevFile: "" };
 
 export const onTouchStart = (e) => {
+  scroller = e.currentTarget;
   touching = true;
   tStart = e.timeStamp;
   let { pageX, pageY } = (e.touches && e.touches[0]) || e;
@@ -42,9 +44,10 @@ export const onTouchEnd = (e) => {
   if (!drag) {
     tEnd = e.timeStamp;
     let elapsed = tEnd - tStart;
-    if (elapsed > 70) {
-      let ww = window.innerWidth;
-      let wh = window.innerHeight;
+    let ww = window.innerWidth;
+    let wh = window.innerHeight;
+
+    if (elapsed > 70 && point.x - scroller?.offsetLeft < scroller?.offsetWidth - 15) {
       // Top
       if (point.y < wh * 0.33) {
         if (point.x < ww * 0.33) {

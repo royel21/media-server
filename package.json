@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "concurrently \"yarn run serv-dev\" \"yarn run vite-dev\" ",
     "vite-dev": "vite",
-    "build": "vite build",
     "build-win": "vite build&&move.bat",
     "build-linux": "vite build&&./move.sh",
     "server": "node server/app",

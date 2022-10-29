@@ -1,0 +1,2 @@
+openssl req -x509 -out localhost.crt -keyout localhost.key -newkey rsa:2048 -nodes -sha256 -subj '/CN=10.0.0.12t' -extensions EXT -config <( \
+printf "O = RCStudio\nOU = RCStudio\n[dn]\nCN=10.0.0.12\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:10.0.0.12t\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")

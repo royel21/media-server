@@ -1,4 +1,4 @@
-import https from "http";
+import https from "https";
 import express from "express";
 import path from "path";
 import session from "express-session";
@@ -10,6 +10,7 @@ import compression from "compression";
 import passportConfig from "./passport.js";
 import websocketConfig from "./websocket/socketio-server.js";
 import { fileURLToPath } from "url";
+import fs from "fs";
 
 config();
 
@@ -113,19 +114,19 @@ app.use((e, _, res, __) => {
 const { PORT, PORT2, IP, HOME_IP } = process.env;
 const host = process.env.USERNAME === "rconsoro" ? IP : HOME_IP;
 const port = process.env.USERNAME === "rconsoro" ? PORT2 : PORT;
-
+console.log(path.resolve("./security/key.pem"));
 db.init().then(() => {
   let server = https
     .createServer(
       {
-        // key: fs.readFileSync("./cert/key.pem"),
-        // cert: fs.readFileSync("./cert/cert.pem")
+        key: fs.readFileSync(global.appPath + "/security/localhost.key"),
+        cert: fs.readFileSync(global.appPath + "/security/localhost.crt"),
       },
       app
     )
     .listen(port, host);
 
-  console.log(`Node server is running.. at http://${host}:${port}`);
+  console.log(`Node server is running.. at https://${host}:${port}`);
 
   return websocketConfig(server, sessionMeddle);
 });

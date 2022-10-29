@@ -2,20 +2,27 @@
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
   export let filter = "";
+  let inputRef;
+
+  const send = (text) => dispatch("filter", (text || "").trim().replace(/%|\?/, ""));
 
   const ClearFilter = () => {
-    dispatch("filter", "");
+    send("");
     filter = "";
   };
 
   const submitFilter = (e) => {
     if (e.keyCode === 13) {
-      dispatch("filter", (filter || "").trim().replace(/%|\?/, ""));
+      send(filter);
     }
   };
 
-  const btnFilter = () => {
-    dispatch("filter", (filter || "").trim().replace(/%|\?/, ""));
+  const btnFilter = async () => {
+    let text = await navigator.clipboard?.readText();
+    if (text) {
+      filter = text;
+      send(filter);
+    }
   };
 </script>
 
@@ -26,6 +33,7 @@
     </span>
   </div>
   <input
+    bind:this={inputRef}
     type="text"
     class="form-control filter-file"
     placeholder="Filter"
