@@ -30,4 +30,4 @@ build/
 server/public/*
 ./images/*
 backup/*
-/server/security/*.pem
+/server/security/*
