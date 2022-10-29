@@ -1,4 +1,3 @@
-import https from "http";
 import express from "express";
 import path from "path";
 import session from "express-session";
@@ -45,7 +44,7 @@ app.use(
 );
 
 app.use(express.static(process.env.IMAGES));
-app.use(express.static(global.appPath + "/public/static"));
+app.use(express.static(global.appPath + "/public/static", { dotfiles: "allow" }));
 
 const sessionMeddle = session({
   name: process.env.SESSION,
@@ -116,15 +115,17 @@ const host = process.env.USERNAME === "rconsoro" ? IP : HOME_IP;
 const port = process.env.USERNAME === "rconsoro" ? PORT2 : PORT;
 console.log(path.resolve("./security/key.pem"));
 db.init().then(() => {
-  let server = https
-    .createServer(
-      {
-        // key: fs.readFileSync(global.appPath + "/security/localhost.key"),
-        // cert: fs.readFileSync(global.appPath + "/security/localhost.crt"),
-      },
-      app
-    )
-    .listen(port, host);
+  // let server = https
+  //   .createServer(
+  //     {
+  //       cert: fs.readFileSync("server/security/fullchain.pem"),
+  //       key: fs.readFileSync("server/security/privkey.pem"),
+  //     },
+  //     app
+  //   )
+  //   .listen(port, host);
+
+  let server = app.listen(port, host);
 
   console.log(`Node server is running.. at http://${host}:${port}`);
 

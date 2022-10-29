@@ -18,11 +18,13 @@
   };
 
   const btnFilter = async () => {
-    let text = await navigator.clipboard?.readText();
-    if (text) {
+    let text = "";
+    try {
+      text = await navigator.clipboard?.readText();
       filter = text;
-      send(filter);
-    }
+    } catch (err) {}
+
+    send(filter);
   };
 </script>
 
