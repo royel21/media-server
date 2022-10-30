@@ -95,20 +95,23 @@ export default (sequelize, DataTypes) => {
         },
         beforeUpdate: async function (item, opt) {
           let old = item._previousDataValues.Path;
-
           if (opt.Name && old !== item.Path && fs.existsSync(old)) {
+            //move or rename folder
             fs.moveSync(old, item.Path, { overwrite: true });
 
             let oldCover = getCoverPath(opt.Name);
             const Cover = getCoverPath(item.Name);
+            //rename cover name
             if (fs.existsSync(oldCover) && Cover !== oldCover) {
               fs.moveSync(oldCover, Cover, { overwrite: true });
             }
-
-            const thumbsPath = `${ImagesPath}/${getFileType(item)}/${opt.Name}`;
-            if (fs.existsSync(thumbsPath)) {
-              const newthumbsPath = thumbsPath.replace(opt.Name, item.Name);
-              fs.moveSync(thumbsPath, newthumbsPath);
+            //Rename Folder for thumbnail
+            if (opt.Name !== item.Name) {
+              const thumbsPath = `${ImagesPath}/${getFileType(item)}/${opt.Name}`;
+              if (fs.existsSync(thumbsPath)) {
+                const newthumbsPath = thumbsPath.replace(opt.Name, item.Name);
+                fs.moveSync(thumbsPath, newthumbsPath);
+              }
             }
           }
         },

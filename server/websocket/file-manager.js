@@ -236,7 +236,7 @@ const renameFolder = async ({ Id, Name, Description, Genres, Status, IsAdult, Al
       if (dir) {
         const newPath = folder.Path.replace(folder.Directory.FullPath, dir.FullPath);
         try {
-          folder.update({ DirectoryId, Path: newPath }, { Name: folder.Name });
+          await folder.update({ DirectoryId, Path: newPath }, { Name: folder.Name });
         } catch (error) {
           console.log(error);
         }

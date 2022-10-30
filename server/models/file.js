@@ -76,13 +76,19 @@ export default (sequelize, DataTypes) => {
         beforeDestroy: async function (item, opt) {
           console.log(opt);
           if (opt.Del) {
-            const folder = await item.getFolder();
-            //Delete File
-            const fPath = `${folder.Path}/${item.Name}`;
-            if (fs.existsSync(fPath)) fs.removeSync(fPath);
-            //Delete Cover
-            const cover = `${ImagesPath}/${folder.Name}/${item.Name}.jpg`;
-            if (fs.existsSync(cover)) fs.removeSync(cover);
+            try {
+              const folder = await item.getFolder();
+              if (folder) {
+                //Delete File
+                const fPath = `${folder.Path}/${item.Name}`;
+                if (fs.existsSync(fPath)) fs.removeSync(fPath);
+                //Delete Cover
+                const cover = `${ImagesPath}/${folder.Name}/${item.Name}.jpg`;
+                if (fs.existsSync(cover)) fs.removeSync(cover);
+              }
+            } catch (error) {
+              console.log(error);
+            }
           }
         },
       },

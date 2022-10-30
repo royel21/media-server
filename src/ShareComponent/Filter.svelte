@@ -2,12 +2,14 @@
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
   export let filter = "";
-  let inputRef;
 
   const send = (text = "") => {
     filter = text;
-    let ftl = text.replace("’", "'").replace(/:|%|\?|\"/gi, "");
-    dispatch("filter", (ftl || "").trim());
+    let ftl = text
+      .replace("’", "'")
+      .replace(/:|\?|\"/gi, "")
+      .trim();
+    dispatch("filter", encodeURI(ftl));
   };
 
   const ClearFilter = () => send("");
@@ -32,7 +34,6 @@
     </span>
   </div>
   <input
-    bind:this={inputRef}
     type="text"
     class="form-control filter-file"
     placeholder="Filter"
