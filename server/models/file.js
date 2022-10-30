@@ -1,6 +1,8 @@
 import path from "path";
-import fs from "fs";
+import fs from "fs-extra";
 import { nanoid } from "nanoid";
+
+const ImagesPath = process.env.IMAGES;
 
 export default (sequelize, DataTypes) => {
   const { INTEGER, STRING, DATE, FLOAT, VIRTUAL } = DataTypes;
@@ -66,9 +68,20 @@ export default (sequelize, DataTypes) => {
         beforeValidate: function (item) {
           item.Id = nanoid(10);
         },
-        beforeBulkCreate(instances) {
-          for (var item of instances) {
+        beforeBulkCreate: function (items) {
+          for (var item of items) {
             item.Id = nanoid(10);
+          }
+        },
+        beforeDelete: async function (item) {
+          if (Del) {
+            const folder = await item.getFolder();
+            //Delete File
+            const fPath = `${folder.Path}/${item.Name}`;
+            if (fs.existsSync(fPath)) fs.removeSync(fPath);
+            //Delete Cover
+            const cover = `${ImagesPath}/${folder.Name}/${item.Name}.jpg`;
+            if (fs.existsSync(cover)) fs.removeSync(cover);
           }
         },
       },

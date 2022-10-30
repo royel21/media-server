@@ -193,26 +193,9 @@ const removeFile = async ({ Id, Del }) => {
 
   if (file) {
     try {
-      message.success = true;
-      if (Del) {
-        let cover = path.join(ImagesPath, file.Cover);
-
-        if (fs.existsSync(cover)) fs.removeSync(cover);
-
-        let fPath = path.join(file.Folder.Path, file.Name);
-
-        if (fs.existsSync(fPath)) {
-          fs.removeSync(fPath);
-
-          message.msg = `File ${file.Name} removed from server`;
-        } else {
-          message.msg = `File Don't exit on server was only remove from db`;
-        }
-      } else {
-        message.msg = `File ${file.Name} removed from DB`;
-      }
-      await file.destroy();
+      await file.destroy({ Del });
       await file.Folder.update({ FileCount: file.Folder.FileCount - 1 });
+      message.success = true;
     } catch (err) {
       console.log(err);
       message.msg = "Server Error 500";

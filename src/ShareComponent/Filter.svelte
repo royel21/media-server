@@ -21,10 +21,12 @@
     let text = "";
     try {
       text = await navigator.clipboard?.readText();
-      filter = text;
     } catch (err) {}
 
-    send(filter);
+    if (text) {
+      filter = text.replace("’", "'").replace(/:|\?|\"/gi, "");
+      send(filter);
+    }
   };
 </script>
 
