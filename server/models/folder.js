@@ -1,5 +1,6 @@
-import { readdirSync, existsSync } from "fs";
+import fs from "fs-extra";
 import { nanoid } from "nanoid";
+import { getCoverPath, getFileType, ImagesPath } from "./utils.js";
 
 export default (sequelize, DataTypes) => {
   const { INTEGER, STRING, DATE, TEXT, BOOLEAN, VIRTUAL } = DataTypes;
@@ -32,13 +33,13 @@ export default (sequelize, DataTypes) => {
       Exists: {
         type: VIRTUAL,
         get() {
-          return existsSync(this.Path || "");
+          return fs.existsSync(this.Path || "");
         },
       },
       IsNoEmpty: {
         type: VIRTUAL,
         get() {
-          return this.Exists && readdirSync(this.Path).length;
+          return this.Exists && fs.readdirSync(this.Path).length;
         },
       },
       Cover: {
@@ -90,6 +91,40 @@ export default (sequelize, DataTypes) => {
         beforeBulkCreate: (instances) => {
           for (var item of instances) {
             item.Id = nanoid(6);
+          }
+        },
+        beforeUpdate: async function (item, opt) {
+          let old = item._previousDataValues.Path;
+
+          if (opt.Name && old !== item.Path && fs.existsSync(old)) {
+            fs.moveSync(old, item.Path, { overwrite: true });
+
+            let oldCover = getCoverPath(opt.Name);
+            const Cover = getCoverPath(item.Name);
+            if (fs.existsSync(oldCover) && Cover !== oldCover) {
+              fs.moveSync(oldCover, Cover, { overwrite: true });
+            }
+
+            const thumbsPath = `${ImagesPath}/${getFileType(item)}/${opt.Name}`;
+            if (fs.existsSync(thumbsPath)) {
+              const newthumbsPath = thumbsPath.replace(opt.Name, item.Name);
+              fs.moveSync(thumbsPath, newthumbsPath);
+            }
+          }
+        },
+        beforeDestroy: async function (item, opt) {
+          if (opt.Del) {
+            let cPath = getCoverPath(item.Name);
+
+            //Remove Cover from images
+            if (fs.existsSync(cPath)) fs.removeSync(cPath);
+
+            //Remove files Thumbnails from images folder
+            const imagesFolder = `${ImagesPath}/${getFileType(item)}/${item.Name}`;
+            if (fs.existsSync(imagesFolder)) fs.removeSync(imagesFolder);
+
+            //Remove folder from disk
+            if (fs.existsSync(item.Path)) fs.removeSync(item.Path);
           }
         },
       },

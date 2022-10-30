@@ -9,7 +9,6 @@ import compression from "compression";
 import passportConfig from "./passport.js";
 import websocketConfig from "./websocket/socketio-server.js";
 import { fileURLToPath } from "url";
-import fs from "fs";
 
 config();
 
@@ -113,18 +112,8 @@ app.use((e, _, res, __) => {
 const { PORT, PORT2, IP, HOME_IP } = process.env;
 const host = process.env.USERNAME === "rconsoro" ? IP : HOME_IP;
 const port = process.env.USERNAME === "rconsoro" ? PORT2 : PORT;
-console.log(path.resolve("./security/key.pem"));
-db.init().then(() => {
-  // let server = https
-  //   .createServer(
-  //     {
-  //       cert: fs.readFileSync("server/security/fullchain.pem"),
-  //       key: fs.readFileSync("server/security/privkey.pem"),
-  //     },
-  //     app
-  //   )
-  //   .listen(port, host);
 
+db.init().then(() => {
   let server = app.listen(port, host);
 
   console.log(`Node server is running.. at http://${host}:${port}`);

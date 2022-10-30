@@ -4,29 +4,24 @@
   export let filter = "";
   let inputRef;
 
-  const send = (text) => dispatch("filter", (text || "").trim().replace(/%|\?/, ""));
-
-  const ClearFilter = () => {
-    send("");
-    filter = "";
+  const send = (text = "") => {
+    filter = text;
+    let ftl = text.replace("’", "'").replace(/:|%|\?|\"/gi, "");
+    dispatch("filter", (ftl || "").trim());
   };
 
+  const ClearFilter = () => send("");
+
   const submitFilter = (e) => {
-    if (e.keyCode === 13) {
-      send(filter);
-    }
+    if (e.keyCode === 13) send(filter);
   };
 
   const btnFilter = async () => {
-    let text = "";
-    try {
-      text = await navigator.clipboard?.readText();
-    } catch (err) {}
-
-    if (text) {
-      filter = text.replace("’", "'").replace(/:|\?|\"/gi, "");
-      send(filter);
+    let text = (await navigator.clipboard?.readText()) || "";
+    if (!text) {
+      text = filter;
     }
+    send(text);
   };
 </script>
 

@@ -12,8 +12,8 @@
   };
 
   const options = [
-    { name: "Mangas", value: "Mangas" },
-    { name: "Videos", value: "Videos" },
+    { Name: "Mangas", Id: "Mangas" },
+    { Name: "Videos", Id: "Videos" },
   ];
 
   const create = () => {

@@ -73,8 +73,9 @@ export default (sequelize, DataTypes) => {
             item.Id = nanoid(10);
           }
         },
-        beforeDelete: async function (item) {
-          if (Del) {
+        beforeDestroy: async function (item, opt) {
+          console.log(opt);
+          if (opt.Del) {
             const folder = await item.getFolder();
             //Delete File
             const fPath = `${folder.Path}/${item.Name}`;

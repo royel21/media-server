@@ -5,6 +5,7 @@ import path from "path";
 import winEx from "win-explorer";
 import { nanoid } from "nanoid";
 import db from "../models/index.js";
+import { getCoverPath } from "../models/utils.js";
 
 var io;
 
@@ -162,7 +163,7 @@ const renameFile = async ({ Id, Name }) => {
       if (fs.existsSync(fromFile)) {
         fs.moveSync(fromFile, toFile, { overwrite: true });
 
-        file.update({ Name, Cover: toCover });
+        file.update({ Name, Cover: toCover }, { Name: folder.Name });
 
         success = true;
         if (fs.existsSync(fromCover)) {
@@ -206,8 +207,6 @@ const removeFile = async ({ Id, Del }) => {
   io.sockets.emit("file-removed", message);
 };
 
-const getCoverPath = (name) => path.join(ImagesPath, "Folder", name + ".jpg");
-
 const renameFolder = async ({ Id, Name, Description, Genres, Status, IsAdult, AltName, Transfer, DirectoryId }) => {
   let folder = await db.folder.findOne({
     where: { Id },
@@ -219,21 +218,10 @@ const renameFolder = async ({ Id, Name, Description, Genres, Status, IsAdult, Al
   if (folder) {
     if (folder.Name !== Name) {
       try {
-        let basePath = folder.Directory.FullPath;
+        const Path = folder.Path.replace(folder.Name, Name);
 
-        const oldPath = path.join(basePath, folder.Name);
-        const Path = path.join(basePath, Name);
-        const Cover = getCoverPath(Name);
-
-        if (fs.existsSync(oldPath)) {
-          fs.moveSync(oldPath, Path, { overwrite: true });
-          msg = "Folder Rename Successfully";
-
-          let oldCover = getCoverPath(folder.Name);
-          if (fs.existsSync(oldCover)) fs.moveSync(oldCover, Cover, { overwrite: true });
-        }
-
-        await folder.update({ Name, Path, Cover, Description, Genres, Status, IsAdult, AltName });
+        await folder.update({ Name, Path, Description, Genres, Status, IsAdult, AltName }, { Name: folder.Name });
+        msg = "Folder Rename Successfully";
         success = true;
       } catch (err) {
         console.log(err);
@@ -246,11 +234,9 @@ const renameFolder = async ({ Id, Name, Description, Genres, Status, IsAdult, Al
     if (Transfer) {
       const dir = await db.directory.findOne({ where: { Id: DirectoryId } });
       if (dir) {
-        const oldPath = folder.Path;
         const newPath = folder.Path.replace(folder.Directory.FullPath, dir.FullPath);
         try {
-          fs.moveSync(oldPath, newPath);
-          folder.update({ DirectoryId, Path: newPath });
+          folder.update({ DirectoryId, Path: newPath }, { Name: folder.Name });
         } catch (error) {
           console.log(error);
         }
@@ -262,38 +248,18 @@ const renameFolder = async ({ Id, Name, Description, Genres, Status, IsAdult, Al
   }
 };
 
-const getFileType = ({ FilesType }) => (FilesType === "mangas" ? "Manga" : "Video");
-
 const removeFolder = async ({ Id, Del }) => {
   let folder = await db.folder.findByPk(Id);
   let success = false;
-  if (folder) {
-    try {
-      if (Del) {
-        //Remove Folder Thumbnail from images folder
-        let cPath = getCoverPath(folder.Name);
 
-        if (fs.existsSync(cPath)) {
-          fs.removeSync(cPath);
-        }
-
-        //Remove files Thumbnails from images folder
-        const imagesFolder = `${ImagesPath}/${getFileType(folder)}/${folder.Name}`;
-        if (fs.existsSync(imagesFolder)) {
-          fs.removeSync(imagesFolder);
-        }
-
-        //Remove All Files from Disk
-        if (fs.existsSync(folder.Path)) {
-          fs.removeSync(folder.Path);
-        }
-      }
-      // remove from Database
-      await folder.destroy();
+  try {
+    // remove from Database and Disk
+    if (folder) {
+      await folder.destroy({ Del });
       success = true;
-    } catch (err) {
-      console.log(err);
     }
+  } catch (err) {
+    console.log(err);
   }
   io.sockets.emit("folder-removed", { success, Id });
 };

@@ -43,7 +43,7 @@ const rmOrphanFiles = async (Id, isFolder, folder) => {
       if (folder.Path && file.Name) {
         if (!tfiles.includes(file.Name)) {
           try {
-            await file.destroy();
+            await file.destroy({ Del: true });
           } catch (error) {
             console.log(folder.Path, file.Name, error.toString());
           }
@@ -56,7 +56,7 @@ const rmOrphanFiles = async (Id, isFolder, folder) => {
         await rmOrphanFiles(null, true, f);
       } else {
         try {
-          await f.destroy();
+          await f.destroy({ Del: true });
         } catch (error) {
           console.log(f.Name, error.toString());
         }

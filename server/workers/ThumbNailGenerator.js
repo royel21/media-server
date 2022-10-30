@@ -14,44 +14,46 @@ export const genFileThumbnails = async (folders, sendMessage) => {
   for (let folder of folders) {
     sendMessage(`${parseFloat((i / total) * 100).toFixed(2)}% - ${folder.Name}`);
 
-    let files = [];
+    if (existsSync(folder.Path)) {
+      let files = [];
 
-    let thumbPath = join(thumbnailBasePath, folder.FilesType.includes("mangas") ? "Manga" : "Video", folder.Name);
+      let thumbPath = join(thumbnailBasePath, folder.FilesType.includes("mangas") ? "Manga" : "Video", folder.Name);
 
-    if (!existsSync(thumbPath)) {
-      mkdirSync(thumbPath);
-    } else {
-      files = readdirSync(thumbPath);
-    }
-
-    let toUpdate = [];
-    for (let file of folder.Files) {
-      let Duration = 0;
-
-      let exist = files.includes(file.Name + ".jpg");
-
-      if (file.Duration === 0 || !exist) {
-        try {
-          let filePath = join(folder.Path, file.Name);
-
-          let coverPath = join(thumbPath, file.Name + ".jpg");
-
-          if (file.Type.includes("Manga")) {
-            Duration = await ZipCover(filePath, coverPath, exist);
-          } else {
-            Duration = await getVideoThumnail(filePath, coverPath, exist);
-          }
-
-          if (file.Duration !== Duration) {
-            toUpdate.push({ Id: file.Id, Duration });
-          }
-        } catch (err) {
-          console.log(folder.Path, file.Name, err);
-        }
+      if (!existsSync(thumbPath)) {
+        mkdirSync(thumbPath);
+      } else {
+        files = readdirSync(thumbPath);
       }
-      i++;
+
+      let toUpdate = [];
+      for (let file of folder.Files) {
+        let Duration = 0;
+
+        let exist = files.includes(file.Name + ".jpg");
+
+        if (file.Duration === 0 || !exist) {
+          try {
+            let filePath = join(folder.Path, file.Name);
+
+            let coverPath = join(thumbPath, file.Name + ".jpg");
+
+            if (file.Type.includes("Manga")) {
+              Duration = await ZipCover(filePath, coverPath, exist);
+            } else {
+              Duration = await getVideoThumnail(filePath, coverPath, exist);
+            }
+
+            if (file.Duration !== Duration) {
+              toUpdate.push({ Id: file.Id, Duration });
+            }
+          } catch (err) {
+            console.log(folder.Path, file.Name, err);
+          }
+        }
+        i++;
+      }
+      await db.file.bulkCreate(toUpdate, { updateOnDuplicate: ["Duration"] });
     }
-    await db.file.bulkCreate(toUpdate, { updateOnDuplicate: ["Duration"] });
   }
   sendMessage("-----100%-----");
 };
