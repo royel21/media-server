@@ -74,7 +74,6 @@ export default (sequelize, DataTypes) => {
           }
         },
         beforeDestroy: async function (item, opt) {
-          console.log(opt);
           if (opt.Del) {
             try {
               const folder = await item.getFolder();

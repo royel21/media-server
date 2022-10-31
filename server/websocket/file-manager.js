@@ -163,7 +163,7 @@ const renameFile = async ({ Id, Name }) => {
       if (fs.existsSync(fromFile)) {
         fs.moveSync(fromFile, toFile, { overwrite: true });
 
-        file.update({ Name, Cover: toCover }, { Name: folder.Name });
+        file.update({ Name, Cover: toCover }, { Name: file.Folder.Name });
 
         success = true;
         if (fs.existsSync(fromCover)) {
