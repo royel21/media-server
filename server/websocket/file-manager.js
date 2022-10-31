@@ -5,11 +5,8 @@ import path from "path";
 import winEx from "win-explorer";
 import { nanoid } from "nanoid";
 import db from "../models/index.js";
-import { getCoverPath } from "../models/utils.js";
 
 var io;
-
-const ImagesPath = process.env.IMAGES;
 
 const setSocket = (_io) => (io = _io);
 
@@ -96,7 +93,7 @@ const loadContent = (data) => {
 const scanDir = async ({ Id, Path, Type, isFolder, IsAdult }, user) => {
   //If is it root of disk return;
   if (!Id && !Path) return io.sockets.emit("scan-info", "Id And Path both can't be null");
-  if (/^([a-z]:\\|^\/)$/gi.test(path)) io.sockets.emit("scan-info", "Can't add root of a disk");
+  if (/^([a-z]:\\|^\/)$/gi.test(path)) return io.sockets.emit("scan-info", "Can't add root of a disk");
 
   let msg;
   try {
@@ -153,30 +150,9 @@ const renameFile = async ({ Id, Name }) => {
   let success = false;
   let msg = "File was not found";
   if (file) {
-    let fromFile = path.join(file.Folder.Path, file.Name);
-    let toFile = path.join(file.Folder.Path, Name);
-
-    let fromCover = path.join(ImagesPath, file.Cover);
-    let toCover = fromCover.replace(file.Name, Name);
-
-    try {
-      if (fs.existsSync(fromFile)) {
-        fs.moveSync(fromFile, toFile, { overwrite: true });
-
-        file.update({ Name, Cover: toCover }, { Name: file.Folder.Name });
-
-        success = true;
-        if (fs.existsSync(fromCover)) {
-          fs.moveSync(fromCover, toCover, { overwrite: true });
-        }
-        msg = `File ${file.Name} was rename to ${Name} successfully`;
-      } else {
-        msg = `File ${file.Name} not found on server`;
-      }
-    } catch (err) {
-      console.log(err);
-      msg = err.toString();
-    }
+    await file.update({ Name });
+    success = true;
+    msg = `File ${file.Name} was rename to ${Name} successfully`;
   } else {
     msg = "File not found on db";
   }
@@ -195,7 +171,9 @@ const removeFile = async ({ Id, Del }) => {
   if (file) {
     try {
       await file.destroy({ Del });
-      await file.Folder.update({ FileCount: file.Folder.FileCount - 1 });
+      if (file.Folder.FileCount > 1) {
+        await file.Folder.update({ FileCount: file.Folder.FileCount - 1 });
+      }
       message.success = true;
     } catch (err) {
       console.log(err);
@@ -213,37 +191,37 @@ const renameFolder = async ({ Id, Name, Description, Genres, Status, IsAdult, Al
     include: { model: db.directory },
   });
 
-  let success = false;
-  let msg = "Folder not found on DB";
   if (folder) {
-    if (folder.Name !== Name) {
-      try {
-        const Path = folder.Path.replace(folder.Name, Name);
+    let data;
+    let success = false;
+    let msg = "Folder not found on DB";
 
-        await folder.update({ Name, Path, Description, Genres, Status, IsAdult, AltName }, { Name: folder.Name });
-        msg = "Folder Rename Successfully";
-        success = true;
-      } catch (err) {
-        console.log(err);
-      }
+    if (folder.Name !== Name) {
+      const Path = folder.Path.replace(folder.Name, Name);
+
+      data = { Name, Path, Description, Genres, Status, IsAdult, AltName };
+      msg = "Folder Rename Successfully";
+      success = true;
     } else {
       success = true;
-      await folder.update({ Description, Genres, Status, IsAdult, AltName });
+      data = { Description, Genres, Status, IsAdult, AltName };
     }
 
     if (Transfer) {
       const dir = await db.directory.findOne({ where: { Id: DirectoryId } });
       if (dir) {
         const newPath = folder.Path.replace(folder.Directory.FullPath, dir.FullPath);
-        try {
-          await folder.update({ DirectoryId, Path: newPath }, { Name: folder.Name });
-        } catch (error) {
-          console.log(error);
-        }
+        data = { DirectoryId, Path: newPath };
       }
     }
 
-    await folder.reload();
+    try {
+      await folder.update(data, { Name: folder.Name });
+      await folder.reload();
+    } catch (error) {
+      console.log(error);
+    }
+
     io.sockets.emit("folder-renamed", { Id, success, msg, folder: { ...folder.dataValues } });
   }
 };

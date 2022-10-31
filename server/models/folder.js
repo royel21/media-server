@@ -1,8 +1,11 @@
 import fs from "fs-extra";
 import { nanoid } from "nanoid";
-import { getCoverPath, getFileType, ImagesPath } from "./utils.js";
+import path from "path";
 
-export default (sequelize, DataTypes) => {
+export default (sequelize, DataTypes, ImagesPath) => {
+  const getFileType = ({ FilesType }) => (FilesType === "mangas" ? "Manga" : "Video");
+  const getCoverPath = (name) => path.join(ImagesPath, "Folder", name + ".jpg");
+
   const { INTEGER, STRING, DATE, TEXT, BOOLEAN, VIRTUAL } = DataTypes;
   const Folder = sequelize.define(
     "Folders",

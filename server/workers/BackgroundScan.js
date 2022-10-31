@@ -76,7 +76,7 @@ const createFolderThumbnail = async (folder, files) => {
       //if folder contain a image use as thumbnail
       if (img) {
         let imgPath = path.join(folder.Path, img.Name);
-        await sharp(imgPath).jpeg({ quality: 75 }).resize(240).toFile(CoverPath);
+        await sharp(imgPath).jpeg().resize(240).toFile(CoverPath);
       } else {
         //else push to list of folder for later process of thumbnail from first file
         foldersPendingCover.push({

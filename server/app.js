@@ -113,12 +113,9 @@ const { PORT, PORT2, IP, HOME_IP } = process.env;
 const host = process.env.USERNAME === "rconsoro" ? IP : HOME_IP;
 const port = process.env.USERNAME === "rconsoro" ? PORT2 : PORT;
 
+console.log(process.env.NODE_ENV, host, port);
+
 db.init().then(() => {
-  let server = app.listen(port, host);
-
+  websocketConfig(app.listen(port, host), sessionMeddle);
   console.log(`Node server is running.. at http://${host}:${port}`);
-
-  return websocketConfig(server, sessionMeddle);
 });
-
-console.log(process.env.NODE_ENV, port);

@@ -2,9 +2,7 @@ import path from "path";
 import fs from "fs-extra";
 import { nanoid } from "nanoid";
 
-const ImagesPath = process.env.IMAGES;
-
-export default (sequelize, DataTypes) => {
+export default (sequelize, DataTypes, ImagesPath) => {
   const { INTEGER, STRING, DATE, FLOAT, VIRTUAL } = DataTypes;
   const File = sequelize.define(
     "File",
@@ -73,6 +71,26 @@ export default (sequelize, DataTypes) => {
             item.Id = nanoid(10);
           }
         },
+        beforeUpdate: async function (item) {
+          const oldName = item._previousDataValues.Name;
+          if (item.Name !== oldName) {
+            const folder = await item.getFolder();
+            if (folder) {
+              const fromFile = path.join(folder.Path, oldName);
+              if (fs.existsSync(fromFile)) {
+                const toFile = path.join(folder.Path, item.Name);
+                fs.moveSync(fromFile, toFile);
+              }
+
+              const oldCover = `${ImagesPath}/Manga/${folder.Name}/${oldName}.jpg`;
+              console.log(oldCover);
+              if (fs.existsSync(oldCover)) {
+                const cover = `${ImagesPath}/Manga/${folder.Name}/${item.Name}.jpg`;
+                fs.moveSync(oldCover, cover);
+              }
+            }
+          }
+        },
         beforeDestroy: async function (item, opt) {
           if (opt.Del) {
             try {
@@ -82,7 +100,7 @@ export default (sequelize, DataTypes) => {
                 const fPath = `${folder.Path}/${item.Name}`;
                 if (fs.existsSync(fPath)) fs.removeSync(fPath);
                 //Delete Cover
-                const cover = `${ImagesPath}/${folder.Name}/${item.Name}.jpg`;
+                const cover = `${ImagesPath}/Manga/${folder.Name}/${item.Name}.jpg`;
                 if (fs.existsSync(cover)) fs.removeSync(cover);
               }
             } catch (error) {

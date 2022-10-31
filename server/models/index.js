@@ -16,7 +16,7 @@ config();
 
 const DataTypes = Sequelize.DataTypes;
 
-const { USERNAME, HOST, HOST2, DB_USER, PASSWORD, DB, CONNECTOR } = process.env;
+const { USERNAME, HOST, HOST2, DB_USER, PASSWORD, DB, CONNECTOR, IMAGES } = process.env;
 
 dbconfig[CONNECTOR].host = USERNAME === "rconsoro" ? HOST : HOST2;
 // dbconfig[CONNECTOR].logging = console.log;
@@ -27,8 +27,8 @@ const db = {
   Op: Sequelize.Op,
   sqlze: sequelize,
   user: user(sequelize, DataTypes),
-  file: file(sequelize, DataTypes),
-  folder: folder(sequelize, DataTypes),
+  file: file(sequelize, DataTypes, IMAGES),
+  folder: folder(sequelize, DataTypes, IMAGES),
   favorite: favorite(sequelize, DataTypes),
   recent: recent(sequelize, DataTypes),
   userConfig: userConfig(sequelize, DataTypes),
