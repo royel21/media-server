@@ -17,6 +17,7 @@
       file.Genres = data.Genres;
       file.AltName = data.AltName;
       file.IsAdult = data.IsAdult;
+      file.DirectoryId = data.DirectoryId;
       options = data.dirs.map((d) => ({ Id: d.Id, Name: d.FullPath }));
     }
   });

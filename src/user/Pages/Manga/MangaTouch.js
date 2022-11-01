@@ -4,18 +4,31 @@ let tStart, tEnd;
 let point = {};
 let touching = false;
 let drag = false;
-let moveY = { dis: 0, dir: 0 };
-let moveX = { dis: 0, dir: 0 };
+let moveY = {
+  //Distance
+  dis: 0,
+  //Direction
+  dir: 0,
+};
+let moveX = {
+  //Distance
+  dis: 0,
+  //Direction
+  dir: 0,
+};
 let scroller;
 
 let controls = { nextPage: "", prevPage: "", nextFile: "", prevFile: "" };
 
 export const onTouchStart = (e) => {
   scroller = e.currentTarget;
-  touching = true;
   tStart = e.timeStamp;
   let { pageX, pageY } = (e.touches && e.touches[0]) || e;
   point = { x: pageX, y: pageY };
+
+  if (e.touches && e.touches.length === 1) {
+    touching = true;
+  }
 };
 
 export const onTouchMove = (e) => {
@@ -30,7 +43,10 @@ export const onTouchMove = (e) => {
 };
 
 export const onTouchEnd = (e) => {
+  if (!touching) return;
+
   touching = false;
+
   let {
     file: { CurrentPos, Duration },
     webtoon,
@@ -41,6 +57,7 @@ export const onTouchEnd = (e) => {
     jumpTo,
     fullScreen,
   } = controls;
+
   if (!drag) {
     tEnd = e.timeStamp;
     let elapsed = tEnd - tStart;

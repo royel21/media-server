@@ -59,6 +59,7 @@ routes.get("/folder/:folderId", async (req, res) => {
     Genres: folder?.Genres,
     AltName: folder.AltName,
     IsAdult: folder.IsAdult,
+    DirectoryId: folder.DirectoryId,
     dirs,
   });
 });
