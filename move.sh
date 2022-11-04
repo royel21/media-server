@@ -1,3 +1,4 @@
+#!/bin/sh
 rm -rf ./server/public/admin
 rm -rf ./server/public/user
 

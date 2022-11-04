@@ -5,21 +5,17 @@ var imgObserver;
 let imgs;
 let currentPage;
 
-export const PageObserver = (setPage, container, loadImages) => {
+export const PageObserver = (setPage, container) => {
   imgs = container.querySelectorAll("img");
   if (!pageObserver) {
     pageObserver = new IntersectionObserver(
       (entries) => {
-        if (entries.length < imgs.length) {
+        if (imgs.length) {
           for (let entry of entries) {
             let img = entry.target;
             if (entry.isIntersecting) {
-              setPage(parseInt(img.id));
-              currentPage = img.id;
-              let timg = imgs[currentPage];
-              if (timg && !timg.src.includes("data:img")) {
-                loadImages(currentPage - 3, 8, 1);
-              }
+              currentPage = +img.id;
+              setPage(+img.id);
             }
           }
         }
@@ -70,10 +66,10 @@ export const scrollImageLoader = (loadImages, container) => {
             let pg, dir;
             for (let entry of entries) {
               if (entry.isIntersecting) {
-                pg = parseInt(entry.target.id);
+                pg = +entry.target.id;
                 dir = pg < currentPage ? -1 : 1;
 
-                const img = imgs[dir + pg];
+                const img = imgs[pg];
                 if (img && !img.src.includes("data:img")) {
                   load = true;
                 }
@@ -81,11 +77,7 @@ export const scrollImageLoader = (loadImages, container) => {
             }
             if (load) {
               load = false;
-              if (tout) clearTimeout(tout);
-              tout = setTimeout(() => {
-                loadImages(pg, 8, dir);
-                clearTimeout(tout);
-              }, 50);
+              loadImages(currentPage, 8, dir);
             }
           }
         }

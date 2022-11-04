@@ -20,7 +20,6 @@ const loadZipImages = async (data, socket) => {
       const entries = Object.values(await zip.entries())
         .sort((a, b) => String(a.name).localeCompare(String(b.name)))
         .filter((entry) => !entry.isDirectory);
-
       for (let i of indices) {
         if (entries[i]) {
           const img = await zip.entryData(entries[i]);

@@ -94,8 +94,8 @@
   let connectObservers = (delay = 0) => {
     let tout = setTimeout(() => {
       scrollInView(file.CurrentPos);
-      PageObserver(changePages, imgContainer, loadImages, viewerState);
-      scrollImageLoader(loadImages, imgContainer, file.CurrentPos);
+      PageObserver(changePages, imgContainer);
+      scrollImageLoader(loadImages, imgContainer);
       clearTimeout(tout);
       viewerState.jumping = false;
     }, delay);
@@ -121,8 +121,9 @@
       } else {
         viewerState.loading = false;
         if (viewerState.jumping) {
-          PageObserver(changePages, imgContainer, loadImages, viewerState);
-          scrollImageLoader(loadImages, imgContainer, file.CurrentPos);
+          viewerState.jumping = false;
+          PageObserver(changePages, imgContainer);
+          scrollImageLoader(loadImages, imgContainer);
         }
       }
     }

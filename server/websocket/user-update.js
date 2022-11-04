@@ -24,7 +24,7 @@ const updateFilePos = async (data, user) => {
     });
     await recent[0].update({ LastRead: new Date(), LastPos: data.CurrentPos || 0 });
   } catch (error) {
-    console.log(error);
+    console.error(error?.Message);
   }
 };
 

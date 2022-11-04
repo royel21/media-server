@@ -43,8 +43,8 @@ const saveDb = async () => {
         IsAdult: folder.IsAdult,
         FilesType: folder.FilesType,
       });
+      i++;
     }
-    i++;
   }
   fs.writeJSONSync(`backup/${process.env.DB}.json`, datas);
   console.log("save", i, `backup/${process.env.DB}.json`);
