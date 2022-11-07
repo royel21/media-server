@@ -26,7 +26,7 @@ export const onTouchStart = (e) => {
   let { pageX, pageY } = (e.touches && e.touches[0]) || e;
   point = { x: pageX, y: pageY };
 
-  if (e.touches && e.touches.length === 1) {
+  if ((e.touches && e.touches.length === 1) || e.type === "mousedown") {
     touching = true;
   }
 };

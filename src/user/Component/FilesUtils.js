@@ -56,7 +56,7 @@ export const ProcessFile = (file, socket, type) => {
 
       let url = `${segment.join("/")}/${file.id}`;
       localStorage.setItem("content", curPath);
-      localStorage.setItem("fileId", file.id);
+      localStorage.setItem("Content", file.id);
 
       navigate(url);
       break;

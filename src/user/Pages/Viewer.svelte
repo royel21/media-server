@@ -57,7 +57,7 @@
   const returnBack = () => {
     saveFile();
     const pathname = localStorage.getItem("content");
-    localStorage.setItem("fileId", file.Id);
+    localStorage.setItem("Content", file.Id);
     navigate(pathname);
   };
 
