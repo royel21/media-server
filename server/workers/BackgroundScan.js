@@ -39,17 +39,20 @@ const sendMessage = (text, event = "info") => {
 const rmOrphanFiles = async (Id, isFolder, folder) => {
   if (folder) {
     const tfiles = fs.readdirSync(folder.Path);
+    const removed = [];
     for (const file of folder.Files) {
       if (folder.Path && file.Name) {
         if (!tfiles.includes(file.Name)) {
           try {
             await file.destroy({ Del: true });
+            removed.push(file.Id);
           } catch (error) {
             console.log(folder.Path, file.Name, error.toString());
           }
         }
       }
     }
+    folder.Files = [...folder.Files.filter((f) => !removed.includes(f.Id))];
   } else {
     for (const f of folders) {
       if (f.IsNoEmpty) {
@@ -169,7 +172,7 @@ const getFolders = async (id, isFolder) => {
     order: ["Path"],
     attributes: ["Id", "Name", "FileCount", "CreatedAt", "FilesType", "Path"],
     where: isFolder ? { Id: id } : { DirectoryId: id },
-    include: { model: db.file, attributes: ["Id", "Name", "Type", "Duration"] },
+    include: { model: db.file, attributes: ["Id", "Name", "Type", "Duration", "FolderId"] },
   });
 };
 

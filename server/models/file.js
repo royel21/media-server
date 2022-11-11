@@ -3,6 +3,8 @@ import fs from "fs-extra";
 import { nanoid } from "nanoid";
 
 export default (sequelize, DataTypes, ImagesPath) => {
+  const genImgPath = (fname, name) => `${ImagesPath}/Manga/${fname}/${name}.jpg`;
+
   const { INTEGER, STRING, DATE, FLOAT, VIRTUAL } = DataTypes;
   const File = sequelize.define(
     "File",
@@ -82,10 +84,9 @@ export default (sequelize, DataTypes, ImagesPath) => {
                 fs.moveSync(fromFile, toFile);
               }
 
-              const oldCover = `${ImagesPath}/Manga/${folder.Name}/${oldName}.jpg`;
-              console.log(oldCover);
+              const oldCover = genImgPath(folder.Name, oldName);
               if (fs.existsSync(oldCover)) {
-                const cover = `${ImagesPath}/Manga/${folder.Name}/${item.Name}.jpg`;
+                const cover = genImgPath(folder.Name, item.Name);
                 fs.moveSync(oldCover, cover);
               }
             }
@@ -100,7 +101,7 @@ export default (sequelize, DataTypes, ImagesPath) => {
                 const fPath = `${folder.Path}/${item.Name}`;
                 if (fs.existsSync(fPath)) fs.removeSync(fPath);
                 //Delete Cover
-                const cover = `${ImagesPath}/Manga/${folder.Name}/${item.Name}.jpg`;
+                const cover = genImgPath(folder.Name, item.Name);
                 if (fs.existsSync(cover)) fs.removeSync(cover);
               }
             } catch (error) {
