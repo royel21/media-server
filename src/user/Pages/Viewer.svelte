@@ -34,8 +34,8 @@
     socket.emit("file-update-pos", { Id, CurrentPos });
   };
 
-  const onFilter = ({ target: { value = "" } }) => {
-    playList = files.filter((f) => f.Name.contains(value));
+  const onFilter = (val) => {
+    playList = files.filter((f) => f.Name.toLocaleLowerCase().includes(val.toLocaleLowerCase()));
   };
 
   const selectFile = ({ target: { id } }) => {
@@ -74,10 +74,6 @@
       window.title = playList[0]?.Cover?.split("/")[2] || "";
     }
   });
-
-  const clearFilter = () => {
-    playList = files;
-  };
 
   let runningClock;
   window.addEventListener("fullscreenchange", (e) => {

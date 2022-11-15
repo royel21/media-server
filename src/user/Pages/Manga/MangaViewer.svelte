@@ -29,7 +29,7 @@
   controls.webtoon = webtoon;
 
   let viewerState = {
-    isLoading: false,
+    loading: false,
     jumping: false,
     lastId: file?.Id,
   };

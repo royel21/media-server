@@ -10,6 +10,8 @@
   export let fileId;
   export let onFilter;
 
+  let filter = "";
+
   let list = [];
   const pageData = {
     pg: 0,
@@ -66,7 +68,7 @@
 
   const getPage = () => {
     let index = files.findIndex((f) => f.Id === fileId);
-    return Math.floor(index / filePerPage);
+    return Math.floor(Math.max(index, 0) / filePerPage);
   };
 
   const sliceFiles = () => {
@@ -78,6 +80,10 @@
     pageData.pg = clamp(pg.detail - 1, 0, pageData.totalPages - 1);
     list = sliceFiles(files);
   };
+
+  const clearFilter = () => (filter = "");
+
+  $: onFilter(filter);
 
   $: if (files.length) {
     pageData.totalFiles = files.length;
@@ -99,8 +105,8 @@
 <input name="show-hide-play-list" type="checkbox" id="p-hide" bind:checked={hideList} />
 <div id="play-list" class:move={!$ToggleMenu}>
   <div id="v-filter">
-    <input name="clear-filters" type="text" on:change={onFilter} placeholder="Filter" class="form-control" />
-    <span class="clear-filter" on:click={onFilter}>
+    <input name="clear-filters" type="text" bind:value={filter} placeholder="Filter" class="form-control" />
+    <span class="clear-filter" on:click={clearFilter}>
       <i class="fas fa-times-circle" />
     </span>
   </div>
@@ -280,7 +286,7 @@
   }
   #play-list .clear-filter {
     right: 6px;
-    top: 3px;
+    top: 0px;
   }
 
   #p-items {
