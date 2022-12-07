@@ -64,18 +64,7 @@
   }
   @media screen and (max-width: 600px) {
     #filter-control {
-      width: 150px;
-    }
-    .filter-file:not(:placeholder-shown),
-    .filter-file:focus {
-      position: absolute;
-      left: 46px;
-      height: 100%;
-      width: calc(100% * 1.2);
-      z-index: 1;
-    }
-    .filter-file:not(:placeholder-shown) + span {
-      right: -70px;
+      width: 200px;
     }
   }
 </style>

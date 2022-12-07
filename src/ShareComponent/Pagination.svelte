@@ -126,7 +126,7 @@
     text-align: center;
     font-size: 14px;
     padding: 0 4px;
-    line-height: 2;
+    line-height: 2.2;
     font-weight: 700;
   }
   .page-link {
@@ -165,6 +165,10 @@
     #next-page {
       border-top-right-radius: 0.25rem;
       border-bottom-right-radius: 0.25rem;
+    }
+    #pager .current-page {
+      min-width: 10px;
+      width: 50px;
     }
   }
 </style>

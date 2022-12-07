@@ -118,12 +118,13 @@
     if (data.id === file.Id) {
       if (!data.last) {
         images[data.page] = data.img;
+        console.log(data.page, data.img?.length);
       } else {
         viewerState.loading = false;
         if (viewerState.jumping) {
           viewerState.jumping = false;
-          PageObserver(changePages, imgContainer);
           scrollImageLoader(loadImages, imgContainer);
+          console.log("finish-loading");
         }
       }
     }
@@ -153,7 +154,7 @@
 
   //reload on file change
   $: if (file.Id !== viewerState.lastfId) {
-    viewerState.jumping = true;
+    viewerState.jumping = webtoon;
     viewerState.loading = false;
     images = [];
     controls.file = file;
@@ -180,6 +181,7 @@
       viewerState.lastfId = file.Id;
       scrollInView(file.CurrentPos);
     }
+    if (webtoon) PageObserver(changePages, imgContainer);
   });
 
   $: localStorage.setItem("webtoon", webtoon);

@@ -196,28 +196,22 @@ const renameFolder = async ({ Id, Name, Description, Genres, Status, IsAdult, Al
     let success = false;
     let msg = "Folder not found on DB";
 
-    if (folder.Name !== Name) {
-      const Path = folder.Path.replace(folder.Name, Name);
-
-      data = { Name, Path, Description, Genres, Status, IsAdult, AltName };
-      msg = "Folder Rename Successfully";
-      success = true;
-    } else {
-      success = true;
-      data = { Description, Genres, Status, IsAdult, AltName };
-    }
+    const Path = folder.Path.replace(folder.Name, Name);
+    data = { Name, Path, Description, Genres, Status, IsAdult, AltName };
 
     if (Transfer) {
       const dir = await db.directory.findOne({ where: { Id: DirectoryId } });
       if (dir) {
         const newPath = folder.Path.replace(folder.Directory.FullPath, dir.FullPath);
-        data = { DirectoryId, Path: newPath };
+        data.DirectoryId = DirectoryId;
+        data.Path = newPath;
       }
     }
 
     try {
       await folder.update(data, { Name: folder.Name });
       await folder.reload();
+      success = true;
     } catch (error) {
       console.log(error);
     }
