@@ -74,6 +74,7 @@
     changePages(val - 1);
     viewerState.jumping = webtoon;
     loadImages(val - 5, 10);
+    scrollInView(val);
   };
 
   //Replace Placeholder with current page on focus
