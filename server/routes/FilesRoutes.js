@@ -23,7 +23,14 @@ routes.get("/folder-content/:id/:order/:page?/:items?/:search?", async (req, res
         "Description",
         "Status",
         "Genres",
-        [literal("(Select currentFile from RecentFolders where FolderId = `Folders`.`Id`)"), "currentFile"],
+        [
+          literal(
+            "(Select currentFile from RecentFolders where FolderId = `Folders`.`Id` AND RecentId = '" +
+              req.user?.Recent.Id +
+              "')"
+          ),
+          "currentFile",
+        ],
       ],
       where: { Id: id },
     });

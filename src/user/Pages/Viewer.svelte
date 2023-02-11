@@ -71,6 +71,7 @@
     if (!data.fail) {
       folderName = data.Name;
       playList = files = data.files.sort(sortFileByName);
+      console.log(playList);
       window.title = playList[0]?.Cover?.split("/")[2] || "";
     }
   });

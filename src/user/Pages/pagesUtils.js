@@ -55,8 +55,8 @@ export const setfullscreen = (element) => {
 };
 
 export const sortFileByName = (a, b) => {
-  let n1 = a.Name.replace("-", ".").match(/\d+.\d+|\d+/);
-  let n2 = b.Name.replace("-", ".").match(/\d+.\d+|\d+/);
+  let n1 = a.Name.replace("-", ".").match(/^\d+.\d+|\d+/);
+  let n2 = b.Name.replace("-", ".").match(/^\d+.\d+|\d+/);
 
   if (n1 && n2) {
     return Number(n1[0]) - Number(n2[0]);
