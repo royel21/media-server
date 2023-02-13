@@ -37,7 +37,7 @@ app.use(cookieParser());
 app.use(
   compression({
     filter: function (req, res) {
-      return true;
+      return !req.url.includes("viewer/video");
     },
   })
 );

@@ -79,5 +79,5 @@ export const getVideoThumnail = async (video, toPath, exist) => {
     });
     return duration;
   }
-  return 0;
+  return duration;
 };
