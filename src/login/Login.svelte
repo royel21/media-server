@@ -62,23 +62,25 @@
 <div id="root">
   <div id="login-container">
     <h3 class="mb-4">Login</h3>
-    <Input width="65px" icon="fas fa-user" name="username" bind:value={user.username} placeholder="Name" {error}>
-      <UserIcon slot="label" />
-    </Input>
-    <Input
-      width="65px"
-      icon="fas fa-key"
-      name="password"
-      type="password"
-      bind:value={user.password}
-      placeholder="Password"
-      {error}
-    >
-      <KeyIcon slot="label" />
-    </Input>
-    <div class="form-footer">
-      <span on:click={onSubmit}>Submit</span>
-    </div>
+    <form on:submit|preventDefault={onSubmit}>
+      <Input width="65px" icon="fas fa-user" name="username" bind:value={user.username} placeholder="Name" {error}>
+        <UserIcon slot="label" />
+      </Input>
+      <Input
+        width="65px"
+        icon="fas fa-key"
+        name="password"
+        type="password"
+        bind:value={user.password}
+        placeholder="Password"
+        {error}
+      >
+        <KeyIcon slot="label" />
+      </Input>
+      <div class="form-footer">
+        <button type="submit">Submit</button>
+      </div>
+    </form>
   </div>
 </div>
 
@@ -124,7 +126,7 @@
     margin-top: 10px;
   }
 
-  span {
+  button {
     display: inline-block;
     font-weight: 400;
     text-align: center;
@@ -140,13 +142,13 @@
     transition: 0.15s all ease-in-out;
   }
 
-  span:hover {
+  button:hover {
     color: #fff;
     background-color: gray;
     border-color: #545b62;
   }
 
-  span:active {
+  button:active {
     transform: scale(1.2);
     transition: 0.25s;
   }

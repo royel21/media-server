@@ -31,7 +31,7 @@
       <slot name="label" />
     {/if}
   </span>
-  <input use:typeAction {name} bind:value {placeholder} />
+  <input use:typeAction {name} bind:value {placeholder} autocomplete={type === "password" ? "current-password" : ""} />
 </div>
 {#if error && error[name]}
   <div class="error">{error[name]}</div>

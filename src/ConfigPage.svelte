@@ -24,7 +24,20 @@
     location.href = "/login";
   };
 
-  function config(data) {
+  onMount(async () => {
+    try {
+      let data = await fetch("/api/users").then((response) => response.json());
+      if (data.isAutenticated) {
+        user = data;
+      } else {
+        logout();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  $: if (user) {
     socket = socketClient("/");
 
     socket.off("logout", logout);
@@ -32,20 +45,8 @@
     setContext("logout", logout);
 
     setContext("socket", socket);
-
-    user = data;
     setContext("User", user);
   }
-
-  onMount(async () => {
-    try {
-      let data = await fetch("/api/users").then((response) => response.json());
-      if (data.isAutenticated) return config(data);
-    } catch (error) {
-      console.log(error);
-    }
-    logout();
-  });
 </script>
 
 {#if user.isAutenticated}

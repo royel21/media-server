@@ -152,7 +152,7 @@
 
 {#if showImage}
   <div class="thumbnail">
-    <img src={encodeURI(`/Folder/${showImage.Name}.jpg`)} alt="Cover Not Found" />
+    <img src={`/Folder/${encodeURIComponent(showImage.Name)}.jpg`} alt="Cover Not Found" />
   </div>
   <span id="f-path" style={`left: ${fullPathPos.x}px; top:${fullPathPos.y}px;`}>{showImage.Path}</span>
 {/if}
