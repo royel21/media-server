@@ -20,36 +20,32 @@
     }
 
     socket?.close();
-    if (isPwa()) {
-      history.go(-(history.length - 1));
-    } else {
-      location.href = "/login";
-    }
+    if (isPwa()) history.go(-(history.length - 1));
+    location.href = "/login";
   };
+
+  function config(data) {
+    socket = socketClient("/");
+
+    socket.off("logout", logout);
+    socket.on("logout", logout);
+    setContext("logout", logout);
+
+    setContext("socket", socket);
+
+    user = data;
+    setContext("User", user);
+  }
 
   onMount(async () => {
     try {
       let data = await fetch("/api/users").then((response) => response.json());
-      if (data.isAutenticated) {
-        user = data;
-      } else {
-        location.href = "/login";
-      }
+      if (data.isAutenticated) return config(data);
     } catch (error) {
-      console.log("configPage-error", error);
+      console.log(error);
     }
+    logout();
   });
-
-  $: if (user.isAutenticated) {
-    socket = socketClient("/");
-    setContext("socket", socket);
-    setContext("User", user);
-
-    socket.off("logout", () => logout());
-    socket.on("logout", () => logout());
-
-    setContext("logout", logout);
-  }
 </script>
 
 {#if user.isAutenticated}

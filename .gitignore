@@ -32,3 +32,4 @@ server/public/*
 backup/*
 /server/security/*
 note.txt
+mediaserver.sqlite-journal

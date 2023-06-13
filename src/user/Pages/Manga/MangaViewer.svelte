@@ -119,13 +119,11 @@
     if (data.id === file.Id) {
       if (!data.last) {
         images[data.page] = data.img;
-        console.log(data.page, data.img?.length);
       } else {
         viewerState.loading = false;
         if (viewerState.jumping) {
           viewerState.jumping = false;
           scrollImageLoader(loadImages, imgContainer);
-          console.log("finish-loading");
         }
       }
     }
@@ -210,7 +208,7 @@
           class:empty-img={!images[file.CurrentPos]}
           style="object-fit: {config.imgAbjust}"
           src={images[file.CurrentPos] && "data:img/jpeg;base64, " + images[file.CurrentPos]}
-          alt="Loading..."
+          alt="Loading... Please Wait"
         />
       {:else}
         {#each Array(file.Duration).fill() as _, i}

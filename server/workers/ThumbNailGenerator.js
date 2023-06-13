@@ -58,15 +58,14 @@ export const genFileThumbnails = async (folders, sendMessage) => {
   sendMessage("-----100%-----");
 };
 
+//Generate Thumbnail for folders
 export const genFolderThumbnails = async (folders) => {
-  for (let s of folders) {
+  for (let { filePath, CoverPath } of folders) {
     try {
-      if (s.FilesType.includes("mangas")) {
-        if (/zip/gi.test(s.filePath)) {
-          await ZipCover(s.filePath, s.CoverPath);
-        }
+      if (/zip/gi.test(filePath)) {
+        await ZipCover(filePath, CoverPath);
       } else {
-        await getVideoThumnail(s.filePath, s.CoverPath);
+        await getVideoThumnail(filePath, CoverPath);
       }
     } catch (err) {
       console.log(err);

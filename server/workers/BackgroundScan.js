@@ -36,7 +36,7 @@ const sendMessage = (text, event = "info") => {
   process.send({ event, text });
 };
 
-const rmOrphanFiles = async (Id, isFolder, folder) => {
+const rmOrphanFiles = async (folder) => {
   if (folder) {
     const tfiles = fs.readdirSync(folder.Path);
     const removed = [];
@@ -52,11 +52,11 @@ const rmOrphanFiles = async (Id, isFolder, folder) => {
         }
       }
     }
-    folder.Files = [...folder.Files.filter((f) => !removed.includes(f.Id))];
+    folder.Files = folder.Files.filter((f) => !removed.includes(f.Id));
   } else {
     for (const f of folders) {
       if (f.IsNoEmpty) {
-        await rmOrphanFiles(null, true, f);
+        await rmOrphanFiles(f);
       } else {
         try {
           await f.destroy({ Del: true });
@@ -67,7 +67,6 @@ const rmOrphanFiles = async (Id, isFolder, folder) => {
     }
   }
 };
-
 const foldersPendingCover = [];
 
 const createFolderThumbnail = async (folder, files) => {
@@ -82,12 +81,8 @@ const createFolderThumbnail = async (folder, files) => {
         await sharp(imgPath).jpeg().resize(240).toFile(CoverPath);
       } else {
         //else push to list of folder for later process of thumbnail from first file
-        foldersPendingCover.push({
-          folder: true,
-          filePath: path.join(folder.Path, files[0].Name),
-          CoverPath,
-          FilesType: folder.FilesType,
-        });
+        const filePath = path.join(folder.Path, files[0].Name);
+        foldersPendingCover.push({ CoverPath, filePath });
       }
     }
   } catch (error) {
@@ -130,7 +125,6 @@ const scanFolder = async (curfolder, files) => {
     folderFiles = await folder.Files;
   } else if (filteredFiles.length) {
     folder = await createFolder(curfolder, filteredFiles);
-
     isNoNewFolder = false;
   }
 
@@ -181,30 +175,33 @@ const scanDirectory = async ({ id, dir, isFolder }) => {
   console.log(dir);
   if (fs.existsSync(dir)) {
     const fis = WinDrive.ListFilesRO(dir);
-    console.time("m1");
+
+    console.time("list-files");
     let folder = WinDrive.ListFiles(dir, { oneFile: true });
     folder.Path = dir;
 
     folders = await getFolders(id, isFolder);
-    console.timeEnd("m1");
+    console.timeEnd("list-files");
 
-    console.time("m2");
     sendMessage("cleaning direcory");
-    await rmOrphanFiles(id, isFolder);
-    console.timeEnd("m2");
+    console.time("cleaning direcory");
+    await rmOrphanFiles();
+    console.timeEnd("cleaning direcory");
 
     sendMessage("scanning directory");
-    console.time("m3");
+    console.time("scanning directory");
     await scanFolder(folder, fis);
-    console.timeEnd("m3");
+    console.timeEnd("scanning directory");
+
     sendMessage("creating folder thumbnails");
     await genFolderThumbnails(foldersPendingCover);
 
     sendMessage("creating files thumbnails");
-    console.time("m4");
+    console.time("creating files thumbnails");
 
     await genFileThumbnails(folders, sendMessage);
-    console.timeEnd("m4");
+    console.timeEnd("creating files thumbnails");
+    Console.log("Job Finish");
   } else {
     sendMessage("Not found:", dir);
   }
