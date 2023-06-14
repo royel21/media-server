@@ -61,6 +61,7 @@ app.use(passport.session());
 app.use("/api/users", userRoutes);
 
 app.use((req, res, next) => {
+  console.log(req.url);
   if (!req.user) {
     return res.redirect("/login");
   }
@@ -89,7 +90,7 @@ app.get("/login/*", (_, res) => {
   return res.sendFile(getPath("/static/login"));
 });
 
-app.get("/admin/*", ({ user, url }, res) => {
+app.get("/admin/*", ({ user }, res) => {
   if (user.Role.includes("User")) {
     return res.redirect("/user");
   }
