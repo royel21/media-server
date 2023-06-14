@@ -201,7 +201,7 @@ const scanDirectory = async ({ id, dir, isFolder }) => {
 
     await genFileThumbnails(folders, sendMessage);
     console.timeEnd("creating files thumbnails");
-    Console.log("Job Finish");
+    console.log("Job Finish");
   } else {
     sendMessage("Not found:", dir);
   }
