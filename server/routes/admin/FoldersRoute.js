@@ -6,7 +6,7 @@ const routes = Router();
 
 const getData = async ({ params }, res) => {
   const { page, items, filter, folderId } = params;
-  let filterTerm = filter || "";
+  let filterTerm = decodeURIComponent(filter || "");
 
   // calculate the start and end of the query check sql limit
   let limit = +items || 10;

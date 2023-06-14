@@ -177,7 +177,7 @@ function pick(routes, uri) {
         break;
       }
 
-      if (!routeSegment.includes(":") && routeSegment !== uriSegment) {
+      if (!routeSegment?.includes(":") && routeSegment !== uriSegment) {
         missed = true;
         break;
       }
