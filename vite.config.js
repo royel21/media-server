@@ -4,10 +4,10 @@ import { config } from "dotenv";
 import { fileURLToPath } from "url";
 
 config();
-
-const host = process.env.IP;
-const port = process.env.DEV_PORT;
-const serverPort = process.env.PORT;
+const { IS_DEV, IP, DEV_PORT, PORT, HOME_IP } = process.env;
+const host = IS_DEV ? HOME_IP : IP;
+const port = DEV_PORT;
+const serverPort = PORT;
 
 // https://vitejs.dev/config/
 export default defineConfig({
