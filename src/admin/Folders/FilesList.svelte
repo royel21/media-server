@@ -24,7 +24,7 @@
   const loadFiles = async (pg) => {
     if (folderId) {
       let rows = calRows(".list-container");
-      let data = await apiUtils.admin(["folders", "files", folderId, pg, rows, filter]);
+      let data = await apiUtils.admin(["folders", "files", folderId, pg, rows, encodeURIComponent(filter)]);
 
       if (data.items) {
         items = data.items;
