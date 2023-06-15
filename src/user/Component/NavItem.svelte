@@ -7,15 +7,15 @@
   export let selectDir;
 
   let items = [];
-  let selectedId;
+  let selectedId = "";
 
   $: if (dirs) {
-    let found = dirs[item.title].find((i) => i.IsAdult);
+    let found = dirs[item.title]?.find((i) => i.IsAdult);
     if (found) {
       found.First = true;
     }
     items = dirs[item.title];
-    selectedId = selected[item.title];
+    selectedId = selected[item.title] || "";
   }
 </script>
 
@@ -23,20 +23,22 @@
   <Link to={`${item.path}/${selectedId}`} {getProps}>
     <i class={"fas fa-" + item.class} />
     <span class="nav-title">{item.title}</span>
-    <ul class="down-list">
-      {#each items as { Id, Name, IsAdult }}
-        <li
-          class="list-item"
-          id={Id}
-          class:selected={Id === selectedId}
-          on:click={selectDir}
-          title={item.title}
-          class:adult={IsAdult}
-        >
-          {Name}
-        </li>
-      {/each}
-    </ul>
+    {#if items}
+      <ul class="down-list">
+        {#each items as { Id, Name, IsAdult }}
+          <li
+            class="list-item"
+            id={Id}
+            class:selected={Id === selectedId}
+            on:click={selectDir}
+            title={item.title}
+            class:adult={IsAdult}
+          >
+            {Name}
+          </li>
+        {/each}
+      </ul>
+    {/if}
   </Link>
 </li>
 

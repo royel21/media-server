@@ -15,13 +15,13 @@
   import Config from "./Component/Config.svelte";
 
   const navItems = [
-    { title: "Home", path: "/", class: "home", items: [] },
-    { title: "Videos", path: "/videos", class: "film", items: [] },
-    { title: "Mangas", path: "/mangas", class: "book", items: [] },
-    { title: "Favorites", path: "/favorites", class: "heart", items: [] },
+    { title: "Home", path: "/", class: "home" },
+    { title: "Videos", path: "/videos", class: "film" },
+    { title: "Mangas", path: "/mangas", class: "book" },
+    { title: "Favorites", path: "/favorites", class: "heart" },
   ];
 
-  let dirs;
+  let dirs = {};
 
   FavoritesStores.set(getContext("User").favorites);
 
@@ -29,24 +29,20 @@
 
   const selectDir = ({ target: { id, title } }) => (selected[title] = id);
 
-  $: navItems[3] = $FavoritesStores;
+  $: dirs.Favorites = $FavoritesStores;
 
   onMount(async () => {
     const data = await apiUtils.files(["dirs/"]);
     selected.Mangas = data.Mangas[0]?.Id || "";
     selected.Videos = data.Videos[0]?.Id || "";
-    dirs = data;
-    navItems[1].items = data.Videos;
-    navItems[2].items = data.Mangas;
+    dirs = { ...dirs, ...data };
   });
-
-  $: console.log(navItems);
 
   document.title = "Home";
 </script>
 
 <Router>
-  <Navbar on:click {navItems} filters={["Mangas", "Videos"]} let:item>
+  <Navbar on:click {navItems} filters={["Mangas", "Videos", "Favorites"]} let:item>
     <NavItem {dirs} {selectDir} {selected} {item} slot="nav-item" />
     <Config slot="user" />
   </Navbar>
