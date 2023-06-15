@@ -3,7 +3,7 @@
   import { writable, derived } from "svelte/store";
   import { LOCATION, ROUTER } from "./contexts.js";
   import { globalHistory } from "./history.js";
-  import { pick, match, stripSlashes, combinePaths } from "./utils.js";
+  import { pick, match, combinePaths } from "./utils.js";
 
   export let basepath = "/";
   export let url = null;
@@ -17,9 +17,7 @@
 
   // If locationContext is not set, this is the topmost Router in the tree.
   // If the `url` prop is given we force the location to it.
-  const location =
-    locationContext ||
-    writable(url ? { pathname: url } : globalHistory.location);
+  const location = locationContext || writable(url ? { pathname: url } : globalHistory.location);
 
   // If routerContext is set, the routerBase of the parent Router
   // will be the base for this Router's descendants.
@@ -29,7 +27,7 @@
     ? routerContext.routerBase
     : writable({
         path: basepath,
-        uri: basepath
+        uri: basepath,
       });
 
   const routerBase = derived([base, activeRoute], ([base, activeRoute]) => {
@@ -71,7 +69,7 @@
         hasActiveRoute = true;
       }
     } else {
-      routes.update(rs => {
+      routes.update((rs) => {
         rs.push(route);
         return rs;
       });
@@ -79,7 +77,7 @@
   }
 
   function unregisterRoute(route) {
-    routes.update(rs => {
+    routes.update((rs) => {
       const index = rs.indexOf(route);
       rs.splice(index, 1);
       return rs;
@@ -90,8 +88,8 @@
   // the basepath changes.
   $: {
     const { path: basepath } = $base;
-    routes.update(rs => {
-      rs.forEach(r => (r.path = combinePaths(basepath, r._path)));
+    routes.update((rs) => {
+      rs.forEach((r) => (r.path = combinePaths(basepath, r._path)));
       return rs;
     });
   }
@@ -108,7 +106,7 @@
     // The topmost Router in the tree is responsible for updating
     // the location store and supplying it through context.
     onMount(() => {
-      const unlisten = globalHistory.listen(history => {
+      const unlisten = globalHistory.listen((history) => {
         location.set(history.location);
       });
 
@@ -123,8 +121,8 @@
     base,
     routerBase,
     registerRoute,
-    unregisterRoute
+    unregisterRoute,
   });
 </script>
 
-<slot></slot>
+<slot />

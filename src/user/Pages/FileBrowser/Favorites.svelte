@@ -7,11 +7,12 @@
   export let filter = "";
   export let id;
   let favId = id || $FavoritesStores[0].Id;
-
   let type = `favorites/${favId}`;
+
+  $: favId = id || favId;
   $: type = `favorites/${favId}`;
 </script>
 
-<FilesList title="Favorites" {type} {filter} {page} {favId}>
-  <FavoriteManager {id} slot="controls" />
+<FilesList title="Favorites" {type} {filter} {page} id={favId}>
+  <FavoriteManager id={favId} slot="controls" />
 </FilesList>

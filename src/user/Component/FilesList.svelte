@@ -76,7 +76,7 @@
   const favClick = (event) => {
     if (handleClick) handleClick(event);
     let { target } = event;
-    if (target.classList.contains("far")) {
+    if (target.closest(".fav-icon")) {
       favClicked = target;
     } else {
       favClicked = false;
@@ -153,7 +153,9 @@
                 {FileTypes[Type].formatter(CurrentPos, Duration)}
               {/if}
             </span>
-            <FavoriteList {isFav} {type} {Type} {favClicked} favId={id} on:removeFile={removeFile} />
+            {#if Type === "Folder"}
+              <FavoriteList {isFav} {type} {favClicked} favId={id} on:removeFile={removeFile} />
+            {/if}
           </div>
           <div class="file-cover usn" on:dblclick|stopPropagation={openFile}>
             <img src={getCover(Type, Name) + `?v=${ver}`} alt="No Cover Found" />

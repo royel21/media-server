@@ -62,23 +62,9 @@ export const getFolders = async (req, res) => {
 
   let limit = +items || 16;
 
-  let favs = req.user.Favorites.map((f) => f.Id).join("','");
-
-  let favSelect = `( Select FolderId from FavoriteFolders where \`Folders\`.\`Id\` = FolderId and FavoriteId IN ('${favs}'))`;
   let filter = getFilter(search);
   let query = {
-    attributes: [
-      "Id",
-      "Name",
-      "Cover",
-      "Type",
-      "Genres",
-      "FilesType",
-      "CreatedAt",
-      "Status",
-      "FileCount",
-      [literal(favSelect), "isFav"],
-    ],
+    attributes: ["Id", "Name", "Cover", "Type", "Genres", "FilesType", "CreatedAt", "Status", "FileCount"],
     where: {
       [db.Op.or]: {
         Name: filter,
@@ -88,6 +74,7 @@ export const getFolders = async (req, res) => {
       IsAdult: { [db.Op.lte]: req.user.AdultPass },
       FilesType: filetype,
     },
+    include: { model: db.favorite, attributes: ["Id"] },
     order: getOrderBy(order, "Folders"),
     offset: (page - 1) * limit,
     limit,
@@ -99,8 +86,13 @@ export const getFolders = async (req, res) => {
 
   let result = await db.folder.findAndCountAll(query);
 
+  const mapFiles = ({ dataValues, Cover, Favorites }) => {
+    const isFav = Favorites.map((fv) => fv.Id);
+    return { ...dataValues, Cover: encodeURI(Cover), isFav };
+  };
+
   return res.json({
-    files: result.rows.map((fd) => ({ ...fd.dataValues, Cover: encodeURI(fd.Cover) })),
+    files: result.rows.map(mapFiles),
     totalFiles: result.count,
     totalPages: Math.ceil(result.count / limit),
     valid: true,

@@ -4,14 +4,15 @@
 
   import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
 
+  import apiUtils from "../../apiUtils";
   import PlayList from "../Component/PlayList.svelte";
   import MangaViewer from "./Manga/MangaViewer.svelte";
   import VideoPLayer from "./Video/VideoPlayer.svelte";
   import { KeyMap, handleKeyboard, isMobile, isVideo, isManga, showFileName, sortFileByName } from "./pagesUtils";
-  import apiUtils from "../../apiUtils";
 
   export let folderId;
   export let fileId;
+
   let lastId = fileId;
   const menu = document.querySelector("#menu");
 
@@ -20,6 +21,7 @@
     .split("/")
     .slice(0, 3)
     .join("/");
+
   const socket = getContext("socket");
   const { NextFile, PrevFile } = KeyMap;
   let files = [];

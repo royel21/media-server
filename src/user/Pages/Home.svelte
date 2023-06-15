@@ -79,7 +79,6 @@
   </div>
 </div>
 <div class="controls">
-  <slot name="controls" />
   <Filter {filter} on:filter={fileFilter} />
   <Pagination page={pageData.page} totalPages={pageData.totalPages} on:gotopage={goToPage} />
   <span class="items">{pageData.totalFiles}</span>

@@ -44,16 +44,12 @@
     <NavItem {dirs} {selectDir} {selected} {item} slot="nav-item" />
     <Config slot="user" />
   </Navbar>
-  <Route path="/videos/content/:id/:page/:filter" component={Content} />
-  <Route path="/videos/viewer/:folderId/:fileId" component={Viewer} />
+
+  <Route path="/:type/content/:id/:page/:filter" component={Content} />
+  <Route path="/:type/viewer/:folderId/:fileId" component={Viewer} />
+
   <Route path="/videos/:dir/:page/:filter" component={Videos} />
-
-  <Route path="/mangas/content/:id/:page/:filter" component={Content} />
-  <Route path="/mangas/viewer/:folderId/:fileId" component={Viewer} />
   <Route path="/mangas/:dir/:page/:filter" component={Mangas} />
-
-  <Route path="/favorites/content/:id/:page/:filter" component={Content} />
-  <Route path="/favorites/viewer/:folderId/:fileId" component={Viewer} />
   <Route path="/favorites/:id/:page/:filter" component={Favorites} />
 
   <Route path="/:page/:filter" component={Home} />

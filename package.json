@@ -13,7 +13,8 @@
     "serv-dev": "nodemon server/app",
     "updateDb": "set CDB=mediaserverdb&&node db.js updateDb",
     "updateAd_Db": "set CDB=mediaserver_adultdb&&node db.js updateDb",
-    "saveDb": "node db.js saveDb"
+    "saveDb": "node db.js saveDb",
+    "testDb": "node db.js test"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.2",

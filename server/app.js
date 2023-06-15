@@ -60,24 +60,15 @@ app.use(passport.session());
 // it is here because is needed for login before access the other routes;
 app.use("/api/users", userRoutes);
 
-app.use((req, res, next) => {
-  console.log(req.url);
-  if (!req.user) {
-    return res.redirect("/login");
-  }
-  return next();
-});
+app.use((req, res, next) => (req.user ? next() : res.redirect("/login")));
 
 app.use("/api/files/favorites", favoriteRoutes);
 app.use("/api/files", filesRoutes);
 app.use("/api/viewer", ViewerRoutes);
 
-app.use("/api/admin", (req, res, next) => {
-  if (!req.user.Role.includes("Administrator")) {
-    return res.redirect("/notfound");
-  }
-  next();
-});
+app.use("/api/admin", ({ user }, res, next) =>
+  user.Role.includes("Administrator") ? next() : res.redirect("/notfound")
+);
 
 app.use("/api/admin/users", UsersManagerRoute);
 app.use("/api/admin/directories", DirectoriesRoute);
@@ -86,23 +77,15 @@ app.use("/api/admin/folders", FoldersRoute);
 
 const getPath = (type) => path.join(global.appPath, "public", type, "index.html");
 
-app.get("/login/*", (_, res) => {
-  return res.sendFile(getPath("/static/login"));
-});
+app.get("/login/*", (_, res) => res.sendFile(getPath("/static/login")));
 
-app.get("/admin/*", ({ user }, res) => {
-  if (user.Role.includes("User")) {
-    return res.redirect("/user");
-  }
-  return res.sendFile(getPath("admin"));
-});
+app.get("/admin/*", ({ user }, res) =>
+  user.Role.includes("User") ? res.redirect("/user") : res.sendFile(getPath("admin"))
+);
 
-app.get("/*", ({ user, url }, res) => {
-  if (user.Role.includes("Admin")) {
-    return res.redirect("/admin/");
-  }
-  return res.sendFile(getPath("user"));
-});
+app.get("/*", ({ user }, res) =>
+  user.Role.includes("Admin") ? res.redirect("/admin/") : res.sendFile(getPath("user"))
+);
 
 app.use((e, _, res, __) => {
   if (e.message.includes("Failed to decode param")) {

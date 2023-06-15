@@ -16,11 +16,12 @@ const updateDb = async () => {
   const update = async (items) => {
     for (let d of items) {
       const found = await db.folder.findOne({ where: { Name: d.Name } });
-      if (found && d.Description) {
+      if (found && d.Description && d.Status && d.IsAdult) {
         d.AltName = capitalize(d.AltName);
+        // console.log(found.Name);
         await found.update(d);
+        i++;
       }
-      i++;
     }
   };
 
@@ -49,11 +50,29 @@ const saveDb = async () => {
   console.log("save", i, `backup/${process.env.DB}.json`);
 };
 
+const test = async () => {
+  await db.init();
+  const all = await db.folder.findAll({
+    where: {
+      FilesType: "mangas",
+      Name: "100,000 Levels Of Body Refining All The Dogs I Raise Are The Emperor",
+    },
+    include: [{ model: db.favorite }],
+  });
+  console.log(all[0]);
+  // all.forEach((f) => {
+  //   console.log(f.Name);
+  // });
+};
+
 const works = {
   updateDb,
   saveDb,
+  test,
 };
+
 const action = process.argv[2];
+
 if (action) {
   console.log(action);
   works[action]();
