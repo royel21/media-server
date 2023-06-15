@@ -33,3 +33,4 @@ backup/*
 /server/security/*
 note.txt
 mediaserver.sqlite-journal
+mariadb.txt
