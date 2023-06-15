@@ -15,10 +15,10 @@
   import Config from "./Component/Config.svelte";
 
   const navItems = [
-    { title: "Home", path: "/", class: "home" },
-    { title: "Videos", path: "/videos", class: "film" },
-    { title: "Mangas", path: "/mangas", class: "book" },
-    { title: "Favorites", path: "/favorites", class: "heart" },
+    { title: "Home", path: "/", class: "home", items: [] },
+    { title: "Videos", path: "/videos", class: "film", items: [] },
+    { title: "Mangas", path: "/mangas", class: "book", items: [] },
+    { title: "Favorites", path: "/favorites", class: "heart", items: [] },
   ];
 
   let dirs;
@@ -29,12 +29,18 @@
 
   const selectDir = ({ target: { id, title } }) => (selected[title] = id);
 
+  $: navItems[3] = $FavoritesStores;
+
   onMount(async () => {
     const data = await apiUtils.files(["dirs/"]);
     selected.Mangas = data.Mangas[0]?.Id || "";
     selected.Videos = data.Videos[0]?.Id || "";
     dirs = data;
+    navItems[1].items = data.Videos;
+    navItems[2].items = data.Mangas;
   });
+
+  $: console.log(navItems);
 
   document.title = "Home";
 </script>
