@@ -6,7 +6,7 @@
   import { PageConfig } from "../../user/Stores/PageConfigStore";
 
   import { FileTypes, ProcessFile, getFilesPerPage } from "./filesUtils";
-  import { fileKeypress, selectElementById, selectByTitl./fileEventsfileEvents";
+  import { fileKeypress, selectElementById, selectByTitle } from "./fileEvents";
 
   import Pagination from "../../ShareComponent/Pagination.svelte";
   import Filter from "../../ShareComponent/Filter.svelte";

@@ -1,8 +1,8 @@
 <script>
   import { afterUpdate } from "svelte";
   import { navigate } from "svelte-routing";
-  import { getFilesPerPage, Process../Component/filesUtilsnt/filesUtils";
-../Component/fileEvents
+  import { getFilesPerPage, ProcessFile } from "../Component/filesUtils";
+
   import { clamp } from "../../ShareComponent/utils";
   import { PageConfig } from "../Stores/PageConfigStore";
   import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
