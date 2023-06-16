@@ -7,7 +7,7 @@
   export let selectDir;
 
   let items = [];
-  let selectedId = "";
+  let selectedId = selected[item.title] || "";
 
   $: if (dirs) {
     let found = dirs[item.title]?.find((i) => i.IsAdult);

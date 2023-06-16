@@ -35,6 +35,7 @@
     const data = await apiUtils.files(["dirs/"]);
     selected.Mangas = data.Mangas[0]?.Id || "";
     selected.Videos = data.Videos[0]?.Id || "";
+    selected.Favorites = dirs.Favorites[0]?.Id || "";
     dirs = { ...dirs, ...data };
   });
 
