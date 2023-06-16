@@ -69,6 +69,13 @@ db.user.hasOne(db.userConfig, { onDelete: "cascade" });
 
 db.init = async (force) => {
   await sequelize.sync({ force });
+
+  try {
+    await db.sqlze.query("ALTER TABLE Folders ADD Server VARCHAR(255) NULL DEFAULT '';");
+  } catch (error) {
+    console.log("add COLUMN fail Server");
+  }
+
   let admin = await db.user.findOne({ where: { Name: "Administrator" } });
 
   if (!admin) {

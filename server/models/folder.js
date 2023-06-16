@@ -79,6 +79,10 @@ export default (sequelize, DataTypes, ImagesPath) => {
         type: BOOLEAN,
         defaultValue: 0,
       },
+      Server: {
+        type: STRING,
+        defaultValue: "",
+      },
     },
     {
       timestamps: false,
