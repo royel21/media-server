@@ -1,4 +1,4 @@
-import { getFilesPerPage, ProcessFile } from "./FilesUtils";
+import { getFilesPerPage, ProcessFile } from "./filesUtils";
 const UP = 38;
 const DOWN = 40;
 const LEFT = 37;
@@ -21,20 +21,18 @@ const getElIndex = (element) => {
   return [...document.querySelectorAll(".file")].indexOf(element);
 };
 
-const selectItem = (index) => {
-  selectedIndex = index;
-  let nextEl = getElByIndex(index);
-  if (nextEl) {
-    let itemContainer = nextEl.parentElement;
+const selectElement = (element) => {
+  if (element) {
+    let itemContainer = element.parentElement;
     let scrollElement = itemContainer.parentElement;
     let scroll = scrollElement.scrollTop,
-      elofft = nextEl.offsetTop;
+      elofft = element.offsetTop;
 
     if (elofft - scroll + 1 < -1) {
       scroll = elofft < 60 ? 0 : elofft;
     }
 
-    let top = elofft + nextEl.offsetHeight;
+    let top = elofft + element.offsetHeight;
     let sctop = scroll + scrollElement.offsetHeight;
 
     if (top - sctop + 1 > 0) {
@@ -50,22 +48,39 @@ const selectItem = (index) => {
 
     if (activeEl) activeEl.classList.remove("active");
 
-    nextEl.classList.add("active");
-    nextEl.focus();
-    window.localStorage.setItem("selected", index);
+    element.classList.add("active");
+    element.focus();
   }
-  return nextEl;
+  return element;
+};
+
+const selectItem = (index) => {
+  selectedIndex = index;
+  selectElement(getElByIndex(index));
+};
+
+const selectElementById = (Id, saveKey) => {
+  const el = document.getElementById(Id);
+  if (el) selectElement(el);
+  if (saveKey) localStorage.setItem(saveKey, Id);
+};
+
+const selectByTitle = (title) => {
+  const id = localStorage.getItem(title);
+  const element = document.getElementById(id);
+  if (element) selectElement(element);
 };
 
 const fileKeypress = (e, page, goToPage, title) => {
   let file = document.querySelector(".file");
   let selected = 0;
+
   if (file) {
-    localStorage.setItem(title, file.Id);
     let wasProcesed = false;
     let colNum = calCol();
     let totalitem = document.querySelectorAll(".file").length;
     selectedIndex = getElIndex(file.parentElement.querySelector(".active"));
+
     switch (e.keyCode) {
       case ENTER: {
         ProcessFile(e.target);
@@ -129,7 +144,12 @@ const fileKeypress = (e, page, goToPage, title) => {
     if (wasProcesed) {
       e.preventDefault();
     }
+
+    const active = file.parentElement.querySelector(".active");
+    if (active && title) {
+      localStorage.setItem(title, active.id);
+    }
   }
 };
 
-export { fileKeypress, selectItem, getElIndex };
+export { fileKeypress, selectItem, getElIndex, selectElementById, selectByTitle };

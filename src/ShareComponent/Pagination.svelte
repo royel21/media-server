@@ -11,7 +11,6 @@
   let showinput = false;
 
   const pagerClick = (e) => {
-    window.localStorage.setItem("selected", 0);
     let li = e.target;
 
     switch (e.target.id) {

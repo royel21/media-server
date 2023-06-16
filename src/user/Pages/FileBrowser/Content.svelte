@@ -5,7 +5,7 @@
   import apiUtils from "../../../apiUtils";
 
   import FilesList from "../../Component/FilesList.svelte";
-  import { ProcessFile } from "../../Component/FilesUtils";
+  import { ProcessFile } from "../../Component/filesUtils";
   import SortBy from "./SortBy.svelte";
 
   export let page = 1;
@@ -26,17 +26,16 @@
   let segment = window.location.pathname.replace(/(^\/+|\/+$)/g, "").split("/");
   let type = `${segment[0]}/${segment[1]}/${id}`;
 
-  let { pathname, folder } = localStorage.getObject("folder");
-  localStorage.setItem("Manga", folder);
+  let pathname = localStorage.getItem("return-folder");
 
   const openFirstLast = async ({ target: { id } }) => {
     const data = await apiUtils.files(["first-last", id, folderinfo.Id]);
-    ProcessFile({ id: data.Id, dataset: { type: data.Type } }, socket);
+    ProcessFile({ id: data.Id, dataset: { type: data.Type } });
   };
 
   const continueReading = async () => {
     const data = await apiUtils.files(["file-data", lastRead]);
-    ProcessFile({ id: lastRead, dataset: { type: data.Type } }, socket);
+    ProcessFile({ id: lastRead, dataset: { type: data.Type } });
   };
 
   const exitFolder = () => {

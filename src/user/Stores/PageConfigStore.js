@@ -11,12 +11,10 @@ const checkConfig = () => {
   let config = initConfig;
   const tconfig = JSON.parse(localStorage.getItem("config"));
   if (tconfig) {
-    config = tconfig;
-  }
-
-  for (const k in initConfig) {
-    if (!config[k]) {
-      config[k] = initConfig[k];
+    for (const k in initConfig) {
+      if (!config[k]) {
+        config[k] = tconfig[k] || config[k];
+      }
     }
   }
   return config;

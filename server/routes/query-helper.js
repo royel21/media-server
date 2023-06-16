@@ -86,7 +86,13 @@ export const getFolders = async (req, res) => {
     query.where.DirectoryId = dirid;
   }
 
-  let result = await db.folder.findAndCountAll(query);
+  let result = { rows: [], count: 0 };
+
+  try {
+    result = await db.folder.findAndCountAll(query);
+  } catch (error) {
+    console.log(error.toString());
+  }
 
   const mapFiles = ({ dataValues, Cover, Favorites }) => {
     const isFav = Favorites.map((fv) => fv.Id);

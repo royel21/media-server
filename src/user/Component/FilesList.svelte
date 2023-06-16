@@ -5,8 +5,8 @@
 
   import { PageConfig } from "../../user/Stores/PageConfigStore";
 
-  import { genUrl, FileTypes, ProcessFile } from "./FilesUtils";
-  import { fileKeypress, selectItem, getElIndex } from "./FileEvents";
+  import { FileTypes, ProcessFile, getFilesPerPage } from "./filesUtils";
+  import { fileKeypress, selectElementById, selectByTitle } from "./fileEvents";
 
   import Pagination from "../../ShareComponent/Pagination.svelte";
   import Filter from "../../ShareComponent/Filter.svelte";
@@ -22,10 +22,13 @@
   export let setLastRead;
   export let setFolderInfo;
   export let handleClick;
+  export let useSlot = false;
+  export let onOpen;
+
+  const apiPath = title === "Content" ? `folder-content/${id}` : type;
+
   let ver = 1;
   let folder;
-
-  let selected = +localStorage.getItem(title) || 0;
 
   const socket = getContext("socket");
   const user = getContext("User");
@@ -33,9 +36,10 @@
   let pageData = baseData;
   let favClicked = null;
 
-  const loadContent = async (pg = 1, flt = "", curId = "", config, nType) => {
+  const loadContent = async (pg = 1, flt = "", config) => {
     const { items, sort } = config[title];
-    let url = genUrl(pg, { items, order: sort || "nu" }, flt, nType || type, curId);
+    const itemsPerPage = items || getFilesPerPage(3);
+    let url = `/api/files/${apiPath}/${sort}/${pg}/${itemsPerPage}/${flt.replace("%", "")}`;
 
     const data = await getItemsList(url);
 
@@ -47,7 +51,6 @@
         folder = data.folder.Name;
         setLastRead(data.folder.currentFile);
       }
-      selected = pageData.files.findIndex((f) => f.Id === data.currentFile) || 0;
     } else {
       console.log(data.error);
     }
@@ -58,7 +61,6 @@
     let { totalPages } = pageData;
     pg = clamp(pg, 1, totalPages);
     navigate(`/${type}/${pg}/${filter || ""}`);
-    selected = sel;
   };
 
   const fileFilter = ({ detail }) => {
@@ -70,7 +72,7 @@
   const openFile = ({ target }) => {
     const el = target.closest(".file");
     localStorage.setItem(title, el.id);
-    ProcessFile(target.closest(".file"), socket);
+    ProcessFile(el);
   };
 
   const favClick = (event) => {
@@ -84,9 +86,7 @@
 
     const file = target.closest(".file");
     if (file) {
-      localStorage.setItem(title, file.id);
-      selected = getElIndex(file);
-      selectItem(selected);
+      selectElementById(file.id, title);
     }
   };
 
@@ -100,19 +100,11 @@
     }
   };
 
-  afterUpdate(() => {
-    let sel = 0;
-    let id = localStorage.getItem(title);
-    let el = document.getElementById(id);
-    if (el) {
-      sel = getElIndex(el);
-    }
-    selectItem(sel);
-  });
+  afterUpdate(() => selectByTitle(title));
 
   const reloadDir = (data) => {
     if (data.Id === id && user.Id === data.user) {
-      loadContent(page, filter, id, $PageConfig, type).then(() => ver++);
+      loadContent(page, filter, $PageConfig).then(() => ver++);
     }
   };
 
@@ -131,7 +123,7 @@
 
   $: document.title = `${title} Page ${page || ""}`;
 
-  $: loadContent(page, filter, id, $PageConfig, type);
+  $: loadContent(page, filter, $PageConfig);
 
   let isContent = location.pathname.includes("content");
 </script>
@@ -139,11 +131,11 @@
 <div class="scroll-container" class:r-content={isContent}>
   <slot name="header" />
   <div class="files-list" on:keydown={handleKeydown} on:click={favClick}>
-    {#each pageData.files as { Id, Name, Type, CurrentPos, Duration, isFav, FileCount, Status }, i}
+    {#each pageData.files as { Id, Name, Type, CurrentPos, Duration, isFav, FileCount, Status }}
       <div class="file" id={Id} data-type={Type} tabIndex="0" in:fade>
         <div class="file-info">
           <div class="file-btns usn">
-            <span class="file-btn-left" on:click|stopPropagation={openFile}>
+            <span class="file-btn-left" on:click|stopPropagation={onOpen || openFile}>
               <i class={"fas fa-" + FileTypes[Type].class} />
             </span>
             <span class="file-progress">
@@ -154,10 +146,14 @@
               {/if}
             </span>
             {#if Type === "Folder"}
-              <FavoriteList {isFav} {type} {favClicked} favId={id} on:removeFile={removeFile} />
+              {#if useSlot}
+                <slot name="file-action" file={{ Id, Name, Type }} />
+              {:else}
+                <FavoriteList {isFav} {type} {favClicked} favId={id} on:removeFile={removeFile} />
+              {/if}
             {/if}
           </div>
-          <div class="file-cover usn" on:dblclick|stopPropagation={openFile}>
+          <div class="file-cover usn" on:dblclick|stopPropagation={onOpen || openFile}>
             <img src={getCover(Type, Name) + `?v=${ver}`} alt="No Cover Found" />
             {#if Type.includes("Folder")}
               <span class:completed={Status}>{Status ? "Completed" : "OnGoing"}</span>

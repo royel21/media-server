@@ -1,19 +1,21 @@
 <script>
-  import api from "../../apiUtils";
+  import { afterUpdate } from "svelte";
   import { navigate } from "svelte-routing";
-  import { getFilesPerPage } from "../Component/FilesUtils";
-  import { fileKeypress, selectItem, getElIndex } from "../Component/FileEvents";
+  import { getFilesPerPage, ProcessFile } from "../Component/filesUtils";
 
-  import Filter from "../../ShareComponent/Filter.svelte";
-  import Pagination from "../../ShareComponent/Pagination.svelte";
-  import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
   import { clamp } from "../../ShareComponent/utils";
   import { PageConfig } from "../Stores/PageConfigStore";
+  import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
+  import { fileKeypress, selectByTitle, selectElementById } from "../Component/fileEvents";
+
+  import api from "../../apiUtils";
+  import Filter from "../../ShareComponent/Filter.svelte";
+  import Pagination from "../../ShareComponent/Pagination.svelte";
 
   export let page = 1;
   export let filter = "";
+  let title = "Home";
 
-  let current = 0;
   let pageData = { items: [], page: page || 1, totalPages: 0, totalFiles: 0 };
 
   const loadContent = async (pg, flt = "") => {
@@ -26,13 +28,11 @@
   const goToPage = async ({ detail }) => navigate(`/${+detail}/${filter || ""}`);
 
   const openFolder = ({ target }) => {
-    let { Id, FilesType, CurrentFile } = pageData.items.find((f) => f.Id === target.closest(".file").id);
-    localStorage.setItem("content", location.pathname);
-
-    navigate(`/${FilesType}/viewer/${Id}/${CurrentFile}`);
+    const file = target.closest(".file");
+    ProcessFile(file, file.dataset.types);
   };
 
-  const handleKeydown = (event) => fileKeypress(event, pageData.page, goToPage);
+  const handleKeydown = (event) => fileKeypress(event, pageData.page, goToPage, title);
 
   const fileFilter = ({ detail }) => navigate(`/${1}/${detail || ""}`);
 
@@ -42,9 +42,15 @@
     if (result.valid) loadContent(page, filter);
   };
 
+  const handleClick = ({ currentTarget }) => {
+    selectElementById(currentTarget.id, title);
+  };
+
   ToggleMenu.set(false);
 
   $: $PageConfig, loadContent(page, filter);
+
+  afterUpdate(() => selectByTitle(title));
 
   $: document.title = page ? `Home - Page - ${pageData.page}` : "Home";
 </script>
@@ -58,14 +64,14 @@
   </div>
   <div class="files-list" on:keydown={handleKeydown}>
     {#each pageData.items as { Id, Name, Type, Cover, FileCount, FilesType }, i}
-      <div class="file" class:current={i === current} id={Id} data-type={Type} data-types={FilesType} tabIndex="0">
+      <div class="file" id={Id} data-type={Type} data-types={FilesType} tabIndex="0" on:click={handleClick}>
         <div class="file-info">
           <div class="file-btns">
             <span class="file-btn-left" on:click|stopPropagation={openFolder}>
               <i class={"fas fa-folder"} />
             </span>
             <span class="file-progress">{FileCount}</span>
-            <span class="remove" on:click={removeRecent}>
+            <span class="remove" on:click|stopPropagation={removeRecent}>
               <i class="fas fa-trash-alt" />
             </span>
           </div>

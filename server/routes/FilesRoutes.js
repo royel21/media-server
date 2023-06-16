@@ -13,25 +13,12 @@ routes.get("/folder-content/:id/:order/:page?/:items?/:search?", async (req, res
   const { id, order, page, items, search } = req.params;
 
   let data = {};
+  const currentFile = `(Select currentFile from RecentFolders where FolderId = \`Folders\`.\`Id\` AND RecentId = '${req.user?.Recent.Id}')`;
 
   try {
     data = await getFiles(req.user, { id, order, page, items, search }, db.folder);
     const folder = await db.folder.findOne({
-      attributes: [
-        "Id",
-        "Name",
-        "Description",
-        "Status",
-        "Genres",
-        [
-          literal(
-            "(Select currentFile from RecentFolders where FolderId = `Folders`.`Id` AND RecentId = '" +
-              req.user?.Recent.Id +
-              "')"
-          ),
-          "currentFile",
-        ],
-      ],
+      attributes: ["Id", "Name", "Description", "Status", "Genres", [literal(currentFile), "currentFile"]],
       where: { Id: id },
     });
 

@@ -31,43 +31,37 @@ export const getFilesPerPage = (i) => {
   return items * i || 0;
 };
 
-export const genUrl = (page = 1, { order = "nu", items }, filter, type, id, dir) => {
+export const genUrl = (page = 1, { order = "nu", items }, filter, type, id) => {
   let itemsperpage = +items || getFilesPerPage(3);
-  if (type.includes("content")) {
-    type = `folder-content/${id}`;
-  }
+
+  // if (type.includes("content")) {
+  //   type = `folder-content/${id}`;
+  // }
 
   filter = (filter || "").replace("%", " ");
-  let url = "";
-  if (["mangas", "videos"].includes(type)) {
-    url = `/api/files/${type}/${dir}/${order}/${page}/${itemsperpage}/${filter}`;
-  } else {
-    url = `/api/files/${type}/${order}/${page}/${itemsperpage}/${filter}`;
-  }
+  let url = `/api/files/${type}/${order}/${page}/${itemsperpage}/${filter}`;
   return url;
 };
 
-export const ProcessFile = (file, socket, type) => {
-  const curPath = location.pathname;
+export const ProcessFile = (file, type) => {
+  const folderId = file.id;
+  const { pathname } = location;
+
   switch (file.dataset.type) {
     case "Manga":
     case "Video": {
-      let segment = curPath.replace("content", "viewer").split("/").slice(0, 4);
+      localStorage.setItem("return-content", pathname);
 
-      let url = `${segment.join("/")}/${file.id}`;
-      localStorage.setItem("content", curPath);
-      localStorage.setItem("Content", file.id);
+      let segment = pathname.replace("content", "viewer").split("/").slice(0, 4);
+      let url = `${segment.join("/")}/${folderId}`;
 
       navigate(url);
       break;
     }
     default: {
-      localStorage.setObject("folder", {
-        folder: file.id,
-        pathname: curPath,
-      });
-      let Type = location.pathname.split("/")[1];
-      navigate(`/${type || Type}/content/${file.id}/`);
+      localStorage.setItem("return-folder", pathname);
+      let Type = pathname.split("/")[1];
+      navigate(`/${type || Type}/content/${folderId}/`);
     }
   }
 };
