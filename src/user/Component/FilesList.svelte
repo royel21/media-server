@@ -25,8 +25,6 @@
   export let useSlot = false;
   export let onOpen;
 
-  const apiPath = title === "Content" ? `folder-content/${id}` : type;
-
   let ver = 1;
   let folder;
 
@@ -39,6 +37,7 @@
   const loadContent = async (pg = 1, flt = "", config) => {
     const { items, sort } = config[title];
     const itemsPerPage = items || getFilesPerPage(3);
+    const apiPath = title === "Content" ? `folder-content/${id}` : type;
     let url = `/api/files/${apiPath}/${sort}/${pg}/${itemsPerPage}/${flt.replace("%", "")}`;
 
     const data = await getItemsList(url);
@@ -123,7 +122,7 @@
 
   $: document.title = `${title} Page ${page || ""}`;
 
-  $: loadContent(page, filter, $PageConfig);
+  $: type && loadContent(page, filter, $PageConfig);
 
   let isContent = location.pathname.includes("content");
 </script>
