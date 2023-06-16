@@ -30,7 +30,7 @@ export default (sequelize, DataTypes, ImagesPath) => {
         type: TEXT,
       },
       Genres: {
-        type: STRING(150),
+        type: STRING(255),
         defaultValue: "",
       },
       Exists: {
