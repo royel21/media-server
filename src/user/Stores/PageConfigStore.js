@@ -7,24 +7,25 @@ const initConfig = {
   Videos: { items: 0, sort: "nu" },
   Favorites: { items: 0, sort: "nu" },
 };
-const checkConfig = () => {
-  let config = initConfig;
-  const tconfig = JSON.parse(localStorage.getItem("config"));
-  if (tconfig) {
-    for (const k in initConfig) {
-      if (!config[k]) {
-        config[k] = tconfig[k] || config[k];
-      }
+
+export function getConfig() {
+  const cfg = JSON.parse(localStorage.getItem("config"));
+
+  if (cfg) {
+    for (const key in initConfig) {
+      initConfig[key] = cfg[key] ?? initConfig[key];
     }
   }
-  return config;
-};
 
-const PageConfig = writable(checkConfig());
+  return initConfig;
+}
+
+const PageConfig = writable(getConfig());
 
 const updateConfig = (config) => {
   PageConfig.update((cfg) => (cfg = config));
   localStorage.setObject("config", config);
   return config;
 };
+
 export { PageConfig, updateConfig };
