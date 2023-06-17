@@ -31,7 +31,7 @@ const updateDb = async () => {
 
 const saveDb = async () => {
   let datas = [];
-  const folders = await db.folder.findAll({ order: ["Name"], where: { FilesType: "mangas" } });
+  const folders = await db.folder.findAll({ order: ["Name"] });
   for (let folder of folders) {
     if (!datas.find((f) => compare(f, folder))) {
       datas.push({
@@ -42,6 +42,7 @@ const saveDb = async () => {
         Status: folder.Status,
         IsAdult: folder.IsAdult,
         FilesType: folder.FilesType,
+        Server: folder.Server,
       });
       i++;
     }
