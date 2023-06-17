@@ -77,6 +77,7 @@ app.use("/api/admin/folders", FoldersRoute);
 
 const getPath = (type) => path.join(global.appPath, "public", type, "index.html");
 
+// process login page request
 app.get("/login/*", (_, res) => res.sendFile(getPath("/static/login")));
 
 app.get("/admin/*", ({ user }, res) =>
@@ -93,8 +94,8 @@ app.use((e, _, res, __) => {
   }
 });
 
-const { PORT, PORT2, IP, HOME_IP } = process.env;
-const host = process.env.USERNAME === "rconsoro" ? IP : HOME_IP;
+const { PORT, PORT2, IP, HOME_IP, IP_LOCAL, USE_LOCAL } = process.env;
+let host = USE_LOCAL ? IP_LOCAL : process.env.USERNAME === "rconsoro" ? IP : HOME_IP;
 const port = process.env.USERNAME === "rconsoro" ? PORT2 : PORT;
 
 console.log(process.env.NODE_ENV, host, port);

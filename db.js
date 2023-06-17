@@ -51,19 +51,15 @@ const saveDb = async () => {
   console.log("save", i, `backup/${process.env.DB}.json`);
 };
 
-const test = async () => {
-  await db.init();
-  const all = await db.folder.findAll({
-    where: {
-      FilesType: "mangas",
-      Name: "100,000 Levels Of Body Refining All The Dogs I Raise Are The Emperor",
-    },
-    include: [{ model: db.favorite }],
-  });
-  console.log(all[0]);
-  // all.forEach((f) => {
-  //   console.log(f.Name);
-  // });
+const test = () => {
+  const datas = fs.readJsonSync(`backup/mediaserverdb.json`);
+  const folders = fs.readdirSync("F:/R18/webtoon");
+
+  for (const d of datas) {
+    if (d.Status && folders.includes(d.Name)) {
+      console.log(d.Name);
+    }
+  }
 };
 
 const works = {

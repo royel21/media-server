@@ -11,17 +11,18 @@ import recentFolder from "./recent-folder.js";
 import recentFile from "./recent-file.js";
 
 import dbconfig from "./config.js";
-import { config } from "dotenv";
-config();
+import { config as configEnv } from "dotenv";
+configEnv();
 
 const DataTypes = Sequelize.DataTypes;
 
 const { USERNAME, HOST, HOST2, DB_USER, PASSWORD, DB, CONNECTOR, IMAGES } = process.env;
 
-dbconfig[CONNECTOR].host = USERNAME === "rconsoro" ? HOST : HOST2;
-// dbconfig[CONNECTOR].logging = console.log;
+const config = dbconfig[CONNECTOR];
+config.host = USERNAME === "rconsoro" ? HOST : HOST2;
+//config.logging = console.log;
 
-const sequelize = new Sequelize(DB, DB_USER, PASSWORD, dbconfig[CONNECTOR]);
+const sequelize = new Sequelize(DB, DB_USER, PASSWORD, config);
 
 const db = {
   Op: Sequelize.Op,

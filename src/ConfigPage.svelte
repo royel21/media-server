@@ -20,8 +20,13 @@
     }
 
     socket?.close();
-    if (isPwa()) history.go(-(history.length - 1));
-    location.href = "/login";
+    if (isPwa()) {
+      history.go(-(history.length - 1));
+    }
+
+    setTimeout(() => {
+      location.href = "/login";
+    }, 50);
   };
 
   onMount(async () => {
