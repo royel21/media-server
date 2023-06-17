@@ -143,7 +143,6 @@ const scanDir = async ({ Id, Path, Type, isFolder, IsAdult }, user) => {
 };
 /****************** Rename File *******************/
 const renameFile = async ({ Id, Name }) => {
-  console.log("rename", Id, Name);
   let file = await db.file.findOne({
     where: { Id },
     include: { model: db.folder },

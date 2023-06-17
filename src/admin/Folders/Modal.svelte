@@ -38,7 +38,6 @@
 
   const submit = (e) => {
     file.Name = tempFile.Name + tempFile.Ex;
-    console.log(file, tempFile);
     dispatch("submit", e);
   };
 
