@@ -1,14 +1,22 @@
 <script>
+  import { onMount } from "svelte";
+
   export let file;
   export let key;
   export let label;
   export let style;
   export let rows;
+  export let ref = null;
+  export let focus = false;
+
+  onMount(() => {
+    if (ref && focus) ref.focus();
+  });
 </script>
 
 <div class="input-body" {style}>
   <div for="Name" class="input-text">{label || key}</div>
-  <textarea name="Name" class="input-control" {rows} bind:value={file[key]} />
+  <textarea bind:this={ref} name="Name" class="input-control" {rows} bind:value={file[key]} />
 </div>
 
 <style>

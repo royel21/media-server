@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from "svelte";
+  import { onMount, createEventDispatcher } from "svelte";
   import { fade } from "svelte/transition";
   import apiUtils from "../../apiUtils";
   import CheckBox from "../Component/CheckBox.svelte";
@@ -8,7 +8,11 @@
 
   export let file;
   export let modalType;
+  export let ref = null;
+
   let options = [];
+  let tempFile = { Name: "", Ex: "" };
+  const dispatch = createEventDispatcher();
 
   onMount(async () => {
     if (file.Type === "Folder") {
@@ -26,14 +30,32 @@
     if (type === "checkbox") value = checked;
     file[name] = value;
   };
+
+  const loadTemp = (f) => {
+    tempFile.Ex = "." + f.Name.split(".").pop();
+    tempFile.Name = f.Name.replace(tempFile.Ex, "");
+  };
+
+  const submit = (e) => {
+    file.Name = tempFile.Name + tempFile.Ex;
+    console.log(file, tempFile);
+    dispatch("submit", e);
+  };
+
+  const onKeyDown = (e) => {
+    if (e.keyCode === 13) submit(e);
+    if (e.keyCode === 27) dispatch("click", e);
+  };
+
+  loadTemp(file);
 </script>
 
 <div class="modal-container">
-  <div class="modal card" transition:fade={{ duration: 200 }}>
+  <div class="modal card" transition:fade={{ duration: 200 }} on:keydown={onKeyDown} tabindex="0">
     <div class="modal-header">
       <h4>{modalType.title}</h4>
     </div>
-    <form action="#" on:submit|preventDefault on:keydown>
+    <form bind:this={ref} action="#" on:submit|preventDefault={submit}>
       <div class="modal-body">
         {#if modalType.Del}
           <p>Are you sure you want to remove <strong>{file.Name}</strong></p>
@@ -47,7 +69,7 @@
             </label>
           </div>
         {:else}
-          <Input {file} key="Name" style="margin-bottom: 5px" rows="3" />
+          <Input file={tempFile} key="Name" style="margin-bottom: 5px" rows="3" focus={true} />
           {#if file.Type === "Folder"}
             <Input {file} key="AltName" style="margin-bottom: 5px" rows="3" />
             <Input {file} key="Genres" style="margin-bottom: 5px" rows="2" />
@@ -75,6 +97,7 @@
 <style>
   .modal {
     width: 400px;
+    outline: none;
   }
   .del-label {
     width: fit-content;

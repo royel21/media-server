@@ -76,10 +76,10 @@
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = ({ detail }) => {
     //if we are deleting the file
     if (modalType.Del) {
-      let Del = event.target.querySelector("input").checked;
+      let Del = detail.target.querySelector("input").checked;
       socket.emit("remove-folder", { Id: folder.Id, Del });
     } else {
       if (!folder.Name) {
@@ -148,7 +148,7 @@
 </script>
 
 {#if showModal}
-  <Modal file={folder} {modalType} on:submit={handleSubmit} on:click={hideModal} on:keydown{handleSubmit} />
+  <Modal file={folder} {modalType} on:submit={handleSubmit} on:click={hideModal} />
 {/if}
 
 {#if showImage}
