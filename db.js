@@ -17,7 +17,9 @@ const updateDb = async () => {
     for (let d of items) {
       const found = await db.folder.findOne({ where: { Name: d.Name } });
       if (found && d.Description && d.Status && d.IsAdult) {
-        d.AltName = capitalize(d.AltName);
+        if (d.AltName !== "N/A") {
+          d.AltName = capitalize(d.AltName.replace("',", ""));
+        }
         // console.log(found.Name);
         await found.update(d);
         i++;
