@@ -5,8 +5,6 @@ modules/win-explorer/.vscode
 modules/win-explorer/test
 modules/win-explorer/build
 modules/win-explorer/bin
-public/build/*
-images/
 ./files*
 test.js
 
@@ -34,3 +32,5 @@ backup/*
 note.txt
 mediaserver.sqlite-journal
 mariadb.txt
+sessions/
+others/
