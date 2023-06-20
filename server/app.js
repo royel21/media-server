@@ -10,9 +10,6 @@ import passportConfig from "./passport.js";
 import websocketConfig from "./websocket/socketio-server.js";
 import { fileURLToPath } from "url";
 
-import sessionStore from "session-file-store";
-const FileStore = sessionStore(session);
-
 config();
 
 import db from "./models/index.js";
@@ -51,10 +48,9 @@ app.use(express.static(global.appPath + "/public/static", { dotfiles: "allow" })
 const sessionMeddle = session({
   name: process.env.SESSION,
   secret: "2491eb2c-595d-4dc8-8427",
-  resave: true,
+  resave: false,
   saveUninitialized: false,
   maxAge: 24 * 60 * 60 * 1000 * 30,
-  store: new FileStore(),
 });
 app.use(sessionMeddle);
 
