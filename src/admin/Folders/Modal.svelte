@@ -33,7 +33,7 @@
 
   const loadTemp = (f) => {
     const ex = f.Name.split(".").pop();
-    if (/zip|mp4|mkv|ogg|avi/i.test(ex)) {
+    if (/\.(zip|mp4|mkv|ogg|avi)$/i.test(ex)) {
       tempFile.Ex = "." + ex;
     }
     tempFile.Name = f.Name.replace(tempFile.Ex, "");
