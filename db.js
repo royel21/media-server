@@ -58,13 +58,13 @@ const saveDb = async () => {
 
 const test = () => {
   const datas = fs.readJsonSync(`backup/mediaserverdb.json`);
-  const folders = fs.readdirSync("F:/R18/webtoon");
 
   for (const d of datas) {
-    if (d.Status && folders.includes(d.Name)) {
-      console.log(d.Name);
-    }
+    const genres = d.Genres.split(",").map((d) => d.trim());
+    genres.sort();
+    d.Genres = genres.join(", ");
   }
+  fs.writeJsonSync(`backup/mediaserverdb.json`, datas);
 };
 
 const works = {
