@@ -16,7 +16,7 @@ const updateDb = async () => {
   const update = async (items) => {
     for (let d of items) {
       const found = await db.folder.findOne({ where: { Name: d.Name } });
-      if (found && d.Description && d.Status && d.IsAdult) {
+      if (found && d.Description) {
         if (d.AltName !== "N/A") {
           d.AltName = capitalize(d.AltName.replace("',", ""));
         }
@@ -33,7 +33,10 @@ const updateDb = async () => {
 
 const saveDb = async () => {
   let datas = [];
-  const folders = await db.folder.findAll({ order: ["Name"] });
+  const folders = await db.folder.findAll({
+    order: ["Name"],
+    where: { Server: { [db.Op.not]: "nhentai.net" }, FilesType: { [db.Op.not]: "videos" } },
+  });
   for (let folder of folders) {
     if (!datas.find((f) => compare(f, folder))) {
       datas.push({
