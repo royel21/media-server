@@ -21,11 +21,10 @@ export default (server, sessionMeddle) => {
 
       if (!user) return;
 
-      console.log("connected", socket.id);
-
       FileManager.setSocket(io);
 
       socket.on("scan-dir", (data) => FileManager.scanDir(data, user));
+      console.log("User: ", user.Name, socket.id);
 
       if (user.Role.includes("Administrator")) {
         socket.on("load-disks", FileManager.diskLoader);
