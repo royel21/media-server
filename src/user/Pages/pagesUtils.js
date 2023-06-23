@@ -59,9 +59,9 @@ export const sortFileByName = (a, b) => {
   let n2 = b.Name.replace("-", ".").match(/^\d+.\d+|\d+/);
 
   if (n1 && n2) {
-    return Number(n1[0]) - Number(n2[0]) && a.Name.replace("-", "Z").localeCompare(b.Name.replace("-", "Z"));
-  }else{
-    return a.Name.replace("-", "Z").localeCompare(b.Name.replace("-", "Z"));
+    return Number(n1[0]) - Number(n2[0]) && a.Name.replace("-", "Z").localeCompare(b.Name?.replace("-", "Z"));
+  } else {
+    return a.Name.replace("-", "Z").localeCompare(b.Name?.replace("-", "Z"));
   }
 };
 
