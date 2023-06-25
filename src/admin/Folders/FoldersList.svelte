@@ -24,7 +24,7 @@
   let fullPathPos = {};
 
   const loadFolders = async (pg) => {
-    let flt = encodeURIComponent(filter.replace(/|:|\?|\^|"|\*|<|>|\t|\n/gi, ""));
+    let flt = encodeURIComponent(filter?.replace(/|:|\?|\^|"|\*|<|>|\t|\n/gi, ""));
     let data = await apiUtils.admin(["folders", pg, calRows(), flt]);
 
     if (data.items) {
@@ -153,9 +153,9 @@
 
 {#if showImage}
   <div class="thumbnail">
-    <img src={`/Folder/${encodeURIComponent(showImage.Name)}.jpg`} alt="Cover Not Found" />
+    <img src={`/Folder/${encodeURIComponent(showImage?.Name)}.jpg`} alt="Cover Not Found" />
   </div>
-  <span id="f-path" style={`left: ${fullPathPos.x}px; top:${fullPathPos.y}px;`}>{showImage.Path}</span>
+  <span id="f-path" style={`left: ${fullPathPos.x}px; top:${fullPathPos.y}px;`}>{showImage?.Path}</span>
 {/if}
 
 <ItemList
