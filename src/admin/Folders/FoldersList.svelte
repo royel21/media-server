@@ -24,7 +24,7 @@
   let fullPathPos = {};
 
   const loadFolders = async (pg) => {
-    let flt = encodeURIComponent((filter | "")?.replace(/|:|\?|\^|"|\*|<|>|\t|\n/gi, ""));
+    let flt = encodeURIComponent((filter || "")?.replace(/|:|\?|\^|"|\*|<|>|\t|\n/gi, ""));
     let data = await apiUtils.admin(["folders", pg, calRows(), flt]);
 
     if (data.items) {
