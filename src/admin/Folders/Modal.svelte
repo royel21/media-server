@@ -33,7 +33,7 @@
 
   const loadTemp = (f) => {
     const ex = f.Name.split(".").pop();
-    if (/\.(zip|mp4|mkv|ogg|avi)$/i.test(ex)) {
+    if (/zip|mp4|mkv|ogg|avi$/i.test(ex)) {
       tempFile.Ex = "." + ex;
     }
     tempFile.Name = f.Name?.replace(tempFile.Ex, "");
@@ -45,7 +45,11 @@
   };
 
   const onKeyDown = (e) => {
-    if (e.keyCode === 13) submit(e);
+    if (e.keyCode === 13) {
+      submit(e);
+      e.preventDefault();
+      e.stopPropagation();
+    }
     if (e.keyCode === 27) dispatch("click", e);
   };
 
