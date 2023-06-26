@@ -14,8 +14,7 @@ export default {
       timestamps: false,
     },
     dialectOptions: {
-      timezone: "Etc/GMT-4",
-      multipleStatements: true,
+      useUTC: false,
     },
   },
   sqlite: {
@@ -24,6 +23,9 @@ export default {
     storage: "mediaserver.sqlite",
     define: {
       timestamps: false,
+    },
+    dialectOptions: {
+      useUTC: false,
     },
   },
 };
