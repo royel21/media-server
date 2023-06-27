@@ -24,7 +24,7 @@ routes.get("/", async (req, res) => {
       [db.sqlze.literal("(Select COUNT(Folders.Id) from Folders where DirectoryId = Directory.Id)"), "FolderCount"],
       [db.sqlze.literal("(Select SUM(FileCount) from Folders where DirectoryId = Directory.Id)"), "TotalFiles"],
     ],
-    order: ["FullPath"],
+    order: ["IsAdult", "FullPath"],
   });
 
   let dirs = data.map((d) => d.dataValues);

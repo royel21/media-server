@@ -68,7 +68,11 @@ const selectElementById = (Id, saveKey) => {
 const selectByTitle = (title) => {
   const id = localStorage.getItem(title);
   const element = document.getElementById(id);
-  if (element) selectElement(element);
+  if (element) {
+    selectElement(element);
+  } else {
+    selectItem(0);
+  }
 };
 
 const fileKeypress = (e, page, goToPage, title) => {

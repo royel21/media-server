@@ -1,13 +1,18 @@
 import { scrollInView } from "./mangaUtils";
 
-var pageObserver;
-var imgObserver;
-let imgs;
+let pageObserver;
+let imgObserver;
 let currentPage;
+let scrollDir;
+let oldScroll;
+const onScroll = function ({ target: { scrollTop } }) {
+  scrollDir = oldScroll < scrollTop ? 1 : -1;
+  oldScroll = scrollTop;
+};
 
 export const PageObserver = (setPage, container) => {
-  imgs = container.querySelectorAll("img");
-  if (!pageObserver) {
+  if (!pageObserver && imgs.length) {
+    container.onscroll = onScroll;
     pageObserver = new IntersectionObserver(
       (entries) => {
         if (imgs.length) {
@@ -15,12 +20,12 @@ export const PageObserver = (setPage, container) => {
             let img = entry.target;
             if (entry.isIntersecting) {
               currentPage = +img.id;
-              setPage(+img.id);
+              setPage(currentPage);
             }
           }
         }
       },
-      { root: container }
+      { threshold: 0.05, root: container }
     );
 
     imgs.forEach((lazyImg) => {
@@ -36,8 +41,9 @@ const onmousedown = () => {
   mDown = true;
 };
 
-const onmouseup = () => {
+const onmouseup = (e) => {
   const curPage = currentPage;
+  const imgs = e.target.querySelectorAll("img");
   if (imgs[curPage] && !imgs[curPage].src) {
     loadImages(curPage - 1, 6);
     setTimeout(() => {
@@ -55,40 +61,40 @@ const onmouseup = () => {
 let tout;
 let load = false;
 export const scrollImageLoader = (loadImages, container) => {
+  const imgs = container.querySelectorAll("img");
   container.onmouseup = onmouseup;
   container.onmousedown = onmousedown;
+  disconnectObvrs(container);
 
-  if (!imgObserver) {
-    imgObserver = new IntersectionObserver(
-      (entries) => {
-        if (!mDown) {
-          if (entries.length < imgs.length) {
-            let pg, dir;
-            for (let entry of entries) {
-              if (entry.isIntersecting) {
-                pg = +entry.target.id;
-                dir = pg < currentPage ? -1 : 1;
+  const margin = window.innerHeight * 2;
 
-                const img = imgs[pg];
-                if (img && !img.src.includes("data:img")) {
-                  load = true;
-                }
+  imgObserver = new IntersectionObserver(
+    (entries) => {
+      if (!mDown) {
+        if (entries.length < imgs.length) {
+          let pg;
+          for (let entry of entries) {
+            if (entry.isIntersecting) {
+              pg = +entry.target.id;
+
+              if (imgs[pg] && !imgs[pg].src.includes("data:img")) {
+                load = true;
               }
             }
-            if (load) {
-              load = false;
-              loadImages(currentPage, 8, dir);
-            }
+          }
+          if (load) {
+            load = false;
+            loadImages(currentPage, 8, scrollDir);
           }
         }
-      },
-      {
-        root: container,
-        rootMargin: window.innerHeight * 4 + "px",
-        threshold: 0,
       }
-    );
-  }
+    },
+    {
+      root: container,
+      rootMargin: `${margin}px 0px ${margin}px 0px`,
+      threshold: 0,
+    }
+  );
 
   imgs.forEach((lazyImg) => {
     imgObserver.observe(lazyImg);
@@ -102,9 +108,7 @@ export const disconnectObvrs = (container) => {
   }
   pageObserver?.disconnect();
   imgObserver?.disconnect();
-  imgs = [];
   pageObserver = null;
   imgObserver = null;
-  imgs = null;
   currentPage = null;
 };

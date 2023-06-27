@@ -45,7 +45,6 @@
   };
 
   const changePage = (dir, action) => {
-    disconnectObvrs(imgContainer);
     let pg = file.CurrentPos + dir;
     if (pg > -1 && pg < file.Duration) {
       if (webtoon) {
@@ -118,11 +117,11 @@
       if (!data.last) {
         images[data.page] = data.img;
       } else {
-        viewerState.loading = false;
-        if (viewerState.jumping) {
-          viewerState.jumping = false;
+        if ((viewerState.jumping, imgContainer)) {
           scrollImageLoader(loadImages, imgContainer);
+          viewerState.jumping = false;
         }
+        viewerState.loading = false;
       }
     }
   };
@@ -151,11 +150,11 @@
 
   //reload on file change
   $: if (file.Id !== viewerState.lastfId) {
+    disconnectObvrs(imgContainer);
     viewerState.jumping = webtoon;
     viewerState.loading = false;
     images = [];
     controls.file = file;
-    disconnectObvrs(imgContainer);
     loadImages(file.CurrentPos - 2, 8);
   }
 

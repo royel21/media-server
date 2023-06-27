@@ -19,7 +19,6 @@
   let pageData = { items: [], page: page || 1, totalPages: 0, totalFiles: 0 };
 
   const loadContent = async (pg, flt = "") => {
-    pg = clamp(pg, 1, pageData.totalPages);
     const items = $PageConfig.Home.items || getFilesPerPage(3);
     const data = await api.files(["recents", items, pg, flt]);
     if (data.valid) pageData = data;
@@ -29,6 +28,7 @@
 
   const openFolder = ({ target }) => {
     const file = target.closest(".file");
+    localStorage.setItem(title, file.id);
     ProcessFile(file, file.dataset.types);
   };
 
@@ -39,7 +39,10 @@
   const removeRecent = async ({ currentTarget }) => {
     const Id = currentTarget.closest(".file")?.id;
     const result = await api.post("files/recents/remove", { Id });
-    if (result.valid) loadContent(page, filter);
+    if (result.valid) {
+      page = clamp(pg, 1, pageData.totalPages);
+      loadContent(page, filter);
+    }
   };
 
   const handleClick = ({ currentTarget }) => {

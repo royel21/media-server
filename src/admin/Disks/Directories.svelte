@@ -91,17 +91,16 @@
     <thead>
       <tr>
         <th>Actions</th>
-        <th>Name</th>
         <th>Type</th>
+        <th>Is Adult</th>
+        <th>Path</th>
         <th>Folder {count}</th>
         <th>Total Files {allFiles}</th>
-        <th>Is Adult</th>
         <th>Order In Menu</th>
-        <th>Full Path</th>
       </tr>
     </thead>
     <tbody>
-      {#each dirs as { Id, Name, IsLoading, FullPath, Type, FolderCount, TotalFiles, IsAdult, FirstInList }}
+      {#each dirs as { Id, IsLoading, FullPath, Type, FolderCount, TotalFiles, IsAdult, FirstInList }}
         <tr id={Id} key={Id}>
           <td>
             <span class="dir-sync" on:click={rescan}>
@@ -111,11 +110,11 @@
               <i class="fas fa-trash-alt" />
             </span>
           </td>
-          <td><div>{Name}</div></td>
           <td>{Type}</td>
+          <td data-name="IsAdult" on:click={updateDir}>{IsAdult}</td>
+          <td>{FullPath}</td>
           <td>{FolderCount}</td>
           <td>{TotalFiles}</td>
-          <td data-name="IsAdult" on:click={updateDir}>{IsAdult}</td>
           <td class="order" on:click|stopPropagation={onShowInput}>
             {#if showInput && Id === dir.Id}
               <input bind:value={dir.FirstInList} on:blur={hideInput} use:focusInput />
@@ -123,7 +122,6 @@
               {FirstInList}
             {/if}
           </td>
-          <td>{FullPath}</td>
         </tr>
       {/each}
       <tr class="only">
@@ -145,33 +143,28 @@
     display: block;
     color: red;
   }
-  td div {
-    width: 50px;
-  }
-  td:nth-child(2),
   th:nth-child(2) {
-    white-space: nowrap;
-    overflow: hidden;
-    min-width: 150px;
-    width: 10%;
+    min-width: 80px;
+    width: 80px;
   }
-  th:nth-child(3) {
-    min-width: 100px;
-    width: 100px;
-  }
-  th:nth-child(4),
-  th:nth-child(5) {
-    min-width: 155px;
-    width: 155px;
-  }
-  td:nth-child(6),
-  td:nth-child(7) {
+  td:nth-child(3) {
+    min-width: 90px;
+    width: 90px;
     cursor: pointer;
-    width: 130px;
-    min-width: 130px;
   }
-  td:nth-child(7) {
+  th:nth-child(5) {
+    min-width: 120px;
+    width: 120px;
+  }
+  td:nth-child(6) {
+    width: 155px;
+    min-width: 155px;
+  }
+  td:last-child {
     text-align: center;
+    cursor: pointer;
+    width: 155px;
+    min-width: 155px;
   }
   .order:has(input) {
     padding: 0;

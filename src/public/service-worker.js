@@ -1,4 +1,4 @@
-const cacheName = "media-v1";
+const cacheName = "media-v2";
 const staticAssets = [
   "./fa-regular-400.woff",
   "./fa-regular-400.woff2",
