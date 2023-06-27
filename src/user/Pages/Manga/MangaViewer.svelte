@@ -40,14 +40,12 @@
       if (indices.length) {
         viewerState.loading = true;
         socket.emit("loadzip-image", { Id: file.Id, indices });
-      } else if (viewerState.jumping) {
-        // if we came from pager and all image all loaded
-        connectObservers();
       }
     }
   };
 
   const changePage = (dir, action) => {
+    disconnectObvrs(imgContainer);
     let pg = file.CurrentPos + dir;
     if (pg > -1 && pg < file.Duration) {
       if (webtoon) {
@@ -60,7 +58,6 @@
       changePages(pg);
     } else {
       viewerState.jumping = webtoon;
-      disconnectObvrs(imgContainer);
       action();
     }
   };
@@ -70,7 +67,6 @@
 
   const jumpTo = (val) => {
     val = clamp(val, 1, file.Duration);
-    // file.CurrentPos = val - 1;
     changePages(val - 1);
     viewerState.jumping = webtoon;
     loadImages(val - 5, 10);
@@ -93,13 +89,15 @@
   const returnTo = () => dispatch("returnBack");
 
   let connectObservers = (delay = 0) => {
-    let tout = setTimeout(() => {
-      scrollInView(file.CurrentPos);
-      PageObserver(changePages, imgContainer);
-      scrollImageLoader(loadImages, imgContainer);
-      clearTimeout(tout);
-      viewerState.jumping = false;
-    }, delay);
+    if (webtoon) {
+      let tout = setTimeout(() => {
+        scrollInView(file.CurrentPos);
+        PageObserver(changePages, imgContainer);
+        scrollImageLoader(loadImages, imgContainer);
+        clearTimeout(tout);
+        viewerState.jumping = false;
+      }, delay);
+    }
   };
 
   Fullscreen.action = () => {
@@ -180,7 +178,10 @@
       viewerState.lastfId = file.Id;
       scrollInView(file.CurrentPos);
     }
-    if (webtoon) PageObserver(changePages, imgContainer);
+
+    if (webtoon && !viewerState.loading) {
+      PageObserver(changePages, imgContainer);
+    }
   });
 
   $: localStorage.setItem("webtoon", webtoon);

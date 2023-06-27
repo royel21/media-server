@@ -84,7 +84,7 @@ export const scrollImageLoader = (loadImages, container) => {
       },
       {
         root: container,
-        rootMargin: window.innerHeight * 2 + "px",
+        rootMargin: window.innerHeight * 4 + "px",
         threshold: 0,
       }
     );
