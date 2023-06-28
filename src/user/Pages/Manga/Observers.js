@@ -11,6 +11,7 @@ const onScroll = function ({ target: { scrollTop } }) {
 };
 
 export const PageObserver = (setPage, container) => {
+  const imgs = container.querySelectorAll("img");
   if (!pageObserver && imgs.length) {
     container.onscroll = onScroll;
     pageObserver = new IntersectionObserver(
