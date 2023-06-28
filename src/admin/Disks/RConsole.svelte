@@ -1,6 +1,7 @@
 <script>
   import { getContext, onDestroy, afterUpdate } from "svelte";
   import { ConsoleStore, updateConsole } from "../Store/ConsoleStore";
+  import Icons from "../..//icons/Icons.svelte";
 
   let ref;
   let items = [];
@@ -28,7 +29,7 @@
 
 <div class="r-console">
   {#if items.length}
-    <span class="fa-icon fas fa-trash-alt" on:click={onClear} />
+    <span on:click={onClear}><Icons name="trash" /></span>
     <div class="text-list" bind:this={ref}>
       {#each items as item}<div>{item}</div>{/each}
     </div>
@@ -36,6 +37,15 @@
 </div>
 
 <style>
+  .r-console span {
+    position: absolute;
+    right: 0;
+    z-index: 99999;
+  }
+  .r-console span :global(svg) {
+    height: 30px;
+    width: 35px;
+  }
   .r-console {
     position: relative;
     height: 180px;
@@ -52,11 +62,5 @@
   }
   .text-list > div {
     white-space: nowrap;
-  }
-  .fa-icon {
-    position: absolute;
-    right: 14px;
-    bottom: 5px;
-    font-size: 24px;
   }
 </style>

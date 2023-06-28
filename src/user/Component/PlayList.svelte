@@ -5,6 +5,7 @@
   import Pagination from "../../ShareComponent/Pagination.svelte";
   import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
   import { formatTime } from "../Pages/pagesUtils";
+  import Icons from "../../icons/Icons.svelte";
 
   export let files = [];
   export let fileId;
@@ -98,7 +99,7 @@
 
 <label class={"show-list" + (!hideList ? " move" : "")} for="p-hide" style="bottom: 35px" title="play-list">
   <span class="p-sort">
-    <i class="fas fa-list" />
+    <Icons name="list" width="30px" height="24px" />
   </span>
 </label>
 <div id="p-bg" class:hidelist={!hideList} on:click={hidePlayList} tabindex="-1" />
@@ -107,7 +108,7 @@
   <div id="v-filter">
     <input name="clear-filters" type="text" bind:value={filter} placeholder="Filter" class="form-control" />
     <span class="clear-filter" on:click={clearFilter}>
-      <i class="fas fa-times-circle" />
+      <Icons name="timescircle" />
     </span>
   </div>
   <div id="p-list" bind:this={playList}>
@@ -157,12 +158,9 @@
     transition: 0.3s all;
     z-index: 11;
     background-color: black;
-    padding: 4px 6px;
+    padding: 3px 0px 3px 6px;
     border-radius: 0.25rem;
     cursor: pointer;
-  }
-  .show-list i {
-    font-size: 20px;
   }
   .move {
     right: 230px;
@@ -193,10 +191,6 @@
   #p-hide:checked + #play-list {
     width: 0;
     border: none;
-  }
-
-  #play-list label i {
-    transition: 0.3s all;
   }
 
   #p-hide:checked + #play-list .p-controls .form-control {

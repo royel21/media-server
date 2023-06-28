@@ -1,4 +1,5 @@
 <script>
+  import Icons from "../../../icons/Icons.svelte";
   import { clamp } from "../../../ShareComponent/utils";
   export let onConfig;
   export let ToggleMenu;
@@ -25,7 +26,7 @@
   $: localStorage.setObject("mangaConfig", config);
 </script>
 
-<label for="show"> <i class="fas fa-cog" /></label>
+<label class="config-icon" for="show"><Icons name="cog" /></label>
 <input type="checkbox" name="show-config" id="show" bind:checked={show} />
 <div id="content" class:show on:click|stopPropagation|preventDefault>
   <div class="input-group">
@@ -93,9 +94,5 @@
   label {
     width: 110px;
     position: relative;
-  }
-  .fas {
-    font-size: 25px;
-    transition: 0.05s all;
   }
 </style>

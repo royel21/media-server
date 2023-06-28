@@ -88,11 +88,13 @@
 
   const itemClick = (event) => {
     let el = event.target;
-    if (el.tagName !== "LI") {
+    console.log(el.tagName);
+    if (el.tagName === "svg") {
       file = items.find((f) => f.Id === el.closest("li").id);
       let cList = el.classList.toString();
+      console.log(cList);
       //Edit button was clicked
-      if (/fa-edit/gi.test(cList)) {
+      if (/icon-edit/gi.test(cList)) {
         modalType = { title: "Edit File", Del: false, isFile: true };
       }
       //Delete button was clicked

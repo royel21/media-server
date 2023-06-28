@@ -248,44 +248,48 @@ span i,
   -moz-user-select: none;
   user-select: none;
 }
-
-.fa-folder-open,
-.fa-folder {
-  color: rgb(250, 183, 15);
+svg path {
+  pointer-events: none;
 }
 
-.fa-book {
-  color: rgb(202, 48, 48);
+.icon-folder-open,
+.icon-folder {
+  fill: rgb(250, 183, 15);
 }
 
-.fa-home {
-  color: rgb(17, 218, 201);
+.icon-trash {
+  fill: rgb(202, 48, 48);
 }
 
-.fa-sync,
-.fa-edit,
-.fa-film {
-  color: rgb(37, 140, 209);
+.icon-home {
+  fill: rgb(17, 218, 201);
 }
 
-.fa-heart {
-  color: rgba(248, 224, 6, 0.952);
+.icon-sync,
+.icon-edit,
+.icon-film {
+  fill: rgb(37, 140, 209);
 }
 
-.fa-trash-alt {
-  color: rgba(252, 1, 1, 0.856);
+.active .icon-sync {
+  fill: white;
 }
 
-.fa-folder-open + .file-progress {
+.icon-heart {
+  fill: rgba(248, 224, 6, 0.952);
+}
+
+.icon-trash {
+  fill: rgba(252, 1, 1, 0.856);
+}
+
+.icon-folder-open + .file-progress {
   background-color: rgba(252, 1, 1, 0.856);
 }
 
-.fa-icon {
-  cursor: pointer;
-}
-
-.fa-icon:active {
-  transform: scale(1.1);
+.icon-check,
+.icon-times {
+  fill: black;
 }
 
 .list-group {
@@ -317,8 +321,8 @@ span i,
   border-color: #007bff;
 }
 
-.list-group-item.active .fa-edit {
-  color: white;
+.list-group-item.active .icon-edit {
+  fill: white;
 }
 
 .list-group-item:first-child {

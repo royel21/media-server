@@ -2,12 +2,15 @@
   import { createEventDispatcher } from "svelte";
   import paginationInput from "./PageInput";
   import { clamp } from "./utils";
+  import Icons from "../icons/Icons.svelte";
 
   const dispatch = createEventDispatcher();
 
   export let page = 1;
   export let totalPages = 0;
   export let hideFL = false;
+  const color = "#007bff";
+
   let showinput = false;
 
   const pagerClick = (e) => {
@@ -61,16 +64,18 @@
   const handleChange = (event) => {
     handlerPage(event.target.value);
   };
+
+  const width = 22;
 </script>
 
 {#if totalPages > 1}
   <div id="pager" class="usn" on:click={pagerClick}>
     <ul class="pagination">
       <li id="first-page" class="page-link" class:d-none={hideFL}>
-        <i class="fas fa-angle-double-left" />
+        <Icons name="angledoubleleft" {color} />
       </li>
       <li id="prev-page" class="page-link" class:border-r-left={hideFL}>
-        <i class="fas fa-angle-left" />
+        <Icons name="angleleft" {color} />
       </li>
       <li class="page-link current-page" on:click={onShowinput}>
         {#if showinput}
@@ -86,16 +91,20 @@
         {:else}{page + "/" + totalPages}{/if}
       </li>
       <li id="next-page" class="page-link" class:border-r-right={hideFL}>
-        <i class="fas fa-angle-right" />
+        <Icons name="angleright" {color} />
       </li>
       <li id="last-page" class="page-link" class:d-none={hideFL}>
-        <i class="fas fa-angle-double-right" />
+        <Icons name="angledoubleright" {color} />
       </li>
     </ul>
   </div>
 {/if}
 
 <style>
+  .page-link :global(svg) {
+    top: 4px;
+    pointer-events: none;
+  }
   #pager {
     display: inline-block;
     width: fit-content;
@@ -112,6 +121,7 @@
   }
   #pager li {
     height: 32px;
+    width: 45px;
     cursor: pointer;
   }
   #pager li:not(.current-page) {
@@ -137,9 +147,6 @@
     color: #007bff;
     background-color: #fff;
     border: 1px solid #dee2e6;
-  }
-  .fas {
-    pointer-events: none;
   }
 
   .d-none {

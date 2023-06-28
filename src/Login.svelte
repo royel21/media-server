@@ -1,6 +1,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
   import { post } from "./apiUtils.js";
+  import Icons from "./icons/Icons.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -34,11 +35,11 @@
 
 <div id="login-container">
   <form method="post" class="card bg-dark p-3" on:submit={onSubmit}>
-    <h3 class="mb-4">Login</h3>
+    <h3 class="mb-4"><Icons name="signin" /> Login</h3>
     <div class="input-group">
       <div class="input-group-prepend">
         <label for="name" class="input-group-text">
-          <i class="fas fa-user" />
+          <Icons name="user" />
         </label>
       </div>
       <input
@@ -55,7 +56,7 @@
     <div class="input-group">
       <div class="input-group-prepend">
         <label for="password" class="input-group-text">
-          <i class="fas fa-key" />
+          <Icons name="key" />
         </label>
       </div>
       <input
@@ -88,20 +89,30 @@
     user-select: none;
   }
 
+  #login-container :global(.icon-signin) {
+    height: 32px;
+    width: 40px;
+    top: 7px;
+    fill: white;
+  }
+
   #login-container form {
     text-align: center;
     border-radius: 0.25rem;
     border: 1px solid;
     min-width: 320px;
   }
+  #login-container label :global(svg) {
+    fill: black;
+    fill: black;
+    width: 30px;
+    height: 24px;
+    top: 0;
+  }
 
   #login-container label {
     padding: 0 15px;
     min-width: 60px;
-  }
-
-  #login-container label i {
-    font-size: 26px;
   }
 
   #login-container .error {

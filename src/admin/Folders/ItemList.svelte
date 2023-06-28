@@ -1,4 +1,5 @@
 <script>
+  import Icons from "../../icons/Icons.svelte";
   import Filter from "../../ShareComponent/Filter.svelte";
   import Pagination from "../../ShareComponent/Pagination.svelte";
   export let filter;
@@ -31,10 +32,10 @@
             on:mousemove
           >
             {#if Type.includes("Folder")}
-              <i class="fas fa-sync" class:completed={Status} />
+              <span><Icons name="sync" color={Status ? "rgb(37, 140, 209);" : "rgb(202, 48, 48);"} /></span>
             {/if}
-            <i class="fas fa-edit" />
-            <i class="fas fa-trash-alt" />
+            <span><Icons name="edit" /></span>
+            <span><Icons name="trash" /></span>
             {Name}
           </li>
         {/each}
@@ -85,15 +86,5 @@
   }
   .empty-list:only-child {
     text-align: center;
-  }
-  i {
-    font-size: 20px;
-    margin-right: 6px;
-  }
-  .active i:not(.fa-trash-alt, .completed) {
-    color: white;
-  }
-  .fas.completed {
-    color: red;
   }
 </style>

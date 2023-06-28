@@ -63,18 +63,10 @@
   <div id="login-container">
     <h3 class="mb-4">Login</h3>
     <form on:submit|preventDefault={onSubmit}>
-      <Input width="65px" icon="fas fa-user" name="username" bind:value={user.username} placeholder="Name" {error}>
+      <Input width="65px" name="username" bind:value={user.username} placeholder="Name" {error}>
         <UserIcon slot="label" />
       </Input>
-      <Input
-        width="65px"
-        icon="fas fa-key"
-        name="password"
-        type="password"
-        bind:value={user.password}
-        placeholder="Password"
-        {error}
-      >
+      <Input width="65px" name="password" type="password" bind:value={user.password} placeholder="Password" {error}>
         <KeyIcon slot="label" />
       </Input>
       <div class="form-footer">

@@ -2,6 +2,7 @@
   import { createEventDispatcher } from "svelte";
   import apiUtils from "../../apiUtils";
   import FavoriteAction from "./FavoriteAction.svelte";
+  import Icons from "../../icons/Icons.svelte";
 
   export let type;
   export let isFav;
@@ -20,7 +21,7 @@
   };
 
   $: if (favClicked === thisEl) {
-    if (thisEl.classList.contains("fa-trash-alt")) {
+    if (thisEl.classList.contains("trash")) {
       removeFile(thisEl.closest(".file").id);
     }
   }
@@ -28,8 +29,19 @@
 
 <span class="fav-icon">
   {#if type.startsWith("favorites")}
-    <i class="fas fa-trash-alt text-danger" bind:this={thisEl} />
+    <span class="trash" bind:this={thisEl}>
+      <Icons name="trash" height="22px" color="rgba(252, 1, 1, 0.856)" />
+    </span>
   {:else}
     <FavoriteAction {favClicked} {isFav} />
   {/if}
 </span>
+
+<style>
+  .trash {
+    cursor: pointer;
+  }
+  .trash :global(svg) {
+    pointer-events: none;
+  }
+</style>

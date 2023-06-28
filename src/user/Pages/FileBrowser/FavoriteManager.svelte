@@ -1,19 +1,22 @@
 <script>
   import { navigate } from "svelte-routing";
   import { FavoritesStores, addUpdateFavorite, removeFavorite } from "../../Stores/FavoritesStores";
+  import Icons from "../../../icons/Icons.svelte";
 
   export let id = "";
   let currentFav = {};
   let error;
 
   const saveFavorite = () => {
-    currentFav.Type == "";
-    addUpdateFavorite(currentFav).then((result) => {
-      if (result.Id !== id) {
-        navigate(`/favorites/${result.Id}`);
-      }
-    });
-    error = "";
+    if (currentFav.Name) {
+      currentFav.Type == "";
+      addUpdateFavorite(currentFav).then((result) => {
+        if (result.Id !== id) {
+          navigate(`/favorites/${result.Id}`);
+        }
+      });
+      error = "";
+    }
   };
 
   const clearFavorite = () => {
@@ -49,14 +52,14 @@
 </script>
 
 <div class="first-controls">
-  <label for="show-favs"> <i class="fas fa-heart" /> </label>
+  <label for="show-favs"><Icons name="heart" /></label>
   <input type="checkbox" name="show-favorites" id="show-favs" />
   <div id="fav-manager" class="card text-light">
     <div class="modal-title">
       <div id="fav-controls">
         <div class="input-group-prepend">
           <label for="fav-name" id="addfav" class="input-group-text" on:click={saveFavorite}>
-            <i class="fas fa-save" />
+            <Icons name="save" />
           </label>
           <div class="i-control">
             <input
@@ -67,7 +70,7 @@
               placeholder="New Favorite"
             />
             <span on:click={clearFavorite}>
-              <i class="fas fa-times-circle" />
+              <Icons name="timescircle" />
             </span>
           </div>
         </div>
@@ -85,16 +88,16 @@
         </thead>
         <tbody>
           {#each $FavoritesStores as fav}
-            <tr id={fav.Id} class={fav.Id === id ? "active" : ""}>
+            <tr id={fav.Id} class:active={fav.Id === id}>
               <td on:click={loadFavorite} data-title={fav.Name}>
                 {fav.Name}
               </td>
-              <td>
+              <td class="fa-icons">
                 <span on:click={editFavorite}>
-                  <i class="fas fa-edit" />
+                  <Icons name="edit" color="rgba(20, 139, 236, 0.925)" />
                 </span>
                 <span on:click={removeFav}>
-                  <i class="fas fa-trash-alt" />
+                  <Icons name="trash" color="rgba(252, 1, 1, 0.855)" />
                 </span>
               </td>
             </tr>
@@ -106,13 +109,28 @@
 </div>
 
 <style>
+  .fa-icons span {
+    display: inline-block;
+  }
   .first-controls {
     position: absolute;
     z-index: 99;
     pointer-events: all;
   }
-  .fas {
-    font-size: 30px;
+  .first-controls :global(svg.icon-heart) {
+    fill: rgba(248, 224, 6, 0.953);
+    height: 29px;
+    width: 42px;
+    top: 1px;
+  }
+  .modal-body .active :global(svg.icon-edit) {
+    fill: white;
+  }
+  #addfav :global(svg) {
+    fill: black;
+    height: 24px;
+    width: 32px;
+    top: 0;
   }
   #show-favs[type="checkbox"] {
     display: none;
@@ -151,15 +169,11 @@
     width: 200px;
   }
 
-  #fav-manager td:last-child,
-  #fav-manager th:last-child {
-    width: 50px;
+  #fav-manager td:last-child {
+    width: 75px;
   }
   #fav-manager .active td {
     background-color: rgba(20, 139, 236, 0.925);
-    color: white;
-  }
-  #fav-manager .active .fa-edit {
     color: white;
   }
   .modal-title {
@@ -187,9 +201,7 @@
   tbody td:first-child {
     cursor: pointer;
   }
-  #fav-manager .fas {
-    font-size: 20px;
-  }
+
   .i-control {
     width: 100%;
     position: relative;

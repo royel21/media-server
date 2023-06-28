@@ -1,4 +1,6 @@
 <script>
+  import Icons from "../../icons/Icons.svelte";
+
   export let item;
   export let key;
   export let label;
@@ -16,12 +18,16 @@
 
 <div class="check-control" {style}>
   <span class="check-label" style="width: ${labelWidth};">{label || key}</span>
-  <label class={`fas fa-${item[key] ? "check" : "times"}`}>
+  <label>
+    <Icons name={item[key] ? "check" : "times"} color="black" />
     <input type="checkbox" bind:checked={item[key]} on:change={onChange} />
   </label>
 </div>
 
 <style>
+  .check-control label :global(svg) {
+    top: -1px;
+  }
   input {
     display: none;
   }

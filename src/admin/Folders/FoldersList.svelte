@@ -63,15 +63,14 @@
       folder = items.find((f) => f.Id === el.closest("li").id);
       let cList = el.classList.toString();
 
-      if (/fa-edit/gi.test(cList)) {
+      if (/icon-edit/gi.test(cList)) {
         modalType = { title: "Edit Folder Properties", Del: false };
         showModal = true;
-      } else if (/fa-trash-alt/gi.test(cList)) {
+      } else if (/icon-trash-alt/gi.test(cList)) {
         modalType = { title: "Remove Folder", Del: true };
         showModal = true;
       } else {
         socket.emit("scan-dir", { Id: folder.Id, isFolder: true });
-        document.getElementById(folder.Id)?.querySelector(`.fas`)?.classList.add("fa-spin");
       }
     }
   };
@@ -130,7 +129,7 @@
   };
 
   const scanFinish = (data) => {
-    document.getElementById(data.Id).querySelector(".fas")?.classList.remove("fa-spin");
+    // document.getElementById(data.Id).querySelector(".fas")?.classList.remove("fa-spin");
   };
 
   onMount(() => {

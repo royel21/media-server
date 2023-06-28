@@ -2,6 +2,7 @@
   import { onDestroy, onMount, getContext } from "svelte";
   import TreeItem from "./TreeItem.svelte";
   import DirectoryModal from "./DirectoryModal.svelte";
+  import Icons from "../..//icons/Icons.svelte";
 
   const socket = getContext("socket");
   let content = [];
@@ -37,7 +38,7 @@
 {/if}
 
 <div class="tree-title">
-  <i class="fas fa-server" />
+  <Icons name="hdd" />
   <span class="tree-name">Server</span>
 </div>
 <ul class="tree-view usn">

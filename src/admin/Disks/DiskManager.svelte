@@ -2,6 +2,7 @@
   import { navigate } from "svelte-routing";
   import Tree from "./Tree.svelte";
   import Directories from "./Directories.svelte";
+  import Icons from "../..//icons/Icons.svelte";
   export let tab = "tab-1";
   $: {
     navigate(`/admin/content-manager/${tab || "tab-1"}`, { replace: true });
@@ -13,14 +14,14 @@
     <div class="nav-item">
       <input type="radio" bind:group={tab} value="tab-1" id="tab1" />
       <label class="nav-link" for="tab1">
-        <i class="fas fa-folder" />
+        <Icons name="folder" />
         <span id="dirs">Directories</span>
       </label>
     </div>
     <div class="nav-item">
       <input type="radio" bind:group={tab} value="tab-2" id="tab2" />
       <label class="nav-link" for="tab2">
-        <div class="fas fa-hdd" />
+        <Icons name="hdd" />
         <span id="disks">Server</span>
       </label>
     </div>
@@ -43,6 +44,12 @@
     padding: 10px 0 0 0;
   }
 
+  .admin-manager .disk-controls :global(svg) {
+    top: 0px;
+    width: 32px;
+    height: 24px;
+  }
+
   .nav {
     display: flex;
     justify-content: space-evenly;
@@ -60,9 +67,6 @@
     margin: 0;
     cursor: pointer;
     color: white;
-  }
-  .disk-controls .nav-link .fas {
-    font-size: 30px;
   }
   .nav-link span {
     position: relative;

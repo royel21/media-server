@@ -2,6 +2,7 @@
   import { Link } from "svelte-routing";
   import { ToggleMenu } from "./ToggleMenu";
   import { getProps } from "./DataUtils";
+  import Icons from "../icons/Icons.svelte";
 
   export let navItems;
   export let filters = [];
@@ -19,7 +20,7 @@
       {:else}
         <li class="nav-item">
           <Link to={item.path} {getProps}>
-            <i class={"fas fa-" + item.class} />
+            <Icons name={item.class} height="22px" color={item.color} />
             <span class="nav-title">{item.title}</span>
           </Link>
         </li>
@@ -56,5 +57,11 @@
     position: relative;
     color: white;
     height: 100%;
+  }
+  .nav-item :global(svg) {
+    cursor: pointer;
+  }
+  .nav-item:active :global(svg) {
+    transform: scale(1.1);
   }
 </style>

@@ -1,6 +1,7 @@
 <script>
   import Link from "svelte-routing/src/Link.svelte";
   import { getProps } from "../../ShareComponent/DataUtils";
+  import Icons from "../../icons/Icons.svelte";
   export let dirs;
   export let item;
   export let selected;
@@ -21,7 +22,7 @@
 
 <li class="nav-item">
   <Link to={`${item.path}/${selectedId}`} {getProps}>
-    <i class={"fas fa-" + item.class} />
+    <Icons name={item.class} height="22px" color={item.color} />
     <span class="nav-title">{item.title}</span>
     {#if items}
       <ul class="down-list">
@@ -43,6 +44,12 @@
 </li>
 
 <style>
+  .nav-item :global(svg) {
+    cursor: pointer;
+  }
+  .nav-item:active :global(svg) {
+    transform: scale(1.1);
+  }
   .nav-item:hover ul {
     display: initial;
   }

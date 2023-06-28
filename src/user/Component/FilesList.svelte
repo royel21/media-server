@@ -13,6 +13,7 @@
   import FavoriteList from "./FavoriteList.svelte";
   import { clamp } from "../../ShareComponent/utils";
   import { getItemsList } from "../../apiUtils";
+  import Icons from "../../icons/Icons.svelte";
 
   export let id = "";
   export let page = 1;
@@ -135,7 +136,7 @@
         <div class="file-info">
           <div class="file-btns usn">
             <span class="file-btn-left" on:click|stopPropagation={onOpen || openFile}>
-              <i class={"fas fa-" + FileTypes[Type].class} />
+              <Icons name={FileTypes[Type].class} height="22px" color={FileTypes[Type].color} />
             </span>
             <span class="file-progress">
               {#if Type.includes("Folder")}
@@ -181,9 +182,7 @@
   .file-btn-left {
     cursor: pointer;
   }
-  .file-btn-left i {
-    pointer-events: none;
-  }
+
   .scroll-container::-webkit-scrollbar-thumb {
     border-radius: 0.4rem;
   }

@@ -2,6 +2,7 @@
   import { onMount, getContext } from "svelte";
   import apiUtils from "../../apiUtils";
   import RConsole from "./RConsole.svelte";
+  import Icons from "../../icons/Icons.svelte";
 
   const socket = getContext("socket");
   let dirs = [];
@@ -104,10 +105,10 @@
         <tr id={Id} key={Id}>
           <td>
             <span class="dir-sync" on:click={rescan}>
-              <i class={"fas fa-sync" + (IsLoading ? " fa-spin" : "")} />
+              <Icons name="sync" />
             </span>
             <span class="dir-remove ml-2" on:click={removeDir}>
-              <i class="fas fa-trash-alt" />
+              <Icons name="trash" />
             </span>
           </td>
           <td>{Type}</td>
@@ -142,6 +143,10 @@
   .message:not(:empty) {
     display: block;
     color: red;
+  }
+  th:first-child {
+    width: 90px;
+    min-width: 90px;
   }
   th:nth-child(2) {
     min-width: 80px;

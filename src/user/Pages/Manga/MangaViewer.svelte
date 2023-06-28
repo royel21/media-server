@@ -8,6 +8,7 @@
 
   import { ToggleMenu } from "../../../ShareComponent/ToggleMenu";
   import MangaConfig from "./MangaConfig.svelte";
+  import Icons from "../../..//icons/Icons.svelte";
 
   export let file;
   export let KeyMap;
@@ -188,7 +189,7 @@
 
 <div id="manga-viewer" tabIndex="0" class:hide={$ToggleMenu}>
   <span class="fullscreen-progress">
-    <i class="fas fa-sticky-note" />
+    <Icons name="stickynote" />
     {progress}
   </span>
   <div class="viewer" class:isFullscreen bind:this={viewerRef}>
@@ -224,18 +225,18 @@
     </div>
   </div>
   <div class="controls usn">
-    <span class="h-p" on:click={returnTo}>
-      <i class="far fa-times-circle popup-msg" data-title="Close" />
+    <span class="h-p popup-msg" on:click={returnTo} data-title="Close">
+      <Icons name="timescircle" />
     </span>
     <span class="web-toon">
       <input type="checkbox" name="webtoon" id="webtoon" bind:checked={webtoon} />
       <label for="webtoon">
         {webtoon ? "List" : "Pages"}
-        <i class="fas fa-eye" />
+        <Icons name="eye" />
       </label>
     </span>
     <span class="prev-page" on:click={prevPage}>
-      <i class="fa fa-arrow-circle-left" />
+      <Icons name="arrowcircleleft" />
     </span>
     <span class="current-page">
       <form action="" on:submit|preventDefault={jumpToPage}>
@@ -252,18 +253,29 @@
       </form>
     </span>
     <span class="next-page" on:click={nextPage}>
-      <i class="fa fa-arrow-circle-right" />
+      <Icons name="arrowcircleright" />
     </span>
     <span class="config">
       <MangaConfig {onConfig} {ToggleMenu} />
     </span>
-    <span class="btn-fullscr" on:click={Fullscreen.action}>
-      <i class="fas fa-expand-arrows-alt popup-msg" data-title="Full Screen" />
+    <span class="btn-fullscr popup-msg" on:click={Fullscreen.action} data-title="Full Screen">
+      <Icons name="expandarrows" />
     </span>
   </div>
 </div>
 
 <style>
+  .controls :global(svg:not(.icon-eye)) {
+    width: 36px;
+    height: 30px;
+    top: -2px;
+  }
+
+  .controls :global(svg.icon-eye) {
+    top: -17px;
+    fill: black;
+    right: -46px;
+  }
   .controls {
     position: fixed;
     right: 0px;
@@ -298,13 +310,6 @@
     height: 26px;
   }
 
-  #webtoon + label i {
-    position: absolute;
-    top: 6px;
-    right: 4px;
-    font-size: 16px;
-    font-weight: 600;
-  }
   .config {
     position: relative;
   }
@@ -321,9 +326,6 @@
     transition: 0.5s all;
     font-size: 16px;
     z-index: 4;
-  }
-  #manga-viewer .fa-sticky-note {
-    font-size: 16px;
   }
   #manga-viewer .webtoon-img img[alt] {
     position: relative;
@@ -412,11 +414,6 @@
     max-height: initial;
   }
 
-  #manga-viewer i {
-    font-size: 25px;
-    transition: 0.1s all;
-  }
-
   #manga-viewer .current-page input {
     position: relative;
     top: -1px;
@@ -452,11 +449,6 @@
 
   #manga-viewer.hide .viewer {
     padding: 0;
-  }
-
-  .h-p i {
-    position: relative;
-    top: 2px;
   }
 
   @media screen and (max-width: 600px) {

@@ -8,17 +8,19 @@ const itemW = isMobile ? 170 : 200;
 export const FileTypes = {
   Manga: {
     type: "mangas",
-    class: "book-open",
+    class: "bookopen",
     formatter: (a, b) => `${parseInt(a || 0) + 1}/${b}`,
   },
   Video: {
     type: "videos",
-    class: "play-circle",
+    class: "playcircle",
+    color: "",
     formatter: (a, b) => `${formatTime(a)}/${formatTime(b)}`,
   },
   Folder: {
     type: "folders",
-    class: "folder-open",
+    class: "folderopen",
+    color: "rgb(250, 183, 15)",
     formatter() {
       return "";
     },

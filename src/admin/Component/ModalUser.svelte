@@ -2,6 +2,7 @@
   import { createEventDispatcher } from "svelte";
   import { fade } from "svelte/transition";
   import apiUtils from "../../apiUtils";
+  import Icons from "../../icons/Icons.svelte";
 
   export let foundUser = { AdultPass: false, Password: "" };
 
@@ -21,6 +22,7 @@
   const closeModal = () => {
     dispatch("closeModal");
   };
+  const color = "black";
 </script>
 
 <div class="modal-container">
@@ -33,7 +35,7 @@
       <div class="input-group">
         <div class="input-group-prepend">
           <label for="Name" class="input-group-text">
-            <i class="fas fa-user" />
+            <Icons name="user" {color} />
           </label>
         </div>
         <input class="form-control" type="text" name="Name" bind:value={foundUser.Name} />
@@ -41,7 +43,7 @@
       <div class="input-group">
         <div class="input-group-prepend">
           <label for="Password" class="input-group-text">
-            <i class="fas fa-key" />
+            <Icons name="key" {color} />
           </label>
         </div>
         <input class="form-control" type="password" bind:value={foundUser.Password} autoComplete="new-password" />
@@ -72,7 +74,7 @@
           </div>
           <input id="Adult" type="checkbox" bind:checked={foundUser.AdultPass} />
           <label for="Adult" class="form-control checkadult">
-            <i class="fas fa-times" />
+            <Icons name={foundUser.AdultPass ? "check" : "times"} {color} />
           </label>
         </div>
       </div>
@@ -88,6 +90,13 @@
 </div>
 
 <style>
+  .modal-container label:not(.checkadult) :global(svg) {
+    top: 0px;
+  }
+  label {
+    color: black;
+    font-weight: 600;
+  }
   .input-grouping {
     display: flex;
     justify-content: space-evenly;
@@ -101,9 +110,6 @@
   .modal .checkadult {
     text-align: center;
     cursor: pointer;
-  }
-  .second-ctrl input:checked + label i:before {
-    content: "\f00c";
   }
   .input-grouping .second-ctrl {
     margin-left: 5px;

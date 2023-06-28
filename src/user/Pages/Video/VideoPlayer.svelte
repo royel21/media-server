@@ -4,6 +4,7 @@
   import Slider from "./Slider.svelte";
   import { setfullscreen, formatTime } from "../pagesUtils";
   import { setGesture } from "./VideoTouch";
+  import Icons from "../../../icons/Icons.svelte";
 
   export let KeyMap;
   export let file;
@@ -146,19 +147,21 @@
           </Slider>
         </div>
         <div class="player-btns">
-          <span on:click={onReturn}> <i class="far fa-times-circle" /> </span>
+          <span on:click={onReturn}>
+            <Icons name="timescircle" />
+          </span>
           <span class="prev-page" on:click={PrevFile.action}>
-            <i class="far fa-arrow-alt-circle-left" />
+            <Icons name="arrowcircleleft" />
           </span>
           <label for="v-play">
             <input name="play-button" type="checkbox" id="v-play" on:change={onPlay} />
-            <i class={`far fa-${mConfig.pause ? "play" : "pause"}-circle`} />
+            <Icons name={mConfig.pause ? "playcircle" : "pausecircle"} />
           </label>
           <span class="next-page" on:click={NextFile.action}>
-            <i class="far fa-arrow-alt-circle-right" />
+            <Icons name="arrowcircleright" />
           </span>
           <span on:click={fullScreen}>
-            <i class="fas fa-expand-arrows-alt" />
+            <Icons name="expandarrow" />
           </span>
           <span class="v-vol">
             <input
@@ -170,7 +173,7 @@
               value={mConfig.volume}
               on:input={volChange}
             />
-            <label for="v-mute">
+            <label for="v-mute" class="v-volume">
               <input
                 name="mute-volumen"
                 id="v-mute"
@@ -179,7 +182,7 @@
                 checked={mConfig.volume === 0}
                 on:change={onMuted}
               />
-              <i class="fas fa-volume-up popup-msg" data-title="Mute" />
+              <Icons name={player.muted ? "volumemute" : "volume"} />
             </label>
           </span>
         </div>
@@ -189,6 +192,18 @@
 {/if}
 
 <style>
+  .player-btns :global(svg) {
+    height: 26px;
+    width: 32px;
+    top: 0px;
+  }
+  .player-btns *:not(.v-volume) :global(svg) {
+    margin-right: 8px;
+  }
+  .player-btns .v-volume :global(svg) {
+    margin-left: 8px;
+    top: 1px;
+  }
   input[type="checkbox"] {
     display: none;
   }
@@ -248,15 +263,6 @@
     position: relative;
     top: -1px;
   }
-  #v-mute + .fa-volume-up {
-    display: inline-block;
-    width: 30px;
-    margin-left: 5px;
-  }
-
-  #v-mute:checked + i:before {
-    content: "\f6a9";
-  }
 
   .v-vol {
     position: absolute;
@@ -266,11 +272,6 @@
     justify-content: center;
     align-items: center;
     line-height: 1.3;
-  }
-  label i,
-  span i {
-    font-size: 25px;
-    margin: 0 10px;
   }
 
   .isFullScreen .player,

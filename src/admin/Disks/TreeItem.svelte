@@ -1,5 +1,6 @@
 <script>
   import { createEventDispatcher } from "svelte";
+  import Icons from "../..//icons/Icons.svelte";
   import apiUtils from "../../apiUtils";
   export let items = [];
   export let type;
@@ -29,7 +30,7 @@
 {#each items as { Content, Id, Name }}
   <li id={Id} class="tree-item">
     <span class="dir" on:click={scanDirectory}>
-      <i class={`fa fa-${type} mr-1`} />
+      <Icons name={type} />
       {Name}
     </span>
     <span class="caret" on:click={expandFolder}>▶</span>

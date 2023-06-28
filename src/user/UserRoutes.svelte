@@ -15,10 +15,10 @@
   import Config from "./Component/Config.svelte";
 
   const navItems = [
-    { title: "Home", path: "/", class: "home" },
-    { title: "Videos", path: "/videos", class: "film" },
-    { title: "Mangas", path: "/mangas", class: "book" },
-    { title: "Favorites", path: "/favorites", class: "heart" },
+    { title: "Home", path: "/", class: "home", color: "rgb(17, 218, 201)" },
+    { title: "Videos", path: "/videos", class: "film", color: "rgb(37, 140, 209)" },
+    { title: "Mangas", path: "/mangas", class: "book", color: "rgb(202, 48, 48)" },
+    { title: "Favorites", path: "/favorites", class: "heart", color: "rgba(248, 224, 6, 0.952)" },
   ];
 
   let dirs = {};

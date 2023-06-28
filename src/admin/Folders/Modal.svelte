@@ -5,10 +5,12 @@
   import CheckBox from "../Component/CheckBox.svelte";
   import Select from "../Component/Select.svelte";
   import Input from "./TextAreaInput.svelte";
+  import Icons from "../../icons/Icons.svelte";
 
   export let file;
   export let modalType;
   export let ref = null;
+  export let deleteFromSys = null;
 
   let options = [];
   let tempFile = { Name: "", Ex: "" };
@@ -53,6 +55,8 @@
     if (e.keyCode === 27) dispatch("click", e);
   };
 
+  const onChanges = ({ target: { checked } }) => (deleteFromSys = checked);
+
   loadTemp(file);
 </script>
 
@@ -69,9 +73,9 @@
             <div class="input-group-prepend">
               <label for="sysdel" class="input-group-text del-label"> Delete From System </label>
             </div>
-            <input id="sysdel" type="checkbox" />
-            <label for="sysdel" class="form-control">
-              <i class="fas fa-times" />
+            <label for="sysdel" class="form-control check-del">
+              <input id="sysdel" type="checkbox" on:change={onChanges} />
+              <Icons name={deleteFromSys ? "check" : "times"} />
             </label>
           </div>
         {:else}
@@ -108,14 +112,14 @@
   .del-label {
     width: fit-content;
   }
+  .check-del {
+    cursor: pointer;
+  }
   strong {
     color: red;
   }
   input[type="checkbox"] {
     display: none;
-  }
-  input[type="checkbox"]:checked + label i:before {
-    content: "\f00c";
   }
   label {
     text-align: center;

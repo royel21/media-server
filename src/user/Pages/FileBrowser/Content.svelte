@@ -7,6 +7,7 @@
   import FilesList from "../../Component/FilesList.svelte";
   import { ProcessFile } from "../../Component/filesUtils";
   import SortBy from "./SortBy.svelte";
+  import Icons from "../../../icons/Icons.svelte";
 
   export let page = 1;
   export let filter = "";
@@ -107,12 +108,11 @@
     </div>
   </div>
 </div>
-
 <fieldset>
   <legend><span>Files List - <SortBy label="Sort By:" {showConfig} toggleConfig={handleClick} /></span></legend>
   <FilesList title={"Content"} {type} {filter} {page} {id} {setFolderInfo} {setLastRead} {handleClick}>
     <div class="first-controls" slot="controls" on:click={exitFolder}>
-      <i class="fas fa-arrow-circle-up" />
+      <Icons name="arrowcircleup" />
     </div>
   </FilesList>
 </fieldset>
@@ -140,9 +140,10 @@
   div {
     pointer-events: all;
   }
-  i {
-    background-color: black;
-    border-radius: 50%;
+  .first-controls :global(.icon-arrowcircleup) {
+    top: -1px;
+    height: 31px;
+    width: 42px;
   }
   #info {
     z-index: 999;

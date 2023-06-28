@@ -3,6 +3,7 @@
   import { onMount } from "svelte";
   import apiUtils from "../apiUtils";
   import ModalUser from "./Component/ModalUser.svelte";
+  import Icons from "../icons/Icons.svelte";
 
   let users = [];
   let foundUser;
@@ -47,7 +48,7 @@
   <div class="remove-error">{error}</div>
   <div class="u-controls">
     <span class="btn" on:click={saveEdit}>
-      <i class="fas fa-user-plus" />
+      <Icons name="userplus" />
     </span>
     <h3 class="text-center">Users Manager</h3>
   </div>
@@ -66,10 +67,10 @@
         <tr id={user.Id} key={user.Name}>
           <td>
             <span class="u-edit" on:click={saveEdit}>
-              <i class="fas fa-edit" />
+              <Icons name="edit" color="rgb(37, 140, 209)" />
             </span>
             <span class="u-remove ml-2" on:click={removeUser}>
-              <i class="fas fa-trash-alt" />
+              <Icons name="trash" color="rgba(252, 1, 1, 0.856)" />
             </span>
           </td>
           <td>{user.Name}</td>
@@ -101,10 +102,6 @@
     font-size: initial;
     padding: 0.4rem 0.6rem;
     line-height: 1.6;
-  }
-
-  #u-manager .u-controls .btn i {
-    font-size: 20px;
   }
   .table td:first-child,
   .table th:first-child {

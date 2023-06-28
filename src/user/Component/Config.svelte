@@ -1,6 +1,7 @@
 <script>
   import { getContext } from "svelte";
   import { PageConfig, updateConfig } from "../Stores/PageConfigStore";
+  import Icons from "../../icons/Icons.svelte";
 
   const User = getContext("User");
   const logout = getContext("logout");
@@ -20,13 +21,17 @@
   };
 </script>
 
-<label id="user-label" for="show-config" title="Show Config">
-  <i class="fas fa-user-cog" />
+<label class="icon" id="user-label" for="show-config" title="Show Config">
+  <Icons name="usercog" height="22px" />
   <span class="nav-title">{User.username}</span>
 </label>
 <input type="checkbox" name="" id="show-config" title="show-config" />
-<div id="user-config">
-  <div id="sep"><span on:click={logout}> <i class="fas fa-sign-out-alt" /> Log out </span></div>
+<div id="user-config" on:click|stopPropagation>
+  <div id="sep">
+    <span class="icon signout" on:click={logout}>
+      <Icons name="signout" height="22px" /> Log out
+    </span>
+  </div>
 
   <div id="config-content">
     <div class="input-group">
@@ -56,10 +61,16 @@
       <span id="fpp-tips">0 = auto, max 500</span>
     </div>
   </div>
-  <div><span class="fas fa-save fa-icon" on:click={save} /></div>
+  <div><span on:click={save}><Icons name="save" height="22px" color="black" /></span></div>
 </div>
 
 <style>
+  #user-config :global(svg.icon-save) {
+    height: 26px;
+    width: 40px;
+    top: 2px;
+    right: -13px;
+  }
   #sep {
     border-bottom: 1px solid;
   }
@@ -67,7 +78,6 @@
     cursor: pointer;
     align-self: center;
     margin-right: 5px;
-    height: 32px;
     padding: 0 5px;
   }
   #show-config:checked + #user-config {
@@ -146,7 +156,6 @@
     right: 0%;
     top: -35px;
     z-index: 3;
-    -webkit-appearance: none;
   }
 
   #fpp-tips:after {
@@ -173,9 +182,11 @@
     font-family: "Font Awesome 5 Free", "sans-serif";
     font-weight: 600;
   }
-  .fa-icon {
-    font-size: 25px;
+
+  .signout :global(svg) {
+    top: 5px;
   }
+
   @media screen and (max-width: 500px) {
     #user-config {
       top: 73px;

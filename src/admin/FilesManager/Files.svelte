@@ -6,6 +6,7 @@
   import Filter from "../../ShareComponent/Filter.svelte";
   import Pagination from "../../ShareComponent/Pagination.svelte";
   import apiUtils from "../../apiUtils";
+  import Icons from "../../icons/Icons.svelte";
 
   const socket = getContext("socket");
   export let page = 1;
@@ -72,10 +73,11 @@
 
   const itemClick = (event) => {
     let el = event.target;
-    if (el.tagName === "I") {
+    console.log(el.tagName);
+    if (el.tagName === "svg") {
       file = items.find((f) => f.Id === el.closest("tr").id);
       let cList = el.classList.toString();
-      if (/fa-edit/gi.test(cList)) {
+      if (/icon-edit/gi.test(cList)) {
         modalType = { title: "Edit File", Del: false, isFile: true };
         showModal = true;
       } else {
@@ -132,8 +134,8 @@
           {#each items as { Id, Name, Path }}
             <tr id={Id} on:click={itemClick}>
               <td>
-                <i class="fas fa-edit" />
-                <i class="fas fa-trash-alt" />
+                <span><Icons name="edit" /></span>
+                <span><Icons name="trash" /></span>
               </td>
               <td>{Name}</td>
               <td>{Path}</td>
@@ -153,6 +155,7 @@
     height: calc(100% - 85px);
     overflow: auto;
   }
+
   .file-list {
     padding: 10px 10px 0px 10px;
     height: 100%;
@@ -171,11 +174,6 @@
     margin-top: 5px;
     text-align: center;
     width: 100%;
-  }
-
-  i {
-    font-size: 20px;
-    margin-right: 6px;
   }
   .table {
     width: 100%;

@@ -11,6 +11,7 @@
   import api from "../../apiUtils";
   import Filter from "../../ShareComponent/Filter.svelte";
   import Pagination from "../../ShareComponent/Pagination.svelte";
+  import Icons from "../../icons/Icons.svelte";
 
   export let page = 1;
   export let filter = "";
@@ -56,12 +57,13 @@
   afterUpdate(() => selectByTitle(title));
 
   $: document.title = page ? `Home - Page - ${pageData.page}` : "Home";
+  const folderIcon = { name: "folderopen", color: "rgb(250, 183, 15);" };
 </script>
 
 <div class="scroll-container">
   <div class="title">
     <span>
-      <i class="fas fa-folder" />
+      <Icons {...folderIcon} name="folder" />
       Last View
     </span>
   </div>
@@ -71,11 +73,11 @@
         <div class="file-info">
           <div class="file-btns">
             <span class="file-btn-left" on:click|stopPropagation={openFolder}>
-              <i class={"fas fa-folder"} />
+              <Icons {...folderIcon} />
             </span>
             <span class="file-progress">{FileCount}</span>
             <span class="remove" on:click|stopPropagation={removeRecent}>
-              <i class="fas fa-trash-alt" />
+              <Icons name="trash" color="rgba(252, 1, 1, 0.856)" />
             </span>
           </div>
           <div class="file-cover" on:dblclick|stopPropagation={openFolder}>
@@ -94,9 +96,11 @@
 </div>
 
 <style>
-  .fas:active {
-    transform: scale(1.2);
+  :global(.icon-folderopen path),
+  :global(.icon-folder path) {
+    fill: rgb(250, 183, 15);
   }
+
   .title {
     top: 0;
     position: sticky;

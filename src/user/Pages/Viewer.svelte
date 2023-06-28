@@ -9,6 +9,7 @@
   import MangaViewer from "./Manga/MangaViewer.svelte";
   import VideoPLayer from "./Video/VideoPlayer.svelte";
   import { KeyMap, handleKeyboard, isMobile, isVideo, isManga, showFileName, sortFileByName } from "./pagesUtils";
+  import Icons from "../../icons/Icons.svelte";
 
   export let folderId;
   export let fileId;
@@ -124,7 +125,7 @@
   </div>
   <span class="info" class:top={isVideo(file)}>
     <span id="files-prog">
-      <i class="fas fa-file" />
+      <Icons name="file" />
       {`${fileIndex + 1} / ${playList.length}`}
     </span>
     <div id="clock" />
@@ -180,7 +181,7 @@
     top: 0;
     border-radius: 0 0 0 0.25rem;
   }
-  :fullscreen .top .fas {
+  :fullscreen .top :global(.file) {
     font-size: 16px;
   }
   #clock {

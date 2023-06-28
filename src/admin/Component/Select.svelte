@@ -33,7 +33,7 @@
     height: 30px;
   }
   .check-label {
-    width: 100px;
+    width: 134px;
     color: #495057;
     background-color: #e9ecef;
     border-top-left-radius: 0.25rem;
@@ -54,5 +54,6 @@
     border-bottom-right-radius: 0.25rem;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     outline: none;
+    width: 100%;
   }
 </style>

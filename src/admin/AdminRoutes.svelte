@@ -7,18 +7,20 @@
   import DiskManager from "./Disks/DiskManager.svelte";
   import Files from "./FilesManager/Files.svelte";
   import Redirect from "./Component/Redirect.svelte";
+  import Icons from "../icons/Icons.svelte";
 
   let logout = getContext("logout");
   let user = getContext("User");
 
   const navItems = [
-    { title: "Users", path: "/admin/", class: "users" },
-    { title: "Files", path: "/admin/files", class: "file" },
-    { title: "Folders", path: "/admin/folders", class: "folder" },
+    { title: "Users", path: "/admin/", class: "users", color: "rgb(37, 140, 209)" },
+    { title: "Files", path: "/admin/files", class: "file", color: "rgba(248, 224, 6, 0.952)" },
+    { title: "Folders", path: "/admin/folders", class: "folder", color: "rgb(250, 183, 15)" },
     {
       title: "Manager",
       path: "/admin/content-manager/tab-1",
       class: "sitemap",
+      color: "#80bdff",
     },
   ];
 
@@ -28,7 +30,7 @@
 <Router>
   <Navbar on:click {navItems}>
     <span id="admin-label" on:click={logout} slot="user" title="Log Out">
-      <i class="fas fa-sign-out-alt" />
+      <Icons name="signout" />
       <span class="nav-title">{user.username}</span>
     </span>
   </Navbar>

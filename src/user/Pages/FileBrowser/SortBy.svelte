@@ -1,4 +1,5 @@
 <script>
+  import Icons from "../../../icons/Icons.svelte";
   import { PageConfig, updateConfig } from "../../Stores/PageConfigStore";
   export let label;
   export let toggleConfig;
@@ -22,7 +23,7 @@
   };
 </script>
 
-<span class="config-list fas fa-cog" on:click={onShowConfig} />
+<span class="config-list" on:click={onShowConfig}><Icons name="cog" /></span>
 {#if showConfig}
   <div class="config-items">
     <div class="sortby">
@@ -37,7 +38,7 @@
       <label for="items">Items: </label>
       <input id="items" name="items" type="number" bind:value={Config.Content.items} min="0" max="500" />
     </div>
-    <span class="fas fa-save" on:click={save} />
+    <span on:click={save}><Icons name="save" /></span>
   </div>
 {/if}
 
@@ -48,13 +49,17 @@
     font-size: 22px;
     cursor: pointer;
   }
-  .fa-save {
-    cursor: pointer;
+
+  .config-list :global(.icon-cog) {
+    width: 30px;
+    height: 30px;
+    top: -2px;
+    right: -3px;
   }
 
-  .fa-save:active,
-  .config-list:active {
-    transform: scale(1.1);
+  .config-items :global(.icon-save) {
+    width: 30px;
+    margin-left: 8px;
   }
 
   .config-items {
@@ -83,11 +88,6 @@
   .sortby {
     display: flex;
     margin-right: 15px;
-  }
-
-  .fa-save {
-    font-size: 30px;
-    margin-left: 10px;
   }
 
   label {
