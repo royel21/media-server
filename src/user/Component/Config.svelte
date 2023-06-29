@@ -33,42 +33,40 @@
     </span>
   </div>
 
-  {#if !document.title.includes("Home")}
-    <div
-      id="config-content"
-      on:click|stopPropagation={(e) => {
-        e.preventDefault();
-      }}
-    >
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <label for="order-by" class="input-group-text">Sort By:</label>
-        </div>
-        <select id="order-by" class="form-control" bind:value={Config[title].sort}>
-          <option value="nu">&#xf15d; Name</option>
-          <option value="nd">&#xf15e; Name</option>
-          <option value="du">&#xf162; Date</option>
-          <option value="dd">&#xf163; Date</option>
-        </select>
+  <div
+    id="config-content"
+    on:click|stopPropagation={(e) => {
+      e.preventDefault();
+    }}
+  >
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <label for="order-by" class="input-group-text">Sort By:</label>
       </div>
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <label for="items" class="input-group-text">File per Page:</label>
-        </div>
-        <input
-          id="items"
-          name="item-number"
-          type="number"
-          min="0"
-          max="500"
-          bind:value={Config[title].items}
-          class="form-control"
-        />
-        <span id="fpp-tips">0 = auto, max 500</span>
-      </div>
+      <select id="order-by" class="form-control" bind:value={Config[title].sort}>
+        <option value="nu">&darr; Name</option>
+        <option value="nd">&uarr; Name</option>
+        <option value="du">&darr; Date</option>
+        <option value="dd">&uarr; Date</option>
+      </select>
     </div>
-    <div><span on:click={save}><Icons name="save" height="22px" color="black" /></span></div>
-  {/if}
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <label for="items" class="input-group-text">File per Page:</label>
+      </div>
+      <input
+        id="items"
+        name="item-number"
+        type="number"
+        min="0"
+        max="500"
+        bind:value={Config[title].items}
+        class="form-control"
+      />
+      <span id="fpp-tips">0 = auto, max 500</span>
+    </div>
+  </div>
+  <div><span on:click={save}><Icons name="save" height="22px" color="black" /></span></div>
 </div>
 
 <style>

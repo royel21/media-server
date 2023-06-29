@@ -28,7 +28,7 @@
 
   let ver = 1;
   let folder;
-  let lastPage = 0;
+  let reload = true;
 
   const socket = getContext("socket");
   const user = getContext("User");
@@ -37,8 +37,7 @@
   let favClicked = null;
 
   const loadContent = async (pg = 1, flt = "", config) => {
-    if (+lastPage !== +page) {
-      lastPage = +pg;
+    if (reload) {
       const { items, sort } = config[title];
       const itemsPerPage = items || getFilesPerPage(3);
       const apiPath = title === "Content" ? `folder-content/${id}` : type;
@@ -55,13 +54,15 @@
           setLastRead(data.folder.currentFile);
         }
 
-        if (data.page !== pg) {
-          lastPage = +data.page;
+        if (+data.page !== +pg) {
+          reload = false;
           navigate(`/${type}/${data.page}/${filter || ""}`);
         }
       } else {
         console.log(data.error);
       }
+    } else {
+      reload = true;
     }
   };
 

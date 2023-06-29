@@ -16,21 +16,23 @@
   export let page = 1;
   export let filter = "";
   let title = "Home";
-  let lastPage = 0;
+  let reload = true;
 
   let pageData = { items: [], page: page || 1, totalPages: 0, totalFiles: 0 };
 
   const loadContent = async (pg, flt = "") => {
-    if (+lastPage !== +pg) {
+    if (reload) {
       const items = $PageConfig.Home.items || getFilesPerPage(3);
       const data = await api.files(["recents", items, pg, flt]);
       if (data.valid) {
         pageData = data;
-        lastPage = data.page;
+        if (+pg !== +data.page) {
+          reload = false;
+          navigate(`/${data.page}/${filter || ""}`);
+        }
       }
-      if (pg !== data.page) {
-        navigate(`/${data.page}/${filter || ""}`);
-      }
+    } else {
+      reload = true;
     }
   };
 
