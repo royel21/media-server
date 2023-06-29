@@ -28,6 +28,7 @@
 
   let ver = 1;
   let folder;
+  let lastPage = 0;
 
   const socket = getContext("socket");
   const user = getContext("User");
@@ -36,27 +37,31 @@
   let favClicked = null;
 
   const loadContent = async (pg = 1, flt = "", config) => {
-    const { items, sort } = config[title];
-    const itemsPerPage = items || getFilesPerPage(3);
-    const apiPath = title === "Content" ? `folder-content/${id}` : type;
-    let url = `/api/files/${apiPath}/${sort}/${pg}/${itemsPerPage}/${flt?.replace("%", "") || ""}`;
+    if (+lastPage !== +page) {
+      lastPage = +pg;
+      const { items, sort } = config[title];
+      const itemsPerPage = items || getFilesPerPage(3);
+      const apiPath = title === "Content" ? `folder-content/${id}` : type;
+      let url = `/api/files/${apiPath}/${sort}/${pg}/${itemsPerPage}/${flt?.replace("%", "") || ""}`;
 
-    const data = await getItemsList(url);
+      const data = await getItemsList(url);
 
-    if (data.valid) {
-      pageData = data;
+      if (data.valid) {
+        pageData = data;
 
-      if (data.files[0] && setFolderInfo && setLastRead) {
-        setFolderInfo(data.folder);
-        folder = data.folder.Name;
-        setLastRead(data.folder.currentFile);
+        if (data.files[0] && setFolderInfo && setLastRead) {
+          setFolderInfo(data.folder);
+          folder = data.folder.Name;
+          setLastRead(data.folder.currentFile);
+        }
+
+        if (data.page !== pg) {
+          lastPage = +data.page;
+          navigate(`/${type}/${data.page}/${filter || ""}`);
+        }
+      } else {
+        console.log(data.error);
       }
-
-      if (data.page !== pg) {
-        navigate(`/${type}/${data.page}/${filter || ""}`);
-      }
-    } else {
-      console.log(data.error);
     }
   };
 
