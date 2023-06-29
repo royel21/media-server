@@ -1,7 +1,7 @@
 <script>
   import Input from "../ShareComponent/Input.svelte";
   import { onMount } from "svelte";
-  import Icons from "./icons/Icons2.svelte";
+  import Icons from "../icons/Icons2.svelte";
 
   let error = { name: "", password: "" };
 

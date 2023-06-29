@@ -63,8 +63,9 @@ export const getFolders = async (req, res) => {
   let limit = +items || 16;
 
   let filter = getFilter(search);
+
   let query = {
-    attributes: ["Id", "Name", "Cover", "Type", "Genres", "FilesType", "CreatedAt", "Status", "FileCount"],
+    attributes: ["Id", "Name", "Type", "Genres", "FilesType", "CreatedAt", "Status", "FileCount"],
     where: {
       [db.Op.or]: {
         Name: filter,
@@ -76,10 +77,6 @@ export const getFolders = async (req, res) => {
       IsAdult: { [db.Op.lte]: req.user.AdultPass },
       FilesType: filetype,
     },
-    include: { model: db.favorite, attributes: ["Id"] },
-    order: getOrderBy(order, "Folders"),
-    offset: (page - 1) * limit,
-    limit,
   };
 
   if (["mangas", "videos"].includes(filetype)) {
@@ -87,9 +84,22 @@ export const getFolders = async (req, res) => {
   }
 
   let result = { rows: [], count: 0 };
+  let p = +page || 1;
 
   try {
-    result = await db.folder.findAndCountAll(query);
+    result.count = await db.folder.count(query);
+
+    const totalPages = Math.ceil(result.count / limit);
+
+    if (p > totalPages) p = totalPages;
+
+    result.rows = await db.folder.findAll({
+      ...query,
+      include: { model: db.favorite, attributes: ["Id"] },
+      order: getOrderBy(order, "Folders"),
+      offset: (p - 1) * limit,
+      limit,
+    });
   } catch (error) {
     console.log(error.toString());
   }
@@ -104,5 +114,6 @@ export const getFolders = async (req, res) => {
     totalFiles: result.count,
     totalPages: Math.ceil(result.count / limit),
     valid: true,
+    page: p,
   });
 };

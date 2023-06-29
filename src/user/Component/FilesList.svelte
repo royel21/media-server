@@ -51,6 +51,10 @@
         folder = data.folder.Name;
         setLastRead(data.folder.currentFile);
       }
+
+      if (data.page !== pg) {
+        navigate(`/${type}/${data.page}/${filter || ""}`);
+      }
     } else {
       console.log(data.error);
     }
