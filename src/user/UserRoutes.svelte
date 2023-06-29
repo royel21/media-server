@@ -15,10 +15,10 @@
   import Config from "./Component/Config.svelte";
 
   const navItems = [
-    { title: "Home", path: "/", class: "home", color: "rgb(17, 218, 201)" },
-    { title: "Videos", path: "/videos", class: "film", color: "rgb(37, 140, 209)" },
-    { title: "Mangas", path: "/mangas", class: "book", color: "rgb(202, 48, 48)" },
-    { title: "Favorites", path: "/favorites", class: "heart", color: "rgba(248, 224, 6, 0.952)" },
+    { title: "Home", path: "/", class: "home" },
+    { title: "Videos", path: "/videos", class: "film" },
+    { title: "Mangas", path: "/mangas", class: "book" },
+    { title: "Favorites", path: "/favorites", class: "heart" },
   ];
 
   let dirs = {};
@@ -27,15 +27,22 @@
 
   let selected = { Mangas: "", Videos: "" };
 
-  const selectDir = ({ target: { id, title } }) => (selected[title] = id);
+  const selectDir = ({ target: { id, title } }) => {
+    selected[title] = id;
+    localStorage.setItem("current-" + title, id);
+  };
+
+  const getCurrent = (list, name) => {
+    return localStorage.getItem("current-" + name) || list[0]?.Id || "";
+  };
 
   $: dirs.Favorites = $FavoritesStores;
 
   onMount(async () => {
     const data = await apiUtils.files(["dirs/"]);
-    selected.Mangas = data.Mangas[0]?.Id || "";
-    selected.Videos = data.Videos[0]?.Id || "";
-    selected.Favorites = dirs.Favorites[0]?.Id || "";
+    selected.Mangas = getCurrent(data.Mangas, "Mangas");
+    selected.Videos = getCurrent(data.Videos, "Videos");
+    selected.Favorites = getCurrent(dirs.Favorites, "Favorites");
     dirs = { ...dirs, ...data };
   });
 

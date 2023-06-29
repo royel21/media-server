@@ -11,6 +11,7 @@
 
   $: favId = id || favId;
   $: type = `favorites/${favId}`;
+  $: console.log("Id", id, "firstfav", $FavoritesStores[0].Id, favId);
 </script>
 
 <FilesList title="Favorites" {type} {filter} {page} id={favId}>

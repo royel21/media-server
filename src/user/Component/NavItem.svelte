@@ -35,7 +35,7 @@
             title={item.title}
             class:adult={IsAdult}
           >
-            {Name}
+            <span>{Name}</span>
           </li>
         {/each}
       </ul>
@@ -44,14 +44,11 @@
 </li>
 
 <style>
-  .nav-item :global(svg) {
-    cursor: pointer;
-  }
-  .nav-item:active :global(svg) {
-    transform: scale(1.1);
-  }
   .nav-item:hover ul {
     display: initial;
+  }
+  .nav-item ul .list-item:hover {
+    background-color: #8e5e00;
   }
   .down-list {
     display: none;
@@ -70,6 +67,14 @@
     padding: 8px;
     font-weight: bold;
     font-size: 12px;
+    max-width: 210px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .down-list li span {
+    max-width: 100%;
+    overflow: hidden;
+    display: inline-block;
   }
   .down-list li:not(:last-child) {
     border-bottom: 1px solid;

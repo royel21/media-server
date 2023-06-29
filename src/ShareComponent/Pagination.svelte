@@ -129,12 +129,11 @@
     padding: 0 15px;
   }
   #pager .current-page {
-    min-width: 70px;
-    width: 100px;
-    max-width: 100px;
+    min-width: 60px;
+    width: 60px;
     text-align: center;
     font-size: 14px;
-    padding: 0 4px;
+    padding: 0;
     line-height: 2.2;
     font-weight: 700;
   }
@@ -147,6 +146,12 @@
     color: #007bff;
     background-color: #fff;
     border: 1px solid #dee2e6;
+  }
+
+  input {
+    height: 29px;
+    text-align: center;
+    padding: 0.1rem 0.2rem;
   }
 
   .d-none {
@@ -171,10 +176,6 @@
     #next-page {
       border-top-right-radius: 0.25rem;
       border-bottom-right-radius: 0.25rem;
-    }
-    #pager .current-page {
-      min-width: 10px;
-      width: 50px;
     }
   }
 </style>

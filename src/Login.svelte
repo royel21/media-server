@@ -1,7 +1,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
   import { post } from "./apiUtils.js";
-  import Icons from "./icons/Icons.svelte";
+  import Icons from "./icons/Icons2.svelte";
 
   const dispatch = createEventDispatcher();
 

@@ -3,8 +3,12 @@ export const getProps = ({ location, href }) => {
   let hrefParts = href.split("/");
   let locPart = location.pathname.split("/");
 
-  for (let i = 0; i < hrefParts.length; i++) {
-    active = locPart[i] === hrefParts[i];
+  if (!hrefParts[1] && !isNaN(+locPart[1])) {
+    active = true;
+  } else {
+    for (let i = 0; i < hrefParts.length; i++) {
+      active = locPart[i] === hrefParts[i];
+    }
   }
 
   if (active) {

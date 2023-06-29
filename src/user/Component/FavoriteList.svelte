@@ -38,10 +38,7 @@
 </span>
 
 <style>
-  .trash {
-    cursor: pointer;
-  }
-  .trash :global(svg) {
+  .trash :global(svg:active) {
     pointer-events: none;
   }
 </style>

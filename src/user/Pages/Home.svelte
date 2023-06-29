@@ -20,9 +20,12 @@
   let pageData = { items: [], page: page || 1, totalPages: 0, totalFiles: 0 };
 
   const loadContent = async (pg, flt = "") => {
-    const items = $PageConfig.Home.items || getFilesPerPage(3);
-    const data = await api.files(["recents", items, pg, flt]);
-    if (data.valid) pageData = data;
+    if (pg !== pageData.page || !pageData.totalPages) {
+      const items = $PageConfig.Home.items || getFilesPerPage(3);
+      const data = await api.files(["recents", items, pg, flt]);
+      if (data.valid) pageData = data;
+      if (pg !== data.page) navigate(`/${data.page}/${filter || ""}`);
+    }
   };
 
   const goToPage = async ({ detail }) => navigate(`/${+detail}/${filter || ""}`);
@@ -41,7 +44,9 @@
     const Id = currentTarget.closest(".file")?.id;
     const result = await api.post("files/recents/remove", { Id });
     if (result.valid) {
-      page = clamp(pg, 1, pageData.totalPages);
+      if (document.querySelectorAll(".file").length === 1) {
+        page = clamp(page - 1, 1, pageData.totalPages);
+      }
       loadContent(page, filter);
     }
   };

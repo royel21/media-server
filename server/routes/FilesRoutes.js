@@ -45,10 +45,10 @@ routes.post("/recents/remove", async ({ body }, res) => {
 
 routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
   const { page, items, filter } = req.params;
-  const p = +page || 1;
+  let p = +page || 1;
   const limit = +items || 16;
 
-  const recents = await db.recentFolder.findAndCountAll({
+  const query = {
     order: [["LastRead", "DESC"]],
     where: { RecentId: req.user?.Recent.Id },
     include: {
@@ -60,11 +60,21 @@ routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
       },
       required: true,
     },
+  };
+
+  const count = await db.recentFolder.count(query);
+
+  const totalPages = Math.ceil(count / limit);
+
+  if (p > totalPages) p = totalPages;
+
+  const recents = await db.recentFolder.findAll({
+    ...query,
     offset: (p - 1) * limit,
     limit,
   });
   //Map Folder
-  const folders = recents.rows.map((rc) => {
+  const folders = recents.map((rc) => {
     delete rc.dataValues.Folder;
     delete rc.dataValues.LastRead;
     return {
@@ -77,8 +87,8 @@ routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
   res.send({
     items: folders,
     page: p,
-    totalFiles: recents.count,
-    totalPages: Math.ceil(recents.count / limit),
+    totalFiles: count,
+    totalPages,
     valid: true,
   });
 });

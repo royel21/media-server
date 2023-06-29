@@ -75,7 +75,7 @@ routes.get("/:id/:order/:page/:items/:search?", async (req, res) => {
     const { id, order, page, items, search } = req.params;
     const limit = +items || 16;
 
-    let result = await db.folder.findAndCountAll({
+    const query = {
       attributes: ["Id", "Name", "FileCount", "Type", "CreatedAt"],
       where: {
         Name: {
@@ -95,7 +95,20 @@ routes.get("/:id/:order/:page/:items/:search?", async (req, res) => {
       order: getOrderBy(order, "Folders"),
       offset: (page - 1) * limit,
       limit,
-    });
+    };
+
+    let result = {
+      rows: [],
+      count: 0,
+    };
+
+    try {
+      result = await db.folder.findAndCountAll(query);
+    } catch (error) {
+      console.error(error);
+    }
+
+    console.log(result.rows.length);
 
     const files = result.rows.map((r) => {
       delete r.dataValues.Favorites;

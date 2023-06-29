@@ -44,7 +44,7 @@
     cursor: pointer;
   }
 
-  span :global(svg) {
+  span :global(svg:active) {
     pointer-events: none;
   }
 

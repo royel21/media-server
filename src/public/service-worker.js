@@ -1,13 +1,5 @@
 const cacheName = "media-v2";
-const staticAssets = [
-  "./fa-regular-400.woff",
-  "./fa-regular-400.woff2",
-  "./fa-solid-900.woff",
-  "./fa-solid-900.woff2",
-  "./home.png",
-  "./home.ico",
-  "./all.min.css",
-];
+const staticAssets = ["./home.png"];
 
 self.addEventListener("install", async (e) => {
   const cache = await caches.open(cacheName);

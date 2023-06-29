@@ -58,10 +58,4 @@
     color: white;
     height: 100%;
   }
-  .nav-item :global(svg) {
-    cursor: pointer;
-  }
-  .nav-item:active :global(svg) {
-    transform: scale(1.1);
-  }
 </style>

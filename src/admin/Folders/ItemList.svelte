@@ -48,10 +48,6 @@
 </div>
 
 <style>
-  .completed :global(svg) {
-    fill: rgb(202, 48, 48);
-  }
-
   .list-container {
     height: calc(100% - 85px);
     overflow-y: auto;

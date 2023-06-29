@@ -1,8 +1,7 @@
 <script>
   import Input from "../ShareComponent/Input.svelte";
-  import UserIcon from "../icons/user-solid.svelte";
-  import KeyIcon from "../icons/key-solid.svelte";
   import { onMount } from "svelte";
+  import Icons from "./icons/Icons2.svelte";
 
   let error = { name: "", password: "" };
 
@@ -61,13 +60,13 @@
 
 <div id="root">
   <div id="login-container">
-    <h3 class="mb-4">Login</h3>
+    <h3 class="mb-4"><Icons name="signin" /> Login</h3>
     <form on:submit|preventDefault={onSubmit}>
       <Input width="65px" name="username" bind:value={user.username} placeholder="Name" {error}>
-        <UserIcon slot="label" />
+        <Icons name="user" slot="label" />
       </Input>
       <Input width="65px" name="password" type="password" bind:value={user.password} placeholder="Password" {error}>
-        <KeyIcon slot="label" />
+        <Icons name="key" slot="label" />
       </Input>
       <div class="form-footer">
         <button type="submit">Submit</button>
@@ -91,6 +90,20 @@
   }
   #root {
     min-height: 100%;
+  }
+
+  #login-container :global(.icon-signin) {
+    height: 32px;
+    width: 40px;
+    top: 7px;
+    fill: white;
+  }
+  #login-container form :global(svg) {
+    fill: black;
+    fill: black;
+    width: 30px;
+    height: 24px;
+    top: 0;
   }
 
   #login-container {
@@ -140,16 +153,6 @@
     border-color: #545b62;
   }
 
-  button:active {
-    transform: scale(1.2);
-    transition: 0.25s;
-  }
-
-  :global(svg) {
-    fill: #495057;
-    height: 27px;
-    padding-top: 5px;
-  }
   :global(.input-control) {
     margin-bottom: 10px;
   }

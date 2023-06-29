@@ -44,11 +44,6 @@ li {
   align-items: center;
 }
 
-.nav-item a:active i {
-  transition: 0.1s all;
-  transform: scale(1.2);
-}
-
 .nav-item .active {
   border-bottom: 1px solid;
 }
@@ -203,21 +198,6 @@ input[type="text"]:not(:placeholder-shown) + span {
 
 /* Directory Style */
 
-i,
-span i,
-label i {
-  cursor: pointer;
-  font-size: 20px;
-}
-
-.fa:active,
-a:active i,
-label:active i,
-span:active i,
-.page-link:active i {
-  transform: scale(1.2);
-}
-
 .table tr {
   border: 2px solid #444444;
 }
@@ -234,12 +214,8 @@ h3 {
   text-align: center;
 }
 
-.fa,
-.fas,
-.far,
+svg,
 .usn,
-label i,
-span i,
 .btn,
 .table thead,
 .modal label,
@@ -265,6 +241,10 @@ svg path {
   fill: rgb(17, 218, 201);
 }
 
+.icon-book {
+  fill: rgb(202, 48, 48);
+}
+
 .icon-sync,
 .icon-edit,
 .icon-film {
@@ -277,10 +257,6 @@ svg path {
 
 .icon-heart {
   fill: rgba(248, 224, 6, 0.952);
-}
-
-.icon-trash {
-  fill: rgba(252, 1, 1, 0.856);
 }
 
 .icon-folder-open + .file-progress {
