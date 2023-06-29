@@ -66,11 +66,12 @@
       if (/icon-edit/gi.test(cList)) {
         modalType = { title: "Edit Folder Properties", Del: false };
         showModal = true;
-      } else if (/icon-trash-alt/gi.test(cList)) {
+      } else if (/icon-trash/gi.test(cList)) {
         modalType = { title: "Remove Folder", Del: true };
         showModal = true;
       } else {
         socket.emit("scan-dir", { Id: folder.Id, isFolder: true });
+        document.getElementById(folder.Id).querySelector(".icon-sync")?.classList.add("icon-spin");
       }
     }
   };
@@ -129,7 +130,7 @@
   };
 
   const scanFinish = (data) => {
-    // document.getElementById(data.Id).querySelector(".fas")?.classList.remove("fa-spin");
+    document.getElementById(data.Id).querySelector(".icon-sync")?.classList.remove("icon-spin");
   };
 
   onMount(() => {

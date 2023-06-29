@@ -32,7 +32,7 @@
             on:mousemove
           >
             {#if Type.includes("Folder")}
-              <span><Icons name="sync" color={Status ? "rgb(37, 140, 209);" : "rgb(202, 48, 48);"} /></span>
+              <span class:completed={Status}><Icons name="sync" box="0 0 512 512" /></span>
             {/if}
             <span><Icons name="edit" /></span>
             <span><Icons name="trash" /></span>
@@ -48,6 +48,10 @@
 </div>
 
 <style>
+  .completed :global(svg) {
+    fill: rgb(202, 48, 48);
+  }
+
   .list-container {
     height: calc(100% - 85px);
     overflow-y: auto;

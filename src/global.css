@@ -292,6 +292,20 @@ svg path {
   fill: black;
 }
 
+.icon-spin {
+  animation: 2s linear infinite icon-spin;
+}
+
+@keyframes icon-spin {
+  0% {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(1turn);
+  }
+}
+
 .list-group {
   display: flex;
   flex-direction: column;
