@@ -58,7 +58,9 @@
   };
 
   const setLastRead = (data) => (lastRead = data);
-  const setFolderInfo = (data) => {};
+  const setFolderInfo = (data) => {
+    folderinfo = data;
+  };
 
   const onShowMore = () => {
     if (showMore) {

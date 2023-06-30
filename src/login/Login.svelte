@@ -99,11 +99,10 @@
     fill: white;
   }
   #login-container form :global(svg) {
-    fill: black;
-    fill: black;
+    fill: #000;
     width: 30px;
-    height: 24px;
-    top: 0;
+    height: 30px;
+    top: 2px;
   }
 
   #login-container {

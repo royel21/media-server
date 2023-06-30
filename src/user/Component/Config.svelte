@@ -1,10 +1,11 @@
 <script>
-  import { getContext } from "svelte";
+  import { getContext, onDestroy, onMount } from "svelte";
   import { PageConfig, updateConfig } from "../Stores/PageConfigStore";
   import Icons from "../../icons/Icons.svelte";
 
   const User = getContext("User");
   const logout = getContext("logout");
+  let checkRef;
 
   let title = document.title.split(" ")[0];
 
@@ -19,13 +20,25 @@
   const save = () => {
     updateConfig(Config);
   };
+  const hideConfig = ({ target }) => {
+    if (target.closest(".scroll-container")) {
+      checkRef.checked = false;
+    }
+  };
+
+  onMount(() => {
+    document.addEventListener("click", hideConfig);
+  });
+  onDestroy(() => {
+    document.removeEventListener("click", hideConfig);
+  });
 </script>
 
 <label class="icon" id="user-label" for="show-config" title="Show Config">
   <Icons name="usercog" height="22px" />
   <span class="nav-title">{User.username}</span>
 </label>
-<input type="checkbox" name="" id="show-config" title="show-config" />
+<input type="checkbox" name="" id="show-config" title="show-config" bind:this={checkRef} />
 <div id="user-config" on:click|stopPropagation>
   <div id="sep">
     <span class="icon signout" on:click={logout}>
