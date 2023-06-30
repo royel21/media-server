@@ -18,7 +18,6 @@
 
   const logIn = (_user) => {
     user = _user.detail;
-    navigate("/" + (user.role.includes("Admin") ? "admin" : ""), { replace: true, state: "" });
   };
 </script>
 

@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
   export let cover;
-  let src;
+  let src = "";
   let ref;
   let observer;
 

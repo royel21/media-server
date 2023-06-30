@@ -20,7 +20,7 @@
   const menu = document.querySelector("#menu");
 
   let lastRead = "";
-  let folderinfo = { Genres: "" };
+  let folderinfo = { Genres: "Loading Info" };
 
   const socket = getContext("socket");
 
@@ -58,7 +58,7 @@
   };
 
   const setLastRead = (data) => (lastRead = data);
-  const setFolderInfo = (data) => (folderinfo = data);
+  const setFolderInfo = (data) => {};
 
   const onShowMore = () => {
     if (showMore) {
@@ -83,17 +83,17 @@
       <img src={folderinfo?.Cover} alt="Cover Not Found" />
     </div>
     <div id="name-gen-tag">
-      <span id="manga-name"><span>{folderinfo?.Name}</span></span>
+      <span id="manga-name"><span>{folderinfo?.Name || "Loading Info"}</span></span>
       <div class="genres-list">
         <span class="gen-tag">Genres: </span>
-        {#each folderinfo?.Genres?.split(", ") || [] as genre}
+        {#each folderinfo?.Genres?.split(", ") as genre}
           <span on:click|preventDefault={onGenres}> {genre}</span>
         {/each}
       </div>
       <div class="m-desc" class:show-more={showMore} on:click={onShowMore} title="Click To Show More">
         <span bind:this={descRef} class="desc-text">
           <span class="gen-tag">Description: </span>
-          {folderinfo?.Description}
+          {folderinfo?.Description || "Loading Info"}
         </span>
       </div>
       <div id="btn-bar">

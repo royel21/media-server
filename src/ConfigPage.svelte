@@ -22,11 +22,9 @@
     socket?.close();
     if (isPwa()) {
       history.go(-(history.length - 1));
-    }
-
-    setTimeout(() => {
+    } else {
       location.href = "/login";
-    }, 50);
+    }
   };
 
   onMount(async () => {
@@ -42,7 +40,7 @@
     }
   });
 
-  $: if (user) {
+  $: if (user.username) {
     socket = socketClient("/");
 
     socket.off("logout", logout);
