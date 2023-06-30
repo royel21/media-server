@@ -233,16 +233,8 @@ svg path {
   fill: rgb(250, 183, 15);
 }
 
-.icon-trash {
-  fill: rgb(202, 48, 48);
-}
-
 .icon-home {
   fill: rgb(17, 218, 201);
-}
-
-.icon-book {
-  fill: rgb(202, 48, 48);
 }
 
 .icon-sync,
@@ -251,8 +243,14 @@ svg path {
   fill: rgb(37, 140, 209);
 }
 
-.active .icon-sync {
+.active:not(.completed) .icon-sync {
   fill: white;
+}
+
+.completed .icon-sync,
+.icon-trash,
+.icon-book {
+  fill: rgb(202, 48, 48);
 }
 
 .icon-heart {

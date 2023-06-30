@@ -26,13 +26,14 @@
             id={Id}
             class="list-group-item"
             class:active={folderId === Id}
+            class:completed={Status}
             on:click
             on:mouseenter
             on:mouseleave
             on:mousemove
           >
             {#if Type.includes("Folder")}
-              <span class:completed={Status}><Icons name="sync" box="0 0 512 512" /></span>
+              <span><Icons name="sync" box="0 0 512 512" /></span>
             {/if}
             <span><Icons name="edit" /></span>
             <span><Icons name="trash" /></span>
