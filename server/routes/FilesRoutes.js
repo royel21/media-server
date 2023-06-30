@@ -47,6 +47,10 @@ routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
   const { page, items, filter } = req.params;
   let p = +page || 1;
   const limit = +items || 16;
+  let offset = (p - 1) * limit;
+  if (offset < 1) {
+    offset = 1;
+  }
 
   const query = {
     order: [["LastRead", "DESC"]],
@@ -66,11 +70,11 @@ routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
 
   const totalPages = Math.ceil(count / limit);
 
-  if (p > totalPages) p = totalPages;
+  if (p > totalPages) p = totalPages || 1;
 
   const recents = await db.recentFolder.findAll({
     ...query,
-    offset: (p - 1) * limit,
+    offset,
     limit,
   });
   //Map Folder
