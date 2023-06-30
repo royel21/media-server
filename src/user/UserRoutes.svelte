@@ -21,29 +21,16 @@
     { title: "Favorites", path: "/favorites", class: "heart" },
   ];
 
-  let dirs = {};
+  let dirs = { selected: {}, Mangas: [] };
+  const User = getContext("User");
 
-  FavoritesStores.set(getContext("User").favorites);
-
-  let selected = { Mangas: "", Videos: "" };
-
-  const selectDir = ({ target: { id, title } }) => {
-    selected[title] = id;
-    localStorage.setItem("current-" + title, id);
-  };
-
-  const getCurrent = (list, name) => {
-    return localStorage.getItem("current-" + name) || list[0]?.Id || "";
-  };
-
-  $: dirs.Favorites = $FavoritesStores;
+  FavoritesStores.set(User.favorites);
 
   onMount(async () => {
     const data = await apiUtils.files(["dirs/"]);
-    selected.Mangas = getCurrent(data.Mangas, "Mangas");
-    selected.Videos = getCurrent(data.Videos, "Videos");
-    selected.Favorites = getCurrent(dirs.Favorites, "Favorites");
-    dirs = { ...dirs, ...data };
+    if (data.valid) {
+      dirs = { Favorites: $FavoritesStores, ...data };
+    }
   });
 
   document.title = "Home";
@@ -51,7 +38,7 @@
 
 <Router>
   <Navbar on:click {navItems} filters={["Mangas", "Videos", "Favorites"]} let:item>
-    <NavItem {dirs} {selectDir} {selected} {item} slot="nav-item" />
+    <NavItem {dirs} {item} slot="nav-item" {User} />
     <Config slot="user" />
   </Navbar>
 

@@ -4,37 +4,36 @@
   import Icons from "../../icons/Icons.svelte";
   export let dirs;
   export let item;
-  export let selected;
-  export let selectDir;
+  export let User;
+  const saveItem = `${User.Name}-${item.title}`;
 
-  let items = [];
-  let selectedId = selected[item.title] || "";
+  const getCurrent = (name) => {
+    return localStorage.getItem(saveItem) || dirs[name][0]?.Id || "";
+  };
 
-  $: if (dirs) {
-    let found = dirs[item.title]?.find((i) => i.IsAdult);
-    if (found) {
-      found.First = true;
-    }
-    items = dirs[item.title];
-    selectedId = selected[item.title] || "";
+  let data = { items: [], current: "" };
+
+  const select = ({ target: { id } }) => {
+    data.current = id;
+    localStorage.setItem(saveItem, id);
+  };
+
+  $: if (dirs.Mangas.length) {
+    data = {
+      items: dirs[item.title],
+      current: getCurrent(item.title),
+    };
   }
 </script>
 
 <li class="nav-item">
-  <Link to={`${item.path}/${selectedId}`} {getProps}>
+  <Link to={`${item.path}/${data.current}`} {getProps}>
     <Icons name={item.class} height="22px" color={item.color} />
     <span class="nav-title">{item.title}</span>
-    {#if items}
+    {#if data.items}
       <ul class="down-list">
-        {#each items as { Id, Name, IsAdult }}
-          <li
-            class="list-item"
-            id={Id}
-            class:selected={Id === selectedId}
-            on:click={selectDir}
-            title={item.title}
-            class:adult={IsAdult}
-          >
+        {#each data.items as { Id, Name, IsAdult }}
+          <li class="list-item" id={Id} class:selected={Id === data.current} on:click={select} class:adult={IsAdult}>
             <span>{Name}</span>
           </li>
         {/each}
@@ -50,6 +49,9 @@
   .nav-item ul .list-item:hover {
     background-color: #8e5e00;
   }
+  .list-item span {
+    pointer-events: none;
+  }
   .down-list {
     display: none;
     position: absolute;
@@ -64,7 +66,7 @@
     display: initial;
   }
   .down-list li {
-    padding: 8px;
+    padding: 5px;
     font-weight: bold;
     font-size: 12px;
     max-width: 210px;

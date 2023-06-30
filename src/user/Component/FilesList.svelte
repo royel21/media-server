@@ -14,6 +14,7 @@
   import { clamp } from "../../ShareComponent/utils";
   import { getItemsList } from "../../apiUtils";
   import Icons from "../../icons/Icons.svelte";
+  import LazyImage from "./LazyImage.svelte";
 
   export let id = "";
   export let page = 1;
@@ -54,7 +55,7 @@
           setLastRead(data.folder.currentFile);
         }
 
-        if (+data.page !== +pg) {
+        if (pg && data.page && +data.page !== +pg) {
           reload = false;
           navigate(`/${type}/${data.page}/${filter || ""}`);
         }
@@ -164,7 +165,7 @@
             {/if}
           </div>
           <div class="file-cover usn" on:dblclick|stopPropagation={onOpen || openFile}>
-            <img src={getCover(Type, Name) + `?v=${ver}`} alt="No Cover Found" />
+            <LazyImage cover={getCover(Type, Name) + `?v=${ver}`} />
             {#if Type.includes("Folder")}
               <span class:completed={Status}>{Status ? "Completed" : "OnGoing"}</span>
             {/if}

@@ -25,6 +25,8 @@
     const favs = $FavoritesStores;
     return favs.filter((fv) => !isFav.includes(fv.Id));
   };
+
+  $: icon = isFav?.length ? starFill : star;
 </script>
 
 <span class="fav-star" bind:this={thisEl}>
