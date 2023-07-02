@@ -75,7 +75,6 @@
     if (data.isValid) {
       folderinfo = data;
     }
-    console.log(folderinfo);
   });
 
   onDestroy(() => (menu.style.display = "flex"));
