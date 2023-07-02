@@ -10,7 +10,7 @@
   };
 </script>
 
-<div class="card bg-dark admin-manager ">
+<div class="card bg-dark admin-manager">
   <div class="rows">
     <FolderList on:folderid={folderid} page={parseInt(page) || 1} {folderId} {filter} />
     <FilesList {folderId} />
@@ -19,6 +19,7 @@
 
 <style>
   .rows {
+    position: relative;
     display: flex;
     flex-direction: row;
     height: 100%;

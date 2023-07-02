@@ -57,8 +57,8 @@ routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
   let p = +page || 1;
   const limit = +items || 16;
   let offset = (p - 1) * limit;
-  if (offset < 1) {
-    offset = 1;
+  if (offset < 0) {
+    offset = 0;
   }
 
   const query = {

@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"yarn run serv-dev\" \"yarn run vite-dev\" ",
+    "dev": "export NC=true&&vite",
     "vite-dev": "vite",
     "vite-local": "set IS_DEV=true&&vite",
     "server": "node server/app",

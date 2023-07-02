@@ -12,6 +12,7 @@
 </script>
 
 <div id={title} class="file-list col-6">
+  <slot name="first-tag" />
   <div class="controls">
     <Filter on:filter {filter} />
     <h4 class="text-center usn">{`${totalItems} - ${title}`}</h4>

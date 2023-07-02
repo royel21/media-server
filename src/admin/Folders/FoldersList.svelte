@@ -102,8 +102,7 @@
 
   const showPath = (e) => {
     if (showImage) {
-      fullPathPos.x = e.pageX + 10;
-      fullPathPos.y = e.pageY + 10;
+      fullPathPos.y = e.pageY - 30;
     }
   };
 
@@ -155,7 +154,6 @@
   <div class="thumbnail">
     <img src={`/Folder/${encodeURIComponent(showImage?.Name)}.jpg`} alt="Cover Not Found" />
   </div>
-  <span id="f-path" style={`left: ${fullPathPos.x}px; top:${fullPathPos.y}px;`}>{showImage?.Path}</span>
 {/if}
 
 <ItemList
@@ -173,9 +171,21 @@
   on:mouseenter={onShowImage}
   on:mouseleave={onShowImage}
   on:mousemove={showPath}
-/>
+>
+  <div class="path-tag" slot="first-tag">
+    {#if showImage}
+      <span id="f-path" style={`top:${fullPathPos.y}px;`}>
+        {showImage?.Path}
+      </span>
+    {/if}
+  </div>
+</ItemList>
 
 <style>
+  .path-tag {
+    position: relative;
+    width: 100%;
+  }
   .thumbnail {
     position: absolute;
     right: 18px;
@@ -188,12 +198,12 @@
     background-color: black;
   }
   .thumbnail img {
-    width: 180px;
-    object-fit: fill;
+    max-width: 200px;
+    object-fit: contain;
   }
   #f-path {
     display: inline-block;
-    position: fixed;
+    position: absolute;
     z-index: 99;
     background-color: rgb(88, 86, 86);
     font-size: 14px;
@@ -203,14 +213,13 @@
     border-radius: 0.25rem;
     border: 1px solid white;
     pointer-events: none;
+    left: 2px;
+    width: 99%;
   }
   @media screen and (max-width: 600px) {
     .thumbnail {
       right: 11px;
       top: 47px;
-    }
-    .thumbnail img {
-      width: 120px;
     }
   }
 </style>

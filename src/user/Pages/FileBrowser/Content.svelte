@@ -1,5 +1,5 @@
 <script>
-  import { getContext, onDestroy, onMount } from "svelte";
+  import { afterUpdate, getContext, onDestroy, onMount } from "svelte";
 
   import { navigate } from "svelte-routing";
   import apiUtils from "../../../apiUtils";
@@ -18,7 +18,6 @@
   let currentContent = "File List";
 
   const menu = document.querySelector("#menu");
-  menu.style.display = "none";
 
   let lastRead = "";
   let folderinfo = { Genres: "Loading Info" };
@@ -77,6 +76,7 @@
     }
   });
 
+  afterUpdate(() => (menu.style.display = "none"));
   onDestroy(() => (menu.style.display = "flex"));
 </script>
 

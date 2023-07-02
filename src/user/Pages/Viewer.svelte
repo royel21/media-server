@@ -106,6 +106,7 @@
   $: if (file.Id != lastId) {
     lastId = file.Id;
     showFileName();
+    console.log("pdate-recent", { CurrentFile: fileId, FolderId: folderId });
     socket?.emit("recent-folder", { CurrentFile: fileId, FolderId: folderId });
   }
 
