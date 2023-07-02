@@ -35,8 +35,8 @@
   };
 
   const continueReading = async () => {
-    const data = await apiUtils.files(["file-data", lastRead]);
-    ProcessFile({ id: lastRead, dataset: { type: data.Type } });
+    const data = await apiUtils.files(["file-data", folderinfo.currentFile]);
+    ProcessFile({ id: folderinfo.currentFile, dataset: { type: data.Type } });
   };
 
   const exitFolder = () => {
@@ -74,6 +74,7 @@
     if (data.isValid) {
       folderinfo = data;
     }
+    console.log(folderinfo);
 
     menu.style.display = "none";
   });
@@ -117,7 +118,7 @@
 {/if}
 {#if currentContent === "File List"}
   <div id="btn-bar">
-    {#if lastRead}
+    {#if folderinfo.currentFile}
       <button class="btn btn-secondary" on:click={continueReading}>Continue</button>
     {/if}
     <button id="first" class="btn btn-secondary" on:click={openFirstLast}>First</button>
@@ -311,9 +312,12 @@
   }
   #btn-bar {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     padding: 5px 0;
     width: 100%;
+  }
+  #btn-bar button {
+    margin-right: 15px;
   }
   @media screen and (max-width: 600px) {
     .gen-tag {
@@ -322,6 +326,9 @@
     }
     .m-desc .desc-text:hover {
       width: 100.5%;
+    }
+    #btn-bar {
+      justify-content: space-evenly;
     }
   }
 </style>
