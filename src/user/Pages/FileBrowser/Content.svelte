@@ -100,7 +100,7 @@
         <span class="img-d"><img src={folderinfo?.Cover} alt="Cover Not Found" /></span>
       </div>
       <div class="manga-name">Name: <span>{folderinfo?.Name || "Name: Loading Info"}</span></div>
-      <div class="manga-name">Alternative: <span>{folderinfo?.Name || "Name: Loading Info"}</span></div>
+      <div class="manga-name alt">Alternative: <span>{folderinfo?.AltName || "Name: Loading Info"}</span></div>
       <div class="genres-list">
         <span class="gen-tag">Genres: </span>
         {#each folderinfo?.Genres?.split(", ") as genre}
@@ -297,6 +297,9 @@
     font-size: 1rem;
     height: 54px;
     overflow: hidden;
+  }
+  .alt {
+    height: 80px;
   }
 
   .genres-list {
