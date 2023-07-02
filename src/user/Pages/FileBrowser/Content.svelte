@@ -292,7 +292,7 @@
 
   .manga-name {
     display: inline-block;
-    font-family: cursive;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     text-align: start;
     font-size: 1rem;
     height: 54px;
