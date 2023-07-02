@@ -3,37 +3,46 @@ import db from "../models/index.js";
 
 import { getFiles, getFolders } from "./query-helper.js";
 
-import { getFilter } from "./utils.js";
+import { clamp, getFilter } from "./utils.js";
 
 const routes = Router();
 
 const { literal } = db.sqlze;
 
-routes.get("/folder-content/:id/:order/:page?/:items?/:search?", async (req, res) => {
-  const { id, order, page, items, search } = req.params;
-
-  let data = {};
+routes.get("/folder-content/info/:id", async (req, res) => {
+  const { id } = req.params;
   const currentFile = `(Select currentFile from RecentFolders where FolderId = \`Folders\`.\`Id\` AND RecentId = '${req.user?.Recent.Id}')`;
 
-  try {
-    data = await getFiles(req.user, { id, order, page, items, search }, db.folder);
-    const folder = await db.folder.findOne({
-      attributes: ["Id", "Name", "Description", "Status", "Genres", [literal(currentFile), "currentFile"]],
-      where: { Id: id },
-    });
+  const query = {
+    attributes: [
+      "Id",
+      "Name",
+      "Description",
+      "Status",
+      "Genres",
+      "AltName",
+      "Server",
+      [literal(currentFile), "currentFile"],
+    ],
+    where: { Id: id },
+  };
 
-    res.json({
-      files: data.rows.map((d) => ({ ...d.dataValues })),
-      totalFiles: data.count,
-      totalPages: Math.ceil(data.count / items),
-      folder: { ...folder.dataValues, Cover: encodeURI(folder.Cover) },
-      valid: true,
-    });
-  } catch (err) {
-    console.log(err);
-    res.send({});
+  let folder = { dataValues: {} };
+
+  try {
+    folder = await db.folder.findOne(query);
+    folder.dataValues.isValid = true;
+  } catch (error) {
+    console.log(error);
   }
+
+  res.send({ ...folder.dataValues, Cover: encodeURI(folder.Cover) });
 });
+
+routes.get("/folder-content/:id/:order/:page?/:items?/:search?", async (req, res) => {
+  getFiles(req.user, req.params, db.folder).then((data) => res.send(data));
+});
+
 routes.post("/recents/remove", async ({ body }, res) => {
   if (body.Id) {
     const recent = await db.recentFolder.findOne({ where: { FolderId: body.Id } });
@@ -53,9 +62,9 @@ routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
     where: { RecentId: req.user?.Recent.Id },
     include: {
       model: db.folder,
-      attributes: ["Id", "Name", "FileCount", "FilesType", "Type", "Status"],
+      attributes: ["Id", "Name", "FileCount", "FilesType", "Type", "Status", "Genres"],
       where: {
-        Path: getFilter(filter),
+        [db.Op.or]: { Path: getFilter(filter), Genres: getFilter(filter) },
         IsAdult: { [db.Op.lte]: req.user.AdultPass },
       },
       required: true,
@@ -66,7 +75,7 @@ routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
 
   const totalPages = Math.ceil(count / limit);
 
-  if (p > totalPages) p = totalPages;
+  p = clamp(p, 1, totalPages);
 
   const recents = await db.recentFolder.findAll({
     ...query,

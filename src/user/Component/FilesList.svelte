@@ -21,8 +21,6 @@
   export let filter = "";
   export let type = "";
   export let title = "";
-  export let setLastRead;
-  export let setFolderInfo;
   export let handleClick;
   export let useSlot = false;
   export let onOpen;
@@ -42,6 +40,7 @@
       const { items, sort } = config[title];
       const itemsPerPage = items || getFilesPerPage(3);
       const apiPath = title === "Content" ? `folder-content/${id}` : type;
+
       let url = `/api/files/${apiPath}/${sort}/${pg}/${itemsPerPage}/${flt?.replace("%", "") || ""}`;
 
       const data = await getItemsList(url);
@@ -49,10 +48,8 @@
       if (data.valid) {
         pageData = data;
 
-        if (data.files[0] && setFolderInfo && setLastRead) {
-          setFolderInfo(data.folder);
+        if (data.folder) {
           folder = data.folder.Name;
-          setLastRead(data.folder.currentFile);
         }
 
         if (pg && data.page && +data.page !== +pg) {

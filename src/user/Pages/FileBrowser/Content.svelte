@@ -1,5 +1,5 @@
 <script>
-  import { getContext, onMount } from "svelte";
+  import { getContext, onDestroy, onMount } from "svelte";
 
   import { navigate } from "svelte-routing";
   import apiUtils from "../../../apiUtils";
@@ -13,9 +13,9 @@
   export let filter = "";
   export let id = "";
 
-  let showMore = false;
-  let descRef;
   let showConfig = false;
+  let contents = ["File List", "Details"];
+  let currentContent = "File List";
 
   const menu = document.querySelector("#menu");
 
@@ -46,7 +46,11 @@
   const onGenres = ({ currentTarget }) => {
     const g = currentTarget.textContent;
     const part = pathname.split("/").slice(1, 3);
-    navigate(`/${part[0]}/${part[1]}/1/${g}`);
+    if (/mangas|videos|favorites/i.test(pathname)) {
+      navigate(`/${part[0]}/${part[1]}/1/${g}`);
+    } else {
+      navigate(`/1/${g}`);
+    }
   };
 
   const onResetFiles = async () => {
@@ -58,76 +62,121 @@
   };
 
   const setLastRead = (data) => (lastRead = data);
+
   const setFolderInfo = (data) => {
     folderinfo = data;
   };
 
-  const onShowMore = () => {
-    if (showMore) {
-      descRef.scrollTop = 0;
-    }
-    showMore = !showMore;
-  };
   //Toggle File List Config
   const handleClick = (e) => (showConfig = !e);
-  onMount(() => {
+  onMount(async () => {
+    const data = await apiUtils.get(["files", "folder-content", "info", id]);
+    if (data.isValid) {
+      folderinfo = data;
+    }
+
     menu.style.display = "none";
-    return () => {
-      menu.style.display = "flex";
-    };
   });
+
+  onDestroy(() => (menu.style.display = "flex"));
 </script>
 
-<div id="info">
-  <div id="info-content">
-    <div id="img-info">
-      <span class:completed={folderinfo?.Status}>{folderinfo?.Status ? "Completed" : "On Going"}</span>
-      <img src={folderinfo?.Cover} alt="Cover Not Found" />
-    </div>
-    <div id="name-gen-tag">
-      <span id="manga-name"><span>{folderinfo?.Name || "Loading Info"}</span></span>
+<div class="tabs">
+  <div class="return-to" on:click={exitFolder}>
+    <Icons name="reply" />
+  </div>
+  {#each contents as content}
+    <input id={content} type="radio" name="contents" bind:group={currentContent} value={content} />
+    <label for={content}>{content}</label>
+  {/each}
+</div>
+{#if currentContent === "Details"}
+  <div id="info">
+    <div id="info-content">
+      <div id="img-info">
+        <span class="d-state" class:completed={folderinfo?.Status}>{folderinfo?.Status ? "Completed" : "On Going"}</span
+        >
+        <span class="img-d"><img src={folderinfo?.Cover} alt="Cover Not Found" /></span>
+      </div>
+      <div class="manga-name">Name: <span>{folderinfo?.Name || "Name: Loading Info"}</span></div>
+      <div class="manga-name">Alternative: <span>{folderinfo?.Name || "Name: Loading Info"}</span></div>
       <div class="genres-list">
         <span class="gen-tag">Genres: </span>
         {#each folderinfo?.Genres?.split(", ") as genre}
           <span on:click|preventDefault={onGenres}> {genre}</span>
         {/each}
       </div>
-      <div class="m-desc" class:show-more={showMore} on:click={onShowMore} title="Click To Show More">
-        <span bind:this={descRef} class="desc-text">
+      <div class="m-desc">
+        <span class="desc-text">
           <span class="gen-tag">Description: </span>
           {folderinfo?.Description || "Loading Info"}
         </span>
       </div>
-      <div id="btn-bar">
-        {#if lastRead}
-          <button class="btn btn-secondary" on:click={continueReading}>Continue</button>
-        {/if}
-        <button id="first" class="btn btn-secondary" on:click={openFirstLast}>First</button>
-        <button id="last" class="btn btn-secondary" on:click={openFirstLast}>Last</button>
-        <button class="btn btn-secondary" on:click={onResetFiles}>Reset All</button>
-        <button class="btn btn-secondary" on:click={scanfiles}>Update</button>
-      </div>
     </div>
   </div>
-</div>
-<fieldset>
-  <legend><span>Files List - <SortBy label="Sort By:" {showConfig} toggleConfig={handleClick} /></span></legend>
-  <FilesList title={"Content"} {type} {filter} {page} {id} {setFolderInfo} {setLastRead} {handleClick}>
-    <div class="first-controls" slot="controls" on:click={exitFolder}>
-      <Icons name="arrowcircleup" />
-    </div>
-  </FilesList>
-</fieldset>
+{/if}
+{#if currentContent === "File List"}
+  <div id="btn-bar">
+    {#if lastRead}
+      <button class="btn btn-secondary" on:click={continueReading}>Continue</button>
+    {/if}
+    <button id="first" class="btn btn-secondary" on:click={openFirstLast}>First</button>
+    <button id="last" class="btn btn-secondary" on:click={openFirstLast}>Last</button>
+    <button class="btn btn-secondary" on:click={onResetFiles}>Reset All</button>
+    <button class="btn btn-secondary" on:click={scanfiles}>Update</button>
+  </div>
+  <fieldset>
+    <legend><span>Files List - <SortBy label="Sort By:" {showConfig} toggleConfig={handleClick} /></span></legend>
+    <FilesList title={"Content"} {type} {filter} {page} {id} {setFolderInfo} {setLastRead} {handleClick} />
+  </fieldset>
+{/if}
 
 <style>
+  input[type="radio"] {
+    display: none;
+  }
+  .tabs {
+    position: relative;
+    display: flex;
+    padding-top: 5px;
+    text-align: center;
+    border-bottom: 1px solid white;
+    user-select: none;
+    justify-content: center;
+  }
+
+  .tabs label {
+    font-size: 19px;
+    font-weight: 600;
+    cursor: pointer;
+    color: white;
+    transition: 0.3s all;
+    margin-bottom: -1px;
+    border: 1px solid transparent;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    border-color: #e9ecef #e9ecef #dee2e6;
+    padding: 0.45rem;
+    user-select: none;
+    z-index: 100;
+    background-color: radial-gradient(ellipse at center, #14243d 0, #030611 100%);
+  }
+
+  input:checked + label {
+    background-color: white;
+    color: black;
+  }
+
   fieldset {
     position: relative;
     text-align: center;
-    height: calc(100% - 229px);
-    min-height: calc(100% - 229px);
+    height: calc(100% - 95px);
+    min-height: calc(100% - 95px);
     border-radius: 0.5rem;
-    margin: 2px;
-    margin-top: 10px;
+    margin: 0px 2px;
+  }
+  fieldset :global(.files-list) {
+    padding-bottom: 0;
   }
   legend {
     height: 26px;
@@ -142,27 +191,56 @@
   div {
     pointer-events: all;
   }
-  .first-controls :global(.icon-arrowcircleup) {
-    top: -1px;
-    height: 31px;
-    width: 42px;
+
+  .return-to {
+    position: fixed;
+    left: 5px;
+  }
+  .return-to :global(svg) {
+    height: 30px;
+    width: 38px;
+  }
+
+  #info-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    max-width: 700px;
+    margin: auto;
+    background-color: #14243d;
+    border-radius: 0.25rem;
+    border: 1px solid white;
+  }
+  #info-content > div:not(:last-child) {
+    border-bottom: 1px solid;
   }
   #info {
     z-index: 999;
-    padding: 2px;
+    padding: 4px;
     text-align: center;
     padding-top: 5px;
+  }
+  .img-d {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 186px;
+    min-height: 186px;
+    min-width: 150px;
+    padding: 1px;
+    border: 1px solid;
+    border-radius: 0.25rem;
   }
   #img-info {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 140px;
-    padding: 4px 4px 0 4px;
-    border-right: 1px solid;
+    padding: 4px;
+    border-bottom: 1px solid;
+    min-height: 190px;
   }
-  #img-info span {
+  #img-info .d-state {
     display: inline-block;
     position: absolute;
     left: 7px;
@@ -174,20 +252,8 @@
     font-size: 10px;
     font-weight: 600;
   }
-
-  #img-info span.completed {
+  #img-info .completed {
     background-color: red;
-  }
-
-  #info-content {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    max-width: 700px;
-    margin: auto;
-    background-color: #14243d;
-    border-radius: 0.25rem;
-    border: 1px solid white;
   }
   #info img {
     max-height: 186px;
@@ -198,7 +264,6 @@
   }
   .m-desc {
     text-align: start;
-    height: 54px;
   }
   #name-gen-tag {
     display: flex;
@@ -219,13 +284,12 @@
     display: inline-block;
     height: 100%;
     overflow: hidden;
-    background-color: #14243d;
     text-align: start;
     padding: 0 5px;
     cursor: pointer;
   }
 
-  #manga-name {
+  .manga-name {
     display: inline-block;
     font-family: cursive;
     text-align: start;
@@ -233,30 +297,7 @@
     height: 54px;
     overflow: hidden;
   }
-  #manga-name:hover span {
-    position: absolute;
-  }
-  #manga-name span {
-    display: inline-block;
-    background-color: #14243d;
-    padding: 0 5px;
-  }
-  #name-gen-tag > *:not(:last-child) {
-    border-bottom: 1px solid;
-    width: 100%;
-  }
-  .m-desc.show-more .desc-text {
-    position: absolute;
-    left: -1px;
-    width: 100.3%;
-    overflow: auto;
-    z-index: 10;
-    border-right: 1px solid;
-    border-left: 1px solid;
-    border-bottom: 1px solid;
-    border-bottom-left-radius: 0.4rem;
-    border-bottom-right-radius: 0.4rem;
-  }
+
   .genres-list {
     text-align: start;
     padding: 0 5px;
@@ -274,28 +315,13 @@
     padding: 5px 0;
     width: 100%;
   }
-  #info-content .btn {
-    width: 80px;
-  }
   @media screen and (max-width: 600px) {
-    fieldset {
-      height: calc(100% - 218px);
-      min-height: calc(100% - 218px);
-    }
     .gen-tag {
       font-size: 1rem;
       font-weight: 600;
     }
-    #info-content .btn {
-      padding: 0.1rem 0.2rem;
-      font-size: 12px;
-      width: initial;
-    }
     .m-desc .desc-text:hover {
       width: 100.5%;
-    }
-    #img-info {
-      width: 140px;
     }
   }
 </style>

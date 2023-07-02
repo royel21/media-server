@@ -1,6 +1,6 @@
 import db from "../models/index.js";
 
-import { getFilter } from "./utils.js";
+import { clamp, getFilter } from "./utils.js";
 
 const { literal } = db.sqlze;
 
@@ -38,10 +38,8 @@ export const getFiles = async (user, data) => {
   }
 
   let query = {
-    attributes: ["Id", "Name", "Type", "Duration", "Cover", "CreatedAt", qryCurrentPos(user.Recent, "File")],
+    attributes: ["Id", "Name", "Type", "Duration", "CreatedAt", qryCurrentPos(user.Recent, "File")],
     order: getOrderBy(data.order, "File"),
-    offset: (data.page - 1) * +data.items,
-    limit: +data.items,
     where: {
       [db.Op.or]: searchs,
       FolderId: data.id,
@@ -54,7 +52,33 @@ export const getFiles = async (user, data) => {
     };
   }
 
-  return db.file.findAndCountAll(query);
+  try {
+    const count = await db.file.count(query);
+
+    const totalPages = Math.ceil(count / data.items);
+    let page = clamp(data.page, 1, totalPages);
+
+    query.offset = (page - 1) * +data.items;
+    query.limit = +data.items;
+
+    const rows = await db.file.findAll(query);
+
+    const folder = await db.folder.findOne({
+      attributes: ["Id", "Name"],
+      where: { Id: data.id },
+    });
+    console.log({
+      totalFiles: count,
+      page,
+      totalPages,
+      valid: true,
+      folder,
+    });
+    return { totalFiles: count, files: rows.map((d) => ({ ...d.dataValues })), page, totalPages, valid: true, folder };
+  } catch (error) {
+    console.log(error);
+    return { valid: false };
+  }
 };
 
 export const getFolders = async (req, res) => {
@@ -114,6 +138,6 @@ export const getFolders = async (req, res) => {
     totalFiles: result.count,
     totalPages: Math.ceil(result.count / limit),
     valid: true,
-    page: p,
+    page: p || 1,
   });
 };

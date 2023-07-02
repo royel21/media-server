@@ -10,3 +10,7 @@ export const getFilter = (data) => {
     [db.Op[isOr ? "and" : "or"]]: filter.split(isOr ? "&" : "|").map(mapFilter),
   };
 };
+
+export const clamp = (num, min, max) => {
+  return Math.min(Math.max(num, min), max) || min;
+};

@@ -6,6 +6,7 @@
   import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
   import { formatTime } from "../Pages/pagesUtils";
   import Icons from "../../icons/Icons.svelte";
+  import LazyImage from "./LazyImage.svelte";
 
   export let files = [];
   export let fileId;
@@ -21,39 +22,8 @@
   };
   const filePerPage = 100;
 
-  let observer;
   let playList;
   let hideList = true;
-
-  const setObserver = () => {
-    if (observer) {
-      observer.disconnect();
-    }
-    if (playList) {
-      let imgs = document.querySelectorAll("#play-list li img");
-      observer = new IntersectionObserver(
-        (entries) => {
-          for (let entry of entries) {
-            let img = entry.target;
-            if (entry.isIntersecting) {
-              img.src = img.dataset.src;
-            } else {
-              img.src = "";
-            }
-          }
-        },
-        {
-          root: playList,
-          rootMargin: "1000px",
-          threshold: 0,
-        }
-      );
-
-      imgs.forEach((lazyImg) => {
-        observer.observe(lazyImg);
-      });
-    }
-  };
 
   const hidePlayList = (e) => {
     e.preventDefault();
@@ -64,7 +34,6 @@
   afterUpdate(() => {
     let current = document.getElementById(fileId);
     playList.scroll({ top: Math.max(current?.offsetTop - 250, 0) });
-    setObserver();
   });
 
   const getPage = () => {
@@ -116,7 +85,7 @@
       {#each list as { Id, Name, Cover, CurrentPos, Duration, Type }}
         <li id={Id} class={"usn " + (Id === fileId ? "active" : "")} on:click>
           <span class="cover">
-            <img data-src={Cover} src="" alt="" />
+            <LazyImage cover={Cover} />
             <span class="duration">
               {Type.includes("Manga") ? `${CurrentPos + 1}/${Duration}` : formatTime(Duration)}
             </span>
@@ -263,7 +232,7 @@
     font-size: 13px;
   }
 
-  #play-list img {
+  #play-list :global(img) {
     max-height: 185px;
   }
 
