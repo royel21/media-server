@@ -79,11 +79,7 @@ routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
 
   const totalPages = Math.ceil(count / limit);
 
-<<<<<<< HEAD
   p = clamp(p, 1, totalPages);
-=======
-  if (p > totalPages) p = totalPages || 1;
->>>>>>> 0043164cf509c01b5ef22711ffef49107f216e59
 
   const recents = await db.recentFolder.findAll({
     ...query,
