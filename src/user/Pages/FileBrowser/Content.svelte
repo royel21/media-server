@@ -18,6 +18,7 @@
   let currentContent = "File List";
 
   const menu = document.querySelector("#menu");
+  menu.style.display = "none";
 
   let lastRead = "";
   let folderinfo = { Genres: "Loading Info" };
@@ -75,8 +76,6 @@
       folderinfo = data;
     }
     console.log(folderinfo);
-
-    menu.style.display = "none";
   });
 
   onDestroy(() => (menu.style.display = "flex"));
