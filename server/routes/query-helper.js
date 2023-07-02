@@ -67,13 +67,7 @@ export const getFiles = async (user, data) => {
       attributes: ["Id", "Name"],
       where: { Id: data.id },
     });
-    console.log({
-      totalFiles: count,
-      page,
-      totalPages,
-      valid: true,
-      folder,
-    });
+
     return { totalFiles: count, files: rows.map((d) => ({ ...d.dataValues })), page, totalPages, valid: true, folder };
   } catch (error) {
     console.log(error);
@@ -125,7 +119,7 @@ export const getFolders = async (req, res) => {
       limit,
     });
   } catch (error) {
-    console.log(error.toString());
+    console.log(error);
   }
 
   const mapFiles = ({ dataValues, Cover, Favorites }) => {
