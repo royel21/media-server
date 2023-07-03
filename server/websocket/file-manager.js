@@ -150,9 +150,14 @@ const renameFile = async ({ Id, Name }) => {
   let success = false;
   let msg = "File was not found";
   if (file) {
-    await file.update({ Name });
-    success = true;
-    msg = `File ${file.Name} was rename to ${Name} successfully`;
+    try {
+      await file.update({ Name });
+      success = true;
+      msg = `File ${file.Name} was rename to ${Name} successfully`;
+    } catch (err) {
+      console.log(err);
+      msg = `File ${Name} already exists`;
+    }
   } else {
     msg = "File not found on db";
   }
