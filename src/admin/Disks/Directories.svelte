@@ -105,7 +105,7 @@
         <tr id={Id} key={Id}>
           <td>
             <span class="dir-sync" on:click={rescan}>
-              <Icons name="sync" />
+              <Icons name="sync" class={IsLoading ? "icon-spin" : ""} box="0 0 512 512" />
             </span>
             <span class="dir-remove ml-2" on:click={removeDir}>
               <Icons name="trash" />
@@ -156,6 +156,9 @@
     min-width: 90px;
     width: 90px;
     cursor: pointer;
+  }
+  td:nth-child(4) {
+    white-space: nowrap;
   }
   th:nth-child(5) {
     min-width: 120px;

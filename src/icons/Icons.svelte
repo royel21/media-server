@@ -60,6 +60,8 @@
   export let color = "white";
   export let width = "25px";
   export let box = "0 0 640 512";
+  let clazz;
+  export { clazz as class };
   let ref;
 
   let fill = color || "white";
@@ -67,10 +69,17 @@
 
   $: icon = icons[name];
   $: fill = color || "white";
+  console.log("clazz", clazz);
 </script>
 
-<svg bind:this={ref} class={"icon-" + name} {fill} xmlns="http://www.w3.org/2000/svg" {height} {width} viewBox={box}
-  >{@html icon}</svg
+<svg
+  bind:this={ref}
+  class={`icon-${name} ${clazz}`}
+  {fill}
+  xmlns="http://www.w3.org/2000/svg"
+  {height}
+  {width}
+  viewBox={box}>{@html icon}</svg
 >
 
 <style>
