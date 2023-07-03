@@ -69,7 +69,6 @@
 
   $: icon = icons[name];
   $: fill = color || "white";
-  console.log("clazz", clazz);
 </script>
 
 <svg

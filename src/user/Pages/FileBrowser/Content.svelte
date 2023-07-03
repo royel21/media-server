@@ -126,13 +126,22 @@
   </div>
   <fieldset>
     <legend><span>Files List - <SortBy label="Sort By:" {showConfig} toggleConfig={handleClick} /></span></legend>
-    <FilesList title={"Content"} {type} {filter} {page} {id} {setFolderInfo} {setLastRead} {handleClick} />
+    <FilesList title={"Content"} {type} {filter} {page} {id} {setFolderInfo} {setLastRead} {handleClick}>
+      <div class="first-controls" slot="controls" on:click={exitFolder}>
+        <Icons name="reply" />
+      </div>
+    </FilesList>
   </fieldset>
 {/if}
 
 <style>
   input[type="radio"] {
     display: none;
+  }
+  .first-controls :global(.icon-reply) {
+    top: -1px;
+    height: 31px;
+    width: 42px;
   }
   .tabs {
     position: relative;

@@ -25,45 +25,27 @@
   let playList;
   let hideList = true;
 
-  const hidePlayList = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    hideList = true;
-  };
-
-  afterUpdate(() => {
-    let current = document.getElementById(fileId);
-    playList.scroll({ top: Math.max(current?.offsetTop - 250, 0) });
-  });
-
-  const getPage = () => {
-    let index = files.findIndex((f) => f.Id === fileId);
-    return Math.floor(Math.max(index, 0) / filePerPage);
-  };
-
-  const sliceFiles = () => {
-    const start = pageData.pg * filePerPage || 0;
-    return files.slice(start, start + filePerPage);
-  };
-
   const goToPage = (pg) => {
     pageData.pg = clamp(pg.detail - 1, 0, pageData.totalPages - 1);
-    list = sliceFiles(files);
   };
-
-  const clearFilter = () => (filter = "");
 
   $: onFilter(filter);
 
   $: if (files.length) {
     pageData.totalFiles = files.length;
-    pageData.pg = getPage();
+    //Calculate Page
+    let index = files.findIndex((f) => f.Id === fileId);
+    pageData.pg = Math.floor(Math.max(index, 0) / filePerPage);
     pageData.totalPages = Math.ceil(files.length / filePerPage);
   }
 
-  $: if (!hideList) {
-    list = sliceFiles(files);
-  }
+  afterUpdate(() => {
+    const start = pageData.pg * filePerPage;
+    list = files.slice(start, start + filePerPage);
+
+    let current = document.getElementById(fileId);
+    playList.scroll({ top: Math.max(current?.offsetTop - 250, 0) });
+  });
 </script>
 
 <label class={"show-list" + (!hideList ? " move" : "")} for="p-hide" style="bottom: 35px" title="play-list">
@@ -71,12 +53,12 @@
     <Icons name="list" width="30px" height="24px" />
   </span>
 </label>
-<div id="p-bg" class:hidelist={!hideList} on:click={hidePlayList} tabindex="-1" />
+<div id="p-bg" class:hidelist={!hideList} on:click|stopPropagation={(e) => (hideList = true)} tabindex="-1" />
 <input name="show-hide-play-list" type="checkbox" id="p-hide" bind:checked={hideList} />
 <div id="play-list" class:move={!$ToggleMenu}>
   <div id="v-filter">
     <input name="clear-filters" type="text" bind:value={filter} placeholder="Filter" class="form-control" />
-    <span class="clear-filter" on:click={clearFilter}>
+    <span class="clear-filter" on:click={() => (filter = "")}>
       <Icons name="timescircle" />
     </span>
   </div>
