@@ -95,7 +95,7 @@
       <div id="img-info">
         <span class="d-state" class:completed={folderinfo?.Status}>{folderinfo?.Status ? "Completed" : "On Going"}</span
         >
-        <span class="img-d"><img src={folderinfo?.Cover} alt="Cover Not Found" /></span>
+        <span class="img-d"><img src={encodeURI(`/Folder/${folderinfo?.Name}.jpg`)} alt="Cover Not Found" /></span>
       </div>
       <div class="manga-name">Name: <span>{folderinfo?.Name || "Name: Loading Info"}</span></div>
       <div class="manga-name alt">Alternative: <span>{folderinfo?.AltName || "Name: Loading Info"}</span></div>
