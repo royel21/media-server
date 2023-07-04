@@ -122,9 +122,9 @@ export const getFolders = async (req, res) => {
     console.log(error);
   }
 
-  const mapFiles = ({ dataValues, Cover, Favorites }) => {
+  const mapFiles = ({ dataValues, Favorites }) => {
     const isFav = Favorites.map((fv) => fv.Id);
-    return { ...dataValues, Cover: encodeURI(Cover), isFav };
+    return { ...dataValues, isFav };
   };
 
   return res.json({

@@ -112,7 +112,7 @@ routes.get("/:id/:order/:page/:items/:search?", async (req, res) => {
 
     const files = result.rows.map((r) => {
       delete r.dataValues.Favorites;
-      return { ...r.dataValues, Cover: encodeURI(r.Cover) };
+      return { ...r.dataValues };
     });
 
     return res.json({

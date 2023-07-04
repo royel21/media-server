@@ -11,6 +11,7 @@
   export let files = [];
   export let fileId;
   export let onFilter;
+  export let folderName = "";
 
   let filter = "";
 
@@ -39,6 +40,12 @@
     pageData.totalPages = Math.ceil(files.length / filePerPage);
   }
 
+  const getCover = (Type, Name) => {
+    if (folderName) Name = `${folderName}/${Name}`;
+
+    return encodeURI(`/${Type}/${Name}.jpg`);
+  };
+
   afterUpdate(() => {
     const start = pageData.pg * filePerPage;
     list = files.slice(start, start + filePerPage);
@@ -64,10 +71,10 @@
   </div>
   <div id="p-list" bind:this={playList}>
     <ul>
-      {#each list as { Id, Name, Cover, CurrentPos, Duration, Type }}
+      {#each list as { Id, Name, CurrentPos, Duration, Type }}
         <li id={Id} class={"usn " + (Id === fileId ? "active" : "")} on:click>
           <span class="cover">
-            <LazyImage cover={Cover} />
+            <LazyImage cover={getCover(Type, Name)} />
             <span class="duration">
               {Type.includes("Manga") ? `${CurrentPos + 1}/${Duration}` : formatTime(Duration)}
             </span>

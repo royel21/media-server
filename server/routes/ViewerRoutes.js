@@ -23,7 +23,7 @@ const getFiles = async ({ user, body }, res, type) => {
   const folder = await db.folder.findOne({ where: { Id: body.id }, attributes: ["Name"] });
   res.send({
     Name: folder.Name,
-    files: table.Files.map((d) => ({ ...d.dataValues, Cover: `/${d.Type}/${folder.Name}/${d.Name}.jpg` })),
+    files: table.Files.map((d) => ({ ...d.dataValues })),
     config: UserConfig.dataValues.Config,
   });
 };

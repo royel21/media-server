@@ -33,18 +33,6 @@ export const getFilesPerPage = (i) => {
   return items * i || 0;
 };
 
-export const genUrl = (page = 1, { order = "nu", items }, filter, type, id) => {
-  let itemsperpage = +items || getFilesPerPage(3);
-
-  // if (type.includes("content")) {
-  //   type = `folder-content/${id}`;
-  // }
-
-  filter = (filter || "").replace("%", " ");
-  let url = `/api/files/${type}/${order}/${page}/${itemsperpage}/${filter}`;
-  return url;
-};
-
 export const ProcessFile = (file, type) => {
   const folderId = file.id;
   const { pathname } = location;
@@ -62,8 +50,8 @@ export const ProcessFile = (file, type) => {
     }
     default: {
       localStorage.setItem("return-folder", pathname);
-      let Type = pathname.split("/")[1];
-      navigate(`/${type || Type}/content/${folderId}/`);
+      type = type || pathname.split("/")[1];
+      navigate(`/${type}/content/${folderId}/`);
     }
   }
 };

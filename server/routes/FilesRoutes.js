@@ -36,7 +36,7 @@ routes.get("/folder-content/info/:id", async (req, res) => {
     console.log(error);
   }
 
-  res.send({ ...folder.dataValues, Cover: encodeURI(folder.Cover) });
+  res.send({ ...folder.dataValues });
 });
 
 routes.get("/folder-content/:id/:order/:page?/:items?/:search?", async (req, res) => {
@@ -93,7 +93,6 @@ routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
     return {
       ...rc.dataValues,
       ...rc.Folder.dataValues,
-      Cover: encodeURI(rc.Folder.Cover),
     };
   });
 

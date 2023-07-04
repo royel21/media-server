@@ -130,7 +130,7 @@
     </span>
     <div id="clock" />
   </span>
-  <PlayList {fileId} files={playList} on:click={selectFile} {onFilter} />
+  <PlayList {fileId} files={playList} on:click={selectFile} {onFilter} {folderName} />
   {#if isManga(file)}
     <MangaViewer {viewer} {file} on:changefile={changeFile} on:returnBack={returnBack} {changePages} {KeyMap} />
   {:else if isVideo(file)}

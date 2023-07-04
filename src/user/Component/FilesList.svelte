@@ -64,7 +64,7 @@
     }
   };
 
-  const goToPage = async ({ detail }, sel) => {
+  const goToPage = async ({ detail }) => {
     let pg = +detail;
     let { totalPages } = pageData;
     pg = clamp(pg, 1, totalPages);

@@ -12,6 +12,7 @@
   import Filter from "../../ShareComponent/Filter.svelte";
   import Pagination from "../../ShareComponent/Pagination.svelte";
   import Icons from "../../icons/Icons.svelte";
+  import LazyImage from "../Component/LazyImage.svelte";
 
   export let page = 1;
   export let filter = "";
@@ -94,7 +95,7 @@
             </span>
           </div>
           <div class="file-cover" on:dblclick|stopPropagation={openFolder}>
-            <img src={Cover} alt="Cover Not Found" />
+            <LazyImage cover={encodeURI(`/${Type}/${Name}.jpg`)} />
           </div>
           <div class="file-name">{Name}</div>
         </div>
