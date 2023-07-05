@@ -7,11 +7,7 @@
   export let User;
   const saveItem = `${User.Name}-${item.title}`;
 
-  const getCurrent = (name) => {
-    return localStorage.getItem(saveItem) || dirs[name][0]?.Id || "";
-  };
-
-  let data = { items: [], current: "" };
+  let data = { items: [], current: "", first: "" };
 
   const select = ({ target: { id } }) => {
     data.current = id;
@@ -19,19 +15,17 @@
   };
 
   $: if (dirs.Mangas.length) {
-    let current = getCurrent(item.title);
-    if (!dirs[item.title].find((f) => f.Id === +current)) {
-      current = dirs[item.title].Id || "";
-    }
+    const first = dirs[item.title][0].Id || "";
     data = {
       items: dirs[item.title],
-      current,
+      current: first,
+      first,
     };
   }
 </script>
 
 <li class="nav-item">
-  <Link to={`${item.path}/${data.current}`} {getProps}>
+  <Link to={`${item.path}/${data.first}`} {getProps}>
     <Icons name={item.class} height="22px" color={item.color} />
     <span class="nav-title">{item.title}</span>
     {#if data.items}
