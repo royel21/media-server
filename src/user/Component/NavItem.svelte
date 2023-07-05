@@ -20,7 +20,7 @@
 
   $: if (dirs.Mangas.length) {
     let current = getCurrent(item.title);
-    if (!dirs[item.title].find((f) => f.Id === +id)) {
+    if (!dirs[item.title].find((f) => f.Id === +current)) {
       current = dirs[item.title].Id || "";
     }
     data = {
