@@ -47,7 +47,7 @@
   };
 
   const onKeyDown = (e) => {
-    if (e.keyCode === 13) {
+    if (e.keyCode === 13 && e.ctrlKey) {
       submit(e);
       e.preventDefault();
       e.stopPropagation();
