@@ -4,28 +4,25 @@
   import Icons from "../../icons/Icons.svelte";
   export let dirs;
   export let item;
-  export let User;
-  const saveItem = `${User.Name}-${item.title}`;
 
-  let data = { items: [], current: "", first: "" };
+  let data = { items: [], current: "" };
 
   const select = ({ target: { id } }) => {
     data.current = id;
-    localStorage.setItem(saveItem, id);
   };
 
   $: if (dirs.Mangas.length) {
-    const first = dirs[item.title][0].Id || "";
+    let current = dirs[item.title][0]?.Id || "";
+
     data = {
       items: dirs[item.title],
-      current: first,
-      first,
+      current,
     };
   }
 </script>
 
 <li class="nav-item">
-  <Link to={`${item.path}/${data.first}`} {getProps}>
+  <Link to={`${item.path}/${data.current}`} {getProps}>
     <Icons name={item.class} height="22px" color={item.color} />
     <span class="nav-title">{item.title}</span>
     {#if data.items}
