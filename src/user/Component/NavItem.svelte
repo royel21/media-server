@@ -19,9 +19,13 @@
   };
 
   $: if (dirs.Mangas.length) {
+    let current = getCurrent(item.title);
+    if (!dirs[item.title].find((f) => f.Id === +id)) {
+      current = dirs[item.title].Id || "";
+    }
     data = {
       items: dirs[item.title],
-      current: getCurrent(item.title),
+      current,
     };
   }
 </script>
