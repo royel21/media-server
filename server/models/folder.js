@@ -117,7 +117,11 @@ export default (sequelize, DataTypes, ImagesPath) => {
               const thumbsPath = `${ImagesPath}/${getFileType(item)}/${opt.Name}`;
               if (fs.existsSync(thumbsPath)) {
                 const newthumbsPath = thumbsPath.replace(opt.Name, item.Name);
-                fs.moveSync(thumbsPath, newthumbsPath);
+                try {
+                  fs.moveSync(thumbsPath, newthumbsPath);
+                } catch (error) {
+                  console.log(error);
+                }
               }
             }
           }

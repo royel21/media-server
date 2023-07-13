@@ -42,8 +42,6 @@ const getData = async ({ params }, res) => {
     });
   }
 
-  const dir = await db.directory.findOne({ where: { Id: result[0]?.DirectoryId || "" } });
-
   let totalPages = Math.ceil(result.count / query.limit);
 
   res.send({
@@ -52,6 +50,38 @@ const getData = async ({ params }, res) => {
     totalItems: result.count,
   });
 };
+
+routes.get("/folder-raw/:Id", async (req, res) => {
+  const { Id } = req.params;
+  const folder = await db.folder.findOne({ where: { Id } });
+  const genres = folder?.Genres.split(", ");
+  console.log(Id, folder?.Name, genres);
+  if (folder && !genres.includes("Raw")) {
+    genres.push("Raw");
+    genres.sort();
+    folder.Genres = genres.join(", ");
+    await folder.save();
+    console.log("raw", Id, folder?.Name);
+  }
+  res.send({ valid: true });
+});
+
+routes.get("/changes-genres/:Id/:genre", async (req, res) => {
+  const { Id, genre } = req.params;
+  const folder = await db.folder.findOne({ where: { Id } });
+  let genres = folder?.Genres.split(", ");
+
+  if (folder && !genres?.includes("Raw")) {
+    genres = genres.filter((g) => !/manga|manhwa|manhua|webtoon/i.test(g));
+
+    genres.push(genre);
+    genres.sort();
+    folder.Genres = genres.join(", ");
+    await folder.save();
+    console.log(genre, folder.Name, "->", genres.join(", "));
+  }
+  res.send({ valid: true });
+});
 
 routes.post("/folder-create", async (req, res) => {
   try {

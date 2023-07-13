@@ -1,4 +1,5 @@
 <script>
+  import apiUtils from "../../apiUtils";
   import Icons from "../../icons/Icons.svelte";
   import Filter from "../../ShareComponent/Filter.svelte";
   import Pagination from "../../ShareComponent/Pagination.svelte";
@@ -9,6 +10,15 @@
   export let page = 1;
   export let totalPages = 0;
   export let totalItems = 0;
+
+  const addGenres = ({ target }) => {
+    let Id = target.closest("li").id;
+    apiUtils.admin(["folders", "changes-genres", Id, target.textContent]);
+  };
+  const addRaw = ({ target }) => {
+    let Id = target.closest("li").id;
+    apiUtils.admin(["folders", "folder-raw", Id]);
+  };
 </script>
 
 <div id={title} class="file-list col-6">
@@ -36,9 +46,17 @@
           >
             {#if Type.includes("Folder")}
               <span><Icons name="sync" box="0 0 512 512" /></span>
+              <span class="g-list">
+                <span on:click={addGenres}>Manga</span>
+                <span on:click={addGenres}>Manhua</span>
+                <span on:click={addGenres}>Manhwa</span>
+                <span on:click={addGenres}>Webtoon</span>
+                <span on:click={addRaw}>Raw</span>
+              </span>
             {/if}
             <span><Icons name="edit" /></span>
             <span><Icons name="trash" /></span>
+
             {Name}
           </li>
         {/each}
@@ -51,6 +69,29 @@
 </div>
 
 <style>
+  li {
+    position: relative;
+  }
+  .g-list {
+    position: absolute;
+    right: 5px;
+  }
+  .g-list span {
+    display: inline-block;
+    background-color: darkgray;
+    color: white;
+    padding: 2px 4px;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    max-width: 75px;
+    max-height: 26px;
+    overflow: hidden;
+  }
+
+  .g-list span:active {
+    font-size: 1.02rem;
+  }
+
   .list-container {
     height: calc(100% - 85px);
     overflow-y: auto;

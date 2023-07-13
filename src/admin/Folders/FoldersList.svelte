@@ -74,7 +74,7 @@
       } else if (/icon-trash/gi.test(cList)) {
         modalType = { title: "Remove Folder", Del: true };
         showModal = true;
-      } else {
+      } else if (/icon-sync/gi.test(cList)) {
         socket.emit("scan-dir", { Id: folder.Id, isFolder: true });
         document.getElementById(folder.Id).querySelector(".icon-sync")?.classList.add("icon-spin");
       }
@@ -229,7 +229,8 @@
     border: 1px solid white;
     pointer-events: none;
     left: 2px;
-    width: 99%;
+    width: max-content;
+    max-width: 99%;
   }
   @media screen and (max-width: 600px) {
     .thumbnail {
