@@ -13,23 +13,12 @@ routes.get("/", async (_, res) => {
   return res.send({ users });
 });
 
-const validate = async (req, remove) => {
-  let { Role, State } = req.body;
-
+const getUser = async (req) => {
   let users = await db.user.findAll();
-
-  let adminsCount = users.filter((a) => a.Role.includes("Administrator")).length === 1;
 
   let user = users.find((u) => u.Id === req.body.Id);
 
-  const result = { user, isValid: true };
-  // we have only one Admin
-  if (user.Role.includes("Administrator") && adminsCount) {
-    // can't be remove, deactivate or change role
-    result.isValid = !(remove || /admin/gi.test(Role) || /Active/gi.test(State));
-  }
-
-  return result;
+  return { user, admins: users.filter((a) => /^Adm/i.test(a.Role)).length > 1 };
 };
 
 const Config = JSON.stringify({
@@ -59,47 +48,37 @@ const createUser = async (req) => {
   };
 };
 
-const createUpdate = async (req) => {
-  let valid = await validate(req);
-  let result = { fail: true };
+const updateUser = async (req) => {
+  const { Id, State, Role, Password } = req.body;
+  let valid = await getUser(req);
+  console.log(req.body);
 
-  if (valid.isValid) {
-    if (valid.user) {
-      let data = { Id: "", ...req.body };
-      if (!data.Password) delete data.Password;
-      await valid.user.update(data, { encript: true });
-
-      result = { fail: false, user: req.body };
-    } else {
-      result.msg = `Could't update User ${req.body.Name}, Was not found`;
-    }
-  } else {
-    result.msg = "Can't change Privileges to the only administrator";
+  if (req.user.Id === Id && (/inactive/i.test(State) || !/^Admin/i.test(Role))) {
+    return { msg: "Can't Change Status or Role Current for Administrator", fail: true };
   }
 
-  return result;
+  if (!valid.user) {
+    return { msg: "User Not Found", fail: true };
+  }
+
+  await valid.user.update(req.body, { encript: Password });
+  return { fail: false, user: req.body };
 };
 
 routes.post("/create-update", async (req, res) => {
-  const result = await (req.body.Id ? createUpdate(req) : createUser(req));
+  const result = await (req.body.Id ? updateUser(req) : createUser(req));
   return res.send(result);
 });
 
 routes.post("/remove", async (req, res) => {
-  let valid = await validate(req, true);
-  const result = { removed: true };
+  let valid = await getUser(req);
 
-  if (valid.isValid) {
-    if (valid.user) {
-      await valid.user.destroy();
-    } else {
-      result.msg = "User Not Found";
-    }
-  } else {
-    result.msg = "Can't remove the only admin";
-  }
+  if (req.user.Id === valid.user.Id) return res.send({ msg: "Can't Remove Current Admin", removed: false });
 
-  return res.send(result);
+  if (valid.user) return res.send({ msg: "User Not Found", removed: false });
+
+  await valid.user.destroy();
+  return res.send({ removed: true });
 });
 
 export default routes;

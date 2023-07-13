@@ -69,11 +69,11 @@ const rmOrphanFiles = async (folder) => {
 };
 const foldersPendingCover = [];
 
-const createFolderThumbnail = async (folder, files) => {
+const createFolderThumbnail = async (folder, files, isFolder) => {
   try {
     let CoverPath = path.join(ThumbnailPath, "Folder", folder.Name + ".jpg");
 
-    if (!fs.existsSync(CoverPath)) {
+    if (!fs.existsSync(CoverPath) || isFolder) {
       let img = files.find((f) => IMGTYPES.test(f.Name));
       //if folder contain a image use as thumbnail
       if (img) {
@@ -104,7 +104,7 @@ const createFolder = async ({ Name, Path, LastModified }, files) => {
   });
 };
 
-const scanFolder = async (curfolder, files) => {
+const scanFolder = async (curfolder, files, isFolder) => {
   let isNoNewFolder = true;
 
   let folder = folders.find((fd) => fd.Path === curfolder.Path);
@@ -131,7 +131,7 @@ const scanFolder = async (curfolder, files) => {
   }
 
   if (folder && filteredFiles.length) {
-    await createFolderThumbnail(folder, files);
+    await createFolderThumbnail(folder, files, isFolder);
   }
 
   let tempFiles = [];
@@ -192,7 +192,7 @@ const scanDirectory = async ({ id, dir, isFolder }) => {
 
     sendMessage("scanning directory");
     console.time("scanning directory");
-    await scanFolder(folder, fis);
+    await scanFolder(folder, fis, isFolder);
     console.timeEnd("scanning directory");
 
     sendMessage("creating folder thumbnails");

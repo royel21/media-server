@@ -63,7 +63,7 @@
           <div class="input-group-prepend">
             <label for="State" class="input-group-text">Status</label>
           </div>
-          <select class="form-control" name="State" bind:value={foundUser.Status}>
+          <select class="form-control" name="State" bind:value={foundUser.State}>
             <option value="Active">Active</option>
             <option value="Inactive">Inactive</option>
           </select>

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import db from "../../models/index.js";
 import { getFilter } from "../utils.js";
+import fs from "fs-extra";
 
 const routes = Router();
 
@@ -51,15 +52,26 @@ const getData = async ({ params }, res) => {
   });
 };
 
-routes.get("/folder/:folderId", async (req, res) => {
+routes.post("/folder-create", async (req, res) => {
+  try {
+    const folder = await db.folder.create({ ...req.body, CreatedAt: new Date() });
+    const exist = fs.existsSync(folder.Path);
+    return res.send({ valid: true, Id: exist ? folder.Id : "" });
+  } catch (error) {
+    console.log(error);
+    return res.send({ error: "Error Creating Folder" });
+  }
+});
+
+routes.get("/folder/:folderId?", async (req, res) => {
   const folder = await db.folder.findOne({ where: { Id: req.params.folderId || "" } });
   const dirs = await db.directory.findAll({ order: ["Name"] });
   res.send({
     Description: folder?.Description,
     Genres: folder?.Genres,
-    AltName: folder.AltName,
-    IsAdult: folder.IsAdult,
-    DirectoryId: folder.DirectoryId,
+    AltName: folder?.AltName,
+    IsAdult: folder?.IsAdult,
+    DirectoryId: folder?.DirectoryId,
     dirs,
   });
 });

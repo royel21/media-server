@@ -39,13 +39,19 @@
       users = data.users;
     }
   });
+
+  $: if (error) {
+    setTimeout(() => {
+      error = "";
+    }, 5000);
+  }
 </script>
 
 {#if foundUser}
   <ModalUser {foundUser} on:closeModal={hideModal} on:updateusers={updateUsers} />
 {/if}
 <div id="u-manager" class="card bg-dark manager">
-  <div class="remove-error">{error}</div>
+  <div class="remove-error" on:click={() => (error = "")}>{error}</div>
   <div class="u-controls">
     <span class="btn" on:click={saveEdit}>
       <Icons name="userplus" />
@@ -87,6 +93,26 @@
 </div>
 
 <style>
+  .remove-error {
+    position: absolute;
+    top: 10px;
+    left: calc(50% - 100px);
+    z-index: 99;
+    font-weight: 600;
+    color: firebrick;
+    background-color: #dfc507;
+    padding: 5px;
+    border-radius: 0.25rem;
+    opacity: 1;
+    cursor: pointer;
+    transition: 0.5s opacity;
+  }
+
+  .remove-error:empty {
+    transition: 0s opacity;
+    opacity: 0;
+  }
+
   .manager {
     height: 100%;
     padding: 0;

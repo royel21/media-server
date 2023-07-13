@@ -7,6 +7,8 @@
   import { calRows } from "./Utils";
   import apiUtils from "../../apiUtils";
   import { clamp } from "../../ShareComponent/utils";
+  import Icons from "../../icons/Icons.svelte";
+  import CreateFolderModal from "./CreateFolderModal.svelte";
   const dispatch = createEventDispatcher();
   const socket = getContext("socket");
 
@@ -22,6 +24,9 @@
   let modalType = {};
   let showImage;
   let fullPathPos = {};
+  let createFolder;
+
+  const newFolder = () => (createFolder = true);
 
   const loadFolders = async (pg) => {
     let flt = encodeURIComponent((filter || "")?.replace(/|:|\?|\^|"|\*|<|>|\t|\n/gi, ""));
@@ -146,6 +151,10 @@
   });
 </script>
 
+{#if createFolder}
+  <CreateFolderModal hide={() => (createFolder = false)} {socket} />
+{/if}
+
 {#if showModal}
   <Modal file={folder} {modalType} on:submit={handleSubmit} on:click={hideModal} />
 {/if}
@@ -172,6 +181,7 @@
   on:mouseleave={onShowImage}
   on:mousemove={showPath}
 >
+  <span class="create-folder" slot="btn-controls" on:click={newFolder}><Icons name="squareplus" /></span>
   <div class="path-tag" slot="first-tag">
     {#if showImage}
       <span id="f-path" style={`top:${fullPathPos.y}px;`}>
@@ -182,6 +192,11 @@
 </ItemList>
 
 <style>
+  .create-folder :global(svg) {
+    height: 35px;
+    width: 43px;
+    top: -1px;
+  }
   .path-tag {
     position: relative;
     width: 100%;
