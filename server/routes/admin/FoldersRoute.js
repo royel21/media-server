@@ -2,6 +2,7 @@ import { Router } from "express";
 import db from "../../models/index.js";
 import { getFilter } from "../utils.js";
 import fs from "fs-extra";
+import path from "node:path";
 
 const routes = Router();
 
@@ -54,7 +55,16 @@ const getData = async ({ params }, res) => {
 
 routes.post("/folder-create", async (req, res) => {
   try {
-    const folder = await db.folder.create({ ...req.body, CreatedAt: new Date() });
+    const dir = await db.directory.findOne({ where: { Id: req.body.DirectoryId } });
+    const file = {
+      ...req.body,
+      CreatedAt: new Date(),
+      Path: path.join(dir.FullPath, req.body.Name),
+      Status: 0,
+      Type: "Folder",
+    };
+
+    const folder = await db.folder.create(file);
     const exist = fs.existsSync(folder.Path);
     return res.send({ valid: true, Id: exist ? folder.Id : "" });
   } catch (error) {

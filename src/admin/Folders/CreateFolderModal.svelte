@@ -11,10 +11,16 @@
   export let hide;
   export let socket;
 
-  let file = {};
+  let message = "";
+
+  const types = [
+    { Id: "mangas", Name: "Mangas" },
+    { Id: "videos", Name: "Videos" },
+  ];
+
+  let file = { FilesType: "mangas" };
 
   let options = [];
-  let tempFile = { Name: "", Ex: "" };
 
   onMount(async () => {
     const data = await apiUtils.admin(["folders", "folder", ""]);
@@ -22,6 +28,7 @@
   });
 
   const submit = async (e) => {
+    message = "";
     console.log(file);
     if (!file.Name) {
       return (error = "Name Can't Be Empty");
@@ -34,7 +41,7 @@
     const result = await apiUtils.post("admin/folders/folder-create", file);
     error = result.error;
     if (result.valid) {
-      hide();
+      message = `Folder: ${file.Name} Create Succefully`;
       if (result.Id) {
         socket.emit("scan-dir", { Id: result.Id, isFolder: true });
       }
@@ -55,12 +62,14 @@
         <Input {file} key="Description" rows="4" />
         <CheckBox label="Completed" key="Status" item={file} my="5px" />
         <CheckBox label="Is Adult" key="IsAdult" item={file} />
+        <Select label="Files Type" key="FilesType" mt="5px" options={types} item={file} />
         <Select label="Directories" mt="5px" key="DirectoryId" {options} item={file} />
       </div>
       <div class="error">{error || ""}</div>
+      <div class="message">{message || ""}</div>
       <div class="modal-footer">
-        <button type="button" class="btn" on:click={() => hide()}>Cancel</button>
-        <button type="submit" class="btn">Ctreate</button>
+        <button type="button" class="btn" on:click={() => hide()}>Close</button>
+        <button type="submit" class="btn">Create</button>
       </div>
     </form>
   </div>
@@ -71,13 +80,19 @@
     width: 400px;
     outline: none;
   }
-  .error:empty {
-    display: none;
-  }
   .error {
     color: red;
     font-weight: 600;
   }
+  .message {
+    color: rgb(3 16 255);
+    font-weight: 600;
+  }
+  .message:empty,
+  .error:empty {
+    display: none;
+  }
+
   @media screen and (max-width: 450px) {
     .modal {
       width: 380px;
