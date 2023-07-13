@@ -196,24 +196,25 @@ const renameFolder = async ({ Id, Name, Description, Genres, Status, IsAdult, Al
     include: { model: db.directory },
   });
 
+  let msg = "Folder not found on DB";
+  let success = false;
   if (folder) {
     let data;
-    let success = false;
-    let msg = "Folder not found on DB";
-
-    const Path = folder.Path.replace(folder.Name, Name);
-    data = { Name, Path, Description, Genres, Status, IsAdult, AltName };
-
-    if (Transfer) {
-      const dir = await db.directory.findOne({ where: { Id: DirectoryId } });
-      if (dir) {
-        const newPath = folder.Path.replace(folder.Directory.FullPath, dir.FullPath);
-        data.DirectoryId = DirectoryId;
-        data.Path = newPath;
-      }
-    }
 
     try {
+      const Path = folder.Path.replace(folder.Name, Name);
+
+      data = { Name, Path, Description, Genres, Status, IsAdult, AltName };
+
+      if (Transfer) {
+        const dir = await db.directory.findOne({ where: { Id: DirectoryId } });
+        if (dir) {
+          const newPath = folder.Path.replace(folder.Directory.FullPath, dir.FullPath);
+          data.DirectoryId = DirectoryId;
+          data.Path = newPath;
+        }
+      }
+
       await folder.update(data, { Name: folder.Name });
       await folder.reload();
       success = true;
@@ -223,6 +224,8 @@ const renameFolder = async ({ Id, Name, Description, Genres, Status, IsAdult, Al
 
     io.sockets.emit("folder-renamed", { Id, success, msg, folder: { ...folder.dataValues } });
   }
+
+  io.sockets.emit("folder-renamed", { Id, success: false });
 };
 
 const removeFolder = async ({ Id, Del }) => {

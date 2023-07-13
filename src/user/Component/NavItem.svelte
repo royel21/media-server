@@ -4,24 +4,19 @@
   import Icons from "../../icons/Icons.svelte";
   export let dirs;
   export let item;
-  export let User;
-  const saveItem = `${User.Name}-${item.title}`;
-
-  const getCurrent = (name) => {
-    return localStorage.getItem(saveItem) || dirs[name][0]?.Id || "";
-  };
 
   let data = { items: [], current: "" };
 
   const select = ({ target: { id } }) => {
     data.current = id;
-    localStorage.setItem(saveItem, id);
   };
 
   $: if (dirs.Mangas.length) {
+    let current = dirs[item.title][0]?.Id || "";
+
     data = {
       items: dirs[item.title],
-      current: getCurrent(item.title),
+      current,
     };
   }
 </script>

@@ -112,7 +112,7 @@
   };
 
   const onFolderRename = (data) => {
-    if (data.success && data.Id) {
+    if (data.success && data.Id && data.folder) {
       let index = items.findIndex((f) => f.Id === data.Id);
       if (index !== -1) {
         items[index] = data.folder;
