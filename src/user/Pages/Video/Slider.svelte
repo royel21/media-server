@@ -21,9 +21,9 @@
   const onMDown = (e) => {
     isMdown = { is: true, id: uniqId };
     let xpos;
-    let tch = e.touches[0];
 
     if (e.type === "touchstart") {
+      let tch = e.touches[0];
       xpos = tch.pageX - getLeft(tch.target);
       document.on("touchmove", globalMMove);
     } else {
@@ -37,12 +37,10 @@
   };
 
   const globalMMove = (e) => {
-    let tch = e.touches[0];
-    let id = tch.target.id || e.target.id;
-
     if (isMdown.is && e.target.id === uniqId) {
       let newPos;
       if (e.type === "touchmove") {
+        let tch = e.touches[0];
         newPos = tch.pageX - getLeft(tch.target);
       } else {
         newPos = e.offsetX;

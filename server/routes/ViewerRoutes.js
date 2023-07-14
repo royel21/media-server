@@ -46,48 +46,25 @@ routes.get("/video/:id", (req, res) => {
     .then((file) => {
       if (file) {
         let filePath = join(file.Folder.Path, file.Name);
-        var total = file.Size;
-        var range = req.headers.range;
+        const range = req.headers.range;
         if (!range) {
-          // 416 Wrong range
-          return res.sendStatus(416);
+          return res.status(400).send("Requires Range header");
         }
 
-        var positions = range.replace(/bytes=/, "").split("-");
-        var start = parseInt(positions[0], 10);
-
-        if (start === 0) {
-          if (!existsSync(filePath)) return res.sendStatus(404);
-        }
-
-        // same code as accepted answer
-        var end = positions[1] ? parseInt(positions[1], 10) : total - 1;
-        var chunksize = end - start + 1;
-        // poor hack to send smaller chunks to the browser
-        var maxChunk = 1024 * 1024; // 1MB at a time
-
-        if (chunksize > maxChunk) {
-          end = start + maxChunk - 1;
-          chunksize = end - start + 1;
-        }
+        const chunkSize = 1024 * 256;
+        const start = Number(range.replace(/\D/g, ""));
+        const end = Math.min(start + chunkSize, file.Size - 1);
+        const contentLength = end - start + 1;
 
         res.writeHead(206, {
-          "Content-Range": "bytes " + start + "-" + end + "/" + total,
+          "Content-Range": `bytes ${start}-${end}/${file.Size}`,
           "Accept-Ranges": "bytes",
-          "Content-Length": chunksize,
+          "Content-Length": contentLength,
           "Content-Type": "video/mp4",
         });
 
-        var stream = createReadStream(filePath, {
-          start: start,
-          end: end,
-        })
-          .on("open", function () {
-            stream.pipe(res);
-          })
-          .on("error", function (err) {
-            res.end(err);
-          });
+        let stream = createReadStream(filePath, { start, end });
+        stream.pipe(res);
       } else {
         res.send("Error File Not Found");
       }
