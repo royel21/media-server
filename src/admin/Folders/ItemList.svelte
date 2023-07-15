@@ -33,7 +33,7 @@
       {#if items.length < 1}
         <li class="list-group-item empty-list">{`Not ${title} Found`}</li>
       {:else}
-        {#each items as { Id, Name, Type, Status }}
+        {#each items as { Id, Name, Type, Status, FilesType }}
           <li
             id={Id}
             class="list-group-item"
@@ -46,13 +46,15 @@
           >
             {#if Type.includes("Folder")}
               <span><Icons name="sync" box="0 0 512 512" /></span>
-              <span class="g-list">
-                <span on:click={addGenres}>Manga</span>
-                <span on:click={addGenres}>Manhua</span>
-                <span on:click={addGenres}>Manhwa</span>
-                <span on:click={addGenres}>Webtoon</span>
-                <span on:click={addRaw}>Raw</span>
-              </span>
+              {#if /manga/.test(FilesType)}
+                <span class="g-list">
+                  <span on:click={addGenres}>Manga</span>
+                  <span on:click={addGenres}>Manhua</span>
+                  <span on:click={addGenres}>Manhwa</span>
+                  <span on:click={addGenres}>Webtoon</span>
+                  <span on:click={addRaw}>Raw</span>
+                </span>
+              {/if}
             {/if}
             <span><Icons name="edit" /></span>
             <span><Icons name="trash" /></span>

@@ -68,7 +68,7 @@ routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
       model: db.folder,
       attributes: ["Id", "Name", "FileCount", "FilesType", "Type", "Status", "Genres"],
       where: {
-        [db.Op.or]: { Path: getFilter(filter), Genres: getFilter(filter) },
+        [db.Op.or]: { Genres: getFilter(filter) },
         IsAdult: { [db.Op.lte]: req.user.AdultPass },
       },
       required: true,
