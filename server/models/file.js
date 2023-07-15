@@ -101,7 +101,7 @@ export default (sequelize, DataTypes, ImagesPath) => {
                 const fPath = `${folder.Path}/${item.Name}`;
                 if (fs.existsSync(fPath)) fs.removeSync(fPath);
                 //Delete Cover
-                const cover = genImgPath(this.Type, folder.Name, item.Name);
+                const cover = genImgPath(item.Type, folder.Name, item.Name);
                 if (fs.existsSync(cover)) fs.removeSync(cover);
               }
             } catch (error) {
