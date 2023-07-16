@@ -1,8 +1,7 @@
 import { Router } from "express";
 import db from "../models/index.js";
 
-import { existsSync, createReadStream } from "fs";
-import { join } from "path";
+import fs from "fs";
 
 import { qryCurrentPos } from "./query-helper.js";
 
@@ -36,39 +35,36 @@ routes.post("/favorites/", (req, res) => {
   getFiles(req, res, "favorite");
 });
 
-routes.get("/video/:id", (req, res) => {
-  db.file
-    .findOne({
-      attributes: ["Id", "Name", "Size"],
-      where: { Id: req.params.id },
-      include: { model: db.folder },
-    })
-    .then((file) => {
-      if (file) {
-        let filePath = join(file.Folder.Path, file.Name);
-        const range = req.headers.range;
-        if (!range) {
-          return res.status(400).send("Requires Range header");
-        }
+routes.get("/video/:id", async (req, res) => {
+  const file = await db.file.findOne({
+    attributes: ["Id", "Name", "Size"],
+    where: { Id: req.params.id },
+    include: { model: db.folder },
+  });
 
-        const chunkSize = 1024 * 256;
-        const start = Number(range.replace(/\D/g, ""));
-        const end = Math.min(start + chunkSize, file.Size - 1);
-        const contentLength = end - start + 1;
+  if (file) {
+    const range = req.headers.range;
+    if (!range) {
+      res.status(400).send("Requires Range header");
+    }
 
-        res.writeHead(206, {
-          "Content-Range": `bytes ${start}-${end}/${file.Size}`,
-          "Accept-Ranges": "bytes",
-          "Content-Length": contentLength,
-          "Content-Type": "video/mp4",
-        });
-
-        let stream = createReadStream(filePath, { start, end });
-        stream.pipe(res);
-      } else {
-        res.send("Error File Not Found");
-      }
-    });
+    const videoSize = fs.statSync(file.Path).size;
+    const CHUNK_SIZE = 10 ** 6;
+    const start = Number(range.replace(/\D/g, ""));
+    const end = Math.min(start + CHUNK_SIZE, videoSize - 1);
+    const contentLength = end - start + 1;
+    const headers = {
+      "Content-Range": `bytes ${start}-${end}/${videoSize}`,
+      "Accept-Ranges": "bytes",
+      "Content-Length": contentLength,
+      "Content-Type": "video/mp4",
+    };
+    res.writeHead(206, headers);
+    const videoStream = fs.createReadStream(file.Path, { start, end });
+    videoStream.pipe(res);
+  } else {
+    res.send("Error File Not Found");
+  }
 });
 
 //export this Router to use in our index.js
