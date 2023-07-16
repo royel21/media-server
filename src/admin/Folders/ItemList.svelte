@@ -10,6 +10,7 @@
   export let page = 1;
   export let totalPages = 0;
   export let totalItems = 0;
+  export let scanning = [];
 
   const addGenres = ({ target }) => {
     let Id = target.closest("li").id;
@@ -45,7 +46,7 @@
             on:mousemove
           >
             {#if Type.includes("Folder")}
-              <span><Icons name="sync" box="0 0 512 512" /></span>
+              <span><Icons name="sync" box="0 0 512 512" class={scanning.includes(Id) ? "icon-spin" : ""} /></span>
               {#if /manga/.test(FilesType)}
                 <span class="g-list">
                   <span on:click={addGenres}>Manga</span>

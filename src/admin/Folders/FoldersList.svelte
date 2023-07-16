@@ -15,6 +15,7 @@
   export let page = 1;
   export let filter = "";
   export let folderId;
+  export let scanning = [];
 
   let totalPages = 1;
   let totalItems = 0;
@@ -76,7 +77,8 @@
         showModal = true;
       } else if (/icon-sync/gi.test(cList)) {
         socket.emit("scan-dir", { Id: folder.Id, isFolder: true });
-        document.getElementById(folder.Id).querySelector(".icon-sync")?.classList.add("icon-spin");
+        document.getElementById(folder.Id);
+        scanning = [...scanning, folder.Id];
       }
     }
   };
@@ -134,7 +136,7 @@
   };
 
   const scanFinish = (data) => {
-    document.getElementById(data.Id).querySelector(".icon-sync")?.classList.remove("icon-spin");
+    scanning = scanning.filter((f) => f != data.Id);
   };
 
   onMount(() => {
@@ -173,6 +175,7 @@
   {totalPages}
   {totalItems}
   {filter}
+  {scanning}
   {onShowImage}
   on:filter={onFilter}
   on:gotopage={gotopage}

@@ -29,7 +29,6 @@
 
   const submit = async (e) => {
     message = "";
-    console.log(file);
     if (!file.Name) {
       return (error = "Name Can't Be Empty");
     }
