@@ -78,7 +78,7 @@ routes.get("/changes-genres/:Id/:genre", async (req, res) => {
   let genres = folder?.Genres.split(", ");
 
   if (folder) {
-    if (genre !== "sort" || !genres?.includes("Raw")) {
+    if (genre !== "sort" && !genres?.includes("Raw")) {
       genres = genres.filter((g) => !/manga|manhwa|manhua|webtoon/i.test(g));
       genres.push(mangaTypes[genre]);
     }
