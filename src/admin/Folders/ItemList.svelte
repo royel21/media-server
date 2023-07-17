@@ -109,7 +109,6 @@
   .controls {
     position: initial;
     display: flex;
-    justify-content: space-between;
     padding: 5px 0;
     border: none;
     height: 45px;
@@ -155,7 +154,6 @@
       display: none;
     }
     .controls h4 {
-      flex-grow: 0;
       width: 60px;
     }
   }

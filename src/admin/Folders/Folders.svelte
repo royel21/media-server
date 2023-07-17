@@ -50,5 +50,9 @@
     .card.has-files {
       min-width: 184%;
     }
+
+    .card.has-files :global(#Folders) {
+      width: 55%;
+    }
   }
 </style>
