@@ -64,13 +64,24 @@
     }
   };
 
+  const scanFinish = (data) => {
+    if (data.Id === folderId) {
+      loadFiles(1);
+    }
+  };
+
+  const socketEvent = [
+    { name: "file-renamed", event: onFileRename },
+    { name: "file-removed", event: onFileRemove },
+    { name: "reload", event: scanFinish },
+  ];
+
   onMount(async () => {
     loadFiles(1);
-    socket.on("file-renamed", onFileRename);
-    socket.on("file-removed", onFileRemove);
+
+    socketEvent.forEach(({ name, event }) => socket.on(name, event));
     return () => {
-      socket.off("file-renamed", onFileRename);
-      socket.off("file-removed", onFileRemove);
+      socketEvent.forEach(({ name, event }) => socket.off(name, event));
     };
   });
 

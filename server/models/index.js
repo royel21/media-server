@@ -72,7 +72,7 @@ db.init = async (force) => {
   await sequelize.sync({ force });
 
   try {
-    await db.sqlze.query("ALTER TABLE Folders ADD Server VARCHAR(255) NULL DEFAULT '';");
+    await db.sqlze.query("ALTER TABLE Folders ADD Scanning TINYINT(1) NULL DEFAULT '0';");
   } catch (error) {
     console.log("add COLUMN fail Server");
   }

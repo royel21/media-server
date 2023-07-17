@@ -31,9 +31,8 @@ const getData = async ({ params }, res) => {
     query.where.Name = filters;
     result = await db.file.findAndCountAll(query);
   } else {
-    query.attributes.push("Path"); // add Path to folder query
-    query.attributes.push("Status"); // add Genres to folder query
-    query.attributes.push("FilesType"); // add Genres to folder query
+    query.attributes = [...query.attributes, "Path", "Status", "FilesType", "Scanning"];
+
     query.where[db.Op.or] = { Path: filters, AltName: filters };
     result = await db.folder.findAndCountAll(query);
 

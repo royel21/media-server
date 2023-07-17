@@ -27,14 +27,15 @@
   <div class="controls">
     <slot name="btn-controls" />
     <Filter on:filter {filter} />
-    <h4 class="text-center usn">{`${totalItems} - ${title}`}</h4>
+    <h4 class="text-center usn">{totalItems} <strong>- {title}</strong></h4>
+    <slot name="btn-ctr-last" />
   </div>
   <div class="list-container">
     <ul class="list-group text-dark">
       {#if items.length < 1}
         <li class="list-group-item empty-list">{`Not ${title} Found`}</li>
       {:else}
-        {#each items as { Id, Name, Type, Status, FilesType }}
+        {#each items as { Id, Name, Type, Status, FilesType, Scanning }}
           <li
             id={Id}
             class="list-group-item"
@@ -46,13 +47,19 @@
             on:mousemove
           >
             {#if Type.includes("Folder")}
-              <span><Icons name="sync" box="0 0 512 512" class={scanning.includes(Id) ? "icon-spin" : ""} /></span>
+              <span
+                ><Icons
+                  name="sync"
+                  box="0 0 512 512"
+                  class={scanning.includes(Id) || Scanning ? "icon-spin" : ""}
+                /></span
+              >
               {#if /manga/.test(FilesType)}
-                <span class="g-list">
-                  <span on:click={addGenres}>Manga</span>
-                  <span on:click={addGenres}>Manhua</span>
-                  <span on:click={addGenres}>Manhwa</span>
-                  <span on:click={addGenres}>Webtoon</span>
+                <span class="g-list" on:mouseenter|stopPropagation on:mouseleave|stopPropagation>
+                  <span on:click={addGenres}>Mg</span>
+                  <span on:click={addGenres}>Mhu</span>
+                  <span on:click={addGenres}>Mhw</span>
+                  <span on:click={addGenres}>Web</span>
                   <span on:click={addRaw}>Raw</span>
                 </span>
               {/if}
@@ -110,7 +117,6 @@
   .controls h4 {
     flex-grow: 1;
     width: 100%;
-    width: 200px;
   }
   .col-6 {
     flex-grow: 1;
@@ -120,6 +126,7 @@
   }
   #Files {
     border-left: 1px solid;
+    width: 30%;
   }
   .list-controls {
     margin-top: 5px;
@@ -133,5 +140,23 @@
   }
   .empty-list:only-child {
     text-align: center;
+  }
+
+  @media screen and (max-width: 600px) {
+    #Folders {
+      border-left: 1px solid;
+      max-width: 60%;
+    }
+    #Files {
+      width: 40%;
+    }
+
+    .controls h4 strong {
+      display: none;
+    }
+    .controls h4 {
+      flex-grow: 0;
+      width: 60px;
+    }
   }
 </style>

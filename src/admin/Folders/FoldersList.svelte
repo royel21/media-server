@@ -16,6 +16,7 @@
   export let filter = "";
   export let folderId;
   export let scanning = [];
+  export let showFiles;
 
   let totalPages = 1;
   let totalItems = 0;
@@ -185,6 +186,9 @@
   on:mousemove={showPath}
 >
   <span class="create-folder" slot="btn-controls" on:click={newFolder}><Icons name="squareplus" /></span>
+  <span class="show-files" slot="btn-ctr-last" on:click={showFiles} title="Toggle Files List">
+    <Icons name="files" box="0 0 280 512" />
+  </span>
   <div class="path-tag" slot="first-tag">
     {#if showImage}
       <span id="f-path" style={`top:${fullPathPos.y}px;`}>
@@ -199,6 +203,10 @@
     height: 35px;
     width: 43px;
     top: -1px;
+  }
+  .show-files :global(svg) {
+    width: 27px;
+    height: 28px;
   }
   .path-tag {
     position: relative;

@@ -166,7 +166,7 @@ const scanFolder = async (curfolder, files, isFolder) => {
 const getFolders = async (id, isFolder) => {
   return db.folder.findAll({
     order: ["Path"],
-    attributes: ["Id", "Name", "FileCount", "CreatedAt", "FilesType", "Path"],
+    attributes: ["Id", "Name", "FileCount", "CreatedAt", "FilesType", "Path", "Scanning"],
     where: isFolder ? { Id: id } : { DirectoryId: id },
     include: { model: db.file, attributes: ["Id", "Name", "Type", "Duration", "FolderId"] },
   });
@@ -183,6 +183,10 @@ const scanDirectory = async ({ id, dir, isFolder }) => {
     folder.Path = dir;
 
     folders = await getFolders(id, isFolder);
+
+    if (isFolder && folders[0]) {
+      await folders[0].update({ Scanning: true });
+    }
     console.timeEnd("list-files");
 
     sendMessage("cleaning direcory");
@@ -204,6 +208,10 @@ const scanDirectory = async ({ id, dir, isFolder }) => {
     await genFileThumbnails(folders, sendMessage);
     console.timeEnd("creating files thumbnails");
     console.log("Job Finish");
+
+    if (isFolder && folders[0]) {
+      await folders[0].update({ Scanning: false });
+    }
   } else {
     sendMessage("Not found:", dir);
   }
