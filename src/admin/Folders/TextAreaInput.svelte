@@ -8,6 +8,7 @@
   export let rows;
   export let ref = null;
   export let focus = false;
+  export let onChange = () => {};
 
   onMount(() => {
     if (ref && focus) ref.focus();
@@ -16,7 +17,7 @@
 
 <div class="input-body" {style}>
   <div for="Name" class="input-text">{label || key}</div>
-  <textarea bind:this={ref} name="Name" class="input-control" {rows} bind:value={file[key]} />
+  <textarea bind:this={ref} name={key} class="input-control" {rows} bind:value={file[key]} on:change={onChange} />
 </div>
 
 <style>

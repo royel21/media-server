@@ -54,15 +54,16 @@
                   class={scanning.includes(Id) || Scanning ? "icon-spin" : ""}
                 /></span
               >
-              {#if /manga/.test(FilesType)}
-                <span class="g-list" on:mouseenter|stopPropagation on:mouseleave|stopPropagation>
+              <span class="g-list" on:mouseenter|stopPropagation on:mouseleave|stopPropagation>
+                <span on:click={addGenres}>sort</span>
+                {#if /manga/.test(FilesType)}
                   <span on:click={addGenres}>Mg</span>
                   <span on:click={addGenres}>Mhu</span>
                   <span on:click={addGenres}>Mhw</span>
                   <span on:click={addGenres}>Web</span>
                   <span on:click={addRaw}>Raw</span>
-                </span>
-              {/if}
+                {/if}
+              </span>
             {/if}
             <span><Icons name="edit" /></span>
             <span><Icons name="trash" /></span>

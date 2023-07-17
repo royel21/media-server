@@ -61,24 +61,31 @@ routes.get("/folder-raw/:Id", async (req, res) => {
     genres.sort();
     folder.Genres = genres.join(", ");
     await folder.save();
-    console.log("raw", Id, folder?.Name);
   }
   res.send({ valid: true });
 });
+
+const mangaTypes = {
+  Mg: "Manga",
+  mhu: "Manhua",
+  mhw: "Manhwa",
+  web: "Webtoon",
+};
 
 routes.get("/changes-genres/:Id/:genre", async (req, res) => {
   const { Id, genre } = req.params;
   const folder = await db.folder.findOne({ where: { Id } });
   let genres = folder?.Genres.split(", ");
 
-  if (folder && !genres?.includes("Raw")) {
-    genres = genres.filter((g) => !/manga|manhwa|manhua|webtoon/i.test(g));
+  if (folder) {
+    if (genre !== "sort" || !genres?.includes("Raw")) {
+      genres = genres.filter((g) => !/manga|manhwa|manhua|webtoon/i.test(g));
+      genres.push(mangaTypes[genre]);
+    }
 
-    genres.push(genre);
     genres.sort();
     folder.Genres = genres.join(", ");
     await folder.save();
-    console.log(genre, folder.Name, "->", genres.join(", "));
   }
   res.send({ valid: true });
 });

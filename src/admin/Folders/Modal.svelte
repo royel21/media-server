@@ -28,8 +28,17 @@
     }
   });
 
+  const validGenres = (g) => {
+    return g
+      .split(", ")
+      .map((ge) => (/school/i.test(ge) ? "School Life" : ge.trim()))
+      .sort()
+      .join(", ");
+  };
+
   const onChange = ({ target: { name, value, checked, type } }) => {
     if (type === "checkbox") value = checked;
+    if (name === "Genres") value = validGenres(value);
     file[name] = value;
   };
 
@@ -81,7 +90,7 @@
           <Input file={tempFile} key="Name" style="margin-bottom: 5px" rows="3" focus={true} />
           {#if file.Type === "Folder"}
             <Input {file} key="AltName" style="margin-bottom: 5px" rows="3" />
-            <Input {file} key="Genres" style="margin-bottom: 5px" rows="2" />
+            <Input {file} key="Genres" style="margin-bottom: 5px" rows="2" {onChange} />
             <Input {file} key="Description" rows="4" />
             <CheckBox label="Completed" key="Status" item={file} my="5px" />
             <CheckBox label="Is Adult" key="IsAdult" item={file} />
