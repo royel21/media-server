@@ -55,13 +55,14 @@
                 /></span
               >
               <span class="g-list" on:mouseenter|stopPropagation on:mouseleave|stopPropagation>
-                <span on:click={addGenres}>sort</span>
                 {#if /manga/.test(FilesType)}
                   <span on:click={addGenres}>Mg</span>
                   <span on:click={addGenres}>Mhu</span>
                   <span on:click={addGenres}>Mhw</span>
                   <span on:click={addGenres}>Web</span>
                   <span on:click={addRaw}>Raw</span>
+                {:else}
+                  <span on:click={addGenres}>sort</span>
                 {/if}
               </span>
             {/if}
