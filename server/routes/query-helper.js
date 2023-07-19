@@ -14,7 +14,9 @@ export const getOrderBy = (orderby, table = "") => {
   let byName = literal(`REPLACE(${table}.Name, '[','0') ${desc}`);
 
   if (table === "File") {
-    byName = literal(`CAST(${table}.Name as unsigned) ${desc}, REPLACE(${table}.Name, '[','0') ${desc}`);
+    byName = literal(
+      `CAST(REPLACE(${table}.Name, "-", ".") as unsigned) ${desc}, REPLACE(${table}.Name, '[','0') ${desc}`
+    );
   }
 
   const data = {

@@ -140,16 +140,17 @@
     scanning = scanning.filter((f) => f != data.Id);
   };
 
+  const socketEvents = [
+    { name: "folder-renamed", handler: onFolderRename },
+    { name: "folder-removed", handler: onFolderRemove },
+    { name: "reload", handler: scanFinish },
+  ];
+
   onMount(() => {
     loadFolders(page);
-
-    socket.on("folder-renamed", onFolderRename);
-    socket.on("folder-removed", onFolderRemove);
-    socket.on("reload", scanFinish);
+    socketEvents.forEach((e) => socket.on(e.name, e.handler));
     return () => {
-      socket.off("folder-renamed", onFolderRename);
-      socket.off("folder-removed", onFolderRemove);
-      socket.off("reload", scanFinish);
+      socketEvents.forEach((e) => socket.off(e.name, e.handler));
     };
   });
 </script>
