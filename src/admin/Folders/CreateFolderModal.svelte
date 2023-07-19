@@ -5,6 +5,7 @@
   import CheckBox from "../Component/CheckBox.svelte";
   import Select from "../Component/Select.svelte";
   import Input from "./TextAreaInput.svelte";
+  import { validGenres } from "./Utils";
 
   export let error;
   export let ref = null;
@@ -21,11 +22,6 @@
   let file = { FilesType: "mangas" };
 
   let options = [];
-
-  onMount(async () => {
-    const data = await apiUtils.admin(["folders", "folder", ""]);
-    options = [{ Name: "Select Directory" }, ...data.dirs.map((d) => ({ Id: d.Id, Name: d.FullPath }))];
-  });
 
   const submit = async (e) => {
     message = "";
@@ -46,6 +42,17 @@
       }
     }
   };
+
+  const onChange = ({ target: { name, value, checked, type } }) => {
+    if (type === "checkbox") value = checked;
+    if (name === "Genres") value = validGenres(value);
+    file[name] = value;
+  };
+
+  onMount(async () => {
+    const data = await apiUtils.admin(["folders", "folder", ""]);
+    options = [{ Name: "Select Directory" }, ...data.dirs.map((d) => ({ Id: d.Id, Name: d.FullPath }))];
+  });
 </script>
 
 <div class="modal-container">
@@ -57,7 +64,7 @@
       <div class="modal-body">
         <Input {file} key="Name" style="margin-bottom: 5px" rows="3" focus={true} />
         <Input {file} key="AltName" style="margin-bottom: 5px" rows="3" />
-        <Input {file} key="Genres" style="margin-bottom: 5px" rows="2" />
+        <Input {file} key="Genres" style="margin-bottom: 5px" rows="2" {onChange} />
         <Input {file} key="Description" rows="4" />
         <CheckBox label="Completed" key="Status" item={file} my="5px" />
         <CheckBox label="Is Adult" key="IsAdult" item={file} />

@@ -158,5 +158,8 @@
     .controls h4 {
       width: 60px;
     }
+    li > span {
+      margin-right: 5px;
+    }
   }
 </style>

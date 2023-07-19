@@ -6,6 +6,7 @@
   import Select from "../Component/Select.svelte";
   import Input from "./TextAreaInput.svelte";
   import Icons from "../../icons/Icons.svelte";
+  import { validGenres } from "./Utils";
 
   export let file;
   export let modalType;
@@ -27,14 +28,6 @@
       options = data.dirs.map((d) => ({ Id: d.Id, Name: d.FullPath }));
     }
   });
-
-  const validGenres = (g) => {
-    return g
-      .split(", ")
-      .map((ge) => (/school/i.test(ge) ? "School Life" : ge.trim()))
-      .sort()
-      .join(", ");
-  };
 
   const onChange = ({ target: { name, value, checked, type } }) => {
     if (type === "checkbox") value = checked;
