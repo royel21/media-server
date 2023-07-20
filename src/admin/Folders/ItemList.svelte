@@ -76,6 +76,7 @@
     </ul>
   </div>
   <div class="list-controls">
+    <slot name="bottom-ctr" />
     <Pagination {page} {totalPages} on:gotopage />
   </div>
 </div>
@@ -130,8 +131,9 @@
     width: 30%;
   }
   .list-controls {
+    display: flex;
     margin-top: 5px;
-    text-align: center;
+    justify-content: center;
     width: 100%;
   }
   .list-group-item {

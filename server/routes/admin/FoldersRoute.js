@@ -6,8 +6,8 @@ import path from "node:path";
 
 const routes = Router();
 
-const getData = async ({ params }, res) => {
-  const { page, items, filter, folderId } = params;
+const getData = async ({ params, url }, res) => {
+  const { page, items, filter, folderId, dirId } = params;
   let filterTerm = decodeURIComponent(filter || "");
 
   // calculate the start and end of the query check sql limit
@@ -31,6 +31,9 @@ const getData = async ({ params }, res) => {
     query.where.Name = filters;
     result = await db.file.findAndCountAll(query);
   } else {
+    if (dirId && dirId !== "all") {
+      query.where.DirectoryId = dirId;
+    }
     query.attributes = [...query.attributes, "Path", "Status", "FilesType", "Scanning"];
 
     query.where[db.Op.or] = { Path: filters, AltName: filters };
@@ -51,11 +54,15 @@ const getData = async ({ params }, res) => {
   });
 };
 
+routes.get("/dirs", async (req, res) => {
+  const dirs = await db.directory.findAll({});
+  res.send([...dirs.map((d) => d.dataValues)]);
+});
+
 routes.get("/folder-raw/:Id", async (req, res) => {
   const { Id } = req.params;
   const folder = await db.folder.findOne({ where: { Id } });
   const genres = folder?.Genres.split(", ");
-  console.log(Id, folder?.Name, genres);
   if (folder && !genres.includes("Raw")) {
     genres.push("Raw");
     genres.sort();
@@ -123,16 +130,8 @@ routes.get("/folder/:folderId?", async (req, res) => {
   });
 });
 
-routes.get("/files/:folderId/:page/:items/:filter?", (req, res) => {
-  getData(req, res).catch((err) => {
-    console.log(err);
-  });
-});
+routes.get("/files/:folderId/:page/:items/:filter?", getData);
 
-routes.get("/:page/:items/:filter?", (req, res) => {
-  getData(req, res).catch((err) => {
-    console.log(err);
-  });
-});
+routes.get("/:dirId/:page/:items/:filter?", getData);
 
 export default routes;

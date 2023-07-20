@@ -17,6 +17,8 @@
   export let folderId;
   export let scanning = [];
   export let showFiles;
+  let dirs = [];
+  let currentDir = "";
 
   let totalPages = 1;
   let totalItems = 0;
@@ -30,9 +32,18 @@
 
   const newFolder = () => (createFolder = true);
 
-  const loadFolders = async (pg) => {
+  const loadDir = async () => {
+    const data = await apiUtils.admin(["folders", "dirs"]);
+    if (data?.length) {
+      dirs = data;
+      console.log(data);
+    }
+  };
+
+  const loadFolders = async (pg, dir) => {
+    console.log("reload", dir);
     let flt = encodeURIComponent((filter || "")?.replace(/|:|\?|\^|"|\*|<|>|\t|\n/gi, ""));
-    let data = await apiUtils.admin(["folders", pg, calRows(), flt]);
+    let data = await apiUtils.admin(["folders", dir || currentDir || "all", pg, calRows(), flt]);
 
     if (data.items) {
       let tmp = data.items[0];
@@ -140,6 +151,8 @@
     scanning = scanning.filter((f) => f != data.Id);
   };
 
+  $: loadFolders(1, currentDir);
+
   const socketEvents = [
     { name: "folder-renamed", handler: onFolderRename },
     { name: "folder-removed", handler: onFolderRemove },
@@ -148,6 +161,7 @@
 
   onMount(() => {
     loadFolders(page);
+    loadDir();
     socketEvents.forEach((e) => socket.on(e.name, e.handler));
     return () => {
       socketEvents.forEach((e) => socket.off(e.name, e.handler));
@@ -197,6 +211,15 @@
       </span>
     {/if}
   </div>
+  <span class="dir-list" slot="bottom-ctr">
+    <span>Dirs: </span>
+    <select class="form-control" bind:value={currentDir}>
+      <option value={""}>All</option>
+      {#each dirs as { Id, FullPath }}
+        <option value={Id}>{FullPath}</option>
+      {/each}</select
+    >
+  </span>
 </ItemList>
 
 <style>
@@ -244,10 +267,30 @@
     width: max-content;
     max-width: 99%;
   }
+
+  .dir-list {
+    flex-grow: 1;
+    display: flex;
+    padding: 0px 5px;
+    align-items: center;
+    background-color: grey;
+    margin: 0 5px;
+    border-radius: 0.25rem;
+    padding: 2px 5px;
+  }
+  .dir-list select {
+    margin-left: 2px;
+    padding: 3px;
+    height: 27px;
+  }
   @media screen and (max-width: 600px) {
     .thumbnail {
       right: 11px;
       top: 47px;
+    }
+
+    .dir-list:not(:only-child) {
+      max-width: 60%;
     }
   }
 </style>
