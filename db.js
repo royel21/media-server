@@ -35,7 +35,6 @@ const saveDb = async () => {
   let datas = [];
   const folders = await db.folder.findAll({
     order: ["Name"],
-    where: { Server: { [db.Op.not]: "nhentai.net" }, FilesType: { [db.Op.not]: "videos" } },
   });
   for (let folder of folders) {
     if (!datas.find((f) => compare(f, folder))) {
