@@ -175,45 +175,49 @@ const getFolders = async (id, isFolder) => {
 const scanDirectory = async ({ id, dir, isFolder }) => {
   DirectoryId = id;
   console.log(dir);
-  if (fs.existsSync(dir)) {
-    const fis = WinDrive.ListFilesRO(dir);
+  try {
+    if (fs.existsSync(dir)) {
+      const fis = WinDrive.ListFilesRO(dir);
 
-    console.time("list-files");
-    let folder = WinDrive.ListFiles(dir, { oneFile: true });
-    folder.Path = dir;
+      console.time("list-files");
+      let folder = WinDrive.ListFiles(dir, { oneFile: true });
+      folder.Path = dir;
 
-    folders = await getFolders(id, isFolder);
+      folders = await getFolders(id, isFolder);
 
-    if (isFolder && folders[0]) {
-      await folders[0].update({ Scanning: true });
+      if (isFolder && folders[0]) {
+        await folders[0].update({ Scanning: true });
+      }
+      console.timeEnd("list-files");
+
+      sendMessage("cleaning direcory");
+      console.time("cleaning direcory");
+      await rmOrphanFiles();
+      console.timeEnd("cleaning direcory");
+
+      sendMessage("scanning directory");
+      console.time("scanning directory");
+      await scanFolder(folder, fis, isFolder);
+      console.timeEnd("scanning directory");
+
+      sendMessage("creating folder thumbnails");
+      await genFolderThumbnails(foldersPendingCover);
+
+      sendMessage("creating files thumbnails");
+      console.time("creating files thumbnails");
+
+      await genFileThumbnails(folders, sendMessage);
+      console.timeEnd("creating files thumbnails");
+      console.log("Job Finish");
+
+      if (isFolder && folders[0]) {
+        await folders[0].update({ Scanning: false });
+      }
+    } else {
+      sendMessage("Not found:", dir);
     }
-    console.timeEnd("list-files");
-
-    sendMessage("cleaning direcory");
-    console.time("cleaning direcory");
-    await rmOrphanFiles();
-    console.timeEnd("cleaning direcory");
-
-    sendMessage("scanning directory");
-    console.time("scanning directory");
-    await scanFolder(folder, fis, isFolder);
-    console.timeEnd("scanning directory");
-
-    sendMessage("creating folder thumbnails");
-    await genFolderThumbnails(foldersPendingCover);
-
-    sendMessage("creating files thumbnails");
-    console.time("creating files thumbnails");
-
-    await genFileThumbnails(folders, sendMessage);
-    console.timeEnd("creating files thumbnails");
-    console.log("Job Finish");
-
-    if (isFolder && folders[0]) {
-      await folders[0].update({ Scanning: false });
-    }
-  } else {
-    sendMessage("Not found:", dir);
+  } catch (error) {
+    console.log(error);
   }
   sendMessage("scan-finish", "scan-finish");
 };
