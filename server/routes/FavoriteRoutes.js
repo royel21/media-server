@@ -108,8 +108,6 @@ routes.get("/:id/:order/:page/:items/:search?", async (req, res) => {
       console.error(error);
     }
 
-    console.log(result.rows.length);
-
     const files = result.rows.map((r) => {
       delete r.dataValues.Favorites;
       return { ...r.dataValues };

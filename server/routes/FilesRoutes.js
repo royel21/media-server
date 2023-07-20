@@ -90,6 +90,7 @@ routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
   const folders = recents.map((rc) => {
     delete rc.dataValues.Folder;
     delete rc.dataValues.LastRead;
+    delete rc.Folder.dataValues.Genres;
     return {
       ...rc.dataValues,
       ...rc.Folder.dataValues,

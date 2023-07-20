@@ -3,44 +3,36 @@
   import { onMount } from "svelte";
   import Icons from "../icons/Icons2.svelte";
 
-  let error = { name: "", password: "" };
+  let error = "";
 
   let user = { username: "", password: "" };
 
   const getUrl = ({ role }) => `/${/admin/gi.test(role) ? "admin" : ""}`;
 
   const onError = (err) => {
-    if (err.toString().includes("Network Error")) {
-      error.password = "Not Network Connection";
-    } else {
-      error.password = "Server Not Available";
-    }
+    console.log(err);
+    error = `Server ${/Network Error/i.test(err.toString()) ? "offilne" : "error"}`;
   };
 
   const onSubmit = async () => {
-    error = { username: "", password: "" };
-    try {
-      if (!user.username) {
-        error.username = "User can't be empty";
-      } else if (!user.password) {
-        error.password = "Password can't be empty";
-      } else {
-        const data = await fetch("/api/users/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(user),
-        }).then((res) => res.json());
+    if (!user.username) return (error = "User can't be empty");
+    if (!user.password) return (error = "Password can't be empty");
 
-        if (data.isAutenticated) {
-          location.href = getUrl(data);
-        } else {
-          error.password = data.info.message;
-        }
+    try {
+      const data = await fetch("/api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      }).then((res) => res.json());
+
+      if (data.isAutenticated) {
+        location.href = getUrl(data);
+      } else {
+        error = data.info.message;
       }
     } catch (err) {
-      console.log(err);
       onError(err);
     }
   };
@@ -48,9 +40,7 @@
   onMount(async () => {
     try {
       const data = await fetch("/api/users").then((response) => response.json());
-      if (data.isAutenticated) {
-        location.href = getUrl(data);
-      }
+      if (data.isAutenticated) location.href = getUrl(data);
     } catch (err) {
       onError(err);
     }
@@ -58,38 +48,37 @@
   document.title = "Media Server";
 </script>
 
-<div id="root">
-  <div id="login-container">
-    <h3 class="mb-4"><Icons name="signin" /> Login</h3>
-    <form on:submit|preventDefault={onSubmit}>
-      <Input width="65px" name="username" bind:value={user.username} placeholder="Name" {error}>
-        <Icons name="user" slot="label" />
-      </Input>
-      <Input width="65px" name="password" type="password" bind:value={user.password} placeholder="Password" {error}>
-        <Icons name="key" slot="label" />
-      </Input>
-      <div class="form-footer">
-        <button type="submit">Submit</button>
-      </div>
-    </form>
-  </div>
+<div id="login-container">
+  <h3 class="mb-4"><Icons name="signin" /> Login</h3>
+  <form on:submit|preventDefault={onSubmit}>
+    <Input width="65px" name="username" bind:value={user.username} placeholder="Name" {error}>
+      <Icons name="user" slot="label" />
+    </Input>
+    <Input width="65px" name="password" type="password" bind:value={user.password} placeholder="Password" {error}>
+      <Icons name="key" slot="label" />
+    </Input>
+    <div class="error">{error}</div>
+    <div class="form-footer">
+      <button type="submit">Submit</button>
+    </div>
+  </form>
 </div>
 
 <style>
   :global(html, body) {
-    position: fixed;
-    left: 0;
-    top: 0;
     width: 100%;
     height: 100%;
     margin: 0;
-    padding: 0;
     background: radial-gradient(ellipse at center, #14243d 0, #030611 100%);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
-      "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   }
-  #root {
-    min-height: 100%;
+  .error {
+    display: none;
+  }
+  .error:not(:empty) {
+    display: block;
+    margin: 10px 0;
+    color: firebrick;
+    font-weight: 600;
   }
 
   #login-container :global(.icon-signin) {
@@ -110,11 +99,8 @@
     top: calc(50% - 150px);
     left: calc(50% - 150px);
     width: 300px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
     user-select: none;
     background-color: #343a40;
-    background-clip: border-box;
     border-radius: 0.25rem;
     border: 1px solid white;
     padding: 5px;
@@ -124,10 +110,7 @@
 
   h3 {
     font-size: 1.7rem;
-    margin: 1rem 0;
-  }
-  .form-footer {
-    margin-top: 10px;
+    margin: 10px;
   }
 
   button {
@@ -140,19 +123,18 @@
     font-size: 1rem;
     line-height: 1.5;
     border-radius: 0.25rem;
-    color: #fff;
+    color: white;
     background-color: #5a6268;
     border: 1px solid transparent;
     transition: 0.15s all ease-in-out;
   }
 
   button:hover {
-    color: #fff;
     background-color: gray;
     border-color: #545b62;
   }
 
   :global(.input-control) {
-    margin-bottom: 10px;
+    margin: 10px 0;
   }
 </style>

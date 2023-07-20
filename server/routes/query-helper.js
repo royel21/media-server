@@ -108,7 +108,7 @@ export const getFolders = async (req, res) => {
 
     result.rows = await db.folder.findAll({
       ...query,
-      include: { model: db.favorite, attributes: ["Id"] },
+      include: { model: db.favorite, attributes: ["Id"], where: { UserId: req.user.Id }, required: false },
       order: getOrderBy(order, "Folders"),
       offset: (p - 1) * limit,
       limit,
@@ -119,6 +119,8 @@ export const getFolders = async (req, res) => {
 
   const mapFiles = ({ dataValues, Favorites }) => {
     const isFav = Favorites.map((fv) => fv.Id);
+    delete dataValues.Genres;
+    delete dataValues.Favorites;
     return { ...dataValues, isFav };
   };
 

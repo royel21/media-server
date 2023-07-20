@@ -51,7 +51,6 @@ const createUser = async (req) => {
 const updateUser = async (req) => {
   const { Id, State, Role, Password } = req.body;
   let valid = await getUser(req);
-  console.log(req.body);
 
   if (req.user.Id === Id && (/inactive/i.test(State) || !/^Admin/i.test(Role))) {
     return { msg: "Can't Change Status or Role Current for Administrator", fail: true };

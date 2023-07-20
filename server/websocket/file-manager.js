@@ -139,7 +139,6 @@ const scanDir = async ({ Id, Path, Type, isFolder, IsAdult }, user) => {
   }
 
   io.sockets.emit("scan-info", msg);
-  console.log(msg);
 };
 /****************** Rename File *******************/
 const renameFile = async ({ Id, Name }) => {

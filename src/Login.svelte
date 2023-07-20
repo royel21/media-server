@@ -1,6 +1,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
   import { post } from "./apiUtils.js";
+  import Input from "./ShareComponent/Input.svelte";
   import Icons from "./icons/Icons2.svelte";
 
   const dispatch = createEventDispatcher();
@@ -8,85 +9,52 @@
   let user = {
     username: "",
     password: "",
+    error: "",
   };
-  let error = { name: "", password: "" };
+
   const onSubmit = async (event) => {
     event.preventDefault();
+    if (!user.username) return (user.error = "User can't be empty");
+    if (!user.password) return (user.error = "Password can't be empty");
+
     try {
       const data = await post("users/login", user);
       if (data.isAutenticated) {
         dispatch("login", { ...data });
-      } else if (user.username) {
-        error.name = "User can't be empty";
-      } else {
-        error.password = "Password can't be empty";
-      }
+      } else user.error = data.info.message;
     } catch (err) {
       console.log(err);
-      if (err.toString().includes("Network Error")) {
-        error.password = "server offline";
-      } else {
-        error.password = "Server Error";
-      }
+      user.error = `Server ${/Network Error/i.test(err.toString()) ? "offilne" : "error"}`;
     }
   };
   document.title = "Media Server";
 </script>
 
 <div id="login-container">
-  <form method="post" class="card bg-dark p-3" on:submit={onSubmit}>
-    <h3 class="mb-4"><Icons name="signin" /> Login</h3>
-    <div class="input-group">
-      <div class="input-group-prepend">
-        <label for="name" class="input-group-text">
-          <Icons name="user" />
-        </label>
-      </div>
-      <input
-        id="name"
-        type="text"
-        class="form-control"
-        name="username"
-        placeholder="Name"
-        bind:value={user.username}
-        tabindex="0"
-      />
+  <h3 class="mb-4"><Icons name="signin" /> Login</h3>
+  <form on:submit={onSubmit}>
+    <Input width="65px" name="username" bind:value={user.username} placeholder="Name">
+      <Icons name="user" slot="label" />
+    </Input>
+    <Input width="65px" name="password" type="password" bind:value={user.password} placeholder="Password">
+      <Icons name="key" slot="label" />
+    </Input>
+    <div class="error">{user.error}</div>
+    <div class="form-footer">
+      <button type="submit">Submit</button>
     </div>
-    <div id="name-errors" class="error text-left text-danger">{error.name}</div>
-    <div class="input-group">
-      <div class="input-group-prepend">
-        <label for="password" class="input-group-text">
-          <Icons name="key" />
-        </label>
-      </div>
-      <input
-        id="password"
-        type="password"
-        class="form-control"
-        name="Password"
-        placeholder="Password"
-        bind:value={user.password}
-        autocomplete="on"
-        tabindex="0"
-      />
-    </div>
-
-    <div id="pasword-errors" class="error text-left text-danger">
-      {error.password}
-    </div>
-    <div class="form-footer"><button class="btn" type="submit" tabindex="0">Submit</button></div>
   </form>
 </div>
 
 <style>
-  #login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    user-select: none;
+  .error {
+    display: none;
+  }
+  .error:not(:empty) {
+    display: block;
+    margin-top: 10px;
+    color: firebrick;
+    font-weight: 600;
   }
 
   #login-container :global(.icon-signin) {
@@ -95,34 +63,54 @@
     top: 7px;
     fill: white;
   }
-
-  #login-container form {
-    text-align: center;
-    border-radius: 0.25rem;
-    border: 1px solid;
-    min-width: 320px;
-  }
-  #login-container label :global(svg) {
-    fill: black;
-    fill: black;
+  #login-container form :global(svg) {
+    fill: #000;
     width: 30px;
-    height: 24px;
-    top: 0;
+    height: 30px;
+    top: 2px;
   }
 
-  #login-container label {
-    padding: 0 15px;
-    min-width: 60px;
-  }
-
-  #login-container .error {
-    padding: 8px 0;
-    color: firebrick;
-    font-weight: 600;
+  #login-container {
+    position: absolute;
+    top: calc(50% - 150px);
+    left: calc(50% - 150px);
+    width: 300px;
+    user-select: none;
+    background-color: #343a40;
+    border-radius: 0.25rem;
+    border: 1px solid white;
+    padding: 5px;
+    color: white;
+    text-align: center;
   }
 
   h3 {
     font-size: 1.7rem;
-    margin-bottom: 1.5rem;
+    margin: 10px;
+  }
+
+  button {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    padding: 0.25rem 0.35rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    color: white;
+    background-color: #5a6268;
+    border: 1px solid transparent;
+    transition: 0.15s all ease-in-out;
+  }
+
+  button:hover {
+    background-color: gray;
+    border-color: #545b62;
+  }
+
+  :global(.input-control) {
+    margin-bottom: 10px;
   }
 </style>
