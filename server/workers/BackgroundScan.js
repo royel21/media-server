@@ -22,7 +22,7 @@ const ThumbnailPath = process.env.IMAGES;
 
 const ValidFiles = /\.(avi|avi2|mp4|mkv|ogg|webm|rar|zip)/i;
 
-const IMGTYPES = /\.(jpg|jpeg|png|gif|webp)$/i;
+const IMGTYPES = /\.(jpg|jpeg|png|gif|webp|jpe)$/i;
 
 let DirectoryId;
 
