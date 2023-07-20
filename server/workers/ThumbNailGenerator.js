@@ -8,6 +8,7 @@ var thumbnailBasePath = process.env.IMAGES;
 export const genFileThumbnails = async (folders, sendMessage) => {
   let total = 0;
   let i = 0;
+  if (!folder.FilesType) return;
 
   folders.forEach((f) => (total += f.Files.length));
 
