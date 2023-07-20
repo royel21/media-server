@@ -3,6 +3,7 @@ import db from "../../models/index.js";
 import { getFilter } from "../utils.js";
 import fs from "fs-extra";
 import path from "node:path";
+import { literal } from "sequelize";
 
 const routes = Router();
 
@@ -55,7 +56,7 @@ const getData = async ({ params, url }, res) => {
 };
 
 routes.get("/dirs", async (req, res) => {
-  const dirs = await db.directory.findAll({});
+  const dirs = await db.directory.findAll({ order: [literal(`LOWER(FullPath)`)] });
   res.send([...dirs.map((d) => d.dataValues)]);
 });
 
