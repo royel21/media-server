@@ -24,6 +24,7 @@
   export let handleClick;
   export let useSlot = false;
   export let onOpen;
+  export let setFolderInfo;
 
   let ver = 1;
   let folder;
@@ -49,6 +50,7 @@
 
       if (data.folder) {
         folder = data.folder.Name;
+        setFolderInfo(data.folder);
       }
 
       if (pg && data.page && +data.page !== +pg) {

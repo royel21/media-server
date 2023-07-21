@@ -40,6 +40,7 @@
   };
 
   const exitFolder = () => {
+    console.log(pathname);
     navigate(pathname, { replace: true, state: "" });
   };
 
@@ -69,12 +70,6 @@
 
   //Toggle File List Config
   const handleClick = (e) => (showConfig = !e);
-  onMount(async () => {
-    const data = await apiUtils.get(["files", "folder-content", "info", id]);
-    if (data.isValid) {
-      folderinfo = data;
-    }
-  });
 
   afterUpdate(() => (menu.style.display = "none"));
   onDestroy(() => (menu.style.display = "flex"));
@@ -232,12 +227,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    max-height: 186px;
-    min-height: 186px;
-    min-width: 150px;
-    padding: 1px;
+    max-height: 200px;
+    padding: 2px;
     border: 1px solid;
     border-radius: 0.25rem;
+    background-color: #030611;
   }
   #img-info {
     position: relative;

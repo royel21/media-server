@@ -21,6 +21,30 @@ export const getOrderBy = (orderby, table = "") => {
   return [data[orderby] || [byName]];
 };
 
+const getFolder = async (Id, user) => {
+  const currentFile = `(Select currentFile from RecentFolders where FolderId = \`Folders\`.\`Id\` AND RecentId = '${user?.Recent.Id}')`;
+
+  const query = {
+    attributes: [
+      "Id",
+      "Name",
+      "Description",
+      "Status",
+      "Genres",
+      "AltName",
+      "Server",
+      [literal(currentFile), "currentFile"],
+    ],
+    where: { Id, IsAdult: { [db.Op.lte]: user.AdultPass } },
+  };
+
+  try {
+    return await db.folder.findOne(query);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getFiles = async (user, data) => {
   let searchs = [];
   let search = data.search || "";
@@ -49,22 +73,30 @@ export const getFiles = async (user, data) => {
   }
 
   try {
-    const count = await db.file.count(query);
+    const folder = await getFolder(data.id, user);
 
-    const totalPages = Math.ceil(count / data.items);
-    let page = clamp(data.page, 1, totalPages);
+    if (folder) {
+      const count = await db.file.count(query);
 
-    query.offset = (page - 1) * +data.items;
-    query.limit = +data.items;
+      const totalPages = Math.ceil(count / data.items);
+      let page = clamp(data.page, 1, totalPages);
 
-    const rows = await db.file.findAll(query);
+      query.offset = (page - 1) * +data.items;
+      query.limit = +data.items;
 
-    const folder = await db.folder.findOne({
-      attributes: ["Id", "Name"],
-      where: { Id: data.id },
-    });
+      const rows = await db.file.findAll(query);
 
-    return { totalFiles: count, files: rows.map((d) => ({ ...d.dataValues })), page, totalPages, valid: true, folder };
+      return {
+        totalFiles: count,
+        files: rows.map((d) => ({ ...d.dataValues })),
+        page,
+        totalPages,
+        valid: true,
+        folder,
+      };
+    } else {
+      return { valid: false, msg: "Not Found Or Not authorized" };
+    }
   } catch (error) {
     console.log(error);
     return { valid: false };
@@ -87,7 +119,7 @@ export const getFolders = async (req, res) => {
         Genres: filter,
         Server: filter,
       },
-      IsAdult: { [db.Op.lte]: req.user.AdultPass },
+      IsAdult: req.user.AdultPass,
       FilesType: filetype,
     },
   };
@@ -101,6 +133,7 @@ export const getFolders = async (req, res) => {
 
   try {
     result.count = await db.folder.count(query);
+    console.log(query);
 
     const totalPages = Math.ceil(result.count / limit);
 
