@@ -30,7 +30,7 @@
       if (data.isAutenticated) {
         location.href = getUrl(data);
       } else {
-        error = data.info.message;
+        error = data?.info.message;
       }
     } catch (err) {
       onError(err);

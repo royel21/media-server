@@ -73,7 +73,6 @@
 
   const itemClick = (event) => {
     let el = event.target;
-    console.log(el.tagName);
     if (el.tagName === "svg") {
       file = items.find((f) => f.Id === el.closest("tr").id);
       let cList = el.classList.toString();

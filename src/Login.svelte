@@ -21,7 +21,7 @@
       const data = await post("users/login", user);
       if (data.isAutenticated) {
         dispatch("login", { ...data });
-      } else user.error = data.info.message;
+      } else user.error = data?.info.message;
     } catch (err) {
       console.log(err);
       user.error = `Server ${/Network Error/i.test(err.toString()) ? "offilne" : "error"}`;
