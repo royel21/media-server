@@ -36,12 +36,10 @@
     const data = await apiUtils.admin(["folders", "dirs"]);
     if (data?.length) {
       dirs = data;
-      console.log(data);
     }
   };
 
   const loadFolders = async (pg, dir) => {
-    console.log("reload", dir);
     let flt = encodeURIComponent((filter || "")?.replace(/|:|\?|\^|"|\*|<|>|\t|\n/gi, ""));
     let data = await apiUtils.admin(["folders", dir || currentDir || "all", pg, calRows(), flt]);
 
@@ -151,7 +149,7 @@
     scanning = scanning.filter((f) => f != data.Id);
   };
 
-  $: loadFolders(1, currentDir);
+  $: if (currentDir) loadFolders(1, currentDir);
 
   const socketEvents = [
     { name: "folder-renamed", handler: onFolderRename },
