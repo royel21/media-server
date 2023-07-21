@@ -40,8 +40,7 @@
   };
 
   const exitFolder = () => {
-    console.log(pathname);
-    navigate(pathname, { replace: true, state: "" });
+    navigate(pathname || `/${segment[0] || ""}`, { replace: true, state: "" });
   };
 
   const onGenres = ({ currentTarget }) => {
@@ -227,7 +226,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    max-height: 200px;
     padding: 2px;
     border: 1px solid;
     border-radius: 0.25rem;
@@ -258,7 +256,7 @@
     background-color: red;
   }
   #info img {
-    max-height: 186px;
+    max-height: 300px;
     max-width: 100%;
   }
   img[alt]:after {

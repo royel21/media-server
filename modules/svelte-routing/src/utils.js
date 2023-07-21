@@ -198,7 +198,6 @@ function pick(routes, uri) {
       break;
     }
   }
-  // console.log(match, default_)
   return match || default_ || null;
 }
 

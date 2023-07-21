@@ -133,7 +133,6 @@ export const getFolders = async (req, res) => {
 
   try {
     result.count = await db.folder.count(query);
-    console.log(query);
 
     const totalPages = Math.ceil(result.count / limit);
 
