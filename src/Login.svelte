@@ -1,45 +1,30 @@
 <script>
-  import { createEventDispatcher } from "svelte";
-  import { post } from "./apiUtils.js";
   import Input from "./ShareComponent/Input.svelte";
   import Icons from "./icons/Icons2.svelte";
 
-  const dispatch = createEventDispatcher();
+  export let error = "";
+  export let onLogin;
 
-  let user = {
-    username: "",
-    password: "",
-    error: "",
-  };
+  let user = { username: "", password: "" };
 
-  const onSubmit = async (event) => {
-    event.preventDefault();
-    if (!user.username) return (user.error = "User can't be empty");
-    if (!user.password) return (user.error = "Password can't be empty");
-
-    try {
-      const data = await post("users/login", user);
-      if (data.isAutenticated) {
-        dispatch("login", { ...data });
-      } else user.error = data.info.message;
-    } catch (err) {
-      console.log(err);
-      user.error = `Server ${/Network Error/i.test(err.toString()) ? "offilne" : "error"}`;
-    }
+  const onSubmit = () => {
+    if (!user.username) return (error = "User can't be empty");
+    if (!user.password) return (error = "Password can't be empty");
+    onLogin(user);
   };
   document.title = "Media Server";
 </script>
 
 <div id="login-container">
   <h3 class="mb-4"><Icons name="signin" /> Login</h3>
-  <form on:submit={onSubmit}>
-    <Input width="65px" name="username" bind:value={user.username} placeholder="Name">
+  <form on:submit|preventDefault={onSubmit}>
+    <Input width="65px" name="username" bind:value={user.username} placeholder="Name" {error}>
       <Icons name="user" slot="label" />
     </Input>
-    <Input width="65px" name="password" type="password" bind:value={user.password} placeholder="Password">
+    <Input width="65px" name="password" type="password" bind:value={user.password} placeholder="Password" {error}>
       <Icons name="key" slot="label" />
     </Input>
-    <div class="error">{user.error}</div>
+    <div class="error">{error}</div>
     <div class="form-footer">
       <button type="submit">Submit</button>
     </div>
@@ -47,12 +32,18 @@
 </div>
 
 <style>
+  :global(html, body) {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    background: radial-gradient(ellipse at center, #14243d 0, #030611 100%);
+  }
   .error {
     display: none;
   }
   .error:not(:empty) {
     display: block;
-    margin-top: 10px;
+    margin: 10px 0;
     color: firebrick;
     font-weight: 600;
   }
@@ -111,6 +102,6 @@
   }
 
   :global(.input-control) {
-    margin-bottom: 10px;
+    margin: 10px 0;
   }
 </style>

@@ -1,6 +1,5 @@
 <script>
   import { onMount } from "svelte";
-  import { navigate } from "svelte-routing";
   //Pages
   import AdminRoutes from "./admin/AdminRoutes.svelte";
   import UserRoutes from "./user/UserRoutes.svelte";
@@ -9,6 +8,8 @@
   import ConfigPage from "./ConfigPage.svelte";
 
   let user = { username: "" };
+  let error = "";
+
   onMount(async () => {
     let data = await apiUtils.get(["users"]);
     if (data.isAutenticated) {
@@ -16,13 +17,25 @@
     }
   });
 
-  const logIn = (_user) => {
-    user = _user.detail;
+  const onLogin = async (loginData) => {
+    try {
+      const data = await apiUtils.post("users/login", loginData);
+      if (data.isAutenticated) {
+        user = data;
+      }
+
+      if (data.info) {
+        error = data.info.message;
+      }
+    } catch (err) {
+      console.log(err);
+      error = `Server ${/Network Error/i.test(err.toString()) ? "offilne" : "error"}`;
+    }
   };
 </script>
 
 {#if user.username}
-  <ConfigPage>
+  <ConfigPage {user}>
     {#if user.role.includes("Admin")}
       <AdminRoutes />
     {:else}
@@ -30,5 +43,5 @@
     {/if}
   </ConfigPage>
 {:else}
-  <Login on:login={logIn} />
+  <Login {onLogin} {error} />
 {/if}

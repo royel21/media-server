@@ -28,15 +28,17 @@
   };
 
   onMount(async () => {
-    try {
-      let data = await fetch("/api/users").then((response) => response.json());
-      if (data.isAutenticated) {
-        user = data;
-      } else {
-        logout();
+    if (!user.username) {
+      try {
+        let data = await fetch("/api/users").then((response) => response.json());
+        if (data.isAutenticated) {
+          user = data;
+        } else {
+          logout();
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
   });
 
