@@ -11,14 +11,14 @@
     error = `Server ${/Network Error/i.test(err.toString()) ? "offilne" : "error"}`;
   };
 
-  const onlogin = async (user) => {
+  const logIn = async (userData) => {
     try {
       const data = await fetch("/api/users/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(user),
+        body: JSON.stringify(userData),
       }).then((res) => res.json());
 
       if (data.isAutenticated) {
@@ -42,5 +42,5 @@
 </script>
 
 <div id="root">
-  <Login {onlogin} />
+  <Login {logIn} {error} />
 </div>

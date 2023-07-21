@@ -20,9 +20,9 @@
     }
   });
 
-  const onLogin = async (loginData) => {
+  const logIn = async (userData) => {
     try {
-      const data = await apiUtils.post("users/login", loginData);
+      const data = await apiUtils.post("users/login", userData);
       if (data.isAutenticated) {
         user = data;
         navigate(getUrl(user));
@@ -47,5 +47,5 @@
     {/if}
   </ConfigPage>
 {:else}
-  <Login {onLogin} {error} />
+  <Login {logIn} {error} />
 {/if}

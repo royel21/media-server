@@ -3,15 +3,16 @@
   import Icons from "./icons/Icons2.svelte";
 
   export let error = "";
-  export let onLogin;
+  export let logIn;
 
   let user = { username: "", password: "" };
 
   const onSubmit = () => {
     if (!user.username) return (error = "User can't be empty");
     if (!user.password) return (error = "Password can't be empty");
-    onLogin(user);
+    logIn(user);
   };
+
   document.title = "Media Server";
 </script>
 
