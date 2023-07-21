@@ -27,7 +27,7 @@
 
   let ver = 1;
   let folder;
-  let reload = true;
+  let lastId = id;
 
   const socket = getContext("socket");
   const user = getContext("User");
@@ -129,6 +129,11 @@
   });
 
   $: document.title = `${title} Page ${page || ""}`;
+
+  $: if (lastId !== id) {
+    lastId = id;
+    loadContent();
+  }
 
   let isContent = location.pathname.includes("content");
 </script>

@@ -8,7 +8,7 @@
 
   const onError = (err) => {
     console.log(err);
-    error = `Server ${/Network Error/i.test(err.toString()) ? "offilne" : "error"}`;
+    error = `Server ${/Network Error/i.test(err.toString()) ? "offline" : "error"}`;
   };
 
   const logIn = async (userData) => {

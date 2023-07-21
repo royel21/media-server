@@ -15,7 +15,6 @@ let username = "";
 
 export const setConfig = (name) => {
   username = name;
-  console.log(name);
   const cfg = JSON.parse(localStorage.getItem(name));
 
   if (cfg) {
@@ -23,8 +22,6 @@ export const setConfig = (name) => {
       initConfig[key] = cfg[key] ?? initConfig[key];
     }
   }
-
-  initConfig;
 
   ConfigStore = writable(initConfig);
 };

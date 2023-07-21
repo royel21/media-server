@@ -6,4 +6,4 @@
   export let filter = "";
 </script>
 
-<FilesList title={"Mangas"} type={`mangas/${dir}`} {filter} {page} />
+<FilesList title={"Mangas"} type={`mangas/${dir}`} {filter} {page} id={dir} />
