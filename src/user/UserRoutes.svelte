@@ -13,6 +13,7 @@
   import NavItem from "./Component/NavItem.svelte";
   import apiUtils from "../apiUtils";
   import Config from "./Component/Config.svelte";
+  import { setConfig } from "./Stores/PageConfigStore";
 
   const navItems = [
     { title: "Home", path: "/", class: "home" },
@@ -25,6 +26,8 @@
   const User = getContext("User");
 
   FavoritesStores.set(User.favorites);
+
+  setConfig(User.username);
 
   onMount(async () => {
     const data = await apiUtils.files(["dirs/"]);

@@ -10,6 +10,7 @@
   import VideoPLayer from "./Video/VideoPlayer.svelte";
   import { KeyMap, handleKeyboard, isMobile, isVideo, isManga, showFileName, sortFileByName } from "./pagesUtils";
   import Icons from "../../icons/Icons.svelte";
+  import { getReturnPath } from "./filesUtils";
 
   export let folderId;
   export let fileId;
@@ -59,7 +60,7 @@
 
   const returnBack = () => {
     saveFile();
-    navigate(localStorage.getItem("return-content"));
+    navigate(getReturnPath("open-folder"));
   };
 
   NextFile.action = () => changeFile(1);

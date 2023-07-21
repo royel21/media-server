@@ -1,10 +1,10 @@
 <script>
   import Icons from "../../../icons/Icons.svelte";
   import { clamp } from "../../../ShareComponent/utils";
-  export let onConfig;
+  import { ConfigStore, updateConfig } from "../../Stores/PageConfigStore";
   export let ToggleMenu;
 
-  let config = localStorage.getObject("mangaConfig") || { width: 65, imgAbjust: "fill" };
+  const config = { ...$ConfigStore };
 
   let show = false;
   let width = "";
@@ -13,17 +13,15 @@
     width = "";
   };
   const focus = () => {
-    width = config.width;
+    width = config.Viewer.manga.width;
   };
 
   let change = ({ target: { value } }) => {
-    width = clamp(value, 30, 100);
-    config.width = width;
+    config.Viewer.manga.width = clamp(value, 30, 100);
   };
 
   $: if ($ToggleMenu) show = false;
-  $: onConfig(config);
-  $: localStorage.setObject("mangaConfig", config);
+  $: updateConfig(config);
 </script>
 
 <label class="config-icon" for="show"><Icons name="cog" /></label>
@@ -31,7 +29,7 @@
 <div id="content" class:show on:click|stopPropagation|preventDefault>
   <div class="input-group">
     <div class="input-group-prepend"><label for="img-fill" class="input-group-text">Ajust Image:</label></div>
-    <select id="img-fill" name="image-fill" class="form-control" bind:value={config.imgAbjust}>
+    <select id="img-fill" name="image-fill" class="form-control" bind:value={config.Viewer.manga.imgAbjust}>
       <option value="fill">fill</option>
       <option value="cover">cover</option>
       <option value="contain">contain</option>
@@ -51,7 +49,7 @@
       on:keydown|stopPropagation
       class="form-control"
       bind:value={width}
-      placeholder={config.width + "%"}
+      placeholder={config.Viewer.manga.width + "%"}
     />
   </div>
 </div>

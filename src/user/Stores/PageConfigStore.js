@@ -6,10 +6,17 @@ const initConfig = {
   Mangas: { items: 0, sort: "nu" },
   Videos: { items: 0, sort: "nu" },
   Favorites: { items: 0, sort: "nu" },
+  Viewer: { manga: { imgAbjust: "fill", width: 65, webtoon: false } },
 };
 
-export function getConfig() {
-  const cfg = JSON.parse(localStorage.getItem("config"));
+let ConfigStore;
+
+let username = "";
+
+export const setConfig = (name) => {
+  username = name;
+  console.log(name);
+  const cfg = JSON.parse(localStorage.getItem(name));
 
   if (cfg) {
     for (const key in initConfig) {
@@ -17,15 +24,15 @@ export function getConfig() {
     }
   }
 
-  return initConfig;
-}
+  initConfig;
 
-const PageConfig = writable(getConfig());
-
-const updateConfig = (config) => {
-  PageConfig.update((cfg) => (cfg = config));
-  localStorage.setObject("config", config);
-  return config;
+  ConfigStore = writable(initConfig);
 };
 
-export { PageConfig, updateConfig };
+const updateConfig = (cfg) => {
+  ConfigStore.update((old) => (old = cfg));
+  localStorage.setObject(username, cfg);
+  return cfg;
+};
+
+export { ConfigStore, updateConfig };

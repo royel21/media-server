@@ -10,12 +10,12 @@ export const qryCurrentPos = (Recent, table) => [
 ];
 
 export const getOrderBy = (orderby, table = "") => {
-  let desc = /nd/.test(orderby) ? "DESC" : "";
+  let desc = /d$/.test(orderby) ? "DESC" : "ASC";
   let byName = literal(`REPLACE(REPLACE(${table}.Name, "-", "0"), "[","0") ${desc}`);
 
   const data = {
-    du: ["CreatedAt", "DESC"],
-    dd: ["CreatedAt", "ASC"],
+    du: ["CreatedAt", desc],
+    dd: ["CreatedAt", desc],
   };
 
   return [data[orderby] || [byName]];

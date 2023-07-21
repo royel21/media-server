@@ -7,8 +7,9 @@
   import { onTouchStart, onTouchEnd, onTouchMove, default as controls } from "./MangaTouch";
 
   import { ToggleMenu } from "../../../ShareComponent/ToggleMenu";
+  import { ConfigStore, updateConfig } from "../../Stores/PageConfigStore";
   import MangaConfig from "./MangaConfig.svelte";
-  import Icons from "../../..//icons/Icons.svelte";
+  import Icons from "../../../icons/Icons.svelte";
 
   export let file;
   export let KeyMap;
@@ -19,8 +20,8 @@
   const socket = getContext("socket");
   const dispatch = createEventDispatcher();
 
-  let webtoon = localStorage.getItem("webtoon") === "true";
-  let config = localStorage.getObject("mangaConfig") || { width: 65, imgAbjust: "fill" };
+  let webtoon = $ConfigStore.Viewer.manga.webtoon;
+  let config = $ConfigStore.Viewer.manga;
   let progress = `${file.CurrentPos + 1}/${file.Duration}`;
   let images = [file.Duration];
   let imgContainer;
@@ -110,7 +111,9 @@
     }
   };
 
-  const onConfig = (cfg) => (config = cfg);
+  ConfigStore.subscribe(({ Viewer }) => {
+    config = Viewer.manga;
+  });
 
   // receive data from server
   const onImageData = (data) => {
@@ -184,7 +187,10 @@
     }
   });
 
-  $: localStorage.setItem("webtoon", webtoon);
+  $: {
+    $ConfigStore.Viewer.manga.webtoon = webtoon;
+    updateConfig($ConfigStore);
+  }
 </script>
 
 <div id="manga-viewer" tabIndex="0" class:hide={$ToggleMenu}>
@@ -256,7 +262,7 @@
       <Icons name="arrowcircleright" />
     </span>
     <span class="config">
-      <MangaConfig {onConfig} {ToggleMenu} />
+      <MangaConfig {ToggleMenu} />
     </span>
     <span class="btn-fullscr popup-msg" on:click={Fullscreen.action} data-title="Full Screen">
       <Icons name="expandarrows" />

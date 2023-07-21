@@ -3,9 +3,9 @@
   import { fade } from "svelte/transition";
   import { navigate } from "svelte-routing";
 
-  import { PageConfig } from "../../user/Stores/PageConfigStore";
+  import { ConfigStore } from "../../user/Stores/PageConfigStore";
 
-  import { FileTypes, ProcessFile, getFilesPerPage } from "./filesUtils";
+  import { FileTypes, ProcessFile, getFilesPerPage } from "../Pages/filesUtils";
   import { fileKeypress, selectElementById, selectByTitle } from "./fileEvents";
 
   import Pagination from "../../ShareComponent/Pagination.svelte";
@@ -35,32 +35,27 @@
   let pageData = baseData;
   let favClicked = null;
 
-  const loadContent = async (pg = 1, flt = "", config) => {
-    if (reload) {
-      const { items, sort } = config[title];
-      const itemsPerPage = items || getFilesPerPage(3);
-      const apiPath = title === "Content" ? `folder-content/${id}` : type;
+  const loadContent = async (pg = 1, flt = "") => {
+    const { items, sort } = $ConfigStore[title];
+    const itemsPerPage = items || getFilesPerPage(3);
+    const apiPath = title === "Content" ? `folder-content/${id}` : type;
 
-      let url = `/api/files/${apiPath}/${sort}/${pg}/${itemsPerPage}/${flt?.replace("%", "") || ""}`;
+    let url = `/api/files/${apiPath}/${sort}/${pg}/${itemsPerPage}/${flt?.replace("%", "") || ""}`;
 
-      const data = await getItemsList(url);
+    const data = await getItemsList(url);
 
-      if (data.valid) {
-        pageData = data;
+    if (data.valid) {
+      pageData = data;
 
-        if (data.folder) {
-          folder = data.folder.Name;
-        }
+      if (data.folder) {
+        folder = data.folder.Name;
+      }
 
-        if (pg && data.page && +data.page !== +pg) {
-          reload = false;
-          navigate(`/${type}/${data.page}/${filter || ""}`);
-        }
-      } else {
-        console.log(data.error);
+      if (pg && data.page && +data.page !== +pg) {
+        navigate(`/${type}/${data.page}/${filter || ""}`);
       }
     } else {
-      reload = true;
+      console.log(data.error);
     }
   };
 
@@ -69,18 +64,19 @@
     let { totalPages } = pageData;
     pg = clamp(pg, 1, totalPages);
     navigate(`/${type}/${pg}/${filter || ""}`);
+    loadContent(pg, filter);
   };
 
   const fileFilter = ({ detail }) => {
     navigate(`/${type}/${1}/${detail || ""}`);
+    loadContent(1, detail);
   };
 
   const handleKeydown = (event) => fileKeypress(event, page, goToPage, title);
 
   const openFile = ({ target }) => {
     const el = target.closest(".file");
-    localStorage.setItem(title, el.id);
-    ProcessFile(el);
+    ProcessFile(el, "", title);
   };
 
   const favClick = (event) => {
@@ -102,7 +98,7 @@
     pageData.files = pageData.files.filter((f) => f.Id !== detail);
     if (!pageData.files.length) {
       page -= 1;
-      loadContent(page, filter || "", $PageConfig);
+      loadContent(page, filter || "");
     } else {
       pageData = pageData;
     }
@@ -112,7 +108,7 @@
 
   const reloadDir = (data) => {
     if (data.Id === id && user.Id === data.user) {
-      loadContent(page, filter, $PageConfig).then(() => ver++);
+      loadContent(page, filter).then(() => ver++);
     }
   };
 
@@ -123,6 +119,9 @@
   };
 
   onMount(() => {
+    ConfigStore.subscribe((value) => {
+      loadContent(page, filter, value);
+    });
     socket.on("reload", reloadDir);
     return () => {
       socket.off("reload", reloadDir);
@@ -130,8 +129,6 @@
   });
 
   $: document.title = `${title} Page ${page || ""}`;
-
-  $: type && loadContent(page, filter, $PageConfig);
 
   let isContent = location.pathname.includes("content");
 </script>

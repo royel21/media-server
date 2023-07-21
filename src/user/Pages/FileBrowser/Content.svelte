@@ -5,7 +5,7 @@
   import apiUtils from "../../../apiUtils";
 
   import FilesList from "../../Component/FilesList.svelte";
-  import { ProcessFile } from "../../Component/filesUtils";
+  import { ProcessFile, getReturnPath } from "../filesUtils";
   import SortBy from "./SortBy.svelte";
   import Icons from "../../../icons/Icons.svelte";
 
@@ -27,7 +27,7 @@
   let segment = window.location.pathname.replace(/(^\/+|\/+$)/g, "").split("/");
   let type = `${segment[0]}/${segment[1]}/${id}`;
 
-  let pathname = localStorage.getItem("return-folder");
+  let pathname = getReturnPath("to-menu");
 
   const openFirstLast = async ({ target: { id } }) => {
     const data = await apiUtils.files(["first-last", id, folderinfo.Id]);

@@ -1,4 +1,4 @@
-export const isMobile = /(android)|(iphone)/i.test(navigator.userAgent);
+export const isMobile = /android|iphone/i.test(navigator.userAgent);
 export const isVideo = (file) => file.Type.includes("Video");
 export const isManga = (file) => file.Type.includes("Manga");
 /**

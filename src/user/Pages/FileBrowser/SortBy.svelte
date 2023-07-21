@@ -1,6 +1,6 @@
 <script>
   import Icons from "../../../icons/Icons.svelte";
-  import { PageConfig, updateConfig } from "../../Stores/PageConfigStore";
+  import { ConfigStore, updateConfig } from "../../Stores/PageConfigStore";
   export let label;
   export let toggleConfig;
   export let showConfig;
@@ -12,7 +12,7 @@
     { value: "du", label: "\u2B07 Date" },
   ];
 
-  const Config = { ...$PageConfig };
+  const Config = { ...$ConfigStore };
 
   const onShowConfig = () => {
     toggleConfig(showConfig);

@@ -1,5 +1,6 @@
 import { navigate } from "svelte-routing";
-import { formatTime } from "../Pages/pagesUtils";
+import { formatTime } from "./pagesUtils";
+import { saveId } from "../Component/fileEvents";
 
 const isMobile = /(android)|(iphone)/i.test(navigator.userAgent);
 const scrollW = isMobile ? 15 : 0;
@@ -27,20 +28,29 @@ export const FileTypes = {
   },
 };
 
+const pathStore = {};
+
+export const saveReturnPath = (name, path) => {
+  pathStore[name] = path;
+  localStorage.setObject("pathStore", pathStore);
+};
+
+export const getReturnPath = (name) => pathStore[name];
+
 export const getFilesPerPage = (i) => {
   let fwidth = document.body.offsetWidth;
   let items = Math.floor((fwidth - scrollW) / itemW);
   return items * i || 0;
 };
 
-export const ProcessFile = (file, type) => {
+export const ProcessFile = (file, type, title) => {
   const folderId = file.id;
   const { pathname } = location;
 
   switch (file.dataset.type) {
     case "Manga":
     case "Video": {
-      localStorage.setItem("return-content", pathname);
+      saveReturnPath("open-folder", pathname);
 
       let segment = pathname.replace("content", "viewer").split("/").slice(0, 4);
       let url = `${segment.join("/")}/${folderId}`;
@@ -49,7 +59,8 @@ export const ProcessFile = (file, type) => {
       break;
     }
     default: {
-      localStorage.setItem("return-folder", pathname);
+      saveId(title, folderId);
+      saveReturnPath("to-menu", pathname);
       type = type || pathname.split("/")[1];
       navigate(`/${type}/content/${folderId}/`);
     }

@@ -1,4 +1,4 @@
-import { getFilesPerPage, ProcessFile } from "./filesUtils";
+import { getFilesPerPage, ProcessFile } from "../Pages/filesUtils";
 const UP = 38;
 const DOWN = 40;
 const LEFT = 37;
@@ -59,14 +59,24 @@ const selectItem = (index) => {
   selectElement(getElByIndex(index));
 };
 
+const StoreId = {};
+export const saveId = (title, id) => {
+  if (title && id) {
+    StoreId[title] = id;
+    localStorage.setObject("FolderId", StoreId);
+  }
+};
+
+export const getId = (title) => StoreId[title];
+
 const selectElementById = (Id, saveKey) => {
   const el = document.getElementById(Id);
   if (el) selectElement(el);
-  if (saveKey) localStorage.setItem(saveKey, Id);
+  saveId(saveKey, Id);
 };
 
 const selectByTitle = (title) => {
-  const id = localStorage.getItem(title);
+  const id = getId(title);
   const element = document.getElementById(id);
   if (element) {
     selectElement(element);

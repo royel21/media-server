@@ -6,9 +6,12 @@
   import Login from "./Login.svelte";
   import apiUtils from "./apiUtils";
   import ConfigPage from "./ConfigPage.svelte";
+  import { navigate } from "svelte-routing";
 
   let user = { username: "" };
   let error = "";
+
+  const getUrl = ({ role }) => `/${/admin/gi.test(role) ? "admin" : ""}`;
 
   onMount(async () => {
     let data = await apiUtils.get(["users"]);
@@ -22,6 +25,7 @@
       const data = await apiUtils.post("users/login", loginData);
       if (data.isAutenticated) {
         user = data;
+        navigate(getUrl(user));
       }
 
       if (data.info) {

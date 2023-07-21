@@ -1,10 +1,10 @@
 <script>
   import { afterUpdate } from "svelte";
   import { navigate } from "svelte-routing";
-  import { getFilesPerPage, ProcessFile } from "../Component/filesUtils";
+  import { getFilesPerPage, ProcessFile } from "./filesUtils";
 
   import { clamp } from "../../ShareComponent/utils";
-  import { PageConfig } from "../Stores/PageConfigStore";
+  import { ConfigStore } from "../Stores/PageConfigStore";
   import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
   import { fileKeypress, selectByTitle, selectElementById } from "../Component/fileEvents";
 
@@ -23,7 +23,7 @@
 
   const loadContent = async (pg, flt = "") => {
     if (reload) {
-      const items = $PageConfig.Home.items || getFilesPerPage(3);
+      const items = $ConfigStore.Home.items || getFilesPerPage(3);
       const data = await api.files(["recents", items, pg, flt]);
       if (data.valid) {
         pageData = data;
@@ -41,8 +41,7 @@
 
   const openFolder = ({ target }) => {
     const file = target.closest(".file");
-    localStorage.setItem(title, file.id);
-    ProcessFile(file, file.dataset.types);
+    ProcessFile(file, file.dataset.types, title);
   };
 
   const handleKeydown = (event) => fileKeypress(event, pageData.page, goToPage, title);
@@ -66,7 +65,7 @@
 
   ToggleMenu.set(false);
 
-  $: $PageConfig, loadContent(page, filter);
+  $: $ConfigStore, loadContent(page, filter);
 
   afterUpdate(() => selectByTitle(title));
 

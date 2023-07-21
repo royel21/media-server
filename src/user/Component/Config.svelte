@@ -1,6 +1,6 @@
 <script>
   import { getContext, onDestroy, onMount } from "svelte";
-  import { PageConfig, updateConfig } from "../Stores/PageConfigStore";
+  import { ConfigStore, updateConfig } from "../Stores/PageConfigStore";
   import Icons from "../../icons/Icons.svelte";
 
   const User = getContext("User");
@@ -9,7 +9,7 @@
 
   let title = document.title.split(" ")[0];
 
-  const Config = { ...$PageConfig };
+  const Config = { ...$ConfigStore };
 
   const observer = new MutationObserver(() => (title = document.title.split(" ")[0]));
 
@@ -20,6 +20,7 @@
   const save = () => {
     updateConfig(Config);
   };
+
   const hideConfig = ({ target }) => {
     if (target.closest(".scroll-container")) {
       checkRef.checked = false;
