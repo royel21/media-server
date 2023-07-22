@@ -7,9 +7,6 @@ export default (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      LastRead: {
-        type: DataTypes.DATE,
-      },
       LastPos: {
         type: DataTypes.FLOAT(8, 2).UNSIGNED,
         defaultValue: 0,

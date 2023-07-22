@@ -46,10 +46,6 @@ export default (sequelize, DataTypes, ImagesPath) => {
       CreatedAt: {
         type: DATE,
       },
-      ViewCount: {
-        type: INTEGER,
-        defaultValue: 0,
-      },
       Cover: {
         type: VIRTUAL,
         get() {
