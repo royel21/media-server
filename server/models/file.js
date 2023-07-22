@@ -21,7 +21,7 @@ export default (sequelize, DataTypes, ImagesPath) => {
       Path: {
         type: VIRTUAL,
         get() {
-          return path.join(this?.Folder.Path || "", this.Name);
+          return this.Folder ? path.join(this.Folder.Path, this.Name) : "";
         },
       },
       Exists: {
@@ -45,10 +45,6 @@ export default (sequelize, DataTypes, ImagesPath) => {
       },
       CreatedAt: {
         type: DATE,
-      },
-      ViewCount: {
-        type: INTEGER,
-        defaultValue: 0,
       },
       Cover: {
         type: VIRTUAL,

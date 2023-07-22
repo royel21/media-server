@@ -15,7 +15,7 @@ const getFiles = async ({ user, body }, res, type) => {
     order: [db.sqlze.literal("REPLACE(`Files`.`Name`, '[','0')")],
     include: {
       model: db.file,
-      attributes: ["Id", "Name", "Type", "Duration", "FolderId", "ViewCount", qryCurrentPos(Recent, "Files")],
+      attributes: ["Id", "Name", "Type", "Duration", "FolderId", qryCurrentPos(Recent, "Files")],
     },
   });
 

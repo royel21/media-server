@@ -1,11 +1,5 @@
 import db from "../models/index.js";
 
-const updateFileView = async (data) => {
-  let file = db.file.findByPk(data.id);
-  if (file) {
-    await file.update({ ViewCount: file.ViewCount + 1 });
-  }
-};
 const recentFolder = async ({ FolderId, CurrentFile }, user) => {
   try {
     let recent = await db.recentFolder.findOrCreate({
@@ -22,7 +16,7 @@ const updateFilePos = async (data, user) => {
     let recent = await db.recentFile.findOrCreate({
       where: { FileId: data.Id, RecentId: user.Recent.Id },
     });
-    await recent[0].update({ LastRead: new Date(), LastPos: data.CurrentPos || 0 });
+    await recent[0].update({ LastPos: data.CurrentPos || 0 });
   } catch (error) {
     console.error(error?.Message);
   }
@@ -49,5 +43,4 @@ export default {
   updateConfig,
   updateFilePos,
   recentFolder,
-  updateFileView,
 };
