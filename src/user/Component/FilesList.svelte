@@ -37,6 +37,7 @@
   let favClicked = null;
 
   const loadContent = async (pg = 1, flt = "") => {
+    console.log(type, id);
     const { items, sort } = $ConfigStore[title];
     const itemsPerPage = items || getFilesPerPage(3);
     const apiPath = title === "Content" ? `folder-content/${id}` : type;

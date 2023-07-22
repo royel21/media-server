@@ -13,12 +13,18 @@ export default (sequelize, { STRING, INTEGER, DATE }) => {
       LastRead: {
         type: DATE,
       },
+      FolderId: {
+        type: STRING(10),
+      },
+      UserId: {
+        type: STRING(10),
+      },
     },
     {
       timestamps: false,
       uniqueKeys: {
         RecentFolder_unique: {
-          fields: ["RecentId", "FolderId"],
+          fields: ["UserId", "FolderId"],
         },
       },
       hooks: {

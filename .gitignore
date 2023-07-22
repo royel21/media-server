@@ -13,6 +13,7 @@ test.js
 *.log
 *.lock
 *.env
+*.sqlite
 *.db-journal
 ./rollup.config.js
 ./images
@@ -22,7 +23,6 @@ notes.json
 notes-adult.json
 zserver/app.js
 db.json
-mediaserver.sqlite
 datas.json
 build/
 server/public/*

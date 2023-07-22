@@ -51,7 +51,7 @@ routes.post("/remove", (req, res) => {
 routes.post("/content", (req, res) => {
   let { Id, Path } = req.body;
   if (existsSync(Path)) {
-    let dirs = ListFiles(Path, { directory: true });
+    let dirs = ListFiles(Path, { directory: true, hidden: true });
     let tdata = [];
     for (let d of dirs) {
       tdata.push({

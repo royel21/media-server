@@ -3,7 +3,6 @@ import user from "./user.js";
 import file from "./file.js";
 import folder from "./folder.js";
 import favorite from "./favorites.js";
-import recent from "./recents.js";
 import userConfig from "./userconfig.js";
 import directory from "./directories.js";
 import favoriteFolder from "./favorite-folder.js";
@@ -31,7 +30,6 @@ const db = {
   file: file(sequelize, DataTypes, IMAGES),
   folder: folder(sequelize, DataTypes, IMAGES),
   favorite: favorite(sequelize, DataTypes),
-  recent: recent(sequelize, DataTypes),
   userConfig: userConfig(sequelize, DataTypes),
   directory: directory(sequelize, DataTypes),
   favoriteFolder: favoriteFolder(sequelize, DataTypes),
@@ -49,11 +47,8 @@ db.user.hasMany(db.recentFolder, { onDelete: "cascade" });
 db.user.hasMany(db.recentFile, { onDelete: "cascade" });
 
 db.folder.hasOne(db.recentFolder);
-
-db.recent.belongsToMany(db.file, { through: { model: db.recentFile } });
-db.file.belongsToMany(db.recent, {
-  through: { model: db.recentFile, onDelete: "cascade" },
-});
+db.recentFolder.belongsTo(db.folder);
+db.recentFolder.hasMany(db.file, { foreignKey: "CurrentFile", onDelete: "SET NULL", onUpdate: "cascade" });
 
 db.folder.belongsTo(db.directory, { onDelete: "cascade" });
 db.directory.hasMany(db.folder);
@@ -62,7 +57,6 @@ db.file.belongsTo(db.folder, { onDelete: "cascade" });
 db.folder.hasMany(db.file);
 
 db.user.hasMany(db.favorite, { onDelete: "cascade" });
-db.user.hasOne(db.recent, { onDelete: "cascade" });
 db.user.hasOne(db.userConfig, { onDelete: "cascade" });
 
 db.init = async (force) => {
@@ -82,9 +76,6 @@ db.init = async (force) => {
         Name: "Administrator",
         Password: "Admin",
         Role: "Administrator",
-        Recent: {
-          Name: "Administrator",
-        },
         UserConfig: {
           Name: "Administrator",
           Config: JSON.stringify({
@@ -107,7 +98,7 @@ db.init = async (force) => {
         },
       },
       {
-        include: [db.recent, db.favorite, db.userConfig],
+        include: [db.favorite, db.userConfig],
         encript: true,
       }
     );

@@ -16,7 +16,7 @@ export default (server, sessionMeddle) => {
     if (isAuth) {
       const user = await db.user.findOne({
         where: { Name: isAuth.user },
-        include: [{ model: db.userConfig }, { model: db.recent }],
+        include: [{ model: db.userConfig }],
       });
 
       if (!user) return;

@@ -14,12 +14,18 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.FLOAT(8, 2).UNSIGNED,
         defaultValue: 0,
       },
+      FileId: {
+        type: DataTypes.STRING(10),
+      },
+      UserId: {
+        type: DataTypes.STRING(10),
+      },
     },
     {
       timestamps: false,
       uniqueKeys: {
         RecentFile_unique: {
-          fields: ["RecentId", "FileId"],
+          fields: ["UserId", "FileId"],
         },
       },
       hooks: {

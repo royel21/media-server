@@ -65,7 +65,7 @@ const test = async () => {
   // }
   // fs.writeJsonSync(`backup/mediaserverdb.json`, datas);
   const user = await db.user.findOne({ where: { Name: "Royel" } });
-  console.log(user);
+  console.log(await user.countRecentFolders());
   process.exit();
 };
 

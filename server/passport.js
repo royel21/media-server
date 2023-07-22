@@ -9,7 +9,7 @@ export default () => {
       where: {
         Name: username,
       },
-      include: [{ model: db.userConfig }, { model: db.recent }, { model: db.favorite, attributes: ["Id", "Name"] }],
+      include: [{ model: db.userConfig }, { model: db.favorite, attributes: ["Id", "Name"] }],
     });
 
     if (user) {
@@ -30,7 +30,7 @@ export default () => {
         where: {
           Name: username,
         },
-        include: [{ model: db.userConfig }, { model: db.recent }, { model: db.favorite, attributes: ["Id", "Name"] }],
+        include: [{ model: db.userConfig }, { model: db.favorite, attributes: ["Id", "Name"] }],
       });
       const isValid = user?.validPassword(password);
       if (isValid) {

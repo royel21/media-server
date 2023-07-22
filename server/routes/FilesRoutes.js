@@ -7,38 +7,6 @@ import { clamp, getFilter } from "./utils.js";
 
 const routes = Router();
 
-const { literal } = db.sqlze;
-
-routes.get("/folder-content/info/:id", async (req, res) => {
-  const { id } = req.params;
-  const currentFile = `(Select currentFile from RecentFolders where FolderId = \`Folders\`.\`Id\` AND UserId = '${req.user.Id}')`;
-
-  const query = {
-    attributes: [
-      "Id",
-      "Name",
-      "Description",
-      "Status",
-      "Genres",
-      "AltName",
-      "Server",
-      [literal(currentFile), "currentFile"],
-    ],
-    where: { Id: id },
-  };
-
-  let folder = { dataValues: {} };
-
-  try {
-    folder = await db.folder.findOne(query);
-    folder.dataValues.isValid = true;
-  } catch (error) {
-    console.log(error);
-  }
-
-  res.send({ ...folder.dataValues });
-});
-
 routes.get("/folder-content/:id/:order/:page?/:items?/:search?", async (req, res) => {
   getFiles(req.user, req.params, db.folder).then((data) => res.send(data));
 });
@@ -75,13 +43,13 @@ routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
     },
   };
 
-  const count = await db.recentFolder.count(query);
+  const count = await req.user.countRecentFolders();
 
   const totalPages = Math.ceil(count / limit);
 
   p = clamp(p, 1, totalPages);
 
-  const recents = await db.recentFolder.findAll({
+  const recents = await req.user.getRecentFolders({
     ...query,
     offset,
     limit,
