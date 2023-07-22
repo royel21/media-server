@@ -55,15 +55,18 @@ const saveDb = async () => {
   console.log("save", i, `backup/${process.env.DB}.json`);
 };
 
-const test = () => {
-  const datas = fs.readJsonSync(`backup/mediaserverdb.json`);
+const test = async () => {
+  // const datas = fs.readJsonSync(`backup/mediaserverdb.json`);
 
-  for (const d of datas) {
-    const genres = d.Genres.split(",").map((d) => d.trim());
-    genres.sort();
-    d.Genres = genres.join(", ");
-  }
-  fs.writeJsonSync(`backup/mediaserverdb.json`, datas);
+  // for (const d of datas) {
+  //   const genres = d.Genres.split(",").map((d) => d.trim());
+  //   genres.sort();
+  //   d.Genres = genres.join(", ");
+  // }
+  // fs.writeJsonSync(`backup/mediaserverdb.json`, datas);
+  const user = await db.user.findOne({ where: { Name: "Royel" } });
+  console.log(user);
+  process.exit();
 };
 
 const works = {

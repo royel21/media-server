@@ -8,14 +8,12 @@ import { qryCurrentPos } from "./query-helper.js";
 const routes = Router();
 
 const getFiles = async ({ user, body }, res, type) => {
-  const { Recent, UserConfig } = user;
-
   let table = await db[type].findOne({
     where: { Id: body.id },
     order: [db.sqlze.literal("REPLACE(`Files`.`Name`, '[','0')")],
     include: {
       model: db.file,
-      attributes: ["Id", "Name", "Type", "Duration", "FolderId", "ViewCount", qryCurrentPos(Recent, "Files")],
+      attributes: ["Id", "Name", "Type", "Duration", "FolderId", "ViewCount", qryCurrentPos(user, "Files")],
     },
   });
 
@@ -23,7 +21,6 @@ const getFiles = async ({ user, body }, res, type) => {
   res.send({
     Name: folder.Name,
     files: table.Files.map((d) => ({ ...d.dataValues })),
-    config: UserConfig.dataValues.Config,
   });
 };
 

@@ -4,8 +4,8 @@ import { clamp, getFilter } from "./utils.js";
 
 const { literal } = db.sqlze;
 
-export const qryCurrentPos = (Recent, table) => [
-  literal(`IFNULL((Select LastPos from RecentFiles where FileId = ${table}.Id and RecentId = '${Recent.Id}'), 0)`),
+export const qryCurrentPos = (user, table) => [
+  literal(`IFNULL((Select LastPos from RecentFiles where FileId = ${table}.Id and UserId = '${user.Id}'), 0)`),
   "CurrentPos",
 ];
 
@@ -22,7 +22,7 @@ export const getOrderBy = (orderby, table = "") => {
 };
 
 const getFolder = async (Id, user) => {
-  const currentFile = `(Select currentFile from RecentFolders where FolderId = \`Folders\`.\`Id\` AND RecentId = '${user?.Recent.Id}')`;
+  const currentFile = `(Select currentFile from RecentFolders where FolderId = \`Folders\`.\`Id\` AND UserId = '${user.Id}')`;
 
   const query = {
     attributes: [
@@ -58,7 +58,7 @@ export const getFiles = async (user, data) => {
   }
 
   let query = {
-    attributes: ["Id", "Name", "Type", "Duration", "CreatedAt", qryCurrentPos(user.Recent, "File")],
+    attributes: ["Id", "Name", "Type", "Duration", "CreatedAt", qryCurrentPos(user, "File")],
     order: getOrderBy(data.order, "File"),
     where: {
       [db.Op.or]: searchs,

@@ -9,7 +9,7 @@ const updateFileView = async (data) => {
 const recentFolder = async ({ FolderId, CurrentFile }, user) => {
   try {
     let recent = await db.recentFolder.findOrCreate({
-      where: { FolderId, RecentId: user.Recent.Id },
+      where: { FolderId, UserId: user.Id },
     });
     await recent[0].update({ LastRead: new Date(), CurrentFile: CurrentFile });
   } catch (error) {
@@ -20,7 +20,7 @@ const recentFolder = async ({ FolderId, CurrentFile }, user) => {
 const updateFilePos = async (data, user) => {
   try {
     let recent = await db.recentFile.findOrCreate({
-      where: { FileId: data.Id, RecentId: user.Recent.Id },
+      where: { FileId: data.Id, UserId: user.Id },
     });
     await recent[0].update({ LastRead: new Date(), LastPos: data.CurrentPos || 0 });
   } catch (error) {

@@ -45,13 +45,10 @@ db.folder.belongsToMany(db.favorite, {
   through: { model: db.favoriteFolder, onDelete: "cascade" },
 });
 
-db.recent.belongsToMany(db.folder, { through: { model: db.recentFolder } });
+db.user.hasMany(db.recentFolder, { onDelete: "cascade" });
+db.user.hasMany(db.recentFile, { onDelete: "cascade" });
 
-db.folder.belongsToMany(db.recent, {
-  through: { model: db.recentFolder, onDelete: "cascade" },
-});
-
-db.recentFolder.belongsTo(db.folder);
+db.folder.hasOne(db.recentFolder);
 
 db.recent.belongsToMany(db.file, { through: { model: db.recentFile } });
 db.file.belongsToMany(db.recent, {

@@ -11,7 +11,7 @@ const { literal } = db.sqlze;
 
 routes.get("/folder-content/info/:id", async (req, res) => {
   const { id } = req.params;
-  const currentFile = `(Select currentFile from RecentFolders where FolderId = \`Folders\`.\`Id\` AND RecentId = '${req.user?.Recent.Id}')`;
+  const currentFile = `(Select currentFile from RecentFolders where FolderId = \`Folders\`.\`Id\` AND UserId = '${req.user.Id}')`;
 
   const query = {
     attributes: [
@@ -63,7 +63,7 @@ routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
 
   const query = {
     order: [["LastRead", "DESC"]],
-    where: { RecentId: req.user?.Recent.Id },
+    where: { UserId: req.user.Id },
     include: {
       model: db.folder,
       attributes: ["Id", "Name", "FileCount", "FilesType", "Type", "Status", "Genres"],

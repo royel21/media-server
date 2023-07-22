@@ -36,7 +36,6 @@ const createUser = async (req) => {
     Id: null,
     CreatedAt: new Date(),
     Favorites: [{ Name: "Default" }],
-    Recent: { Name },
     UserConfig: { Name, Config },
   };
 

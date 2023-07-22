@@ -66,9 +66,9 @@ const diskLoader = () => {
 };
 
 const resetRecent = async (data, user) => {
-  if (user.Recent) {
+  if (user) {
     const files = await db.file.findAll({ where: { FolderId: data.Id } });
-    await db.recentFile.update({ LastPos: 0 }, { where: { FileId: files.map((f) => f.Id), RecentId: user.Recent.Id } });
+    await db.recentFile.update({ LastPos: 0 }, { where: { FileId: files.map((f) => f.Id), UserId: user.Id } });
   }
   io.sockets.emit("reload", { Id: data.Id, user: user.Id });
 };

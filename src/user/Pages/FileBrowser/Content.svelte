@@ -92,7 +92,7 @@
         <span class="img-d"><img src={encodeURI(`/Folder/${folderinfo?.Name}.jpg`)} alt="Cover Not Found" /></span>
       </div>
       <div class="manga-name">Name: <span>{folderinfo?.Name || "Name: Loading Info"}</span></div>
-      <div class="manga-name alt">Alternative: <span>{folderinfo?.AltName || "Name: Loading Info"}</span></div>
+      <div class="manga-name">Alternative: <span>{folderinfo?.AltName || "Name: Loading Info"}</span></div>
       <div class="genres-list">
         <span class="gen-tag">Genres: </span>
         {#each folderinfo?.Genres?.split(", ") as genre}
@@ -202,11 +202,19 @@
     height: 30px;
     width: 38px;
   }
+  #info {
+    z-index: 999;
+    padding: 4px;
+    text-align: center;
+    padding-top: 5px;
+    height: calc(100% - 50px);
+  }
 
   #info-content {
     position: relative;
     display: flex;
     flex-direction: column;
+    height: 100%;
     max-width: 700px;
     margin: auto;
     background-color: #14243d;
@@ -214,13 +222,8 @@
     border: 1px solid white;
   }
   #info-content > div:not(:last-child) {
-    border-bottom: 1px solid;
-  }
-  #info {
-    z-index: 999;
     padding: 4px;
-    text-align: center;
-    padding-top: 5px;
+    border-bottom: 1px solid;
   }
   .img-d {
     display: flex;
@@ -264,6 +267,9 @@
   }
   .m-desc {
     text-align: start;
+    flex-grow: 1;
+    height: calc(100% - 456px);
+    overflow-y: auto;
   }
   #name-gen-tag {
     display: flex;
@@ -282,7 +288,6 @@
   }
   .m-desc .desc-text {
     display: inline-block;
-    height: 100%;
     overflow: hidden;
     text-align: start;
     padding: 0 5px;
@@ -297,16 +302,10 @@
     height: 54px;
     overflow: hidden;
   }
-  .alt {
-    height: 80px;
-  }
 
   .genres-list {
     text-align: start;
-    padding: 0 5px;
-    min-height: 20%;
     font-size: 14px;
-    height: 51px;
   }
   .gen-tag {
     font-size: 1rem;
