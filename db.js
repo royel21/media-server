@@ -1,6 +1,7 @@
 import fs from "fs-extra";
 import db from "./server/models/index.js";
 import { compare } from "./src/stringUtils.js";
+import { literal } from "sequelize";
 
 const capitalize = (val) => {
   let words = val.split(" ");
@@ -36,6 +37,7 @@ const saveDb = async () => {
   const folders = await db.folder.findAll({
     order: ["Name"],
   });
+
   for (let folder of folders) {
     if (!datas.find((f) => compare(f, folder))) {
       datas.push({
@@ -51,27 +53,149 @@ const saveDb = async () => {
       i++;
     }
   }
+
   fs.writeJSONSync(`backup/${process.env.DB}.json`, datas);
   console.log("save", i, `backup/${process.env.DB}.json`);
 };
 
-const test = async () => {
-  // const datas = fs.readJsonSync(`backup/mediaserverdb.json`);
+const test = () => {
+  const datas = fs.readJsonSync(`backup/mediaserverdb.json`);
 
-  // for (const d of datas) {
-  //   const genres = d.Genres.split(",").map((d) => d.trim());
-  //   genres.sort();
-  //   d.Genres = genres.join(", ");
+  for (const d of datas) {
+    const genres = d.Genres.split(",").map((d) => d.trim());
+    genres.sort();
+    d.Genres = genres.join(", ");
+  }
+  fs.writeJsonSync(`backup/mediaserverdb.json`, datas);
+};
+
+const mapData = (rf) => {
+  delete rf.dataValues.Id;
+  return rf.dataValues;
+};
+
+const backup = async () => {
+  console.time("Backup");
+  const users = await db.user.findAll({
+    include: [{ model: db.recent }, { model: db.favorite, include: { model: db.folder, attributes: ["Path"] } }],
+  });
+  const datas = { users: [], directory: [] };
+  for (const u of users) {
+    const RecentFolders = (
+      await db.recentFolder.findAll({
+        attributes: [
+          "CurrentFile",
+          "LastRead",
+          [literal(`(Select Path from Folders where Id = RecentFolders.FolderId)`), "Folder"],
+        ],
+        where: { RecentId: u.Recent.Id },
+      })
+    ).map(mapData);
+
+    const RecentFiles = (
+      await db.recentFile.findAll({
+        attributes: ["LastPos", [literal(`(Select Name from Files where Id = RecentFiles.FileId)`), "File"]],
+        where: { RecentId: u.Recent.Id },
+      })
+    ).map(mapData);
+
+    const Favorites = [];
+
+    for (let fav of u.Favorites) {
+      Favorites.push({ Name: fav.Name, Folder: fav.Folders.map((f) => f.Path) });
+    }
+
+    delete u.dataValues.Id;
+    delete u.dataValues.Recent;
+    delete u.dataValues.Favorites;
+    const user = { ...u.dataValues, RecentFiles, RecentFolders, Favorites };
+
+    datas.users.push(user);
+  }
+
+  datas.directory = (
+    await db.directory.findAll({
+      include: {
+        model: db.folder,
+        order: ["Name"],
+        include: {
+          model: db.file,
+        },
+      },
+    })
+  ).map((dir) => {
+    delete dir.dataValues.Id;
+    dir.IsLoading = false;
+
+    dir.dataValues.Folders = dir.dataValues.Folders.map((folder) => {
+      delete folder.dataValues.Id;
+      delete folder.dataValues.DirectoryId;
+
+      folder.dataValues.Files = folder.dataValues.Files.map((d) => {
+        delete d.dataValues.Id;
+        delete d.dataValues.FolderId;
+        return d.dataValues;
+      });
+
+      return folder.dataValues;
+    });
+
+    return dir.dataValues;
+  });
+
+  fs.writeJSONSync("./backup/db.json", datas);
+  console.timeEnd("Backup");
+  process.exit();
+};
+
+const restore = async () => {
+  await db.init(true);
+
+  console.time("restore");
+  const datas = fs.readJSONSync("./backup/db.json");
+
+  for (const dir of datas.directory) {
+    try {
+      const directory = await db.directory.create(dir);
+
+      await db.folder.bulkCreate(
+        dir.Folders.map((f) => {
+          f.DirectoryId = directory.Id;
+          return f;
+        }),
+        { include: { model: db.file } }
+      );
+    } catch (error) {
+      console.log(dir.Name, error);
+    }
+  }
+
+  // for (const user of datas.users) {
+  //   let found = await db.user.findOne({ where: { Name: user.Name } });
+  //   if (found?.Name === "Administrator") continue;
+  //   await found?.destroy();
+
+  //   const nuser = await db.user.create(user, { include: { model: db.favorite } });
+
+  //   let folders = await db.folder.findAll({ where: { Path: user.Favorites.map((fav) => fav.Folder) } });
+
+  //   await nuser.addFavorites(folders);
+
+  //   //   folders = await db.folder.findAll({ where: { Path: user.RecentFolders.map((rf) => rf.Folder) } });
+  //   //  user.RecentFolders.forEach(rf => {
+  //   //   rf.UserId = user.Id;
+  //   //   rf.FolderId = folder.find(f=> f.Path === rf.Folder).Id;
+  //   //  })
   // }
-  // fs.writeJsonSync(`backup/mediaserverdb.json`, datas);
-  const user = await db.user.findOne({ where: { Name: "Royel" } });
-  console.log(await user.countRecentFolders());
+  console.timeEnd("restore");
   process.exit();
 };
 
 const works = {
   updateDb,
   saveDb,
+  backup,
+  restore,
   test,
 };
 

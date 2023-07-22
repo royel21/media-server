@@ -70,7 +70,7 @@ export default (sequelize, DataTypes, ImagesPath) => {
         unique: true,
       },
       Description: {
-        type: TEXT + "COLLATE 'utf8mb4_bin'",
+        type: TEXT + " COLLATE 'utf8mb4_bin'",
       },
       Status: {
         type: BOOLEAN,
