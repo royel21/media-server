@@ -16,7 +16,6 @@
 
   const restoreBackup = ({ target }) => {
     const bckp = target.closest("tr").id;
-    console.log(bckp);
   };
   const removeBackup = async ({ target }) => {
     const backup = target.closest("tr").id;
@@ -28,7 +27,7 @@
 
   const reload = async () => {
     const result = await apiUtils.get(["admin", "directories", "backups"]);
-    backups = result.reverse();
+    backups = result.sort().reverse();
   };
 
   onMount(async () => {

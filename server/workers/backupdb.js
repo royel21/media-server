@@ -2,7 +2,7 @@ import db from "../models/index.js";
 import { literal } from "sequelize";
 import fs from "fs-extra";
 
-const { BACKUPDIR } = process.env;
+const { BACKUPDIR, DB } = process.env;
 
 const sendMessage = (text, event = "info") => {
   if (process.send) {
@@ -83,30 +83,28 @@ const getAllDirectories = async () => {
 };
 
 export const backupDb = async () => {
+  sendMessage(`Bakup ---${DB}---`);
   console.time("Backup");
   if (BACKUPDIR) {
     try {
-      sendMessage("Getting Users From DB");
       const users = await db.user.findAll({
         include: [{ model: db.favorite, include: { model: db.folder, attributes: ["Path"] } }],
       });
       const datas = { users: [], directory: [] };
 
       for (const u of users) {
-        sendMessage("Getting RecentFolders: " + u.Name);
+        sendMessage(`**********User: ${u.Name}**************`);
         const RecentFolders = await getRecentFolders(u.Id);
-        sendMessage(RecentFolders.length);
-        sendMessage("Getting RecentFiles: " + u.Name);
+        sendMessage("RecentFolders: " + RecentFolders.length);
         const RecentFiles = await getRecentFiles(u.Id);
-        sendMessage(RecentFiles.length);
+        sendMessage("RecentFiles: " + RecentFiles.length);
 
         const Favorites = [];
 
-        sendMessage("Getting Favorites: " + u.Name);
         for (let fav of u.Favorites) {
           Favorites.push({ Name: fav.Name, Folders: fav.Folders.map((f) => f.Path) });
         }
-        sendMessage(Favorites.length);
+        sendMessage("Favorites: " + Favorites.length);
 
         delete u.dataValues.Id;
         delete u.dataValues.Recent;
@@ -120,7 +118,10 @@ export const backupDb = async () => {
       datas.directory = await getAllDirectories();
 
       fs.mkdirsSync(BACKUPDIR);
-      const savePath = `${BACKUPDIR}/db-${new Date().toISOString().replaceAll(":", "").split(".")[0]}.json`;
+      const savePath = `${BACKUPDIR}/${DB} - ${new Date()
+        .toLocaleString()
+        .replace(/\//g, "-")
+        .replace(/:/g, "'")}.json`;
       fs.writeJSONSync(savePath, datas);
       sendMessage("Save to " + savePath);
     } catch (error) {

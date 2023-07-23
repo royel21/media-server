@@ -1,11 +1,13 @@
 <script>
-  import { getContext, onDestroy, afterUpdate } from "svelte";
+  import { getContext, onDestroy, afterUpdate, onMount } from "svelte";
   import { ConsoleStore, updateConsole } from "../Store/ConsoleStore";
   import Icons from "../../icons/Icons.svelte";
 
   let ref;
   let items = [];
   let toggle = true;
+  let canShow = false;
+  let update = false;
   const socket = getContext("socket");
 
   const onClear = () => ConsoleStore.set([]);
@@ -27,9 +29,25 @@
   afterUpdate(() => {
     ref?.querySelector("div:last-child")?.scrollIntoView();
   });
+
+  const onNavigate = ({ navigationType, currentTarget: { currentEntry } }) => {
+    if (navigationType === "push") {
+      update = currentEntry.url;
+    }
+  };
+
+  onMount(() => {
+    navigation.addEventListener("navigate", onNavigate);
+    return () => {
+      navigation.removeEventListener("navigate", onNavigate);
+    };
+  });
+  $: if (update) {
+    canShow = /content-manager|tools/.test(location.pathname);
+  }
 </script>
 
-{#if items.length && /manager|tools/.test(location.pathname)}
+{#if items.length && canShow}
   <label on:click={toggleConsole} class:toggle>
     <input type="checkbox" bind:checked={toggle} /><Icons name="eye" box="0 0 564 512" />
   </label>
@@ -44,6 +62,16 @@
 {/if}
 
 <style>
+  .r-console {
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    bottom: 9px;
+    height: 180px;
+    padding: 2px;
+    background-color: white;
+    border-radius: 0.25rem;
+  }
   label {
     position: absolute;
     background: #0847ef;
@@ -68,21 +96,13 @@
   .r-console:empty {
     display: none;
   }
-  .r-console {
-    position: fixed;
-    left: 10px;
-    right: 10px;
-    bottom: 10px;
-    height: 180px;
-  }
   .text-list {
     height: 100%;
     background-color: white;
-    border-radius: 0.25rem;
     color: black;
     font-size: 16px;
     font-weight: 600;
-    padding: 5px;
+    padding: 3px;
     overflow-x: auto;
   }
   .text-list > div {
