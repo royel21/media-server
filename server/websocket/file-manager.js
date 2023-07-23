@@ -61,7 +61,7 @@ const startWork = async (model, isFolder, user) => {
   if (!worker) {
     worker = fork(appPath + "/workers/BackgroundScan.js");
 
-    io.sockets.emit("info", "Scan Starting Please Wait");
+    io.sockets.emit("info", { text: "Scan Starting Please Wait" });
 
     worker.on("message", (data) => {
       if (data.event === "scan-finish") {
@@ -186,7 +186,7 @@ const scanDir = async ({ Id, Path, Type, isFolder, IsAdult }, user) => {
     }
   }
 
-  io.sockets.emit("scan-info", msg);
+  io.sockets.emit("info", { text: msg });
 };
 /****************** Rename File *******************/
 const renameFile = async ({ Id, Name }) => {
