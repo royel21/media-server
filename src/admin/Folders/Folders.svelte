@@ -5,6 +5,7 @@
   export let page;
   export let filter;
   export let folderId;
+  export let dirid;
   let shwFiles = true;
 
   const folderid = (event) => {
@@ -18,7 +19,7 @@
 
 <div class="card bg-dark admin-manager" class:has-files={shwFiles}>
   <div class="rows" class:has-files={shwFiles}>
-    <FolderList on:folderid={folderid} page={parseInt(page) || 1} {folderId} {filter} {showFiles} />
+    <FolderList on:folderid={folderid} page={parseInt(page) || 1} {dirid} {folderId} {filter} {showFiles} />
     {#if shwFiles}<FilesList {folderId} /> {/if}
   </div>
 </div>

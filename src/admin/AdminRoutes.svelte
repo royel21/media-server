@@ -8,6 +8,8 @@
   import Files from "./FilesManager/Files.svelte";
   import Redirect from "./Component/Redirect.svelte";
   import Icons from "../icons/Icons.svelte";
+  import Tools from "./Tools/Tools.svelte";
+  import RConsole from "./Component/RConsole.svelte";
 
   let logout = getContext("logout");
   let user = getContext("User");
@@ -22,6 +24,12 @@
       class: "sitemap",
       color: "#80bdff",
     },
+    {
+      title: "Tools",
+      path: "/admin/tools",
+      class: "cog",
+      color: "grey",
+    },
   ];
 
   document.title = "Content Manager";
@@ -35,12 +43,14 @@
     </span>
   </Navbar>
   <div class="content">
-    <Route path="/admin/folders/:page/:filter" component={Folders} />
+    <Route path="/admin/folders/:dirid/:page/:filter" component={Folders} />
     <Route path="/admin/content-manager/:tab" component={DiskManager} />
     <Route path="/admin/files/:page/:filter" component={Files} />
+    <Route path="/admin/tools" component={Tools} />
     <Route path="/admin/" component={User} />
     <Route path="/"><Redirect to="/admin/" /></Route>
   </div>
+  <RConsole />
 </Router>
 
 <style>

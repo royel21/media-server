@@ -52,6 +52,7 @@ li {
   z-index: 99;
   padding: 4px 6px;
   cursor: pointer;
+  text-align: center;
 }
 
 #menu .nav-item {
@@ -338,9 +339,6 @@ svg path {
 }
 /****************************************************************/
 @media screen and (max-width: 500px) {
-  #menu a {
-    text-align: center;
-  }
   ::-webkit-scrollbar {
     width: 0;
   }

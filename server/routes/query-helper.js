@@ -77,30 +77,38 @@ export const getFiles = async (user, data) => {
 
     if (folder) {
       const count = await db.file.count(query);
+      if (count) {
+        const totalPages = Math.ceil(count / data.items);
+        let page = clamp(data.page, 1, totalPages);
 
-      const totalPages = Math.ceil(count / data.items);
-      let page = clamp(data.page, 1, totalPages);
+        query.offset = (page - 1) * +data.items;
+        query.limit = +data.items;
 
-      query.offset = (page - 1) * +data.items;
-      query.limit = +data.items;
+        const rows = await db.file.findAll(query);
 
-      const rows = await db.file.findAll(query);
-
-      return {
-        totalFiles: count,
-        files: rows.map((d) => ({ ...d.dataValues })),
-        page,
-        totalPages,
-        valid: true,
-        folder,
-      };
+        return {
+          totalFiles: count,
+          files: rows.map((d) => ({ ...d.dataValues })),
+          page,
+          totalPages,
+          valid: true,
+          folder,
+        };
+      }
     } else {
       return { valid: false, msg: "Not Found Or Not authorized" };
     }
   } catch (error) {
-    console.log(error);
-    return { valid: false };
+    console.log(error.toString());
   }
+  return { valid: false };
+};
+
+const mapFiles = ({ dataValues, Favorites }) => {
+  const isFav = Favorites.map((fv) => fv.Id);
+  delete dataValues.Genres;
+  delete dataValues.Favorites;
+  return { ...dataValues, isFav };
 };
 
 export const getFolders = async (req, res) => {
@@ -133,28 +141,22 @@ export const getFolders = async (req, res) => {
 
   try {
     result.count = await db.folder.count(query);
+    if (result.count) {
+      const totalPages = Math.ceil(result.count / limit);
 
-    const totalPages = Math.ceil(result.count / limit);
+      if (p > totalPages) p = totalPages;
 
-    if (p > totalPages) p = totalPages;
-
-    result.rows = await db.folder.findAll({
-      ...query,
-      include: { model: db.favorite, attributes: ["Id"], where: { UserId: req.user.Id }, required: false },
-      order: getOrderBy(order, "Folders"),
-      offset: (p - 1) * limit,
-      limit,
-    });
+      result.rows = await db.folder.findAll({
+        ...query,
+        include: { model: db.favorite, attributes: ["Id"], where: { UserId: req.user.Id }, required: false },
+        order: getOrderBy(order, "Folders"),
+        offset: (p - 1) * limit,
+        limit,
+      });
+    }
   } catch (error) {
-    console.log(error);
+    console.log(error.toString());
   }
-
-  const mapFiles = ({ dataValues, Favorites }) => {
-    const isFav = Favorites.map((fv) => fv.Id);
-    delete dataValues.Genres;
-    delete dataValues.Favorites;
-    return { ...dataValues, isFav };
-  };
 
   return res.json({
     files: result.rows.map(mapFiles),

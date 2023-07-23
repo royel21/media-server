@@ -14,11 +14,13 @@
 
   export let page = 1;
   export let filter = "";
+  export let dirid;
   export let folderId;
   export let scanning = [];
   export let showFiles;
+
   let dirs = [];
-  let currentDir = "";
+  let currentDir = dirid || "all";
 
   let totalPages = 1;
   let totalItems = 0;
@@ -51,7 +53,7 @@
       totalItems = data.totalItems;
       page = pg;
       dispatch("folderid", folderId);
-      navigate(`/admin/folders/${pg}/${flt || ""}`);
+      navigate(`/admin/folders/${currentDir}/${pg}/${flt || ""}`);
     }
   };
 
@@ -149,7 +151,11 @@
     scanning = scanning.filter((f) => f != data.Id);
   };
 
-  $: if (currentDir) loadFolders(1, currentDir);
+  const changeDir = ({ target: { value } }) => {
+    currentDir = value;
+    filter = "";
+    loadFolders(1, value);
+  };
 
   const socketEvents = [
     { name: "folder-renamed", handler: onFolderRename },
@@ -211,8 +217,8 @@
   </div>
   <span class="dir-list" slot="bottom-ctr">
     <span>Dirs: </span>
-    <select class="form-control" bind:value={currentDir}>
-      <option value={""}>All</option>
+    <select class="form-control" on:change={changeDir} value={currentDir}>
+      <option value="all">All</option>
       {#each dirs as { Id, FullPath }}
         <option value={Id}>{FullPath}</option>
       {/each}</select

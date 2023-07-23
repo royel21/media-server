@@ -37,12 +37,11 @@
   let favClicked = null;
 
   const loadContent = async (pg = 1, flt = "") => {
-    console.log(type, id);
     const { items, sort } = $ConfigStore[title];
     const itemsPerPage = items || getFilesPerPage(3);
     const apiPath = title === "Content" ? `folder-content/${id}` : type;
 
-    let url = `/api/files/${apiPath}/${sort}/${pg}/${itemsPerPage}/${flt?.replace("%", "") || ""}`;
+    let url = `/api/files/${apiPath}/${sort}/${pg}/${itemsPerPage}/${flt || ""}`;
 
     const data = await getItemsList(url);
 
@@ -71,6 +70,7 @@
   };
 
   const fileFilter = ({ detail }) => {
+    console.log("filter", detail);
     navigate(`/${type}/${1}/${detail || ""}`);
     loadContent(1, detail);
   };

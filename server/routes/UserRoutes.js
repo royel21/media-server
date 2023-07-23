@@ -11,7 +11,6 @@ const sendUser = (res, user = { UserConfig: { dataValues: {} } }) => {
     username: user.Name || "",
     isAutenticated: user !== undefined,
     favorites: user.Favorites || [],
-    Config: JSON.parse(user.UserConfig.dataValues.Config),
   });
 };
 
@@ -37,8 +36,7 @@ routes.get("/logout", (req, res) => {
 
 routes.get("/userconfig", (req, res) => {
   if (!req.user) return res.send({});
-  let config = req.user.UserConfig.Config;
-  return res.send(JSON.parse(config));
+  return res.send("no found");
 });
 
 routes.get("/", (req, res) => {

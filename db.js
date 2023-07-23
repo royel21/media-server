@@ -1,4 +1,5 @@
 import fs from "fs-extra";
+import path from "path";
 import db from "./server/models/index.js";
 import { compare } from "./src/stringUtils.js";
 import { literal } from "sequelize";
@@ -58,17 +59,6 @@ const saveDb = async () => {
   console.log("save", i, `backup/${process.env.DB}.json`);
 };
 
-const test = () => {
-  const datas = fs.readJsonSync(`backup/mediaserverdb.json`);
-
-  for (const d of datas) {
-    const genres = d.Genres.split(",").map((d) => d.trim());
-    genres.sort();
-    d.Genres = genres.join(", ");
-  }
-  fs.writeJsonSync(`backup/mediaserverdb.json`, datas);
-};
-
 const mapData = (rf) => {
   delete rf.dataValues.Id;
   return rf.dataValues;
@@ -77,27 +67,32 @@ const mapData = (rf) => {
 const backup = async () => {
   console.time("Backup");
   const users = await db.user.findAll({
-    include: [{ model: db.recent }, { model: db.favorite, include: { model: db.folder, attributes: ["Path"] } }],
+    include: [{ model: db.favorite, include: { model: db.folder, attributes: ["Path"] } }],
   });
   const datas = { users: [], directory: [] };
   for (const u of users) {
     const RecentFolders = (
       await db.recentFolder.findAll({
         attributes: [
-          "CurrentFile",
           "LastRead",
-          [literal(`(Select Path from Folders where Id = RecentFolders.FolderId)`), "Folder"],
+          [
+            literal(
+              `(Select Name from Files where Id = RecentFolders.CurrentFile AND FolderId=RecentFolders.FolderId)`
+            ),
+            "File",
+          ],
+          [(literal(`(Select Path from Folders where Id = RecentFolders.FolderId)`), "Path")],
         ],
-        where: { RecentId: u.Recent.Id },
+        where: { UserId: u.Id },
       })
     ).map(mapData);
 
-    const RecentFiles = (
-      await db.recentFile.findAll({
-        attributes: ["LastPos", [literal(`(Select Name from Files where Id = RecentFiles.FileId)`), "File"]],
-        where: { RecentId: u.Recent.Id },
-      })
-    ).map(mapData);
+    // const RecentFiles = (
+    //   await db.recentFile.findAll({
+    //     attributes: ["LastPos", [literal(`(Select Name from Files where Id = RecentFiles.FileId)`), "Name"]],
+    //     where: { UserId: u.Id },
+    //   })
+    // ).map(mapData);
 
     const Favorites = [];
 
@@ -108,7 +103,7 @@ const backup = async () => {
     delete u.dataValues.Id;
     delete u.dataValues.Recent;
     delete u.dataValues.Favorites;
-    const user = { ...u.dataValues, RecentFiles, RecentFolders, Favorites };
+    const user = { ...u.dataValues, RecentFolders, Favorites };
 
     datas.users.push(user);
   }
@@ -149,15 +144,12 @@ const backup = async () => {
 };
 
 const restore = async () => {
-  await db.init(true);
-
+  // await db.init(true);
   console.time("restore");
   const datas = fs.readJSONSync("./backup/db.json");
-
   for (const dir of datas.directory) {
     try {
       const directory = await db.directory.create(dir);
-
       await db.folder.bulkCreate(
         dir.Folders.map((f) => {
           f.DirectoryId = directory.Id;
@@ -169,25 +161,90 @@ const restore = async () => {
       console.log(dir.Name, error);
     }
   }
+  for (const user of datas.users) {
+    let found = await db.user.findOne({ where: { Name: user.Name } });
+    if (found) {
+      await found.update(user);
+    } else {
+      found = await db.user.create(user, { include: { model: db.favorite } });
+    }
+    //Create Favorites
+    for (let fav of user.Favorites) {
+      try {
+        const [nfav] = await db.favorite.findOrCreate({ where: { Name: fav.Name, UserId: found.Id } });
+        if (nfav) {
+          let folders = await db.folder.findAll({ where: { Path: fav.Path } });
+          await nfav.addFolders(folders);
+        }
+      } catch (error) {}
+    }
 
-  // for (const user of datas.users) {
-  //   let found = await db.user.findOne({ where: { Name: user.Name } });
-  //   if (found?.Name === "Administrator") continue;
-  //   await found?.destroy();
-
-  //   const nuser = await db.user.create(user, { include: { model: db.favorite } });
-
-  //   let folders = await db.folder.findAll({ where: { Path: user.Favorites.map((fav) => fav.Folder) } });
-
-  //   await nuser.addFavorites(folders);
-
-  //   //   folders = await db.folder.findAll({ where: { Path: user.RecentFolders.map((rf) => rf.Folder) } });
-  //   //  user.RecentFolders.forEach(rf => {
-  //   //   rf.UserId = user.Id;
-  //   //   rf.FolderId = folder.find(f=> f.Path === rf.Folder).Id;
-  //   //  })
-  // }
+    const list = user.RecentFolders;
+    try {
+      const items = list.map((rf) => rf.Path);
+      let founds = await db.folder.findAll({ where: { Path: items } });
+      const files = await db.file.findAll({ where: { Name: list.map((f) => f.File) } });
+      const recent = list.map((rf) => {
+        rf.FolderId = founds.find((f) => f.Path === rf.Path).Id;
+        rf.CurrentFile = files.find((f) => f.Name === rf.File).Id;
+        delete rf.Folder;
+        delete rf.File;
+        return { ...rf, UserId: found.Id };
+      });
+      await db.recentFolder.bulkCreate(recent);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   console.timeEnd("restore");
+  process.exit();
+};
+
+const test = async () => {
+  const imagesDir = process.env.IMAGES;
+  let count = 0;
+  for (let dr of fs.readdirSync(imagesDir)) {
+    if (/Folder/.test(dr)) {
+      const files = fs.readdirSync(path.join(imagesDir, dr));
+      for (let img of files) {
+        const found = await db.folder.findOne({ where: { Name: img.replace(".jpg", "") } });
+        if (!found) {
+          fs.removeSync(path.join(imagesDir, dr, img));
+          console.log(img);
+        }
+      }
+    }
+    if (/Folder|R18/.test(dr)) continue;
+
+    const folders = fs.readdirSync(path.join(imagesDir, dr));
+    for (let folder of folders) {
+      const fpath = path.join(imagesDir, dr, folder);
+      const found = await db.folder.findOne({ where: { Name: folder } });
+      if (!found) {
+        console.log(folder);
+        fs.removeSync(fpath);
+        count++;
+      } else {
+        const files = fs.readdirSync(fpath);
+        const founds = found.getFiles();
+        const filtered = files.filter((f) => !founds.find((fd) => f.includes(fd.Name)));
+        for (let file of filtered) {
+          console.log(path.join(fpath, file));
+        }
+      }
+    }
+  }
+  console.log("Count", count);
+  // const all = await db.folder.findAll({
+  //   include: {
+  //     model: db.folder,
+  //     order: ["Name"],
+  //     include: {
+  //       model: db.file,
+  //     },
+  //   },
+  // });
+  // all.forEach((d) => console.log(d.Folders.length));
   process.exit();
 };
 

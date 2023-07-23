@@ -3,7 +3,7 @@
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
   export let filter = "";
-  let curFilter = decodeURI(filter);
+  let curFilter = decodeURIComponent(filter);
 
   const send = (text = "") => {
     curFilter = text;
@@ -11,7 +11,7 @@
       .replace("’", "'")
       .replace(/:|\?|\"/gi, "")
       .trim();
-    dispatch("filter", encodeURI(ftl));
+    dispatch("filter", encodeURIComponent(ftl));
   };
 
   const ClearFilter = () => send("");

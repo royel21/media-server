@@ -68,41 +68,43 @@ db.init = async (force) => {
     console.log("add COLUMN fail Server");
   }
 
-  let admin = await db.user.findOne({ where: { Name: "Administrator" } });
+  try {
+    let admin = await db.user.findOne({ where: { Name: "Administrator" } });
 
-  if (!admin) {
-    await db.user.create(
-      {
-        Name: "Administrator",
-        Password: "Admin",
-        Role: "Administrator",
-        UserConfig: {
+    if (!admin) {
+      await db.user.create(
+        {
           Name: "Administrator",
-          Config: JSON.stringify({
-            order: "nu",
-            items: 0,
-            recentFolders: [],
-            video: {
-              KeysMap: {},
-              volume: 0.3,
-              pause: true,
-              mute: false,
-            },
-            manga: {
-              KeysMap: {},
-              scaleX: 0.6,
-              scaleY: 1,
-              aniDuration: 300,
-            },
-          }),
+          Password: "Admin",
+          Role: "Administrator",
+          UserConfig: {
+            Name: "Administrator",
+            Config: JSON.stringify({
+              order: "nu",
+              items: 0,
+              recentFolders: [],
+              video: {
+                KeysMap: {},
+                volume: 0.3,
+                pause: true,
+                mute: false,
+              },
+              manga: {
+                KeysMap: {},
+                scaleX: 0.6,
+                scaleY: 1,
+                aniDuration: 300,
+              },
+            }),
+          },
         },
-      },
-      {
-        include: [db.favorite, db.userConfig],
-        encript: true,
-      }
-    );
-  }
+        {
+          include: [db.favorite, db.userConfig],
+          encript: true,
+        }
+      );
+    }
+  } catch (error) {}
 };
 
 export default db;
