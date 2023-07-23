@@ -48,7 +48,17 @@ db.user.hasMany(db.recentFile, { onDelete: "cascade" });
 
 db.folder.hasOne(db.recentFolder);
 db.recentFolder.belongsTo(db.folder);
-db.recentFolder.hasMany(db.file, { foreignKey: "CurrentFile", onDelete: "SET NULL", onUpdate: "cascade" });
+db.recentFile.belongsTo(db.file, {
+  foreignKey: "FileId",
+  onDelete: "SET NULL",
+  onUpdate: "cascade",
+});
+
+db.recentFolder.belongsTo(db.file, {
+  foreignKey: "CurrentFile",
+  onDelete: "SET NULL",
+  onUpdate: "cascade",
+});
 
 db.folder.belongsTo(db.directory, { onDelete: "cascade" });
 db.directory.hasMany(db.folder);

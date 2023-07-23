@@ -35,6 +35,8 @@ export default (server, sessionMeddle) => {
 
         socket.on("rename-folder", FileManager.renameFolder);
         socket.on("remove-folder", FileManager.removeFolder);
+        socket.on("clean-images", FileManager.cleanImagesDir);
+        socket.on("backup-db", FileManager.onBackup);
       } else {
         socket.on("file-update-pos", (data) => userUpdate.updateFilePos(data, user));
         socket.on("recent-folder", (data) => userUpdate.recentFolder(data, user));

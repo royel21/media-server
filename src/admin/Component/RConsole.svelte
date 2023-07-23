@@ -5,7 +5,7 @@
 
   let ref;
   let items = [];
-  let toggle = false;
+  let toggle = true;
   const socket = getContext("socket");
 
   const onClear = () => ConsoleStore.set([]);
@@ -29,7 +29,7 @@
   });
 </script>
 
-{#if items.length || /manager|tools/.test(location.pathname)}
+{#if items.length && /manager|tools/.test(location.pathname)}
   <label on:click={toggleConsole} class:toggle>
     <input type="checkbox" bind:checked={toggle} /><Icons name="eye" box="0 0 564 512" />
   </label>
@@ -87,5 +87,12 @@
   }
   .text-list > div {
     white-space: nowrap;
+  }
+
+  @media screen and (max-width: 600px) {
+    label {
+      top: 85px;
+      right: 16px;
+    }
   }
 </style>

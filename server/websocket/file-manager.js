@@ -10,10 +10,58 @@ var io;
 
 const setSocket = (_io) => (io = _io);
 
-var worker = null;
+let backupWorker;
+
+const onBackup = (data) => {
+  if (!backupWorker) {
+    backupWorker = fork(appPath + "/workers/BackupWorker.js");
+  }
+
+  io.sockets.emit("info", { text: "Start Backup" });
+
+  backupWorker.on("message", (data) => {
+    io.sockets.emit("info", data);
+  });
+
+  backupWorker.on("exit", async () => {
+    backupWorker = null;
+    io.sockets.emit("reload-backups");
+    io.sockets.emit("info", { text: "Finish Backup" });
+  });
+
+  backupWorker.send(data);
+};
+
+let imageWorker;
+const cleanImagesDir = () => {
+  if (!imageWorker) {
+    imageWorker = fork(appPath + "/workers/ImagesCleaner.js");
+
+    io.sockets.emit("info", { text: "Start to clean folder please wait" });
+    console.log("info", "Start to clean folder please wait");
+
+    imageWorker.on("message", (data) => {
+      io.sockets.emit("info", data);
+    });
+
+    imageWorker.on("exit", async () => {
+      imageWorker = null;
+      io.sockets.emit("info", { text: "Finish Cleaning" });
+    });
+
+    imageWorker.send({ cleanup: true });
+  } else {
+    io.sockets.emit("info", { text: "Cleaning In process Pleaase Wait" });
+  }
+};
+
+let worker = null;
+
 const startWork = async (model, isFolder, user) => {
   if (!worker) {
     worker = fork(appPath + "/workers/BackgroundScan.js");
+
+    io.sockets.emit("info", "Scan Starting Please Wait");
 
     worker.on("message", (data) => {
       if (data.event === "scan-finish") {
@@ -248,6 +296,8 @@ export default {
   renameFolder,
   removeFile,
   renameFile,
+  onBackup,
+  cleanImagesDir,
   scanDir,
   loadContent,
   resetRecent,

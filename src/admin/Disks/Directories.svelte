@@ -1,7 +1,6 @@
 <script>
   import { onMount, getContext } from "svelte";
   import apiUtils from "../../apiUtils";
-  import RConsole from "../Component/RConsole.svelte";
   import Icons from "../../icons/Icons.svelte";
 
   const socket = getContext("socket");
