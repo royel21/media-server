@@ -52,6 +52,9 @@ export default (sequelize, DataTypes, ImagesPath) => {
           return this.Folder ? `/${this.Type}/${this.Folder.Name}/${this.Name}.jpg` : "";
         },
       },
+      FolderId: {
+        type: STRING(6),
+      },
     },
     {
       uniqueKeys: {

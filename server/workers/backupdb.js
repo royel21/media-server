@@ -4,6 +4,14 @@ import fs from "fs-extra";
 
 const { BACKUPDIR, DB } = process.env;
 
+function formatAMPM() {
+  const date = dayfmt.format(new Date());
+  let parts = date.split(", ");
+  let time = parts[1].split(" ");
+
+  return `${parts[0]} ${time[1].toUpperCase()} ${time[0]}`.replace(/ |:/g, "-");
+}
+
 const sendMessage = (text, event = "info") => {
   if (process.send) {
     process?.send({ event, text });
@@ -49,11 +57,13 @@ const getRecentFiles = async (UserId) => {
 };
 
 const mapDirectory = (dir) => {
-  sendMessage(`Mapping ${dir.FullPath}`);
   delete dir.dataValues.Id;
   dir.IsLoading = false;
 
-  dir.dataValues.Folders = dir.dataValues.Folders.map((folder) => {
+  const folders = [];
+  sendMessage(`Mapping ${dir.FullPath} - folders: ${dir.dataValues.Folders.length}`);
+
+  dir.dataValues.Folders.forEach((folder) => {
     delete folder.dataValues.Id;
     delete folder.dataValues.DirectoryId;
 
@@ -63,9 +73,14 @@ const mapDirectory = (dir) => {
       return d.dataValues;
     });
 
-    return folder.dataValues;
+    if (!folders.find((f) => f.Path.toLowerCase() === folder.Path.toLowerCase())) {
+      folders.push(folder.dataValues);
+    } else {
+      sendMessage(`Removing duplicate: ${folder.Path}`);
+    }
   });
 
+  dir.dataValues.Folders = [...folders];
   return dir.dataValues;
 };
 
@@ -88,7 +103,9 @@ export const backupDb = async () => {
   if (BACKUPDIR) {
     try {
       const users = await db.user.findAll({
-        include: [{ model: db.favorite, include: { model: db.folder, attributes: ["Path"] } }],
+        include: [
+          { model: db.favorite, required: false, include: { model: db.folder, attributes: ["Path"], required: false } },
+        ],
       });
       const datas = { users: [], directory: [] };
 
@@ -118,10 +135,7 @@ export const backupDb = async () => {
       datas.directory = await getAllDirectories();
 
       fs.mkdirsSync(BACKUPDIR);
-      const savePath = `${BACKUPDIR}/${DB} - ${new Date()
-        .toLocaleString()
-        .replace(/\//g, "-")
-        .replace(/:/g, "'")}.json`;
+      const savePath = `${BACKUPDIR}/${DB} - ${formatAMPM(new Date()).replace(/:/g, "'")}.json`;
       fs.writeJSONSync(savePath, datas);
       sendMessage("Save to " + savePath);
     } catch (error) {

@@ -59,11 +59,12 @@ routes.post("/update", async (req, res) => {
 });
 
 routes.get("/backups", async (_, res) => {
+  let backups = [];
   if (fs.existsSync(BACKUPDIR)) {
-    res.send(fs.readdirSync(BACKUPDIR));
-  } else {
-    res.send([]);
+    backups = fs.readdirSync(BACKUPDIR);
   }
+
+  res.send(backups);
 });
 
 routes.post("/rm-backup", async ({ body }, res) => {

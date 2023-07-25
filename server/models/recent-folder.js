@@ -14,7 +14,7 @@ export default (sequelize, { STRING, INTEGER, DATE }) => {
         type: DATE,
       },
       FolderId: {
-        type: STRING(10),
+        type: STRING(6),
       },
       UserId: {
         type: STRING(10),

@@ -20,7 +20,6 @@ export default {
   sqlite: {
     logging: false,
     dialect: "sqlite",
-    storage: "mediaserver.sqlite",
     define: {
       timestamps: false,
     },

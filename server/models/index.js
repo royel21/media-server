@@ -19,6 +19,7 @@ const { USERNAME, HOST, HOST2, DB_USER, PASSWORD, DB, CONNECTOR, IMAGES } = proc
 
 const config = dbconfig[CONNECTOR];
 config.host = USERNAME === "rconsoro" ? HOST : HOST2;
+config.storage = DB + ".sqlite";
 //config.logging = console.log;
 
 const sequelize = new Sequelize(DB, DB_USER, PASSWORD, config);
@@ -28,7 +29,7 @@ const db = {
   sqlze: sequelize,
   user: user(sequelize, DataTypes),
   file: file(sequelize, DataTypes, IMAGES),
-  folder: folder(sequelize, DataTypes, IMAGES),
+  folder: folder(sequelize, DataTypes, IMAGES, /sqlite/i.test(CONNECTOR)),
   favorite: favorite(sequelize, DataTypes),
   userConfig: userConfig(sequelize, DataTypes),
   directory: directory(sequelize, DataTypes),
@@ -63,7 +64,7 @@ db.recentFolder.belongsTo(db.file, {
 db.folder.belongsTo(db.directory, { onDelete: "cascade" });
 db.directory.hasMany(db.folder);
 
-db.file.belongsTo(db.folder, { onDelete: "cascade" });
+db.file.belongsTo(db.folder, { onDelete: "cascade", onUpdate: "cascade" });
 db.folder.hasMany(db.file);
 
 db.user.hasMany(db.favorite, { onDelete: "cascade" });

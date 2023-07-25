@@ -3,8 +3,9 @@ import db from "../server/models/index.js";
 import { compare } from "../src/stringUtils.js";
 import { backupDb } from "../server/workers/backupdb.js";
 import { restoreDb } from "../server/workers/restoredb.js";
+import { literal } from "sequelize";
 
-const { BACKUPDIR } = process.env;
+const { BACKUPDIR, DB } = process.env;
 
 const capitalize = (val) => {
   let words = val.split(" ");
@@ -66,17 +67,16 @@ const backup = async () => {
 };
 
 const restore = async () => {
-  await restoreDb("db-2023-07-23T174859.json");
+  await restoreDb("mediaserverdb - 7-24-2023, 10'17'36 PM.json");
 };
 
 const test = async () => {
-  const savePath = `${BACKUPDIR}/${date}`;
-  const datas = fs.readJSONSync(savePath);
-  for (let user of datas.users) {
-    for (const fav of user.Favorites) {
-      console.log("ufav:", fav);
-    }
-  }
+  db.sqlze.options.logging = console.log;
+  const result = await db.folder.findAll({
+    group: [literal("Path")],
+    attributes: ["Name", "Path", [literal("count(Path)"), "Count"]],
+  });
+  console.log(result.length);
   process.exit();
 };
 

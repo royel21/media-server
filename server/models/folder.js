@@ -2,7 +2,7 @@ import fs from "fs-extra";
 import { nanoid } from "nanoid";
 import path from "path";
 
-export default (sequelize, DataTypes, ImagesPath) => {
+export default (sequelize, DataTypes, ImagesPath, isSqlite) => {
   const getFileType = ({ FilesType }) => (FilesType === "mangas" ? "Manga" : "Video");
   const getCoverPath = (name) => path.join(ImagesPath, "Folder", name + ".jpg");
 
@@ -70,7 +70,7 @@ export default (sequelize, DataTypes, ImagesPath) => {
         unique: true,
       },
       Description: {
-        type: TEXT + " COLLATE 'utf8mb4_bin'",
+        type: TEXT + (isSqlite ? " " : " COLLATE 'utf8mb4_bin'"),
       },
       Status: {
         type: BOOLEAN,
@@ -90,11 +90,6 @@ export default (sequelize, DataTypes, ImagesPath) => {
     },
     {
       timestamps: false,
-      uniqueKeys: {
-        folder_unique: {
-          fields: ["Name", "DirectoryId"],
-        },
-      },
       hooks: {
         beforeValidate: function (item) {
           item.Id = nanoid(6);
