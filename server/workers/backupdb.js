@@ -4,12 +4,22 @@ import fs from "fs-extra";
 
 const { BACKUPDIR, DB } = process.env;
 
+export const dayfmt = new Intl.DateTimeFormat("en-GB", {
+  year: "2-digit",
+  month: "short",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "numeric",
+  second: "2-digit",
+  hour12: true,
+});
+
 function formatAMPM() {
   const date = dayfmt.format(new Date());
   let parts = date.split(", ");
   let time = parts[1].split(" ");
 
-  return `${parts[0]} ${time[1].toUpperCase()} ${time[0]}`.replace(/ |:/g, "-");
+  return `${parts[0].replace(" ", "-")} ${time[1].toUpperCase()} ${time[0]}`.replace(/:/g, "'");
 }
 
 const sendMessage = (text, event = "info") => {

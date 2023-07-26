@@ -3,9 +3,9 @@ import db from "../server/models/index.js";
 import { compare } from "../src/stringUtils.js";
 import { backupDb } from "../server/workers/backupdb.js";
 import { restoreDb } from "../server/workers/restoredb.js";
-import { literal } from "sequelize";
+import { Sequelize, literal } from "sequelize";
 
-const { BACKUPDIR, DB } = process.env;
+const { BACKUPDIR, DB, HOST, HOST2 } = process.env;
 
 const capitalize = (val) => {
   let words = val.split(" ");
@@ -70,17 +70,26 @@ const restore = async () => {
   await restoreDb("mediaserverdb - 7-24-2023, 10'17'36 PM.json");
 };
 
-const test = async () => {
-  db.sqlze.options.logging = console.log;
-  const result = await db.folder.findAll({
-    group: [literal("Path")],
-    attributes: ["Name", "Path", [literal("count(Path)"), "Count"]],
-  });
-  console.log(result.length);
-  process.exit();
+const isWork = process.env.USERNAME === "rconsoro";
+
+const createdb = async (args) => {
+  if (args?.length > 2) {
+    const sequelize = new Sequelize("", args[1], args[2], {
+      logging: console.log,
+      dialect: "mariadb",
+      host: isWork ? HOST : HOST2,
+      pool: 5,
+      dialectOption: {
+        timezone: "Etc/GMT-4",
+      },
+    });
+    await sequelize.query(`CREATE DATABASE if not exists ${args[0]}`);
+    return sequelize.close();
+  }
 };
 
 const works = {
+  createdb,
   updateDb,
   saveDb,
   backup,
@@ -92,5 +101,5 @@ const action = process.argv[2];
 
 if (action) {
   console.log(action);
-  works[action]();
+  works[action](process.argv.slice(3));
 }
