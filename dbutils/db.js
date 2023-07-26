@@ -84,6 +84,11 @@ const createdb = async (args) => {
   }
 };
 
+const test = async () => {
+  const fol = await db.folder.findOne({ where: { Status: 3 } });
+  console.log(fol?.Name, fol?.Status);
+};
+
 const works = {
   createdb,
   updateDb,
