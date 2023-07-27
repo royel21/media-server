@@ -126,7 +126,7 @@ const createDirStruct = async (dir) => {
   } catch (error) {}
 };
 
-export const restoreDb = async (backupFile) => {
+export default async (backupFile) => {
   const time = getTime();
   await db.init();
   const savePath = `${BACKUPDIR}/${backupFile}`;

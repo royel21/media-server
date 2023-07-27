@@ -31,6 +31,7 @@
   let showImage;
   let fullPathPos = {};
   let createFolder;
+  let showGenres = false;
 
   const newFolder = () => (createFolder = true);
 
@@ -196,6 +197,7 @@
   {totalItems}
   {filter}
   {scanning}
+  {showGenres}
   {onShowImage}
   on:filter={onFilter}
   on:gotopage={gotopage}
@@ -205,8 +207,13 @@
   on:mousemove={showPath}
 >
   <span class="create-folder" slot="btn-controls" on:click={newFolder}><Icons name="squareplus" /></span>
-  <span class="show-files" slot="btn-ctr-last" on:click={showFiles} title="Toggle Files List">
-    <Icons name="files" box="0 0 280 512" />
+  <span class="show-files" slot="btn-ctr-last">
+    <span on:click={() => (showGenres = !showGenres)} title="Toggle Genres List">
+      <Icons name={showGenres ? "eyeslash" : "eye"} box="0 0 612 512" />
+    </span>
+    <span on:click={showFiles} title="Toggle Files List">
+      <Icons name="files" box="0 0 280 512" />
+    </span>
   </span>
   <div class="path-tag" slot="first-tag">
     {#if showImage}
@@ -231,6 +238,12 @@
     height: 35px;
     width: 43px;
     top: -1px;
+  }
+  .show-files {
+    display: flex;
+  }
+  .show-files span {
+    margin-right: 5px;
   }
   .show-files :global(svg) {
     width: 27px;

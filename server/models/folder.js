@@ -1,8 +1,9 @@
 import fs from "fs-extra";
-import { nanoid } from "nanoid";
 import path from "path";
+import { nanoid } from "nanoid";
+import { DataTypes } from "sequelize";
 
-export default (sequelize, DataTypes, ImagesPath, isSqlite) => {
+export default (sequelize, ImagesPath, isSqlite) => {
   const getFileType = ({ FilesType }) => (FilesType === "mangas" ? "Manga" : "Video");
   const getCoverPath = (name) => path.join(ImagesPath, "Folder", name + ".jpg");
 

@@ -11,6 +11,7 @@
   export let totalPages = 0;
   export let totalItems = 0;
   export let scanning = [];
+  export let showGenres = false;
 
   const addGenres = ({ target }) => {
     let Id = target.closest("li").id;
@@ -54,17 +55,19 @@
                   class={scanning.includes(Id) || Scanning ? "icon-spin" : ""}
                 /></span
               >
-              <span class="g-list" on:mouseenter|stopPropagation on:mouseleave|stopPropagation>
-                {#if /manga/.test(FilesType)}
-                  <span on:click={addGenres}>Mg</span>
-                  <span on:click={addGenres}>Mhu</span>
-                  <span on:click={addGenres}>Mhw</span>
-                  <span on:click={addGenres}>Web</span>
-                  <span on:click={addRaw}>Raw</span>
-                {:else}
-                  <span on:click={addGenres}>sort</span>
-                {/if}
-              </span>
+              {#if showGenres}
+                <span class="g-list" on:mouseenter|stopPropagation on:mouseleave|stopPropagation>
+                  {#if /manga/.test(FilesType)}
+                    <span on:click={addGenres}>Mg</span>
+                    <span on:click={addGenres}>Mhu</span>
+                    <span on:click={addGenres}>Mhw</span>
+                    <span on:click={addGenres}>Web</span>
+                    <span on:click={addRaw}>Raw</span>
+                  {:else}
+                    <span on:click={addGenres}>sort</span>
+                  {/if}
+                </span>
+              {/if}
             {/if}
             <span><Icons name="edit" /></span>
             <span><Icons name="trash" /></span>

@@ -1,38 +1,52 @@
 import fs from "fs-extra";
-import db from "../server/models/index.js";
 import { compare } from "../src/stringUtils.js";
-import { backupDb } from "../server/workers/backupdb.js";
-import { restoreDb } from "../server/workers/restoredb.js";
-import { Sequelize, literal } from "sequelize";
+import dbLoader, { createdb } from "../server/models/dbloader.js";
+import backup from "../server/workers/backupdb.js";
+import restore from "../server/workers/restoredb.js";
 
-const { BACKUPDIR, DB, HOST, HOST2 } = process.env;
+//Name: { [db.Op.like]: "HMangas%" },
+const update = async () => {
+  const db = await dbLoader("mediaserverdb");
+  const founds = await db.folder.findAll({
+    where: { Name: { [db.Op.like]: "% Raw" } },
+  });
+  for (let found of founds) {
+    // if (!/various/.test(found.Name)) {
+    //   found.AltName = "Comic " + found.Name;
+    // }
+    if (!found.AltName && !found.Description) {
+      found.AltName = "N/A";
+      found.Genres = "Adult, Raw";
+      found.Description = "Raw manga";
+      await found.save();
+    }
 
-const capitalize = (val) => {
-  let words = val.split(" ");
-  for (let i = 0; i < words.length; i++) {
-    words[i] = words[i].charAt(0).toUpperCase() + words[i].toLowerCase().slice(1);
+    console.log(found.Name);
   }
-  return words.join(" ");
+  process.exit();
 };
 
 let i = 0;
-const updateDb = async () => {
-  await db.init();
-  const update = async (items) => {
-    for (let d of items) {
-      const found = await db.folder.findOne({ where: { Name: d.Name } });
-      if (found && d.Description) {
-        await found.update(d);
-        i++;
-      }
-    }
-  };
 
-  await update(fs.readJsonSync(`backup/${process.env.CDB}.json`));
+const updateDbData = async (items, db) => {
+  for (let d of items) {
+    const found = await db.folder.findOne({ where: { Name: d.Name } });
+    if (found && d.Description) {
+      await found.update(d);
+      i++;
+    }
+  }
   console.log("update", i);
+  process.exit();
 };
 
-const saveDb = async () => {
+const updateDb = async () => {
+  console.log("updatedb");
+  const db = await dbLoader("mediaserverdb");
+  await updateDbData(fs.readJsonSync(`db/mediaserverdb.json`), db);
+};
+
+const getData = async (db) => {
   let datas = [];
   const folders = await db.folder.findAll({
     order: ["Name"],
@@ -53,49 +67,53 @@ const saveDb = async () => {
       i++;
     }
   }
-
-  fs.writeJSONSync(`backup/${process.env.DB}.json`, datas);
-  console.log("save", i, `backup/${process.env.DB}.json`);
+  return datas;
 };
 
-const backup = async () => {
-  await backupDb();
+const saveDb = async () => {
+  const db = await dbLoader("mediaserverdb");
+  let datas = getData(db);
+
+  fs.writeJSONSync(`db/${process.env.DB}.json`, datas);
+  console.log("save", i, `db/${process.env.DB}.json`);
+  process.exit();
 };
 
-const restore = async () => {
-  await restoreDb("mediaserverdb - 7-24-2023, 10'17'36 PM.json");
+const copyDataToSqlite = async () => {
+  const mariadb = await dbLoader("mediaserverdb");
+
+  const sqlite = await dbLoader("mediaserverdb", "sqlite");
+  await sqlite.init();
+
+  const datas = await getData(mariadb);
+  updateDbData(datas, sqlite);
 };
 
-const isWork = process.env.USERNAME === "rconsoro";
+const copyDataToMariadb = async () => {
+  const mariadb = await dbLoader("mediaserverdb");
+  await mariadb.init();
 
-const createdb = async (args) => {
-  if (args?.length > 2) {
-    const sequelize = new Sequelize("", args[1], args[2], {
-      logging: console.log,
-      dialect: "mariadb",
-      host: isWork ? HOST : HOST2,
-      pool: 5,
-      dialectOption: {
-        timezone: "Etc/GMT-4",
-      },
-    });
-    await sequelize.query(`CREATE DATABASE if not exists ${args[0]}`);
-    return sequelize.close();
-  }
+  const sqlite = await dbLoader("mediaserverdb", "sqlite");
+
+  const datas = await getData(sqlite);
+  updateDbData(datas, mariadb);
 };
 
-const test = async () => {
-  const fol = await db.folder.findOne({ where: { Status: 3 } });
-  console.log(fol?.Name, fol?.Status);
+const restoreDB = async () => {
+  await restore("mediaserverdb2 - 25-Jul 23 AM 09'50'35.json");
 };
+
+const test = async () => {};
 
 const works = {
   createdb,
   updateDb,
   saveDb,
   backup,
-  restore,
+  restoreDB,
   test,
+  copyDataToMariadb,
+  copyDataToSqlite,
 };
 
 const action = process.argv[2];

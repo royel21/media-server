@@ -49,6 +49,20 @@
     font-weight: 600;
   }
 
+  #login-container {
+    position: absolute;
+    top: calc(50% - 150px);
+    left: calc(50% - 150px);
+    width: 300px;
+    user-select: none;
+    background-color: #343a40;
+    border-radius: 0.25rem;
+    border: 1px solid white;
+    padding: 0 20px;
+    color: white;
+    text-align: center;
+  }
+
   #login-container :global(.icon-signin) {
     height: 32px;
     width: 40px;
@@ -62,23 +76,12 @@
     top: 2px;
   }
 
-  #login-container {
-    position: absolute;
-    top: calc(50% - 150px);
-    left: calc(50% - 150px);
-    width: 300px;
-    user-select: none;
-    background-color: #343a40;
-    border-radius: 0.25rem;
-    border: 1px solid white;
-    padding: 5px;
-    color: white;
-    text-align: center;
-  }
-
   h3 {
     font-size: 1.7rem;
-    margin: 10px;
+    margin: 15px;
+  }
+  .form-footer {
+    padding: 15px;
   }
 
   button {

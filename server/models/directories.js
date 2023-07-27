@@ -1,6 +1,7 @@
 import { nanoid } from "nanoid";
+import { DataTypes } from "sequelize";
 
-export default (sequelize, DataTypes) => {
+export default (sequelize) => {
   const { STRING, BOOLEAN, INTEGER } = DataTypes;
 
   const Directory = sequelize.define(

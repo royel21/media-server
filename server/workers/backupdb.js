@@ -107,7 +107,7 @@ const getAllDirectories = async () => {
   return result.map(mapDirectory);
 };
 
-export const backupDb = async () => {
+export default async () => {
   sendMessage(`Bakup ---${DB}---`);
   console.time("Backup");
   if (BACKUPDIR) {

@@ -1,21 +1,24 @@
-export default (sequelize, DataTypes) => {
+import { DataTypes } from "sequelize";
+
+export default (sequelize) => {
+  const { INTEGER, STRING, FLOAT } = DataTypes;
   const RecentFile = sequelize.define(
     "RecentFiles",
     {
       Id: {
-        type: DataTypes.INTEGER,
+        type: INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
       LastPos: {
-        type: DataTypes.FLOAT(8, 2).UNSIGNED,
+        type: FLOAT(8, 2).UNSIGNED,
         defaultValue: 0,
       },
       FileId: {
-        type: DataTypes.STRING(10),
+        type: STRING(10),
       },
       UserId: {
-        type: DataTypes.STRING(10),
+        type: STRING(10),
       },
     },
     {
@@ -26,8 +29,10 @@ export default (sequelize, DataTypes) => {
         },
       },
       hooks: {
-        beforeCreate: (item, options) => {
-          item.LastRead = new Date();
+        beforeCreate: (item) => {
+          if (!item.LastRead) {
+            item.LastRead = new Date();
+          }
         },
       },
     }

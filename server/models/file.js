@@ -1,8 +1,9 @@
 import path from "path";
 import fs from "fs-extra";
 import { nanoid } from "nanoid";
+import { DataTypes } from "sequelize";
 
-export default (sequelize, DataTypes, ImagesPath) => {
+export default (sequelize, ImagesPath) => {
   const genImgPath = (type, fname, name) => `${ImagesPath}/${type}/${fname}/${name}.jpg`;
 
   const { INTEGER, STRING, DATE, FLOAT, VIRTUAL } = DataTypes;
