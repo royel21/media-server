@@ -9,6 +9,7 @@
   import { clamp } from "../../ShareComponent/utils";
   import Icons from "../../icons/Icons.svelte";
   import CreateFolderModal from "./CreateFolderModal.svelte";
+  import ReplaceImage from "./ReplaceImage.svelte";
   const dispatch = createEventDispatcher();
   const socket = getContext("socket");
 
@@ -32,6 +33,7 @@
   let fullPathPos = {};
   let createFolder;
   let showGenres = false;
+  let showReplace = false;
 
   const newFolder = () => (createFolder = true);
 
@@ -158,6 +160,10 @@
     loadFolders(1, value);
   };
 
+  const replaceImage = (Id) => {
+    showReplace = Id;
+  };
+
   const socketEvents = [
     { name: "folder-renamed", handler: onFolderRename },
     { name: "folder-removed", handler: onFolderRemove },
@@ -172,7 +178,17 @@
       socketEvents.forEach((e) => socket.off(e.name, e.handler));
     };
   });
+
+  $: document.title = `Folders${dirs.find((d) => d.Id === currentDir)?.FullPath || "All"}/${page}`;
 </script>
+
+{#if showReplace}
+  <ReplaceImage hide={() => (showReplace = "")} Id={showReplace} />
+{/if}
+
+{#if createFolder}
+  <CreateFolderModal hide={() => (createFolder = false)} {socket} />
+{/if}
 
 {#if createFolder}
   <CreateFolderModal hide={() => (createFolder = false)} {socket} />
@@ -199,6 +215,7 @@
   {scanning}
   {showGenres}
   {onShowImage}
+  {replaceImage}
   on:filter={onFilter}
   on:gotopage={gotopage}
   on:click={itemClick}

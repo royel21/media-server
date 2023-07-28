@@ -39,6 +39,14 @@
     margin: 0;
     background: radial-gradient(ellipse at center, #14243d 0, #030611 100%);
   }
+
+  :global(#root) {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+
   .error {
     display: none;
   }
@@ -50,10 +58,8 @@
   }
 
   #login-container {
-    position: absolute;
-    top: calc(50% - 150px);
-    left: calc(50% - 150px);
-    width: 300px;
+    width: 380px;
+    height: fit-content;
     user-select: none;
     background-color: #343a40;
     border-radius: 0.25rem;
@@ -107,5 +113,10 @@
 
   :global(.input-control) {
     margin: 10px 0;
+  }
+  @media screen and (max-width: 600px) {
+    #login-container {
+      width: 300px;
+    }
   }
 </style>

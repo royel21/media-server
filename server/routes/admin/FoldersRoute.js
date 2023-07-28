@@ -4,6 +4,7 @@ import { getFilter } from "../utils.js";
 import fs from "fs-extra";
 import path from "node:path";
 import { literal } from "sequelize";
+import axios from "axios";
 
 const routes = Router();
 
@@ -54,6 +55,39 @@ const getData = async ({ params, url }, res) => {
     totalItems: result.count,
   });
 };
+
+import sharp from "sharp";
+const { IMAGES } = process.env;
+
+routes.post("/image", async (req, res) => {
+  const folder = await db.folder.findOne({ where: { Id: req.body.Id } });
+  if (folder) {
+    try {
+      const result = await axios.get(req.body.url, {
+        responseType: "arraybuffer",
+      });
+      if (result.data) {
+        const buffer = Buffer.from(result.data, "binary");
+        const type = result.request.path.match(/\.(jpg|jpeg|png|webp)/i);
+        if (type) {
+          const ex = type[0];
+          const coverP = path.join(IMAGES, "Folder", folder.Name + ".jpg");
+          await sharp(buffer).jpeg().resize(240).toFile(coverP);
+
+          const imgs = fs.readdirSync(folder.Path).filter((f) => /\.(jpg|jpeg|webp|png)$/.test(f));
+          for (const img of imgs) {
+            fs.removeSync(path.join(folder.Path, img));
+          }
+          fs.writeFileSync(path.join(folder.Path, "Cover" + ex), buffer);
+          return res.send({ valid: true, folder: req.body.Id });
+        }
+      }
+    } catch (error) {
+      console.log(error.toString());
+    }
+  }
+  res.send({ valid: false });
+});
 
 routes.get("/dirs", async (req, res) => {
   const dirs = await db.directory.findAll({ order: [literal(`LOWER(FullPath)`)] });
