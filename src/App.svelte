@@ -47,5 +47,7 @@
     {/if}
   </ConfigPage>
 {:else}
-  <Login {logIn} {error} />
+  <div id="root">
+    <Login {logIn} {error} />
+  </div>
 {/if}
