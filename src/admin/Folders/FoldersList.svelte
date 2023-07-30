@@ -179,7 +179,7 @@
     };
   });
 
-  $: document.title = `Folders/${dirs.find((d) => d.Id === currentDir)?.FullPath || "All"}/${page}`;
+  $: document.title = `Folders/${dirs.find((d) => d.Id === currentDir)?.FullPath || "All"}/${page}/${filter || ""}`;
 </script>
 
 {#if showReplace}
