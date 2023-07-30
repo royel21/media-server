@@ -127,7 +127,7 @@ export const getFolders = async (req, res) => {
         Genres: filter,
         Server: filter,
       },
-      IsAdult: req.user.AdultPass,
+      IsAdult: { [db.Op.lte]: req.user.AdultPass },
       FilesType: filetype,
     },
   };
