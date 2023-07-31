@@ -9,8 +9,7 @@
   display: flex;
   align-content: flex-start;
   flex-wrap: wrap;
-  padding: 5px;
-  padding-bottom: 50px;
+  padding: 5px 2px 50px;
 }
 
 .file.active .file-info {
@@ -62,10 +61,10 @@ button:active {
   position: relative;
   outline: none;
   background-color: transparent;
-  width: 215px;
-  min-width: 200px;
+  width: 204px;
+  min-width: 195px;
   transition: 0.2s all;
-  margin: 10px 0px;
+  margin: 10px 0;
 }
 .file:hover,
 .file.active {
@@ -75,10 +74,10 @@ button:active {
 .file-info {
   position: relative;
   text-align: center;
-  width: 195px;
+  width: 194px;
   height: 300px;
   min-height: 300px;
-  background-color: rgba(52, 58, 64, 0.99);
+  background-color: #343a40fc;
   border-radius: 5px;
   cursor: pointer;
   overflow: hidden;
