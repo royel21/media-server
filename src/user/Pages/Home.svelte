@@ -13,6 +13,7 @@
   import Pagination from "../../ShareComponent/Pagination.svelte";
   import Icons from "../../icons/Icons.svelte";
   import LazyImage from "../Component/LazyImage.svelte";
+  import { getLastChap } from "../Component/fileUtils";
 
   export let page = 1;
   export let filter = "";
@@ -88,9 +89,7 @@
             <span class="file-btn-left" on:click|stopPropagation={openFolder}>
               <Icons {...folderIcon} />
             </span>
-            <span class="file-progress"
-              >{LastChapter && FilesType === "mangas" ? LastChapter?.match(/\d+(-\d+|)/)[0] : FileCount}</span
-            >
+            <span class="file-progress">{getLastChap(LastChapter, FilesType, FileCount)}</span>
             <span class="remove" on:click|stopPropagation={removeRecent}>
               <Icons name="trash" color="rgba(252, 1, 1, 0.856)" />
             </span>

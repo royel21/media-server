@@ -15,6 +15,7 @@
   import { getItemsList } from "../../apiUtils";
   import Icons from "../../icons/Icons.svelte";
   import LazyImage from "./LazyImage.svelte";
+  import { getLastChap } from "./fileUtils";
 
   export let id = "";
   export let page = 1;
@@ -137,14 +138,6 @@
     lastId = id;
     loadContent();
   }
-
-  const getLastChap = (chap, type, count) => {
-    if (/\d+(-\d+|)/.test(chap) && type === "mangas") {
-      return chap.match(/\d+(-\d+|)/);
-    }
-
-    return count;
-  };
 
   let isContent = location.pathname.includes("content");
 </script>
