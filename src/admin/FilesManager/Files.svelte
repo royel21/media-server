@@ -86,12 +86,13 @@
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = ({ detail: { target } }) => {
+    console.log(target);
     if (modalType.Del) {
-      let Del = event.target.querySelector("input").checked;
+      let Del = target.querySelector("input").checked;
       socket.emit("remove-file", { Id: file.Id, Del });
     } else {
-      let Name = event.target.querySelector("input").value;
+      let Name = target.querySelector("textarea").value;
       if (!Name) {
         modalType.error = "Name Can't be empty";
       } else {
@@ -153,6 +154,9 @@
   .list-container {
     height: calc(100% - 85px);
     overflow: auto;
+  }
+  .list-container :global(.input-control) {
+    margin: 0;
   }
 
   .file-list {

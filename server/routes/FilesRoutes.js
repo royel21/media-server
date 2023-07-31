@@ -4,6 +4,7 @@ import db from "../models/index.js";
 import { getFiles, getFolders } from "./query-helper.js";
 
 import { clamp, getFilter } from "./utils.js";
+import { Op, literal } from "sequelize";
 
 const routes = Router();
 
@@ -29,6 +30,8 @@ routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
     offset = 0;
   }
 
+  const filters = getFilter(filter);
+
   const query = {
     order: [["LastRead", "DESC"]],
     where: { UserId: req.user.Id },
@@ -36,18 +39,25 @@ routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
       model: db.folder,
       attributes: ["Id", "Name", "FileCount", "FilesType", "Type", "Status", "Genres"],
       where: {
-        [db.Op.or]: { Genres: getFilter(filter) },
-        IsAdult: { [db.Op.lte]: req.user.AdultPass },
+        [Op.or]: { Name: filters, AltName: filters, Genres: filters },
+        IsAdult: { [Op.lte]: req.user.AdultPass },
       },
       required: true,
     },
   };
 
-  const count = await req.user.countRecentFolders();
+  const count = await req.user.countRecentFolders(query);
 
   const totalPages = Math.ceil(count / limit);
 
   p = clamp(p, 1, totalPages);
+
+  query.include.attributes.push([
+    literal(
+      `(Select Name from Files where FolderId=RecentFolders.FolderId ORDER BY REPLACE(REPLACE(Files.Name, "-", "0"), "[","0") DESC LIMIT 1)`
+    ),
+    "LastFile",
+  ]);
 
   const recents = await req.user.getRecentFolders({
     ...query,
@@ -78,7 +88,7 @@ routes.get("/dirs", async (req, res) => {
   const dirs = await db.directory.findAll({
     order: ["FirstInList"],
     attributes: ["Id", "Name", "Type", "FirstInList", "IsAdult"],
-    where: { IsAdult: { [db.Op.lte]: req.user.AdultPass } },
+    where: { IsAdult: { [Op.lte]: req.user.AdultPass } },
   });
 
   let Mangas = dirs.filter((d) => d.Type === "Mangas");

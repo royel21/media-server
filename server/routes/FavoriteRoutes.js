@@ -2,6 +2,7 @@ import { Router } from "express";
 import db from "../models/index.js";
 
 import { getOrderBy } from "./query-helper.js";
+import { Op } from "sequelize";
 
 const routes = Router();
 
@@ -79,7 +80,7 @@ routes.get("/:id/:order/:page/:items/:search?", async (req, res) => {
       attributes: ["Id", "Name", "FileCount", "Type", "CreatedAt"],
       where: {
         Name: {
-          [db.Op.like]: `%${search || ""}%`,
+          [Op.like]: `%${search || ""}%`,
         },
       },
       include: [

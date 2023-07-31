@@ -36,7 +36,7 @@ const mapData = (rf) => {
   return rf.dataValues;
 };
 
-const getRecentFolders = async (UserId) => {
+const getRecentFolders = async (UserId, db) => {
   const result = await db.recentFolder.findAll({
     attributes: [
       "LastRead",
@@ -52,8 +52,8 @@ const getRecentFolders = async (UserId) => {
   return result.map(mapData);
 };
 
-const getRecentFiles = async (UserId) => {
-  return db.recentFile.findAll({
+const getRecentFiles = async (UserId, db) => {
+  const result = await db.recentFile.findAll({
     where: { UserId },
     attributes: [
       "LastPos",
@@ -64,6 +64,7 @@ const getRecentFiles = async (UserId) => {
       ],
     ],
   });
+  return result.map((r) => r.dataValues);
 };
 
 const mapDirectory = (dir) => {
@@ -107,39 +108,52 @@ const getAllDirectories = async () => {
   return result.map(mapDirectory);
 };
 
+export const getUserData = async (users, db) => {
+  const usersData = [];
+
+  for (const u of users) {
+    try {
+      sendMessage(`**********User: ${u.Name}**************`);
+      const RecentFolders = await getRecentFolders(u.Id, db);
+      sendMessage("RecentFolders: " + RecentFolders.length);
+      const RecentFiles = await getRecentFiles(u.Id, db);
+      sendMessage("RecentFiles: " + RecentFiles.length);
+
+      const Favorites = [];
+
+      for (let fav of u.Favorites) {
+        Favorites.push({ Name: fav.Name, Folders: fav.Folders.map((f) => f.Path) });
+      }
+      sendMessage("Favorites: " + Favorites.length);
+
+      delete u.dataValues.Id;
+      delete u.dataValues.Recent;
+      delete u.dataValues.Favorites;
+      const user = { ...u.dataValues, RecentFolders, Favorites, RecentFiles };
+
+      usersData.push(user);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  return usersData;
+};
+
 export default async () => {
   sendMessage(`Bakup ---${DB}---`);
   console.time("Backup");
   if (BACKUPDIR) {
     try {
+      const datas = { users: [], directory: [] };
+
       const users = await db.user.findAll({
         include: [
           { model: db.favorite, required: false, include: { model: db.folder, attributes: ["Path"], required: false } },
         ],
       });
-      const datas = { users: [], directory: [] };
 
-      for (const u of users) {
-        sendMessage(`**********User: ${u.Name}**************`);
-        const RecentFolders = await getRecentFolders(u.Id);
-        sendMessage("RecentFolders: " + RecentFolders.length);
-        const RecentFiles = await getRecentFiles(u.Id);
-        sendMessage("RecentFiles: " + RecentFiles.length);
-
-        const Favorites = [];
-
-        for (let fav of u.Favorites) {
-          Favorites.push({ Name: fav.Name, Folders: fav.Folders.map((f) => f.Path) });
-        }
-        sendMessage("Favorites: " + Favorites.length);
-
-        delete u.dataValues.Id;
-        delete u.dataValues.Recent;
-        delete u.dataValues.Favorites;
-        const user = { ...u.dataValues, RecentFolders, Favorites, RecentFiles };
-
-        datas.users.push(user);
-      }
+      datas.users = await getUserData(users, db);
 
       sendMessage("Getting Files From DB this may take a while");
       datas.directory = await getAllDirectories();

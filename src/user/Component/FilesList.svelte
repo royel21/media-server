@@ -138,13 +138,21 @@
     loadContent();
   }
 
+  const getLastChap = (chap, type, count) => {
+    if (/\d+(-\d+|)/.test(chap) && type === "mangas") {
+      return chap.match(/\d+(-\d+|)/);
+    }
+
+    return count;
+  };
+
   let isContent = location.pathname.includes("content");
 </script>
 
 <div class="scroll-container" class:r-content={isContent}>
   <slot name="header" />
   <div class="files-list" on:keydown={handleKeydown} on:click={favClick}>
-    {#each pageData.files as { Id, Name, Type, CurrentPos, Duration, isFav, FileCount, Status }}
+    {#each pageData.files as { Id, Name, Type, CurrentPos, Duration, isFav, FilesType, FileCount, LastChapter, Status }}
       <div class="file" id={Id} data-type={Type} tabIndex="0" in:fade>
         <div class="file-info">
           <div class="file-btns usn">
@@ -153,7 +161,7 @@
             </span>
             <span class="file-progress">
               {#if Type.includes("Folder")}
-                {FileCount}
+                {getLastChap(LastChapter, FilesType, FileCount)}
               {:else}
                 {FileTypes[Type].formatter(CurrentPos, Duration)}
               {/if}
@@ -206,8 +214,8 @@
     display: inline-block;
     width: max-content;
     position: absolute;
-    left: 32px;
-    bottom: 7px;
+    left: 2px;
+    bottom: 2px;
     z-index: 1;
     font-size: 11px;
     font-weight: 600;
@@ -217,9 +225,5 @@
   }
   .file-cover .completed {
     background-color: red;
-  }
-  .file-cover:hover span {
-    left: 2px;
-    bottom: 2px;
   }
 </style>

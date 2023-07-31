@@ -1,13 +1,14 @@
+import { Op } from "sequelize";
 import db from "../models/index.js";
 
-export const mapFilter = (f) => ({ [db.Op.like]: `%${f || ""}%` });
+export const mapFilter = (f) => ({ [Op.like]: `%${f || ""}%` });
 
 export const getFilter = (data) => {
   const filter = data?.replace(/’/g, "'") || "";
   const isOr = filter.includes("&");
 
   return {
-    [db.Op[isOr ? "and" : "or"]]: filter.split(isOr ? "&" : "|").map(mapFilter),
+    [Op[isOr ? "and" : "or"]]: filter.split(/&|\|/g).map(mapFilter),
   };
 };
 

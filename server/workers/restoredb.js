@@ -14,29 +14,7 @@ const sendMessage = (text, event = "info") => {
   }
 };
 
-const createUserAndFav = async (user) => {
-  let found = await db.user.findOne({ where: { Name: user.Name } });
-  if (found) {
-    await found.update(user);
-  } else {
-    found = await db.user.create(user, { include: { model: db.favorite } });
-  }
-  //   Create Favorites
-  for (let fav of user.Favorites) {
-    try {
-      const [nfav] = await db.favorite.findOrCreate({ where: { Name: fav.Name, UserId: found.Id } });
-      if (nfav) {
-        let folders = await db.folder.findAll({ where: { Path: fav.Folders } });
-        await nfav.addFolders(folders);
-      }
-    } catch (error) {
-      console.log(error.toString());
-    }
-  }
-  return found;
-};
-
-const createRecentFiles = async (rec, UserId) => {
+const createRecentFiles = async (rec, UserId, db) => {
   if (rec.length) {
     try {
       const folders = await db.folder.findAll({ where: { Path: rec.map((f) => f.Folder) } });
@@ -68,7 +46,7 @@ const createRecentFiles = async (rec, UserId) => {
   }
 };
 
-const createRecentFolders = async (list, UserId) => {
+const createRecentFolders = async (list, UserId, db) => {
   try {
     const items = list.map((rf) => rf.Path);
     let founds = await db.folder.findAll({ where: { Path: items } });
@@ -85,6 +63,31 @@ const createRecentFolders = async (list, UserId) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+export const createUserAndFav = async (user, db) => {
+  let found = await db.user.findOne({ where: { Name: user.Name } });
+  if (found) {
+    await found.update(user);
+  } else {
+    found = await db.user.create(user, { include: { model: db.favorite } });
+  }
+  //   Create Favorites
+  for (let fav of user.Favorites) {
+    try {
+      const [nfav] = await db.favorite.findOrCreate({ where: { Name: fav.Name, UserId: found.Id } });
+      if (nfav) {
+        let folders = await db.folder.findAll({ where: { Path: fav.Folders } });
+        await nfav.addFolders(folders);
+      }
+    } catch (error) {
+      console.log(error.toString());
+    }
+  }
+
+  await createRecentFiles(user.RecentFiles, found.Id, db);
+  await createRecentFolders(user.RecentFolders, found.Id, db);
+  return found;
 };
 
 const createDirStruct = async (dir) => {
@@ -145,11 +148,7 @@ export default async (backupFile) => {
 
   sendMessage(`Creating Users`);
   for (const user of datas.users) {
-    const nuser = await createUserAndFav(user);
-    if (nuser) {
-      await createRecentFiles(user.RecentFiles, nuser.Id);
-      await createRecentFolders(user.RecentFolders, nuser.Id);
-    }
+    await createUserAndFav(user, db);
   }
   sendMessage("Restore: " + getTimeDif(time));
   process.exit();

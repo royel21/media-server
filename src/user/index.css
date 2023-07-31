@@ -9,6 +9,7 @@
   display: flex;
   align-content: flex-start;
   flex-wrap: wrap;
+  padding: 5px;
   padding-bottom: 50px;
 }
 
@@ -25,7 +26,7 @@
   display: flex;
   justify-content: space-between;
   padding: 0 5px 4px 5px;
-  z-index: 1;
+  z-index: 99;
 }
 
 svg {
@@ -61,19 +62,22 @@ button:active {
   position: relative;
   outline: none;
   background-color: transparent;
-  padding: 5px;
-  width: 200px;
+  width: 215px;
   min-width: 200px;
-  height: 270px;
   transition: 0.2s all;
+  margin: 10px 0px;
+}
+.file:hover,
+.file.active {
+  z-index: 2;
 }
 
 .file-info {
+  position: relative;
   text-align: center;
-  width: 190px;
-  height: 260px;
-  min-height: 260px;
-  padding: 5px;
+  width: 195px;
+  height: 300px;
+  min-height: 300px;
   background-color: rgba(52, 58, 64, 0.99);
   border-radius: 5px;
   cursor: pointer;
@@ -88,6 +92,8 @@ button:active {
 }
 
 .file-btns {
+  position: absolute;
+  top: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -95,6 +101,9 @@ button:active {
   height: 26px;
   z-index: 1;
   cursor: initial;
+  width: 100%;
+  padding: 0 0 0 3px;
+  background-color: rgba(33, 33, 33, 0.45);
 }
 
 .file-progress {
@@ -121,20 +130,17 @@ button:active {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 180px;
+  height: 250px;
   overflow: hidden;
+  border-top-right-radius: 0.25rem;
+  border-top-left-radius: 0.25rem;
 }
 
 .file-cover img {
-  max-width: 190px;
-  max-height: 170px;
+  min-width: 100%;
+  max-height: 100%;
   pointer-events: none;
   position: relative;
-}
-
-.file-cover:hover > img {
-  max-width: none;
-  max-height: none;
 }
 
 img {
@@ -167,7 +173,6 @@ img[alt]:after {
 .file-info:hover .file-name {
   display: inline-block;
   z-index: 999;
-  top: 5px;
   line-height: 1.5;
 }
 

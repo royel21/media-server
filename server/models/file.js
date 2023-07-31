@@ -58,6 +58,12 @@ export default (sequelize, ImagesPath) => {
       },
     },
     {
+      indexes: [
+        {
+          unique: false,
+          fields: ["FolderId"],
+        },
+      ],
       uniqueKeys: {
         name_folderid_unique: {
           fields: ["Name", "FolderId"],

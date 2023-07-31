@@ -81,14 +81,16 @@
     </span>
   </div>
   <div class="files-list" on:keydown={handleKeydown}>
-    {#each pageData.items as { Id, Name, Type, Cover, FileCount, FilesType }, i}
+    {#each pageData.items as { Id, Name, Type, LastChapter, FileCount, FilesType }, i}
       <div class="file" id={Id} data-type={Type} data-types={FilesType} tabIndex="0" on:click={handleClick}>
         <div class="file-info">
           <div class="file-btns">
             <span class="file-btn-left" on:click|stopPropagation={openFolder}>
               <Icons {...folderIcon} />
             </span>
-            <span class="file-progress">{FileCount}</span>
+            <span class="file-progress"
+              >{LastChapter && FilesType === "mangas" ? LastChapter?.match(/\d+(-\d+|)/)[0] : FileCount}</span
+            >
             <span class="remove" on:click|stopPropagation={removeRecent}>
               <Icons name="trash" color="rgba(252, 1, 1, 0.856)" />
             </span>

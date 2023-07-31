@@ -1,8 +1,7 @@
+import { Op, literal } from "sequelize";
 import db from "../models/index.js";
 
 import { clamp, getFilter } from "./utils.js";
-
-const { literal } = db.sqlze;
 
 export const qryCurrentPos = (user, table) => [
   literal(`IFNULL((Select LastPos from RecentFiles where FileId = ${table}.Id and UserId = '${user.Id}'), 0)`),
@@ -35,7 +34,7 @@ const getFolder = async (Id, user) => {
       "Server",
       [literal(currentFile), "currentFile"],
     ],
-    where: { Id, IsAdult: { [db.Op.lte]: user.AdultPass } },
+    where: { Id, IsAdult: { [Op.lte]: user.AdultPass } },
   };
 
   try {
@@ -52,7 +51,7 @@ export const getFiles = async (user, data) => {
   for (let s of search.split("|")) {
     searchs.push({
       Name: {
-        [db.Op.like]: "%" + s + "%",
+        [Op.like]: "%" + s + "%",
       },
     });
   }
@@ -61,14 +60,14 @@ export const getFiles = async (user, data) => {
     attributes: ["Id", "Name", "Type", "Duration", "CreatedAt", qryCurrentPos(user, "File")],
     order: getOrderBy(data.order, "File"),
     where: {
-      [db.Op.or]: searchs,
+      [Op.or]: searchs,
       FolderId: data.id,
     },
   };
   // by file type manga or video => future audio
   if (data.type) {
     query.where.Type = {
-      [db.Op.like]: `%${data.type || ""}%`,
+      [Op.like]: `%${data.type || ""}%`,
     };
   }
 
@@ -121,13 +120,13 @@ export const getFolders = async (req, res) => {
   let query = {
     attributes: ["Id", "Name", "Type", "Genres", "FilesType", "CreatedAt", "Status", "FileCount"],
     where: {
-      [db.Op.or]: {
+      [Op.or]: {
         Name: filter,
         AltName: filter,
         Genres: filter,
         Server: filter,
       },
-      IsAdult: { [db.Op.lte]: req.user.AdultPass },
+      IsAdult: { [Op.lte]: req.user.AdultPass },
       FilesType: filetype,
     },
   };
@@ -145,6 +144,12 @@ export const getFolders = async (req, res) => {
       const totalPages = Math.ceil(result.count / limit);
 
       if (p > totalPages) p = totalPages;
+      query.attributes.push([
+        literal(
+          `(Select Name from Files where FolderId=Folders.Id ORDER BY REPLACE(REPLACE(Name, "-", "0"), "[","0") DESC LIMIT 1)`
+        ),
+        "LastChapter",
+      ]);
 
       result.rows = await db.folder.findAll({
         ...query,

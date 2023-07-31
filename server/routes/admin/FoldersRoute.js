@@ -3,12 +3,12 @@ import db from "../../models/index.js";
 import { getFilter } from "../utils.js";
 import fs from "fs-extra";
 import path from "node:path";
-import { literal } from "sequelize";
+import { Op, literal } from "sequelize";
 import axios from "axios";
 
 const routes = Router();
 
-const getData = async ({ params, url }, res) => {
+const getData = async ({ params }, res) => {
   const { page, items, filter, folderId, dirId } = params;
   let filterTerm = decodeURIComponent(filter || "");
 
@@ -18,7 +18,7 @@ const getData = async ({ params, url }, res) => {
 
   const query = {
     attributes: ["Id", "Name", "Type"],
-    order: [db.sqlze.literal(`REPLACE(REPLACE(Name, "-", "0"), '[','0')`)], // used for natural ordering
+    order: [literal(`REPLACE(REPLACE(Name, "-", "0"), '[','0')`)], // used for natural ordering
     where: {},
     offset,
     limit,
@@ -38,7 +38,7 @@ const getData = async ({ params, url }, res) => {
     }
     query.attributes = [...query.attributes, "Path", "Status", "FilesType", "Scanning"];
 
-    query.where[db.Op.or] = { Path: filters, AltName: filters };
+    query.where[Op.or] = { AltName: filters, Name: filters, Genres: filters };
     result = await db.folder.findAndCountAll(query);
 
     result.rows = result.rows.map((fd) => {

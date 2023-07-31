@@ -4,6 +4,7 @@ import db from "../../models/index.js";
 import fs from "fs-extra";
 import path from "path";
 import { ListFiles } from "win-explorer";
+import { literal } from "sequelize";
 
 const getNewId = () => {
   return Math.random().toString(36).slice(-5);
@@ -87,8 +88,8 @@ routes.get("/", async (req, res) => {
       "FirstInList",
       "IsAdult",
       "IsLoading",
-      [db.sqlze.literal("(Select COUNT(Folders.Id) from Folders where DirectoryId = Directory.Id)"), "FolderCount"],
-      [db.sqlze.literal("(Select SUM(FileCount) from Folders where DirectoryId = Directory.Id)"), "TotalFiles"],
+      [literal("(Select COUNT(Folders.Id) from Folders where DirectoryId = Directory.Id)"), "FolderCount"],
+      [literal("(Select SUM(FileCount) from Folders where DirectoryId = Directory.Id)"), "TotalFiles"],
     ],
     order: ["IsAdult", "FullPath"],
   });

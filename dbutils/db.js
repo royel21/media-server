@@ -1,8 +1,9 @@
 import fs from "fs-extra";
 import { compare } from "../src/stringUtils.js";
 import dbLoader, { createdb } from "../server/models/dbloader.js";
-import backup from "../server/workers/backupdb.js";
-import restore from "../server/workers/restoredb.js";
+import backup, { getUserData } from "../server/workers/backupdb.js";
+import restore, { createUserAndFav } from "../server/workers/restoredb.js";
+import { Op } from "sequelize";
 
 //Name: { [db.Op.like]: "HMangas%" },
 const update = async () => {
@@ -103,6 +104,52 @@ const restoreDB = async () => {
   await restore("mediaserverdb2 - 25-Jul 23 AM 09'50'35.json");
 };
 
+const copyFavToMariadb = async () => {
+  const mariadb = await dbLoader("mediaserverdb");
+
+  const sqlite = await dbLoader("mediaserverdb", "sqlite");
+  await sqlite.init();
+
+  const users = await sqlite.user.findAll({
+    include: [
+      {
+        model: sqlite.favorite,
+        required: false,
+        include: { model: sqlite.folder, attributes: ["Path"], required: false },
+      },
+    ],
+  });
+  const datas = await getUserData(users, sqlite);
+  for (const user of datas) {
+    console.log(user.Name);
+    await createUserAndFav(user, mariadb);
+  }
+  process.exit();
+};
+
+const copyFavToSqlite = async () => {
+  const mariadb = await dbLoader("mediaserverdb");
+  await mariadb.init();
+
+  const sqlite = await dbLoader("mediaserverdb", "sqlite");
+
+  const users = await mariadb.user.findAll({
+    include: [
+      {
+        model: mariadb.favorite,
+        required: false,
+        include: { model: mariadb.folder, attributes: ["Path"], required: false },
+      },
+    ],
+  });
+  const datas = await getUserData(users, mariadb);
+  for (const user of datas) {
+    console.log(user.Name);
+    await createUserAndFav(user, sqlite);
+  }
+  process.exit();
+};
+
 const test = async () => {};
 
 const works = {
@@ -114,6 +161,8 @@ const works = {
   test,
   copyDataToMariadb,
   copyDataToSqlite,
+  copyFavToMariadb,
+  copyFavToSqlite,
 };
 
 const action = process.argv[2];

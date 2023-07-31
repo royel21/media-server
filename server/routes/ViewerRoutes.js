@@ -4,13 +4,14 @@ import db from "../models/index.js";
 import fs from "fs";
 
 import { qryCurrentPos } from "./query-helper.js";
+import { literal } from "sequelize";
 
 const routes = Router();
 
 const getFiles = async ({ user, body }, res, type) => {
   let table = await db[type].findOne({
     where: { Id: body.id },
-    order: [db.sqlze.literal("REPLACE(`Files`.`Name`, '[','0')")],
+    order: [literal("REPLACE(`Files`.`Name`, '[','0')")],
     include: {
       model: db.file,
       attributes: ["Id", "Name", "Type", "Duration", "FolderId", qryCurrentPos(user, "Files")],
