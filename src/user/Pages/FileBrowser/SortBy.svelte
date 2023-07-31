@@ -23,38 +23,41 @@
   };
 </script>
 
-<span class="config-list" on:click={onShowConfig}><Icons name="cog" /></span>
-{#if showConfig}
-  <div class="config-items">
-    <div class="sortby">
-      <label for="orderby">{label}</label>
-      <select id="orderby" name="select-sort" class="fa" bind:value={Config.Content.sort}>
-        {#each items as { value, label }}
-          <option {value}>{label}</option>
-        {/each}
-      </select>
+<span class="config-list" on:click={onShowConfig}
+  ><Icons name="cog" />
+  {#if showConfig}
+    <div class="config-items">
+      <div class="sortby">
+        <label for="orderby">{label}</label>
+        <select id="orderby" name="select-sort" class="fa" bind:value={Config.Content.sort}>
+          {#each items as { value, label }}
+            <option {value}>{label}</option>
+          {/each}
+        </select>
+      </div>
+      <div>
+        <label for="items">Items: </label>
+        <input id="items" name="items" type="number" bind:value={Config.Content.items} min="0" max="500" />
+      </div>
+      <span on:click={save}><Icons name="save" /></span>
     </div>
-    <div>
-      <label for="items">Items: </label>
-      <input id="items" name="items" type="number" bind:value={Config.Content.items} min="0" max="500" />
-    </div>
-    <span on:click={save}><Icons name="save" /></span>
-  </div>
-{/if}
+  {/if}
+</span>
 
 <style>
   .config-list {
-    line-height: 1.15;
-    margin-left: 5px;
-    font-size: 22px;
+    position: relative;
+    display: inline-block;
+    width: 39px;
+    height: 34px;
     cursor: pointer;
   }
 
   .config-list :global(.icon-cog) {
-    width: 30px;
+    width: 38px;
     height: 30px;
-    top: -2px;
-    right: -3px;
+    top: 2px;
+    right: -4px;
   }
 
   .config-items :global(.icon-save) {
@@ -66,7 +69,8 @@
     position: absolute;
     display: flex;
     justify-content: space-around;
-    top: 30px;
+    top: 39px;
+    right: 5px;
     z-index: 9;
     background-color: #4a6083;
     padding: 0 5px;
@@ -78,7 +82,7 @@
     content: " ";
     position: absolute;
     top: -4px;
-    left: calc(50% - -32px);
+    right: 9px;
     width: 10px;
     height: 10px;
     transform: rotate(45deg);
@@ -104,7 +108,7 @@
     outline: none;
   }
   select {
-    top: 6px;
+    top: 5px;
     height: 24px;
   }
   select option {
@@ -112,14 +116,9 @@
     color: white;
   }
   input {
-    top: -1px;
+    top: -2px;
     width: 51px;
     height: 22px;
     text-align: center;
-  }
-  @media screen and (max-width: 600px) {
-    input {
-      top: 1px;
-    }
   }
 </style>

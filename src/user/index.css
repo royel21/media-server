@@ -59,6 +59,8 @@ button:active {
 
 .file {
   position: relative;
+  display: flex;
+  justify-content: center;
   outline: none;
   background-color: transparent;
   width: 204px;
@@ -271,9 +273,17 @@ input[type="range"]::-moz-range-track {
   top: 0;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 600px) {
   .scroll-container {
     height: calc(100% - 67px);
     min-height: calc(100% - 67px);
+  }
+  .file-info {
+    width: 185px;
+    height: 270px;
+    min-height: 270px;
+  }
+  .file-cover {
+    height: 220px;
   }
 }

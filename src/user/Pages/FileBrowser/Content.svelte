@@ -40,7 +40,8 @@
   };
 
   const exitFolder = () => {
-    navigate(pathname || `/${segment[0] || ""}`, { replace: true, state: "" });
+    const url = document.querySelector(`#menu a[href^="/${segment[0]}"]`)?.href;
+    navigate(pathname || url, { replace: true, state: "" });
   };
 
   const onGenres = ({ currentTarget }) => {
@@ -117,15 +118,13 @@
     <button id="last" class="btn btn-secondary" on:click={openFirstLast}>Last</button>
     <button class="btn btn-secondary" on:click={onResetFiles}>Reset All</button>
     <button class="btn btn-secondary" on:click={scanfiles}>Update</button>
+    <span><SortBy label="Sort By:" {showConfig} toggleConfig={handleClick} /></span>
   </div>
-  <fieldset>
-    <legend><span>Files List - <SortBy label="Sort By:" {showConfig} toggleConfig={handleClick} /></span></legend>
-    <FilesList title={"Content"} {type} {filter} {page} {id} {setFolderInfo} {setLastRead} {handleClick}>
-      <div class="first-controls" slot="controls" on:click={exitFolder}>
-        <Icons name="reply" />
-      </div>
-    </FilesList>
-  </fieldset>
+  <FilesList title={"Content"} {type} {filter} {page} {id} {setFolderInfo} {setLastRead} {handleClick}>
+    <div class="first-controls" slot="controls" on:click={exitFolder}>
+      <Icons name="reply" />
+    </div>
+  </FilesList>
 {/if}
 
 <style>
@@ -167,28 +166,6 @@
   input:checked + label {
     background-color: white;
     color: black;
-  }
-
-  fieldset {
-    position: relative;
-    text-align: center;
-    height: calc(100% - 95px);
-    min-height: calc(100% - 95px);
-    border-radius: 0.5rem;
-    margin: 0px 2px;
-  }
-  fieldset :global(.files-list) {
-    padding-bottom: 0;
-  }
-  legend {
-    height: 26px;
-    padding: 0 5px;
-  }
-  legend span {
-    display: flex;
-    justify-content: space-around;
-    margin: 0;
-    width: 100%;
   }
   div {
     pointer-events: all;
