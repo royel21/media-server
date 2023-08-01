@@ -95,7 +95,7 @@
             </span>
           </div>
           <div class="file-cover" on:dblclick|stopPropagation={openFolder}>
-            <LazyImage cover={encodeURI(`/${Type}/${Name}.jpg`)} />
+            <LazyImage cover={encodeURI(`/${Type}/${FilesType}/${Name}.jpg`)} />
           </div>
           <div class="file-name">{Name}</div>
         </div>

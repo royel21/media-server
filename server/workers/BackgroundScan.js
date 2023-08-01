@@ -26,11 +26,10 @@ const IMGTYPES = /\.(jpg|jpeg|png|gif|webp|jpe)$/i;
 
 let DirectoryId;
 
-if (path.join(ThumbnailPath, "Folder")) {
-  fs.mkdirsSync(path.join(ThumbnailPath, "Folder"));
-  fs.mkdirsSync(path.join(ThumbnailPath, "Manga"));
-  fs.mkdirsSync(path.join(ThumbnailPath, "Video"));
-}
+fs.mkdirsSync(path.join(ThumbnailPath, "Folder", "videos"));
+fs.mkdirsSync(path.join(ThumbnailPath, "Folder", "mangas"));
+fs.mkdirsSync(path.join(ThumbnailPath, "Manga"));
+fs.mkdirsSync(path.join(ThumbnailPath, "Video"));
 
 const sendMessage = (text, event = "info") => {
   process.send({ event, text });
@@ -71,7 +70,7 @@ const foldersPendingCover = [];
 
 const createFolderThumbnail = async (folder, files, isFolder) => {
   try {
-    let CoverPath = path.join(ThumbnailPath, "Folder", folder.Name + ".jpg");
+    let CoverPath = path.join(ThumbnailPath, "Folder", folder.FilesType, folder.Name + ".jpg");
 
     if (!fs.existsSync(CoverPath) || isFolder) {
       let img = files.find((f) => IMGTYPES.test(f.Name));

@@ -200,7 +200,7 @@
 
 {#if showImage}
   <div class="thumbnail">
-    <img src={`/Folder/${encodeURIComponent(showImage?.Name)}.jpg`} alt="Cover Not Found" />
+    <img src={`/Folder/${showImage.FilesType}/${encodeURIComponent(showImage?.Name)}.jpg`} alt="Cover Not Found" />
   </div>
 {/if}
 

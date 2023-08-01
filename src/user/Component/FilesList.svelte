@@ -116,10 +116,12 @@
     }
   };
 
-  const getCover = (Type, Name) => {
-    if (folder) Name = `${folder}/${Name}`;
+  const getCover = (Type, Name, FilesType) => {
+    if (FilesType) {
+      return encodeURI(`/Folder/${FilesType}/${Name}.jpg`);
+    }
 
-    return encodeURI(`/${Type}/${Name}.jpg`);
+    return encodeURI(`/${Type}/${folder}/${Name}.jpg`);
   };
 
   onMount(() => {
@@ -168,7 +170,7 @@
             {/if}
           </div>
           <div class="file-cover usn" on:dblclick|stopPropagation={onOpen || openFile}>
-            <LazyImage cover={getCover(Type, Name) + `?v=${ver}`} />
+            <LazyImage cover={getCover(Type, Name, FilesType) + `?v=${ver}`} />
             {#if Type.includes("Folder")}
               <span class:completed={Status}>{Status ? "Completed" : "OnGoing"}</span>
             {/if}
