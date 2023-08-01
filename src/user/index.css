@@ -63,7 +63,7 @@ button:active {
   justify-content: center;
   outline: none;
   background-color: transparent;
-  width: 204px;
+  width: 220px;
   min-width: 195px;
   transition: 0.2s all;
   margin: 10px 0;
@@ -76,9 +76,9 @@ button:active {
 .file-info {
   position: relative;
   text-align: center;
-  width: 194px;
-  height: 300px;
-  min-height: 300px;
+  width: calc(100% - 10px);
+  height: 310px;
+  min-height: 310px;
   background-color: #343a40fc;
   border-radius: 5px;
   cursor: pointer;
@@ -131,7 +131,7 @@ button:active {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 250px;
+  height: 260px;
   overflow: hidden;
   border-top-right-radius: 0.25rem;
   border-top-left-radius: 0.25rem;
@@ -278,12 +278,10 @@ input[type="range"]::-moz-range-track {
     height: calc(100% - 67px);
     min-height: calc(100% - 67px);
   }
-  .file-info {
-    width: 185px;
-    height: 270px;
-    min-height: 270px;
+  .file {
+    width: 204px;
   }
-  .file-cover {
-    height: 220px;
+  .file-info {
+    width: 195px;
   }
 }
