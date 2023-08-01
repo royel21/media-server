@@ -1,5 +1,4 @@
 <script>
-  import { FavoritesStores } from "../../Stores/FavoritesStores";
   import FavoriteManager from "./FavoriteManager.svelte";
   import FilesList from "../../Component/FilesList.svelte";
 
