@@ -31,6 +31,7 @@ const getFolder = async (Id, user) => {
       "Status",
       "Genres",
       "AltName",
+      "FilesType",
       "Server",
       [literal(currentFile), "currentFile"],
     ],

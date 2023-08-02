@@ -71,7 +71,7 @@ routes.post("/image", async (req, res) => {
         const type = result.request.path.match(/\.(jpg|jpeg|png|webp)/i);
         if (type) {
           const ex = type[0];
-          const coverP = path.join(IMAGES, "Folder", folder.Name + ".jpg");
+          const coverP = path.join(IMAGES, "Folder", folder.FilesType, folder.Name + ".jpg");
           await sharp(buffer).jpeg().resize(240).toFile(coverP);
 
           const imgs = fs.readdirSync(folder.Path).filter((f) => /\.(jpg|jpeg|webp|png)$/.test(f));
