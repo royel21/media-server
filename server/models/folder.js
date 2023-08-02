@@ -5,7 +5,7 @@ import { DataTypes } from "sequelize";
 
 export default (sequelize, ImagesPath, isSqlite) => {
   const getFileType = ({ FilesType }) => (FilesType === "mangas" ? "Manga" : "Video");
-  const getCoverPath = (name) => path.join(ImagesPath, "Folder", name + ".jpg");
+  const getCoverPath = (name, type) => path.join(ImagesPath, "Folder", type, name + ".jpg");
 
   const { INTEGER, STRING, DATE, TEXT, BOOLEAN, VIRTUAL } = DataTypes;
   const Folder = sequelize.define(
@@ -106,8 +106,10 @@ export default (sequelize, ImagesPath, isSqlite) => {
             //move or rename folder
             fs.moveSync(old, item.Path, { overwrite: true });
 
-            let oldCover = getCoverPath(opt.Name);
-            const Cover = getCoverPath(item.Name);
+            const type = item._previousDataValues.FilesType;
+
+            let oldCover = getCoverPath(opt.Name, type.FilesType);
+            const Cover = getCoverPath(item.Name, type.FilesType);
             //rename cover name
             if (fs.existsSync(oldCover) && Cover !== oldCover) {
               fs.moveSync(oldCover, Cover, { overwrite: true });
