@@ -20,7 +20,7 @@ export const ZipCover = async (file, coverP, exist) => {
         .sort(sortByName)
         .filter((entry) => !entry.isDirectory);
 
-      const firstImg = entries.find((e) => IMGTYPES.test(e.name) && e.size > 1024 * 30);
+      const firstImg = entries.find((e, i) => IMGTYPES.test(e.name) && e.size > 1024 * 40);
       if (firstImg) {
         const buff = await zipfile.entryData(firstImg);
 
@@ -28,11 +28,12 @@ export const ZipCover = async (file, coverP, exist) => {
 
         let meta = await sharData.metadata();
 
-        if (meta.height > 1650) {
-          sharData = await sharData.extract({ height: 1200, width: meta.width, top: 0, left: 0 });
+        if (meta.width / meta.height < 0.6 && meta.height > 1800) {
+          const height = Math.ceil(meta.width / 0.67);
+          sharData = await sharData.extract({ height, width: meta.width, top: 0, left: 0 });
         }
 
-        await sharData.jpeg().resize(240).toFile(coverP);
+        await sharData.jpeg().resize({ width: 200 }).toFile(coverP);
       }
     }
     const count = zipfile.entriesCount;
