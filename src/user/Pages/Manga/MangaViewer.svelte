@@ -67,8 +67,13 @@
   const nextPage = () => changePage(1, NextFile.action);
 
   const jumpTo = (val) => {
-    val = clamp(val, 0, file.Duration - 1);
-    changePage(val - 1);
+    val = clamp(val, 1, file.Duration) - 1;
+
+    changePages(val);
+    if (webtoon) {
+      scrollInView(val);
+    }
+
     viewerState.jumping = webtoon;
     loadImages(val - 5, 10);
     scrollInView(val);

@@ -60,7 +60,13 @@
 
   const returnBack = () => {
     saveFile();
-    navigate(getReturnPath("open-folder"));
+    let path = getReturnPath("open-folder");
+    if (!path) {
+      const parts = location.pathname.split("/");
+      path = `/${parts[1]}/content/${parts[3]}`;
+    }
+
+    navigate(path);
   };
 
   NextFile.action = () => changeFile(1);

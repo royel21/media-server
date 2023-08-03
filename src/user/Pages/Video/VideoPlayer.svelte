@@ -22,9 +22,8 @@
     player.currentTime = file.CurrentPos;
   };
 
-  const onReturn = () => {
-    dispatch("returnBack");
-  };
+  const onReturn = () => dispatch("returnBack");
+
   const onSeek = (value) => {
     player.currentTime = value;
   };
