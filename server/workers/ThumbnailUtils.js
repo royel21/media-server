@@ -33,7 +33,7 @@ export const ZipCover = async (file, coverP, exist) => {
           sharData = await sharData.extract({ height, width: meta.width, top: 0, left: 0 });
         }
 
-        await sharData.jpeg().resize({ width: 300 }).toFile(coverP);
+        await sharData.jpeg().resize({ width: 240 }).toFile(coverP);
       }
     }
     const count = zipfile.entriesCount;
