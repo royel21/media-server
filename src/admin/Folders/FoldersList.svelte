@@ -80,21 +80,24 @@
     if (el.tagName === "LI") {
       folder = items.find((f) => f.Id === folderId);
       dispatch("folderid", folderId);
-    } else {
-      folder = items.find((f) => f.Id === el.closest("li").id);
-      let cList = el.classList.toString();
+    }
+  };
+  const iconClick = (e) => {
+    let el = e.target;
+    folder = items.find((f) => f.Id === el.closest("li").id);
+    let cList = el.classList.toString();
+    socket.emit("user-info", { cList, name: el.tagName });
 
-      if (/icon-edit/gi.test(cList)) {
-        modalType = { title: "Edit Folder Properties", Del: false };
-        showModal = true;
-      } else if (/icon-trash/gi.test(cList)) {
-        modalType = { title: "Remove Folder", Del: true };
-        showModal = true;
-      } else if (/icon-sync/gi.test(cList)) {
-        socket.emit("scan-dir", { Id: folder.Id, isFolder: true });
-        document.getElementById(folder.Id);
-        scanning = [...scanning, folder.Id];
-      }
+    if (/edit/gi.test(cList)) {
+      modalType = { title: "Edit Folder Properties", Del: false };
+      showModal = true;
+    } else if (/trash/gi.test(cList)) {
+      modalType = { title: "Remove Folder", Del: true };
+      showModal = true;
+    } else if (/sync/gi.test(cList)) {
+      socket.emit("scan-dir", { Id: folder.Id, isFolder: true });
+      document.getElementById(folder.Id);
+      scanning = [...scanning, folder.Id];
     }
   };
 
@@ -216,6 +219,7 @@
   {showGenres}
   {onShowImage}
   {replaceImage}
+  {iconClick}
   on:filter={onFilter}
   on:gotopage={gotopage}
   on:click={itemClick}

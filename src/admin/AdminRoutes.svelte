@@ -60,6 +60,8 @@
     text-align: center;
     overflow: hidden;
     max-height: 66px;
+    max-width: 100px;
+    text-overflow: ellipsis;
   }
   .content {
     width: 100%;

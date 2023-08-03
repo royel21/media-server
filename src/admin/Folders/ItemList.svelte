@@ -13,6 +13,7 @@
   export let scanning = [];
   export let showGenres = false;
   export let replaceImage;
+  export let iconClick;
 
   const addGenres = ({ target }) => {
     let Id = target.closest("li").id;
@@ -49,8 +50,8 @@
             on:mousemove
           >
             {#if Type.includes("Folder")}
-              <span on:click={() => replaceImage(Id)}><Icons name="file" color="red" /></span>
-              <span>
+              <span on:click={() => replaceImage(Id)}><Icons name="file" color="red" box="0 0 420 512" /></span>
+              <span class="sync" on:click={iconClick}>
                 <Icons name="sync" box="0 0 512 512" class={scanning.includes(Id) || Scanning ? "icon-spin" : ""} />
               </span>
               {#if showGenres}
@@ -67,8 +68,8 @@
                 </span>
               {/if}
             {/if}
-            <span><Icons name="edit" /></span>
-            <span><Icons name="trash" /></span>
+            <span class="edit" on:click={iconClick}><Icons name="edit" /></span>
+            <span class="trash" on:click={iconClick}><Icons name="trash" box="0 0 420 512" /></span>
 
             {Name}
           </li>
@@ -145,6 +146,10 @@
   .empty-list:only-child {
     text-align: center;
   }
+  li :global(svg path),
+  li :global(svg) {
+    pointer-events: none;
+  }
 
   @media screen and (max-width: 600px) {
     #Folders {
@@ -160,9 +165,6 @@
     }
     .controls h4 {
       width: 60px;
-    }
-    li > span {
-      margin-right: 5px;
     }
   }
 </style>
