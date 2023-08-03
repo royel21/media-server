@@ -39,6 +39,8 @@
     type="text"
     class="form-control filter-file"
     placeholder="Filter"
+    enterkeyhint="done"
+    autocomplete="off"
     bind:value={curFilter}
     on:keydown={submitFilter}
   />

@@ -86,7 +86,6 @@
     let el = e.target;
     folder = items.find((f) => f.Id === el.closest("li").id);
     let cList = el.classList.toString();
-    socket.emit("user-info", { cList, name: el.tagName });
 
     if (/edit/gi.test(cList)) {
       modalType = { title: "Edit Folder Properties", Del: false };

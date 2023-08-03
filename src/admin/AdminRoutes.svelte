@@ -60,8 +60,6 @@
     text-align: center;
     overflow: hidden;
     max-height: 66px;
-    max-width: 100px;
-    text-overflow: ellipsis;
   }
   .content {
     width: 100%;
@@ -72,6 +70,10 @@
   @media screen and (max-width: 480px) {
     .content {
       height: calc(100% - 67px);
+    }
+    #admin-label {
+      max-width: 100px;
+      text-overflow: ellipsis;
     }
   }
 </style>
