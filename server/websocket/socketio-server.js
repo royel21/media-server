@@ -24,6 +24,7 @@ export default (server, sessionMeddle) => {
       FileManager.setSocket(io);
 
       socket.on("scan-dir", (data) => FileManager.scanDir(data, user));
+      socket.on("user-info", (data) => console.log(data));
       console.log("User: ", user.Name, socket.id);
 
       if (user.Role.includes("Administrator")) {

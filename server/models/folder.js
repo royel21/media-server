@@ -108,8 +108,8 @@ export default (sequelize, ImagesPath, isSqlite) => {
 
             const type = item._previousDataValues.FilesType;
 
-            let oldCover = getCoverPath(opt.Name, type.FilesType);
-            const Cover = getCoverPath(item.Name, type.FilesType);
+            let oldCover = getCoverPath(opt.Name, type);
+            const Cover = getCoverPath(item.Name, type);
             //rename cover name
             if (fs.existsSync(oldCover) && Cover !== oldCover) {
               fs.moveSync(oldCover, Cover, { overwrite: true });
@@ -130,7 +130,7 @@ export default (sequelize, ImagesPath, isSqlite) => {
         },
         beforeDestroy: async function (item, opt) {
           if (opt.Del) {
-            let cPath = getCoverPath(item.Name);
+            let cPath = getCoverPath(item.Name, item.FilesType);
 
             //Remove Cover from images
             if (fs.existsSync(cPath)) fs.removeSync(cPath);

@@ -26,7 +26,7 @@
 <span class="config-list" on:click={onShowConfig}
   ><Icons name="cog" />
   {#if showConfig}
-    <div class="config-items">
+    <div class="config-items" on:click|stopPropagation>
       <div class="sortby">
         <label for="orderby">{label}</label>
         <select id="orderby" name="select-sort" class="fa" bind:value={Config.Content.sort}>

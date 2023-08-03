@@ -190,10 +190,9 @@
 
 <style>
   .scroll-container.r-content {
-    padding-top: 15px;
-    padding-bottom: 0px;
-    height: calc(100% - 44px);
-    min-height: calc(100% - 44px);
+    height: calc(100% - 96px);
+    min-height: calc(100% - 90px);
+    padding-bottom: 90px;
   }
   .file-btn-left {
     cursor: pointer;

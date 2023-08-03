@@ -300,7 +300,7 @@
     width: 100%;
   }
   #btn-bar button {
-    margin-right: 15px;
+    margin-right: 12px;
   }
   @media screen and (max-width: 600px) {
     .gen-tag {

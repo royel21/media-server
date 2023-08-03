@@ -71,5 +71,9 @@
     .content {
       height: calc(100% - 67px);
     }
+    #admin-label {
+      max-width: 100px;
+      text-overflow: ellipsis;
+    }
   }
 </style>

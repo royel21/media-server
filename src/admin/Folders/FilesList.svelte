@@ -97,17 +97,18 @@
     }
   };
 
-  const itemClick = (event) => {
+  const iconClick = (event) => {
     let el = event.target;
-    if (el.tagName === "svg") {
+
+    if (el.tagName === "SPAN") {
       file = items.find((f) => f.Id === el.closest("li").id);
       let cList = el.classList.toString();
       //Edit button was clicked
-      if (/icon-edit/gi.test(cList)) {
+      if (/edit/gi.test(cList)) {
         modalType = { title: "Edit File", Del: false, isFile: true };
       }
       //Delete button was clicked
-      else {
+      if (/trash/gi.test(cList)) {
         modalType = { title: "Remove File", Del: true, isFile: true };
       }
       showModal = true;
@@ -150,7 +151,7 @@
   {totalPages}
   {totalItems}
   {filter}
+  {iconClick}
   on:filter={onFilter}
   on:gotopage={goToPage}
-  on:click={itemClick}
 />

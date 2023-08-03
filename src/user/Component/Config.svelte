@@ -219,8 +219,16 @@
     #user-label {
       max-width: 100px;
     }
+    .icon :global(svg) {
+      height: 26px;
+    }
     .nav-title {
+      display: inline-block;
       font-size: 16px;
+      white-space: nowrap;
+      max-width: 90px;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
   }
 </style>
