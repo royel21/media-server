@@ -8,6 +8,17 @@ const HOME = 36;
 const END = 35;
 var selectedIndex = 0;
 
+Storage.prototype.getObject = function (key) {
+  let value = this.getItem(key);
+
+  try {
+    value = JSON.parse(value);
+  } catch (err) {
+    console.log(err);
+  }
+  return value || {};
+};
+
 const calCol = () => {
   let file = document.querySelector(".file");
   return Math.floor(file.parentElement.offsetWidth / file.offsetWidth);
@@ -59,11 +70,13 @@ const selectItem = (index) => {
   selectElement(getElByIndex(index));
 };
 
-const StoreId = {};
+const StoreKey = localStorage.getItem("user") + "-FolderIds";
+
+const StoreId = localStorage.getObject(StoreKey);
 export const saveId = (title, id) => {
   if (title && id) {
     StoreId[title] = id;
-    localStorage.setObject("FolderId", StoreId);
+    localStorage.setObject(StoreKey, StoreId);
   }
 };
 
@@ -161,7 +174,7 @@ const fileKeypress = (e, page, goToPage, title) => {
 
     const active = file.parentElement.querySelector(".active");
     if (active && title) {
-      localStorage.setItem(title, active.id);
+      saveId(title, active.id);
     }
   }
 };

@@ -11,11 +11,10 @@ const initConfig = {
 
 let ConfigStore;
 
-let username = "";
+let username = localStorage.getItem("user");
 
-export const setConfig = (name) => {
-  username = name;
-  const cfg = JSON.parse(localStorage.getItem(name));
+export const setConfig = () => {
+  const cfg = JSON.parse(localStorage.getItem(username));
 
   if (cfg) {
     for (const key in initConfig) {

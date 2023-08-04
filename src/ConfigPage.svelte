@@ -40,6 +40,7 @@
         console.log(error);
       }
     }
+    localStorage.setItem("user", user.username);
   });
 
   $: if (user.username) {

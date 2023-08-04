@@ -146,6 +146,9 @@
   .empty-list:only-child {
     text-align: center;
   }
+  li span:hover {
+    cursor: ponter;
+  }
   li :global(svg path),
   li :global(svg) {
     pointer-events: none;

@@ -2,9 +2,9 @@ import { navigate } from "svelte-routing";
 import { formatTime } from "./pagesUtils";
 import { saveId } from "../Component/fileEvents";
 
-const isMobile = /(android)|(iphone)/i.test(navigator.userAgent);
+const isMobile = window.innerWidth < 501;
 const scrollW = isMobile ? 15 : 0;
-const itemW = isMobile ? 170 : 200;
+const itemW = isMobile ? 204 : 220;
 
 export const FileTypes = {
   Manga: {
@@ -28,11 +28,23 @@ export const FileTypes = {
   },
 };
 
-const pathStore = {};
+Storage.prototype.getObject = function (key) {
+  let value = this.getItem(key);
+
+  try {
+    value = JSON.parse(value);
+  } catch (err) {
+    console.log(err);
+  }
+  return value || {};
+};
+
+const user = localStorage.getItem("user") + "-path";
+const pathStore = localStorage.getObject(user);
 
 export const saveReturnPath = (name, path) => {
   pathStore[name] = path;
-  localStorage.setObject("pathStore", pathStore);
+  localStorage.setObject(user, pathStore);
 };
 
 export const getReturnPath = (name) => pathStore[name];
