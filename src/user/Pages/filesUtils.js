@@ -3,7 +3,7 @@ import { formatTime } from "./pagesUtils";
 import { saveId } from "../Component/fileEvents";
 
 const isMobile = window.innerWidth < 501;
-const scrollW = isMobile ? 15 : 0;
+const scrollW = isMobile ? 0 : 15;
 const itemW = isMobile ? 204 : 220;
 
 export const FileTypes = {
