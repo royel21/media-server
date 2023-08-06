@@ -70,15 +70,15 @@ routes.post("/image", async (req, res) => {
         const buffer = Buffer.from(result.data, "binary");
         const type = result.request.path.match(/\.(jpg|jpeg|png|webp)/i);
         if (type) {
-          const ex = type[0];
           const coverP = path.join(IMAGES, "Folder", folder.FilesType, folder.Name + ".jpg");
-          await sharp(buffer).jpeg().resize(240).toFile(coverP);
+          const img = await sharp(buffer);
+          img.jpeg().resize(240).toFile(coverP);
 
           const imgs = fs.readdirSync(folder.Path).filter((f) => /\.(jpg|jpeg|webp|png)$/.test(f));
           for (const img of imgs) {
             fs.removeSync(path.join(folder.Path, img));
           }
-          fs.writeFileSync(path.join(folder.Path, "Cover" + ex), buffer);
+          img.jpeg().toFile(path.join(folder.Path, "Cover.jpg"));
           return res.send({ valid: true, folder: req.body.Id });
         }
       }
@@ -109,24 +109,22 @@ routes.get("/folder-raw/:Id", async (req, res) => {
 
 const mangaTypes = {
   Mg: "Manga",
-  mhu: "Manhua",
-  mhw: "Manhwa",
-  web: "Webtoon",
+  Mhw: "Manhwa",
+  Web: "Webtoon",
 };
 
 routes.get("/changes-genres/:Id/:genre", async (req, res) => {
   const { Id, genre } = req.params;
   const folder = await db.folder.findOne({ where: { Id } });
-  let genres = folder?.Genres.split(", ");
-
+  let genres = folder?.Genres.split(/,( |)/g);
   if (folder) {
     if (genre !== "sort" && !genres?.includes("Raw")) {
-      genres = genres.filter((g) => !/manga|manhwa|manhua|webtoon/i.test(g));
+      genres = genres.filter((g) => g && !/manga|manhwa|manhua|webtoon/i.test(g));
       genres.push(mangaTypes[genre]);
     }
 
     genres.sort();
-    folder.Genres = genres.join(", ");
+    folder.Genres = genres.filter((g) => g?.trim()).join(", ");
     await folder.save();
   }
   res.send({ valid: true });

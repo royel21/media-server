@@ -11,23 +11,24 @@ const initConfig = {
 
 let ConfigStore;
 
-let username = localStorage.getItem("user");
+export const setConfig = (key) => {
+  if (key) {
+    localStorage.setItem("user", key);
+    const cfg = JSON.parse(localStorage.getItem(key + "-config"));
 
-export const setConfig = () => {
-  const cfg = JSON.parse(localStorage.getItem(username));
-
-  if (cfg) {
-    for (const key in initConfig) {
-      initConfig[key] = cfg[key] ?? initConfig[key];
+    if (cfg) {
+      for (const key in initConfig) {
+        initConfig[key] = cfg[key] ?? initConfig[key];
+      }
     }
-  }
 
-  ConfigStore = writable(initConfig);
+    ConfigStore = writable(initConfig);
+  }
 };
 
 const updateConfig = (cfg) => {
   ConfigStore.update((old) => (old = cfg));
-  localStorage.setObject(username, cfg);
+  localStorage.setObject(localStorage.getItem("user") + "-config", cfg);
   return cfg;
 };
 

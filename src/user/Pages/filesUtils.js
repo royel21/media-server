@@ -39,15 +39,25 @@ Storage.prototype.getObject = function (key) {
   return value || {};
 };
 
-const user = localStorage.getItem("user") + "-path";
-const pathStore = localStorage.getObject(user);
+let pathStore = {};
 
-export const saveReturnPath = (name, path) => {
-  pathStore[name] = path;
-  localStorage.setObject(user, pathStore);
+const getPathStore = (key, path) => {
+  const user = localStorage.getItem("user") + "-path";
+  if (!pathStore) {
+    pathStore = localStorage.getObject(user) || {};
+  }
+
+  if (path) {
+    pathStore[key] = path;
+    localStorage.setObject(user, pathStore);
+  }
+
+  return key ? pathStore[key] : pathStore;
 };
 
-export const getReturnPath = (name) => pathStore[name];
+export const saveReturnPath = (name, path) => getPathStore(name, path);
+
+export const getReturnPath = (name) => getPathStore(name);
 
 export const getFilesPerPage = (i) => {
   let fwidth = document.body.offsetWidth;

@@ -27,8 +27,6 @@
 
   FavoritesStores.set(User.favorites);
 
-  setConfig(User.username);
-
   onMount(async () => {
     const data = await apiUtils.files(["dirs/"]);
     if (data.valid) {
@@ -37,6 +35,7 @@
   });
 
   document.title = "Home";
+  $: setConfig(User.username);
 </script>
 
 <Router>

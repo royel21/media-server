@@ -92,4 +92,9 @@
   li:not(:last-child) {
     border-bottom: 1px solid;
   }
+  @media screen and (max-width: 480px) {
+    li {
+      padding: 8px;
+    }
+  }
 </style>

@@ -9,7 +9,7 @@
   display: flex;
   align-content: flex-start;
   flex-wrap: wrap;
-  padding: 5px 2px 50px;
+  padding: 5px 2px 80px;
 }
 
 .file.active .file-info {

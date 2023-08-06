@@ -132,14 +132,6 @@
     font-family: monospace;
   }
   .controls {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 5px 4px 5px;
-    z-index: 1;
     pointer-events: none;
   }
 </style>

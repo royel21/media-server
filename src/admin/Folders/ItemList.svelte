@@ -55,10 +55,9 @@
                 <Icons name="sync" box="0 0 512 512" class={scanning.includes(Id) || Scanning ? "icon-spin" : ""} />
               </span>
               {#if showGenres}
-                <span class="g-list" on:mouseenter|stopPropagation on:mouseleave|stopPropagation>
+                <span class="g-list">
                   {#if /manga/.test(FilesType)}
                     <span on:click={addGenres}>Mg</span>
-                    <span on:click={addGenres}>Mhu</span>
                     <span on:click={addGenres}>Mhw</span>
                     <span on:click={addGenres}>Web</span>
                     <span on:click={addRaw}>Raw</span>
