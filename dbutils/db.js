@@ -145,7 +145,7 @@ const copyFavToSqlite = async () => {
   const datas = await getUserData(users, mariadb);
   for (const user of datas) {
     console.log(user.Name);
-    await createUserAndFav(user, sqlite);
+    await createUserAndFav(user, sqlite, true);
   }
   process.exit();
 };

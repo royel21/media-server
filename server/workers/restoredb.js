@@ -65,7 +65,7 @@ const createRecentFolders = async (list, UserId, db) => {
   }
 };
 
-export const createUserAndFav = async (user, db) => {
+export const createUserAndFav = async (user, db, lite) => {
   let found = await db.user.findOne({ where: { Name: user.Name } });
   if (found) {
     await found.update(user);
@@ -77,6 +77,12 @@ export const createUserAndFav = async (user, db) => {
     try {
       const [nfav] = await db.favorite.findOrCreate({ where: { Name: fav.Name, UserId: found.Id } });
       if (nfav) {
+        if (lite) {
+          fav.Folders = fav.Folders.map((f) => {
+            return f.replace("/mnt/5TBHDD/", "F:\\").split("/").join("\\");
+          });
+        }
+        console.log(fav.Folders);
         let folders = await db.folder.findAll({ where: { Path: fav.Folders } });
         await nfav.addFolders(folders);
       }
