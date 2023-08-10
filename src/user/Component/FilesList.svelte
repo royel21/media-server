@@ -175,7 +175,7 @@
               <span class:completed={Status}>{Status ? "Completed" : "OnGoing"}</span>
             {/if}
           </div>
-          <div class="file-name">{Name}</div>
+          <div class="file-name" title={Type !== "Folder" ? Name : ""}>{Name}</div>
         </div>
       </div>
     {/each}
