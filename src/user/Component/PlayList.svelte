@@ -178,9 +178,9 @@
   #play-list #p-list li {
     display: flex;
     flex-direction: column;
-    padding: 4px;
+    padding: 0px;
     border-bottom: 1px solid;
-    height: 225px;
+    height: 270px;
     cursor: pointer;
   }
 
@@ -198,31 +198,38 @@
 
   #play-list .cover {
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     pointer-events: none;
+    height: 225px;
     width: 100%;
     text-align: center;
   }
 
   #play-list .l-name {
     display: inline-block;
-    padding-left: 5px;
+    padding: 0 4px;
     font-size: 14px;
     text-align: center;
+    border-top: 1px solid;
   }
 
   #play-list .duration {
     position: absolute;
     display: inline-block;
-    right: 0px;
-    bottom: 8px;
+    top: 3px;
+    right: 2px;
     padding: 0 4px;
-    background-color: black;
+    background-color: #283841;
     border-radius: 0.25rem;
-    font-size: 13px;
+    font-size: 14px;
+    font-family: monospace;
   }
 
   #play-list :global(img) {
-    max-height: 185px;
+    max-height: 100%;
+    max-width: 100%;
   }
 
   #play-list #p-list::-webkit-scrollbar {
