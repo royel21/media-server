@@ -180,7 +180,6 @@
     flex-direction: column;
     padding: 0px;
     border-bottom: 1px solid;
-    height: 270px;
     cursor: pointer;
   }
 
@@ -202,7 +201,7 @@
     justify-content: center;
     align-items: center;
     pointer-events: none;
-    height: 225px;
+    height: 240px;
     width: 100%;
     text-align: center;
   }

@@ -120,7 +120,7 @@ routes.get("/changes-genres/:Id/:genre", async (req, res) => {
   const folder = await db.folder.findOne({ where: { Id } });
   let genres = folder?.Genres.split(/,( |)/g);
   if (folder) {
-    if (genre !== "sort" && !genres?.includes("Raw")) {
+    if (genre !== "sort") {
       genres = genres.filter((g) => g && !/manga|manhwa|manhua|webtoon/i.test(g));
       genres.push(mangaTypes[genre]);
     }
