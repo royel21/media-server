@@ -218,10 +218,10 @@
   #play-list .duration {
     position: absolute;
     display: inline-block;
-    top: 3px;
-    right: 2px;
+    top: 1px;
+    right: calc(50% - 20px);
     padding: 0 4px;
-    background-color: #283841;
+    background-color: #283841d4;
     border-radius: 0.25rem;
     font-size: 14px;
     font-family: monospace;
