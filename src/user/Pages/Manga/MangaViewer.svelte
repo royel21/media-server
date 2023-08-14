@@ -15,6 +15,7 @@
   export let KeyMap;
   export let viewer;
   export let changePages;
+  export let removeFile;
 
   const { NextFile, PrevFile, Fullscreen, SkipForward, SkipBack } = KeyMap;
   const socket = getContext("socket");
@@ -272,10 +273,16 @@
     <span class="btn-fullscr popup-msg" on:click={Fullscreen.action} data-title="Full Screen">
       <Icons name="expandarrows" />
     </span>
+    <span class="remove" on:click={removeFile}><Icons name="trash" color="red" /></span>
   </div>
 </div>
 
 <style>
+  .remove {
+    position: fixed;
+    right: 0px;
+    bottom: 70px;
+  }
   .controls :global(svg:not(.icon-eye)) {
     width: 36px;
     height: 30px;

@@ -32,7 +32,6 @@ export default (server, sessionMeddle) => {
         socket.on("load-content", FileManager.loadContent);
 
         socket.on("rename-file", FileManager.renameFile);
-        socket.on("remove-file", FileManager.removeFile);
 
         socket.on("rename-folder", FileManager.renameFolder);
         socket.on("remove-folder", FileManager.removeFolder);
@@ -45,6 +44,7 @@ export default (server, sessionMeddle) => {
         socket.on("loadzip-image", (data) => mloader.loadZipImages(data, socket));
         socket.on("reset-recent", (data) => FileManager.resetRecent(data, user));
       }
+      socket.on("remove-file", FileManager.removeFile);
 
       socket.on("disconnect", () => console.log("disconnected: ", socket.id));
     } else {

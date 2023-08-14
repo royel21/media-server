@@ -74,6 +74,10 @@
   PrevFile.action = () => changeFile(-1);
   PrevFile.isctrl = true;
 
+  const onFileRemove = () => {
+    changeFile(1);
+  };
+
   onMount(async () => {
     let data = await apiUtils.post(`viewer/folder`, { id: folderId });
     if (!data.fail) {
@@ -81,6 +85,11 @@
       playList = files = data.files.sort(sortFileByName);
       window.title = playList[0]?.Cover?.split("/")[2] || "";
     }
+
+    socket.on("file-removed", onFileRemove);
+    return () => {
+      socket.off("file-removed", onFileRemove);
+    };
   });
 
   let runningClock;
@@ -121,6 +130,10 @@
     fileIndex = playList.findIndex((f) => f.Id === fileId);
   }
 
+  const removeFile = async () => {
+    socket.emit("remove-file", { Id: fileId, Del: true });
+  };
+
   menu.style.display = "none";
 </script>
 
@@ -139,7 +152,15 @@
   </span>
   <PlayList {fileId} files={playList} on:click={selectFile} {onFilter} {folderName} />
   {#if isManga(file)}
-    <MangaViewer {viewer} {file} on:changefile={changeFile} on:returnBack={returnBack} {changePages} {KeyMap} />
+    <MangaViewer
+      {viewer}
+      {file}
+      on:changefile={changeFile}
+      on:returnBack={returnBack}
+      {changePages}
+      {KeyMap}
+      {removeFile}
+    />
   {:else if isVideo(file)}
     <VideoPLayer {file} {KeyMap} on:returnBack={returnBack} {viewer} />
   {/if}
