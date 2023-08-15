@@ -8,7 +8,7 @@
   import PlayList from "../Component/PlayList.svelte";
   import MangaViewer from "./Manga/MangaViewer.svelte";
   import VideoPLayer from "./Video/VideoPlayer.svelte";
-  import { KeyMap, handleKeyboard, isMobile, isVideo, isManga, showFileName, sortFileByName } from "./pagesUtils";
+  import { KeyMap, handleKeyboard, isMobile, isVideo, isManga, showFileName } from "./pagesUtils";
   import Icons from "../../icons/Icons.svelte";
   import { getReturnPath } from "./filesUtils";
 
@@ -74,24 +74,6 @@
   PrevFile.action = () => changeFile(-1);
   PrevFile.isctrl = true;
 
-  const onFileRemove = () => {
-    changeFile(1);
-  };
-
-  onMount(async () => {
-    let data = await apiUtils.post(`viewer/folder`, { id: folderId });
-    if (!data.fail) {
-      folderName = data.Name;
-      playList = files = data.files.sort(sortFileByName);
-      window.title = playList[0]?.Cover?.split("/")[2] || "";
-    }
-
-    socket.on("file-removed", onFileRemove);
-    return () => {
-      socket.off("file-removed", onFileRemove);
-    };
-  });
-
   let runningClock;
   window.addEventListener("fullscreenchange", (e) => {
     if (document.fullscreenElement) {
@@ -131,8 +113,28 @@
   }
 
   const removeFile = async () => {
-    socket.emit("remove-file", { Id: fileId, Del: true });
+    socket.emit("remove-file", { Id: fileId, Del: true, viewer: true });
   };
+
+  const onFileRemove = (_, data) => {
+    if ((data, viewer)) {
+      changeFile(1);
+    }
+  };
+
+  onMount(async () => {
+    let data = await apiUtils.post(`viewer/folder`, { id: folderId });
+    if (!data.fail) {
+      folderName = data.Name;
+      playList = files = data.files;
+      window.title = playList[0]?.Cover?.split("/")[2] || "";
+    }
+
+    socket.on("file-removed", onFileRemove);
+    return () => {
+      socket.off("file-removed", onFileRemove);
+    };
+  });
 
   menu.style.display = "none";
 </script>

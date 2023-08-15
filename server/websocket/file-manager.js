@@ -212,13 +212,13 @@ const renameFile = async ({ Id, Name }) => {
 };
 /************ Remove file from db and system ***********************/
 
-const removeFile = async ({ Id, Del }) => {
+const removeFile = async ({ Id, Del, viewer }) => {
   let file = await db.file.findOne({
     where: { Id },
     include: { model: db.folder },
   });
 
-  const message = { success: false, msg: "" };
+  const message = { success: false, msg: "", viewer };
 
   if (file) {
     try {
