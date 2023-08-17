@@ -82,7 +82,7 @@ export const createUserAndFav = async (user, db, lite) => {
             return f.replace("/mnt/5TBHDD/", "F:\\").split("/").join("\\");
           });
         }
-        console.log(fav.Folders);
+
         let folders = await db.folder.findAll({ where: { Path: fav.Folders } });
         await nfav.addFolders(folders);
       }
