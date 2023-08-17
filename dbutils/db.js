@@ -3,7 +3,7 @@ import { compare } from "../src/stringUtils.js";
 import dbLoader, { createdb } from "../server/models/dbloader.js";
 import backup, { getUserData } from "../server/workers/backupdb.js";
 import restore, { createUserAndFav } from "../server/workers/restoredb.js";
-import { Op } from "sequelize";
+import { Op, literal } from "sequelize";
 
 //Name: { [db.Op.like]: "HMangas%" },
 const update = async () => {
@@ -150,7 +150,20 @@ const copyFavToSqlite = async () => {
   process.exit();
 };
 
-const test = async () => {};
+const test = async () => {
+  const db = await dbLoader("mediaserverdb");
+  db.sqlze.options.logging = console.log;
+  let table = await db.folder.findOne({
+    order: [literal(`REPLACE(REPLACE(Files.Name, "-", "0"), "[","0") ASC`)],
+    where: { Id: "bI9pm4" },
+    include: {
+      model: db.file,
+      attributes: ["Id", "Name", "Type", "Duration", "FolderId"],
+    },
+  });
+  table.Files.forEach((f) => console.log(f.Name));
+  process.exit();
+};
 
 const works = {
   createdb,

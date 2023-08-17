@@ -10,8 +10,8 @@ const routes = Router();
 
 const getFiles = async ({ user, body }, res, type) => {
   let table = await db[type].findOne({
+    order: [literal(`REPLACE(REPLACE(Files.Name, "-", "0"), "[","0") ASC`)],
     where: { Id: body.id },
-    order: [literal("REPLACE(`Files`.`Name`, '[','0')")],
     include: {
       model: db.file,
       attributes: ["Id", "Name", "Type", "Duration", "FolderId", qryCurrentPos(user, "Files")],
