@@ -117,7 +117,7 @@
   };
 
   const onFileRemove = (_, data) => {
-    if ((data, viewer)) {
+    if (data.viewer) {
       changeFile(1);
     }
   };
