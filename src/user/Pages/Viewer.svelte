@@ -116,7 +116,8 @@
     socket.emit("remove-file", { Id: fileId, Del: true, viewer: true });
   };
 
-  const onFileRemove = (_, data) => {
+  const onFileRemove = (data) => {
+    console.log("rm", data);
     if (data.viewer) {
       changeFile(1);
     }
