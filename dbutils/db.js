@@ -3,7 +3,7 @@ import { compare } from "../src/stringUtils.js";
 import dbLoader, { createdb } from "../server/models/dbloader.js";
 import backup, { getUserData } from "../server/workers/backupdb.js";
 import restore, { createUserAndFav } from "../server/workers/restoredb.js";
-import { Op, literal } from "sequelize";
+import { literal } from "sequelize";
 
 //Name: { [db.Op.like]: "HMangas%" },
 const update = async () => {
@@ -127,6 +127,18 @@ const copyFavToMariadb = async () => {
   process.exit();
 };
 
+const mapFolders = (f) => f.replace("/mnt/5TBHDD/", "F:\\").split("/").join("\\");
+const mapFolders2 = (f) => {
+  f.Folder = f.Folder.replace("/mnt/5TBHDD/", "F:\\").split("/").join("\\");
+
+  return f;
+};
+const mapFolders3 = (f) => {
+  f.Path = f.Path.replace("/mnt/5TBHDD/", "F:\\").split("/").join("\\");
+
+  return f;
+};
+
 const copyFavToSqlite = async () => {
   const mariadb = await dbLoader("mediaserverdb");
   await mariadb.init();
@@ -145,6 +157,11 @@ const copyFavToSqlite = async () => {
   const datas = await getUserData(users, mariadb);
   for (const user of datas) {
     console.log(user.Name);
+    for (let fav of user.Favorites) {
+      fav.Folders = fav.Folders.map(mapFolders);
+    }
+    user.RecentFiles = user.RecentFiles.filter((f) => f.Folder).map(mapFolders2);
+    user.RecentFolders = user.RecentFolders.filter((f) => f.Path).map(mapFolders3);
     await createUserAndFav(user, sqlite, true);
   }
   process.exit();

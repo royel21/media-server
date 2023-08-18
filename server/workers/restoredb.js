@@ -31,11 +31,13 @@ const createRecentFiles = async (rec, UserId, db) => {
           const r = rec.find((r) => r.Name === f.Name && r.Folder === folder.Path);
           delete r.Folder;
           delete r.Name;
-          files.push({
-            ...r,
-            FileId: f.Id,
-            UserId,
-          });
+          if (!files.find((f2) => f2.FileId === f.Id)) {
+            files.push({
+              ...r,
+              FileId: f.Id,
+              UserId,
+            });
+          }
         });
       }
 
@@ -48,15 +50,18 @@ const createRecentFiles = async (rec, UserId, db) => {
 
 const createRecentFolders = async (list, UserId, db) => {
   try {
-    const items = list.map((rf) => rf.Path);
-    let founds = await db.folder.findAll({ where: { Path: items } });
+    let founds = await db.folder.findAll({ where: { Path: list.map((rf) => rf.Path) } });
     const files = await db.file.findAll({ where: { Name: list.filter((f) => f.File).map((f) => f.File) } });
-    const recent = list.map((rf) => {
+    const recent = [];
+
+    list.forEach((rf) => {
       rf.FolderId = founds.find((f) => f.Path === rf.Path)?.Id;
       rf.CurrentFile = files.find((f) => f.Name === rf.File)?.Id;
       delete rf.Folder;
       delete rf.File;
-      return { ...rf, UserId };
+      if (!recent.find((f) => f.FolderId === rf.FolderId)) {
+        recent.push({ ...rf, UserId });
+      }
     });
 
     await db.recentFolder.bulkCreate(recent, { updateOnDuplicate: ["CurrentFile", "LastRead", "FolderId", "UserId"] });
@@ -65,7 +70,7 @@ const createRecentFolders = async (list, UserId, db) => {
   }
 };
 
-export const createUserAndFav = async (user, db, lite) => {
+export const createUserAndFav = async (user, db) => {
   let found = await db.user.findOne({ where: { Name: user.Name } });
   if (found) {
     await found.update(user);
@@ -77,12 +82,6 @@ export const createUserAndFav = async (user, db, lite) => {
     try {
       const [nfav] = await db.favorite.findOrCreate({ where: { Name: fav.Name, UserId: found.Id } });
       if (nfav) {
-        if (lite) {
-          fav.Folders = fav.Folders.map((f) => {
-            return f.replace("/mnt/5TBHDD/", "F:\\").split("/").join("\\");
-          });
-        }
-
         let folders = await db.folder.findAll({ where: { Path: fav.Folders } });
         await nfav.addFolders(folders);
       }
