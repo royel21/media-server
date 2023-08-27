@@ -77,24 +77,24 @@ export const getFiles = async (user, data) => {
 
     if (folder) {
       const count = await db.file.count(query);
-      if (count) {
-        const totalPages = Math.ceil(count / data.items);
-        let page = clamp(data.page, 1, totalPages);
+      // if (count) {
+      const totalPages = Math.ceil(count / data.items);
+      let page = clamp(data.page, 1, totalPages);
 
-        query.offset = (page - 1) * +data.items;
-        query.limit = +data.items;
+      query.offset = (page - 1) * +data.items;
+      query.limit = +data.items;
 
-        const rows = await db.file.findAll(query);
+      const rows = await db.file.findAll(query);
 
-        return {
-          totalFiles: count,
-          files: rows.map((d) => ({ ...d.dataValues })),
-          page,
-          totalPages,
-          valid: true,
-          folder,
-        };
-      }
+      return {
+        totalFiles: count,
+        files: rows.map((d) => ({ ...d.dataValues })),
+        page,
+        totalPages,
+        valid: true,
+        folder,
+      };
+      // }
     } else {
       return { valid: false, msg: "Not Found Or Not authorized" };
     }

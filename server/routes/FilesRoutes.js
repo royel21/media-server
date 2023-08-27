@@ -9,7 +9,7 @@ import { Op, literal } from "sequelize";
 const routes = Router();
 
 routes.get("/folder-content/:id/:order/:page?/:items?/:search?", async (req, res) => {
-  getFiles(req.user, req.params, db.folder).then((data) => res.send(data));
+  getFiles(req.user, req.params).then((data) => res.send(data));
 });
 
 routes.post("/recents/remove", async ({ body }, res) => {
