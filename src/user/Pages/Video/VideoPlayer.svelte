@@ -115,7 +115,7 @@
     class="player-container"
     class:isFullScreen
     on:mousemove={hideControls}
-    tabindex="0"
+    tabindex="-1"
     on:keydown={handleKeyboard}
     on:wheel={onWheel}
   >
