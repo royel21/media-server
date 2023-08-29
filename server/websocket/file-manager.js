@@ -114,7 +114,7 @@ const diskLoader = () => {
 };
 
 const resetRecent = async (data, user) => {
-  if (user) {
+  if (data.Id && user) {
     const files = await db.file.findAll({ where: { FolderId: data.Id } });
     await db.recentFile.update({ LastPos: 0 }, { where: { FileId: files.map((f) => f.Id), UserId: user.Id } });
   }
