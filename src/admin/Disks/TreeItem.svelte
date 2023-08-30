@@ -29,11 +29,11 @@
 
 {#each items as { Content, Id, Name }}
   <li id={Id} class="tree-item">
-    <span class="dir" on:click={scanDirectory}>
+    <span class="dir" on:click={scanDirectory} on:keydown={() => {}}>
       <Icons name={type} />
       {Name}
     </span>
-    <span class="caret" on:click={expandFolder}>▶</span>
+    <span class="caret" on:click={expandFolder} on:keydown={() => {}}>▶</span>
     {#if Content.length > 0}
       <ul class="tree-node usn">
         <svelte:self type="folder" items={Content} on:scanDir />

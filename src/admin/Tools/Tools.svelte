@@ -60,8 +60,8 @@
             <td>{i + 1}</td>
             <td>{backup}</td>
             <td>
-              <span on:click={restoreBackup}><Icons name="sync" /></span>
-              <span on:click={removeBackup}><Icons name="trash" /></span>
+              <span on:click={restoreBackup} on:keydown={() => {}}><Icons name="sync" /></span>
+              <span on:click={removeBackup} on:keydown={() => {}}><Icons name="trash" /></span>
             </td>
           </tr>
         {/each}

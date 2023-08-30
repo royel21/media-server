@@ -24,14 +24,14 @@
 </script>
 
 <div class="modal-container">
-  <div class="modal card" transition:fade={{ duration: 200 }} tabindex="0">
+  <div class="modal card" transition:fade={{ duration: 200 }} tabindex="-1">
     <div class="modal-header">
       <h4>Update Image</h4>
     </div>
     <form action="#" on:submit|preventDefault={submit}>
       <div class="modal-body">
         <div class="input-group">
-          <span class="input-group-text" on:click={onPaste}>Url</span>
+          <span class="input-group-text" on:click={onPaste} on:keydown={() => {}}>Url</span>
           <input class="form-control" bind:value={imageData.url} />
         </div>
       </div>

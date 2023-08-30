@@ -28,7 +28,14 @@
     {#if data.items}
       <ul class="down-list">
         {#each data.items as { Id, Name, IsAdult }}
-          <li class="list-item" id={Id} class:selected={Id === data.current} on:click={select} class:adult={IsAdult}>
+          <li
+            class="list-item"
+            id={Id}
+            class:selected={Id === data.current}
+            on:click={select}
+            on:keydown
+            class:adult={IsAdult}
+          >
             <span>{Name}</span>
           </li>
         {/each}

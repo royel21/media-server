@@ -151,7 +151,7 @@
       <div class="file" id={Id} data-type={Type} tabIndex="0" in:fade>
         <div class="file-info">
           <div class="file-btns usn">
-            <span class="file-btn-left" on:click|stopPropagation={onOpen || openFile}>
+            <span class="file-btn-left" on:click|stopPropagation={onOpen || openFile} on:keydown>
               <Icons name={FileTypes[Type].class} height="22px" color={FileTypes[Type].color} />
             </span>
             <span class="file-progress">

@@ -103,20 +103,20 @@
       {#each dirs as { Id, IsLoading, Name, FullPath, Type, FolderCount, TotalFiles, IsAdult, FirstInList }}
         <tr id={Id} key={Id}>
           <td>
-            <span class="dir-sync" on:click={rescan}>
+            <span class="dir-sync" on:click={rescan} on:keydown={() => {}}>
               <Icons name="sync" class={IsLoading ? "icon-spin" : ""} box="0 0 512 512" />
             </span>
-            <span class="dir-remove ml-2" on:click={removeDir}>
+            <span class="dir-remove ml-2" on:click={removeDir} on:keydown={() => {}}>
               <Icons name="trash" />
             </span>
           </td>
           <td>{Type}</td>
-          <td data-name="IsAdult" on:click={updateDir}>{IsAdult}</td>
+          <td data-name="IsAdult" on:click={updateDir} on:keydown={() => {}}>{IsAdult}</td>
           <td class="f-path">{FullPath}</td>
           <td class="f-name" title={FullPath}>{Name}</td>
           <td>{FolderCount}</td>
           <td>{TotalFiles}</td>
-          <td class="order" on:click|stopPropagation={onShowInput}>
+          <td class="order" on:click|stopPropagation={onShowInput} on:keydown={() => {}}>
             {#if showInput && Id === dir.Id}
               <input bind:value={dir.FirstInList} on:blur={hideInput} use:focusInput />
             {:else}

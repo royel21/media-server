@@ -48,27 +48,30 @@
             on:mouseenter
             on:mouseleave
             on:mousemove
+            on:keydown
           >
             {#if Type.includes("Folder")}
-              <span on:click={() => replaceImage(Id)}><Icons name="file" color="red" box="0 0 420 512" /></span>
-              <span class="sync" on:click={iconClick}>
+              <span on:click={() => replaceImage(Id)} on:keydown
+                ><Icons name="file" color="red" box="0 0 420 512" /></span
+              >
+              <span class="sync" on:click={iconClick} on:keydown>
                 <Icons name="sync" box="0 0 512 512" class={scanning.includes(Id) || Scanning ? "icon-spin" : ""} />
               </span>
               {#if showGenres}
                 <span class="g-list">
                   {#if /manga/.test(FilesType)}
-                    <span on:click={addGenres}>Mg</span>
-                    <span on:click={addGenres}>Mhw</span>
-                    <span on:click={addGenres}>Web</span>
-                    <span on:click={addRaw}>Raw</span>
+                    <span on:keydown on:click={addGenres}>Mg</span>
+                    <span on:keydown on:click={addGenres}>Mhw</span>
+                    <span on:keydown on:click={addGenres}>Web</span>
+                    <span on:keydown on:click={addRaw}>Raw</span>
                   {:else}
-                    <span on:click={addGenres}>sort</span>
+                    <span on:keydown on:click={addGenres}>sort</span>
                   {/if}
                 </span>
               {/if}
             {/if}
-            <span class="edit" on:click={iconClick}><Icons name="edit" /></span>
-            <span class="trash" on:click={iconClick}><Icons name="trash" box="0 0 420 512" /></span>
+            <span on:keydown class="edit" on:click={iconClick}><Icons name="edit" /></span>
+            <span on:keydown class="trash" on:click={iconClick}><Icons name="trash" box="0 0 420 512" /></span>
 
             {Name}
           </li>

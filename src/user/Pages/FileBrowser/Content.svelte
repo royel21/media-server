@@ -76,7 +76,7 @@
 </script>
 
 <div class="tabs">
-  <div class="return-to" on:click={exitFolder}>
+  <div class="return-to" on:click={exitFolder} on:keydown>
     <Icons name="reply" />
   </div>
   {#each contents as content}
@@ -102,7 +102,7 @@
       <div class="genres-list">
         <span class="gen-tag">Genres: </span>
         {#each folderinfo?.Genres?.split(", ") as genre}
-          <span on:click|preventDefault={onGenres}> {genre}</span>
+          <span on:click|preventDefault={onGenres} on:keydown> {genre}</span>
         {/each}
       </div>
       <div class="m-desc">
@@ -126,7 +126,7 @@
     <span><SortBy label="Sort By:" {showConfig} toggleConfig={handleClick} /></span>
   </div>
   <FilesList title={"Content"} {type} {filter} {page} {id} {setFolderInfo} {setLastRead} {handleClick}>
-    <div class="first-controls" slot="controls" on:click={exitFolder}>
+    <div class="first-controls" slot="controls" on:click={exitFolder} on:keydown>
       <Icons name="reply" />
     </div>
   </FilesList>

@@ -56,7 +56,7 @@
 </script>
 
 <div class="modal-container">
-  <div class="modal card" transition:fade={{ duration: 200 }} tabindex="0">
+  <div class="modal card" transition:fade={{ duration: 200 }} tabindex="-1">
     <div class="modal-header">
       <h4>Create New Folder</h4>
     </div>

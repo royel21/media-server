@@ -226,12 +226,12 @@
   on:mouseleave={onShowImage}
   on:mousemove={showPath}
 >
-  <span class="create-folder" slot="btn-controls" on:click={newFolder}><Icons name="squareplus" /></span>
+  <span class="create-folder" slot="btn-controls" on:keydown on:click={newFolder}><Icons name="squareplus" /></span>
   <span class="show-files" slot="btn-ctr-last">
-    <span on:click={() => (showGenres = !showGenres)} title="Toggle Genres List">
+    <span on:keydown on:click={() => (showGenres = !showGenres)} title="Toggle Genres List">
       <Icons name={showGenres ? "eyeslash" : "eye"} box="0 0 612 512" />
     </span>
-    <span on:click={showFiles} title="Toggle Files List">
+    <span on:keydown on:click={showFiles} title="Toggle Files List">
       <Icons name="files" box="0 0 280 512" />
     </span>
   </span>

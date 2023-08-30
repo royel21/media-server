@@ -62,7 +62,7 @@
 </script>
 
 <div class="modal-container">
-  <div class="modal card" transition:fade={{ duration: 200 }} on:keydown={onKeyDown} tabindex="0">
+  <div class="modal card" transition:fade={{ duration: 200 }} on:keydown={onKeyDown} tabindex="-1">
     <div class="modal-header">
       <h4>{modalType.title}</h4>
     </div>

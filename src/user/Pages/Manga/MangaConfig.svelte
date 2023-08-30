@@ -26,7 +26,7 @@
 
 <label class="config-icon" for="show"><Icons name="cog" /></label>
 <input type="checkbox" name="show-config" id="show" bind:checked={show} />
-<div id="content" class:show on:click|stopPropagation|preventDefault>
+<div id="content" class:show on:click|stopPropagation|preventDefault on:keydown={() => {}}>
   <div class="input-group">
     <div class="input-group-prepend"><label for="img-fill" class="input-group-text">Ajust Image:</label></div>
     <select id="img-fill" name="image-fill" class="form-control" bind:value={config.Viewer.manga.imgAbjust}>

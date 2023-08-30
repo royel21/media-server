@@ -146,20 +146,20 @@
           </Slider>
         </div>
         <div class="player-btns">
-          <span on:click={onReturn}>
+          <span on:click={onReturn} on:keydown>
             <Icons name="timescircle" />
           </span>
-          <span class="prev-page" on:click={PrevFile.action}>
+          <span class="prev-page" on:click={PrevFile.action} on:keydown>
             <Icons name="arrowcircleleft" />
           </span>
           <label for="v-play">
             <input name="play-button" type="checkbox" id="v-play" on:change={onPlay} />
             <Icons name={mConfig.pause ? "playcircle" : "pausecircle"} />
           </label>
-          <span class="next-page" on:click={NextFile.action}>
+          <span class="next-page" on:click={NextFile.action} on:keydown>
             <Icons name="arrowcircleright" />
           </span>
-          <span on:click={fullScreen}>
+          <span on:click={fullScreen} on:keydown>
             <Icons name="expandarrow" />
           </span>
           <span class="v-vol">

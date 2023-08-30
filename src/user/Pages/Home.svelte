@@ -83,14 +83,14 @@
   </div>
   <div class="files-list" on:keydown={handleKeydown}>
     {#each pageData.items as { Id, Name, Type, LastChapter, FileCount, FilesType }, i}
-      <div class="file" id={Id} data-type={Type} data-types={FilesType} tabIndex="0" on:click={handleClick}>
+      <div class="file" id={Id} data-type={Type} data-types={FilesType} tabIndex="0" on:click={handleClick} on:keydown>
         <div class="file-info">
           <div class="file-btns">
-            <span class="file-btn-left" on:click|stopPropagation={openFolder}>
+            <span class="file-btn-left" on:click|stopPropagation={openFolder} on:keydown>
               <Icons {...folderIcon} />
             </span>
             <span class="file-progress">{getLastChap(LastChapter, FilesType, FileCount)}</span>
-            <span class="remove" on:click|stopPropagation={removeRecent}>
+            <span class="remove" on:click|stopPropagation={removeRecent} on:keydown>
               <Icons name="trash" color="rgba(252, 1, 1, 0.856)" />
             </span>
           </div>

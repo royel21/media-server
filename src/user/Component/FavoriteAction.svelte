@@ -34,7 +34,7 @@
   {#if thisEl === favClicked}
     <ul>
       {#each getFavs() as fav}
-        <li id={fav.Id} on:click={addToFav}>{fav.Name}</li>
+        <li id={fav.Id} on:click={addToFav} on:keydown>{fav.Name}</li>
       {/each}
     </ul>
   {/if}

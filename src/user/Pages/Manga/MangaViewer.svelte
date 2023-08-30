@@ -237,7 +237,7 @@
     </div>
   </div>
   <div class="controls usn">
-    <span class="h-p popup-msg" on:click={returnTo} data-title="Close">
+    <span class="h-p popup-msg" on:click={returnTo} data-title="Close" on:keydown={() => {}}>
       <Icons name="timescircle" />
     </span>
     <span class="web-toon">
@@ -247,7 +247,7 @@
         <Icons name="eye" />
       </label>
     </span>
-    <span class="prev-page" on:click={prevPage}>
+    <span class="prev-page" on:click={prevPage} on:keydown={() => {}}>
       <Icons name="arrowcircleleft" />
     </span>
     <span class="current-page">
@@ -264,13 +264,13 @@
         />
       </form>
     </span>
-    <span class="next-page" on:click={nextPage}>
+    <span class="next-page" on:click={nextPage} on:keydown={() => {}}>
       <Icons name="arrowcircleright" />
     </span>
     <span class="config">
       <MangaConfig {ToggleMenu} />
     </span>
-    <span class="remove" on:click={removeFile}><Icons name="trash" color="red" /></span>
+    <span class="remove" on:click={removeFile} on:keydown={() => {}}><Icons name="trash" color="red" /></span>
   </div>
 </div>
 

@@ -48,12 +48,12 @@
 </script>
 
 {#if items.length && canShow}
-  <label on:click={toggleConsole} class:toggle>
+  <label on:keydown on:click={toggleConsole} class:toggle>
     <input type="checkbox" bind:checked={toggle} /><Icons name="eye" box="0 0 564 512" />
   </label>
   {#if toggle}
     <div class="r-console">
-      <span on:click={onClear}><Icons name="trash" /></span>
+      <span on:keydown on:click={onClear}><Icons name="trash" /></span>
       <div class="text-list" bind:this={ref}>
         {#each items as item}<div>{item}</div>{/each}
       </div>

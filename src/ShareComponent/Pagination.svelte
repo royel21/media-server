@@ -69,7 +69,7 @@
 </script>
 
 {#if totalPages > 1}
-  <div id="pager" class="usn" on:click={pagerClick}>
+  <div id="pager" class="usn" on:click={pagerClick} on:keydown={() => {}}>
     <ul class="pagination">
       <li id="first-page" class="page-link" class:d-none={hideFL}>
         <Icons name="angledoubleleft" {color} />
@@ -77,7 +77,7 @@
       <li id="prev-page" class="page-link" class:border-r-left={hideFL}>
         <Icons name="angleleft" {color} />
       </li>
-      <li class="page-link current-page" on:click={onShowinput}>
+      <li class="page-link current-page" on:click={onShowinput} on:keydown={() => {}}>
         {#if showinput}
           <input
             on:blur={hideInput}
