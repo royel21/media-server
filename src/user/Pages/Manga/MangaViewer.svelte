@@ -480,5 +480,9 @@
     #manga-viewer .img-current.webtoon-img img:not(.empty-img) {
       height: auto;
     }
+
+    .webtoon-img IMG:last-child {
+      padding-bottom: 50px;
+    }
   }
 </style>
