@@ -7,6 +7,7 @@ modules/win-explorer/build
 modules/win-explorer/bin
 ./files*
 test.js
+user-data/
 
 *.map
 *.db

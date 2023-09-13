@@ -11,19 +11,14 @@
   const socket = getContext("socket");
 
   const onClear = () => ConsoleStore.set([]);
-
-  const onInfo = (data) => {
-    updateConsole(data.text);
-  };
-
   ConsoleStore.subscribe((value) => (items = value));
 
-  socket.on("info", onInfo);
+  socket.on("info", updateConsole);
 
   const toggleConsole = () => {};
 
   onDestroy(() => {
-    socket.off("info", onInfo);
+    socket.off("info", updateConsole);
   });
 
   afterUpdate(() => {
@@ -55,7 +50,7 @@
     <div class="r-console">
       <span on:keydown on:click={onClear}><Icons name="trash" /></span>
       <div class="text-list" bind:this={ref}>
-        {#each items as item}<div>{item}</div>{/each}
+        {#each items as item}<div style={`color: ${item.color || "black"}`}>{item.text}</div>{/each}
       </div>
     </div>
   {/if}

@@ -1,14 +1,54 @@
 <script>
+  import { onMount, getContext } from "svelte";
+  import apiUtils from "../../apiUtils";
+  import Filter from "../../ShareComponent/Filter.svelte";
+  import Pagination from "../../ShareComponent/Pagination.svelte";
+
+  const socket = getContext("socket");
   const datas = {
     links: [],
-    page: 0,
-    totalpage: 0,
+    page: 1,
+    totalPages: 50,
     totalItems: 0,
+    items: 10,
+    filter: "",
   };
+  let server = "";
+
+  const download = () => {
+    socket.emit("download-server", { name: datas.filter });
+    console.log("send", { name: server });
+  };
+
+  const onFilter = ({ detail }) => {
+    datas.filter = detail;
+    download(detail);
+  };
+
+  const loadItems = async () => {
+    const result = await apiUtils.get(["admin", "downloader", "links", datas.items, datas.page, datas.filter]);
+    console.log(result);
+  };
+
+  const gotopage = (pg) => {
+    console.log(pg);
+  };
+
+  onMount(() => {
+    loadItems();
+  });
 </script>
 
 <div class="container">
-  <h2>Downloads</h2>
+  <div class="controls">
+    <Filter on:filter={onFilter} filter={datas.filter} />
+    <span>
+      <Pagination page={datas.page} totalPages={datas.totalPages} on:gotopage={gotopage} />
+      <div class="input-group items">
+        <span class="input-group-text">Items</span><input class="form-control" bind:value={datas.items} k />
+      </div>
+    </span>
+  </div>
   <div class="t-container">
     <table id="dir-list" class="table table-dark table-hover table-bordered">
       <thead>
@@ -36,13 +76,27 @@
 </div>
 
 <style>
+  .controls {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+    justify-content: space-between;
+  }
+  .controls span:last-child {
+    display: flex;
+  }
+  .items {
+    width: 108px;
+    margin-left: 5px;
+  }
+  .items > * {
+    height: 32px;
+  }
   .container {
     width: 100%;
     height: 100%;
   }
-  h2 {
-    text-align: center;
-  }
+
   .t-container {
     width: 100%;
     min-height: calc(100% - 35px);

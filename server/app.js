@@ -25,6 +25,7 @@ import UsersManagerRoute from "./routes/admin/UsersManagerRoute.js";
 import DirectoriesRoute from "./routes/admin/DirectoriesRoute.js";
 import FilesManagerRoute from "./routes/admin/FilesManagerRoute.js";
 import FoldersRoute from "./routes/admin/FoldersRoute.js";
+import DownloaderRoutes from "./routes/admin/DownloaderRoutes.js";
 
 const app = express();
 const passport = passportConfig();
@@ -74,6 +75,7 @@ app.use("/api/admin/users", UsersManagerRoute);
 app.use("/api/admin/directories", DirectoriesRoute);
 app.use("/api/admin/files", FilesManagerRoute);
 app.use("/api/admin/folders", FoldersRoute);
+app.use("/api/admin/downloader", DownloaderRoutes);
 
 const getPath = (type) => path.join(global.appPath, "public", type, "index.html");
 
