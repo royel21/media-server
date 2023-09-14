@@ -39,7 +39,7 @@ routes.get("/links/:items/:page?/:filter?", async ({ params }, res) => {
     where: { [Op.or]: { Name: qfilter, AltName: qfilter, "$Server.Name$": qfilter } },
     limit,
     offset,
-    include: { model: db.Server },
+    include: { model: db.Server, Attributes: ["Id", "Name"] },
     order: [
       [literal(`Links.Date IS NULL`), order === "Name" ? "ASC" : "DESC"],
       [order, "DESC"],
