@@ -7,6 +7,7 @@
     "dev": "export NC=true&&vite",
     "vite-dev": "vite",
     "vite-local": "set IS_DEV=true&&vite",
+    "vite-linux": "export IS_DEV=true&&vite",
     "server": "node server/app",
     "serv-dev": "nodemon server/app",
     "serv-dev-linux": "export PORT=8030&&nodemon server/app",

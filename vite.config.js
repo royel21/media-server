@@ -6,10 +6,15 @@ import { fileURLToPath } from "url";
 config();
 const { IS_DEV, IP, DEV_PORT, PORT, HOME_IP, NC, DEV_SERVER_PORT } = process.env;
 const host = IS_DEV ? HOME_IP : IP;
+
 const port = DEV_PORT;
 let serverPort = PORT;
 if (NC) {
   serverPort = DEV_SERVER_PORT;
+}
+
+if (IS_DEV) {
+  serverPort = 8030;
 }
 
 // https://vitejs.dev/config/

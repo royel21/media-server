@@ -54,6 +54,7 @@ export const startBrowser = async (config) => {
       delay(500);
       pupeteer = null;
     }
+    config.args = ["--no-sandbox"];
     pupeteer = await puppeteer.launch(config);
   } catch (error) {
     console.log("Some error", error);

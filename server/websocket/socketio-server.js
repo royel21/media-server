@@ -4,7 +4,7 @@ import mloader from "./manga-loader.js";
 import { Server } from "socket.io";
 
 import db from "../models/index.js";
-import { downloadFromPage } from "./downloader.js";
+import { download } from "./downloader.js";
 
 export default (server, sessionMeddle) => {
   const io = new Server(server, { serveClient: false, cookie: true });
@@ -38,7 +38,7 @@ export default (server, sessionMeddle) => {
         socket.on("remove-folder", FileManager.removeFolder);
         socket.on("clean-images", FileManager.cleanImagesDir);
         socket.on("backup-db", FileManager.onBackup);
-        socket.on("download-server", downloadFromPage);
+        socket.on("download-server", download);
       } else {
         socket.on("file-update-pos", (data) => userUpdate.updateFilePos(data, user));
         socket.on("recent-folder", (data) => userUpdate.recentFolder(data, user));

@@ -6,14 +6,18 @@
   let ref;
   let items = [];
   let toggle = true;
-  let canShow = false;
+  let canShow = /content-manager|tools/.test(location.pathname);
   let update = false;
   const socket = getContext("socket");
 
   const onClear = () => ConsoleStore.set([]);
   ConsoleStore.subscribe((value) => (items = value));
 
-  socket.on("info", updateConsole);
+  socket.on("info", (data) => {
+    if (data.text) {
+      updateConsole(data);
+    }
+  });
 
   const toggleConsole = () => {};
 
@@ -42,11 +46,11 @@
   }
 </script>
 
-{#if items.length && canShow}
+{#if canShow}
   <label on:keydown on:click={toggleConsole} class:toggle>
-    <input type="checkbox" bind:checked={toggle} /><Icons name="eye" box="0 0 564 512" />
+    <input type="checkbox" bind:checked={toggle} /><Icons name={toggle ? "eyeslash" : "eye"} box="0 0 564 512" />
   </label>
-  {#if toggle}
+  {#if toggle && items.length}
     <div class="r-console">
       <span on:keydown on:click={onClear}><Icons name="trash" /></span>
       <div class="text-list" bind:this={ref}>

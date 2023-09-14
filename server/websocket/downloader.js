@@ -1,21 +1,24 @@
-import downloadDB from "./Models/index.js";
 import { fork, spawnSync } from "child_process";
 
 let downloader;
 
-export const downloadFromPage = async ({ name }) => {
-  spawnSync("rm", [".", "user-data/puppeteer/SingletonLock"]);
-  const server = await downloadDB.Server.findOne({ where: { Name: { [downloadDB.Op.like]: `${name}%` } } });
+export const download = async (data) => {
+  console.log(data);
 
-  if (server && !downloader) {
+  if (!downloader) {
+    spawnSync("rm", [".", "user-data/puppeteer/SingletonLock"]);
     downloader = fork(appPath + "/websocket/Workers/Worker.js");
-    downloader.send({ server: server.Id, action: "Check-Server", headless: true, bypass: true });
     downloader.on("exit", () => {
       downloader = null;
     });
 
     downloader.on("message", (info) => {
-      io.sockets.emit("info", info.data);
+      if (info.event === "update-download") {
+        io.sockets.emit("update-download", info);
+      } else {
+        io.sockets.emit("info", info.data);
+      }
     });
   }
+  downloader?.send({ ...data, headless: true, bypass: true });
 };

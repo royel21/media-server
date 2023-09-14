@@ -16,7 +16,7 @@ const { USE_DEV, BASEPATH, PUPETEER_DIR, PUPETEER_DIR_DEV, IMAGEDIR } = process.
 const basePath = BASEPATH;
 // add stealth plugin and use defaults (all evasion techniques)
 
-const state = { links: [], running: false, size: 0 };
+const state = { links: [], running: false, size: 0, checkServer: false };
 
 const imgPath = path.join(IMAGEDIR, "images");
 if (!fs.existsSync(imgPath)) fs.mkdirsSync(imgPath);
@@ -164,13 +164,12 @@ const downloadLinks = async (link, page) => {
 
   await updateLastChapter(manga, link);
 
-  const mangaDir = path.join(basePath, isAdult ? path.join("R18", "webtoon") : "mangas", Name);
-
   const Path = `/mnt/5TBHDD/${isAdult ? "R18/webtoon" : "mangas"}`;
   manga.Server = Server.Name;
 
   let folder = await findOrCreateFolder(Path, manga, isAdult);
 
+  const mangaDir = path.join(basePath, isAdult ? path.join("R18", "webtoon") : "mangas", folder.Name);
   let files = await createFolderCover(mangaDir, manga, imgPath, page);
 
   if (!folder) {
@@ -245,6 +244,9 @@ const onDownload = async (bypass, headless) => {
       });
       try {
         await downloadLinks(link, page, link.Server);
+
+        await link.reload();
+        sendMessage({ link }, "update-download");
       } catch (error) {
         sendMessage({ text: `Error ${link.Url} was no properly downloaded`, color: "red", error });
       }
@@ -417,6 +419,9 @@ const checkServer = async (Id, headless) => {
 
               let FileCount = fs.readdirSync(mangaDir).filter((f) => f.includes(".zip")).length;
               await folder.update({ FileCount, CreatedAt: new Date() });
+
+              await d.link.reload();
+              sendMessage({ link }, "update-download");
             }
 
             await db.Link.update({ Date: new Date() }, { where: { Name: folder.Name } });
@@ -428,7 +433,7 @@ const checkServer = async (Id, headless) => {
     } catch (error) {
       sendMessage({ text: `Error checking server ${server?.Name}`, color: "red", error });
     }
-
+    state.checkServer = false;
     await cleanUp();
   }
 };
@@ -445,7 +450,9 @@ process.on("message", async ({ action, datas, headless, remove, bypass, server }
       break;
     }
     case "Check-Server": {
-      checkServer(server, headless, bypass);
+      if (!state.checkServer) {
+        checkServer(server, headless, bypass);
+      }
       break;
     }
     case "Add-Download": {

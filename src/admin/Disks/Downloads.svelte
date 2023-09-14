@@ -14,7 +14,7 @@
     page: 1,
     totalPages: 50,
     totalItems: 0,
-    items: 30,
+    items: 100,
     filter: "",
   };
 
@@ -28,14 +28,12 @@
     hour12: true,
   });
 
-  const downloadServer = ({ target: { textContent } }) => {
-    // socket.emit("download-server", { name: textContent });
-    console.log(textContent);
+  const downloadServer = ({ target: { dataset } }) => {
+    socket.emit("download-server", { server: +dataset.id, action: "Check-Server" });
   };
 
   const onFilter = ({ detail }) => {
     datas.filter = detail;
-    // download(detail);
     loadItems();
   };
 
@@ -45,7 +43,6 @@
     datas.links = result.links;
     datas.totalPages = result.totalPages;
     datas.totalItems = result.totalItems;
-    console.log(result, datas);
   };
 
   const gotopage = ({ detail }) => {
@@ -68,8 +65,10 @@
   const downloadLink = async ({ target }) => {
     const id = target.closest(".link").id;
     if (id) {
-      // await apiUtils.get(["admin", "downloader", "links", datas.items, datas.page, datas.filter]);
-      console.log("download", id);
+      const found = datas.links.find((f) => f.Id === +id);
+      if (found) {
+        socket.emit("download-server", { datas: { [found.Server.Id]: [found.Id] }, action: "Add-Download" });
+      }
     }
   };
   const editLink = async ({ target }) => {
@@ -83,12 +82,26 @@
     const id = target.closest(".link").id;
     if (id) {
       const result = await apiUtils.get(["admin", "downloader", "remove-link", id]);
-      console.log("remove", id, result);
+    }
+  };
+
+  const onUpdate = ({ data }) => {
+    console.log(data);
+    if (data.link) {
+      const found = datas.links.findIndex((f) => f.Id === data.link.Id);
+      console.log(found, data);
+      if (found > -1) {
+        datas.links[found] = data.link;
+      }
     }
   };
 
   onMount(() => {
     loadItems();
+    socket.on("update-download", onUpdate);
+    return () => {
+      socket.off("update-download", onUpdate);
+    };
   });
 
   $: start = (datas.page - 1) * datas.items;
@@ -118,22 +131,22 @@
         <div class="link" id={link.Id}>
           <span>{i + 1 + start}</span>
           <span>
-            <span on:click={excludeLink} title="Exclude Link">
+            <span on:click={excludeLink} title="Exclude Link" on:keydown>
               <Icons name="files" box="0 0 464 512" color={link.Exclude ? "firebrick" : "#47f046"} />
             </span>
-            <span on:click={downloadLink} title="Download Link">
+            <span on:click={downloadLink} title="Download Link" on:keydown>
               <Icons name="download" color="lightblue" />
             </span>
-            <span on:click={editLink} title="Edit Link">
+            <span on:click={editLink} title="Edit Link" on:keydown>
               <Icons name="edit" />
             </span>
-            <span on:click={removeLink} title="Remove Link">
+            <span on:click={removeLink} title="Remove Link" on:keydown>
               <Icons name="trash" color="firebrick" />
             </span>
           </span>
-          <span on:click={downloadServer}>{link.Server?.Name}</span>
+          <span data-id={link.Server.Id} on:click={downloadServer} on:keydown>{link.Server?.Name}</span>
           <span>{link.LastChapter}</span>
-          <span title={link.Name}><span>{link.Name}</span></span>
+          <span title={link.Name}><a href={link.Url} target="_blank">{link.Name}</a></span>
           <span>{dayfmt.format(new Date(link.Date))}</span>
         </div>
       {/each}
@@ -148,11 +161,14 @@
     margin-bottom: 10px;
     justify-content: space-between;
   }
+  .d-controls .form-control {
+    padding: 0.2rem;
+  }
   .d-controls span:last-child {
     display: flex;
   }
   .d-items {
-    width: 108px;
+    width: 95px;
     margin-left: 5px;
   }
   .d-items > * {
@@ -181,6 +197,10 @@
     top: 0;
     z-index: 99;
   }
+  .d-table > div:last-child {
+    border-bottom-left-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+  }
   .d-table > div {
     display: flex;
     flex-direction: row;
@@ -189,7 +209,7 @@
     border-left: 1px solid;
     border-right: 1px solid;
   }
-  .d-table > div:not(:last-child) {
+  .d-table > div {
     border-bottom: 1px solid;
   }
   .d-table div > span {
@@ -206,7 +226,7 @@
     width: 124px;
   }
   .d-table div > span:nth-child(3) {
-    width: 120px;
+    width: 135px;
     cursor: pointer;
   }
   .d-table div > span:nth-child(4) {
@@ -219,7 +239,12 @@
     overflow-x: hidden;
   }
   .d-table div > span:last-child {
-    width: 175px;
+    width: 180px;
+  }
+
+  span a:hover {
+    cursor: pointer;
+    text-decoration: underline;
   }
   .d-table div:not(:first-child) > span:nth-child(3):hover {
     text-decoration: underline;
