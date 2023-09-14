@@ -1,6 +1,6 @@
 <script>
   import { onMount, getContext } from "svelte";
-  import { calRows } from "./Utils";
+  import { calRows } from "../Utils";
 
   import ItemList from "./ItemList.svelte";
   import Modal from "./Modal.svelte";

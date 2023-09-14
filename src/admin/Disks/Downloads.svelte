@@ -4,8 +4,11 @@
   import Filter from "../../ShareComponent/Filter.svelte";
   import Pagination from "../../ShareComponent/Pagination.svelte";
   import Icons from "../../icons/Icons.svelte";
+  import Modal from "./Modal.svelte";
 
   let start = 0;
+  let editor = { show: false };
+  let servers = {};
 
   const socket = getContext("socket");
 
@@ -28,6 +31,11 @@
     hour12: true,
   });
 
+  const getLink = (target) => {
+    const id = target.closest(".link")?.id;
+    return datas.links.find((f) => f.Id === +id);
+  };
+
   const downloadServer = ({ target: { dataset } }) => {
     socket.emit("download-server", { server: +dataset.id, action: "Check-Server" });
   };
@@ -39,6 +47,7 @@
 
   const loadItems = async () => {
     const result = await apiUtils.get(["admin", "downloader", "links", datas.items, datas.page, datas.filter]);
+    servers = await apiUtils.get(["admin", "downloader", "servers"]);
 
     datas.links = result.links;
     datas.totalPages = result.totalPages;
@@ -67,15 +76,14 @@
     if (id) {
       const found = datas.links.find((f) => f.Id === +id);
       if (found) {
-        socket.emit("download-server", { datas: { [found.Server.Id]: [found.Id] }, action: "Add-Download" });
+        socket.emit("download-server", { datas: { [found.ServerId]: [found.Id] }, action: "Add-Download" });
       }
     }
   };
   const editLink = async ({ target }) => {
-    const id = target.closest(".link").id;
-    if (id) {
-      // await apiUtils.get(["admin", "downloader", "links", datas.items, datas.page, datas.filter]);
-      console.log("edit", id);
+    const link = getLink(target);
+    if (link) {
+      editor = { show: true, link };
     }
   };
   const removeLink = async ({ target }) => {
@@ -85,11 +93,22 @@
     }
   };
 
+  const changeItems = ({ keyCode }) => {
+    if (keyCode === 13) {
+      loadItems();
+    }
+  };
+
+  const editServer = ({ target }) => {
+    const link = getLink(target);
+    if (link) {
+      editor = { show: true, server: servers[link.ServerId] };
+    }
+  };
+
   const onUpdate = ({ data }) => {
-    console.log(data);
     if (data.link) {
       const found = datas.links.findIndex((f) => f.Id === data.link.Id);
-      console.log(found, data);
       if (found > -1) {
         datas.links[found] = data.link;
       }
@@ -107,13 +126,18 @@
   $: start = (datas.page - 1) * datas.items;
 </script>
 
+{#if editor.show}
+  <Modal server={editor.server} link={editor.link} hide={() => (editor = {})} />
+{/if}
+
 <div class="container">
   <div class="d-controls">
     <Filter on:filter={onFilter} filter={datas.filter} />
     <span>
       <Pagination page={datas.page} totalPages={datas.totalPages} on:gotopage={gotopage} />
       <div class="input-group d-items">
-        <span class="input-group-text">Items</span><input class="form-control" bind:value={datas.items} k />
+        <span class="input-group-text"><Icons name="list" color="black" /></span>
+        <input class="form-control" bind:value={datas.items} on:keydown={changeItems} />
       </div>
     </span>
   </div>
@@ -144,7 +168,10 @@
               <Icons name="trash" color="firebrick" />
             </span>
           </span>
-          <span data-id={link.Server.Id} on:click={downloadServer} on:keydown>{link.Server?.Name}</span>
+          <span>
+            <span data-id={link.ServerId} on:click={downloadServer} on:keydown>{servers[link.ServerId]?.Name}</span>
+            <span on:click={editServer}><Icons name="cog" /></span>
+          </span>
           <span>{link.LastChapter}</span>
           <span title={link.Name}><a href={link.Url} target="_blank">{link.Name}</a></span>
           <span>{dayfmt.format(new Date(link.Date))}</span>
@@ -155,6 +182,15 @@
 </div>
 
 <style>
+  .d-controls :global(.icon-list) {
+    top: initial;
+  }
+  .d-controls > span {
+    margin-left: 2px;
+  }
+  .input-group-text {
+    padding: 0.2rem 0.1rem 0.2rem 0.35rem;
+  }
   .d-controls {
     display: flex;
     flex-direction: row;
@@ -168,8 +204,8 @@
     display: flex;
   }
   .d-items {
-    width: 95px;
-    margin-left: 5px;
+    width: 75px;
+    margin-left: 2px;
   }
   .d-items > * {
     height: 32px;
@@ -186,16 +222,24 @@
     overflow-x: auto;
   }
   .d-table {
-    min-width: 850px;
+    min-width: 1000px;
   }
   .d-table > div:first-child {
     position: sticky;
-    border: 1px solid;
-    border-top-left-radius: 0.25rem;
-    border-top-right-radius: 0.25rem;
     background-color: #212529;
     top: 0;
     z-index: 99;
+  }
+  .d-table > div:first-child span {
+    border-top: 1px solid;
+  }
+  .d-table > div:first-child span:first-child {
+    border-left: 1px solid;
+    border-top-left-radius: 0.25rem;
+  }
+  .d-table > div:first-child span:last-child {
+    border-right: 1px solid;
+    border-top-right-radius: 0.25rem;
   }
   .d-table > div:last-child {
     border-bottom-left-radius: 0.25rem;
@@ -226,8 +270,12 @@
     width: 124px;
   }
   .d-table div > span:nth-child(3) {
-    width: 135px;
+    display: flex;
+    width: 150px;
     cursor: pointer;
+  }
+  .d-table div > span:nth-child(3) span:first-child {
+    margin-right: 10px;
   }
   .d-table div > span:nth-child(4) {
     width: 80px;

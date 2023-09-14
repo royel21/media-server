@@ -111,8 +111,12 @@
     border-color: #545b62;
   }
 
-  :global(.input-control) {
+  #login-container :global(.input-control) {
     margin: 10px 0;
+  }
+
+  #login-container :global(.input-control > *) {
+    height: 35px;
   }
   @media screen and (max-width: 600px) {
     #login-container {

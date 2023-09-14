@@ -4,9 +4,9 @@
   import apiUtils from "../../apiUtils";
   import CheckBox from "../Component/CheckBox.svelte";
   import Select from "../Component/Select.svelte";
-  import Input from "./TextAreaInput.svelte";
+  import Input from "../Component/TextAreaInput.svelte";
   import Icons from "../../icons/Icons.svelte";
-  import { validGenres } from "./Utils";
+  import { validGenres } from "../Utils";
 
   export let file;
   export let modalType;
@@ -109,6 +109,12 @@
   .modal {
     width: 400px;
     outline: none;
+  }
+  .modal-container :global(.input-control) {
+    margin-bottom: 5px;
+  }
+  .modal-container :global(.input-label) {
+    width: 145px;
   }
   .del-label {
     width: fit-content;

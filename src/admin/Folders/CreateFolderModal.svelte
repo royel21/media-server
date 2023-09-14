@@ -4,8 +4,8 @@
   import apiUtils from "../../apiUtils";
   import CheckBox from "../Component/CheckBox.svelte";
   import Select from "../Component/Select.svelte";
-  import Input from "./TextAreaInput.svelte";
-  import { validGenres } from "./Utils";
+  import Input from "../Component/TextAreaInput.svelte";
+  import { validGenres } from "../Utils";
 
   export let error;
   export let ref = null;
