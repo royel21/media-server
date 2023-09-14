@@ -116,28 +116,30 @@ export const evaleLinks = async (query) => {
   let imgs = document.querySelectorAll(query.Imgs);
 
   for (let img of imgs) {
-    img?.scrollIntoView();
-    await delay(/toonily/i.test(query.Name) ? 400 : 80);
-    const { src, dataset } = img;
-    let nSrc = (dataset.lazySrc || dataset.src || src)?.trim();
+    if (img.naturalHeight > 96) {
+      img?.scrollIntoView();
+      await delay(/toonily/i.test(query.Name) ? 400 : 80);
+      const { src, dataset } = img;
+      let nSrc = (dataset.lazySrc || dataset.src || src)?.trim();
 
-    if (nSrc.includes(".ico")) continue;
+      if (nSrc.includes(".ico")) continue;
 
-    if (location.href.includes("mangas.in")) {
-      if (img.src.includes("loading.gif") && /jpg|png|webp/i.test(nSrc)) {
-        data.push(nSrc);
-      } else {
-        while (img.src.includes("loading.gif")) {
-          await delay(90);
+      if (location.href.includes("mangas.in")) {
+        if (img.src.includes("loading.gif") && /jpg|png|webp/i.test(nSrc)) {
+          data.push(nSrc);
+        } else {
+          while (img.src.includes("loading.gif")) {
+            await delay(90);
+          }
+          data.push(img.src);
         }
-        data.push(img.src);
-      }
-    } else if (location.href.includes("mangaclash")) {
-      if (nSrc.includes("mangaclash")) {
+      } else if (location.href.includes("mangaclash")) {
+        if (nSrc.includes("mangaclash")) {
+          data.push(nSrc);
+        }
+      } else {
         data.push(nSrc);
       }
-    } else {
-      data.push(nSrc);
     }
   }
   return data;

@@ -16,7 +16,7 @@
   const submit = async (e) => {
     const body = server ? server : link;
     body.table = server ? "Server" : "Link";
-    const result = await apiUtils.post("/admin/downloader/item-update", body);
+    const result = await apiUtils.post("admin/downloader/item-update", body);
     error = result.error;
     if (result.valid) hide();
   };

@@ -421,7 +421,7 @@ const checkServer = async (Id, headless) => {
               await folder.update({ FileCount, CreatedAt: new Date() });
 
               await d.link.reload();
-              sendMessage({ link }, "update-download");
+              sendMessage({ link: d.link.dataValues }, "update-download");
             }
 
             await db.Link.update({ Date: new Date() }, { where: { Name: folder.Name } });

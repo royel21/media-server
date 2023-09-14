@@ -57,26 +57,26 @@ routes.get("/links/:items/:page?/:filter?", async ({ params }, res) => {
   });
 });
 
-routes.get("/servers", async (req, res)=>{
-  const servers = await db.Server.findAll({order: ["Name"]});
+routes.get("/servers", async (req, res) => {
+  const servers = await db.Server.findAll({ order: ["Name"] });
   const datas = {};
 
-  servers.forEach(srv=> {
+  servers.forEach((srv) => {
     datas[srv.Id] = srv;
-  })
-  res.send(datas)
+  });
+  res.send(datas);
 });
 
 routes.post("/item-update", async ({ body }, res) => {
   const result = {};
   try {
-     await db[body.table].update(body, {where: {Id: body.Id}});
-     result.valid = true;
+    await db[body.table].update(body, { where: { Id: body.Id } });
+    result.valid = true;
   } catch (error) {
     result.valid = false;
   }
 
   res.send(result);
-})
+});
 
 export default routes;

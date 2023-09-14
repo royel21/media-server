@@ -80,12 +80,6 @@
       }
     }
   };
-  const editLink = async ({ target }) => {
-    const link = getLink(target);
-    if (link) {
-      editor = { show: true, link };
-    }
-  };
   const removeLink = async ({ target }) => {
     const id = target.closest(".link").id;
     if (id) {
@@ -104,6 +98,17 @@
     if (link) {
       editor = { show: true, server: servers[link.ServerId] };
     }
+  };
+  const editLink = async ({ target }) => {
+    const link = getLink(target);
+    if (link) {
+      editor = { show: true, link };
+    }
+  };
+
+  const hideModal = () => {
+    editor = {};
+    datas.links = [...datas.links];
   };
 
   const onUpdate = ({ data }) => {
@@ -127,7 +132,7 @@
 </script>
 
 {#if editor.show}
-  <Modal server={editor.server} link={editor.link} hide={() => (editor = {})} />
+  <Modal server={editor.server} link={editor.link} hide={hideModal} />
 {/if}
 
 <div class="container">
@@ -170,7 +175,7 @@
           </span>
           <span>
             <span data-id={link.ServerId} on:click={downloadServer} on:keydown>{servers[link.ServerId]?.Name}</span>
-            <span on:click={editServer}><Icons name="cog" /></span>
+            <span on:click={editServer} on:keydown><Icons name="cog" /></span>
           </span>
           <span>{link.LastChapter}</span>
           <span title={link.Name}><a href={link.Url} target="_blank">{link.Name}</a></span>
@@ -271,7 +276,8 @@
   }
   .d-table div > span:nth-child(3) {
     display: flex;
-    width: 150px;
+    justify-content: space-between;
+    width: 170px;
     cursor: pointer;
   }
   .d-table div > span:nth-child(3) span:first-child {

@@ -39,6 +39,13 @@
     margin: 0;
     background: radial-gradient(ellipse at center, #14243d 0, #030611 100%);
   }
+  :global(*),
+  :global(*::before),
+  :global(*::after) {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
 
   :global(#root) {
     display: flex;
@@ -115,8 +122,9 @@
     margin: 10px 0;
   }
 
-  #login-container :global(.input-control > *) {
-    height: 35px;
+  #login-container :global(.input-control > input),
+  #login-container :global(.input-control > span) {
+    height: 36px;
   }
   @media screen and (max-width: 600px) {
     #login-container {
