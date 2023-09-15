@@ -178,7 +178,7 @@
 <div class="container">
   <div class="d-controls">
     <Filter on:filter={onFilter} filter={datas.filter}>
-      <span slot="pre-btn">
+      <span class="btns" slot="pre-btn">
         <span class="btn-add" on:click={() => (showLinkModal = true)} on:keydown>
           <Icons name="squareplus" />
         </span>
@@ -366,7 +366,7 @@
     .d-controls {
       padding-bottom: 10px;
     }
-    .btn-add {
+    .btns {
       display: none;
     }
   }
