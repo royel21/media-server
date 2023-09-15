@@ -45,6 +45,7 @@ app.use(
 
 app.use(express.static(process.env.IMAGES));
 app.use(express.static(global.appPath + "/public/static", { dotfiles: "allow" }));
+console.log("images", process.env.IMAGES);
 
 const sessionMeddle = session({
   name: process.env.SESSION,

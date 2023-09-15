@@ -17,16 +17,19 @@ const cleanImages = async () => {
     if (/R18/.test(dir)) continue;
 
     if (/Folder/.test(dir)) {
-      try {
-        const files = fs.readdirSync(path.join(imagesDir, dir));
-        for (let img of files) {
-          const found = await db.folder.findOne({ where: { Name: img.replace(".jpg", "") } });
-          if (!found) {
-            fs.removeSync(path.join(imagesDir, dir, img));
+      const folders = fs.readdirSync(path.join(imagesDir, dir));
+      for (let folder of folders) {
+        try {
+          const files = fs.readdirSync(path.join(imagesDir, folder, dir));
+          for (let img of files) {
+            const found = await db.folder.findOne({ where: { Name: img.replace(".jpg", "") } });
+            if (!found) {
+              fs.removeSync(path.join(imagesDir, folder, dir, img));
+            }
           }
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
       }
     } else {
       const folders = fs.readdirSync(path.join(imagesDir, dir));

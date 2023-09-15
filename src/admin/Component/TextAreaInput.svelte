@@ -17,7 +17,7 @@
 
 <div class="input-control" {style}>
   <div id="t-label" for="Name" class="input-label">{label || key}</div>
-  <textarea id="t-area" bind:this={ref} name={key} class="input" {rows} bind:value={file[key]} on:change={onChange} />
+  <textarea bind:this={ref} name={key} class="input" {rows} bind:value={file[key]} on:change={onChange} />
 </div>
 
 <style>
@@ -34,7 +34,7 @@
   .input::-webkit-scrollbar {
     width: 10px;
   }
-  #t-area {
+  .input-control .input {
     height: initial;
     border-top-right-radius: 0;
     border-bottom-left-radius: 0.25rem;

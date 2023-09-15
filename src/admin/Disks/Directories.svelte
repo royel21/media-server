@@ -151,6 +151,10 @@
     min-width: 80px;
     width: 80px;
   }
+  th:nth-child(6) {
+    min-width: 155px;
+    width: 155px;
+  }
   td:nth-child(3) {
     min-width: 90px;
     width: 90px;

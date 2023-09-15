@@ -176,10 +176,10 @@ const scanDirectory = async ({ id, dir, isFolder }) => {
   console.log(dir);
   try {
     if (fs.existsSync(dir)) {
-      const fis = WinDrive.ListFilesRO(dir);
-
       console.time("list-files");
       sendMessage("list-files");
+      const fis = WinDrive.ListFilesRO(dir);
+
       let folder = WinDrive.ListFiles(dir, { oneFile: true });
       folder.Path = dir;
 

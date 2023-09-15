@@ -45,6 +45,7 @@
         {#if link}
           <TextAreaInput key="Name" file={link} />
           <TextAreaInput key="Url" file={link} />
+          <CheckBox label="Is Adult" key="IsAdult" item={link} />
         {:else}
           <Select key="Type" options={[{ Id: "Manga" }, { Id: "Adult" }]} item={server} />
           <Input key="Title" item={server} />

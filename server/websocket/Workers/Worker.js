@@ -144,7 +144,7 @@ const downloadLink = async (d, page, Server, folder, mangaDir, count) => {
 const downloadLinks = async (link, page) => {
   const exclude = await db.Exclude.findAll({ where: { LinkName: link.Name } });
   const { Server } = link;
-  const isAdult = Server.Type === "Adult";
+  let isAdult = link.IsAdult;
 
   try {
     await page.goto(link.Url, { waitUntil: "domcontentloaded" });
@@ -165,6 +165,7 @@ const downloadLinks = async (link, page) => {
   await updateLastChapter(manga, link);
 
   const Path = `/mnt/5TBHDD/${isAdult ? "R18/webtoon" : "mangas"}`;
+
   manga.Server = Server.Name;
 
   let folder = await findOrCreateFolder(Path, manga, isAdult);

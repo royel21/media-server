@@ -65,7 +65,7 @@
       const result = await apiUtils.get(["admin", "downloader", "exclude-link", id]);
       if (result.valid) {
         const found = datas.links.findIndex((f) => f.Id === +id);
-        if (found) {
+        if (found > -1) {
           datas.links[found].Exclude = !datas.links[found].Exclude;
         }
       }
@@ -225,6 +225,7 @@
     min-height: calc(100% - 37px);
     height: calc(100% - 37px);
     overflow-x: auto;
+    padding-bottom: 10px;
   }
   .d-table {
     min-width: 1000px;
@@ -239,11 +240,9 @@
     border-top: 1px solid;
   }
   .d-table > div:first-child span:first-child {
-    border-left: 1px solid;
     border-top-left-radius: 0.25rem;
   }
   .d-table > div:first-child span:last-child {
-    border-right: 1px solid;
     border-top-right-radius: 0.25rem;
   }
   .d-table > div:last-child {
@@ -254,22 +253,19 @@
     display: flex;
     flex-direction: row;
   }
-  .d-table > div:not(:first-child) {
-    border-left: 1px solid;
-    border-right: 1px solid;
-  }
   .d-table > div {
     border-bottom: 1px solid;
   }
   .d-table div > span {
     padding: 0.2rem;
   }
-  .d-table div > span:not(:last-child) {
+  .d-table div > span {
     border-right: 1px solid;
   }
   .d-table div > span:first-child {
     width: 50px;
     text-align: center;
+    border-left: 1px solid;
   }
   .d-table div > span:nth-child(2) {
     width: 124px;
@@ -277,7 +273,7 @@
   .d-table div > span:nth-child(3) {
     display: flex;
     justify-content: space-between;
-    width: 170px;
+    width: 185px;
     cursor: pointer;
   }
   .d-table div > span:nth-child(3) span:first-child {
@@ -285,6 +281,8 @@
   }
   .d-table div > span:nth-child(4) {
     width: 80px;
+    overflow: hidden;
+    white-space: nowrap;
   }
   .d-table div > span:nth-child(5) {
     white-space: nowrap;
