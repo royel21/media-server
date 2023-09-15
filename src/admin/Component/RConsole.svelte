@@ -54,7 +54,15 @@
     <div class="r-console">
       <span on:keydown on:click={onClear}><Icons name="trash" /></span>
       <div class="text-list" bind:this={ref}>
-        {#each items as item}<div style={`color: ${item.color || "black"}`}>{item.text}</div>{/each}
+        {#each items as item}
+          <div style={`color: ${item.color || "black"}`}>
+            {#if item.url}
+              <a href={item.url}>{item.text}</a>
+            {:else}
+              {item.text}
+            {/if}
+          </div>
+        {/each}
       </div>
     </div>
   {/if}

@@ -3,7 +3,7 @@
   import Tree from "./Tree.svelte";
   import Directories from "./Directories.svelte";
   import Icons from "../..//icons/Icons.svelte";
-  import Downloads from "./Downloads.svelte";
+  import Downloads from "./Downloader/Downloads.svelte";
   export let tab = "tab-1";
 
   const components = {

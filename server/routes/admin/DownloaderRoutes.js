@@ -2,6 +2,8 @@ import { Router } from "express";
 import db from "../../websocket/Models/index.js";
 import { Op, literal } from "sequelize";
 import { formatLink } from "../utils.js";
+import RenameRoutes from "./RenameRoutes.js";
+import ExcludeChapRoutes from "./ExcludeChapRoutes.js";
 
 const routes = Router();
 
@@ -100,9 +102,17 @@ routes.post("/add-link", async ({ body }, res) => {
       }
       console.log(error.toString());
     }
-  } //https://aquamanga.com/read/infinite-mage/
+  }
 
   res.send(result);
 });
+
+routes.get("/rename-list", RenameRoutes.renameList);
+routes.post("/add-altname", RenameRoutes.addAltname);
+routes.get("/remove-altname/:Id", RenameRoutes.removeAltname);
+
+routes.get("/exclude-list/:LinkName", ExcludeChapRoutes.excludeChapList);
+routes.post("/add-exclude", ExcludeChapRoutes.addExcludeChap);
+routes.get("/remove-exclude/:Id", ExcludeChapRoutes.removeExcludeChap);
 
 export default routes;

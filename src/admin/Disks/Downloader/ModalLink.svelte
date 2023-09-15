@@ -1,12 +1,12 @@
 <script>
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
-  import CheckBox from "../Component/CheckBox.svelte";
-  import TextAreaInput from "../Component/TextAreaInput.svelte";
-  import apiUtils from "../../apiUtils";
+  import CheckBox from "../../Component/CheckBox.svelte";
+  import TextAreaInput from "../../Component/TextAreaInput.svelte";
+  import apiUtils from "../../../apiUtils";
 
   export let hide;
-  let link = { Name: "", IsAdult: false, Url: "" };
+  let link = { Name: "", AltName: "", IsAdult: false, Url: "" };
   let error = "";
   let ref;
 
@@ -42,6 +42,7 @@
       <div class="modal-body">
         <TextAreaInput key="Name" file={link} />
         <TextAreaInput key="Url" file={link} />
+        <TextAreaInput key="AltName" file={link} />
         <CheckBox label="Is Adult" key="IsAdult" item={link} />
       </div>
       <div class="error">{error || ""}</div>

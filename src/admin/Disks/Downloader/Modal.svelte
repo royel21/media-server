@@ -1,11 +1,11 @@
 <script>
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
-  import Input from "../Component/Input.svelte";
-  import Select from "../Component/Select.svelte";
-  import CheckBox from "../Component/CheckBox.svelte";
-  import TextAreaInput from "../Component/TextAreaInput.svelte";
-  import apiUtils from "../../apiUtils";
+  import Input from "../../Component/Input.svelte";
+  import Select from "../../Component/Select.svelte";
+  import CheckBox from "../../Component/CheckBox.svelte";
+  import TextAreaInput from "../../Component/TextAreaInput.svelte";
+  import apiUtils from "../../../apiUtils";
 
   export let server;
   export let link;
@@ -45,6 +45,7 @@
         {#if link}
           <TextAreaInput key="Name" file={link} />
           <TextAreaInput key="Url" file={link} />
+          <TextAreaInput key="AltName" file={link} />
           <CheckBox label="Is Adult" key="IsAdult" item={link} />
         {:else}
           <Select key="Type" options={[{ Id: "Manga" }, { Id: "Adult" }]} item={server} />

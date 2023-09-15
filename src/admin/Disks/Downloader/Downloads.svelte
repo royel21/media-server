@@ -1,16 +1,20 @@
 <script>
   import { onMount, getContext } from "svelte";
-  import apiUtils from "../../apiUtils";
-  import Filter from "../../ShareComponent/Filter.svelte";
-  import Pagination from "../../ShareComponent/Pagination.svelte";
-  import Icons from "../../icons/Icons.svelte";
+  import apiUtils from "../../../apiUtils";
+  import Filter from "../../../ShareComponent/Filter.svelte";
+  import Pagination from "../../../ShareComponent/Pagination.svelte";
+  import Icons from "../../../icons/Icons.svelte";
   import Modal from "./Modal.svelte";
   import ModalLink from "./ModalLink.svelte";
+  import RenameModal from "./RenameModal.svelte";
+  import ExcludeChapModal from "./ExcludeChapModal.svelte";
 
   let start = 0;
   let editor = { show: false };
   let servers = {};
   let showLinkModal = false;
+  let showRenamer = false;
+  let showExcludeChapModal;
 
   const socket = getContext("socket");
 
@@ -37,8 +41,6 @@
     const part = url.split("/");
     let name = "";
     while (!name && part.length) name = part.pop();
-
-    console.log(part, name);
     return name.replace("-", " ");
   };
 
@@ -160,11 +162,27 @@
   <ModalLink hide={onNewlink} />
 {/if}
 
+{#if showRenamer}
+  <RenameModal hide={() => (showRenamer = false)} />
+{/if}
+
+{#if showExcludeChapModal}
+  <ExcludeChapModal
+    linkId={showExcludeChapModal}
+    hide={() => {
+      showExcludeChapModal = false;
+    }}
+  />
+{/if}
+
 <div class="container">
   <div class="d-controls">
     <Filter on:filter={onFilter} filter={datas.filter}>
-      <span class="btn-add" slot="pre-btn" on:click={() => (showLinkModal = true)} on:keydown>
-        <Icons name="squareplus" />
+      <span slot="pre-btn">
+        <span class="btn-add" on:click={() => (showLinkModal = true)} on:keydown>
+          <Icons name="squareplus" />
+        </span>
+        <span title="Show Rename List" on:click={() => (showRenamer = true)}><Icons name="list" /></span>
       </span>
     </Filter>
     <span>
@@ -178,7 +196,7 @@
   <div class="t-container">
     <div class="d-table">
       <div>
-        <span>3650</span>
+        <span>{datas.totalItems}</span>
         <span>Actions</span>
         <span>Server</span>
         <span>Chapter</span>
@@ -189,10 +207,10 @@
         <div class="link" id={link.Id}>
           <span>{i + 1 + start}</span>
           <span>
-            <span on:click={excludeLink} title="Exclude Link" on:keydown>
+            <span on:click={excludeLink} title="Exclude Link From Group Download" on:keydown>
               <Icons name="files" box="0 0 464 512" color={link.Exclude ? "firebrick" : "#47f046"} />
             </span>
-            <span on:click={downloadLink} title="Download Link" on:keydown>
+            <span on:click={downloadLink} title="Download This Link" on:keydown>
               <Icons name="download" color="lightblue" />
             </span>
             <span on:click={editLink} title="Edit Link" on:keydown>
@@ -206,7 +224,10 @@
             <span data-id={link.ServerId} on:click={downloadServer} on:keydown>{servers[link.ServerId]?.Name}</span>
             <span on:click={editServer} on:keydown><Icons name="cog" /></span>
           </span>
-          <span>{link.LastChapter}</span>
+          <span>
+            <span on:click={() => (showExcludeChapModal = link.Name)} on:keydown><Icons name="cog" /></span>
+            {link.LastChapter}
+          </span>
           <span title={link.Name || nameFromurl(link.Url)}>
             <a href={link.Url} target="_blank">{link.Name || nameFromurl(link.Url)}</a>
           </span>
@@ -223,6 +244,7 @@
     flex-direction: row;
     justify-content: space-between;
   }
+  .d-controls :global(.icon-list),
   .d-controls :global(.icon-squareplus) {
     height: 35px;
     width: 45px;
