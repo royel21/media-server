@@ -182,7 +182,7 @@
         <span class="btn-add" on:click={() => (showLinkModal = true)} on:keydown>
           <Icons name="squareplus" />
         </span>
-        <span title="Show Rename List" on:click={() => (showRenamer = true)}><Icons name="list" /></span>
+        <span class="r-list" title="Show Rename List" on:click={() => (showRenamer = true)}><Icons name="list" /></span>
       </span>
     </Filter>
     <span>
@@ -244,7 +244,7 @@
     flex-direction: row;
     justify-content: space-between;
   }
-  .d-controls :global(.icon-list),
+  .d-controls .r-list :global(.icon-list),
   .d-controls :global(.icon-squareplus) {
     height: 35px;
     width: 45px;
