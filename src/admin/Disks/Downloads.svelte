@@ -5,10 +5,12 @@
   import Pagination from "../../ShareComponent/Pagination.svelte";
   import Icons from "../../icons/Icons.svelte";
   import Modal from "./Modal.svelte";
+  import ModalLink from "./ModalLink.svelte";
 
   let start = 0;
   let editor = { show: false };
   let servers = {};
+  let showLinkModal = false;
 
   const socket = getContext("socket");
 
@@ -17,7 +19,7 @@
     page: 1,
     totalPages: 50,
     totalItems: 0,
-    items: 100,
+    items: +localStorage.getItem("d-items") || 100,
     filter: "",
   };
 
@@ -30,6 +32,15 @@
     minute: "numeric",
     hour12: true,
   });
+
+  const nameFromurl = (url = "") => {
+    const part = url.split("/");
+    let name = "";
+    while (!name && part.length) name = part.pop();
+
+    console.log(part, name);
+    return name.replace("-", " ");
+  };
 
   const getLink = (target) => {
     const id = target.closest(".link")?.id;
@@ -84,6 +95,9 @@
     const id = target.closest(".link").id;
     if (id) {
       const result = await apiUtils.get(["admin", "downloader", "remove-link", id]);
+      if (result.valid) {
+        loadItems();
+      }
     }
   };
 
@@ -119,6 +133,12 @@
       }
     }
   };
+  const onNewlink = (newLink) => {
+    if (newLink) {
+      loadItems();
+    }
+    showLinkModal = false;
+  };
 
   onMount(() => {
     loadItems();
@@ -129,15 +149,24 @@
   });
 
   $: start = (datas.page - 1) * datas.items;
+  $: localStorage.setItem("d-items", datas.items);
 </script>
 
 {#if editor.show}
   <Modal server={editor.server} link={editor.link} hide={hideModal} />
 {/if}
 
+{#if showLinkModal}
+  <ModalLink hide={onNewlink} />
+{/if}
+
 <div class="container">
   <div class="d-controls">
-    <Filter on:filter={onFilter} filter={datas.filter} />
+    <Filter on:filter={onFilter} filter={datas.filter}>
+      <span class="btn-add" slot="pre-btn" on:click={() => (showLinkModal = true)} on:keydown>
+        <Icons name="squareplus" />
+      </span>
+    </Filter>
     <span>
       <Pagination page={datas.page} totalPages={datas.totalPages} on:gotopage={gotopage} />
       <div class="input-group d-items">
@@ -178,7 +207,9 @@
             <span on:click={editServer} on:keydown><Icons name="cog" /></span>
           </span>
           <span>{link.LastChapter}</span>
-          <span title={link.Name}><a href={link.Url} target="_blank">{link.Name}</a></span>
+          <span title={link.Name || nameFromurl(link.Url)}>
+            <a href={link.Url} target="_blank">{link.Name || nameFromurl(link.Url)}</a>
+          </span>
           <span>{dayfmt.format(new Date(link.Date))}</span>
         </div>
       {/each}
@@ -187,25 +218,26 @@
 </div>
 
 <style>
+  .d-controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .d-controls :global(.icon-squareplus) {
+    height: 35px;
+    width: 45px;
+    top: -1px;
+  }
   .d-controls :global(.icon-list) {
     top: initial;
-  }
-  .d-controls > span {
-    margin-left: 2px;
   }
   .input-group-text {
     padding: 0.2rem 0.1rem 0.2rem 0.35rem;
   }
-  .d-controls {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 10px;
-    justify-content: space-between;
-  }
   .d-controls .form-control {
     padding: 0.2rem;
   }
-  .d-controls span:last-child {
+  .d-controls > span {
     display: flex;
   }
   .d-items {
@@ -300,5 +332,20 @@
   }
   .d-table div:not(:first-child) > span:nth-child(3):hover {
     text-decoration: underline;
+  }
+
+  @media screen and (max-width: 450px) {
+    .d-controls :global(#filter-control) {
+      margin-right: 2px;
+    }
+    .d-controls :global(.btn-filter) {
+      padding: 0.3rem 0.2rem;
+    }
+    .d-controls {
+      padding-bottom: 10px;
+    }
+    .btn-add {
+      display: none;
+    }
   }
 </style>

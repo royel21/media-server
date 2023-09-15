@@ -4,6 +4,7 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  --menu-s-height: 50px;
 }
 
 html,
@@ -64,17 +65,17 @@ button {
   overflow: visible;
 }
 
-input[type="text"] + span {
+input[type="text"]+span {
   display: none !important;
   position: absolute;
-  top: 0px;
+  top: 1px;
   right: 6px;
   z-index: 99;
   color: darkgray;
   font-size: 20px;
 }
 
-input[type="text"]:not(:placeholder-shown) + span {
+input[type="text"]:not(:placeholder-shown)+span {
   display: initial !important;
 }
 
@@ -169,6 +170,7 @@ input[type="text"]:not(:placeholder-shown) + span {
   border: 1px solid white;
   padding: 5px;
 }
+
 .btn {
   display: inline-block;
   font-weight: 400;
@@ -220,11 +222,12 @@ svg,
 .btn,
 .table thead,
 .modal label,
-.modal-header > * {
+.modal-header>* {
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
 }
+
 svg path {
   pointer-events: none;
 }
@@ -258,7 +261,7 @@ svg path {
   fill: rgba(248, 224, 6, 0.952);
 }
 
-.icon-folder-open + .file-progress {
+.icon-folder-open+.file-progress {
   background-color: rgba(252, 1, 1, 0.856);
 }
 
@@ -337,6 +340,7 @@ svg path {
 #current-page input {
   height: 30px;
 }
+
 /****************************************************************/
 @media screen and (max-width: 500px) {
   ::-webkit-scrollbar {

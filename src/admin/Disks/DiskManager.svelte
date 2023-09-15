@@ -18,27 +18,29 @@
 </script>
 
 <div class="card bg-dark text-light admin-manager">
-  <div class="nav nav-tabs disk-controls usn">
-    <div class="nav-item">
-      <input type="radio" bind:group={tab} value="tab-1" id="tab1" />
-      <label class="nav-link" for="tab1">
-        <Icons name="folder" />
-        <span id="dirs">Directories</span>
-      </label>
-    </div>
-    <div class="nav-item">
-      <input type="radio" bind:group={tab} value="tab-2" id="tab2" />
-      <label class="nav-link" for="tab2">
-        <Icons name="hdd" />
-        <span id="disks">Server</span>
-      </label>
-    </div>
-    <div class="nav-item">
-      <input type="radio" bind:group={tab} value="tab-3" id="tab3" />
-      <label class="nav-link" for="tab3">
-        <Icons name="download" />
-        <span id="disks">Downloads</span>
-      </label>
+  <div class="disk-controls">
+    <div class="usn nav nav-tabs">
+      <div class="nav-item">
+        <input type="radio" bind:group={tab} value="tab-1" id="tab1" />
+        <label class="nav-link" for="tab1">
+          <Icons name="folder" />
+          <span id="dirs">Directories</span>
+        </label>
+      </div>
+      <div class="nav-item">
+        <input type="radio" bind:group={tab} value="tab-2" id="tab2" />
+        <label class="nav-link" for="tab2">
+          <Icons name="hdd" />
+          <span id="disks">Server</span>
+        </label>
+      </div>
+      <div class="nav-item">
+        <input type="radio" bind:group={tab} value="tab-3" id="tab3" />
+        <label class="nav-link" for="tab3">
+          <Icons name="download" />
+          <span id="disks">Downloads</span>
+        </label>
+      </div>
     </div>
   </div>
   <div id="tabs-content">
@@ -52,6 +54,9 @@
     height: 100%;
     padding: 10px 0 0 0;
   }
+  .disk-controls {
+    border-bottom: 1px solid;
+  }
 
   .admin-manager .disk-controls :global(svg) {
     top: 0px;
@@ -59,10 +64,11 @@
     height: 24px;
   }
 
-  .nav {
+  .disk-controls .nav {
     display: flex;
     justify-content: space-evenly;
-    border-bottom: 1px solid;
+    max-width: 440px;
+    margin: 0 auto;
   }
   .nav-link {
     padding: 5px 10px;
@@ -71,7 +77,7 @@
   input[type="radio"] {
     display: none;
   }
-  .disk-controls.nav label {
+  .usn.nav label {
     display: inline-block;
     margin: 0;
     cursor: pointer;

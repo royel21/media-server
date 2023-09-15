@@ -1,6 +1,7 @@
 import { Router } from "express";
 import db from "../../websocket/Models/index.js";
 import { Op, literal } from "sequelize";
+import { formatLink } from "../utils.js";
 
 const routes = Router();
 
@@ -21,7 +22,7 @@ routes.get("/remove-link/:Id", async ({ params }, res) => {
   const link = await db.Link.findOne({ where: { Id } });
 
   if (link) {
-    // link.destroy();
+    link.destroy();
     return res.send({ valid: true });
   }
   res.send({ valid: false });
@@ -75,6 +76,31 @@ routes.post("/item-update", async ({ body }, res) => {
   } catch (error) {
     result.valid = false;
   }
+
+  res.send(result);
+});
+
+const validRegex =
+  /\/\/(aquamanga.com|bato.to)|\/(manga|manga-hentai|hentai|manhua|comic|manhwa(-raw|)|webtoon|bato|\/series\/\d+\/)\//;
+
+routes.post("/add-link", async ({ body }, res) => {
+  const { IsAdult, Url, Name } = body;
+  const result = { valid: false };
+  if (validRegex.test(Url) || !/=/.test(Url)) {
+    const { url, serverName } = formatLink(body.Url);
+
+    let [server] = await db.Server.findOrCreate({ where: { Name: serverName, Type: IsAdult ? "Adult" : "Manga" } });
+
+    try {
+      await db.Link.create({ Url: url, ServerId: server.Id, Name, IsAdult, Date: new Date() });
+      result.valid = true;
+    } catch (error) {
+      if (error.toString().includes("SequelizeUniqueConstraintError")) {
+        result.error = `Can't Add Duplicate Link`;
+      }
+      console.log(error.toString());
+    }
+  } //https://aquamanga.com/read/infinite-mage/
 
   res.send(result);
 });

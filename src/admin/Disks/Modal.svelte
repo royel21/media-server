@@ -35,7 +35,7 @@
   });
 </script>
 
-<div bind:this={ref} class="modal-container" on:keydown={onKeyDown} tabindex="-1">
+<div bind:this={ref} class="modal-container" class:server on:keydown={onKeyDown} tabindex="-1">
   <div class="modal card" transition:fade={{ duration: 200 }}>
     <div class="modal-header">
       <h4>{server ? "Edit Server Config" : "Edit Link"}</h4>
@@ -93,6 +93,13 @@
   @media screen and (max-width: 450px) {
     .modal {
       width: 380px;
+    }
+  }
+
+  @media screen and (max-height: 600px) {
+    .server {
+      overflow: auto;
+      padding-top: 95px;
     }
   }
 </style>

@@ -30,6 +30,7 @@
 </script>
 
 <div id="filter-control" class="input-group">
+  <slot name="pre-btn" />
   <div class="input-group-prepend">
     <span class="btn-filter input-group-text" on:click={btnFilter} on:keydown={() => {}}>
       <Icons name="search" height="22px" color="#495057" />
@@ -50,7 +51,7 @@
 </div>
 
 <style>
-  #filter-control :global(svg) {
+  #filter-control :global(.icon-search) {
     top: 0px;
   }
 

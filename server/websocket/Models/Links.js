@@ -33,6 +33,7 @@ export default (sequelize, { INTEGER, DATE, STRING, VIRTUAL, BOOLEAN, TEXT }) =>
       },
       Date: {
         type: DATE,
+        defaultValue: sequelize.fn("NOW"),
       },
       ServerId: {
         type: INTEGER,
