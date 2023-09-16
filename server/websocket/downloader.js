@@ -3,8 +3,6 @@ import { fork, spawnSync } from "child_process";
 let downloader;
 
 export const download = async (data) => {
-  console.log(data);
-
   if (!downloader) {
     spawnSync("rm", [".", "user-data/puppeteer/SingletonLock"]);
     downloader = fork(appPath + "/websocket/Workers/Worker.js");
