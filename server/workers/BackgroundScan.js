@@ -52,6 +52,17 @@ const rmOrphanFiles = async (folder) => {
       }
     }
     folder.Files = folder.Files.filter((f) => !removed.includes(f.Id));
+    const imgs = folder.Files.map((f) => f.Name + ".jpg");
+    const imageDir = path.join(ThumbnailPath, folder.FilesType === "mangas" ? "Manga" : "Video", folder.Name);
+
+    const founds = fs.readdirSync(imageDir).filter((f) => /jpg/.test(f));
+    for (let img of founds) {
+      if (!imgs.includes(img)) {
+        try {
+          fs.removeSync(path.join(imageDir, img));
+        } catch (error) {}
+      }
+    }
   } else {
     for (const f of folders) {
       if (f.IsNoEmpty) {
@@ -165,7 +176,7 @@ const scanFolder = async (curfolder, files, isFolder) => {
 const getFolders = async (id, isFolder) => {
   return db.folder.findAll({
     order: ["Path"],
-    attributes: ["Id", "Name", "FileCount", "CreatedAt", "FilesType", "Path", "Scanning"],
+    attributes: ["Id", "Name", "FileCount", "CreatedAt", "FilesType", "Path", "Scanning", "Type"],
     where: isFolder ? { Id: id } : { DirectoryId: id },
     include: { model: db.file, attributes: ["Id", "Name", "Type", "Duration", "FolderId"] },
   });
@@ -193,7 +204,6 @@ const scanDirectory = async ({ id, dir, isFolder }) => {
       sendMessage("cleaning direcory");
       console.time("cleaning direcory");
       await rmOrphanFiles();
-      console.timeEnd("cleaning direcory");
 
       sendMessage("scanning directory");
       console.time("scanning directory");

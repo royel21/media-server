@@ -142,6 +142,10 @@
     showLinkModal = false;
   };
 
+  const stopDownloads = () => {
+    socket.emit("download-server", { action: "Exit" });
+  };
+
   onMount(() => {
     loadItems();
     socket.on("update-download", onUpdate);
@@ -182,7 +186,12 @@
         <span class="btn-add" on:click={() => (showLinkModal = true)} on:keydown>
           <Icons name="squareplus" />
         </span>
-        <span class="r-list" title="Show Rename List" on:click={() => (showRenamer = true)}><Icons name="list" /></span>
+        <span class="r-list" title="Show Rename List" on:click={() => (showRenamer = true)} on:keydown>
+          <Icons name="list" />
+        </span>
+        <span class="r-list" title="Stop All Download" on:click={stopDownloads} on:keydown>
+          <Icons name="stopcircle" color="firebrick" />
+        </span>
       </span>
     </Filter>
     <span>
@@ -222,11 +231,13 @@
           </span>
           <span>
             <span data-id={link.ServerId} on:click={downloadServer} on:keydown>{servers[link.ServerId]?.Name}</span>
-            <span on:click={editServer} on:keydown><Icons name="cog" /></span>
+            <span on:click={editServer} on:keydown title="Show Site Config"><Icons name="cog" /></span>
           </span>
           <span>
-            <span on:click={() => (showExcludeChapModal = link.Name)} on:keydown><Icons name="cog" /></span>
-            {link.LastChapter}
+            <span on:click={() => (showExcludeChapModal = link.Name)} on:keydown title="Show Exclude Chapt List ">
+              <Icons name="cog" />
+            </span>
+            <span title={link.LastChapter}>{link.LastChapter}</span>
           </span>
           <span title={link.Name || nameFromurl(link.Url)}>
             <a href={link.Url} target="_blank">{link.Name || nameFromurl(link.Url)}</a>
@@ -244,7 +255,7 @@
     flex-direction: row;
     justify-content: space-between;
   }
-  .d-controls .r-list :global(.icon-list),
+  .d-controls .r-list :global(svg),
   .d-controls :global(.icon-squareplus) {
     height: 35px;
     width: 45px;

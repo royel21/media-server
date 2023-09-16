@@ -64,8 +64,8 @@ const updateLastChapter = async ({ data, Name }, link) => {
   }
 };
 
-const downloadLink = async (d, page, Server, folder, mangaDir, count) => {
-  const isAdult = Server.Type === "Adult";
+const downloadLink = async (d, page, Server, folder, mangaDir, count, adult) => {
+  const isAdult = adult || Server.Type === "Adult";
 
   if (!fs.existsSync(mangaDir)) {
     fs.mkdirsSync(mangaDir);
@@ -193,7 +193,7 @@ const downloadLinks = async (link, page) => {
     try {
       ++count;
       if (!exclude.find((ex) => d.name.includes(ex.Name))) {
-        await downloadLink(d, page, Server, folder, mangaDir, `${count}/${data.length}`);
+        await downloadLink(d, page, Server, folder, mangaDir, `${count}/${data.length}`, link.IsAdult);
       }
     } catch (error) {
       sendMessage({ text: `chapter ${Name} - ${d.name} navigation error`, error });
@@ -244,7 +244,7 @@ const onDownload = async (bypass, headless) => {
         url: link.Url,
       });
       try {
-        await downloadLinks(link, page, link.Server);
+        await downloadLinks(link, page, link.Server, link.IsAdult);
 
         await link.reload();
         sendMessage({ link }, "update-download");
@@ -293,8 +293,6 @@ const checkServer = async (Id, headless) => {
       if (!state.browser) {
         process.exit();
       }
-
-      const isAdult = server.Type === "Adult";
 
       sendMessage({ text: `checking server ${server.Name}` });
 
@@ -396,7 +394,7 @@ const checkServer = async (Id, headless) => {
 
             let ccount = 1;
 
-            const mangaDir = path.join(basePath, isAdult ? path.join("R18", "webtoon") : "mangas", folder.Name);
+            const mangaDir = path.join(basePath, d.link.IsAdult ? path.join("R18", "webtoon") : "mangas", folder.Name);
             d.chaps = d.chaps.filter(removeRaw(d.chaps));
             const excludes = await db.Exclude.findAll({ where: { LinkName: d.link.Name } });
 
@@ -405,7 +403,17 @@ const checkServer = async (Id, headless) => {
             for (let chap of d.chaps) {
               if (chap.name && !excludes.find((ex) => ex.Name === chap.name)) {
                 try {
-                  if (await downloadLink(chap, page, server, folder, mangaDir, `${ccount++}/${d.chaps.length}`)) {
+                  if (
+                    await downloadLink(
+                      chap,
+                      page,
+                      server,
+                      folder,
+                      mangaDir,
+                      `${ccount++}/${d.chaps.length}`,
+                      d.link.IsAdult
+                    )
+                  ) {
                     updateFolder = true;
                   }
                 } catch (error) {

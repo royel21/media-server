@@ -20,7 +20,7 @@
     { title: "Folders", path: "/admin/folders", class: "folder", color: "rgb(250, 183, 15)" },
     {
       title: "Manager",
-      path: "/admin/content-manager/tab-1",
+      path: "/admin/content-manager",
       class: "sitemap",
       color: "#80bdff",
     },

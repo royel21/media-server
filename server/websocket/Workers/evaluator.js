@@ -40,7 +40,7 @@ export const evaluetePage = (query) => {
 
   let data = as
     .map((a) => {
-      let val = (a.querySelector("span") || a).textContent;
+      let val = (a.querySelector("strong,b,san") || a).textContent?.trim();
 
       val = val
         .trim()
@@ -52,7 +52,8 @@ export const evaluetePage = (query) => {
         .replace(/ - (\(|)(fixed)(\)|)|Ver\. (α|\d+|)|(extra-|)lewd edit|.rar/gi, "")
         .replace(/^(Chapter|chap|chvol|)(-| )/i, "")
         .replace(".", "-")
-        .replace(/(\.)+$/, "");
+        .replace(/(\.)+$/, "")
+        .replace(/-6|-7/, "-5");
       let n = val.match(/\d+/);
       if (n) {
         n = n[0];
@@ -180,12 +181,7 @@ export const adultEvalPage = async (query) => {
 
   let data = chaps
     .map((a) => {
-      let text = (
-        a.querySelector("strong") ||
-        a.querySelector("b") ||
-        a.querySelector("span") ||
-        a
-      ).textContent?.trim();
+      let text = (a.querySelector("strong,b,san") || a).textContent?.trim();
 
       let fileName = text
         .replace("  ", " ")

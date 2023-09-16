@@ -98,7 +98,7 @@
   .modal {
     height: calc(100% - 100px);
     max-height: 500px;
-    width: 540px;
+    width: 750px;
     outline: none;
   }
   .modal-header {

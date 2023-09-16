@@ -86,7 +86,7 @@ const validRegex =
   /\/\/(aquamanga.com|bato.to)|\/(manga|manga-hentai|hentai|manhua|comic|manhwa(-raw|)|webtoon|bato|\/series\/\d+\/)\//;
 
 routes.post("/add-link", async ({ body }, res) => {
-  const { IsAdult, Url, Name } = body;
+  const { IsAdult, Url, Name, AltName } = body;
   const result = { valid: false };
   if (validRegex.test(Url) || !/=/.test(Url)) {
     const { url, serverName } = formatLink(body.Url);
@@ -94,7 +94,7 @@ routes.post("/add-link", async ({ body }, res) => {
     let [server] = await db.Server.findOrCreate({ where: { Name: serverName, Type: IsAdult ? "Adult" : "Manga" } });
 
     try {
-      await db.Link.create({ Url: url, ServerId: server.Id, Name, IsAdult, Date: new Date() });
+      await db.Link.create({ Url: url, ServerId: server.Id, Name, AltName, IsAdult, Date: new Date() });
       result.valid = true;
     } catch (error) {
       if (error.toString().includes("SequelizeUniqueConstraintError")) {

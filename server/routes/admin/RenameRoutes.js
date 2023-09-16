@@ -1,7 +1,7 @@
 import db from "../../websocket/Models/index.js";
 
 export const renameList = async (_, res) => {
-  const names = await db.NameList.findAll();
+  const names = await db.NameList.findAll({ order: ["AltName"] });
   res.send(names.map((n) => n.dataValues));
 };
 

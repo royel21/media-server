@@ -10,3 +10,5 @@ export const validGenres = (g) => {
     .sort()
     .join(", ");
 };
+
+export const map = (val, min, max) => Math.min(Math.max(min, val), max);
