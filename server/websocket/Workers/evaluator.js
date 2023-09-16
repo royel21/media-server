@@ -241,7 +241,7 @@ export const adultEvalPage = async (query) => {
     let parts = [];
 
     if (text.includes(",")) {
-      parts = text.split(/, /);
+      parts = text.split(/,( |)/);
     } else {
       parts = text.split(/(  )+/);
     }
@@ -252,7 +252,7 @@ export const adultEvalPage = async (query) => {
 
   let Genres = "";
   let AltName = "";
-  let genreRegex = /(genre((\(|)(s|)(\)|)|)|Género)(:|)/i;
+  let genreRegex = /genre((\(|)(s|)(\)| :(\n|)|))|Género(( |):|)/gi;
   for (let item of document.querySelectorAll(query.AltTitle)) {
     let text = item?.textContent.trim();
     if (text) {
@@ -271,6 +271,10 @@ export const adultEvalPage = async (query) => {
         Genres = formatGenres(text.replace(genreRegex, "").trim());
       }
     }
+  }
+
+  if (!Genres) {
+    Genres = formatGenres(document.querySelector(query.Genres)?.textContent.replace(genreRegex, "").trim() || "");
   }
 
   if (location.href.includes("mangas.in")) {

@@ -45,40 +45,41 @@
   };
 
   onMount(() => {
+    navigation.addEventListener("navigate", onNavigate);
+    const state = { height: 180 };
     if (dragger) {
-      const state = { height: 180 };
       dragger.addEventListener("mousedown", (e) => {
         state.dragge = true;
         state.y = e.clientY;
       });
-      const onMouseMove = (e) => {
-        e.preventDefault();
-        if (state.dragge) {
-          state.lastHeight = state.height + state.y - e.clientY;
-          rconsole.style.height = state.lastHeight + "px";
-        }
-      };
-
-      const resetState = (e) => {
-        e.preventDefault();
-        state.dragge = false;
-        if (state.lastHeight) {
-          state.height = state.lastHeight;
-          state.lastHeight = null;
-        }
-      };
-
-      window.addEventListener("mousemove", onMouseMove);
-      document.addEventListener("mouseup", resetState);
-      document.addEventListener("mouseleave", resetState);
-      navigation.addEventListener("navigate", onNavigate);
-      return () => {
-        window.removeEventListener("mousemove", onMouseMove);
-        document.removeEventListener("mouseup", resetState);
-        document.removeEventListener("mouseleave", resetState);
-        navigation.removeEventListener("navigate", onNavigate);
-      };
     }
+
+    const onMouseMove = (e) => {
+      if (state.dragge) {
+        e.preventDefault();
+        state.lastHeight = state.height + state.y - e.clientY;
+        rconsole.style.height = state.lastHeight + "px";
+      }
+    };
+
+    const resetState = (e) => {
+      state.dragge = false;
+      if (state.lastHeight) {
+        e.preventDefault();
+        state.height = state.lastHeight;
+        state.lastHeight = null;
+      }
+    };
+
+    window.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", resetState);
+    document.addEventListener("mouseleave", resetState);
+    return () => {
+      window.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", resetState);
+      document.removeEventListener("mouseleave", resetState);
+      navigation.removeEventListener("navigate", onNavigate);
+    };
   }, []);
 
   $: if (update) {
