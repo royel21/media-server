@@ -11,6 +11,7 @@
   let dragger;
   let rconsole;
   let expanded = false;
+  const state = { height: 180 };
 
   const socket = getContext("socket");
 
@@ -42,10 +43,10 @@
   const onExpand = () => {
     rconsole.style.height = expanded ? "120px" : "calc(100% - 205px)";
     expanded = !expanded;
+    state.height = rconsole.offsetHeight;
   };
 
   onMount(() => {
-    const state = { height: 180 };
     if (dragger) {
       dragger.addEventListener("mousedown", (e) => {
         state.dragge = true;
@@ -84,7 +85,7 @@
 
   $: if (update) {
     canShow = /content-manager|tools/.test(location.pathname);
-  }
+  } //
 </script>
 
 {#if canShow}
