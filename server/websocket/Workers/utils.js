@@ -96,3 +96,18 @@ export function sendMessage(data, event = "info") {
     process.send({ event, data: { color: "blue", ...data } });
   }
 }
+
+const { USER } = process.env;
+
+export const createDir = (dir) => {
+  try {
+    if (!fs.existsSync(dir)) {
+      fs.mkdirsSync(dir);
+      if (USER) {
+        spawnSync("chown", ["-R", `${USER}:${USER}`, dir]);
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};

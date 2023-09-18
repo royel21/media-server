@@ -1,6 +1,6 @@
 {
     "files.associations": {
-        "*.js": "javascriptreact",
+        "*.js": "javascript",
         "xstring": "cpp",
         "algorithm": "cpp",
         "chrono": "cpp",

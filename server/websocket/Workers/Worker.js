@@ -9,8 +9,9 @@ import { evaluetePage, evaleLinks, adultEvalPage } from "./evaluator.js";
 
 import db from "../Models/index.js";
 import { downloadAllIMages, createThumb, createFolderCover } from "./ImageUtils.js";
-import { filterManga, dateDiff, findRaw, removeRaw, sendMessage } from "./utils.js";
+import { filterManga, dateDiff, findRaw, removeRaw, sendMessage, createDir } from "./utils.js";
 import { startBrowser, createPage } from "./Crawler.js";
+import { spawnSync } from "child_process";
 
 const { USE_DEV, BASEPATH, PUPETEER_DIR, PUPETEER_DIR_DEV, IMAGEDIR } = process.env;
 const basePath = BASEPATH;
@@ -19,7 +20,8 @@ const basePath = BASEPATH;
 const state = { links: [], running: false, size: 0, checkServer: false };
 
 const imgPath = path.join(IMAGEDIR, "images");
-if (!fs.existsSync(imgPath)) fs.mkdirsSync(imgPath);
+
+createDir(imgPath);
 
 const delay = (ms) => {
   return new Promise((resolve) => {
@@ -67,9 +69,7 @@ const updateLastChapter = async ({ data, Name }, link) => {
 const downloadLink = async (d, page, Server, folder, mangaDir, count, adult) => {
   const isAdult = adult || Server.Type === "Adult";
 
-  if (!fs.existsSync(mangaDir)) {
-    fs.mkdirsSync(mangaDir);
-  }
+  createDir(mangaDir);
 
   const exists = fs.readdirSync(mangaDir).find(findRaw(d.name));
 
@@ -90,7 +90,7 @@ const downloadLink = async (d, page, Server, folder, mangaDir, count, adult) => 
   sendMessage({ text: `Dwn: ${count} - ${folder.Name} - ${d.name}`, url: d.url });
   let links = [];
 
-  fs.mkdirsSync(dir);
+  createDir(dir);
 
   let query = {};
   if (!Server.LocalImages) {
@@ -119,7 +119,7 @@ const downloadLink = async (d, page, Server, folder, mangaDir, count, adult) => 
   if (images.length === links.length && !state.stopped) {
     const imgDir = path.join(imgPath, "Manga", folder.Name);
 
-    if (!fs.existsSync(imgDir)) fs.mkdirsSync(imgDir);
+    createDir(imgDir);
 
     const fromImg = path.join(dir, images[0]);
 
@@ -372,6 +372,7 @@ const checkServer = async (Id, headless) => {
           where: { Name: tname?.AltName || Name, ServerId: Id },
           include: ["Server"],
         });
+        if (link.Exclude) continue;
         if (link && !state.links.find((l) => l.Url === link.Url)) {
           linksId.push(link.Id);
           linkData.push({ link, chaps });

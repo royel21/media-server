@@ -130,24 +130,21 @@ export const createThumb = async (fromImg, toImg) => {
 const getPadding = (length) => (length > 999 ? 4 : length > 99 ? 3 : 2);
 
 export const createFolderCover = async (mangaDir, data, imgPath, page) => {
-  let posterPath = path.join(mangaDir, "Cover.jpg");
-
   let files = [];
-  if (!fs.existsSync(mangaDir)) {
-    fs.mkdirsSync(mangaDir);
-  }
+
+  createDir(mangaDir);
 
   files = fs.readdirSync(mangaDir);
   const poster = files.find((f) => /\.(jpg|webp|png|jpeg)/gi.test(f));
   try {
+    let posterPath = path.join(mangaDir, "Cover.jpg");
     if (!poster) {
       await downloadImg(posterPath, data.poster, page, true);
+    }
 
-      let Cover = path.join(imgPath, "Folder", "mangas", data.Name + ".jpg");
-
-      if (!fs.existsSync(Cover)) {
-        await sharp(posterPath).jpeg().resize({ width: 240 }).toFile(Cover);
-      }
+    let Cover = path.join(imgPath, "Folder", "mangas", data.Name + ".jpg");
+    if (!fs.existsSync(Cover) && fs.existsSync(posterPath)) {
+      await sharp(posterPath).jpeg().resize({ width: 240 }).toFile(Cover);
     }
   } catch (error) {
     sendMessage({ text: `Folder-Cover-Error: ${data.poster}`, color: "Red", error });
@@ -157,11 +154,9 @@ export const createFolderCover = async (mangaDir, data, imgPath, page) => {
 };
 
 export const downloadAllIMages = async (page, links, dir, linkData) => {
-  fs.mkdirsSync(dir);
   const length = links.length;
   let padding = getPadding(links.length);
-  console.log("images: ", length);
-
+  sendMessage({ text: `images: ${length}` });
   for (let i = 0; i < links.length; i++) {
     if (linkData.stopped) return;
 
