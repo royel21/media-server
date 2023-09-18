@@ -40,7 +40,7 @@ routes.get("/video/:id", async (req, res) => {
     include: { model: db.folder },
   });
 
-  if (file) {
+  if (file && req.headers.range) {
     const range = req.headers.range;
     if (!range) {
       res.status(400).send("Requires Range header");

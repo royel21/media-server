@@ -40,7 +40,7 @@ export const evaluetePage = (query) => {
 
   let data = as
     .map((a) => {
-      let val = (a.querySelector("strong,b,san") || a).textContent?.trim();
+      let val = (a.querySelector("strong,b,san") || a).textContent?.trim().replace(/\n.*$|\nNEW/gi, "");
 
       val = val
         .trim()
@@ -250,27 +250,36 @@ export const adultEvalPage = async (query) => {
     return capitalize(parts.join(", "));
   };
 
+  const getAltName = (text) => {
+    return capitalize(
+      text
+        .replace(/:|\t|\n|\r/gi, "")
+        .replace(/(Alternative|Other name|Nombres)( |)(:|)/i, "")
+        .replaceAll(/’/g, "'")
+        .replace(/ ; |( |)\/( |) /g, "; ")
+        .replace(/',|’,/g, "'")
+        .trim()
+    );
+  };
+
   let Genres = "";
   let AltName = "";
   let genreRegex = /genre((\(|)(s|)(\)| :(\n|)|))|Género(( |):|)/gi;
-  for (let item of document.querySelectorAll(query.AltTitle)) {
-    let text = item?.textContent.trim();
-    if (text) {
-      if (/Alternative|Nombres|Other name/i.test(text)) {
-        AltName = capitalize(
-          text
-            .replace(/:|\t|\n|\r/gi, "")
-            .replace(/(Alternative|Other name|Nombres)( |)(:|)/i, "")
-            .replaceAll(/’/g, "'")
-            .replace(/ ; |( |)\/( |) /g, "; ")
-            .replace(/',|’,/g, "'")
-            .trim()
-        );
-      }
-      if (genreRegex.test(text)) {
-        Genres = formatGenres(text.replace(genreRegex, "").trim());
+  let items = document.querySelectorAll(query.AltTitle);
+  if (items.length > 1) {
+    for (let item of document.querySelectorAll(query.AltTitle)) {
+      let text = item?.textContent.trim();
+      if (text) {
+        if (/Alternative|Nombres|Other name/i.test(text)) {
+          AltName = getAltName(text || "");
+        }
+        if (genreRegex.test(text)) {
+          Genres = formatGenres(text.replace(genreRegex, "").trim());
+        }
       }
     }
+  } else {
+    AltName = AltName = getAltName(items[0]?.textContent || "");
   }
 
   if (!Genres) {

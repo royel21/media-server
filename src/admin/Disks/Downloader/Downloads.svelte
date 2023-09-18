@@ -15,6 +15,7 @@
   let showLinkModal = false;
   let showRenamer = false;
   let showExcludeChapModal;
+  let running = false;
 
   const socket = getContext("socket");
 
@@ -50,6 +51,7 @@
   };
 
   const downloadServer = ({ target: { dataset } }) => {
+    running = true;
     socket.emit("download-server", { server: +dataset.id, action: "Check-Server" });
   };
 
@@ -89,6 +91,7 @@
     if (id) {
       const found = datas.links.find((f) => f.Id === +id);
       if (found) {
+        running = true;
         socket.emit("download-server", { datas: { [found.ServerId]: [found.Id] }, action: "Add-Download" });
       }
     }
@@ -143,14 +146,23 @@
   };
 
   const stopDownloads = () => {
+    running = false;
     socket.emit("download-server", { action: "Exit" });
+  };
+
+  const updateRunning = ({ IsRunning }) => {
+    running = IsRunning;
+    console.log("is-running", running);
   };
 
   onMount(() => {
     loadItems();
     socket.on("update-download", onUpdate);
+    socket.emit("download-server", { action: "is-running" });
+    socket.on("is-running", updateRunning);
     return () => {
       socket.off("update-download", onUpdate);
+      socket.off("is-running", updateRunning);
     };
   });
 
@@ -189,7 +201,7 @@
         <span class="r-list" title="Show Rename List" on:click={() => (showRenamer = true)} on:keydown>
           <Icons name="list" />
         </span>
-        <span class="r-list" title="Stop All Download" on:click={stopDownloads} on:keydown>
+        <span class="r-list btn-stop" title="Stop All Download" class:running on:click={stopDownloads} on:keydown>
           <Icons name="stopcircle" color="firebrick" />
         </span>
       </span>
@@ -263,6 +275,12 @@
   }
   .d-controls :global(.icon-list) {
     top: initial;
+  }
+  .btn-stop {
+    display: none;
+  }
+  .running {
+    display: initial;
   }
   .input-group-text {
     padding: 0.2rem 0.1rem 0.2rem 0.35rem;

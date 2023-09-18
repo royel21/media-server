@@ -45,7 +45,6 @@
   };
 
   onMount(() => {
-    navigation.addEventListener("navigate", onNavigate);
     const state = { height: 180 };
     if (dragger) {
       dragger.addEventListener("mousedown", (e) => {
@@ -74,6 +73,7 @@
     window.addEventListener("mousemove", onMouseMove);
     document.addEventListener("mouseup", resetState);
     document.addEventListener("mouseleave", resetState);
+    navigation.addEventListener("navigate", onNavigate);
     return () => {
       window.removeEventListener("mousemove", onMouseMove);
       document.removeEventListener("mouseup", resetState);

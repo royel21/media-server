@@ -1,20 +1,25 @@
 import { fork, spawnSync } from "child_process";
 
-let downloader;
+let downloader = null;
 
 export const download = async (data) => {
+  if (data.action === "is-running") {
+    return global.io.sockets.emit("is-running", { IsRunning: downloader != null });
+  }
+
   if (!downloader) {
     spawnSync("rm", [".", "user-data/puppeteer/SingletonLock"]);
     downloader = fork(appPath + "/websocket/Workers/Worker.js");
     downloader.on("exit", () => {
+      global.io.sockets.emit("is-running", { IsRunning: false });
       downloader = null;
     });
 
     downloader.on("message", (info) => {
       if (info.event === "update-download") {
-        io.sockets.emit("update-download", info);
+        global.io.sockets.emit("update-download", info);
       } else {
-        io.sockets.emit("info", info.data);
+        global.io.sockets.emit("info", info.data);
       }
     });
   }
