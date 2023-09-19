@@ -96,6 +96,8 @@
     position: relative;
     font-weight: 600;
     border: 1px solid;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
     border-bottom: transparent;
   }
   .nav input[type="radio"]:checked + label:after {

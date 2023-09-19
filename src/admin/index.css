@@ -151,8 +151,8 @@ input::-webkit-inner-spin-button {
 .input-control .input {
   display: block;
   width: 100%;
-  padding: 0.25rem;
-  font-size: 1rem;
+  padding: 0.25rem 0.5rem;
+  font-size: .9rem;
   line-height: 1.5;
   color: #495057;
   background-color: #fff;

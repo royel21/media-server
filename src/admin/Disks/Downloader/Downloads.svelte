@@ -246,7 +246,12 @@
             <span on:click={editServer} on:keydown title="Show Site Config"><Icons name="cog" /></span>
           </span>
           <span>
-            <span on:click={() => (showExcludeChapModal = link.Name)} on:keydown title="Show Exclude Chapt List ">
+            <span
+              class="ex-cfg"
+              on:click={() => (showExcludeChapModal = link.Name)}
+              on:keydown
+              title="Show Exclude Chapt List "
+            >
               <Icons name="cog" />
             </span>
             <span title={link.LastChapter}>{link.LastChapter}</span>
@@ -275,6 +280,10 @@
   }
   .d-controls :global(.icon-list) {
     top: initial;
+  }
+  .ex-cfg {
+    display: inline-block;
+    width: 20px;
   }
   .btn-stop {
     display: none;
