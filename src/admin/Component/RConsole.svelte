@@ -46,11 +46,12 @@
     state.height = rconsole.offsetHeight;
   };
 
+  const onMouseDown = () => {
+    state.dragge = true;
+    state.y = e.clientY;
+  };
+
   onMount(() => {
-    dragger.addEventListener("mousedown", (e) => {
-      state.dragge = true;
-      state.y = e.clientY;
-    });
     const onMouseMove = (e) => {
       if (state.dragge) {
         e.preventDefault();
@@ -80,6 +81,11 @@
     };
   }, []);
 
+  afterUpdate(() => {
+    dragger?.removeEventListener("mousedown", onMouseDown);
+    dragger?.addEventListener("mousedown", onMouseDown);
+  });
+
   $: if (update) {
     canShow = /content-manager|tools/.test(location.pathname);
   } //
@@ -96,7 +102,7 @@
         <span on:keydown on:click={onClear}><Icons name="trash" /></span>
         <div class="text-list" bind:this={ref}>
           {#each items as item}
-            <div style={`color: ${item.color || "black"}`}>
+            <div style={`color: ${item.color || "black"}`} class:important={item.important}>
               {#if item.url}
                 <a href={item.url} style={`color: ${item.color || "black"}`} target="_blank">{item.text}</a>
               {:else}
@@ -123,6 +129,11 @@
   }
   .hide-dragg {
     display: none;
+  }
+  .important {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
   }
   .r-console {
     height: 100%;

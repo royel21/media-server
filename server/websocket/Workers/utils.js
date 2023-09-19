@@ -50,13 +50,20 @@ export const filterManga = (files) => (d) => {
   });
 };
 
+export const findDub = (name) => (f) => {
+  let num = f.name.match(/\d+(-\d+|)/);
+  let num2 = name.match(/\d+(-\d+|)/);
+
+  return num[0] === num2[0];
+};
+
 export const findRaw = (name) => (f) => {
   let num = f.match(/\d+(-\d+|)/);
   let num2 = name.match(/\d+(-\d+|)/);
 
-  // if (/ raw/i.test(f)) {
-  if (num[0] === num2[0]) return true;
-  // }
+  if (/ raw/i.test(f)) {
+    if (num[0] === num2[0]) return true;
+  }
 
   return false;
 };

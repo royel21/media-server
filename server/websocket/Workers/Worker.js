@@ -294,7 +294,7 @@ const checkServer = async (Id, headless) => {
         process.exit();
       }
 
-      sendMessage({ text: `checking server ${server.Name}` });
+      sendMessage({ text: `*** checking server ${server.Name} ***`, important: true });
 
       const page = await createPage(state.browser);
 
