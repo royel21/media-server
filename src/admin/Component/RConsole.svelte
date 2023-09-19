@@ -47,13 +47,10 @@
   };
 
   onMount(() => {
-    if (dragger) {
-      dragger.addEventListener("mousedown", (e) => {
-        state.dragge = true;
-        state.y = e.clientY;
-      });
-    }
-
+    dragger.addEventListener("mousedown", (e) => {
+      state.dragge = true;
+      state.y = e.clientY;
+    });
     const onMouseMove = (e) => {
       if (state.dragge) {
         e.preventDefault();
@@ -92,27 +89,29 @@
   <label on:keydown on:click={toggleConsole} class:toggle>
     <input type="checkbox" bind:checked={toggle} /><Icons name={toggle ? "eyeslash" : "eye"} box="0 0 564 512" />
   </label>
-  {#if toggle && items.length}
-    <div class="r-console" bind:this={rconsole} on:dblclick={onExpand}>
-      <div class="dragger" bind:this={dragger} />
-      <span on:keydown on:click={onClear}><Icons name="trash" /></span>
-      <div class="text-list" bind:this={ref}>
-        {#each items as item}
-          <div style={`color: ${item.color || "black"}`}>
-            {#if item.url}
-              <a href={item.url} style={`color: ${item.color || "black"}`} target="_blank">{item.text}</a>
-            {:else}
-              {item.text}
-            {/if}
-          </div>
-        {/each}
+  <div class="cls-container" bind:this={rconsole} class:hide-dragg={items.length === 0}>
+    <div class="dragger" bind:this={dragger} />
+    {#if toggle && items.length}
+      <div class="r-console" on:dblclick={onExpand}>
+        <span on:keydown on:click={onClear}><Icons name="trash" /></span>
+        <div class="text-list" bind:this={ref}>
+          {#each items as item}
+            <div style={`color: ${item.color || "black"}`}>
+              {#if item.url}
+                <a href={item.url} style={`color: ${item.color || "black"}`} target="_blank">{item.text}</a>
+              {:else}
+                {item.text}
+              {/if}
+            </div>
+          {/each}
+        </div>
       </div>
-    </div>
-  {/if}
+    {/if}
+  </div>
 {/if}
 
 <style>
-  .r-console {
+  .cls-container {
     position: fixed;
     left: 10px;
     right: 10px;
@@ -120,6 +119,13 @@
     height: 180px;
     min-height: 120px;
     max-height: calc(100% - 205px);
+    background-color: transparent;
+  }
+  .hide-dragg {
+    display: none;
+  }
+  .r-console {
+    height: 100%;
     padding: 2px;
     background-color: white;
     border-radius: 0.25rem;

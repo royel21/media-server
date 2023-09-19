@@ -65,14 +65,14 @@ const rmOrphanFiles = async (folder) => {
     }
   } else {
     for (const f of folders) {
-      if (f.IsNoEmpty) {
-        await rmOrphanFiles(f);
-      } else {
-        try {
+      try {
+        if (f.IsNoEmpty) {
+          await rmOrphanFiles(f);
+        } else {
           await f.destroy({ Del: true });
-        } catch (error) {
-          console.log(f.Name, error.toString());
         }
+      } catch (error) {
+        console.log(f.Name, error.toString());
       }
     }
   }

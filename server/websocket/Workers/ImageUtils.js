@@ -1,7 +1,7 @@
 import sharp from "sharp";
 import path from "path";
 import fs from "fs-extra";
-import { sendMessage } from "./utils.js";
+import { createDir, sendMessage } from "./utils.js";
 import axios from "axios";
 
 const parseDataUrl = (dataUrl) => {

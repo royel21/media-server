@@ -1,3 +1,6 @@
+import fs from "fs-extra";
+import { spawnSync } from "node:child_process";
+
 export const isChar = (c) => {
   return c.match(/[a-z]/i);
 };
@@ -51,9 +54,9 @@ export const findRaw = (name) => (f) => {
   let num = f.match(/\d+(-\d+|)/);
   let num2 = name.match(/\d+(-\d+|)/);
 
-  if (/ raw/i.test(f)) {
-    if (num[0] === num2[0]) return true;
-  }
+  // if (/ raw/i.test(f)) {
+  if (num[0] === num2[0]) return true;
+  // }
 
   return false;
 };

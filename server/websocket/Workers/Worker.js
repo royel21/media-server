@@ -372,7 +372,8 @@ const checkServer = async (Id, headless) => {
           where: { Name: tname?.AltName || Name, ServerId: Id },
           include: ["Server"],
         });
-        if (link.Exclude) continue;
+        if (link?.Exclude) continue;
+
         if (link && !state.links.find((l) => l.Url === link.Url)) {
           linksId.push(link.Id);
           linkData.push({ link, chaps });
