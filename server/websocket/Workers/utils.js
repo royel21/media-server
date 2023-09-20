@@ -108,7 +108,7 @@ export function sendMessage(data, event = "info") {
     process.send({ event, data: { color: "blue", ...data } });
   }
 
-  if (data.text || data.error) {
+  if (data.error) {
     db.eventLog.create({
       event,
       ...data,

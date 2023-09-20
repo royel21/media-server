@@ -133,7 +133,7 @@ export const downloadFromPage = async (Id, state) => {
               d.chaps.reverse();
               await d.link.update({ LastChapter: d.chaps[0].name });
 
-              let FileCount = fs.readdirSync(mangaDir).filter((f) => f.includes(".zip")).length;
+              let FileCount = fs.readdirSync(folder.Path).filter((f) => f.includes(".zip")).length;
               await folder.update({ FileCount, CreatedAt: new Date() });
 
               await d.link.reload();
