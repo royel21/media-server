@@ -34,7 +34,7 @@
   };
 
   const onFilter = ({ detail }) => {
-    filter = detail;
+    filter = decodeURI(detail);
   };
 
   const submit = async (e) => {

@@ -282,7 +282,7 @@ export const adultEvalPage = async (query) => {
     AltName = AltName = getAltName(items[0]?.textContent || "");
   }
 
-  if (!Genres) {
+  if (Genres === "") {
     Genres = formatGenres(document.querySelector(query.Genres)?.textContent.replace(genreRegex, "").trim() || "");
   }
 

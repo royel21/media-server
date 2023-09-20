@@ -46,7 +46,7 @@
     state.height = rconsole.offsetHeight;
   };
 
-  const onMouseDown = () => {
+  const onMouseDown = (e) => {
     state.dragge = true;
     state.y = e.clientY;
   };
