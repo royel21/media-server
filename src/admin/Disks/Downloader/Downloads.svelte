@@ -1,9 +1,9 @@
 <script>
   import { onMount, getContext } from "svelte";
-  import apiUtils from "../../../apiUtils";
-  import Filter from "../../../ShareComponent/Filter.svelte";
-  import Pagination from "../../../ShareComponent/Pagination.svelte";
-  import Icons from "../../../icons/Icons.svelte";
+  import apiUtils from "src/apiUtils";
+  import Filter from "src/ShareComponent/Filter.svelte";
+  import Pagination from "src/ShareComponent/Pagination.svelte";
+  import Icons from "src/icons/Icons.svelte";
   import Modal from "./Modal.svelte";
   import ModalLink from "./ModalLink.svelte";
   import RenameModal from "./RenameModal.svelte";

@@ -4,8 +4,8 @@
 
   import ItemList from "./ItemList.svelte";
   import Modal from "./Modal.svelte";
-  import apiUtils from "../../apiUtils";
-  import { clamp } from "../../ShareComponent/utils";
+  import apiUtils from "src/apiUtils";
+  import { clamp } from "src/ShareComponent/utils";
 
   const socket = getContext("socket");
 

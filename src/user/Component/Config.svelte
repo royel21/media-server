@@ -1,7 +1,7 @@
 <script>
   import { getContext, onDestroy, onMount } from "svelte";
-  import { ConfigStore, updateConfig } from "../Stores/PageConfigStore";
-  import Icons from "../../icons/Icons.svelte";
+  import { ConfigStore, updateConfig } from "src/user/Stores/PageConfigStore";
+  import Icons from "src/icons/Icons.svelte";
 
   const User = getContext("User");
   const logout = getContext("logout");

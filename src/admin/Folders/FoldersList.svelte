@@ -5,9 +5,9 @@
   import ItemList from "./ItemList.svelte";
   import Modal from "./Modal.svelte";
   import { calRows } from "../Utils";
-  import apiUtils from "../../apiUtils";
-  import { clamp } from "../../ShareComponent/utils";
-  import Icons from "../../icons/Icons.svelte";
+  import apiUtils from "src/apiUtils";
+  import { clamp } from "src/ShareComponent/utils";
+  import Icons from "src/icons/Icons.svelte";
   import CreateFolderModal from "./CreateFolderModal.svelte";
   import ReplaceImage from "./ReplaceImage.svelte";
   const dispatch = createEventDispatcher();

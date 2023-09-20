@@ -5,7 +5,7 @@
   import Select from "../../Component/Select.svelte";
   import CheckBox from "../../Component/CheckBox.svelte";
   import TextAreaInput from "../../Component/TextAreaInput.svelte";
-  import apiUtils from "../../../apiUtils";
+  import apiUtils from "src/apiUtils";
 
   export let server;
   export let link;

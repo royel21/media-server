@@ -1,7 +1,7 @@
 <script>
   import { onMount, getContext } from "svelte";
-  import apiUtils from "../../apiUtils";
-  import Icons from "../../icons/Icons.svelte";
+  import apiUtils from "src/apiUtils";
+  import Icons from "src/icons/Icons.svelte";
 
   const socket = getContext("socket");
   let dirs = [];

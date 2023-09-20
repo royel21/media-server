@@ -1,8 +1,8 @@
 <script>
-  import apiUtils from "../../apiUtils";
-  import Icons from "../../icons/Icons.svelte";
-  import Filter from "../../ShareComponent/Filter.svelte";
-  import Pagination from "../../ShareComponent/Pagination.svelte";
+  import apiUtils from "src/apiUtils";
+  import Icons from "src/icons/Icons.svelte";
+  import Filter from "src/ShareComponent/Filter.svelte";
+  import Pagination from "src/ShareComponent/Pagination.svelte";
   export let filter;
   export let title;
   export let items;

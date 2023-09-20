@@ -2,7 +2,7 @@
   import { onDestroy, onMount, getContext } from "svelte";
   import TreeItem from "./TreeItem.svelte";
   import DirectoryModal from "./DirectoryModal.svelte";
-  import Icons from "../..//icons/Icons.svelte";
+  import Icons from "src/icons/Icons.svelte";
 
   const socket = getContext("socket");
   let content = [];

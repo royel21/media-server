@@ -3,15 +3,15 @@
   import { navigate } from "svelte-routing";
   import { getFilesPerPage, ProcessFile } from "./filesUtils";
 
-  import { clamp } from "../../ShareComponent/utils";
+  import { clamp } from "src/ShareComponent/utils";
   import { ConfigStore } from "../Stores/PageConfigStore";
-  import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
+  import { ToggleMenu } from "src/ShareComponent/ToggleMenu";
   import { fileKeypress, selectByTitle, selectElementById } from "../Component/fileEvents";
 
-  import api from "../../apiUtils";
-  import Filter from "../../ShareComponent/Filter.svelte";
-  import Pagination from "../../ShareComponent/Pagination.svelte";
-  import Icons from "../../icons/Icons.svelte";
+  import api from "src/apiUtils";
+  import Filter from "src/ShareComponent/Filter.svelte";
+  import Pagination from "src/ShareComponent/Pagination.svelte";
+  import Icons from "src/icons/Icons.svelte";
   import LazyImage from "../Component/LazyImage.svelte";
   import { getLastChap } from "../Component/fileUtils";
 

@@ -1,15 +1,15 @@
 <script>
   import { getContext, createEventDispatcher, afterUpdate, onMount } from "svelte";
-  import { clamp } from "../../../ShareComponent/utils";
+  import { clamp } from "src/ShareComponent/utils";
   import { isMobile, setfullscreen } from "../pagesUtils";
   import { scrollInView, getEmptyIndex } from "./mangaUtils";
   import { PageObserver, disconnectObvrs, scrollImageLoader } from "./Observers";
   import { onTouchStart, onTouchEnd, onTouchMove, default as controls } from "./MangaTouch";
 
-  import { ToggleMenu } from "../../../ShareComponent/ToggleMenu";
-  import { ConfigStore, updateConfig } from "../../Stores/PageConfigStore";
+  import { ToggleMenu } from "src/ShareComponent/ToggleMenu";
+  import { ConfigStore, updateConfig } from "src/user/Stores/PageConfigStore";
   import MangaConfig from "./MangaConfig.svelte";
-  import Icons from "../../../icons/Icons.svelte";
+  import Icons from "src/icons/Icons.svelte";
 
   export let file;
   export let KeyMap;

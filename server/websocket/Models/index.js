@@ -7,11 +7,12 @@ import Excludes from "./Excludes.js";
 
 const DataTypes = Sequelize.DataTypes;
 
-const { DM_USER, DM_PASS, DB_HOST } = process.env;
+const { DM_USER, DM_PASS, DB_HOST, DB_HOST_DEV, IS_DEV } = process.env;
 
 import config from "./config.js";
 
-config.host = DB_HOST;
+config.host = IS_DEV ? DB_HOST_DEV : DB_HOST;
+console.log(IS_DEV, DB_HOST_DEV);
 
 const sequelize = new Sequelize("mangadownloader", DM_USER, DM_PASS, config);
 

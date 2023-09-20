@@ -1,6 +1,6 @@
 <script>
-  import Icons from "../../../icons/Icons.svelte";
-  import { ConfigStore, updateConfig } from "../../Stores/PageConfigStore";
+  import Icons from "src/icons/Icons.svelte";
+  import { ConfigStore, updateConfig } from "src/user/Stores/PageConfigStore";
   export let label;
   export let toggleConfig;
   export let showConfig;

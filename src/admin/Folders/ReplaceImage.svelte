@@ -1,6 +1,6 @@
 <script>
   import { fade } from "svelte/transition";
-  import apiUtils from "../../apiUtils";
+  import apiUtils from "src/apiUtils";
 
   export let Id;
   export let hide;

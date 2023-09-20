@@ -1,7 +1,8 @@
 <script>
   import { getContext, onDestroy, afterUpdate, onMount } from "svelte";
-  import { ConsoleStore, updateConsole } from "../Store/ConsoleStore";
-  import Icons from "../../icons/Icons.svelte";
+  import { ConsoleStore, setConsoleData, updateConsole } from "../Store/ConsoleStore";
+  import Icons from "src/icons/Icons.svelte";
+  import apiUtils from "src/apiUtils";
 
   let ref;
   let items = [];
@@ -51,7 +52,13 @@
     state.y = e.clientY;
   };
 
+  const loadEvents = async (pg = 1) => {
+    const result = await apiUtils.get(["admin", "downloader", "events", pg]);
+    setConsoleData(result);
+  };
+
   onMount(() => {
+    loadEvents();
     const onMouseMove = (e) => {
       if (state.dragge) {
         e.preventDefault();
@@ -95,7 +102,7 @@
   <label on:keydown on:click={toggleConsole} class:toggle>
     <input type="checkbox" bind:checked={toggle} /><Icons name={toggle ? "eyeslash" : "eye"} box="0 0 564 512" />
   </label>
-  <div class="cls-container" bind:this={rconsole} class:hide-dragg={items.length === 0}>
+  <div class="cls-container" bind:this={rconsole} class:hide-dragg={items.length === 0 || !toggle}>
     <div class="dragger" bind:this={dragger} />
     {#if toggle && items.length}
       <div class="r-console" on:dblclick={onExpand}>

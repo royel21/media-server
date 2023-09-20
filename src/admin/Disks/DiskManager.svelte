@@ -2,7 +2,7 @@
   import { navigate } from "svelte-routing";
   import Tree from "./Tree.svelte";
   import Directories from "./Directories.svelte";
-  import Icons from "../..//icons/Icons.svelte";
+  import Icons from "src/icons/Icons.svelte";
   import Downloads from "./Downloader/Downloads.svelte";
   export let tab = "tab-3";
 

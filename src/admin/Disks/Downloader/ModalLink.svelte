@@ -1,9 +1,9 @@
 <script>
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
-  import CheckBox from "../../Component/CheckBox.svelte";
-  import TextAreaInput from "../../Component/TextAreaInput.svelte";
-  import apiUtils from "../../../apiUtils";
+  import CheckBox from "src/admin/Component/CheckBox.svelte";
+  import TextAreaInput from "src/admin/Component/TextAreaInput.svelte";
+  import apiUtils from "src/apiUtils";
 
   export let hide;
   let link = { Name: "", AltName: "", IsAdult: false, Url: "" };

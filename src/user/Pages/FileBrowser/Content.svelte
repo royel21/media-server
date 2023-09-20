@@ -1,13 +1,13 @@
 <script>
-  import { afterUpdate, getContext, onDestroy, onMount } from "svelte";
+  import { afterUpdate, getContext, onDestroy } from "svelte";
 
   import { navigate } from "svelte-routing";
-  import apiUtils from "../../../apiUtils";
+  import apiUtils from "src/apiUtils";
 
-  import FilesList from "../../Component/FilesList.svelte";
+  import FilesList from "src/user/Component/FilesList.svelte";
   import { ProcessFile, getReturnPath } from "../filesUtils";
   import SortBy from "./SortBy.svelte";
-  import Icons from "../../../icons/Icons.svelte";
+  import Icons from "src/icons/Icons.svelte";
 
   export let page = 1;
   export let filter = "";

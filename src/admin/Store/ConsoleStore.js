@@ -13,4 +13,8 @@ const updateConsole = (data) => {
   });
 };
 
-export { ConsoleStore, updateConsole };
+const setConsoleData = (arr) => {
+  ConsoleStore.update(() => arr);
+};
+
+export { ConsoleStore, updateConsole, setConsoleData };

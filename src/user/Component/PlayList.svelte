@@ -1,11 +1,11 @@
 <script>
-  import { clamp } from "../../ShareComponent/utils";
+  import { clamp } from "src/ShareComponent/utils";
   import { afterUpdate } from "svelte";
 
-  import Pagination from "../../ShareComponent/Pagination.svelte";
-  import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
+  import Pagination from "src/ShareComponent/Pagination.svelte";
+  import { ToggleMenu } from "src/ShareComponent/ToggleMenu";
   import { formatTime } from "../Pages/pagesUtils";
-  import Icons from "../../icons/Icons.svelte";
+  import Icons from "src/icons/Icons.svelte";
   import LazyImage from "./LazyImage.svelte";
 
   export let files = [];

@@ -14,7 +14,7 @@ if (NC) {
 }
 
 if (IS_DEV) {
-  serverPort = 8030;
+  serverPort = 8033;
 }
 
 // https://vitejs.dev/config/
@@ -31,6 +31,9 @@ export default defineConfig({
         user: fileURLToPath(new URL("./src/user/index.html", import.meta.url)),
       },
     },
+  },
+  resolve: {
+    alias: [{ find: "src", replacement: fileURLToPath(new URL("./src", import.meta.url)) }],
   },
   server: {
     host,

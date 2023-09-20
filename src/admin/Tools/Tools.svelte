@@ -1,6 +1,6 @@
 <script>
-  import Icons from "../../icons/Icons.svelte";
-  import apiUtils from "../../apiUtils";
+  import Icons from "src/icons/Icons.svelte";
+  import apiUtils from "src/apiUtils";
   import { onMount, getContext } from "svelte";
   const socket = getContext("socket");
   //clean-images

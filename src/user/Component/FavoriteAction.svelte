@@ -1,7 +1,7 @@
 <script>
-  import Icons from "../../icons/Icons.svelte";
-  import apiUtils from "../../apiUtils";
-  import { FavoritesStores } from "../../user/Stores/FavoritesStores";
+  import Icons from "src/icons/Icons.svelte";
+  import apiUtils from "src/apiUtils";
+  import { FavoritesStores } from "src/user/Stores/FavoritesStores";
   export let isFav = [];
   export let favClicked;
 

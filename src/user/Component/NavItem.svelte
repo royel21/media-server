@@ -1,7 +1,7 @@
 <script>
   import Link from "svelte-routing/src/Link.svelte";
-  import { getProps } from "../../ShareComponent/DataUtils";
-  import Icons from "../../icons/Icons.svelte";
+  import { getProps } from "src/ShareComponent/DataUtils";
+  import Icons from "src/icons/Icons.svelte";
   export let dirs;
   export let item;
 

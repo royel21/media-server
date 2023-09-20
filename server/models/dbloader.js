@@ -8,20 +8,22 @@ import directory from "./directories.js";
 import favoriteFolder from "./favorite-folder.js";
 import recentFolder from "./recent-folder.js";
 import recentFile from "./recent-file.js";
+import eventLog from "./eventlog.js";
 
 import dbconfig from "./config.js";
 import { config as configEnv } from "dotenv";
 configEnv();
 
-const { USERNAME, HOST, HOST2, DB_USER, PASSWORD, IMAGES } = process.env;
-const isWork = USERNAME === "rconsoro";
+const { HOST, HOST2, DB_USER, PASSWORD, IMAGES, IS_DEV } = process.env;
+
+const host = IS_DEV ? HOST2 : HOST;
 
 export const createdb = async (dbName, user, password) => {
   if (args?.length > 2) {
     const sequelize = new Sequelize("", user, password, {
       logging: console.log,
       dialect: "mariadb",
-      host: isWork ? HOST : HOST2,
+      host,
       pool: 5,
       dialectOption: {
         timezone: "Etc/GMT-4",
@@ -34,7 +36,7 @@ export const createdb = async (dbName, user, password) => {
 
 export default (DB, CONNECTOR = "mariadb") => {
   const config = dbconfig[CONNECTOR];
-  config.host = isWork ? HOST : HOST2;
+  config.host = host;
   config.storage = DB + ".sqlite";
   //config.logging = console.log;
 
@@ -52,6 +54,7 @@ export default (DB, CONNECTOR = "mariadb") => {
     favoriteFolder: favoriteFolder(sequelize),
     recentFolder: recentFolder(sequelize),
     recentFile: recentFile(sequelize),
+    eventLog: eventLog(sequelize),
   };
 
   db.favorite.belongsToMany(db.folder, { through: { model: db.favoriteFolder } });

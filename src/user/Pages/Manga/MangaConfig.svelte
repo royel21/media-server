@@ -1,7 +1,7 @@
 <script>
-  import Icons from "../../../icons/Icons.svelte";
-  import { clamp } from "../../../ShareComponent/utils";
-  import { ConfigStore, updateConfig } from "../../Stores/PageConfigStore";
+  import Icons from "src/icons/Icons.svelte";
+  import { clamp } from "src/ShareComponent/utils";
+  import { ConfigStore, updateConfig } from "src/user/Stores/PageConfigStore";
   export let ToggleMenu;
 
   const config = { ...$ConfigStore };

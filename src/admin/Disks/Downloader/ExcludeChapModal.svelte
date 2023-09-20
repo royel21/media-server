@@ -1,9 +1,9 @@
 <script>
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
-  import Input from "../../Component/Input.svelte";
-  import apiUtils from "../../../apiUtils";
-  import Icons from "../../../icons/Icons.svelte";
+  import Input from "src/admin/Component/Input.svelte";
+  import apiUtils from "src/apiUtils";
+  import Icons from "src/icons/Icons.svelte";
 
   export let hide;
   export let linkId;

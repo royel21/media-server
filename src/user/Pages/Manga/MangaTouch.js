@@ -1,4 +1,4 @@
-import { updateToggleMenu } from "../../../ShareComponent/ToggleMenu";
+import { updateToggleMenu } from "src/ShareComponent/ToggleMenu";
 import { showFileName } from "../pagesUtils";
 let tStart, tEnd;
 let point = {};

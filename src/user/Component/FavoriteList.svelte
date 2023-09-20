@@ -1,8 +1,8 @@
 <script>
   import { createEventDispatcher } from "svelte";
-  import apiUtils from "../../apiUtils";
+  import apiUtils from "src/apiUtils";
   import FavoriteAction from "./FavoriteAction.svelte";
-  import Icons from "../../icons/Icons.svelte";
+  import Icons from "src/icons/Icons.svelte";
 
   export let type;
   export let isFav;

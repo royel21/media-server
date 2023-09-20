@@ -1,7 +1,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
-  import Icons from "../..//icons/Icons.svelte";
-  import apiUtils from "../../apiUtils";
+  import Icons from "src/icons/Icons.svelte";
+  import apiUtils from "src/apiUtils";
   export let items = [];
   export let type;
   let item = {};

@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
-  import apiUtils from "../../apiUtils";
+  import apiUtils from "src/apiUtils";
   import CheckBox from "../Component/CheckBox.svelte";
   import Select from "../Component/Select.svelte";
   import Input from "../Component/TextAreaInput.svelte";

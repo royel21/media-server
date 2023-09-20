@@ -2,14 +2,14 @@
   import { onMount, getContext, onDestroy } from "svelte";
   import { navigate } from "svelte-routing";
 
-  import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
+  import { ToggleMenu } from "src/ShareComponent/ToggleMenu";
 
-  import apiUtils from "../../apiUtils";
+  import apiUtils from "src/apiUtils";
   import PlayList from "../Component/PlayList.svelte";
   import MangaViewer from "./Manga/MangaViewer.svelte";
   import VideoPLayer from "./Video/VideoPlayer.svelte";
   import { KeyMap, handleKeyboard, isMobile, isVideo, isManga, showFileName } from "./pagesUtils";
-  import Icons from "../../icons/Icons.svelte";
+  import Icons from "src/icons/Icons.svelte";
   import { getReturnPath } from "./filesUtils";
 
   export let folderId;

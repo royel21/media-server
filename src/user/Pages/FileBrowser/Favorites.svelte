@@ -1,6 +1,6 @@
 <script>
   import FavoriteManager from "./FavoriteManager.svelte";
-  import FilesList from "../../Component/FilesList.svelte";
+  import FilesList from "src/user/Component/FilesList.svelte";
 
   export let page = 1;
   export let filter = "";

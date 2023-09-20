@@ -1,5 +1,6 @@
 import fs from "fs-extra";
 import { spawnSync } from "node:child_process";
+import { getDb } from "./db-worker.js";
 
 export const isChar = (c) => {
   return c.match(/[a-z]/i);
@@ -91,6 +92,7 @@ export const filterAdult = (d) => {
 export const dateDiff = (d1, d2) => parseInt(Math.abs(d1 - d2) / 36e5);
 
 export function sendMessage(data, event = "info") {
+  const db = getDb();
   if (data.text || data.error) {
     console.log(data.text || "", data.error || "");
     if (data.error) {
@@ -104,6 +106,13 @@ export function sendMessage(data, event = "info") {
 
   if (process.send) {
     process.send({ event, data: { color: "blue", ...data } });
+  }
+
+  if (data.text || data.error) {
+    db.eventLog.create({
+      event,
+      ...data,
+    });
   }
 }
 

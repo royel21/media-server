@@ -3,17 +3,17 @@
   import { fade } from "svelte/transition";
   import { navigate } from "svelte-routing";
 
-  import { ConfigStore } from "../../user/Stores/PageConfigStore";
+  import { ConfigStore } from "src/user/Stores/PageConfigStore";
 
   import { FileTypes, ProcessFile, getFilesPerPage } from "../Pages/filesUtils";
   import { fileKeypress, selectElementById, selectByTitle } from "./fileEvents";
 
-  import Pagination from "../../ShareComponent/Pagination.svelte";
-  import Filter from "../../ShareComponent/Filter.svelte";
+  import Pagination from "src/ShareComponent/Pagination.svelte";
+  import Filter from "src/ShareComponent/Filter.svelte";
   import FavoriteList from "./FavoriteList.svelte";
-  import { clamp } from "../../ShareComponent/utils";
-  import { getItemsList } from "../../apiUtils";
-  import Icons from "../../icons/Icons.svelte";
+  import { clamp } from "src/ShareComponent/utils";
+  import { getItemsList } from "src/apiUtils";
+  import Icons from "src/icons/Icons.svelte";
   import LazyImage from "./LazyImage.svelte";
   import { getLastChap } from "./fileUtils";
 

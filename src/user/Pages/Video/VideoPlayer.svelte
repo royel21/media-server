@@ -4,7 +4,7 @@
   import Slider from "./Slider.svelte";
   import { setfullscreen, formatTime } from "../pagesUtils";
   import { setGesture } from "./VideoTouch";
-  import Icons from "../../../icons/Icons.svelte";
+  import Icons from "src/icons/Icons.svelte";
 
   export let KeyMap;
   export let file;

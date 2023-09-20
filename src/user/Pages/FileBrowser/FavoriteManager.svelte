@@ -1,7 +1,7 @@
 <script>
   import { navigate } from "svelte-routing";
-  import { FavoritesStores, addUpdateFavorite, removeFavorite } from "../../Stores/FavoritesStores";
-  import Icons from "../../../icons/Icons.svelte";
+  import { FavoritesStores, addUpdateFavorite, removeFavorite } from "src/user/Stores/FavoritesStores";
+  import Icons from "src/icons/Icons.svelte";
 
   export let id = "";
   let currentFav = {};

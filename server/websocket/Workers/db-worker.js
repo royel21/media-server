@@ -1,29 +1,27 @@
 import winex from "win-explorer";
-import dbLoader from "./models/index.js";
+import db from "../../models/index.js";
 
-let dbManga;
+const { USERNAME, HOST, HOST2, DB_USER, PASSWORD, IMAGES } = process.env;
+console.log(USERNAME, HOST, HOST2, DB_USER, PASSWORD, IMAGES);
+
+export const getDb = () => db;
 
 export const destroy = async (data) => {
   console.log("remove:", data.where.Name);
   try {
-    await dbManga.file.destroy(data, { Del: true });
+    await db.file.destroy(data, { Del: true });
   } catch (error) {
     console.log("destroy failed", error);
   }
 };
 
 export const findFolder = async (Name) => {
-  if (!dbManga) dbManga = await dbLoader("mediaserverdb");
-  return dbManga.folder.findOne({ where: { Name } });
+  return db.folder.findOne({ where: { Name } });
 };
 
-export const getDb = async () => await dbLoader("mediaserverdb");
 export const findOrCreateFolder = async (Path, { Name, Description, Genres, AltName, Status, Server }, IsAdult) => {
-  if (!dbManga) dbManga = await dbLoader("mediaserverdb");
-
   Genres = Genres?.replace(/, Webtoon|, Manhwa|^Manhwa, |^Webtoon, |^Webtoon|^Manhwa/gi, "");
   Path = `${Path}/${Name}`;
-  const db = dbManga;
 
   try {
     let folder = await db.folder.findOne({
@@ -77,7 +75,6 @@ export const findOrCreateFolder = async (Path, { Name, Description, Genres, AltN
 };
 
 export const createFile = async (file, FolderId, Duration) => {
-  const db = dbManga;
   let f = winex.ListFiles(file, { oneFile: true });
 
   let found = await db.file.findOne({ where: { Name: f.Name, Type: "Manga", FolderId } });

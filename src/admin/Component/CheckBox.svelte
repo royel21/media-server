@@ -1,5 +1,5 @@
 <script>
-  import Icons from "../../icons/Icons.svelte";
+  import Icons from "src/icons/Icons.svelte";
 
   export let item;
   export let key;
