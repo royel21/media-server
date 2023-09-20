@@ -152,7 +152,6 @@
 
   const updateRunning = ({ IsRunning }) => {
     running = IsRunning;
-    console.log("is-running", running);
   };
 
   onMount(() => {
