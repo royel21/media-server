@@ -1,5 +1,6 @@
 import fs from "fs-extra";
 import path from "path";
+import db from "./server/models/index.js";
 // import sharp from "sharp";
 // import WinDir from "win-explorer";
 
@@ -59,27 +60,9 @@ import path from "path";
 //   cleanDir,
 //   compressDirs,
 // };
-
-const baseDir = "F:/R18/Completed";
-
-const checkFolders = () => {
-  const { directory } = fs.readJsonSync("backup/db.json");
-
-  const localDirs = fs.readdirSync(baseDir);
-
-  //   for (const dir of directory) {
-  // if (dir.Name === "Completed") {
-  for (const fol of localDirs) {
-    const fPath = path.join(baseDir, fol);
-    const imgs = fs.readdirSync(fPath).filter((f) => /jpg|jpeg|webp|png/i.test(f));
-    if (imgs.length) {
-      for (let img of imgs) {
-        console.log(fPath + "/" + img);
-        fs.removeSync(path.join(fPath, img));
-      }
-    }
-  }
-  // }
-  //   }
+const reset = async () => {
+  db.sqlze.options.logging = console.log;
+  await db.eventLog.destroy({ truncate: true });
+  process.exit();
 };
-checkFolders();
+reset();

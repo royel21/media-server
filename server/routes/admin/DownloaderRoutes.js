@@ -4,7 +4,7 @@ import { Op, literal } from "sequelize";
 import { formatLink } from "../utils.js";
 import RenameRoutes from "./RenameRoutes.js";
 import ExcludeChapRoutes from "./ExcludeChapRoutes.js";
-import { getEvents } from "./EventLogsRoutes.js";
+import EventLogsRoutes from "./EventLogsRoutes.js";
 
 const routes = Router();
 
@@ -108,7 +108,8 @@ routes.post("/add-link", async ({ body }, res) => {
   res.send(result);
 });
 
-routes.get("/events/:page?", getEvents);
+routes.get("/events/:page?", EventLogsRoutes.allEvents);
+routes.get("/clear-events", EventLogsRoutes.clearEvents);
 
 routes.get("/rename-list", RenameRoutes.renameList);
 routes.post("/add-altname", RenameRoutes.addAltname);

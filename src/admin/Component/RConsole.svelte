@@ -16,7 +16,10 @@
 
   const socket = getContext("socket");
 
-  const onClear = () => ConsoleStore.set([]);
+  const onClear = () => {
+    apiUtils.get(["admin", "downloader", "clear-events"]);
+    ConsoleStore.set([]);
+  };
   ConsoleStore.subscribe((value) => (items = value));
 
   socket.on("info", (data) => {
@@ -47,34 +50,26 @@
     state.height = rconsole.offsetHeight;
   };
 
-  const onMouseDown = (e) => {
-    state.dragge = true;
-    state.y = e.clientY;
-  };
-
   const loadEvents = async (pg = 1) => {
     const result = await apiUtils.get(["admin", "downloader", "events", pg]);
     setConsoleData(result);
+  };
+
+  const onMouseDown = (e) => {
+    state.dragge = true;
+    state.y = e.clientY;
+    state.height = rconsole.offsetHeight;
   };
 
   onMount(() => {
     loadEvents();
     const onMouseMove = (e) => {
       if (state.dragge) {
-        e.preventDefault();
-        state.lastHeight = state.height + state.y - e.clientY;
-        rconsole.style.height = state.lastHeight + "px";
+        rconsole.style.height = state.height + state.y - e.clientY + "px";
       }
     };
 
-    const resetState = (e) => {
-      state.dragge = false;
-      if (state.lastHeight) {
-        e.preventDefault();
-        state.height = state.lastHeight;
-        state.lastHeight = null;
-      }
-    };
+    const resetState = (e) => (state.dragge = false);
 
     window.addEventListener("mousemove", onMouseMove);
     document.addEventListener("mouseup", resetState);
