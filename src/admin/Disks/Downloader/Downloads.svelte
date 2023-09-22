@@ -57,6 +57,7 @@
 
   const onFilter = ({ detail }) => {
     datas.filter = detail;
+    datas.page = 1;
     loadItems();
   };
 
