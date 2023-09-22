@@ -109,6 +109,7 @@
 
   const changeItems = ({ keyCode }) => {
     if (keyCode === 13) {
+      datas.page = 1;
       loadItems();
     }
   };
