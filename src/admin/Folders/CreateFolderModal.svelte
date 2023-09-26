@@ -86,6 +86,12 @@
     width: 400px;
     outline: none;
   }
+  .modal-container :global(.input-control) {
+    margin-bottom: 5px;
+  }
+  .modal-container :global(.input-label) {
+    width: 145px;
+  }
   .error {
     color: red;
     font-weight: 600;

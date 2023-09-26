@@ -85,7 +85,7 @@ const createFolderThumbnail = async (folder, files, isFolder) => {
 
     if (!fs.existsSync(CoverPath) || isFolder) {
       let img = files.find((f) => IMGTYPES.test(f.Name));
-      //if folder contain a image use as thumbnail
+      //if folder contain a image use as thumbnailError
       if (img) {
         let imgPath = path.join(folder.Path, img.Name);
         await sharp(imgPath).jpeg().resize({ width: 240 }).toFile(CoverPath);
@@ -136,11 +136,16 @@ const scanFolder = async (curfolder, files, isFolder) => {
 
     folderFiles = await folder.Files;
   } else if (filteredFiles.length) {
-    folder = await createFolder(curfolder, filteredFiles);
+    try {
+      folder = await createFolder(curfolder, filteredFiles);
+    } catch (error) {
+      console.log("142: error-create-folder", error.toString());
+      return;
+    }
     isNoNewFolder = false;
   }
 
-  if (folder && filteredFiles.length) {
+  if (filteredFiles.length) {
     await createFolderThumbnail(folder, files, isFolder);
   }
 
