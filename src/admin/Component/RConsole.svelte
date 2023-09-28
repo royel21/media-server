@@ -202,12 +202,15 @@
   }
 
   @media screen and (max-width: 600px) {
-    .r-console {
+    .cls-container {
       max-height: calc(100% - 230px);
     }
     label {
       top: 85px;
       right: 16px;
+    }
+    .important {
+      font-size: 1.2rem;
     }
   }
 </style>

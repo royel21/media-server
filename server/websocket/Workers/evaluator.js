@@ -40,7 +40,7 @@ export const evaluetePage = (query) => {
 
   let data = as
     .map((a) => {
-      let val = (a.querySelector("strong,b,san") || a).textContent?.trim().replace(/\n.*$|\nNEW/gi, "");
+      let val = (a.querySelector("strong,b,span,p") || a).textContent?.trim().replace(/\n.*$|\nNEW/gi, "");
 
       val = val
         .trim()
@@ -64,7 +64,7 @@ export const evaluetePage = (query) => {
     })
     .filter((a) => {
       let noAllowed =
-        /chapter(_| |-)coming|Not worth reading|Prologue|Coming(_| |-)soon|Novel Promotion|Promo|announcement|Delay Notice$|^000(-| |(-| )Prologue|$)|^0000/gi;
+        /chapter(_| |-)coming|Not worth reading|Prologue|Coming(_| |-)soon|Novel Promotion|Promo|announcement|Delay Notice$|^000(-| |(-| )Prologue|$)|^000( | -|0|$)/i;
       return !noAllowed.test(a.name);
     });
 

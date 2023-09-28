@@ -86,7 +86,8 @@ export const downloadImg = async (imgPath, url, page, cover, useAxios) => {
     if (buff && !buff.includes("html")) {
       try {
         const img = await sharp(buff);
-        if (!cover && img.width > 1100) {
+        const meta = await img.metadata();
+        if (!cover && meta.width > 1100) {
           await img.resize({ width: 1100 });
         }
         await img.jpeg({ quality: 85 }).toFile(imgPath);
