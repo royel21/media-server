@@ -101,7 +101,7 @@
       <div class="manga-name">Alternative: <span>{folderinfo?.AltName || "Name: Loading Info"}</span></div>
       <div class="genres-list">
         <span class="gen-tag">Author(s): </span>
-        {#each folderinfo?.Author?.split(", ") as auth}
+        {#each folderinfo?.Author?.split(", ") || [] as auth}
           <span on:click|preventDefault={onGenres} on:keydown> {auth}</span>
         {/each}
       </div>
