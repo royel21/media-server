@@ -19,7 +19,11 @@ export const findFolder = async (Name) => {
   return db.folder.findOne({ where: { Name } });
 };
 
-export const findOrCreateFolder = async (Path, { Name, Description, Genres, AltName, Status, Server }, IsAdult) => {
+export const findOrCreateFolder = async (
+  Path,
+  { Name, Description, Genres, AltName, Status, Server, Author },
+  IsAdult
+) => {
   Genres = Genres?.replace(/, Webtoon|, Manhwa|^Manhwa, |^Webtoon, |^Webtoon|^Manhwa/gi, "");
   Path = `${Path}/${Name}`;
 
@@ -46,6 +50,7 @@ export const findOrCreateFolder = async (Path, { Name, Description, Genres, AltN
         IsAdult,
         Status,
         Server,
+        Author,
       });
     }
 
@@ -63,6 +68,10 @@ export const findOrCreateFolder = async (Path, { Name, Description, Genres, AltN
 
     if (!folder.AltName && AltName) {
       await folder.update({ AltName });
+    }
+
+    if (!folder.Author && Author) {
+      await folder.update({ Author });
     }
 
     await folder.update({ Status });

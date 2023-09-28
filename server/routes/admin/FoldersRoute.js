@@ -36,9 +36,9 @@ const getData = async ({ params }, res) => {
     if (dirId && dirId !== "all") {
       query.where.DirectoryId = dirId;
     }
-    query.attributes = [...query.attributes, "Path", "Status", "FilesType", "Scanning"];
+    query.attributes = [...query.attributes, "Path", "Status", "FilesType", "Scanning", "Author"];
 
-    query.where[Op.or] = { AltName: filters, Name: filters, Genres: filters };
+    query.where[Op.or] = { AltName: filters, Name: filters, Genres: filters, Author: filters };
     result = await db.folder.findAndCountAll(query);
 
     result.rows = result.rows.map((fd) => {
@@ -161,6 +161,7 @@ routes.get("/folder/:folderId?", async (req, res) => {
     AltName: folder?.AltName,
     IsAdult: folder?.IsAdult,
     DirectoryId: folder?.DirectoryId,
+    Author: folder?.Author,
     dirs,
   });
 });

@@ -93,7 +93,7 @@ export default (DB, CONNECTOR = "mariadb") => {
     await sequelize.sync({ force });
 
     try {
-      await db.sqlze.query("ALTER TABLE Folders ADD Scanning TINYINT(1) NULL DEFAULT '0';");
+      await db.sqlze.query("ALTER TABLE Folders ADD Author VARCHAR(100) NULL;");
     } catch (error) {
       console.log("add COLUMN fail Server");
     }

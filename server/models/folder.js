@@ -88,6 +88,9 @@ export default (sequelize, ImagesPath, isSqlite) => {
         type: BOOLEAN,
         defaultValue: false,
       },
+      Author: {
+        type: STRING(100),
+      },
     },
     {
       timestamps: false,

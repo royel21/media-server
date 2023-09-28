@@ -32,6 +32,7 @@ const getFolder = async (Id, user) => {
       "Genres",
       "AltName",
       "FilesType",
+      "Author",
       "Server",
       [literal(currentFile), "currentFile"],
     ],
@@ -116,15 +117,16 @@ export const getFolders = async (req, res) => {
 
   let limit = +items || 16;
 
-  let filter = getFilter(search);
+  let filters = getFilter(search);
 
   let query = {
-    attributes: ["Id", "Name", "Type", "Genres", "FilesType", "CreatedAt", "Status", "FileCount"],
+    attributes: ["Id", "Name", "Type", "Genres", "FilesType", "CreatedAt", "Status", "FileCount", "Author"],
     where: {
       [Op.or]: {
-        Name: filter,
-        AltName: filter,
-        Genres: filter,
+        Name: filters,
+        AltName: filters,
+        Genres: filters,
+        Author: filters,
       },
       IsAdult: { [Op.lte]: req.user.AdultPass },
       FilesType: filetype,

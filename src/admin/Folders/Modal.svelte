@@ -4,7 +4,8 @@
   import apiUtils from "src/apiUtils";
   import CheckBox from "../Component/CheckBox.svelte";
   import Select from "../Component/Select.svelte";
-  import Input from "../Component/TextAreaInput.svelte";
+  import TextAreaInput from "../Component/TextAreaInput.svelte";
+  import Input from "../Component/Input.svelte";
   import Icons from "src/icons/Icons.svelte";
   import { validGenres } from "../Utils";
 
@@ -25,6 +26,7 @@
       file.AltName = data.AltName;
       file.IsAdult = data.IsAdult;
       file.DirectoryId = data.DirectoryId;
+      file.Author = data.Author;
       options = data.dirs.map((d) => ({ Id: d.Id, Name: d.FullPath }));
     }
   });
@@ -80,11 +82,12 @@
             </label>
           </div>
         {:else}
-          <Input file={tempFile} key="Name" style="margin-bottom: 5px" rows="3" focus={true} />
+          <TextAreaInput file={tempFile} key="Name" style="margin-bottom: 5px" rows="3" focus={true} />
           {#if file.Type === "Folder"}
-            <Input {file} key="AltName" style="margin-bottom: 5px" rows="3" />
-            <Input {file} key="Genres" style="margin-bottom: 5px" rows="2" {onChange} />
-            <Input {file} key="Description" rows="4" />
+            <TextAreaInput {file} key="AltName" style="margin-bottom: 5px" rows="3" />
+            <TextAreaInput {file} key="Genres" style="margin-bottom: 5px" rows="2" {onChange} />
+            <TextAreaInput {file} key="Description" rows="4" />
+            <Input key="Author" item={file} />
             <CheckBox label="Completed" key="Status" item={file} my="5px" />
             <CheckBox label="Is Adult" key="IsAdult" item={file} />
             <CheckBox mt="5px" key="Transfer" item={file} {onChange} />

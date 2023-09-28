@@ -237,7 +237,8 @@ const removeFile = async ({ Id, Del, viewer }) => {
   io.sockets.emit("file-removed", message);
 };
 
-const renameFolder = async ({ Id, Name, Description, Genres, Status, IsAdult, AltName, Transfer, DirectoryId }) => {
+const renameFolder = async (datas) => {
+  const { Id, Name, Description, Genres, Status, IsAdult, AltName, Transfer, DirectoryId, Author } = datas;
   let folder = await db.folder.findOne({
     where: { Id },
     include: { model: db.directory },
@@ -251,7 +252,7 @@ const renameFolder = async ({ Id, Name, Description, Genres, Status, IsAdult, Al
     try {
       const Path = folder.Path.replace(folder.Name, Name);
 
-      data = { Name, Path, Description, Genres, Status, IsAdult, AltName };
+      data = { Name, Path, Description, Genres, Status, IsAdult, AltName, Author };
 
       if (Transfer) {
         const dir = await db.directory.findOne({ where: { Id: DirectoryId } });

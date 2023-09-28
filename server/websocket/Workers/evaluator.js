@@ -265,6 +265,8 @@ export const adultEvalPage = async (query) => {
   let Genres = "";
   let AltName = "";
   let genreRegex = /genre((\(|)(s|)(\)| :(\n|)|))|Género(( |):|)/gi;
+  const authorRegex = /author(\(s\)|( |):( |)|)/i;
+  let Author = "";
   let items = document.querySelectorAll(query.AltTitle);
   if (items.length > 1) {
     for (let item of document.querySelectorAll(query.AltTitle)) {
@@ -272,6 +274,9 @@ export const adultEvalPage = async (query) => {
       if (text) {
         if (/Alternative|Nombres|Other name/i.test(text)) {
           AltName = getAltName(text || "");
+        }
+        if (authorRegex.test(text) && !/updating|Desconocido/i.test(text)) {
+          Author = text.replace(authorRegex, "").trim();
         }
         if (genreRegex.test(text)) {
           Genres = formatGenres(text.replace(genreRegex, "").trim());
@@ -309,5 +314,5 @@ export const adultEvalPage = async (query) => {
       .reverse();
   }
 
-  return { Name, data, poster, Description, Status, posterData, Genres, AltName, title };
+  return { Name, data, poster, Description, Status, posterData, Genres, AltName, title, Author };
 };

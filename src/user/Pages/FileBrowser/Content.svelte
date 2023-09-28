@@ -100,6 +100,12 @@
       <div class="manga-name">Name: <span>{folderinfo?.Name || "Name: Loading Info"}</span></div>
       <div class="manga-name">Alternative: <span>{folderinfo?.AltName || "Name: Loading Info"}</span></div>
       <div class="genres-list">
+        <span class="gen-tag">Author(s): </span>
+        {#each folderinfo?.Author?.split(", ") as auth}
+          <span on:click|preventDefault={onGenres} on:keydown> {auth}</span>
+        {/each}
+      </div>
+      <div class="genres-list">
         <span class="gen-tag">Genres: </span>
         {#each folderinfo?.Genres?.split(", ") as genre}
           <span on:click|preventDefault={onGenres} on:keydown> {genre}</span>
