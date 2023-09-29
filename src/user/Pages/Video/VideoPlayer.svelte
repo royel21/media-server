@@ -149,6 +149,11 @@
           <span on:click={onReturn} on:keydown>
             <Icons name="timescircle" />
           </span>
+          <label class="show-list" for="p-hide" style="bottom: 35px" title="play-list">
+            <span class="p-sort">
+              <Icons name="list" width="30px" height="24px" />
+            </span>
+          </label>
           <span class="prev-page" on:click={PrevFile.action} on:keydown>
             <Icons name="arrowcircleleft" />
           </span>
@@ -221,9 +226,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 65%;
-    max-width: 1280px;
-    max-height: 780px;
+    max-height: 85%;
     margin: 10px;
     padding: 5px;
     border: 1px solid;
@@ -234,7 +237,7 @@
   .player {
     width: 100%;
     max-width: 100%;
-    max-height: 100%;
+    max-height: calc(100% - 59px);
     object-fit: fill;
     background-color: black;
   }
@@ -294,15 +297,17 @@
     position: initial;
   }
 
-  @media screen and (max-width: 1600px) {
-    .player-content {
-      width: 70%;
-    }
+  :global(#btn-playlist) {
+    display: none;
   }
 
-  @media screen and (max-width: 1300px) {
+  @media screen and (max-height: 600px) {
     .player-content {
-      width: 80%;
+      height: 100%;
+    }
+
+    .player-btns {
+      justify-content: initial;
     }
   }
 
@@ -312,6 +317,14 @@
     }
     .player-content {
       width: 100%;
+      height: initial;
+      margin: 0;
+      padding: 0;
+      border: initial;
+    }
+
+    :global(body #play-list) {
+      bottom: 0 !important;
     }
   }
 </style>

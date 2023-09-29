@@ -55,7 +55,13 @@
   });
 </script>
 
-<label class={"show-list" + (!hideList ? " move" : "")} for="p-hide" style="bottom: 35px" title="play-list">
+<label
+  id="btn-playlist"
+  class={"show-list" + (!hideList ? " move" : "")}
+  for="p-hide"
+  style="bottom: 35px"
+  title="play-list"
+>
   <span class="p-sort">
     <Icons name="list" width="30px" height="24px" />
   </span>
