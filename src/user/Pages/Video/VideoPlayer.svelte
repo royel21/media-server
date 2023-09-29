@@ -293,21 +293,17 @@
     background-color: rgba(0, 0, 0, 0.8);
     z-index: 1;
   }
-  .isFullScreen .v-vol {
-    position: initial;
-  }
 
   :global(#btn-playlist) {
     display: none;
+  }
+  .isFullScreen .v-seeker {
+    padding: 5px 0px 15px 0;
   }
 
   @media screen and (max-height: 600px) {
     .player-content {
       height: 100%;
-    }
-
-    .player-btns {
-      justify-content: initial;
     }
   }
 
