@@ -30,7 +30,7 @@
   let playList = [];
   let file = { Name: "", Type: "", Cover: "" };
   let viewer;
-  let fileIndex = 1;
+  let fileIndex = -1;
   let folderName = "";
 
   const saveFile = () => {
@@ -124,12 +124,12 @@
   };
 
   onMount(async () => {
-    let data = await apiUtils.post(`viewer/folder`, { id: folderId });
-    if (!data.fail) {
-      folderName = data.Name;
-      playList = files = data.files;
-      window.title = playList[0]?.Cover?.split("/")[2] || "";
-    }
+    // let data = await apiUtils.post(`viewer/folder`, { id: folderId });
+    // if (!data.fail) {
+    //   folderName = data.Name;
+    //   playList = files = data.files;
+    //   window.title = playList[0]?.Cover?.split("/")[2] || "";
+    // }
 
     socket.on("file-removed", onFileRemove);
     return () => {
@@ -138,9 +138,11 @@
   });
 
   menu.style.display = "none";
+
+  const videoPlayer = location.pathname.includes("videos");
 </script>
 
-<div class="viewer" bind:this={viewer} on:keydown={handleKeyboard}>
+<div class="viewer" bind:this={viewer} on:keydown={handleKeyboard} class:video={isVideo(file)}>
   <div class="f-name" class:nomenu={$ToggleMenu}>
     <div class="name-c">
       <span>{`${folderName} - ${file.Name}`}</span>
@@ -154,7 +156,9 @@
     <div id="clock" />
   </span>
   <PlayList {fileId} files={playList} on:click={selectFile} {onFilter} {folderName} />
-  {#if isManga(file)}
+  {#if videoPlayer}
+    <VideoPLayer {file} {KeyMap} on:returnBack={returnBack} {viewer} />
+  {:else}
     <MangaViewer
       {viewer}
       {file}
@@ -164,8 +168,6 @@
       {KeyMap}
       {removeFile}
     />
-  {:else if isVideo(file)}
-    <VideoPLayer {file} {KeyMap} on:returnBack={returnBack} {viewer} />
   {/if}
 </div>
 
@@ -221,6 +223,10 @@
     padding-left: 5px;
   }
   #clock:empty {
+    display: none;
+  }
+
+  .video :global(#btn-playlist) {
     display: none;
   }
 

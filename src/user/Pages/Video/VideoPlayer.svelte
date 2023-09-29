@@ -294,9 +294,6 @@
     z-index: 1;
   }
 
-  :global(#btn-playlist) {
-    display: none;
-  }
   .isFullScreen .v-seeker {
     padding: 5px 0px 15px 0;
   }

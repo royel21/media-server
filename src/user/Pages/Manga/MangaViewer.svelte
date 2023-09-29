@@ -23,7 +23,7 @@
 
   let webtoon = $ConfigStore.Viewer.manga.webtoon;
   let config = $ConfigStore.Viewer.manga;
-  let progress = `${file.CurrentPos + 1}/${file.Duration}`;
+  let progress = "";
   let images = [file.Duration];
   let imgContainer;
   let viewerRef;
@@ -38,7 +38,7 @@
   };
   //emptyImage observer
   const loadImages = (pg, toPage, dir = 1) => {
-    if (!viewerState.loading && !isNaN(pg) && !isNaN(toPage)) {
+    if (file.Id && !viewerState.loading && !isNaN(pg) && !isNaN(toPage)) {
       const indices = getEmptyIndex(images, pg, toPage, dir || 1, file.Duration);
       if (indices.length) {
         viewerState.loading = true;
@@ -147,7 +147,7 @@
   controls.prevFile = PrevFile.action;
   controls.file = file;
 
-  $: progress = `${parseInt(file.CurrentPos) + 1}/${file.Duration}`;
+  $: progress = file.Duration ? `${+file.CurrentPos + 1}/${file.Duration}` : "Loading";
 
   $: if (controls.webtoon !== webtoon) {
     controls.webtoon = webtoon;
@@ -159,7 +159,7 @@
   }
 
   //reload on file change
-  $: if (file.Id !== viewerState.lastfId) {
+  $: if (file.Id && file.Id !== viewerState.lastfId) {
     disconnectObvrs(imgContainer);
     viewerState.jumping = webtoon;
     viewerState.loading = false;
