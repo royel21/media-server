@@ -124,12 +124,12 @@
   };
 
   onMount(async () => {
-    // let data = await apiUtils.post(`viewer/folder`, { id: folderId });
-    // if (!data.fail) {
-    //   folderName = data.Name;
-    //   playList = files = data.files;
-    //   window.title = playList[0]?.Cover?.split("/")[2] || "";
-    // }
+    let data = await apiUtils.post(`viewer/folder`, { id: folderId });
+    if (!data.fail) {
+      folderName = data.Name;
+      playList = files = data.files;
+      window.title = playList[0]?.Cover?.split("/")[2] || "";
+    }
 
     socket.on("file-removed", onFileRemove);
     return () => {
