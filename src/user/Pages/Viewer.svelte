@@ -117,9 +117,11 @@
   };
 
   const onFileRemove = (data) => {
-    console.log("rm", data);
     if (data.viewer) {
-      changeFile(1);
+      fileIndex = playList.findIndex((f) => f.Id === fileId);
+      console.log(fileIndex);
+      playList = files = files.filter((f) => f.Id !== fileId);
+      fileId = files[fileIndex].Id;
     }
   };
 
