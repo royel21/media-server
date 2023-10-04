@@ -89,6 +89,8 @@ export const evaluetePage = (query) => {
     : 0;
 
   let AltName = "";
+  const authorRegex = /author((\(|)s(\)|)|)( |)(:|)( |)/i;
+  let Author = "";
   for (let item of document.querySelectorAll(query.AltTitle)) {
     let text = item?.textContent;
     if (text && /Alternative/i.test(text)) {
@@ -100,10 +102,13 @@ export const evaluetePage = (query) => {
           .trim()
       );
     }
+    if (authorRegex.test(text) && !/updating|Desconocido/i.test(text)) {
+      Author = text.replace(authorRegex, "").trim();
+    }
   }
   data = data.filter((d) => d);
 
-  return { Name, data, poster, AltName, Description, Genres, Status };
+  return { Name, data, poster, AltName, Description, Genres, Status, Author };
 };
 
 export const evaleLinks = async (query) => {
@@ -265,7 +270,7 @@ export const adultEvalPage = async (query) => {
   let Genres = "";
   let AltName = "";
   let genreRegex = /genre((\(|)(s|)(\)| :(\n|)|))|Género(( |):|)/gi;
-  const authorRegex = /author(\(s\)|( |):( |)|)/i;
+  const authorRegex = /author((\(|)s(\)|)|)( |)(:|)( |)/i;
   let Author = "";
   let items = document.querySelectorAll(query.AltTitle);
   if (items.length > 1) {
@@ -289,6 +294,20 @@ export const adultEvalPage = async (query) => {
 
   if (Genres === "") {
     Genres = formatGenres(document.querySelector(query.Genres)?.textContent.replace(genreRegex, "").trim() || "");
+  }
+
+  if (location.href.includes("manhuascan") && !Author) {
+    let text = [...document.querySelectorAll(".book-info .meta p")]
+      .map((p) => p.textContent)
+      .find((text) => authorRegex.test(text));
+    if (text && !/unknown/i.test(text)) {
+      Author = text
+        .replace(authorRegex, "")
+        .trim()
+        .split(",")
+        .map((p) => p.trim())
+        .join(", ");
+    }
   }
 
   if (location.href.includes("mangas.in")) {
