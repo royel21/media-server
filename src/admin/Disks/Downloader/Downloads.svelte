@@ -247,6 +247,7 @@
             <span on:click={editServer} on:keydown title="Show Site Config"><Icons name="cog" /></span>
           </span>
           <span>
+            <span title={link.LastChapter}>{link.LastChapter}</span>
             <span
               class="ex-cfg"
               on:click={() => (showExcludeChapModal = link.Name)}
@@ -255,7 +256,6 @@
             >
               <Icons name="cog" />
             </span>
-            <span title={link.LastChapter}>{link.LastChapter}</span>
           </span>
           <span title={link.Name || nameFromurl(link.Url)}>
             <a href={link.Url} target="_blank">{link.Name || nameFromurl(link.Url)}</a>
@@ -376,6 +376,8 @@
     width: 80px;
     overflow: hidden;
     white-space: nowrap;
+    display: flex;
+    justify-content: space-between;
   }
   .d-table div > span:nth-child(5) {
     white-space: nowrap;
