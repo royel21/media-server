@@ -133,9 +133,12 @@
     display: none;
   }
   .important {
+    position: sticky;
+    top: 0;
     text-align: center;
     font-size: 1.5rem;
     font-weight: bold;
+    background-color: white;
   }
   .r-console {
     height: 100%;
