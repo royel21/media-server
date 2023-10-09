@@ -219,7 +219,6 @@
     <div class="d-table">
       <div>
         <span>{datas.totalItems}</span>
-        <span>Actions</span>
         <span>Server</span>
         <span>Chapter</span>
         <span>Name</span>
@@ -229,6 +228,21 @@
         <div class="link" id={link.Id}>
           <span>{i + 1 + start}</span>
           <span>
+            <span on:click={editServer} on:keydown title="Show Site Config"><Icons name="cog" /></span>
+            <span data-id={link.ServerId} on:click={downloadServer} on:keydown>{servers[link.ServerId]?.Name}</span>
+          </span>
+          <span>
+            <span
+              class="ex-cfg"
+              on:click={() => (showExcludeChapModal = link.Name)}
+              on:keydown
+              title="Show Exclude Chapt List "
+            >
+              <Icons name="cog" />
+            </span>
+            <span title={link.LastChapter}>{link.LastChapter}</span>
+          </span>
+          <span title={link.Name || nameFromurl(link.Url)}>
             <span on:click={excludeLink} title="Exclude Link From Group Download" on:keydown>
               <Icons name="files" box="0 0 464 512" color={link.Exclude ? "firebrick" : "#47f046"} />
             </span>
@@ -241,23 +255,6 @@
             <span on:click={removeLink} title="Remove Link" on:keydown>
               <Icons name="trash" color="firebrick" />
             </span>
-          </span>
-          <span>
-            <span data-id={link.ServerId} on:click={downloadServer} on:keydown>{servers[link.ServerId]?.Name}</span>
-            <span on:click={editServer} on:keydown title="Show Site Config"><Icons name="cog" /></span>
-          </span>
-          <span>
-            <span title={link.LastChapter}>{link.LastChapter}</span>
-            <span
-              class="ex-cfg"
-              on:click={() => (showExcludeChapModal = link.Name)}
-              on:keydown
-              title="Show Exclude Chapt List "
-            >
-              <Icons name="cog" />
-            </span>
-          </span>
-          <span title={link.Name || nameFromurl(link.Url)}>
             <a href={link.Url} target="_blank">{link.Name || nameFromurl(link.Url)}</a>
           </span>
           <span>{dayfmt.format(new Date(link.Date))}</span>
@@ -361,25 +358,15 @@
     border-left: 1px solid;
   }
   .d-table div > span:nth-child(2) {
-    width: 124px;
-  }
-  .d-table div > span:nth-child(3) {
-    display: flex;
-    justify-content: space-between;
     width: 185px;
     cursor: pointer;
   }
-  .d-table div > span:nth-child(3) span:first-child {
-    margin-right: 10px;
-  }
-  .d-table div > span:nth-child(4) {
+  .d-table div > span:nth-child(3) {
     width: 80px;
     overflow: hidden;
     white-space: nowrap;
-    display: flex;
-    justify-content: space-between;
   }
-  .d-table div > span:nth-child(5) {
+  .d-table div > span:nth-child(4) {
     white-space: nowrap;
     flex-grow: 1;
     width: 300px;

@@ -208,7 +208,7 @@ export const adultEvalPage = async (query) => {
 
       return { name: fileName, url: a.href, n };
     })
-    .filter((a) => !/^000(-| |(-| )Prologue|$)/gi.test(a.name));
+    .filter((a) => (!/^000(-| |(-| )Prologue|$)/gi.test(a.name) && query.Raw ? / raw/i.test(a.name) : true));
 
   let img = document.querySelector(query.Cover);
   let poster = "";
