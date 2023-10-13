@@ -117,19 +117,21 @@
   };
 
   const onFileRemove = (data) => {
-    console.log("rm", data);
     if (data.viewer) {
-      changeFile(1);
+      fileIndex = playList.findIndex((f) => f.Id === fileId);
+      console.log(fileIndex);
+      playList = files = files.filter((f) => f.Id !== fileId);
+      fileId = files[fileIndex].Id;
     }
   };
 
   onMount(async () => {
-    // let data = await apiUtils.post(`viewer/folder`, { id: folderId });
-    // if (!data.fail) {
-    //   folderName = data.Name;
-    //   playList = files = data.files;
-    //   window.title = playList[0]?.Cover?.split("/")[2] || "";
-    // }
+    let data = await apiUtils.post(`viewer/folder`, { id: folderId });
+    if (!data.fail) {
+      folderName = data.Name;
+      playList = files = data.files;
+      window.title = playList[0]?.Cover?.split("/")[2] || "";
+    }
 
     socket.on("file-removed", onFileRemove);
     return () => {

@@ -62,7 +62,6 @@ const updateLastChapter = async ({ data }, link) => {
 };
 
 const downloadLinks = async (link, page) => {
-  const exclude = await db.Exclude.findAll({ where: { LinkName: link.Name } });
   const { Server } = link;
   let isAdult = link.IsAdult;
 
@@ -108,6 +107,7 @@ const downloadLinks = async (link, page) => {
 
   let count = 0;
 
+  const exclude = await db.Exclude.findAll({ where: { LinkName: folder.Name } });
   for (let d of data) {
     if (state.stopped) break;
     try {

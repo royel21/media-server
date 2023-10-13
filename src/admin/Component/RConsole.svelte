@@ -101,14 +101,14 @@
     <div class="dragger" bind:this={dragger} />
     {#if toggle && items.length}
       <div class="r-console" on:dblclick={onExpand}>
-        <span on:keydown on:click={onClear}><Icons name="trash" /></span>
+        <span class="clean" on:keydown on:click={onClear}><Icons name="trash" /></span>
         <div class="text-list" bind:this={ref}>
           {#each items as item}
-            <div style={`color: ${item.color || "black"}`} class:important={item.important}>
+            <div style={`color: ${item.color || "red"}`} class:important={item.important}>
               {#if item.url}
                 <a href={item.url} style={`color: ${item.color || "black"}`} target="_blank">{item.text}</a>
               {:else}
-                {item.text}
+                <span>{item.text}</span>
               {/if}
             </div>
           {/each}
@@ -131,11 +131,6 @@
   }
   .hide-dragg {
     display: none;
-  }
-  .important {
-    text-align: center;
-    font-size: 1.5rem;
-    font-weight: bold;
   }
   .r-console {
     height: 100%;
@@ -176,12 +171,12 @@
   input {
     display: none;
   }
-  .r-console span {
+  .r-console .clean {
     position: absolute;
     right: 0;
     z-index: 99999;
   }
-  .r-console span :global(svg) {
+  .r-console .clean :global(svg) {
     height: 30px;
     width: 35px;
   }
@@ -199,6 +194,17 @@
   }
   .text-list > div {
     white-space: nowrap;
+    text-align: left;
+  }
+  .text-list .important {
+    position: sticky;
+    top: -5px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  .important span {
+    background-color: white;
   }
 
   @media screen and (max-width: 600px) {

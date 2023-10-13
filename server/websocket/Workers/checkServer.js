@@ -15,9 +15,9 @@ const evalServer = async (query) => {
   document.querySelector(".load-title")?.click();
   await delay(1000);
 
-  return [...document.querySelectorAll(query)].map((e) => {
+  return [...document.querySelectorAll(query.HomeQuery)].map((e) => {
     const Name = e
-      .querySelector(".post-title")
+      .querySelector(".post-title, .bigor-manga h3")
       .textContent.replace("( Renta black and white comic Version)", "")
       .replace(/:|\?|\*|<|>|"| Webtoon| \(Acera\)\n|\n|\t|“|^,/gi, "")
       .replace(/(\.)+$/, "")
@@ -57,6 +57,15 @@ const evalServer = async (query) => {
 
         return { name, url };
       })
+      .filter((a) => {
+        if (!/^000(-| |(-| )Prologue|$)/gi.test(a.name)) {
+          if (/ raw/i.test(a.name)) {
+            return query.Raw;
+          }
+          return true;
+        }
+        return false;
+      })
       .reverse();
 
     return { Name, chaps };
@@ -72,7 +81,7 @@ export const downloadFromPage = async (Id, state) => {
       const page = await createPage(state.browser);
       await page.goto(`https:\\${server.Name}`, { waitUntil: "domcontentloaded" });
       await page.waitForSelector(server.HomeQuery);
-      const data = await page.evaluate(evalServer, server.HomeQuery);
+      const data = await page.evaluate(evalServer, server.dataValues);
 
       const linkData = [];
 
@@ -108,7 +117,7 @@ export const downloadFromPage = async (Id, state) => {
 
             let chaptCount = 1;
             for (let chap of d.chaps) {
-              if (chap.name && !excludes.find((ex) => ex.Name === chap.name)) {
+              if (chap.name && !excludes.find((ex) => chap.name.includes(ex.Name))) {
                 try {
                   if (
                     await downloadLink(

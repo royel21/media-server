@@ -108,7 +108,7 @@ export function sendMessage(data, event = "info") {
     process.send({ event, data: { color: "blue", ...data } });
   }
 
-  if (data.error) {
+  if (data.error && !data.error.toString().includes("ProtocolError: Page.enable")) {
     db.eventLog.create({
       event,
       ...data,
