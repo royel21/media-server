@@ -27,6 +27,8 @@
   export let onOpen;
   export let setFolderInfo;
 
+  const dateFormat = { year: "numeric", month: "short", day: "numeric" };
+
   let ver = 1;
   let folder;
   let lastId = id;
@@ -147,7 +149,7 @@
 <div class="scroll-container" class:r-content={isContent}>
   <slot name="header" />
   <div class="files-list" on:keydown={handleKeydown} on:click={favClick}>
-    {#each pageData.files as { Id, Name, Type, CurrentPos, Duration, isFav, FilesType, FileCount, LastChapter, Status }}
+    {#each pageData.files as { Id, Name, Type, CurrentPos, Duration, isFav, FilesType, FileCount, LastChapter, Status, CreatedAt }}
       <div class="file" id={Id} data-type={Type} tabIndex="0" in:fade>
         <div class="file-info">
           <div class="file-btns usn">
@@ -173,6 +175,8 @@
             <LazyImage cover={getCover(Type, Name, FilesType) + `?v=${ver}`} />
             {#if Type.includes("Folder")}
               <span class:completed={Status}>{Status ? "Completed" : "OnGoing"}</span>
+            {:else}
+              <span class="file-date">{new Date(CreatedAt)?.toLocaleDateString("en-us", dateFormat) || ""}</span>
             {/if}
           </div>
           <div class="file-name" title={Type !== "Folder" ? Name : ""}>{Name}</div>
@@ -211,10 +215,10 @@
     left: 2px;
     bottom: 2px;
     z-index: 1;
-    font-size: 11px;
+    font-size: 1rem;
     font-weight: 600;
     padding: 0 5px;
-    border-radius: 1.25rem;
+    border-radius: 0.25rem;
     background-color: darkgreen;
   }
   .file-cover .completed {
