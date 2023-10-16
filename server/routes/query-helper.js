@@ -59,7 +59,7 @@ export const getFiles = async (user, data) => {
   }
 
   let query = {
-    attributes: ["Id", "Name", "Type", "Duration", "CreatedAt", qryCurrentPos(user, "File")],
+    attributes: ["Id", "Name", "Type", "Duration", "CreatedAt", "Size", qryCurrentPos(user, "File")],
     order: getOrderBy(data.order, "File"),
     where: {
       [Op.or]: searchs,

@@ -149,7 +149,7 @@
 <div class="scroll-container" class:r-content={isContent}>
   <slot name="header" />
   <div class="files-list" on:keydown={handleKeydown} on:click={favClick}>
-    {#each pageData.files as { Id, Name, Type, CurrentPos, Duration, isFav, FilesType, FileCount, LastChapter, Status, CreatedAt }}
+    {#each pageData.files as { Id, Name, Type, CurrentPos, Duration, isFav, FilesType, FileCount, LastChapter, Status, CreatedAt, Size }}
       <div class="file" id={Id} data-type={Type} tabIndex="0" in:fade>
         <div class="file-info">
           <div class="file-btns usn">
@@ -176,7 +176,10 @@
             {#if Type.includes("Folder")}
               <span class:completed={Status}>{Status ? "Completed" : "OnGoing"}</span>
             {:else}
-              <span class="file-date">{new Date(CreatedAt)?.toLocaleDateString("en-us", dateFormat) || ""}</span>
+              <span class="file-date">
+                <span>{(Size / 1025 / 1024).toFixed(2)}mb</span>
+                <span>{new Date(CreatedAt)?.toLocaleDateString("en-us", dateFormat)}</span>
+              </span>
             {/if}
           </div>
           <div class="file-name" title={Type !== "Folder" ? Name : ""}>{Name}</div>
@@ -208,18 +211,17 @@
   .file-cover {
     position: relative;
   }
-  .file-cover span {
-    display: inline-block;
-    width: max-content;
+  .file-cover .file-date {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
     position: absolute;
-    left: 2px;
-    bottom: 2px;
+    bottom: 0px;
     z-index: 1;
     font-size: 1rem;
     font-weight: 600;
-    padding: 0 5px;
-    border-radius: 0.25rem;
-    background-color: darkgreen;
+    padding: 0 4px;
+    background-color: #303030ba;
   }
   .file-cover .completed {
     background-color: red;

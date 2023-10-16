@@ -78,15 +78,6 @@
     { name: "reload", event: scanFinish },
   ];
 
-  onMount(async () => {
-    loadFiles(1);
-
-    socketEvent.forEach(({ name, event }) => socket.on(name, event));
-    return () => {
-      socketEvent.forEach(({ name, event }) => socket.off(name, event));
-    };
-  });
-
   const onFilter = (event) => {
     filter = event.detail;
     loadFiles(1);
@@ -135,11 +126,20 @@
     file = {};
   };
 
-  const onShowInfo = ({ type, target: { id } }) => {
-    file = items.find((f) => f.Id === id);
-    console.log(file, type);
+  const onShowInfo = ({ type, target }) => {
+    file = items.find((f) => f?.Id === target?.id);
     showFileinfo = type === "mouseenter";
   };
+
+  onMount(async () => {
+    loadFiles(1);
+    document.body.addEventListener("mouseleave", onShowInfo);
+    socketEvent.forEach(({ name, event }) => socket.on(name, event));
+    return () => {
+      document.body.removeEventListener("mouseleave", onShowInfo);
+      socketEvent.forEach(({ name, event }) => socket.off(name, event));
+    };
+  });
 
   $: if (folderId !== oldFolder) {
     filter = "";
@@ -167,7 +167,7 @@
   let:item
 >
   <div slot="item-slot" class="f-info">
-    {#if file.Id === item}
+    {#if file?.Id === item && showFileinfo}
       <span>{(file.Size / 1024 / 1024).toFixed(2)}mb</span> -
       <span>{new Date(file.CreatedAt)?.toLocaleDateString("en-us", dateFormat)}</span>
     {/if}
