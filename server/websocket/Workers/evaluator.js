@@ -14,7 +14,7 @@ export const evaluetePage = (query) => {
 
   let Name = originalName
     .replace(/(\.)+$| \$/, "")
-    .replace(/:|\?|\*|<|>|"|^,/gi, "")
+    .replace(/:|\?|\*|<|>|"|^,|#/gi, "")
     .replace(/’/g, "'")
     .replace("–", "-")
     .replace(/( )+/g, " ")
@@ -181,34 +181,6 @@ export const adultEvalPage = async (query) => {
       document.querySelector("ul .caret")?.parentElement?.onclick();
     }
   }
-  let chaps = [...document.querySelectorAll(query.Chapters)];
-  const padding = chaps.length > 999 ? 4 : 3;
-
-  let data = chaps
-    .map((a) => {
-      let text = (a.querySelector("strong,b,san") || a).textContent?.trim();
-
-      let fileName = text
-        .replace("  ", " ")
-        .trim()
-        .replace(/( )+/g, " ")
-        .replace(/^ |vol.\d+ |(chapter|chap|ch|Capítulo|Episodio)( | - |-)|\||\/|:|\?|\^|"|\*|<|>|\t|\n/gi, "")
-        .replace(/(\.)+$/, "")
-        .replace(/\./gi, "-");
-
-      let n = fileName.match(/\d+/);
-      if (n) {
-        n = n[0];
-        fileName = fileName.replace(n, n.padStart(padding, "0"));
-      }
-
-      if (/ raw$/i.test(title) || query.Raw) {
-        fileName = fileName + " raw";
-      }
-
-      return { name: fileName, url: a.href, n };
-    })
-    .filter((a) => (!/^000(-| |(-| )Prologue|$)/gi.test(a.name) && query.Raw ? / raw/i.test(a.name) : true));
 
   let img = document.querySelector(query.Cover);
   let poster = "";
@@ -234,11 +206,6 @@ export const adultEvalPage = async (query) => {
       });
     }
   } catch (error) {}
-
-  let Status = /\nEnd\n|End\n/gi.test(title) || data.find((d) => / \[end\]$| end$| fin$/i.test(d.name)) ? 1 : 0;
-  if (!Status) {
-    Status = /completed|finished/gi.test(document.querySelector(query.Status)?.textContent || "") ? 1 : 0;
-  }
 
   const formatGenres = (text) => {
     if (text === "N/A") return text;
@@ -310,6 +277,43 @@ export const adultEvalPage = async (query) => {
     }
   }
 
+  let chaps = [...document.querySelectorAll(query.Chapters)];
+  const padding = chaps.length > 999 ? 4 : 3;
+
+  let data = chaps
+    .map((a) => {
+      let text = (a.querySelector("strong,b,san") || a).textContent?.trim();
+
+      let fileName = text
+        .replace("  ", " ")
+        .trim()
+        .replace(/( )+/g, " ")
+        .replace(/^ |vol.\d+ |(chapter|chap|ch|Capítulo|Episodio)( | - |-)|\||\/|:|\?|\^|"|\*|<|>|\t|\n/gi, "")
+        .replace(/(\.)+$/, "")
+        .replace(/\./gi, "-");
+
+      let n = fileName.match(/\d+/);
+      if (n) {
+        n = n[0];
+        fileName = fileName.replace(n, n.padStart(padding, "0"));
+      }
+
+      if (/ raw$/i.test(title) || Genres?.includes("Raw")) {
+        fileName = fileName + " raw";
+      }
+
+      return { name: fileName, url: a.href, n };
+    })
+    .filter((a) => {
+      if (!/^000(-| |(-| )Prologue|$)/gi.test(a.name)) {
+        if (/ raw/i.test(a.name)) {
+          return query.Raw;
+        }
+        return true;
+      }
+      return false;
+    });
+
   if (location.href.includes("mangas.in")) {
     [...document.querySelectorAll(".dl-horizontal dt")].forEach((el) => {
       if (el.textContent?.includes("Nombres") && el.nextElementSibling) {
@@ -331,6 +335,11 @@ export const adultEvalPage = async (query) => {
         return d;
       })
       .reverse();
+  }
+
+  let Status = /\nEnd\n|End\n/gi.test(title) || data.find((d) => / \[end\]$| end$| fin$/i.test(d.name)) ? 1 : 0;
+  if (!Status) {
+    Status = /completed|finished/gi.test(document.querySelector(query.Status)?.textContent || "") ? 1 : 0;
   }
 
   return { Name, data, poster, Description, Status, posterData, Genres, AltName, title, Author };

@@ -116,14 +116,14 @@ export function sendMessage(data, event = "info") {
   }
 }
 
-const { USER } = process.env;
+const { DIR_USER } = process.env;
 
 export const createDir = (dir) => {
   try {
     if (!fs.existsSync(dir)) {
       fs.mkdirsSync(dir);
-      if (USER) {
-        spawnSync("chown", ["-R", `${USER}:${USER}`, dir]);
+      if (DIR_USER) {
+        spawnSync("chown", ["-R", `${DIR_USER}:${DIR_USER}`, dir]);
       }
     }
   } catch (error) {
