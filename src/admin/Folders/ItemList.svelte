@@ -74,6 +74,7 @@
             <span on:keydown class="trash" on:click={iconClick}><Icons name="trash" box="0 0 420 512" /></span>
 
             {Name}
+            <slot name="item-slot" item={Id} />
           </li>
         {/each}
       {/if}

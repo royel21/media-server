@@ -31,6 +31,7 @@ const getData = async ({ params }, res) => {
   if (folderId) {
     query.where.FolderId = folderId;
     query.where.Name = filters;
+    query.attributes = [...query.attributes, "Size", "CreatedAt"];
     result = await db.file.findAndCountAll(query);
   } else {
     if (dirId && dirId !== "all") {

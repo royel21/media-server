@@ -19,7 +19,9 @@
   let items = [];
   let file = {};
   let showModal = false;
+  let showFileinfo = false;
   let modalType = {};
+  const dateFormat = { year: "numeric", month: "short", day: "numeric" };
 
   const loadFiles = async (pg) => {
     if (folderId) {
@@ -133,6 +135,12 @@
     file = {};
   };
 
+  const onShowInfo = ({ type, target: { id } }) => {
+    file = items.find((f) => f.Id === id);
+    console.log(file, type);
+    showFileinfo = type === "mouseenter";
+  };
+
   $: if (folderId !== oldFolder) {
     filter = "";
     loadFiles(1);
@@ -154,4 +162,28 @@
   {iconClick}
   on:filter={onFilter}
   on:gotopage={goToPage}
-/>
+  on:mouseenter={onShowInfo}
+  on:mouseleave={onShowInfo}
+  let:item
+>
+  <div slot="item-slot" class="f-info">
+    {#if file.Id === item}
+      <span>{(file.Size / 1024 / 1024).toFixed(2)}mb</span> -
+      <span>{new Date(file.CreatedAt)?.toLocaleDateString("en-us", dateFormat)}</span>
+    {/if}
+  </div>
+</ItemList>
+
+<style>
+  .f-info {
+    position: absolute;
+    top: 10px;
+    right: 1px;
+    z-index: 999;
+    padding: 0px 4px;
+    border-radius: 0.25rem;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    pointer-events: none;
+  }
+</style>
