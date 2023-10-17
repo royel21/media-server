@@ -174,7 +174,7 @@
           <div class="file-cover usn" on:dblclick|stopPropagation={onOpen || openFile}>
             <LazyImage cover={getCover(Type, Name, FilesType) + `?v=${ver}`} />
             {#if Type.includes("Folder")}
-              <span class:completed={Status}>{Status ? "Completed" : "OnGoing"}</span>
+              <span class="f-status" class:completed={Status}>{Status ? "Completed" : "OnGoing"}</span>
             {:else}
               <span class="file-date">
                 <span>{(Size / 1025 / 1024).toFixed(2)}mb</span>
@@ -211,7 +211,7 @@
   .file-cover {
     position: relative;
   }
-  .file-cover .file-date {
+  .file-cover > span {
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -222,6 +222,13 @@
     font-weight: 600;
     padding: 0 4px;
     background-color: #303030ba;
+  }
+  .file-cover .f-status {
+    display: inline-block;
+    width: auto;
+    left: 0;
+    border-top-right-radius: 0.25rem;
+    background-color: #05a100;
   }
   .file-cover .completed {
     background-color: red;
