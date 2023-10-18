@@ -138,17 +138,19 @@ export const downloadFromPage = async (Id, state) => {
               }
             }
 
-            if (updateFolder) {
-              d.chaps.reverse();
+            d.chaps.reverse();
+            if (d.chaps.length && d.chaps[0].name !== d.link.LastChapter) {
               await d.link.update({ LastChapter: d.chaps[0].name });
+            }
 
-              let FileCount = fs.readdirSync(folder.Path).filter((f) => f.includes(".zip")).length;
+            if (updateFolder) {
+              let FileCount = fs.readdirSync(mangaDir).filter((f) => f.includes(".zip")).length;
               await folder.update({ FileCount, CreatedAt: new Date() });
 
               await d.link.reload();
-              sendMessage({ link: d.link.dataValues }, "update-download");
             }
 
+            sendMessage({ link: d.link.dataValues }, "update-download");
             await db.Link.update({ Date: new Date() }, { where: { Name: folder.Name } });
           }
         }
