@@ -144,7 +144,7 @@ export const downloadFromPage = async (Id, state) => {
             }
 
             if (updateFolder) {
-              let FileCount = fs.readdirSync(folder).filter((f) => f.includes(".zip")).length;
+              let FileCount = fs.readdirSync(folder.Path).filter((f) => f.includes(".zip")).length;
               await folder.update({ FileCount, CreatedAt: new Date() });
 
               await d.link.reload();

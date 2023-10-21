@@ -19,7 +19,7 @@
   const dispatch = createEventDispatcher();
 
   onMount(async () => {
-    if (file.Type === "Folder") {
+    if (file?.Type === "Folder") {
       const data = await apiUtils.admin(["folders", "folder", file.Id]);
       file.Description = data.Description;
       file.Genres = data.Genres;
@@ -83,7 +83,7 @@
           </div>
         {:else}
           <TextAreaInput file={tempFile} key="Name" style="margin-bottom: 5px" rows="3" focus={true} />
-          {#if file.Type === "Folder"}
+          {#if file?.Type === "Folder"}
             <TextAreaInput {file} key="AltName" style="margin-bottom: 5px" rows="3" />
             <TextAreaInput {file} key="Genres" style="margin-bottom: 5px" rows="2" {onChange} />
             <TextAreaInput {file} key="Description" rows="4" />

@@ -299,7 +299,7 @@ export const adultEvalPage = async (query) => {
       }
 
       if (/ raw$/i.test(title) || Genres?.includes("Raw")) {
-        fileName = fileName + " raw";
+        if (!fileName.includes(" raw")) fileName = fileName + " raw";
       }
 
       return { name: fileName, url: a.href, n };
