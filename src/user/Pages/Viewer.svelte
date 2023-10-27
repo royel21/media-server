@@ -118,10 +118,13 @@
 
   const onFileRemove = (data) => {
     if (data.viewer) {
-      fileIndex = playList.findIndex((f) => f.Id === fileId);
-      console.log(fileIndex);
-      playList = files = files.filter((f) => f.Id !== fileId);
-      fileId = files[fileIndex].Id;
+      const temp = playList[fileIndex];
+      if (temp) {
+        files = files.filter((f) => f.Id !== temp.Id);
+        playList = playList.filter((f) => f.Id !== temp.Id);
+        if (fileIndex === playList.length && fileIndex > 0) fileIndex--;
+        fileId = playList[fileIndex].Id;
+      }
     }
   };
 
