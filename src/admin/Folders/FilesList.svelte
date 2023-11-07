@@ -43,7 +43,7 @@
   };
 
   const onFileRename = (data) => {
-    if (data.success) {
+    if (data.success && data?.Name) {
       file.Name = data.Name;
       items = items;
       hideModal();

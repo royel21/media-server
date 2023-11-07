@@ -42,7 +42,7 @@
     const part = url.split("/");
     let name = "";
     while (!name && part.length) name = part.pop();
-    return name.replace("-", " ");
+    return name.replaceAll("-", " ");
   };
 
   const getLink = (target) => {
