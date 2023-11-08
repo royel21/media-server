@@ -44,7 +44,8 @@
 
   const onFileRename = (data) => {
     if (data.success && data?.Name) {
-      file.Name = data.Name;
+      const f = items.find((f) => f.Name === data.Name);
+      if (f) f.Name = data.Name;
       items = items;
       hideModal();
     } else {
