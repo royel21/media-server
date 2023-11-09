@@ -12,6 +12,7 @@ var touchData = { ...initialData };
 let time = 0;
 export const setGesture = (player) => {
   if (player) {
+    console.log("set gesture", player);
     player.onmousedown = player.ontouchstart = (e) => {
       touching = true;
       time = e.timeStamp;

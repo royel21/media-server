@@ -5,6 +5,7 @@ import { formatLink } from "../utils.js";
 import RenameRoutes from "./RenameRoutes.js";
 import ExcludeChapRoutes from "./ExcludeChapRoutes.js";
 import EventLogsRoutes from "./EventLogsRoutes.js";
+import ServersRoutes from "./ServersRoutes.js";
 
 const routes = Router();
 
@@ -43,7 +44,7 @@ routes.get("/links/:items/:page?/:filter?", async ({ params }, res) => {
     where: { [Op.or]: { Name: qfilter, AltName: qfilter, "$Server.Name$": qfilter } },
     limit,
     offset,
-    include: { model: db.Server, Attributes: ["Id", "Name"] },
+    include: { model: db.Server, Attributes: ["Id", "Name"], required: true, where: { Enable: true } },
     order: [
       [literal(`Links.Date IS NULL`), order === "Name" ? "ASC" : "DESC"],
       [order, "DESC"],
@@ -62,7 +63,7 @@ routes.get("/links/:items/:page?/:filter?", async ({ params }, res) => {
 });
 
 routes.get("/servers", async (req, res) => {
-  const servers = await db.Server.findAll({ order: ["Name"] });
+  const servers = await db.Server.findAll({ order: ["Name"], where: { Enable: true } });
   const datas = {};
 
   servers.forEach((srv) => {
@@ -118,5 +119,9 @@ routes.get("/remove-altname/:Id", RenameRoutes.removeAltname);
 routes.get("/exclude-list/:LinkName", ExcludeChapRoutes.excludeChapList);
 routes.post("/add-exclude", ExcludeChapRoutes.addExcludeChap);
 routes.get("/remove-exclude/:Id", ExcludeChapRoutes.removeExcludeChap);
+
+routes.get("/servers-list/change/:Id", ServersRoutes.changeState);
+routes.get("/servers-list/delete/:Id", ServersRoutes.removeServer);
+routes.get("/servers-list/", ServersRoutes.getServers);
 
 export default routes;

@@ -124,6 +124,10 @@
 </div>
 
 <style>
+  div,
+  span {
+    user-select: none;
+  }
   .rc-slider {
     display: flex;
     align-items: center;

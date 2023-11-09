@@ -18,7 +18,8 @@
   let isFullScreen = false;
   let controls;
 
-  const onMeta = (e) => {
+  const onMeta = () => {
+    if (!player.onmousedown) setGesture(player);
     player.currentTime = file.CurrentPos;
   };
 
@@ -43,7 +44,6 @@
   const onFullscreen = () => (isFullScreen = document.fullscreenElement !== null);
 
   onMount(() => {
-    setGesture(player);
     window.addEventListener("fullscreenchange", onFullscreen);
     return () => window.removeEventListener("fullscreenchange", onFullscreen);
   });
@@ -226,7 +226,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    max-height: 85%;
+    max-height: 98%;
     margin: 10px;
     padding: 5px;
     border: 1px solid;

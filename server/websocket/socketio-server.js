@@ -5,8 +5,10 @@ import { Server } from "socket.io";
 
 import db from "../models/index.js";
 import { download } from "./downloader.js";
+import dmDB from "./Models/index.js";
 
-export default (server, sessionMeddle) => {
+export default async (server, sessionMeddle) => {
+  await dmDB.init();
   const io = new Server(server, { serveClient: false, cookie: true });
   global.io = io;
   io.use((socket, next) => sessionMeddle(socket.request, {}, next));

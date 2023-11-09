@@ -31,7 +31,7 @@ db.Link.belongsTo(db.Server, { foreignKey: "ServerId" });
 
 db.init = async (force = false) => {
   try {
-    await db.sqlze.query("ALTER TABLE Servers ADD HomeQuery VARCHAR(255) NULL DEFAULT '';");
+    await db.sqlze.query("ALTER TABLE Servers ADD Enable BOOLEAN NOT NULL DEFAULT False;");
   } catch (error) {}
 
   await sequelize.sync({ force });

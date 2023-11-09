@@ -68,6 +68,11 @@ export default (sequelize, { INTEGER, STRING, BOOLEAN }) => {
       type: STRING,
       defaultValue: "",
     },
+    Enable: {
+      type: BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
+    },
   });
   return Folder;
 };

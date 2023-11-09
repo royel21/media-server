@@ -8,6 +8,7 @@
   import ModalLink from "./ModalLink.svelte";
   import RenameModal from "./RenameModal.svelte";
   import ExcludeChapModal from "./ExcludeChapModal.svelte";
+  import ModalServerList from "./ModalServerList.svelte";
 
   let start = 0;
   let editor = { show: false };
@@ -16,6 +17,7 @@
   let showRenamer = false;
   let showExcludeChapModal;
   let running = false;
+  let showServerList = false;
 
   const socket = getContext("socket");
 
@@ -132,6 +134,11 @@
     datas.links = [...datas.links];
   };
 
+  const onHideServerList = async (reload) => {
+    if (reload) await loadItems();
+    showServerList = false;
+  };
+
   const onUpdate = ({ data }) => {
     if (data.link) {
       const found = datas.links.findIndex((f) => f.Id === data.link.Id);
@@ -183,6 +190,10 @@
   <RenameModal hide={() => (showRenamer = false)} />
 {/if}
 
+{#if showServerList}
+  <ModalServerList hide={onHideServerList} />
+{/if}
+
 {#if showExcludeChapModal}
   <ExcludeChapModal
     linkId={showExcludeChapModal}
@@ -198,6 +209,9 @@
       <span class="btns" slot="pre-btn">
         <span class="btn-add" on:click={() => (showLinkModal = true)} on:keydown>
           <Icons name="squareplus" />
+        </span>
+        <span class="r-list btn-ser-config" on:click={() => (showServerList = true)} on:keydown>
+          <Icons name="cog" />
         </span>
         <span class="r-list" title="Show Rename List" on:click={() => (showRenamer = true)} on:keydown>
           <Icons name="list" />
