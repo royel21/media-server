@@ -5,8 +5,6 @@
   import apiUtils from "src/apiUtils";
 
   export let server;
-  export let link;
-  export let error = "";
   export let hide;
 
   let servers = [];
@@ -65,6 +63,7 @@
         <thead>
           <tr>
             <th>Name</th>
+            <th>Type</th>
             <th>Enable</th>
             <th>Actions</th>
           </tr>
@@ -73,6 +72,7 @@
           {#each servers as ser}
             <tr id={ser.Id}>
               <td><a href={`https://${ser.Name}`} target="_blank">{ser.Name}</a></td>
+              <td>{ser.Type}</td>
               <td on:click={changeState}>{ser.Enable ? "True" : "False"}</td>
               <td>
                 <span class="dir-remove ml-2" on:click={removeServer} on:keydown={() => {}}>
@@ -92,8 +92,12 @@
 
 <style>
   .modal {
-    width: 540px;
+    width: 560px;
     outline: none;
+  }
+  .modal-body {
+    height: 400px;
+    overflow-y: auto;
   }
 
   .table th:first-child,
@@ -103,8 +107,10 @@
 
   .table td:last-child,
   .table td:nth-child(2),
-  .table tr th:nth-child(2),
-  .table tr th:last-child {
+  .table td:nth-child(3),
+  .table th:nth-child(2),
+  .table th:nth-child(3),
+  .table th:last-child {
     width: 60px;
     max-width: 60px;
     text-align: center;

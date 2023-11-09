@@ -70,7 +70,7 @@ export default (sequelize, { INTEGER, STRING, BOOLEAN }) => {
     },
     Enable: {
       type: BOOLEAN,
-      defaultValue: false,
+      defaultValue: true,
       allowNull: false,
     },
   });
