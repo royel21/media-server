@@ -73,7 +73,7 @@
             <tr id={ser.Id}>
               <td><a href={`https://${ser.Name}`} target="_blank">{ser.Name}</a></td>
               <td>{ser.Type}</td>
-              <td on:click={changeState}>{ser.Enable ? "True" : "False"}</td>
+              <td on:click={changeState} on:keydown>{ser.Enable ? "True" : "False"}</td>
               <td>
                 <span class="dir-remove ml-2" on:click={removeServer} on:keydown={() => {}}>
                   <Icons name="trash" />
