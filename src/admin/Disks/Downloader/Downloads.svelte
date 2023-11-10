@@ -157,6 +157,7 @@
   const stopDownloads = () => {
     running = false;
     socket.emit("download-server", { action: "Exit" });
+    loadItems();
   };
 
   const updateRunning = ({ IsRunning }) => {
