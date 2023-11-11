@@ -118,12 +118,20 @@ export const evaleLinks = async (query) => {
     });
   };
 
+  if (query.Name.includes("manhuascan")) {
+    let divs = document.querySelectorAll(".chapter-image");
+
+    for (let div of divs) {
+      while (!div.classList.contains("loaded")) await delay(100);
+    }
+  }
+
   let data = [];
   let imgs = document.querySelectorAll(query.Imgs);
 
   for (let img of imgs) {
     img?.scrollIntoView();
-    await delay(/toonily/i.test(query.Name) ? 400 : 80);
+    await delay(query.Delay);
     const { src, dataset } = img;
     let nSrc = (dataset.lazySrc || dataset.src || src)?.trim();
 
