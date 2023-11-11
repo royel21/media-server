@@ -158,7 +158,6 @@
 
   const changeDir = ({ target: { value } }) => {
     currentDir = value;
-    filter = "";
     loadFolders(1, value);
   };
 
