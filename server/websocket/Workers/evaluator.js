@@ -296,7 +296,7 @@ export const adultEvalPage = async (query) => {
         .replace("  ", " ")
         .trim()
         .replace(/( )+/g, " ")
-        .replace(/^ |vol.\d+ |(chapter|chap|ch|Capítulo|Episodio)( | - |-)|\||\/|:|\?|\^|"|\*|<|>|\t|\n/gi, "")
+        .replace(/^ |vol.\d+ |(chapter|chap|ch|Capítulo|Episodio)( | - |-|\.)|\||\/|:|\?|\^|"|\*|<|>|\t|\n/gi, "")
         .replace(/(\.)+$/, "")
         .replace(/\./gi, "-");
 
