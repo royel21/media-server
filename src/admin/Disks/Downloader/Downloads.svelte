@@ -401,9 +401,14 @@
     text-decoration: underline;
   }
 
+  .d-controls :global(#filter-control) {
+    max-width: 500px;
+  }
+
   @media screen and (max-width: 450px) {
     .d-controls :global(#filter-control) {
       margin-right: 2px;
+      max-width: 350px;
     }
     .d-controls :global(.btn-filter) {
       padding: 0.3rem 0.2rem;
