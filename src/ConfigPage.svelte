@@ -20,8 +20,12 @@
     }
 
     socket?.close();
-    history.go(-(history.length - 1));
-    location.reload();
+    if (isPwa()) {
+      history.go(-(history.length - 1));
+      location.reload();
+    } else {
+      location.href = "/login";
+    }
   };
 
   onMount(async () => {
