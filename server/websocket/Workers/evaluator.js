@@ -324,10 +324,20 @@ export const adultEvalPage = async (query) => {
 
   if (location.href.includes("mangas.in")) {
     [...document.querySelectorAll(".dl-horizontal dt")].forEach((el) => {
-      if (el.textContent?.includes("Nombres") && el.nextElementSibling) {
-        AltName = el.nextElementSibling?.textContent;
-      } else if (el.textContent?.includes("Género") && el.nextElementSibling) {
-        Genres = formatGenres(el.nextElementSibling.textContent.replace(genreRegex, ""));
+      let content = el.nextElementSibling;
+      let tag = el.textContent?.trim();
+      if (tag && content) {
+        if (tag.includes("Nombres")) {
+          AltName = content.textContent;
+        } else if (tag.includes("Género")) {
+          Genres = formatGenres(content.textContent.replace(genreRegex, ""));
+        } else if (tag.includes("Autor")) {
+          Author = content.textContent
+            .trim()
+            .split(",")
+            .map((t) => t.trim())
+            .join(", ");
+        }
       }
     });
 
