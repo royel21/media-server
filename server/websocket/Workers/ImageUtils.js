@@ -3,6 +3,7 @@ import path from "path";
 import fs from "fs-extra";
 import { createDir, sendMessage } from "./utils.js";
 import axios from "axios";
+import { delay } from "./Crawler.js";
 
 const parseDataUrl = (dataUrl) => {
   const matches = dataUrl.match(/^data:(.+);base64,(.+)$/);
@@ -160,7 +161,7 @@ export const downloadAllIMages = async (page, links, dir, linkData) => {
   sendMessage({ text: `images: ${length}` });
   for (let i = 0; i < links.length; i++) {
     if (linkData.stopped) return;
-
+    delay(60);
     process.stdout.write(`\t IMG: ${i + 1} / ${length}\r`);
     let newImg = path.join(dir, `${i}`.padStart(padding, "0") + ".jpg");
 

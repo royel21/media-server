@@ -129,24 +129,24 @@ export const evaleLinks = async (query) => {
   let data = [];
   let imgs = document.querySelectorAll(query.Imgs);
 
+  if (query.Name.includes("mangas.in")) {
+    for (let img of imgs) {
+      while (img.src.includes("loading.gif")) {
+        img?.scrollIntoView();
+        await delay(100);
+      }
+    }
+  }
+
   for (let img of imgs) {
     img?.scrollIntoView();
     await delay(query.Delay);
     const { src, dataset } = img;
     let nSrc = (dataset.lazySrc || dataset.src || src)?.trim();
 
-    if (nSrc.includes(".ico") || /manhwa-freak.com(.*).gif/gi.test(nSrc)) continue;
+    if (nSrc.includes(".ico") || /manhwa-freak.com(.*).gif|.svg$/gi.test(nSrc)) continue;
 
-    if (location.href.includes("mangas.in")) {
-      if (img.src.includes("loading.gif") && /jpg|png|webp/i.test(nSrc)) {
-        data.push(nSrc);
-      } else {
-        while (img.src.includes("loading.gif")) {
-          await delay(90);
-        }
-        data.push(img.src);
-      }
-    } else if (location.href.includes("mangaclash")) {
+    if (location.href.includes("mangaclash")) {
       if (nSrc.includes("mangaclash")) {
         data.push(nSrc);
       }
@@ -245,7 +245,7 @@ export const adultEvalPage = async (query) => {
   let Genres = "";
   let AltName = "";
   let genreRegex = /genre((\(|)(s|)(\)| :(\n|)|))|Género(( |):|)/gi;
-  const authorRegex = /author((\(|)s(\)|)|)( |)(:|)( |)/i;
+  const authorRegex = /(author|Autor)((\(|)s(\)|)|)( |)(:|)( |)/i;
   let Author = "";
   let items = document.querySelectorAll(query.AltTitle);
   if (items.length > 1) {

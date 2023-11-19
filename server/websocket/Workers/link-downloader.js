@@ -44,10 +44,10 @@ export const downloadLink = async (d, page, Server, folder, count, adult, state)
     query.waitUntil = "domcontentloaded";
   }
 
-  if (/aquamanga|mangagreat|mangaread/gi.test(d.url)) {
-    await page.goto(d.url, query);
-  } else {
+  if (/mangas.ins/gi.test(d.url)) {
     await page.goto(d.url + "?style=list", query);
+  } else {
+    await page.goto(d.url, query);
   }
 
   if (Server.Name.includes("manganatos")) {
