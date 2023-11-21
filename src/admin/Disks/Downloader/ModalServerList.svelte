@@ -53,7 +53,7 @@
   const filter = ({ detail }) => (filterValue = detail);
 
   $: {
-    filtered = servers.filter((sv) => sv.Name.includes(filterValue));
+    filtered = servers.filter((sv) => sv.Name.includes(filterValue)) || sv.Type.includes(filterValue);
   }
 
   onMount(async () => {
