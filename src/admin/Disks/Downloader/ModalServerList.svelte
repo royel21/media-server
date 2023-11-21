@@ -3,11 +3,14 @@
   import { fade } from "svelte/transition";
   import Icons from "src/icons/Icons.svelte";
   import apiUtils from "src/apiUtils";
+  import Filter from "src/ShareComponent/Filter.svelte";
 
   export let server;
   export let hide;
 
   let servers = [];
+  let filtered = [];
+  let filterValue = "";
   let reload = false;
   let ref;
 
@@ -47,6 +50,12 @@
 
   const onClose = () => hide(reload);
 
+  const filter = ({ detail }) => (filterValue = detail);
+
+  $: {
+    filtered = servers.filter((sv) => sv.Name.includes(filterValue));
+  }
+
   onMount(async () => {
     ref?.focus();
     await loadServers();
@@ -57,6 +66,9 @@
   <div class="modal card" transition:fade={{ duration: 200 }}>
     <div class="modal-header">
       <h3>Server List</h3>
+      <div id="filter">
+        <Filter on:filter={filter} />
+      </div>
     </div>
     <div class="modal-body">
       <table class="table table-dark table-hover table-bordered">
@@ -69,7 +81,7 @@
           </tr>
         </thead>
         <tbody>
-          {#each servers as ser}
+          {#each filtered as ser}
             <tr id={ser.Id}>
               <td><a href={`https://${ser.Name}`} target="_blank">{ser.Name}</a></td>
               <td>{ser.Type}</td>
@@ -91,13 +103,28 @@
 </div>
 
 <style>
+  #filter {
+    padding: 0 5px;
+    margin-bottom: 5px;
+  }
+  #filter > :global(#filter-control) {
+    max-width: 100%;
+  }
+  #filter :global(input) {
+    margin: 0;
+  }
+  .modal-header {
+    border-bottom: 1px solid;
+  }
   .modal {
     width: 560px;
     outline: none;
+    padding: 0;
   }
   .modal-body {
     height: 400px;
     overflow-y: auto;
+    padding: 5px;
   }
 
   .table th:first-child,
