@@ -93,10 +93,17 @@ routes.post("/add-link", async ({ body }, res) => {
   if (validRegex.test(Url) || !/=/.test(Url)) {
     const { url, serverName } = formatLink(body.Url);
 
-    let [server] = await db.Server.findOrCreate({ where: { Name: serverName, Type: IsAdult ? "Adult" : "Manga" } });
+    let [server] = await db.Server.findOrCreate({ where: { Name: serverName } });
 
     try {
-      await db.Link.create({ Url: url, ServerId: server.Id, Name, AltName, IsAdult, Date: new Date() });
+      await db.Link.create({
+        Url: url,
+        ServerId: server.Id,
+        Name,
+        AltName,
+        IsAdult: IsAdult || server.Type === "Manga" ? false : true,
+        Date: new Date(),
+      });
       result.valid = true;
     } catch (error) {
       if (error.toString().includes("SequelizeUniqueConstraintError")) {

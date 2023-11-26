@@ -59,6 +59,8 @@ const updateUser = async (req) => {
     return { msg: "User Not Found", fail: true };
   }
 
+  if (!Password) delete req.body.Password;
+
   await valid.user.update(req.body, { encript: Password });
   return { fail: false, user: req.body };
 };
