@@ -132,7 +132,7 @@
     if (file.Name.includes(folderName)) {
       return "";
     }
-    return folderName;
+    return folderName + " -";
   };
 
   onMount(async () => {
@@ -157,7 +157,7 @@
 <div class="viewer" bind:this={viewer} on:keydown={handleKeyboard} class:video={isVideo(file)}>
   <div class="f-name" class:nomenu={$ToggleMenu}>
     <div class="name-c">
-      <span>{`${getFolderName()} - ${file.Name}`}</span>
+      <span>{`${getFolderName()} ${file.Name}`}</span>
     </div>
   </div>
   <span class="info" class:top={isVideo(file)}>
