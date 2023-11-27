@@ -128,6 +128,13 @@
     }
   };
 
+  const getFolderName = () => {
+    if (file.Name.includes(folderName)) {
+      return "";
+    }
+    return folderName;
+  };
+
   onMount(async () => {
     let data = await apiUtils.post(`viewer/folder`, { id: folderId });
     if (!data.fail) {
@@ -150,7 +157,7 @@
 <div class="viewer" bind:this={viewer} on:keydown={handleKeyboard} class:video={isVideo(file)}>
   <div class="f-name" class:nomenu={$ToggleMenu}>
     <div class="name-c">
-      <span>{`${folderName} - ${file.Name}`}</span>
+      <span>{`${getFolderName()} - ${file.Name}`}</span>
     </div>
   </div>
   <span class="info" class:top={isVideo(file)}>
