@@ -88,15 +88,20 @@ export const downloadImg = async (imgPath, url, page, cover, useAxios) => {
       try {
         const img = await sharp(buff);
         const meta = await img.metadata();
+
+        if (!cover && meta.width > 400) return false;
+
         if (!cover && meta.width > 1024) {
           await img.resize({ width: 1024 });
         }
+
         await img.jpeg({ quality: 85 }).toFile(imgPath);
         if (!cover) {
           await img.destroy();
         } else {
           return img;
         }
+        return true;
       } catch (error) {
         sendMessage({ text: `ResizeImage-Error: ${url}`, color: "red", error });
       }
@@ -166,7 +171,8 @@ export const downloadAllIMages = async (page, links, dir, linkData) => {
     let newImg = path.join(dir, `${i}`.padStart(padding, "0") + ".jpg");
 
     if (!fs.existsSync(newImg)) {
-      await downloadImg(newImg, links[i], page);
+      const result = await downloadImg(newImg, links[i], page);
+      if (!result) --links.length;
     }
   }
 };
