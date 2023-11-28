@@ -89,7 +89,7 @@ export const downloadImg = async (imgPath, url, page, cover, useAxios) => {
         const img = await sharp(buff);
         const meta = await img.metadata();
 
-        if (!cover && meta.width > 400) return false;
+        if (!cover && meta.width < 400) return false;
 
         if (!cover && meta.width > 1024) {
           await img.resize({ width: 1024 });
