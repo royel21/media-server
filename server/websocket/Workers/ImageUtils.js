@@ -163,7 +163,6 @@ export const createFolderCover = async (mangaDir, data, imgPath, page) => {
 export const downloadAllIMages = async (page, links, dir, linkData) => {
   const length = links.length;
   let padding = getPadding(links.length);
-  sendMessage({ text: `images: ${length}` });
   for (let i = 0; i < links.length; i++) {
     if (linkData.stopped) return;
     delay(60);

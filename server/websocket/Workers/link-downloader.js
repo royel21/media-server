@@ -34,7 +34,6 @@ export const downloadLink = async (d, page, Server, folder, count, adult, state)
     return;
   }
 
-  sendMessage({ text: `Dwn: ${count} - ${folder.Name} - ${d.name}`, url: d.url });
   let links = [];
 
   createDir(dir);
@@ -57,6 +56,7 @@ export const downloadLink = async (d, page, Server, folder, count, adult, state)
   await page.waitForSelector(Server.Imgs);
 
   links = await page.evaluate(evaleLinks, Server.dataValues);
+  sendMessage({ text: `Dwn: ${count} imgs: ${links.length} - ${folder.Name} - ${d.name}`, url: d.url });
 
   // await delay(60000);
   await downloadAllIMages(page, links, dir, state, Server.LocalImages);
