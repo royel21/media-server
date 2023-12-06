@@ -142,7 +142,7 @@ export const evaleLinks = async (query) => {
     img?.scrollIntoView();
     await delay(query.Delay);
     const { src, dataset } = img;
-    let nSrc = (dataset.lazySrc || dataset.src || src)?.trim();
+    let nSrc = (dataset.lazySrc || dataset.src || dataset.lzlSrc || src)?.trim();
 
     if (/\.(ico|svg)/.test(nSrc) || /manhwa-freak.com(.*).gif|.svg$/gi.test(nSrc)) continue;
 

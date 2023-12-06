@@ -187,6 +187,17 @@ const getFolders = async (id, isFolder) => {
   });
 };
 
+const cleanFolder = (folder) => {
+  const folders = fs.readdirSync(folder.Path).filter((f) => !/\.[a-zA-Z0-9]{3,4}$/.test(f));
+  for (let fol of folders) {
+    try {
+      fs.removeSync(path.join(folder.Path, fol));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+};
+
 const scanDirectory = async ({ id, dir, isFolder }) => {
   DirectoryId = id;
   console.log(dir);
@@ -203,6 +214,7 @@ const scanDirectory = async ({ id, dir, isFolder }) => {
 
       if (isFolder && folders[0]) {
         await folders[0].update({ Scanning: true });
+        cleanFolder(folders[0]);
       }
       console.timeEnd("list-files");
 
