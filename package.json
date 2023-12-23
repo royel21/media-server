@@ -10,7 +10,7 @@
     "vite-linux": "export IS_DEV=true&&vite",
     "server": "node server/app",
     "serv-dev": "nodemon server/app",
-    "serv-dev-linux": "export PORT=8030&&nodemon server/app",
+    "serv-dev-linux": "export PORT=8033&&nodemon server/app",
     "serv-local": "set IS_DEV=true&&nodemon server/app",
     "----": "",
     "build-win": "git pull&&vite build&&move.bat",

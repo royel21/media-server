@@ -342,7 +342,7 @@ svg path {
 }
 
 /****************************************************************/
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 640px) {
   ::-webkit-scrollbar {
     width: 0;
   }

@@ -41,10 +41,11 @@ button:active {
   transition: 0.25s;
 }
 
-*:active > svg {
+*:active>svg {
   transform: scale(1.15);
   transition: 0.2s;
 }
+
 /***************File Style****************************/
 
 .items {
@@ -68,6 +69,7 @@ button:active {
   transition: 0.2s all;
   margin: 10px 0;
 }
+
 .file:hover,
 .file.active {
   z-index: 2;
@@ -148,9 +150,11 @@ img {
   position: relative;
   color: transparent;
 }
+
 img[alt] {
   font-size: 16px;
 }
+
 img[alt]:after {
   position: absolute;
   top: -3px;
@@ -184,7 +188,7 @@ img[alt]:after {
   z-index: 99;
 }
 
-.first-controls input[type="checkbox"]:not(:checked) + div {
+.first-controls input[type="checkbox"]:not(:checked)+div {
   visibility: hidden;
   opacity: 0;
   pointer-events: none;
@@ -194,7 +198,7 @@ img[alt]:after {
   font-size: 30px;
 }
 
-.first-controls + div {
+.first-controls+div {
   margin-left: 40px;
 }
 
@@ -273,15 +277,17 @@ input[type="range"]::-moz-range-track {
   top: 0;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 640px) {
   .scroll-container {
     height: calc(100% - 67px);
     min-height: calc(100% - 67px);
   }
+
   .file {
-    width: 204px;
+    width: 190px;
   }
+
   .file-info {
-    width: 195px;
+    width: 185px;
   }
 }

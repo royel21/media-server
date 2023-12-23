@@ -208,24 +208,23 @@
     border: 1px solid white;
   }
   #info-content > div:not(:last-child) {
-    padding: 4px;
+    padding: 0 4px;
     border-bottom: 1px solid;
   }
   .img-d {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2px;
     border: 1px solid;
     border-radius: 0.25rem;
     background-color: #030611;
+    margin: 18px 0px;
   }
   #img-info {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4px;
     border-bottom: 1px solid;
     min-height: 190px;
   }
@@ -306,7 +305,7 @@
   #btn-bar button {
     margin-right: 12px;
   }
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 640px) {
     .gen-tag {
       font-size: 1rem;
       font-weight: 600;
