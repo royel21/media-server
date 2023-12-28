@@ -67,7 +67,7 @@
     padding: 10px;
     overflow-x: auto;
   }
-  @media screen and (max-width: 480px) {
+  @media screen and (max-width: 600px) {
     .content {
       height: calc(100% - 67px);
     }
@@ -75,9 +75,6 @@
       max-width: 100px;
       text-overflow: ellipsis;
     }
-  }
-
-  @media screen and (max-width: 600px) and (min-width: 480px) {
     :global(#menu) {
       height: 60px;
     }
