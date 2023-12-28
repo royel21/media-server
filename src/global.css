@@ -296,7 +296,7 @@ svg path {
 .list-group-item {
   position: relative;
   display: block;
-  padding: 0.35rem 0.4rem;
+  padding: 0.32rem 0.4rem;
   color: #343a40;
   background-color: #fff;
   border: 1px solid rgba(0, 0, 0, 0.125);

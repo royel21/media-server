@@ -111,7 +111,7 @@
   }
 
   .list-container {
-    height: calc(100% - 90px);
+    height: calc(100% - 80px);
     overflow-y: auto;
   }
   .controls {
@@ -137,7 +137,6 @@
   }
   .list-controls {
     display: flex;
-    margin-top: 5px;
     justify-content: center;
     width: 100%;
   }

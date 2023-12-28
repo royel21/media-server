@@ -79,4 +79,10 @@
       height: 60px;
     }
   }
+
+  @media screen and (max-height: 1200px) {
+    .content {
+      height: calc(100% - 64px);
+    }
+  }
 </style>

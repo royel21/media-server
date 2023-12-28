@@ -152,7 +152,7 @@
 
 <style>
   .list-container {
-    height: calc(100% - 90px);
+    height: calc(100% - 80px);
     overflow: auto;
   }
   .list-container :global(.input-control) {
@@ -174,7 +174,6 @@
     width: 100%;
   }
   .list-controls {
-    margin-top: 5px;
     text-align: center;
     width: 100%;
   }
