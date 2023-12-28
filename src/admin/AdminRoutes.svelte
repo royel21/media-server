@@ -76,4 +76,10 @@
       text-overflow: ellipsis;
     }
   }
+
+  @media screen and (max-width: 600px) and (min-width: 480px) {
+    :global(#menu) {
+      height: 60px;
+    }
+  }
 </style>

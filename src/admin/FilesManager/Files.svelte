@@ -152,7 +152,7 @@
 
 <style>
   .list-container {
-    height: calc(100% - 85px);
+    height: calc(100% - 90px);
     overflow: auto;
   }
   .list-container :global(.input-control) {
