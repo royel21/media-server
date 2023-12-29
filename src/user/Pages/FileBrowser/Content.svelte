@@ -140,8 +140,14 @@
   input[type="radio"] {
     display: none;
   }
+  .first-controls {
+    background-color: rgb(0 0 0 / 55%);
+    height: 32px;
+    width: 37px;
+    border-radius: 0.25rem;
+  }
   .first-controls :global(.icon-reply) {
-    top: -1px;
+    top: 1px;
     height: 31px;
     width: 42px;
   }
