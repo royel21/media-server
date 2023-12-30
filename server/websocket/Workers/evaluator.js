@@ -221,9 +221,9 @@ export const adultEvalPage = async (query) => {
     let parts = [];
 
     if (text.includes(",")) {
-      parts = text.split(/,( |)|\n/);
+      parts = text.split(/,( |)/);
     } else {
-      parts = text.split(/(  )+|\n/);
+      parts = text.split(/(  )+/);
     }
     parts = parts.map((d) => d.trim()).filter((d) => d);
     parts.sort();
