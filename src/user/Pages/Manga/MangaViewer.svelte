@@ -466,6 +466,10 @@
     padding: 0;
   }
 
+  .webtoon-img img:last-child {
+    padding-bottom: 50px;
+  }
+
   @media screen and (max-width: 600px) {
     #manga-viewer .img-current {
       transform: initial;
@@ -479,10 +483,6 @@
     }
     #manga-viewer .img-current.webtoon-img img:not(.empty-img) {
       height: auto;
-    }
-
-    .webtoon-img IMG:last-child {
-      padding-bottom: 50px;
     }
   }
 </style>
