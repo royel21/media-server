@@ -123,7 +123,7 @@ const downloadLinks = async (link, page) => {
   let FileCount = fs.readdirSync(mangaDir).filter((f) => f.includes(".zip")).length;
 
   if (FileCount != folder.FileCount) {
-    const Genres = folder.Genres;
+    let Genres = folder.Genres;
 
     if (folder.IsAdult && !Genres.includes("Adult")) {
       let gens = Genres.split(", ");
