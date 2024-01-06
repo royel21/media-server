@@ -467,7 +467,7 @@
   }
 
   .webtoon-img img:last-child {
-    padding-bottom: 50px;
+    margin-bottom: 80px;
   }
 
   @media screen and (max-width: 600px) {

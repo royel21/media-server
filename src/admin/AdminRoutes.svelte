@@ -80,7 +80,7 @@
     }
   }
 
-  @media screen and (max-height: 1200px) {
+  @media (max-width: 600px) and (pointer: none), (pointer: coarse) {
     .content {
       height: calc(100% - 64px);
     }
