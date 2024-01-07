@@ -225,12 +225,18 @@ export const adultEvalPage = async (query) => {
     } else {
       parts = text.split(/(  )+/);
     }
-    parts = parts.map((d) => d.trim()).filter((d) => d);
+    parts = parts.map((d) => d.replace("(W)", "").trim()).filter((d) => d);
     parts.sort();
     return capitalize(parts.join(", "));
   };
 
   const getAltName = (text) => {
+    text = text
+      .trim()
+      .split("/")
+      .filter((p) => p.trim())
+      .map((p) => p.trim())
+      .join("; ");
     return capitalize(
       text
         .replace(/:|\t|\n|\r/gi, "")
@@ -244,7 +250,7 @@ export const adultEvalPage = async (query) => {
 
   let Genres = "";
   let AltName = "";
-  let genreRegex = /genre((\(|)(s|)(\)| :(\n|)|))|Género(( |):|)/gi;
+  let genreRegex = /genre((\(|)(s|)(\)|( |):(\n|)|))|Género(( |):|)/gi;
   const authorRegex = /(author|Autor)((\(|)s(\)|)|)( |)(:|)( |)/i;
   let Author = "";
   let items = document.querySelectorAll(query.AltTitle);
@@ -269,6 +275,24 @@ export const adultEvalPage = async (query) => {
 
   if (Genres === "") {
     Genres = formatGenres(document.querySelector(query.Genres)?.textContent.replace(genreRegex, "").trim() || "");
+  }
+
+  if (query.Name.includes("bato")) {
+    for (let tag of [...document.querySelectorAll(".attr-item")]) {
+      let text = tag.textContent || "";
+      if (genreRegex.test(text)) {
+        Genres = formatGenres(text.replace(genreRegex, "").trim());
+      }
+
+      if (authorRegex.test(text)) {
+        Author = text
+          .replace(authorRegex, "")
+          .trim()
+          .split("/")
+          .map((a) => capitalize(a).trim())
+          .join("; ");
+      }
+    }
   }
 
   if (location.href.includes("manhuascan") && !Author) {

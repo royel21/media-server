@@ -123,16 +123,15 @@ const downloadLinks = async (link, page) => {
   let FileCount = fs.readdirSync(mangaDir).filter((f) => f.includes(".zip")).length;
 
   if (FileCount != folder.FileCount) {
-    let Genres = folder.Genres;
-
-    if (folder.IsAdult && !Genres.includes("Adult")) {
-      let gens = Genres.split(", ");
-      gens.push("Adult");
-      gens.sort();
-      Genres = gens.join(", ");
-    }
-    await folder.update({ FileCount, CreatedAt: new Date(), Genres });
+    folder.FileCount = FileCount;
+    folder.CreatedAt = new Date();
   }
+  if (folder.IsAdult && !folder.Genres.includes("Adult")) {
+    let gens = folder.Genres.split(", ");
+    gens.push("Adult");
+    folder.Genres = gens.sort().join(", ");
+  }
+  await folder.save();
 
   await db.Link.update({ Date: new Date() }, { where: { Name: folder.Name } });
 };
