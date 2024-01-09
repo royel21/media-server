@@ -215,8 +215,9 @@ export const adultEvalPage = async (query) => {
     }
   } catch (error) {}
 
-  const formatGenres = (text) => {
+  const formatGenres = (text, extra = []) => {
     if (text === "N/A") return text;
+    let genres = new Set();
 
     let parts = [];
 
@@ -225,9 +226,11 @@ export const adultEvalPage = async (query) => {
     } else {
       parts = text.split(/(  )+/);
     }
-    parts = parts.map((d) => d.replace("(W)", "").trim()).filter((d) => d);
-    parts.sort();
-    return capitalize(parts.join(", "));
+    parts = parts
+      .map((d) => d.replace("(W)", "").trim())
+      .filter((d) => d)
+      .map((d) => genres.add(d));
+    return capitalize([...genres].sort().join(", "));
   };
 
   const getAltName = (text) => {
@@ -281,7 +284,7 @@ export const adultEvalPage = async (query) => {
     for (let tag of [...document.querySelectorAll(".attr-item")]) {
       let text = tag.textContent || "";
       if (genreRegex.test(text)) {
-        Genres = formatGenres(text.replace(genreRegex, "").trim());
+        Genres = formatGenres(text.replace(genreRegex, "").trim(), ["Adult", "Manga"]);
       }
 
       if (authorRegex.test(text)) {
@@ -321,7 +324,7 @@ export const adultEvalPage = async (query) => {
         .trim()
         .replace(/( )+/g, " ")
         .replace(
-          /^ |vol.\d+ |volume \d+ |(chapter|chap|ch|Capítulo|Episodio)( | - |-|\.)|\||\/|:|\?|\^|"|\*|<|>|\t|\n/gi,
+          /^ |vol.\d+ |volume \d+ |(chapter|chap|ch|Capítulo|Episodio|part)( | - |-|\.)|\||\/|:|\?|\^|"|\*|<|>|\t|\n/gi,
           ""
         )
         .replace(/(\.)+$/, "")
