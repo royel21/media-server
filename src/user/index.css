@@ -137,6 +137,7 @@ button:active {
   overflow: hidden;
   border-top-right-radius: 0.25rem;
   border-top-left-radius: 0.25rem;
+  background-color: darkgray;
 }
 
 .file-cover img {
