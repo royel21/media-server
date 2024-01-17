@@ -107,9 +107,10 @@ export const getFiles = async (user, data) => {
 
 const mapFiles = ({ dataValues, Favorites }) => {
   const isFav = Favorites.map((fv) => fv.Id);
+  const isRaw = dataValues.Genres.includes("Raw");
   delete dataValues.Genres;
   delete dataValues.Favorites;
-  return { ...dataValues, isFav };
+  return { ...dataValues, isFav, isRaw };
 };
 
 export const getFolders = async (req, res) => {

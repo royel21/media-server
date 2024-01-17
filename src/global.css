@@ -51,9 +51,10 @@ li {
 
 #menu a {
   z-index: 99;
-  padding: 4px 6px;
+  padding: 0px 6px;
   cursor: pointer;
   text-align: center;
+  height: calc(100% - 3px);
 }
 
 #menu .nav-item {

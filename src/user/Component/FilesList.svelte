@@ -149,7 +149,7 @@
 <div class="scroll-container" class:r-content={isContent}>
   <slot name="header" />
   <div class="files-list" on:keydown={handleKeydown} on:click={favClick}>
-    {#each pageData.files as { Id, Name, Type, CurrentPos, Duration, isFav, FilesType, FileCount, LastChapter, Status, CreatedAt, Size }}
+    {#each pageData.files as { Id, Name, Type, CurrentPos, Duration, isFav, FilesType, FileCount, LastChapter, Status, CreatedAt, Size, isRaw }}
       <div class="file" id={Id} data-type={Type} tabIndex="0" in:fade>
         <div class="file-info">
           <div class="file-btns usn">
@@ -175,6 +175,7 @@
             <LazyImage cover={getCover(Type, Name, FilesType) + `?v=${ver}`} />
             {#if Type.includes("Folder")}
               <span class="f-status" class:completed={Status}>{Status ? "Completed" : "OnGoing"}</span>
+              <span class="f-raw" class:hidden={!isRaw}>Raw</span>
             {:else}
               <span class="file-date">
                 <span>{(Size / 1025 / 1024).toFixed(2)}mb</span>
@@ -232,5 +233,19 @@
   }
   .file-cover .completed {
     background-color: red;
+  }
+  .file-cover .f-raw {
+    display: inline-block;
+    position: absolute;
+    width: inherit;
+    right: 0;
+    left: initial;
+    bottom: 0px;
+    background-color: red;
+    border-top-left-radius: 20%;
+  }
+
+  .file-cover .f-raw.hidden {
+    display: none;
   }
 </style>

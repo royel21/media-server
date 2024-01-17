@@ -95,7 +95,8 @@
 
 {#if canShow}
   <label on:keydown on:click={toggleConsole} class:toggle>
-    <input type="checkbox" bind:checked={toggle} /><Icons name={toggle ? "eyeslash" : "eye"} box="0 0 564 512" />
+    <input type="checkbox" bind:checked={toggle} />
+    <Icons name={toggle ? "eyeslash" : "eye"} box="0 0 564 512" width="30px" height="20px" />
   </label>
   <div class="cls-container" bind:this={rconsole} class:hide-dragg={items.length === 0 || !toggle}>
     <div class="dragger" bind:this={dragger} />
@@ -207,12 +208,12 @@
     background-color: white;
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 620px) {
     .cls-container {
       max-height: calc(100% - 230px);
     }
     label {
-      top: 85px;
+      top: 80px;
       right: 16px;
     }
     .important {

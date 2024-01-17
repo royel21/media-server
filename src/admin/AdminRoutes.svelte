@@ -75,9 +75,6 @@
       max-width: 100px;
       text-overflow: ellipsis;
     }
-    :global(#menu) {
-      height: 60px;
-    }
   }
 
   @media (max-width: 600px) and (pointer: none), (pointer: coarse) {

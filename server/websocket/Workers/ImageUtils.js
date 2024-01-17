@@ -84,7 +84,7 @@ export const downloadImg = async (imgPath, url, page, cover, useAxios) => {
       sendMessage({ text: `download-Image Error`, url, color: "red", error });
     }
 
-    if (buff && !buff.includes("html")) {
+    if (buff?.length > 0 && !buff.includes("<html>")) {
       try {
         const img = await sharp(buff);
         const meta = await img.metadata();
