@@ -324,11 +324,17 @@ export const adultEvalPage = async (query) => {
         .trim()
         .replace(/( )+/g, " ")
         .replace(
-          /^ |vol.\d+ |volume \d+ |(chapter|chap|ch|Capítulo|Episodio|part)( | - |-|\.)|\||\/|:|\?|\^|"|\*|<|>|\t|\n/gi,
+          /^ |vol.\d+ |volume \d+ |season \d+|(chapter|chap|ch|Capítulo|Episodio|episode|part)( | - |-|\.)|\||\/|:|\?|\^|"|\*|<|>|\t|\n/gi,
           ""
         )
         .replace(/(\.)+$/, "")
-        .replace(/\./gi, "-");
+        .replace(/\./gi, "-")
+        .trim();
+
+      const season = text.match(/^Season \d+/i);
+      if (season) {
+        fileName = fileName + " " + season[0];
+      }
 
       let n = fileName.match(/\d+/);
       if (n) {
