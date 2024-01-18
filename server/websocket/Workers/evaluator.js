@@ -179,7 +179,7 @@ export const adultEvalPage = async (query) => {
     .replace(/( )+/g, " ");
   Name = Name.trim()
     .replace(/,$/, "")
-    .replace(/ raw$| manhwa Raw$/i, "");
+    .replace(/ – (ENG|RAW)| raw$| manhwa Raw$/i, "");
 
   const paras = document.querySelectorAll(query.Desc);
   let Description = (paras[2] || paras[1] || paras[0] || "").innerText?.replace(/You are reading .*\\n\\n\\n/g, "");

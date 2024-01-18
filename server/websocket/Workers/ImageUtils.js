@@ -95,7 +95,7 @@ export const downloadImg = async (imgPath, url, page, cover, useAxios) => {
           await img.resize({ width: 1024 });
         }
 
-        await img.jpeg({ quality: 85 }).toFile(imgPath);
+        await img.jpeg().toFile(imgPath);
         if (!cover) {
           await img.destroy();
         } else {

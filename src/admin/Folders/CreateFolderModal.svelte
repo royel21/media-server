@@ -6,6 +6,7 @@
   import Select from "../Component/Select.svelte";
   import Input from "../Component/TextAreaInput.svelte";
   import { validGenres } from "../Utils";
+  import e from "cors";
 
   export let error;
   export let ref = null;
@@ -53,10 +54,14 @@
     const data = await apiUtils.admin(["folders", "folder", ""]);
     options = [{ Name: "Select Directory" }, ...data.dirs.map((d) => ({ Id: d.Id, Name: d.FullPath }))];
   });
+
+  const onKeyDown = (e) => {
+    if (e.keyCode === 27) hide();
+  };
 </script>
 
 <div class="modal-container">
-  <div class="modal card" transition:fade={{ duration: 200 }} tabindex="-1">
+  <div class="modal card" transition:fade={{ duration: 200 }} on:keydown={onKeyDown} tabindex="-1">
     <div class="modal-header">
       <h4>Create New Folder</h4>
     </div>
@@ -74,7 +79,7 @@
       <div class="error">{error || ""}</div>
       <div class="message">{message || ""}</div>
       <div class="modal-footer">
-        <button type="button" class="btn" on:click={() => hide()}>Close</button>
+        <button type="button" class="btn" on:click={hide}>Close</button>
         <button type="submit" class="btn">Create</button>
       </div>
     </form>

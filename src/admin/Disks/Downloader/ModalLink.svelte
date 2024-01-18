@@ -31,6 +31,8 @@
   onMount(() => {
     ref?.focus();
   });
+  //[Matsuzaka Takeshi] Junshin Musume
+  //[Matsusaka Takeshi] Junshin Musume
 </script>
 
 <div bind:this={ref} class="modal-container" on:keydown={onKeyDown} tabindex="-1">
@@ -48,7 +50,7 @@
       <div class="error">{error || ""}</div>
       <div class="modal-footer">
         <button type="button" class="btn" on:click={hide}>Cancel</button>
-        <button type="submit" class="btn">Update</button>
+        <button type="submit" class="btn">Create</button>
       </div>
     </form>
   </div>
