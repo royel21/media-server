@@ -15,3 +15,9 @@
     {/each}
   </select>
 </div>
+
+<style>
+  span {
+    user-select: none;
+  }
+</style>

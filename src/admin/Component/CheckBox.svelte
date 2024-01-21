@@ -31,4 +31,7 @@
     font-size: 18px;
     cursor: pointer;
   }
+  .input-label {
+    user-select: none;
+  }
 </style>

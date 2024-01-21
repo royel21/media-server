@@ -30,6 +30,7 @@
     border-radius: 0;
     border-top-right-radius: 0.25rem;
     border-top-left-radius: 0.25rem;
+    user-select: none;
   }
   .input::-webkit-scrollbar {
     width: 10px;

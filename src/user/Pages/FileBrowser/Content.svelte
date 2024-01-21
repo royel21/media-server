@@ -232,7 +232,7 @@
     align-items: center;
     justify-content: center;
     border-bottom: 1px solid;
-    min-height: 190px;
+    min-height: 250px;
   }
   #img-info .d-state {
     display: inline-block;
@@ -250,7 +250,7 @@
     background-color: red;
   }
   #info img {
-    max-height: 300px;
+    max-height: 240px;
     max-width: 100%;
   }
   img[alt]:after {
@@ -259,7 +259,6 @@
   .m-desc {
     text-align: start;
     flex-grow: 1;
-    height: calc(100% - 456px);
     overflow-y: auto;
   }
   #name-gen-tag {
@@ -290,8 +289,8 @@
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     text-align: start;
     font-size: 1rem;
-    height: 54px;
-    overflow: hidden;
+    overflow: auto;
+    min-height: 54px;
   }
 
   .genres-list {

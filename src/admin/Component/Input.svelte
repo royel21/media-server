@@ -11,3 +11,9 @@
   <span class="input-label">{label || key}</span>
   <input class="input" bind:value={item[key]} on:change={onChange} />
 </div>
+
+<style>
+  span {
+    user-select: none;
+  }
+</style>
