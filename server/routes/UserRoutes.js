@@ -15,16 +15,20 @@ const sendUser = (res, user = { UserConfig: { dataValues: {} } }) => {
 };
 
 routes.post("/login", (req, res, next) => {
-  return passport.authenticate("local", (err, user, info) => {
+  return passport.authenticate("local", async (err, user, info) => {
     if (err) return next(err);
 
     if (user) {
-      return req.logIn(user, (err) => {
+      const { newpassword } = req.body;
+      if (newpassword && /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/.test(newpassword)) {
+        user.update({ Password: newpassword }, { encript: newpassword });
+      }
+      req.logIn(user, (err) => {
         if (err) return next(err);
         return sendUser(res, user);
       });
     } else {
-      return res.json({ isAutenticated: false, info });
+      res.json({ isAutenticated: false, info });
     }
   })(req, res, next);
 });

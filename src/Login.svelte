@@ -4,6 +4,7 @@
 
   export let error = "";
   export let logIn;
+  let showPass = false;
 
   let user = { username: "", password: "" };
 
@@ -14,9 +15,10 @@
   };
 
   document.title = "Media Server";
+  $: console.log(showPass);
 </script>
 
-<div id="login-container">
+<div id="login-container" class:more={showPass}>
   <h3 class="mb-4"><Icons name="signin" /> Login</h3>
   <form on:submit|preventDefault={onSubmit}>
     <Input width="65px" name="username" bind:value={user.username} placeholder="Name" {error}>
@@ -25,6 +27,25 @@
     <Input width="65px" name="password" type="password" bind:value={user.password} placeholder="Password" {error}>
       <Icons name="key" slot="label" />
     </Input>
+    <div class="cp-label">
+      <label for="toggle-pass">
+        Change Password
+        <input type="checkbox" id="toggle-pass" bind:checked={showPass} />
+      </label>
+      {#if showPass}
+        <Input
+          width="65px"
+          name="newpassword"
+          type="password"
+          bind:value={user.newpassword}
+          placeholder="New Password"
+          {error}
+        >
+          <Icons name="key" slot="label" />
+        </Input>
+      {/if}
+    </div>
+
     <div class="error">{error}</div>
     <div class="form-footer">
       <button type="submit">Submit</button>
@@ -65,6 +86,8 @@
   }
 
   #login-container {
+    display: flex;
+    flex-direction: column;
     width: 380px;
     height: fit-content;
     user-select: none;
@@ -74,6 +97,21 @@
     padding: 0 20px;
     color: white;
     text-align: center;
+  }
+  #login-container.more {
+    height: 312px;
+  }
+
+  .cp-label {
+    display: flex;
+    justify-content: right;
+    flex-direction: column;
+    position: relative;
+    right: 0;
+  }
+  .cp-label label {
+    cursor: pointer;
+    flex-basis: content;
   }
 
   #login-container :global(.icon-signin) {
