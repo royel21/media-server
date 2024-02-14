@@ -39,7 +39,7 @@ const createUser = async (req) => {
     UserConfig: { Name, Config },
   };
 
-  let newUser = await db.user.create(user, { encript: true, include: [db.recent, db.favorite, db.userConfig] });
+  let newUser = await db.user.create(user, { encript: true, include: [db.favorite, db.userConfig] });
 
   return {
     user: { ...newUser.dataValues, Password: "" },
