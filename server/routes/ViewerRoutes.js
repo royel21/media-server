@@ -18,9 +18,10 @@ const getFiles = async ({ user, body }, res, type) => {
     },
   });
 
-  const folder = await db.folder.findOne({ where: { Id: body.id }, attributes: ["Name"] });
+  const folder = await db.folder.findOne({ where: { Id: body.id }, attributes: ["Name", "Genres"] });
   res.send({
     Name: folder.Name,
+    isManhwa: folder.Genres?.includes("Manhwa"),
     files: table.Files.map((d) => ({ ...d.dataValues })),
   });
 };

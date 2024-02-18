@@ -16,6 +16,7 @@
   export let viewer;
   export let changePages;
   export let removeFile;
+  export let isManhwa;
 
   const { NextFile, PrevFile, Fullscreen, SkipForward, SkipBack } = KeyMap;
   const socket = getContext("socket");
@@ -157,7 +158,7 @@
       disconnectObvrs(imgContainer);
     }
   }
-
+  $: webtoon = isManhwa;
   //reload on file change
   $: if (file.Id && file.Id !== viewerState.lastfId) {
     disconnectObvrs(imgContainer);

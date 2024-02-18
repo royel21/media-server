@@ -32,6 +32,7 @@
   let viewer;
   let fileIndex = -1;
   let folderName = "";
+  let isManhwa = false;
 
   const saveFile = () => {
     let { Id, CurrentPos } = file;
@@ -139,6 +140,7 @@
     let data = await apiUtils.post(`viewer/folder`, { id: folderId });
     if (!data.fail) {
       folderName = data.Name;
+      isManhwa = data.isManhwa;
       playList = files = data.files;
       window.title = playList[0]?.Cover?.split("/")[2] || "";
     }
@@ -174,6 +176,7 @@
     <MangaViewer
       {viewer}
       {file}
+      {isManhwa}
       on:changefile={changeFile}
       on:returnBack={returnBack}
       {changePages}
