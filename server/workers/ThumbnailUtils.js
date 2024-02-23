@@ -20,7 +20,7 @@ export const ZipCover = async (file, coverP, exist) => {
         .sort(sortByName)
         .filter((entry) => !entry.isDirectory);
 
-      const firstImg = entries.find((e, i) => i > 0 && IMGTYPES.test(e.name) && e.size > 1024 * 20);
+      const firstImg = entries.find((e) => IMGTYPES.test(e.name) && e.size > 1024 * 20);
       if (firstImg) {
         const buff = await zipfile.entryData(firstImg);
 
