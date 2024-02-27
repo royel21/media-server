@@ -228,7 +228,7 @@ export const adultEvalPage = async (query) => {
     }
     parts = parts
       .map((d) => d.replace("(W)", "").trim())
-      .filter((d) => d)
+      .filter((d) => d && !/adulto/i.test(d))
       .map((d) => genres.add(d));
     return capitalize([...genres].sort().join(", "));
   };

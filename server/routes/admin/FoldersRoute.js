@@ -122,7 +122,12 @@ routes.get("/changes-genres/:Id/:genre", async (req, res) => {
   let genres = folder?.Genres.split(/,( |)/g);
   if (folder) {
     if (genre !== "sort") {
-      genres = genres.filter((g) => g && !/manga|manhwa|manhua|webtoon/i.test(g));
+      if (!genres.includes("webtoon")) {
+        genres = genres.filter((g) => g && !/manhwa|manhua/i.test(g));
+      } else {
+        genres = genres.filter((g) => g && !/manga|manhwa|manhua/i.test(g));
+      }
+
       genres.push(mangaTypes[genre]);
     }
 
