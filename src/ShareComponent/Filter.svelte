@@ -3,9 +3,10 @@
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
   export let filter = "";
+  let curFilter = filter;
 
   const send = (text = "") => {
-    filter = text;
+    curFilter = text;
     let ftl = text
       .replace("’", "'")
       .replace(/:|\?|\"/gi, "")
@@ -16,13 +17,13 @@
   const ClearFilter = () => send("");
 
   const submitFilter = (e) => {
-    if (e.keyCode === 13) send(filter);
+    if (e.keyCode === 13) send(curFilter);
   };
 
   const btnFilter = async () => {
     let text = (await navigator.clipboard?.readText()) || "";
     if (!text) {
-      text = filter;
+      text = curFilter;
     }
     send(text);
   };
@@ -41,7 +42,7 @@
     placeholder="Filter"
     enterkeyhint="done"
     autocomplete="off"
-    bind:value={filter}
+    bind:value={curFilter}
     on:keydown={submitFilter}
   />
   <span id="clear-filter" on:click={ClearFilter} on:keydown={() => {}}>

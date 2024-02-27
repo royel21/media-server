@@ -44,7 +44,7 @@
     const itemsPerPage = items || getFilesPerPage(3);
     const apiPath = title === "Content" ? `folder-content/${id}` : type;
 
-    let url = `/api/files/${apiPath}/${sort}/${pg}/${itemsPerPage}/${encodeURIComponent(flt) || ""}`;
+    let url = `/api/files/${apiPath}/${sort}/${pg}/${itemsPerPage}/${flt || ""}`;
 
     const data = await getItemsList(url);
 
@@ -128,7 +128,7 @@
 
   onMount(() => {
     ConfigStore.subscribe((value) => {
-      loadContent(page, filter, value);
+      loadContent(page, encodeURIComponent(filter), value);
     });
     socket.on("reload", reloadDir);
     return () => {

@@ -17,6 +17,7 @@
 
   export let page = 1;
   export let filter = "";
+
   let title = "Home";
   let reload = true;
 
@@ -25,7 +26,7 @@
   const loadContent = async (pg, flt = "") => {
     if (reload) {
       const items = $ConfigStore.Home.items || getFilesPerPage(3);
-      const data = await api.files(["recents", items, pg, flt]);
+      const data = await api.files(["recents", items, pg, encodeURIComponent(flt)]);
       if (data.valid) {
         pageData = data;
         if (+pg !== +data.page) {
