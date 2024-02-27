@@ -44,7 +44,7 @@
     const itemsPerPage = items || getFilesPerPage(3);
     const apiPath = title === "Content" ? `folder-content/${id}` : type;
 
-    let url = `/api/files/${apiPath}/${sort}/${pg}/${itemsPerPage}/${flt || ""}`;
+    let url = `/api/files/${apiPath}/${sort}/${pg}/${itemsPerPage}/${encodeURIComponent(flt) || ""}`;
 
     const data = await getItemsList(url);
 

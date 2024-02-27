@@ -15,7 +15,6 @@
   };
 
   document.title = "Media Server";
-  $: console.log(showPass);
 </script>
 
 <div id="login-container" class:more={showPass}>

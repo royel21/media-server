@@ -123,7 +123,7 @@ routes.get("/changes-genres/:Id/:genre", async (req, res) => {
   if (folder) {
     if (genre !== "sort") {
       if (!genres.includes("webtoon")) {
-        genres = genres.filter((g) => g && !/manhwa|manhua/i.test(g));
+        genres = genres.filter((g) => g && !/manhwa|webtoon/i.test(g));
       } else {
         genres = genres.filter((g) => g && !/manga|manhwa|manhua/i.test(g));
       }
