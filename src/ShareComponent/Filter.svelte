@@ -3,7 +3,7 @@
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
   export let filter = "";
-  let curFilter = filter;
+  let curFilter = /%/.test(filter) ? decodeURIComponent(filter) : filter;
 
   const send = (text = "") => {
     curFilter = text;

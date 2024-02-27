@@ -10,6 +10,6 @@
   $: type = `favorites/${id}`;
 </script>
 
-<FilesList title="Favorites" {type} {filter} {page} {id}>
+<FilesList title="Favorites" {type} filter={filter || ""} {page} {id}>
   <FavoriteManager {id} slot="controls" />
 </FilesList>

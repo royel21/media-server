@@ -45,8 +45,8 @@
   };
 
   const onGenres = ({ currentTarget }) => {
-    const g = currentTarget.textContent;
-    const part = pathname.split("/").slice(1, 3);
+    const g = currentTarget.textContent || "";
+    const part = pathname.split("/").slice(1, 3) || "";
     if (/mangas|videos|favorites/i.test(pathname)) {
       navigate(`/${part[0]}/${part[1]}/1/${g}`);
     } else {
@@ -129,7 +129,7 @@
     <button class="btn btn-secondary" on:click={scanfiles}>Update</button>
     <span><SortBy label="Sort By:" {showConfig} toggleConfig={handleClick} /></span>
   </div>
-  <FilesList title={"Content"} {type} {filter} {page} {id} {setFolderInfo} {setLastRead} {handleClick}>
+  <FilesList title={"Content"} {type} filter={filter || ""} {page} {id} {setFolderInfo} {setLastRead} {handleClick}>
     <div class="first-controls" slot="controls" on:click={exitFolder} on:keydown>
       <Icons name="reply" />
     </div>

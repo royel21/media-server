@@ -260,6 +260,16 @@ const renameFolder = async (datas) => {
           const newPath = folder.Path.replace(folder.Directory.FullPath, dir.FullPath);
           data.DirectoryId = DirectoryId;
           data.Path = newPath;
+
+          //add Completed id
+          let gens = Genres.split(", ");
+          if (Status && !/Completed/i.test(Genres)) {
+            gens.push("Completed");
+            gens.sort();
+          } else {
+            gens = gens.filter((g) => g !== "Completed");
+          }
+          data.Genres = gens.join(", ");
         }
       }
 

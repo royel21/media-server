@@ -31,7 +31,6 @@
 
   let ver = 1;
   let folder;
-  let lastId = id;
 
   const socket = getContext("socket");
   const user = getContext("User");
@@ -68,7 +67,8 @@
     let pg = +detail;
     let { totalPages } = pageData;
     pg = clamp(pg, 1, totalPages);
-    navigate(`/${type}/${pg}/${encodeURIComponent(filter) || ""}`);
+    const search = encodeURIComponent(filter) || "";
+    navigate(`/${type}/${pg}/${search}`);
   };
 
   const fileFilter = ({ detail }) => navigate(`/${type}/${1}/${detail || ""}`);
@@ -109,7 +109,7 @@
 
   const reloadDir = (data) => {
     if (data.Id === id && user.Id === data.user) {
-      loadContent(id, page, filter).then(() => ver++);
+      loadContent(id, page, filter || "").then(() => ver++);
     }
   };
 
@@ -123,7 +123,7 @@
 
   onMount(() => {
     ConfigStore.subscribe((value) => {
-      loadContent(id, page, encodeURIComponent(filter), value);
+      loadContent(id, page, filter, value);
     });
     socket.on("reload", reloadDir);
     return () => {
@@ -133,7 +133,8 @@
 
   $: document.title = `${title} Page ${page || ""}`;
 
-  $: loadContent(id, page, filter);
+  $: loadContent(id, page, filter || "");
+  $: console.log("filter");
 
   let isContent = location.pathname.includes("content");
 </script>
