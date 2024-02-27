@@ -39,12 +39,12 @@
   let pageData = baseData;
   let favClicked = null;
 
-  const loadContent = async (pg = 1, flt = "") => {
+  const loadContent = async (folderId, pg = 1, flt = "") => {
     const { items, sort } = $ConfigStore[title];
     const itemsPerPage = items || getFilesPerPage(3);
-    const apiPath = title === "Content" ? `folder-content/${id}` : type;
-
-    let url = `/api/files/${apiPath}/${sort}/${pg}/${itemsPerPage}/${flt || ""}`;
+    const apiPath = title === "Content" ? `folder-content/${folderId}` : type;
+    const search = encodeURIComponent(flt || "");
+    let url = `/api/files/${apiPath}/${sort}/${pg}/${itemsPerPage}/${search}`;
 
     const data = await getItemsList(url);
 
@@ -57,7 +57,7 @@
       }
 
       if (pg && data.page && +data.page !== +pg) {
-        navigate(`/${type}/${data.page}/${filter || ""}`);
+        navigate(`/${type}/${data.page}/${search}`);
       }
     } else {
       console.log(data.error);
@@ -68,15 +68,10 @@
     let pg = +detail;
     let { totalPages } = pageData;
     pg = clamp(pg, 1, totalPages);
-    navigate(`/${type}/${pg}/${filter || ""}`);
-    loadContent(pg, filter);
+    navigate(`/${type}/${pg}/${encodeURIComponent(filter) || ""}`);
   };
 
-  const fileFilter = ({ detail }) => {
-    console.log("filter", detail);
-    navigate(`/${type}/${1}/${detail || ""}`);
-    loadContent(1, detail);
-  };
+  const fileFilter = ({ detail }) => navigate(`/${type}/${1}/${detail || ""}`);
 
   const handleKeydown = (event) => fileKeypress(event, page, goToPage, title);
 
@@ -104,7 +99,7 @@
     pageData.files = pageData.files.filter((f) => f.Id !== detail);
     if (!pageData.files.length) {
       page -= 1;
-      loadContent(page, filter || "");
+      loadContent(id, page, filter || "");
     } else {
       pageData = pageData;
     }
@@ -114,7 +109,7 @@
 
   const reloadDir = (data) => {
     if (data.Id === id && user.Id === data.user) {
-      loadContent(page, filter).then(() => ver++);
+      loadContent(id, page, filter).then(() => ver++);
     }
   };
 
@@ -128,7 +123,7 @@
 
   onMount(() => {
     ConfigStore.subscribe((value) => {
-      loadContent(page, encodeURIComponent(filter), value);
+      loadContent(id, page, encodeURIComponent(filter), value);
     });
     socket.on("reload", reloadDir);
     return () => {
@@ -138,10 +133,7 @@
 
   $: document.title = `${title} Page ${page || ""}`;
 
-  $: if (lastId !== id) {
-    lastId = id;
-    loadContent();
-  }
+  $: loadContent(id, page, filter);
 
   let isContent = location.pathname.includes("content");
 </script>
