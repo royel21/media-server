@@ -260,18 +260,15 @@ const renameFolder = async (datas) => {
           const newPath = folder.Path.replace(folder.Directory.FullPath, dir.FullPath);
           data.DirectoryId = DirectoryId;
           data.Path = newPath;
-
-          //add Completed id
-          let gens = Genres.split(", ");
-          if (Status && !/Completed/i.test(Genres)) {
-            gens.push("Completed");
-            gens.sort();
-          } else {
-            gens = gens.filter((g) => g !== "Completed");
-          }
-          data.Genres = gens.join(", ");
         }
       }
+      //add Completed id
+      let gens = Genres.split(", ").filter((g) => g !== "Completed");
+      if (Status) {
+        gens.push("Completed");
+        gens.sort();
+      }
+      data.Genres = gens.join(", ");
 
       await folder.update(data, { Name: folder.Name });
       await folder.reload();

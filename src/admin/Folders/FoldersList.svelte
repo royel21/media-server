@@ -191,10 +191,6 @@
   <CreateFolderModal hide={() => (createFolder = false)} {socket} />
 {/if}
 
-{#if createFolder}
-  <CreateFolderModal hide={() => (createFolder = false)} {socket} />
-{/if}
-
 {#if showModal}
   <Modal file={folder} {modalType} on:submit={handleSubmit} on:click={hideModal} />
 {/if}
