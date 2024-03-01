@@ -109,6 +109,9 @@ const downloadLinks = async (link, page) => {
 
   const exclude = await db.Exclude.findAll({ where: { LinkName: folder.Name } });
   for (let d of data) {
+    if (link.Raw) {
+      d.name = d.name + " raw";
+    }
     if (state.stopped) break;
     try {
       ++count;

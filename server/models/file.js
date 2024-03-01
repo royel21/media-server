@@ -90,9 +90,9 @@ export default (sequelize, ImagesPath) => {
                 fs.moveSync(fromFile, toFile);
               }
 
-              const oldCover = genImgPath(folder.Name, oldName);
+              const oldCover = genImgPath(item.Type, folder.Name, oldName);
               if (fs.existsSync(oldCover)) {
-                const cover = genImgPath(folder.Name, item.Name);
+                const cover = genImgPath(item.Type, folder.Name, item.Name);
                 fs.moveSync(oldCover, cover);
               }
             }

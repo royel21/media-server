@@ -40,6 +40,7 @@ export default (sequelize, { INTEGER, DATE, STRING, VIRTUAL, BOOLEAN, TEXT }) =>
       },
       Exclude: { type: BOOLEAN, defaultValue: false },
       IsAdult: { type: BOOLEAN, defaultValue: false },
+      Raw: { type: BOOLEAN, defaultValue: false },
     },
     {
       uniqueKeys: {

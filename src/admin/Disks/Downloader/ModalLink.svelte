@@ -46,6 +46,7 @@
         <TextAreaInput key="Url" file={link} />
         <TextAreaInput key="AltName" file={link} />
         <CheckBox label="Is Adult" key="IsAdult" item={link} />
+        <CheckBox label="Is Raw" key="Raw" item={link} />
       </div>
       <div class="error">{error || ""}</div>
       <div class="modal-footer">
