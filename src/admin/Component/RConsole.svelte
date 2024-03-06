@@ -38,10 +38,8 @@
     ref?.querySelector("div:last-child")?.scrollIntoView();
   });
 
-  const onNavigate = ({ navigationType, currentTarget: { currentEntry } }) => {
-    if (navigationType === "push") {
-      update = currentEntry.url;
-    }
+  const onNavigate = ({ currentTarget: { currentEntry } }) => {
+    update = currentEntry.id;
   };
 
   const onExpand = () => {
@@ -89,8 +87,8 @@
   });
 
   $: if (update) {
-    canShow = /content-manager|tools/.test(location.pathname);
-  } //
+    canShow = /content-manager|tools/i.test(location.pathname);
+  }
 </script>
 
 {#if canShow}
