@@ -315,48 +315,55 @@ export const adultEvalPage = async (query) => {
   let chaps = [...document.querySelectorAll(query.Chapters)];
   const padding = chaps.length > 999 ? 4 : 3;
 
-  let data = chaps
-    .map((a) => {
-      let text = (a.querySelector("strong,b,san") || a).textContent?.trim();
+  let data = [];
+  chaps.forEach((a) => {
+    let text = (a.querySelector("strong,b,san") || a).textContent?.trim();
 
-      let fileName = text
-        .replace("  ", " ")
-        .trim()
-        .replace(/( )+/g, " ")
-        .replace(
-          /^ |vol.\d+ |volume \d+ |season \d+|(chapter|chap|ch|Capítulo|Episodio|episode|part)( | - |-|\.)|\||\/|:|\?|\^|"|\*|<|>|\t|\n/gi,
-          ""
-        )
-        .replace(/(\.)+$/, "")
-        .replace(/\./gi, "-")
-        .trim();
+    let fileName = text
+      .replace("  ", " ")
+      .trim()
+      .replace(/( )+/g, " ")
+      .replace(
+        /^ |vol.\d+ |volume \d+ |season \d+|(chapter|chap|ch|Capítulo|Episodio|episode|part)( | - |-|\.)|\||\/|:|\?|\^|"|\*|<|>|\t|\n/gi,
+        ""
+      )
+      .replace(/(\.)+$/, "")
+      .replace(/\./gi, "-")
+      .trim();
 
-      const season = text.match(/^Season \d+/i);
-      if (season) {
-        fileName = fileName + " " + season[0];
+    const season = text.match(/^Season \d+/i);
+    if (season) {
+      fileName = fileName + " " + season[0];
+    }
+
+    let n = fileName.match(/\d+/);
+    if (n) {
+      n = n[0];
+      fileName = fileName.replace(n, n.padStart(padding, "0"));
+    }
+
+    if (/ raw$/i.test(title) || Genres?.includes("Raw")) {
+      if (!fileName.includes(" raw")) fileName = fileName + " raw";
+    }
+
+    data.push({ name: fileName, url: a.href, n });
+  });
+  data = data.filter((a) => {
+    if (/\d+-/.test(a.name)) {
+      let num = a.name.match(/^\d+/);
+      let regex = new RegExp(`^${num}( |$)`);
+      if (data.find((b) => regex.test(b.name))) {
+        return false;
       }
-
-      let n = fileName.match(/\d+/);
-      if (n) {
-        n = n[0];
-        fileName = fileName.replace(n, n.padStart(padding, "0"));
+    }
+    if (!/^000(-| |(-| )Prologue|$)/gi.test(a.name)) {
+      if (/ raw/i.test(a.name)) {
+        return query.Raw;
       }
-
-      if (/ raw$/i.test(title) || Genres?.includes("Raw")) {
-        if (!fileName.includes(" raw")) fileName = fileName + " raw";
-      }
-
-      return { name: fileName, url: a.href, n };
-    })
-    .filter((a) => {
-      if (!/^000(-| |(-| )Prologue|$)/gi.test(a.name)) {
-        if (/ raw/i.test(a.name)) {
-          return query.Raw;
-        }
-        return true;
-      }
-      return false;
-    });
+      return true;
+    }
+    return false;
+  });
 
   if (location.href.includes("mangas.in")) {
     [...document.querySelectorAll(".dl-horizontal dt")].forEach((el) => {
