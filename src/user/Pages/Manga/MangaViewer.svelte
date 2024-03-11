@@ -198,9 +198,27 @@
     $ConfigStore.Viewer.manga.webtoon = webtoon;
     updateConfig($ConfigStore);
   }
+  let tout;
+  const onShow = () => {
+    clearTimeout(tout);
+    const elems = [...document.querySelectorAll("#btn-playlist, .fullscreen-progress, .info")];
+    for (let elem of elems) {
+      elem.style.opacity = 1;
+    }
+    tout = setTimeout(() => {
+      for (let elem of elems) {
+        elem.style.opacity = 0;
+      }
+    }, 3000);
+  };
+  let ref;
+  onMount(() => {
+    ref.addEventListener("touchmove", onShow);
+    ref.addEventListener("mousemove", onShow);
+  });
 </script>
 
-<div id="manga-viewer" tabIndex="0" class:hide={$ToggleMenu}>
+<div bind:this={ref} id="manga-viewer" tabIndex="0" class:hide={$ToggleMenu}>
   <span class="fullscreen-progress">
     <Icons name="stickynote" />
     {progress}
