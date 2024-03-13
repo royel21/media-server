@@ -39,6 +39,7 @@
   let favClicked = null;
 
   const loadContent = async (folderId, pg = 1, flt = "") => {
+    if (location.pathname.includes("viewer")) return;
     const { items, sort } = $ConfigStore[title];
     const itemsPerPage = items || getFilesPerPage(3);
     const apiPath = title === "Content" ? `folder-content/${folderId}` : type;
@@ -134,7 +135,6 @@
   $: document.title = `${title} Page ${page || ""}`;
 
   $: loadContent(id, page, filter || "");
-  $: console.log("filter");
 
   let isContent = location.pathname.includes("content");
 </script>

@@ -86,8 +86,7 @@ const downloadLinks = async (link, page) => {
 
   let folder = await findOrCreateFolder(manga, isAdult);
 
-  const mangaDir = path.join(basePath, isAdult ? path.join("R18", "webtoon") : "mangas", folder.Name);
-  let files = await createFolderCover(mangaDir, manga, imgPath, page);
+  let files = await createFolderCover(folder.Path, manga, imgPath, page);
 
   if (!folder) {
     return sendMessage({ text: "Fail to find or create folder entry in database", color: "red" });
@@ -120,7 +119,7 @@ const downloadLinks = async (link, page) => {
     }
   }
 
-  let FileCount = fs.readdirSync(mangaDir).filter((f) => f.includes(".zip")).length;
+  let FileCount = fs.readdirSync(folder.Path).filter((f) => f.includes(".zip")).length;
 
   if (FileCount != folder.FileCount) {
     folder.FileCount = FileCount;

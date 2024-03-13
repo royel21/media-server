@@ -61,8 +61,15 @@ import db from "./server/models/index.js";
 //   compressDirs,
 // };
 const reset = async () => {
-  db.sqlze.options.logging = console.log;
-  await db.eventLog.destroy({ truncate: true });
+  const folders = await db.folder.findAll({ where: { DirectoryId: "QXSlHW", Genres: { [db.Op.like]: "% Manga%" } } });
+  for (const folder of folders) {
+    const nPath = folder.Path.replace("webtoon", "Mangas");
+    fs.moveSync(folder.Path, nPath);
+    folder.DirectoryId = "q8ffmV";
+    folder.Path = nPath;
+    await folder.save();
+    console.log(nPath);
+  }
   process.exit();
 };
 reset();

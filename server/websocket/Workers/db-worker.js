@@ -20,15 +20,17 @@ export const findFolder = async (Name) => {
 };
 
 export const findOrCreateFolder = async (manga, IsAdult) => {
-  const { Name, Description, Genres, AltName, Status, Server, Author } = manga;
+  let { Name, Description, Genres, AltName, Status, Server, Author } = manga;
   Genres = Genres?.replace(/, Webtoon|, Manhwa|^Manhwa, |^Webtoon, |^Webtoon|^Manhwa/gi, "");
 
-  const Path = `/mnt/5TBHDD/${isAdult ? "R18/webtoon" : "mangas"}/${Name}`;
+  const Path = `/mnt/5TBHDD/${IsAdult ? "R18/webtoon" : "mangas"}/${Name}`;
 
   try {
     let folder = await db.folder.findOne({
       where: { Name, FilesType: "mangas" },
     });
+
+    console.log("found", folder?.Path);
 
     if (!folder) {
       let directory = await db.directory.findOne({
