@@ -27,8 +27,8 @@
       <h3>Add <strong>{Name}</strong> To Directories</h3>
     </div>
     <div class="modal-body">
-      <Select labelWidth="80px" mb="10px" item={values} key="Type" {options} />
-      <CheckBox labelWidth="80px" mb="10px" label="Is Adult" key="IsAdult" item={values} />
+      <Select item={values} key="Type" {options} />
+      <CheckBox label="Is Adult" key="IsAdult" item={values} />
     </div>
     <div class="modal-footer">
       <button class="btn" on:click={hideModal}>Cancel</button>
@@ -48,5 +48,11 @@
   strong {
     color: black;
     font-size: 16px;
+  }
+  :global(.input-label) {
+    width: 120px;
+  }
+  :global(.input-control) {
+    margin-bottom: 5px;
   }
 </style>

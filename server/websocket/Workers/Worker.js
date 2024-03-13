@@ -68,7 +68,6 @@ const downloadLinks = async (link, page) => {
   try {
     await page.goto(link.Url, { waitUntil: "domcontentloaded" });
     await page.waitForSelector(Server.Chapters, { timeout: 60000 });
-    console.log("ch loaded");
   } catch (error) {
     sendMessage({ text: `Could not open URL: ${link.Url}`, color: "red", error });
     return;
@@ -83,11 +82,9 @@ const downloadLinks = async (link, page) => {
 
   await updateLastChapter(manga, link);
 
-  const Path = `/mnt/5TBHDD/${isAdult ? "R18/webtoon" : "mangas"}`;
-
   manga.Server = Server.Name;
 
-  let folder = await findOrCreateFolder(Path, manga, isAdult);
+  let folder = await findOrCreateFolder(manga, isAdult);
 
   const mangaDir = path.join(basePath, isAdult ? path.join("R18", "webtoon") : "mangas", folder.Name);
   let files = await createFolderCover(mangaDir, manga, imgPath, page);
