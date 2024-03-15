@@ -82,7 +82,7 @@ const downloadLinks = async (link, page) => {
 
   await updateLastChapter(manga, link);
 
-  manga.Server = Server.Name;
+  manga.Server = link.Url;
 
   let folder = await findOrCreateFolder(manga, isAdult);
 

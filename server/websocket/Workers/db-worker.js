@@ -21,7 +21,7 @@ export const findFolder = async (Name) => {
 
 export const findOrCreateFolder = async (manga, IsAdult) => {
   let { Name, Description, Genres, AltName, Status, Server, Author } = manga;
-  Genres = Genres?.replace(/, Webtoon|, Manhwa|^Manhwa, |^Webtoon, |^Webtoon|^Manhwa/gi, "");
+  Genres = Genres?.replace(/(, |)Webtoon(, |)/gi, "");
 
   const Path = `/mnt/5TBHDD/${IsAdult ? "R18/webtoon" : "mangas"}/${Name}`;
 
