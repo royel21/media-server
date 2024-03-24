@@ -4,26 +4,32 @@ import db from "../models/index.js";
 import fs from "fs";
 
 import { qryCurrentPos } from "./query-helper.js";
-import { literal } from "sequelize";
+import { Op, literal } from "sequelize";
 
 const routes = Router();
 
 const getFiles = async ({ user, body }, res, type) => {
-  let table = await db[type].findOne({
-    order: [literal(`REPLACE(REPLACE(Files.Name, "-", "0"), "[","0") ASC`)],
-    where: { Id: body.id },
-    include: {
-      model: db.file,
-      attributes: ["Id", "Name", "Type", "Duration", "FolderId", qryCurrentPos(user, "Files")],
-    },
+  const folder = await db.folder.findOne({
+    where: { Id: body.id, IsAdult: { [Op.lte]: user.AdultPass } },
+    attributes: ["Name", "Genres"],
   });
+  if (folder) {
+    let table = await db[type].findOne({
+      order: [literal(`REPLACE(REPLACE(Files.Name, "-", "0"), "[","0") ASC`)],
+      where: { Id: body.id },
+      include: {
+        model: db.file,
+        attributes: ["Id", "Name", "Type", "Duration", "FolderId", qryCurrentPos(user, "Files")],
+      },
+    });
+    return res.send({
+      Name: folder.Name,
+      isManhwa: !/Manga/i.test(folder.Genres),
+      files: table.Files.map((d) => ({ ...d.dataValues })),
+    });
+  }
 
-  const folder = await db.folder.findOne({ where: { Id: body.id }, attributes: ["Name", "Genres"] });
-  res.send({
-    Name: folder.Name,
-    isManhwa: !/Manga/i.test(folder.Genres),
-    files: table.Files.map((d) => ({ ...d.dataValues })),
-  });
+  return res.send({ files: [], Name: "", isManhwa: false });
 };
 
 routes.post("/folder/", (req, res) => {
@@ -37,7 +43,7 @@ routes.post("/favorites/", (req, res) => {
 routes.get("/video/:id", async (req, res) => {
   const file = await db.file.findOne({
     attributes: ["Id", "Name", "Size"],
-    where: { Id: req.params.id },
+    where: { Id: req.params.id, IsAdult: { [Op.lte]: req.user.AdultPass } },
     include: { model: db.folder },
   });
 

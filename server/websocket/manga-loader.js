@@ -1,13 +1,14 @@
 import StreamZip from "node-stream-zip";
 import db from "../models/index.js";
+import { Op } from "sequelize";
 
-const loadZipImages = async (data, socket) => {
+const loadZipImages = async (data, socket, user) => {
   let { Id, indices } = data;
 
   let file = await db.file.findOne({
     attributes: ["Id", "Name"],
     where: { Id },
-    include: { model: db.folder },
+    include: { model: db.folder, where: { IsAdult: { [Op.lte]: user.AdultPass } }, required: true },
   });
 
   if (file && file.Exists) {

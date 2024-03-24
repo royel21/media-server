@@ -45,8 +45,8 @@ export default async (server, sessionMeddle) => {
         socket.on("file-update-pos", (data) => userUpdate.updateFilePos(data, user));
         socket.on("recent-folder", (data) => userUpdate.recentFolder(data, user));
         socket.on("video-config", (data) => userUpdate.updateConfig(data, user));
-        socket.on("loadzip-image", (data) => mloader.loadZipImages(data, socket));
         socket.on("reset-recent", (data) => FileManager.resetRecent(data, user));
+        socket.on("loadzip-image", (data) => mloader.loadZipImages(data, socket, user.dataValues));
       }
       socket.on("remove-file", FileManager.removeFile);
 
