@@ -78,13 +78,15 @@ const downloadLinks = async (link, page) => {
 
   const { Name } = manga;
 
-  manga.data = manga.data.filter(removeRaw(manga.data));
-
-  await updateLastChapter(manga, link);
-
   manga.Server = link.Url;
 
   let folder = await findOrCreateFolder(manga, isAdult);
+
+  const exclude = await db.Exclude.findAll({ where: { LinkName: folder.Name } });
+
+  manga.data = manga.data.filter(removeRaw(manga.data)).filter((f) => !exclude.find((ex) => f.name.includes(ex.Name)));
+
+  await updateLastChapter(manga, link);
 
   let files = await createFolderCover(folder.Path, manga, imgPath, page);
 
@@ -102,8 +104,6 @@ const downloadLinks = async (link, page) => {
   data.sort((a, b) => a.name.localeCompare(b.name));
 
   let count = 0;
-
-  const exclude = await db.Exclude.findAll({ where: { LinkName: folder.Name } });
   for (let d of data) {
     if (link.Raw) {
       d.name = d.name + " raw";
@@ -111,9 +111,7 @@ const downloadLinks = async (link, page) => {
     if (state.stopped) break;
     try {
       ++count;
-      if (!exclude.find((ex) => d.name.includes(ex.Name))) {
-        await downloadLink(d, page, Server, folder, `${count}/${data.length}`, link.IsAdult, state);
-      }
+      await downloadLink(d, page, Server, folder, `${count}/${data.length}`, link.IsAdult, state);
     } catch (error) {
       sendMessage({ text: `chapter ${Name} - ${d.name} navigation error`, error });
     }

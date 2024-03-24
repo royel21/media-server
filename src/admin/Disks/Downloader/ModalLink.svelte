@@ -6,7 +6,7 @@
   import apiUtils from "src/apiUtils";
 
   export let hide;
-  let link = { Name: "", AltName: "", IsAdult: false, Url: "" };
+  let link = { Name: "", AltName: "", IsAdult: false, Url: "", Raw: false };
   let error = "";
   let ref;
 

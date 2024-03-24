@@ -88,7 +88,7 @@ const validRegex =
   /\/\/(aquamanga.com|bato.to)|\/(manga|manga-hentai|hentai|manhua|comic|manhwa(-raw|)|webtoon|bato|\/series\/\d+\/)\//;
 
 routes.post("/add-link", async ({ body }, res) => {
-  const { IsAdult, Url, Name, AltName } = body;
+  const { IsAdult, Url, Name, AltName, Raw } = body;
   const result = { valid: false };
   if (validRegex.test(Url) || !/=/.test(Url)) {
     const { url, serverName } = formatLink(body.Url);
@@ -101,8 +101,9 @@ routes.post("/add-link", async ({ body }, res) => {
         ServerId: server.Id,
         Name,
         AltName,
-        IsAdult: IsAdult || server.Type === "Manga" ? false : true,
+        IsAdult: IsAdult,
         Date: new Date(),
+        Raw,
       });
       result.valid = true;
     } catch (error) {
