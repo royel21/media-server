@@ -171,7 +171,7 @@ export const adultEvalPage = async (query) => {
   let title = document.querySelector(query.Title).innerText.trim();
   let Name = title
     .replace("( Renta black and white comic Version)", "")
-    .replace(/:|\?|\*|<|>|"| Webtoon| \(Acera\)\n|\n|\t|“|^,/gi, "")
+    .replace(/:|\?|\*|<|>|"| Webtoon| \(Acera\)\n|\n|\t|“|^,|\//gi, "")
     .replace(/(\.)+$/, "")
     .replace(/”( |)/g, ", ")
     .replace(/^(18\+|(ENDED|END)(\.|)+|ONGOING|ON GOING|HOT|NEW)/, "")
@@ -322,13 +322,13 @@ export const adultEvalPage = async (query) => {
     let fileName = text
       .replace("  ", " ")
       .trim()
-      .replace(/( )+/g, " ")
       .replace(
         /^ |vol.\d+ |volume \d+ |season \d+|(chapter|chap|ch|Capítulo|Episodio|episode|part)( | - |-|\.)|\||\/|:|\?|\^|"|\*|<|>|\t|\n/gi,
         ""
       )
       .replace(/(\.)+$/, "")
       .replace(/\./gi, "-")
+      .replace(/( )+/g, " ")
       .trim();
 
     const season = text.match(/^Season \d+/i);

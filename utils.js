@@ -61,15 +61,19 @@ import db from "./server/models/index.js";
 //   compressDirs,
 // };
 const reset = async () => {
-  const folders = await db.folder.findAll({ where: { DirectoryId: "QXSlHW", Genres: { [db.Op.like]: "% Manga%" } } });
-  for (const folder of folders) {
-    const nPath = folder.Path.replace("webtoon", "Mangas");
-    fs.moveSync(folder.Path, nPath);
-    folder.DirectoryId = "q8ffmV";
-    folder.Path = nPath;
-    await folder.save();
-    console.log(nPath);
-  }
+  // const folders = await db.folder.findAll({ where: { DirectoryId: "QXSlHW", Genres: { [db.Op.like]: "% Manga%" } } });
+  // for (const folder of folders) {
+  //   const nPath = folder.Path.replace("webtoon", "Mangas");
+  //   fs.moveSync(folder.Path, nPath);
+  //   folder.DirectoryId = "q8ffmV";
+  //   folder.Path = nPath;
+  //   await folder.save();
+  //   console.log(nPath);
+  // }
+  const name =
+    "Hitori H yori Kimochii Koto Oshieteageru / I'll tell you what feels better than having sex by yourself.";
+  console.log(name.replace(/ \//i, ""));
+  console.log(name);
   process.exit();
 };
 reset();
