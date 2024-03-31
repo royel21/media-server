@@ -6,7 +6,7 @@
   import apiUtils from "src/apiUtils";
 
   export let hide;
-  let link = { Name: "", AltName: "", IsAdult: false, Url: "", Raw: false };
+  let link = { Name: "", AltName: "", Url: "", Raw: false };
   let error = "";
   let ref;
 
@@ -33,6 +33,7 @@
   });
   //[Matsuzaka Takeshi] Junshin Musume
   //[Matsusaka Takeshi] Junshin Musume
+  console.log(link);
 </script>
 
 <div bind:this={ref} class="modal-container" on:keydown={onKeyDown} tabindex="-1">

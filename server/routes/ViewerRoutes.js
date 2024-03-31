@@ -24,7 +24,7 @@ const getFiles = async ({ user, body }, res, type) => {
     });
     return res.send({
       Name: folder.Name,
-      isManhwa: !/Manga/i.test(folder.Genres),
+      isManhwa: !/Manhwa|Webtoon/i.test(folder.Genres),
       files: table.Files.map((d) => ({ ...d.dataValues })),
     });
   }
