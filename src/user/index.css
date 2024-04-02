@@ -64,7 +64,7 @@ button:active {
   justify-content: center;
   outline: none;
   background-color: transparent;
-  width: 220px;
+  width: 250px;
   min-width: 195px;
   transition: 0.2s all;
   margin: 10px 0;
@@ -78,7 +78,7 @@ button:active {
 .file-info {
   position: relative;
   text-align: center;
-  width: calc(100% - 10px);
+  width: calc(100% - 20px);
   height: 310px;
   min-height: 310px;
   background-color: #343a40fc;
@@ -173,6 +173,7 @@ img[alt]:after {
 .file-name {
   position: relative;
   text-align: center;
+  padding: 0 5px;
 }
 
 .file-name:hover,

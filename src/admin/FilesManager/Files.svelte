@@ -87,7 +87,6 @@
   };
 
   const handleSubmit = ({ detail: { target } }) => {
-    console.log(target);
     if (modalType.Del) {
       let Del = target.querySelector("input").checked;
       socket.emit("remove-file", { Id: file.Id, Del });
