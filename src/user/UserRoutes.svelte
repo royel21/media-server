@@ -22,8 +22,8 @@
     { title: "Favorites", path: "/favorites", class: "heart" },
   ];
 
-  let dirs = { selected: {}, Mangas: [] };
   const User = getContext("User");
+  let dirs = { selected: {}, Mangas: [], Favorites: User.favorites };
 
   FavoritesStores.set(User.favorites);
 
@@ -36,6 +36,7 @@
 
   document.title = "Home";
   $: setConfig(User.username);
+  $: dirs.Favorites = $FavoritesStores;
 </script>
 
 <Router>
