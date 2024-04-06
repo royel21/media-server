@@ -4,7 +4,7 @@ import { saveId } from "../Component/fileEvents";
 
 const isMobile = window.innerWidth < 501;
 const scrollW = isMobile ? 0 : 15;
-const itemW = isMobile ? 204 : 220;
+const itemW = isMobile ? 204 : 250;
 
 export const FileTypes = {
   Manga: {
