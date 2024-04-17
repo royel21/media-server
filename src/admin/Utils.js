@@ -5,9 +5,18 @@ export const calRows = (query) => {
 
 export const validGenres = (g) => {
   return g
-    .split(", ")
+    .split(/(,|\/|\n)/g)
+    .filter((g) => g)
     .map((ge) => (/school/i.test(ge) ? "School Life" : ge.trim()))
     .sort()
+    .join(", ");
+};
+
+export const validateAuthor = (auth) => {
+  return auth
+    .split(/\/|,|;/)
+    .map((a) => a.trim())
+    .filter((a) => a)
     .join(", ");
 };
 

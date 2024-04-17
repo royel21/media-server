@@ -1,23 +1,24 @@
 <script>
-  import { onMount, getContext } from "svelte";
+  import { getContext } from "svelte";
   import apiUtils from "src/apiUtils";
   import CheckBox from "../Component/CheckBox.svelte";
   import Select from "../Component/Select.svelte";
   import TextAreaInput from "../Component/TextAreaInput.svelte";
   import Input from "../Component/Input.svelte";
-  import { validGenres } from "../Utils";
+  import { validGenres, validateAuthor } from "../Utils";
 
   export let folderId;
   export let Name;
   let hasChanges = false;
   let error = "";
   const socket = getContext("socket");
-  let folder = { Name };
+  let folder = { Id: folderId, Name };
 
   let options = [];
 
   const loadDetails = async (Id, Name) => {
     folder.Name = Name;
+    folder.Id = Id;
     const data = await apiUtils.admin(["folders", "folder", Id]);
     folder.Description = data.Description;
     folder.Genres = data.Genres;
@@ -28,10 +29,15 @@
     options = data.dirs.map((d) => ({ Id: d.Id, Name: d.FullPath }));
   };
 
-  const onChange = ({ target: { name, value, checked, type } }) => {
-    if (type === "checkbox") value = checked;
-    if (name === "Genres") value = validGenres(value);
-    folder[name] = value;
+  const onChange = ({ target: { name, value } }) => {
+    if (name === "Genres") {
+      folder[name] = validGenres(value);
+    }
+
+    if(name === "Author"){
+      folder[name] = validateAuthor(value);
+    }
+
     hasChanges = true;
   };
 
@@ -53,13 +59,13 @@
     <TextAreaInput file={folder} key="Name" style="margin-bottom: 5px" rows="3" focus={true} {onChange} />
     <TextAreaInput file={folder} key="AltName" style="margin-bottom: 5px" rows="3" {onChange} />
     <TextAreaInput file={folder} key="Genres" style="margin-bottom: 5px" rows="2" {onChange} />
-    <TextAreaInput file={folder} key="Description" rows="4" />
-    <Input key="Author" item={folder} />
-    <CheckBox label="Completed" key="Status" item={folder} my="5px" />
-    <CheckBox label="Is Adult" key="IsAdult" item={folder} />
+    <TextAreaInput file={folder} key="Description" rows="4" {onChange} />
+    <Input key="Author" item={folder} {onChange} />
+    <CheckBox label="Completed" key="Status" item={folder} my="5px" {onChange} />
+    <CheckBox label="Is Adult" key="IsAdult" item={folder} {onChange} />
     <CheckBox mt="5px" key="Transfer" item={folder} {onChange} />
     {#if folder.Transfer}
-      <Select label="Directories" mt="5px" key="DirectoryId" {options} item={folder} />
+      <Select label="Directories" mt="5px" key="DirectoryId" {options} item={folder} {onChange} />
     {/if}
   </div>
 </div>

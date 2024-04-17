@@ -13,7 +13,7 @@
   <span class="input-label">{label || key}</span>
   <label class="input">
     <Icons name={item[key] ? "check" : "times"} color="black" />
-    <input type="checkbox" bind:checked={item[key]} on:change={onChange} />
+    <input name={key} type="checkbox" bind:checked={item[key]} on:change={onChange} />
   </label>
 </div>
 
