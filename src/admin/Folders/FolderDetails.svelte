@@ -34,7 +34,7 @@
       folder[name] = validGenres(value);
     }
 
-    if(name === "Author"){
+    if (name === "Author") {
       folder[name] = validateAuthor(value);
     }
 
@@ -69,9 +69,11 @@
     {/if}
   </div>
 </div>
-<div class="d-buttons">
-  <button type="button" class="btn" class:primary={hasChanges} on:click={save}>Save</button>
-</div>
+{#if hasChanges}
+  <div class="d-buttons">
+    <button type="button" class="btn primary" on:click={save}>Save</button>
+  </div>
+{/if}
 
 <style>
   .detail {
