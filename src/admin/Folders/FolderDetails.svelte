@@ -20,7 +20,10 @@
   const loadDetails = async (Id, Name) => {
     folder.Name = Name;
     folder.Id = Id;
+    imageData.Id = Id;
     const data = await apiUtils.admin(["folders", "folder", Id]);
+    if (!data.dirs) return;
+
     folder.Description = data.Description;
     folder.Genres = data.Genres;
     folder.AltName = data.AltName;
@@ -28,7 +31,6 @@
     folder.DirectoryId = data.DirectoryId;
     folder.Author = data.Author;
     folder.Status = data.Status;
-    imageData.Id = Id;
     options = data.dirs.map((d) => ({ Id: d.Id, Name: d.FullPath }));
   };
 
@@ -80,7 +82,7 @@
     {/if}
   </div>
 </div>
-{#if hasChanges}
+{#if hasChanges || imageData.Url}
   <div class="d-buttons">
     <button type="button" class="btn primary" on:click={save}>Save</button>
   </div>
