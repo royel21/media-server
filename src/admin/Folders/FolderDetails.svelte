@@ -13,6 +13,7 @@
   let error = "";
   const socket = getContext("socket");
   let folder = { Id: folderId, Name };
+  let imageData = { Id: "", Url: "" };
 
   let options = [];
 
@@ -26,6 +27,8 @@
     folder.IsAdult = data.IsAdult;
     folder.DirectoryId = data.DirectoryId;
     folder.Author = data.Author;
+    folder.Status = data.Status;
+    imageData.Id = Id;
     options = data.dirs.map((d) => ({ Id: d.Id, Name: d.FullPath }));
   };
 
@@ -41,13 +44,20 @@
     hasChanges = true;
   };
 
-  const save = () => {
-    if (!folder.Name) {
-      return (error = "Name Can't be empty");
+  const save = async () => {
+    if (imageData.Url && /^http/.test(imageData.Url)) {
+      await apiUtils.post("admin/folders/image", imageData);
+      imageData.Url = "";
     }
 
-    socket.emit("rename-folder", folder);
-    hasChanges = false;
+    if (hasChanges) {
+      if (!folder.Name) {
+        return (error = "Name Can't be empty");
+      }
+
+      socket.emit("rename-folder", folder);
+      hasChanges = false;
+    }
   };
 
   $: loadDetails(folderId, Name);
@@ -64,6 +74,7 @@
     <CheckBox label="Completed" key="Status" item={folder} my="5px" {onChange} />
     <CheckBox label="Is Adult" key="IsAdult" item={folder} {onChange} />
     <CheckBox mt="5px" key="Transfer" item={folder} {onChange} />
+    <Input key="Url" item={imageData} />
     {#if folder.Transfer}
       <Select label="Directories" mt="5px" key="DirectoryId" {options} item={folder} {onChange} />
     {/if}

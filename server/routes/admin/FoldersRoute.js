@@ -168,6 +168,7 @@ routes.get("/folder/:folderId?", async (req, res) => {
     IsAdult: folder?.IsAdult,
     DirectoryId: folder?.DirectoryId,
     Author: folder?.Author,
+    Status: folder.Status,
     dirs,
   });
 });
