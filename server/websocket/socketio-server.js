@@ -42,15 +42,17 @@ export default async (server, sessionMeddle) => {
         socket.on("clean-images", FileManager.cleanImagesDir);
         socket.on("backup-db", FileManager.onBackup);
         socket.on("download-server", download);
-        socket.on("update-server", () => {
+        socket.on("update-server", ({ reload }) => {
           console.log("build");
-          exec("yarn build-linux", (err, stdout, stderr) => {
+          exec("yarn build-linux", (err) => {
             if (err) {
               console.log("error-build", err);
               return;
             }
-            console.log(`stdout: ${stdout}`);
-            console.log(`stderr: ${stderr}`);
+            if (reload) {
+              console.log("reloadig server");
+              exec("pm2 restart all");
+            }
           });
         });
       } else {

@@ -34,6 +34,9 @@
   const onUpdateServer = () => {
     socket.emit("update-server", {});
   };
+  const rebuildAndReload = () => {
+    socket.emit("update-server", { reload: true });
+  };
 
   onMount(async () => {
     reload();
@@ -50,6 +53,7 @@
     <button class="btn" on:click={onBackup}>Create Backup</button>
     <button class="btn" on:click={onCleanImages}>Clean Orfan Images</button>
     <button class="btn" on:click={onUpdateServer}>Update Server</button>
+    <button class="btn" on:click={rebuildAndReload}>Build And Reload Server</button>
   </div>
   <div class="data-table">
     <table class="table table-dark table-hover table-bordered">
