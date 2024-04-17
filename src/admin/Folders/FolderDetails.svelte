@@ -76,7 +76,7 @@
     <CheckBox label="Completed" key="Status" item={folder} my="5px" {onChange} />
     <CheckBox label="Is Adult" key="IsAdult" item={folder} {onChange} />
     <CheckBox mt="5px" key="Transfer" item={folder} {onChange} />
-    <Input key="Url" item={imageData} />
+    <Input key="Image Url" item={imageData} />
     {#if folder.Transfer}
       <Select label="Directories" mt="5px" key="DirectoryId" {options} item={folder} {onChange} />
     {/if}
