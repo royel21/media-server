@@ -55,7 +55,7 @@
       totalPages = data.totalPages;
       totalItems = data.totalItems;
       page = pg;
-      dispatch("folderid", folderId);
+      dispatch("folderid", tmp);
       navigate(`/admin/folders/${currentDir}/${pg}/${flt || ""}`);
     }
   };
@@ -79,7 +79,7 @@
 
     if (el.tagName === "LI") {
       folder = items.find((f) => f.Id === folderId);
-      dispatch("folderid", folderId);
+      dispatch("folderid", folder);
     }
   };
   const iconClick = (e) => {
@@ -203,6 +203,8 @@
 
 <ItemList
   title="Folders"
+  class="col-6"
+  id="l-folders"
   {folderId}
   {items}
   {page}

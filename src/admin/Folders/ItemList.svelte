@@ -3,6 +3,7 @@
   import Icons from "src/icons/Icons.svelte";
   import Filter from "src/ShareComponent/Filter.svelte";
   import Pagination from "src/ShareComponent/Pagination.svelte";
+  export let id;
   export let filter;
   export let title;
   export let items;
@@ -14,6 +15,8 @@
   export let showGenres = false;
   export let replaceImage;
   export let iconClick;
+  let clazz;
+  export { clazz as class };
 
   const addGenres = ({ target }) => {
     let Id = target.closest("li").id;
@@ -25,7 +28,7 @@
   };
 </script>
 
-<div id={title} class="file-list col-6">
+<div class={"file-list " + clazz}>
   <slot name="first-tag" />
   <div class="controls">
     <slot name="btn-controls" />
@@ -33,7 +36,7 @@
     <h4 class="text-center usn">{totalItems} <strong>- {title}</strong></h4>
     <slot name="btn-ctr-last" />
   </div>
-  <div class="list-container">
+  <div class="list-container" {id}>
     <ul class="list-group text-dark">
       {#if items.length < 1}
         <li class="list-group-item empty-list">{`Not ${title} Found`}</li>
@@ -69,10 +72,10 @@
                   {/if}
                 </span>
               {/if}
+            {:else}
+              <span on:keydown class="edit" on:click={iconClick}><Icons name="edit" /></span>
             {/if}
-            <span on:keydown class="edit" on:click={iconClick}><Icons name="edit" /></span>
             <span on:keydown class="trash" on:click={iconClick}><Icons name="trash" box="0 0 420 512" /></span>
-
             {Name}
             <slot name="item-slot" item={Id} />
           </li>
@@ -111,8 +114,11 @@
   }
 
   .list-container {
-    height: calc(100% - 80px);
-    overflow-y: auto;
+    height: calc(100% - 85px);
+    overflow-y: hidden;
+    background-color: white;
+    border-radius: 5px;
+    margin-bottom: 5px;
   }
   .controls {
     position: initial;
@@ -129,11 +135,7 @@
     flex-grow: 1;
     position: relative;
     width: 50%;
-    padding: 0 15px;
-  }
-  #Files {
-    border-left: 1px solid;
-    width: 30%;
+    padding: 0 10px;
   }
   .list-controls {
     display: flex;

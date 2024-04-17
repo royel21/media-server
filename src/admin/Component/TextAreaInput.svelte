@@ -40,4 +40,7 @@
     border-top-right-radius: 0;
     border-bottom-left-radius: 0.25rem;
   }
+  textarea {
+    resize: vertical;
+  }
 </style>

@@ -416,7 +416,10 @@
     .d-controls {
       padding-bottom: 10px;
     }
-    .btns {
+    .d-items {
+      display: none;
+    }
+    .btns span:not(.btn-add, .btn-stop) {
       display: none;
     }
   }

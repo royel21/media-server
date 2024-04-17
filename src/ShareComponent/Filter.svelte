@@ -77,7 +77,7 @@
   }
   @media screen and (max-width: 600px) {
     #filter-control {
-      width: 200px;
+      width: 220px;
     }
   }
 </style>

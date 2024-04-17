@@ -25,7 +25,7 @@
 
   const loadFiles = async (pg) => {
     if (folderId) {
-      let rows = calRows(".list-container");
+      let rows = calRows("#l-files");
       let data = await apiUtils.admin(["folders", "files", folderId, pg, rows, encodeURIComponent(filter)]);
 
       if (data.items) {
@@ -154,6 +154,7 @@
 
 <ItemList
   title="Files"
+  id="l-files"
   folderId=""
   {items}
   {page}

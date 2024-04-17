@@ -52,7 +52,7 @@
   .admin-manager {
     position: relative;
     height: 100%;
-    padding-top: 5px;
+    padding: 10px 0 0;
   }
   .disk-controls {
     border-bottom: 1px solid;
