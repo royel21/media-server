@@ -1,6 +1,5 @@
 export const calRows = (query) => {
   let container = document.querySelector(query || ".list-container") || {};
-  console.log(parseInt(container.offsetHeight / 40), container.offsetHeight / 40, container.offsetHeight, 40);
   return parseInt(container.offsetHeight / 40);
 };
 
