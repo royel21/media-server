@@ -17,6 +17,7 @@
   const restoreBackup = ({ target }) => {
     const bckp = target.closest("tr").id;
   };
+
   const removeBackup = async ({ target }) => {
     const backup = target.closest("tr").id;
     const result = await apiUtils.post("admin/directories/rm-backup", { backup });
@@ -28,6 +29,10 @@
   const reload = async () => {
     const result = await apiUtils.get(["admin", "directories", "backups"]);
     backups = result.sort().reverse();
+  };
+
+  const onUpdateServer = () => {
+    socket.emit("update-server", {});
   };
 
   onMount(async () => {
@@ -44,6 +49,7 @@
   <div>
     <button class="btn" on:click={onBackup}>Create Backup</button>
     <button class="btn" on:click={onCleanImages}>Clean Orfan Images</button>
+    <button class="btn" on:click={onUpdateServer}>Update Server</button>
   </div>
   <div class="data-table">
     <table class="table table-dark table-hover table-bordered">

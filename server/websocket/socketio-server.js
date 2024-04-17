@@ -6,6 +6,7 @@ import { Server } from "socket.io";
 import db from "../models/index.js";
 import { download } from "./downloader.js";
 import dmDB from "./Models/index.js";
+import { exec } from "node:child_process";
 
 export default async (server, sessionMeddle) => {
   await dmDB.init();
@@ -41,6 +42,17 @@ export default async (server, sessionMeddle) => {
         socket.on("clean-images", FileManager.cleanImagesDir);
         socket.on("backup-db", FileManager.onBackup);
         socket.on("download-server", download);
+        socket.on("update-server", () => {
+          console.log("build");
+          exec("yarn build-linux", (err, stdout, stderr) => {
+            if (err) {
+              console.log("error-build", err);
+              return;
+            }
+            console.log(`stdout: ${stdout}`);
+            console.log(`stderr: ${stderr}`);
+          });
+        });
       } else {
         socket.on("file-update-pos", (data) => userUpdate.updateFilePos(data, user));
         socket.on("recent-folder", (data) => userUpdate.recentFolder(data, user));
