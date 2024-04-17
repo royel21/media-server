@@ -8,7 +8,6 @@
   import { validGenres } from "../Utils";
 
   export let folderId;
-  export let modalType;
   export let Name;
   let hasChanges = false;
   let error = "";
@@ -36,13 +35,13 @@
     hasChanges = true;
   };
 
-  const save = (e) => {
-    folder.Name = tempFile.Name + tempFile.Ex;
+  const save = () => {
     if (!folder.Name) {
-      modalType.error = "Name Can't be empty";
-    } else {
-      socket.emit("rename-folder", folder);
+      return (error = "Name Can't be empty");
     }
+
+    socket.emit("rename-folder", folder);
+    hasChanges = false;
   };
 
   $: loadDetails(folderId, Name);
