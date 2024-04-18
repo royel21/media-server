@@ -13,7 +13,6 @@
   export let totalItems = 0;
   export let scanning = [];
   export let showGenres = false;
-  export let replaceImage;
   export let iconClick;
   let clazz;
   export { clazz as class };
@@ -54,9 +53,6 @@
             on:keydown
           >
             {#if Type.includes("Folder")}
-              <span on:click={() => replaceImage(Id)} on:keydown
-                ><Icons name="file" color="red" box="0 0 420 512" /></span
-              >
               <span class="sync" on:click={iconClick} on:keydown>
                 <Icons name="sync" box="0 0 512 512" class={scanning.includes(Id) || Scanning ? "icon-spin" : ""} />
               </span>

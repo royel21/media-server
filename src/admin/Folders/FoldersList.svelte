@@ -214,7 +214,6 @@
   {scanning}
   {showGenres}
   {onShowImage}
-  {replaceImage}
   {iconClick}
   on:filter={onFilter}
   on:gotopage={gotopage}
