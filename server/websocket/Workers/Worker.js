@@ -105,7 +105,7 @@ const downloadLinks = async (link, page) => {
 
   let count = 0;
   for (let d of data) {
-    if (link.Raw) {
+    if (link.Raw && !/ raw$/i.test(d.name)) {
       d.name = d.name + " raw";
     }
     if (state.stopped) break;

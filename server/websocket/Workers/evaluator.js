@@ -230,6 +230,10 @@ export const adultEvalPage = async (query) => {
       .map((d) => d.replace("(W)", "").trim())
       .filter((d) => d && !/Adulto/i.test(d))
       .map((d) => genres.add(d));
+
+    if (query.Raw) {
+      parts.push("Raw");
+    }
     return capitalize([...genres].sort().join(", "));
   };
 
