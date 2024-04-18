@@ -13,6 +13,9 @@
 
   let logout = getContext("logout");
   let user = getContext("User");
+  let socket = getContext("socket");
+  let message = "";
+  let toastRef;
 
   const navItems = [
     { title: "Users", path: "/admin/", class: "users", color: "rgb(37, 140, 209)" },
@@ -32,10 +35,28 @@
     },
   ];
 
+  const hideMessage = () => {
+    toastRef.style.top = "-20px";
+    toastRef.style.opacity = -0;
+  };
+
+  const onMessege = (data) => {
+    toastRef.style.top = "80px";
+    toastRef.style.opacity = 1;
+    setTimeout(hideMessage, 3500);
+    message = data;
+  };
+
+  socket.off("rebuild-message", onMessege);
+  socket.on("rebuild-message", onMessege);
+
   document.title = "Content Manager";
 </script>
 
 <Router>
+  <div class="toast-container">
+    <span bind:this={toastRef} class="toast" on:click={hideMessage}>{message}</span>
+  </div>
   <Navbar on:click {navItems}>
     <span id="admin-label" on:click={logout} slot="user" title="Log Out" on:keydown>
       <Icons name="signout" />
@@ -66,6 +87,22 @@
     height: calc(100% - 37px);
     padding: 10px;
     overflow-x: auto;
+  }
+  .toast-container {
+    position: fixed;
+    top: 0;
+    text-align: center;
+    width: 100%;
+    z-index: 999;
+  }
+  .toast {
+    position: absolute;
+    top: -20px;
+    background-color: rgb(58, 119, 172);
+    padding: 2px 5px;
+    border-radius: 0.25rem;
+    opacity: 0;
+    transition: all 0.3s;
   }
   @media screen and (max-width: 600px) {
     .content {

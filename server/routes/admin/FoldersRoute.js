@@ -62,9 +62,10 @@ const { IMAGES } = process.env;
 
 routes.post("/image", async (req, res) => {
   const folder = await db.folder.findOne({ where: { Id: req.body.Id } });
+
   if (folder) {
     try {
-      const result = await axios.get(req.body.url, {
+      const result = await axios.get(req.body.Url, {
         responseType: "arraybuffer",
       });
       if (result.data) {
@@ -160,14 +161,17 @@ routes.post("/folder-create", async (req, res) => {
 
 routes.get("/folder/:folderId?", async (req, res) => {
   const folder = await db.folder.findOne({ where: { Id: req.params.folderId || "" } });
+  if (!folder) return res.send({});
+
   const dirs = await db.directory.findAll({ order: ["Name"] });
+
   res.send({
-    Description: folder?.Description,
-    Genres: folder?.Genres,
-    AltName: folder?.AltName,
-    IsAdult: folder?.IsAdult,
-    DirectoryId: folder?.DirectoryId,
-    Author: folder?.Author,
+    Description: folder.Description,
+    Genres: folder.Genres,
+    AltName: folder.AltName,
+    IsAdult: folder.IsAdult,
+    DirectoryId: folder.DirectoryId,
+    Author: folder.Author,
     Status: folder.Status,
     dirs,
   });

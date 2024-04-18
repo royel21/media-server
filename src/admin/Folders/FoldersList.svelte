@@ -142,12 +142,8 @@
 
   const onFolderRemove = (data) => {
     if (data.success && data.Id) {
-      if (items.length === 1 && totalPages > 1) {
-        loadFolders(page - 1);
-      } else {
-        loadFolders(page);
-      }
-
+      let isLast = items.length === 1 && totalPages > 1;
+      loadFolders(isLast ? page - 1 : page);
       hideModal();
     }
   };
@@ -159,10 +155,6 @@
   const changeDir = ({ target: { value } }) => {
     currentDir = value;
     loadFolders(1, value);
-  };
-
-  const replaceImage = (Id) => {
-    showReplace = Id;
   };
 
   const socketEvents = [

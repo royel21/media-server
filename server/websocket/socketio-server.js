@@ -43,8 +43,9 @@ export default async (server, sessionMeddle) => {
         socket.on("backup-db", FileManager.onBackup);
         socket.on("download-server", download);
         socket.on("update-server", ({ reload }) => {
-          console.log("build");
-          exec("yarn build-linux", (err) => {
+          socket.emit("rebuild-message", "Rebuilding App - Please Wait");
+          exec("yarn build-linux", (err, stdout) => {
+            console.log("build", reload);
             if (err) {
               console.log("error-build", err);
               return;
@@ -53,6 +54,8 @@ export default async (server, sessionMeddle) => {
               console.log("reloadig server");
               exec("pm2 restart all");
             }
+            console.log(`stdout: ${stdout}`);
+            socket.emit("rebuild-message", "Finish Building App - Reload");
           });
         });
       } else {

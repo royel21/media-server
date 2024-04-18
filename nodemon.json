@@ -1,12 +1,12 @@
 {
-    "verbose": false,
+    "verbose": true,
     "ignore": [
         "./modules/*",
         "src/**/*",
         "./*.js",
         "./*.json",
         "./*.txt",
-        "./server/public/*/**",
+        "server/public/**/*",
         "./*.sqlite",
         "./*.db",
         "./backup/*"

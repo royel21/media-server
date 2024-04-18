@@ -10,8 +10,8 @@
   let shwFiles = true;
 
   const folderid = ({ detail }) => {
-    folderId = detail.Id;
-    Name = detail.Path.split(/\/|\\/).pop();
+    folderId = detail?.Id || "";
+    Name = detail?.Path.split(/\/|\\/).pop() || "";
   };
 
   const showFiles = () => {
