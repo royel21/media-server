@@ -31,6 +31,7 @@
   onMount(() => {
     ref?.focus();
   });
+  $: console.log(link);
 </script>
 
 <div bind:this={ref} class="modal-container" on:keydown={onKeyDown} tabindex="-1">

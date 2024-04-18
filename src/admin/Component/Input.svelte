@@ -12,6 +12,7 @@
     let text = await navigator.clipboard?.readText();
     if (text) {
       ref.value = text;
+      item[key] = text;
       ref.dispatchEvent(new Event("change"));
     }
   };
