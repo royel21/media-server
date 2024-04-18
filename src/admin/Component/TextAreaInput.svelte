@@ -13,10 +13,18 @@
   onMount(() => {
     if (ref && focus) ref.focus();
   });
+
+  const handler = async () => {
+    let text = await navigator.clipboard?.readText();
+    if (text) {
+      ref.value = text;
+      ref.dispatchEvent(new Event("change"));
+    }
+  };
 </script>
 
 <div class="input-control" {style}>
-  <div id="t-label" for="Name" class="input-label">{label || key}</div>
+  <div id="t-label" for="Name" class="input-label" on:click={handler}>{label || key}</div>
   <textarea bind:this={ref} name={key} class="input" {rows} bind:value={file[key]} on:change={onChange} />
 </div>
 
