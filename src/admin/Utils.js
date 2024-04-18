@@ -27,3 +27,11 @@ export const validateAuthor = (auth) => {
 };
 
 export const map = (val, min, max) => Math.min(Math.max(min, val), max);
+
+export const isDiff = (obj1, obj2) => {
+  for (const key of Object.keys(obj1)) {
+    if (obj1[key] !== obj2[key]) return true;
+  }
+
+  return false;
+};

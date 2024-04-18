@@ -5,7 +5,7 @@
   import Select from "../Component/Select.svelte";
   import TextAreaInput from "../Component/TextAreaInput.svelte";
   import Input from "../Component/Input.svelte";
-  import { validGenres, validateAuthor } from "../Utils";
+  import { isDiff, validGenres, validateAuthor } from "../Utils";
 
   export let folderId;
   export let Name;
@@ -14,6 +14,7 @@
   const socket = getContext("socket");
   let folder = {};
   let imageData = { Id: "", Url: "" };
+  let old = {};
 
   let options = [];
 
@@ -31,6 +32,7 @@
       folder.Author = data.Author;
       folder.Status = data.Status;
       options = data.dirs.map((d) => ({ Id: d.Id, Name: d.FullPath }));
+      old = { ...folder };
     }
   };
 
@@ -47,9 +49,10 @@
       value = checked;
     }
 
-    folder[name] = value;
+    folder[name] = value || null;
 
-    hasChanges = true;
+    hasChanges = isDiff(old, folder);
+    console.log(old, folder);
   };
   const onUrl = ({ target: { value } }) => (imageData.Url = value);
 
@@ -66,6 +69,7 @@
 
       socket.emit("rename-folder", folder);
       hasChanges = false;
+      old = { ...folder };
     }
   };
 
