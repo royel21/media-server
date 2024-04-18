@@ -4,9 +4,8 @@
   import apiUtils from "src/apiUtils";
   import CheckBox from "../Component/CheckBox.svelte";
   import Select from "../Component/Select.svelte";
-  import Input from "../Component/TextAreaInput.svelte";
+  import TextAreaInput from "../Component/TextAreaInput.svelte";
   import { validGenres } from "../Utils";
-  import e from "cors";
 
   export let error;
   export let ref = null;
@@ -20,7 +19,7 @@
     { Id: "videos", Name: "Videos" },
   ];
 
-  let file = { FilesType: "mangas" };
+  let file = { FilesType: "mangas", DirectoryId: "Select Directory" };
 
   let options = [];
 
@@ -48,11 +47,12 @@
     if (type === "checkbox") value = checked;
     if (name === "Genres") value = validGenres(value);
     file[name] = value;
+    console.log(name, file[name]);
   };
 
   onMount(async () => {
-    const data = await apiUtils.admin(["folders", "folder", ""]);
-    options = [{ Name: "Select Directory" }, ...data.dirs.map((d) => ({ Id: d.Id, Name: d.FullPath }))];
+    const data = await apiUtils.admin(["folders", "dirs"]);
+    options = [{ Name: "Select Directory" }, ...data.map((d) => ({ Id: d.Id, Name: d.FullPath }))];
   });
 
   const onKeyDown = (e) => {
@@ -67,10 +67,10 @@
     </div>
     <form bind:this={ref} action="#" on:submit|preventDefault={submit}>
       <div class="modal-body">
-        <Input {file} key="Name" style="margin-bottom: 5px" rows="3" focus={true} />
-        <Input {file} key="AltName" style="margin-bottom: 5px" rows="3" />
-        <Input {file} key="Genres" style="margin-bottom: 5px" rows="2" {onChange} />
-        <Input {file} key="Description" rows="4" />
+        <TextAreaInput {file} key="Name" style="margin-bottom: 5px" rows="3" focus={true} {onChange} />
+        <TextAreaInput {file} key="AltName" style="margin-bottom: 5px" rows="3" {onChange} />
+        <TextAreaInput {file} key="Genres" style="margin-bottom: 5px" rows="2" {onChange} />
+        <TextAreaInput {file} key="Description" rows="4" {onChange} />
         <CheckBox label="Completed" key="Status" item={file} my="5px" />
         <CheckBox label="Is Adult" key="IsAdult" item={file} />
         <Select label="Files Type" key="FilesType" mt="5px" options={types} item={file} />

@@ -15,6 +15,7 @@
   let folder = {};
   let imageData = { Id: "", Url: "" };
   let old = {};
+  let transfer = false;
 
   let options = [];
 
@@ -45,6 +46,10 @@
       value = validateAuthor(value);
     }
 
+    if (name === "DirectoryId") {
+      folder.Transfer = true;
+    }
+
     if (type === "checkbox") {
       value = checked;
     }
@@ -57,6 +62,11 @@
   const onUrl = ({ target: { value } }) => {
     imageData.Url = value;
     error = "";
+  };
+
+  const cancel = () => {
+    folder = { ...old };
+    hasChanges = false;
   };
 
   const save = async () => {
@@ -93,8 +103,8 @@
     <Input key="Author" item={folder} {onChange} />
     <CheckBox label="Completed" key="Status" item={folder} my="5px" {onChange} />
     <CheckBox label="Is Adult" key="IsAdult" item={folder} {onChange} />
-    <CheckBox mt="5px" key="Transfer" item={folder} {onChange} />
-    {#if folder.Transfer}
+    <CheckBox mt="5px" key="Transfer" onChange={() => (transfer = !transfer)} />
+    {#if transfer}
       <Select label="Directories" mt="5px" key="DirectoryId" {options} item={folder} {onChange} />
     {/if}
     <Input key="Url" item={imageData} onChange={onUrl} />
@@ -103,6 +113,7 @@
 {#if hasChanges || imageData.Url}
   <div class="d-buttons">
     <button type="button" class="btn primary" on:click={save}>Save</button>
+    <button type="button" class="btn" on:click={cancel}>Cancel</button>
   </div>
 {/if}
 

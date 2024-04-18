@@ -1,7 +1,7 @@
 <script>
   import Icons from "src/icons/Icons.svelte";
 
-  export let item;
+  export let item = {};
   export let key;
   export let label;
   let clazz;
