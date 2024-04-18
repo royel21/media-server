@@ -409,6 +409,7 @@
     .d-controls :global(#filter-control) {
       margin-right: 2px;
       max-width: 350px;
+      width: 250px;
     }
     .d-controls :global(.btn-filter) {
       padding: 0.3rem 0.2rem;

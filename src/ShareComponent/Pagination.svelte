@@ -177,5 +177,9 @@
       border-top-right-radius: 0.25rem;
       border-bottom-right-radius: 0.25rem;
     }
+    #pager li:not(.current-page) {
+      padding: 0 10px;
+      width: 30px;
+    }
   }
 </style>

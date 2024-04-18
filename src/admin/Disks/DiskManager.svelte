@@ -86,7 +86,7 @@
   .nav-link span {
     position: relative;
     top: -4px;
-    font-size: 16px;
+    font-size: 14px;
   }
   .nav input[type="radio"]:not(:checked) label:hover {
     background-color: #007bff27;

@@ -50,10 +50,10 @@
 <div>
   <h2>Tools</h2>
   <div>
-    <button class="btn" on:click={onBackup}>Create Backup</button>
-    <button class="btn" on:click={onCleanImages}>Clean Orfan Images</button>
-    <button class="btn" on:click={onUpdateServer}>Update Server</button>
-    <button class="btn" on:click={rebuildAndReload}>Build And Reload Server</button>
+    <button class="btn" on:click={onBackup}>Backup</button>
+    <button class="btn" on:click={onCleanImages}>Clean Images</button>
+    <button class="btn" on:click={onUpdateServer}>Build App</button>
+    <button class="btn" on:click={rebuildAndReload}>Reload Server</button>
   </div>
   <div class="data-table">
     <table class="table table-dark table-hover table-bordered">

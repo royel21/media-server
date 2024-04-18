@@ -1,4 +1,6 @@
 <script>
+  import Icons from "src/icons/Icons.svelte";
+
   export let item;
   export let key;
   export let label;
@@ -13,15 +15,32 @@
       ref.dispatchEvent(new Event("change"));
     }
   };
+  const clear = () => {
+    ref.value = "";
+    ref.dispatchEvent(new Event("change"));
+  };
 </script>
 
 <div class={"input-control " + clazz}>
   <span class="input-label" on:click={handler} on:keydown={() => {}}>{label || key}</span>
-  <input bind:this={ref} name={key} class="input" bind:value={item[key]} on:change={onChange} />
+  <input bind:this={ref} name={key} class="input" bind:value={item[key]} on:change={onChange} placeholder=" " />
+  <span class="clear" on:click={clear}><Icons name="times" /></span>
 </div>
 
 <style>
+  .input-control {
+    position: relative;
+  }
   span {
     user-select: none;
+  }
+  .clear {
+    display: none;
+    position: absolute;
+    right: 0;
+    font-size: 14px;
+  }
+  input:not(:placeholder-shown) + .clear {
+    display: initial;
   }
 </style>
