@@ -52,14 +52,21 @@
     folder[name] = value || null;
 
     hasChanges = isDiff(old, folder);
-    console.log(old, folder);
+    error = "";
   };
-  const onUrl = ({ target: { value } }) => (imageData.Url = value);
+  const onUrl = ({ target: { value } }) => {
+    imageData.Url = value;
+    error = "";
+  };
 
   const save = async () => {
     if (imageData.Url && /^http/.test(imageData.Url)) {
-      await apiUtils.post("admin/folders/image", imageData);
-      imageData.Url = "";
+      const result = await apiUtils.post("admin/folders/image", imageData);
+      if (result.valid) {
+        imageData.Url = "";
+      } else {
+        return (error = "Couldn't getImage from URL");
+      }
     }
 
     if (hasChanges) {
