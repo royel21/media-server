@@ -134,4 +134,7 @@
   .d-buttons .primary {
     background-image: linear-gradient(-120deg, rgb(16 165 220), #007bff, #0db9d8);
   }
+  .d-buttons .btn:not(:last-child) {
+    margin-right: 15px;
+  }
 </style>
