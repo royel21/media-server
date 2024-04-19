@@ -35,6 +35,7 @@
       options = data.dirs.map((d) => ({ Id: d.Id, Name: d.FullPath }));
       old = { ...folder };
     }
+    transfer = false;
   };
 
   const onChange = ({ target: { name, value, type, checked } }) => {
