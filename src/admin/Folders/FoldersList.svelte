@@ -187,7 +187,7 @@
   <Modal file={folder} {modalType} on:submit={handleSubmit} on:click={hideModal} />
 {/if}
 
-{#if showImage}
+{#if showImage && totalItems}
   <div class="thumbnail">
     <img src={`/Folder/${showImage.FilesType}/${encodeURIComponent(showImage?.Name)}.jpg`} alt="Cover Not Found" />
   </div>
