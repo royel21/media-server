@@ -218,7 +218,7 @@ export const adultEvalPage = async (query) => {
   const formatGenres = (text, extra = []) => {
     if (text === "N/A") return text;
     let genres = new Set(extra);
-    const raw = / raw/i.test(title) ? "Raw" : "";
+    const raw = / raw/i.test(title) || query.Raw ? "Raw" : "";
     let parts = [];
 
     if (text.includes(",")) {
@@ -230,10 +230,6 @@ export const adultEvalPage = async (query) => {
       .map((d) => d.replace("(W)", "").trim())
       .filter((d) => d && !/Adulto/i.test(d))
       .map((d) => genres.add(d));
-
-    if (query.Raw) {
-      parts.push("Raw");
-    }
     return capitalize([...genres].sort().join(", "));
   };
 
