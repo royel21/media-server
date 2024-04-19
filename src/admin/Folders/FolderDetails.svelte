@@ -104,7 +104,7 @@
     <Input key="Author" item={folder} {onChange} />
     <CheckBox label="Completed" key="Status" item={folder} my="5px" {onChange} />
     <CheckBox label="Is Adult" key="IsAdult" item={folder} {onChange} />
-    <CheckBox mt="5px" key="Transfer" onChange={() => (transfer = !transfer)} />
+    <CheckBox mt="5px" key="transfer" item={{ transfer }} onChange={() => (transfer = !transfer)} />
     {#if transfer}
       <Select label="Directories" mt="5px" key="DirectoryId" {options} item={folder} {onChange} />
     {/if}
