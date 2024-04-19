@@ -57,6 +57,7 @@
       page = pg;
       dispatch("folderid", tmp);
       navigate(`/admin/folders/${currentDir}/${pg}/${flt || ""}`);
+      showImage = "";
     }
   };
 
