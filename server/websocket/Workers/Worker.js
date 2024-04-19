@@ -73,7 +73,10 @@ const downloadLinks = async (link, page) => {
     return;
   }
 
-  const manga = await page.evaluate(Server.Type.includes("Adult") ? adultEvalPage : evaluetePage, Server.dataValues);
+  const manga = await page.evaluate(Server.Type.includes("Adult") ? adultEvalPage : evaluetePage, {
+    ...Server.dataValues,
+    Raw: link.Raw,
+  });
   await validateName(manga, link);
 
   const { Name } = manga;
