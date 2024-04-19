@@ -218,7 +218,7 @@ export const adultEvalPage = async (query) => {
   const formatGenres = (text, extra = []) => {
     if (text === "N/A") return text;
     let genres = new Set(extra);
-    const raw = / raw/i.test(title) || query.Link.Raw ? "Raw" : "";
+    const raw = / raw/i.test(title) || query.link.Raw ? "Raw" : "";
     let parts = [];
 
     if (text.includes(",")) {
