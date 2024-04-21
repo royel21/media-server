@@ -10,7 +10,7 @@
   const socket = getContext("socket");
 
   export let folderId;
-  let oldFolder = folderId;
+  let oldFolder;
 
   let page = 1;
   let totalPages;
@@ -145,6 +145,7 @@
   $: if (folderId !== oldFolder) {
     filter = "";
     loadFiles(1);
+    oldFolder = folderId;
   }
 </script>
 
