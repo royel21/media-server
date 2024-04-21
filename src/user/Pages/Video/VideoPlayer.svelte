@@ -5,6 +5,7 @@
   import { setfullscreen, formatTime } from "../pagesUtils";
   import { setGesture } from "./VideoTouch";
   import Icons from "src/icons/Icons.svelte";
+  import { batteryState } from "./videoUtil";
 
   export let KeyMap;
   export let file;
@@ -17,6 +18,7 @@
   let progress;
   let isFullScreen = false;
   let controls;
+  let battLevel;
 
   const onMeta = () => {
     if (!player.onmousedown) setGesture(player);
@@ -108,6 +110,10 @@
       }
     }
   };
+
+  batteryState.change = (level) => {
+    console.log(level);
+  };
 </script>
 
 {#if file.Id}
@@ -120,6 +126,10 @@
     on:wheel={onWheel}
   >
     <div class="player-content">
+      <span class="v-state">
+        <span class="batt-state">{battLevel ? `${battLevel}%` : ""}</span>
+        <span id="v-progress" class="v-p">&#128337; {progress}</span>
+      </span>
       <video
         class="player"
         src={`/api/viewer/video/${file.Id}`}
@@ -149,11 +159,6 @@
           <span on:click={onReturn} on:keydown>
             <Icons name="timescircle" />
           </span>
-          <label class="show-list" for="p-hide" style="bottom: 35px" title="play-list">
-            <span class="p-sort">
-              <Icons name="list" width="30px" height="24px" />
-            </span>
-          </label>
           <span class="prev-page" on:click={PrevFile.action} on:keydown>
             <Icons name="arrowcircleleft" />
           </span>
@@ -164,19 +169,10 @@
           <span class="next-page" on:click={NextFile.action} on:keydown>
             <Icons name="arrowcircleright" />
           </span>
-          <span on:click={fullScreen} on:keydown>
+          <span class="btn-screen" on:click={fullScreen} on:keydown>
             <Icons name="expandarrow" />
           </span>
           <span class="v-vol">
-            <input
-              name="vol-range"
-              type="range"
-              min={0}
-              max={1}
-              step={0.05}
-              value={mConfig.volume}
-              on:input={volChange}
-            />
             <label for="v-mute" class="v-volume">
               <input
                 name="mute-volumen"
@@ -188,7 +184,21 @@
               />
               <Icons name={player.muted ? "volumemute" : "volume"} />
             </label>
+            <input
+              name="vol-range"
+              type="range"
+              min={0}
+              max={1}
+              step={0.05}
+              value={mConfig.volume}
+              on:input={volChange}
+            />
           </span>
+          <label class="show-list" for="p-hide" title="play-list">
+            <span class="p-sort">
+              <Icons name="list" width="30px" height="24px" />
+            </span>
+          </label>
         </div>
       </div>
     </div>
@@ -196,22 +206,6 @@
 {/if}
 
 <style>
-  .player-btns :global(svg) {
-    height: 26px;
-    width: 32px;
-    top: 0px;
-  }
-  .player-btns *:not(.v-volume) :global(svg) {
-    margin-right: 8px;
-  }
-  .player-btns .v-volume :global(svg) {
-    margin-left: 8px;
-    top: 1px;
-  }
-  input[type="checkbox"] {
-    display: none;
-  }
-
   .player-container {
     display: flex;
     height: 100%;
@@ -221,23 +215,65 @@
     align-items: center;
     outline: none;
   }
-
   .player-content {
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     max-height: 98%;
+    min-width: 70%;
     margin: 10px;
     padding: 5px;
     border: 1px solid;
     border-radius: 0.5rem;
     background-color: black;
   }
+  .v-state {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 12px;
+    padding: 0 4px;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 0 0 0.25rem 0;
+  }
+  .batt-state:empty {
+    display: none;
+  }
+  .isFullScreen .v-state {
+    display: inline-block;
+  }
+  :global(.viewer .icon-file) {
+    display: none;
+  }
+  .player-btns :global(svg) {
+    height: 26px;
+    width: 32px;
+    top: 0px;
+  }
+  .v-volume {
+    margin-right: 5px;
+  }
+  .player-btns *:not(.v-volume) {
+    margin-right: 8px;
+  }
+  .player-btns .btn-screen {
+    margin-right: 0px;
+  }
+  .player-btns .v-volume :global(svg) {
+    margin-left: 8px;
+    top: 1px;
+  }
+  input[type="checkbox"] {
+    display: none;
+  }
 
   .player {
     width: 100%;
     max-width: 100%;
     max-height: calc(100% - 59px);
+    min-height: calc(100% - 59px);
     object-fit: fill;
     background-color: black;
   }
@@ -267,7 +303,6 @@
   }
 
   .v-vol {
-    position: absolute;
     right: 5px;
     display: flex;
     flex-direction: row;
@@ -296,6 +331,13 @@
 
   .isFullScreen .v-seeker {
     padding: 5px 0px 15px 0;
+  }
+  @media screen and (max-width: 800px) {
+    .show-list {
+      position: absolute;
+      right: -10px;
+      bottom: -3px;
+    }
   }
 
   @media screen and (max-height: 600px) {
