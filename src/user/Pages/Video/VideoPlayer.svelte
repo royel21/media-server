@@ -5,7 +5,7 @@
   import { setfullscreen, formatTime } from "../pagesUtils";
   import { setGesture } from "./VideoTouch";
   import Icons from "src/icons/Icons.svelte";
-  import { batteryState } from "./videoUtil";
+  import { setBatteryMetter } from "./videoUtil";
 
   export let KeyMap;
   export let file;
@@ -111,9 +111,9 @@
     }
   };
 
-  batteryState.change = (level) => {
+  setBatteryMetter((level) => {
     battLevel = level;
-  };
+  });
 </script>
 
 {#if file.Id}
@@ -127,7 +127,7 @@
   >
     <div class="player-content">
       <span class="v-state">
-        <span class="batt-state">{battLevel ? `${battLevel}%` : ""}</span>
+        <span class="batt-state">{battLevel ? `${battLevel}` : ""}</span>
         <span id="v-progress" class="v-p">&#128337; {progress}</span>
       </span>
       <video

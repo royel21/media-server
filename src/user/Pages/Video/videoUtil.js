@@ -1,16 +1,13 @@
-export const batteryState = { change: () => {} };
-
-const setBatteryMetter = () => {
+export const setBatteryMetter = (changes) => {
   if (navigator.getBattery) {
     navigator.getBattery().then((battery) => {
       battery.addEventListener("levelchange", () => {
         updateLevelInfo();
       });
       function updateLevelInfo() {
-        batteryState.change(`${battery.level * 100}%`);
+        changes(`${battery.level * 100}%`);
       }
       updateLevelInfo();
     });
   }
 };
-setBatteryMetter();
