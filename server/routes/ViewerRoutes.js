@@ -43,8 +43,8 @@ routes.post("/favorites/", (req, res) => {
 routes.get("/video/:id", async (req, res) => {
   const file = await db.file.findOne({
     attributes: ["Id", "Name", "Size"],
-    where: { Id: req.params.id, IsAdult: { [Op.lte]: req.user.AdultPass } },
-    include: { model: db.folder },
+    where: { Id: req.params.id },
+    include: { model: db.folder, where: { IsAdult: { [Op.lte]: req.user.AdultPass } }, required: true },
   });
 
   if (file && req.headers.range) {
