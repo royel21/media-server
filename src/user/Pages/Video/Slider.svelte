@@ -101,12 +101,9 @@
     bind:this={sliderRef}
     on:mousemove={onPreview}
   >
-    <div
-      class="rc-progress"
-      style={`border-radius: ${Math.round(progress) === 100 ? "0.3rem" : "0.3rem 0px 0px 0.3rem"}; width: ${
-        progress > 0.3 ? progress : 0
-      }%`}
-    />
+    <div class="rc-t">
+      <div class="rc-progress" style={`width: ${progress?.toFixed(2) || 0}%`} />
+    </div>
     <span class="rc-thumb" style={`left: calc(${progress}% - 11px)`} on:mousedown={handleThumb} />
     {#if preview}
       <span
@@ -137,15 +134,22 @@
     cursor: pointer;
     padding: 0 20px;
   }
-
   .rc-slider .rc-track,
   .rc-slider .rc-progress {
     position: relative;
     width: 100%;
     height: 10px;
     background-color: wheat;
-    border-radius: 0.3rem;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25) inset;
+  }
+  .rc-track {
+    border-radius: 0.3rem;
+  }
+
+  .rc-t {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 0.3rem;
   }
 
   .rc-slider .rc-progress {

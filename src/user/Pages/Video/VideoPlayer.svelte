@@ -221,7 +221,7 @@
     flex-direction: column;
     justify-content: center;
     max-height: 98%;
-    min-width: 70%;
+    min-width: 95%;
     margin: 10px;
     padding: 5px;
     border: 1px solid;
