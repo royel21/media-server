@@ -112,7 +112,7 @@
   };
 
   batteryState.change = (level) => {
-    console.log(level);
+    battLevel = level;
   };
 </script>
 
