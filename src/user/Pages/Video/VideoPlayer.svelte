@@ -112,7 +112,7 @@
   };
 
   setBatteryMetter((level) => {
-    battLevel = level;
+    battLevel = 0;
   });
 </script>
 
