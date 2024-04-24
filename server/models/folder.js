@@ -106,6 +106,7 @@ export default (sequelize, isSqlite) => {
         },
         beforeUpdate: async function (item, opt) {
           let old = item._previousDataValues.Path;
+          console.log("move", old, item.Path);
           if (opt.Name && old !== item.Path && fs.existsSync(old)) {
             //move or rename folder
             fs.moveSync(old, item.Path, { overwrite: true });

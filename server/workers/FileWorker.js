@@ -89,7 +89,7 @@ const renameFolder = async (datas) => {
       }
       data.Genres = gens.join(", ");
 
-      await folder.update(data, { Id: folder.Id });
+      await folder.update(data, { Name: folder.Name });
       await folder.reload();
       success = true;
     } catch (error) {

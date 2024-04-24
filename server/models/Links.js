@@ -36,14 +36,13 @@ export default (sequelize) => {
       },
       Date: {
         type: DATE,
-        defaultValue: sequelize.fn("NOW"),
       },
       ServerId: {
         type: INTEGER,
       },
-      Exclude: { type: BOOLEAN, defaultValue: false },
-      IsAdult: { type: BOOLEAN, defaultValue: false },
-      Raw: { type: BOOLEAN, defaultValue: false },
+      Exclude: { type: BOOLEAN, defaultValue: false, allowNull: false },
+      IsAdult: { type: BOOLEAN, defaultValue: false, allowNull: false },
+      Raw: { type: BOOLEAN, defaultValue: false, allowNull: false },
     },
     {
       uniqueKeys: {

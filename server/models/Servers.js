@@ -71,6 +71,10 @@ export default (sequelize) => {
       type: STRING,
       defaultValue: "",
     },
+    Delay: {
+      type: INTEGER,
+      defaultValue: 100,
+    },
     Enable: {
       type: BOOLEAN,
       defaultValue: true,
