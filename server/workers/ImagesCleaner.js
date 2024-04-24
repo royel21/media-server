@@ -9,47 +9,45 @@ const sendMessage = (text, event = "info") => {
   process.send({ event, text });
 };
 
-const cleanImages = async () => {
-  const imagesDir = process.env.IMAGES;
-  let count = 0;
-  for (let dir of fs.readdirSync(imagesDir)) {
-    sendMessage(`Cleaning ${imagesDir}/${dir}`);
-    if (/R18/.test(dir)) continue;
+const { IMAGES_DIR } = process.env;
 
-    if (/Folder/.test(dir)) {
-      const folders = fs.readdirSync(path.join(imagesDir, dir));
-      for (let folder of folders) {
-        try {
-          const files = fs.readdirSync(path.join(imagesDir, folder, dir));
-          for (let img of files) {
-            const found = await db.folder.findOne({ where: { Name: img.replace(".jpg", "") } });
-            if (!found) {
-              fs.removeSync(path.join(imagesDir, folder, dir, img));
-            }
-          }
-        } catch (error) {
-          console.log(error);
-        }
+const types = {
+  Manga: "mangas",
+  Video: "videos",
+};
+
+const cleanImages = async () => {
+  let count = 0;
+  //Cleaning Folder Thumbnails
+  sendMessage(`Cleaning Folder Thumbnails`);
+  for (let dir of ["mangas", "videos"]) {
+    const imgDir = path.join(IMAGES_DIR, "Folder", dir);
+    const imgs = fs.readdirSync(imgDir);
+    for (let img of imgs) {
+      if ((await db.folder.findOne({ where: { Name: img.replace(".jpg", "") } })) === null) {
+        fs.removeSync(path.join(imgDir, img));
       }
-    } else {
-      const folders = fs.readdirSync(path.join(imagesDir, dir));
-      for (let folder of folders) {
-        try {
-          const fpath = path.join(imagesDir, dir, folder);
-          const found = await db.folder.findOne({ where: { Name: folder } });
-          if (!found) {
-            fs.removeSync(fpath);
-            count++;
-          } else {
-            const files = fs.readdirSync(fpath);
-            const founds = await found.getFiles();
-            const filtered = files.filter((f) => !founds.find((fd) => f.includes(fd.Name)));
-            for (let file of filtered) {
-              fs.removeSync(path.join(fpath, file));
-            }
+    }
+  }
+
+  for (const Type of ["Manga", "Video"]) {
+    const imgDir = path.join(IMAGES_DIR, Type);
+    const folders = fs.readdirSync(imgDir);
+    for (const folder of folders) {
+      const found = await db.folder.findOne({
+        where: { Name: folder, FilesType: types[Type] },
+        include: { model: db.file, attributes: ["Name"] },
+      });
+
+      if (found?.Files) {
+        const imgPath = path.join(imgDir, folder);
+        const imgs = fs.readdirSync(path.join(imgDir, folder));
+
+        for (const img of imgs) {
+          const name = img.replace(".jpg", "");
+          if (!found.Files.find((f) => f.Name === name)) {
+            fs.removeSync(path.join(imgPath, img));
           }
-        } catch (error) {
-          console.log(error);
         }
       }
     }

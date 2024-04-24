@@ -9,29 +9,24 @@ import favoriteFolder from "./favorite-folder.js";
 import recentFolder from "./recent-folder.js";
 import recentFile from "./recent-file.js";
 import eventLog from "./eventlog.js";
+//Dwonloader Models
+import Links from "./Links.js";
+import Servers from "./Servers.js";
+import NameLists from "./NameLists.js";
+import Excludes from "./Excludes.js";
 
 import dbconfig from "./config.js";
 import { config as configEnv } from "dotenv";
 configEnv();
 
-const { HOST, HOST2, DB_USER, PASSWORD, IMAGES, IS_DEV } = process.env;
+const { DB_HOST, DEV_DB_HOST, DB_USER, DB_PASSWORD, USE_DEV, DB_NAME } = process.env;
 
-const host = IS_DEV ? HOST2 : HOST;
+const host = USE_DEV ? DEV_DB_HOST : DB_HOST;
 
-export const createdb = async (dbName, user, password) => {
-  if (args?.length > 2) {
-    const sequelize = new Sequelize("", user, password, {
-      logging: console.log,
-      dialect: "mariadb",
-      host,
-      pool: 5,
-      dialectOption: {
-        timezone: "Etc/GMT-4",
-      },
-    });
-    await sequelize.query(`CREATE DATABASE if not exists ${dbName}`);
-    return sequelize.close();
-  }
+export const createdb = async () => {
+  const sequelize = new Sequelize("", DB_USER, DB_PASSWORD, { dialect: "mariadb", host });
+  await sequelize.query(`CREATE DATABASE if not exists ${DB_NAME}`);
+  return sequelize.close();
 };
 
 export default (DB, CONNECTOR = "mariadb") => {
@@ -40,14 +35,14 @@ export default (DB, CONNECTOR = "mariadb") => {
   config.storage = DB + ".sqlite";
   //config.logging = console.log;
 
-  const sequelize = new Sequelize(DB, DB_USER, PASSWORD, config);
+  const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, config);
 
   const db = {
     Op: Sequelize.Op,
     sqlze: sequelize,
     user: user(sequelize),
-    file: file(sequelize, IMAGES),
-    folder: folder(sequelize, IMAGES, /sqlite/i.test(CONNECTOR)),
+    file: file(sequelize),
+    folder: folder(sequelize, /sqlite/i.test(CONNECTOR)),
     favorite: favorite(sequelize),
     userConfig: userConfig(sequelize),
     directory: directory(sequelize),
@@ -55,6 +50,10 @@ export default (DB, CONNECTOR = "mariadb") => {
     recentFolder: recentFolder(sequelize),
     recentFile: recentFile(sequelize),
     eventLog: eventLog(sequelize),
+    Link: Links(sequelize),
+    Server: Servers(sequelize),
+    NameList: NameLists(sequelize),
+    Exclude: Excludes(sequelize),
   };
 
   db.favorite.belongsToMany(db.folder, { through: { model: db.favoriteFolder } });
@@ -89,14 +88,17 @@ export default (DB, CONNECTOR = "mariadb") => {
   db.user.hasMany(db.favorite, { onDelete: "cascade" });
   db.user.hasOne(db.userConfig, { onDelete: "cascade" });
 
+  db.Server.hasMany(db.Link, { onDelete: "CASCADE" });
+  db.Link.belongsTo(db.Server, { foreignKey: "ServerId" });
+
   db.init = async (force) => {
     await sequelize.sync({ force });
 
-    try {
-      await db.sqlze.query("ALTER TABLE Folders ADD Author VARCHAR(100) NULL;");
-    } catch (error) {
-      console.log("add COLUMN fail Server");
-    }
+    // try {
+    //   await db.sqlze.query("ALTER TABLE Folders ADD Author VARCHAR(100) NULL;");
+    // } catch (error) {
+    //   console.log("add COLUMN fail Server");
+    // }
 
     try {
       let admin = await db.user.findOne({ where: { Name: "Administrator" } });

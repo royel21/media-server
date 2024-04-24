@@ -4,23 +4,25 @@ import { config } from "dotenv";
 import { fileURLToPath } from "url";
 
 config();
-const { IS_DEV, IP, DEV_PORT, PORT, HOME_IP, NC, DEV_SERVER_PORT } = process.env;
-const host = IS_DEV ? HOME_IP : IP;
+const { VITE_PORT, VITE_HOST, PORT, DEV_PORT, USE_DEV } = process.env;
+const host = VITE_HOST;
+const port = VITE_PORT;
 
-const port = DEV_PORT;
-let serverPort = PORT;
-if (NC) {
-  serverPort = DEV_SERVER_PORT;
-}
-
-if (IS_DEV) {
-  serverPort = 8033;
-}
+const serverPort = USE_DEV ? DEV_PORT : PORT;
 
 // https://vitejs.dev/config/
 export default defineConfig({
   root: "./src",
-  plugins: [svelte()],
+  plugins: [
+    svelte({
+      onwarn(warning, defaultHandler) {
+        if (warning.code === "a11y-click-events-have-key-events") return;
+
+        // handle all other warnings normally
+        defaultHandler(warning);
+      },
+    }),
+  ],
   build: {
     outDir: "../server/public/static",
     emptyOutDir: true,

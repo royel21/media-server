@@ -188,122 +188,26 @@ const scanDir = async ({ Id, Path, Type, isFolder, IsAdult }, user) => {
 
   io.sockets.emit("info", { text: msg });
 };
-/****************** Rename File *******************/
-const renameFile = async ({ Id, Name }) => {
-  let file = await db.file.findOne({
-    where: { Id },
-    include: { model: db.folder },
-  });
-  let success = false;
-  let msg = "File was not found";
-  if (file) {
-    try {
-      await file.update({ Name });
-      success = true;
-      msg = `File ${file.Name} was rename to ${Name} successfully`;
-    } catch (err) {
-      console.log(err);
-      msg = `File ${Name} already exists`;
-    }
-  } else {
-    msg = "File not found on db";
-  }
-  io.sockets.emit("file-renamed", { success, msg, Name });
-};
-/************ Remove file from db and system ***********************/
 
-const removeFile = async ({ Id, Del, viewer }) => {
-  let file = await db.file.findOne({
-    where: { Id },
-    include: { model: db.folder },
-  });
+let fileWorker;
+const fileWork = (action, data) => {
+  if (!fileWorker) {
+    fileWorker = fork(appPath + "/workers/FileWorker.js");
 
-  const message = { success: false, msg: "", viewer };
+    fileWorker.on("message", ({ event, message }) => {
+      io.sockets.emit(event, message);
+    });
 
-  if (file) {
-    try {
-      await file.destroy({ Del });
-      if (file.Folder.FileCount > 1) {
-        await file.Folder.update({ FileCount: file.Folder.FileCount - 1 });
-      }
-      message.success = true;
-    } catch (err) {
-      console.log(err);
-      message.msg = "Server Error 500";
-    }
-  } else {
-    message.msg = "File not found on db";
-  }
-  io.sockets.emit("file-removed", message);
-};
-
-const renameFolder = async (datas) => {
-  const { Id, Name, Description, Genres, Status, IsAdult, AltName, Transfer, DirectoryId, Author } = datas;
-  let folder = await db.folder.findOne({
-    where: { Id },
-    include: { model: db.directory },
-  });
-
-  let msg = "Folder not found on DB";
-  let success = false;
-  if (folder) {
-    let data;
-
-    try {
-      const Path = folder.Path.replace(folder.Name, Name);
-
-      data = { Name, Path, Description, Genres, Status, IsAdult, AltName, Author };
-
-      if (Transfer) {
-        const dir = await db.directory.findOne({ where: { Id: DirectoryId } });
-        if (dir) {
-          const newPath = folder.Path.replace(folder.Directory.FullPath, dir.FullPath);
-          data.DirectoryId = DirectoryId;
-          data.Path = newPath;
-        }
-      }
-      //add Completed id
-      let gens = Genres.split(", ").filter((g) => g !== "Completed");
-      if (Status) {
-        gens.push("Completed");
-        gens.sort();
-      }
-      data.Genres = gens.join(", ");
-
-      await folder.update(data, { Name: folder.Name });
-      await folder.reload();
-      success = true;
-    } catch (error) {
-      console.log(error);
-    }
-
-    io.sockets.emit("folder-renamed", { Id, success, msg, folder: { ...folder.dataValues } });
+    fileWorker.on("exit", () => {
+      fileWorker = null;
+    });
   }
 
-  io.sockets.emit("folder-renamed", { Id, success: false });
-};
-
-const removeFolder = async ({ Id, Del }) => {
-  let folder = await db.folder.findByPk(Id);
-  let success = false;
-
-  try {
-    // remove from Database and Disk
-    if (folder) {
-      await folder.destroy({ Del });
-      success = true;
-    }
-  } catch (err) {
-    console.log(err);
-  }
-  io.sockets.emit("folder-removed", { success, Id });
+  fileWorker.send({ action, data });
 };
 
 export default {
-  removeFolder,
-  renameFolder,
-  removeFile,
-  renameFile,
+  fileWork,
   onBackup,
   cleanImagesDir,
   scanDir,

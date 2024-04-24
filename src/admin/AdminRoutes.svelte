@@ -10,6 +10,7 @@
   import Icons from "../icons/Icons.svelte";
   import Tools from "./Tools/Tools.svelte";
   import RConsole from "./Component/RConsole.svelte";
+  import { MessageStore } from "./Store/MessageStore";
 
   let logout = getContext("logout");
   let user = getContext("User");
@@ -36,16 +37,20 @@
   ];
 
   const hideMessage = () => {
-    toastRef.style.top = "-20px";
+    toastRef.style.top = -toastRef.offsetHeight - 10 + "px";
     toastRef.style.opacity = -0;
   };
 
   const onMessege = (data) => {
-    toastRef.style.top = "80px";
-    toastRef.style.opacity = 1;
-    setTimeout(hideMessage, 3500);
-    message = data;
+    if (data) {
+      toastRef.style.top = "80px";
+      toastRef.style.opacity = 1;
+      setTimeout(hideMessage, 3500);
+      message = data;
+    }
   };
+
+  $: onMessege($MessageStore);
 
   socket.off("rebuild-message", onMessege);
   socket.on("rebuild-message", onMessege);
@@ -91,7 +96,8 @@
   .toast-container {
     position: fixed;
     top: 0;
-    text-align: center;
+    display: flex;
+    justify-content: center;
     width: 100%;
     z-index: 999;
   }
@@ -102,6 +108,7 @@
     padding: 2px 5px;
     border-radius: 0.25rem;
     opacity: 0;
+    max-width: 750px;
     transition: all 0.3s;
   }
   @media screen and (max-width: 600px) {
@@ -111,6 +118,9 @@
     #admin-label {
       max-width: 100px;
       text-overflow: ellipsis;
+    }
+    .toast {
+      max-width: 380px;
     }
   }
 

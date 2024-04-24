@@ -12,7 +12,7 @@ import { fileURLToPath } from "url";
 
 config();
 
-import db from "./models/index.js";
+import db, { createdb } from "./models/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 global.appPath = path.dirname(__filename);
@@ -43,9 +43,9 @@ app.use(
   })
 );
 
-app.use(express.static(process.env.IMAGES));
+app.use(express.static(process.env.IMAGES_DIR));
 app.use(express.static(global.appPath + "/public/static", { dotfiles: "allow" }));
-console.log("images", process.env.IMAGES);
+console.log("images", process.env.IMAGES_DIR);
 
 const sessionMeddle = session({
   name: process.env.SESSION,
@@ -97,13 +97,18 @@ app.use((e, _, res, __) => {
   }
 });
 
-const { PORT, PORT2, IP, HOME_IP, IP_LOCAL, USE_LOCAL } = process.env;
-let host = USE_LOCAL ? IP_LOCAL : process.env.USERNAME === "rconsoro" ? IP : HOME_IP;
-const port = process.env.USERNAME === "rconsoro" ? PORT2 : PORT;
+const { DB_NAME, USE_DEV, PORT, DEV_PORT, HOST, DEV_HOST } = process.env;
+const host = USE_DEV ? DEV_HOST : HOST;
+const port = USE_DEV ? DEV_PORT : PORT;
 
-console.log(process.env.NODE_ENV, host, port);
-
-db.init().then(() => {
+const iniServer = async () => {
+  console.log("Create DB if Needed", DB_NAME);
+  await createdb();
+  console.log("Initialize db Tables");
+  await db.init();
+  console.log("Initialize Server");
   websocketConfig(app.listen(port, host), sessionMeddle);
-  console.log(`Node server is running.. at http://${host}:${port}`);
-});
+  console.log(`Server is running.. at http://${host}:${port}`);
+};
+
+iniServer().catch((err) => console.log(err));

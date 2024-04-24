@@ -1,28 +1,19 @@
 import fs from "fs-extra";
-import path from "path";
-import os from "os";
 
-import { findOrCreateFolder } from "./db-worker.js";
+import { findOrCreateFolder, getDb } from "./db-worker.js";
 
 import { evaluetePage, adultEvalPage } from "./evaluator.js";
 
-import db from "../Models/index.js";
 import { createFolderCover } from "./ImageUtils.js";
 import { filterManga, dateDiff, removeRaw, sendMessage, createDir } from "./utils.js";
 import { startBrowser, createPage } from "./Crawler.js";
 
 import { downloadLink } from "./link-downloader.js";
 import { downloadFromPage } from "./checkServer.js";
-
-const { USE_DEV, BASEPATH, PUPETEER_DIR, PUPETEER_DIR_DEV, IMAGEDIR } = process.env;
-const basePath = BASEPATH;
 // add stealth plugin and use defaults (all evasion techniques)
-
 const state = { links: [], running: false, size: 0, checkServer: false };
 
-const imgPath = path.join(IMAGEDIR, "images");
-
-createDir(imgPath);
+const db = getDb();
 
 const validateName = async (manga, link) => {
   let tname = await db.NameList.findOne({ where: { Name: manga.Name } });
@@ -184,12 +175,6 @@ const onDownload = async (bypass, headless) => {
   }
 };
 
-let userDataDir = path.resolve(PUPETEER_DIR || path.join(os.homedir(), ".rc-studio/downloader-pupeteer-data"));
-
-if (USE_DEV) {
-  userDataDir = path.resolve(PUPETEER_DIR_DEV);
-}
-
 const loadLinks = async (datas) => {
   for (const ServerId in datas) {
     const founds = await db.Link.findAll({
@@ -212,7 +197,7 @@ const loadLinks = async (datas) => {
 process.on("message", async ({ action, datas, headless, remove, bypass, server }) => {
   console.log("server", action, state.checkServer);
   if (!state.browser) {
-    state.browser = await startBrowser({ headless: headless ? "new" : false, userDataDir });
+    state.browser = await startBrowser({ headless: headless ? "new" : false, userDataDir: "./user-data/puppeteer" });
   }
 
   switch (action) {

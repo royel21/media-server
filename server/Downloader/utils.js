@@ -130,3 +130,6 @@ export const createDir = (dir) => {
     console.log(error);
   }
 };
+
+const types = { mangas: "Manga", videos: "Video" };
+export const getFileType = ({ FilesType }) => types[FilesType];

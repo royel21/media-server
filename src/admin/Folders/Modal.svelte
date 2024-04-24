@@ -1,13 +1,8 @@
 <script>
-  import { onMount, createEventDispatcher } from "svelte";
+  import { createEventDispatcher } from "svelte";
   import { fade } from "svelte/transition";
-  import apiUtils from "src/apiUtils";
-  import CheckBox from "../Component/CheckBox.svelte";
-  import Select from "../Component/Select.svelte";
   import TextAreaInput from "../Component/TextAreaInput.svelte";
-  import Input from "../Component/Input.svelte";
   import Icons from "src/icons/Icons.svelte";
-  import { validGenres } from "../Utils";
 
   export let file;
   export let modalType;
@@ -17,25 +12,6 @@
   let options = [];
   let tempFile = { Name: "", Ex: "" };
   const dispatch = createEventDispatcher();
-
-  onMount(async () => {
-    if (file?.Type === "Folder") {
-      const data = await apiUtils.admin(["folders", "folder", file.Id]);
-      file.Description = data.Description;
-      file.Genres = data.Genres;
-      file.AltName = data.AltName;
-      file.IsAdult = data.IsAdult;
-      file.DirectoryId = data.DirectoryId;
-      file.Author = data.Author;
-      options = data.dirs.map((d) => ({ Id: d.Id, Name: d.FullPath }));
-    }
-  });
-
-  const onChange = ({ target: { name, value, checked, type } }) => {
-    if (type === "checkbox") value = checked;
-    if (name === "Genres") value = validGenres(value);
-    file[name] = value;
-  };
 
   const loadTemp = (f) => {
     if (/\.(zip|mp4|mkv|ogg|avi)$/i.test(f.Name)) {
@@ -83,18 +59,6 @@
           </div>
         {:else}
           <TextAreaInput file={tempFile} key="Name" style="margin-bottom: 5px" rows="3" focus={true} />
-          {#if file?.Type === "Folder"}
-            <TextAreaInput {file} key="AltName" style="margin-bottom: 5px" rows="3" />
-            <TextAreaInput {file} key="Genres" style="margin-bottom: 5px" rows="2" {onChange} />
-            <TextAreaInput {file} key="Description" rows="4" />
-            <Input key="Author" item={file} />
-            <CheckBox label="Completed" key="Status" item={file} my="5px" />
-            <CheckBox label="Is Adult" key="IsAdult" item={file} />
-            <CheckBox mt="5px" key="Transfer" item={file} {onChange} />
-            {#if file.Transfer}
-              <Select label="Directories" mt="5px" key="DirectoryId" {options} item={file} />
-            {/if}
-          {/if}
         {/if}
       </div>
       <div class="error">{modalType.error || ""}</div>

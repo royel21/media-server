@@ -3,13 +3,13 @@
   import { navigate } from "svelte-routing";
 
   import ItemList from "./ItemList.svelte";
-  import Modal from "./Modal.svelte";
   import { calRows } from "../Utils";
   import apiUtils from "src/apiUtils";
   import { clamp } from "src/ShareComponent/utils";
   import Icons from "src/icons/Icons.svelte";
   import CreateFolderModal from "./CreateFolderModal.svelte";
   import ReplaceImage from "./ReplaceImage.svelte";
+  import { setMessage } from "../Store/MessageStore";
   const dispatch = createEventDispatcher();
   const socket = getContext("socket");
 
@@ -101,25 +101,6 @@
     }
   };
 
-  const handleSubmit = ({ detail }) => {
-    //if we are deleting the file
-    if (modalType.Del) {
-      let Del = detail.target.querySelector("input").checked;
-      socket.emit("remove-folder", { Id: folder.Id, Del });
-    } else {
-      if (!folder.Name) {
-        modalType.error = "Name Can't be empty";
-      } else {
-        socket.emit("rename-folder", folder);
-      }
-    }
-  };
-
-  const hideModal = () => {
-    showModal = false;
-    folder = {};
-  };
-
   const onShowImage = (e) => {
     const found = items.find((i) => i.Id === e.currentTarget.id);
     showImage = e.type.includes("mouseenter") ? found : false;
@@ -131,21 +112,26 @@
     }
   };
 
+  const reload = () => {
+    let isLast = items.length === 1 && totalPages > 1;
+    loadFolders(isLast ? page - 1 : page);
+  };
+
   const onFolderRename = (data) => {
-    if (data.success && data.Id && data.folder) {
-      let index = items.findIndex((f) => f.Id === data.Id);
-      if (index !== -1) {
+    let index = items.findIndex((f) => f.Id === data.Id);
+    if (data.success && index > -1) {
+      if (data.Transfer) {
+        setMessage(data.msg);
+        reload();
+      } else {
         items[index] = data.folder;
       }
-      hideModal();
     }
   };
 
   const onFolderRemove = (data) => {
     if (data.success && data.Id) {
-      let isLast = items.length === 1 && totalPages > 1;
-      loadFolders(isLast ? page - 1 : page);
-      hideModal();
+      reload();
     }
   };
 
@@ -182,10 +168,6 @@
 
 {#if createFolder}
   <CreateFolderModal hide={() => (createFolder = false)} {socket} />
-{/if}
-
-{#if showModal}
-  <Modal file={folder} {modalType} on:submit={handleSubmit} on:click={hideModal} />
 {/if}
 
 {#if showImage && totalItems}

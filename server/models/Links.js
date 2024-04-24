@@ -1,4 +1,7 @@
-export default (sequelize, { INTEGER, DATE, STRING, VIRTUAL, BOOLEAN, TEXT }) => {
+import { DataTypes } from "sequelize";
+
+export default (sequelize) => {
+  const { INTEGER, DATE, STRING, VIRTUAL, BOOLEAN, TEXT } = DataTypes;
   const Link = sequelize.define(
     "Links",
     {

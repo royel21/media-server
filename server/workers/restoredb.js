@@ -4,7 +4,7 @@ import db from "../models/index.js";
 const getTime = () => new Date().getTime();
 const getTimeDif = (t) => `${(new Date().getTime() - t) / 1000.0}s`;
 
-const { BACKUPDIR } = process.env;
+const { BACKUP_DIR } = process.env;
 
 const sendMessage = (text, event = "info") => {
   if (process.send) {
@@ -137,7 +137,7 @@ const createDirStruct = async (dir) => {
 export default async (backupFile) => {
   const time = getTime();
   await db.init();
-  const savePath = `${BACKUPDIR}/${backupFile}`;
+  const savePath = `${BACKUP_DIR}/${backupFile}`;
   if (!fs.existsSync(savePath)) {
     sendMessage(`Backup: ${savePath} no found`);
     process.exit();

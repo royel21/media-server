@@ -9,20 +9,22 @@ import { evaleLinks } from "./evaluator.js";
 import { downloadAllIMages, createThumb } from "./ImageUtils.js";
 import { findRaw, sendMessage, createDir } from "./utils.js";
 
-const { IMAGEDIR } = process.env;
-const imgPath = path.join(IMAGEDIR, "images");
+const { IMAGES_DIR } = process.env;
+createDir(IMAGES_DIR);
 
 export const downloadLink = async (d, page, Server, folder, count, adult, state) => {
   const mangaDir = folder.Path;
   const isAdult = adult || Server.Type === "Adult";
+  const imgDir = path.join(IMAGES_DIR, "Manga", folder.Name);
 
+  createDir(imgDir);
   createDir(mangaDir);
 
   const exists = fs.readdirSync(mangaDir).find(findRaw(d.name));
 
   if (!/ raw/i.test(d.name) && exists) {
     fs.removeSync(path.join(mangaDir, exists));
-    const cover = path.join(imgPath, "Manga", folder.Name, exists + ".jpg");
+    const cover = path.join(imgDir, exists + ".jpg");
     if (fs.existsSync(cover)) {
       fs.removeSync(cover);
     }
@@ -64,13 +66,9 @@ export const downloadLink = async (d, page, Server, folder, count, adult, state)
   const images = fs.readdirSync(dir);
 
   if (images.length === links.length && !state.stopped) {
-    const imgDir = path.join(imgPath, "Manga", folder.Name);
-
-    createDir(imgDir);
-
     const fromImg = path.join(dir, images[0]);
 
-    const toImg = path.join(imgPath, "Manga", folder.Name, d.name + ".zip.jpg");
+    const toImg = path.join(imgDir, d.name + ".zip.jpg");
     await createThumb(fromImg, toImg);
 
     zipper.sync

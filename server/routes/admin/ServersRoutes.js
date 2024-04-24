@@ -1,4 +1,4 @@
-import db from "../../websocket/Models/index.js";
+import db from "../../models/index.js";
 
 const getServers = async (req, res) => {
   const servers = await db.Server.findAll({ order: ["Name"] });

@@ -3,9 +3,10 @@ import path from "path";
 import { nanoid } from "nanoid";
 import { DataTypes } from "sequelize";
 
-export default (sequelize, ImagesPath, isSqlite) => {
+export default (sequelize, isSqlite) => {
+  const { IMAGES_DIR } = process.env;
   const getFileType = ({ FilesType }) => (FilesType === "mangas" ? "Manga" : "Video");
-  const getCoverPath = (name, type) => path.join(ImagesPath, "Folder", type, name + ".jpg");
+  const getCoverPath = (name, type) => path.join(IMAGES_DIR, "Folder", type, name + ".jpg");
 
   const { INTEGER, STRING, DATE, TEXT, BOOLEAN, VIRTUAL } = DataTypes;
   const Folder = sequelize.define(
@@ -119,7 +120,7 @@ export default (sequelize, ImagesPath, isSqlite) => {
             }
             //Rename Folder for thumbnail
             if (opt.Name !== item.Name) {
-              const thumbsPath = `${ImagesPath}/${getFileType(item)}/${opt.Name}`;
+              const thumbsPath = `${IMAGES_DIR}/${getFileType(item)}/${opt.Name}`;
               if (fs.existsSync(thumbsPath)) {
                 const newthumbsPath = thumbsPath.replace(opt.Name, item.Name);
                 try {
@@ -139,7 +140,7 @@ export default (sequelize, ImagesPath, isSqlite) => {
             if (fs.existsSync(cPath)) fs.removeSync(cPath);
 
             //Remove files Thumbnails from images folder
-            const imagesFolder = `${ImagesPath}/${getFileType(item)}/${item.Name}`;
+            const imagesFolder = `${IMAGES_DIR}/${getFileType(item)}/${item.Name}`;
             if (fs.existsSync(imagesFolder)) fs.removeSync(imagesFolder);
 
             //Remove folder from disk

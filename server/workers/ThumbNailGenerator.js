@@ -2,8 +2,9 @@ import { join } from "path";
 import { existsSync, mkdirSync, readdirSync } from "fs";
 import { getVideoThumnail, ZipCover } from "./ThumbnailUtils.js";
 import db from "../models/index.js";
+import { getFileType } from "../websocket/Workers/utils.js";
 
-var thumbnailBasePath = process.env.IMAGES;
+var { IMAGES_DIR } = process.env;
 
 export const genFileThumbnails = async (folders, sendMessage) => {
   let total = 0;
@@ -19,7 +20,7 @@ export const genFileThumbnails = async (folders, sendMessage) => {
     if (existsSync(folder.Path)) {
       let files = [];
 
-      let thumbPath = join(thumbnailBasePath, folder.FilesType.includes("mangas") ? "Manga" : "Video", folder.Name);
+      let thumbPath = join(IMAGES_DIR, getFileType(folder), folder.Name);
 
       if (!existsSync(thumbPath)) {
         mkdirSync(thumbPath);

@@ -12,7 +12,7 @@ const getNewId = () => {
 
 const routes = Router();
 
-const { BACKUPDIR } = process.env;
+const { BACKUP_DIR } = process.env;
 
 routes.post("/remove", (req, res) => {
   let { Id } = req.body;
@@ -61,8 +61,8 @@ routes.post("/update", async (req, res) => {
 
 routes.get("/backups", async (_, res) => {
   let backups = [];
-  if (fs.existsSync(BACKUPDIR)) {
-    backups = fs.readdirSync(BACKUPDIR);
+  if (fs.existsSync(BACKUP_DIR)) {
+    backups = fs.readdirSync(BACKUP_DIR);
   }
 
   res.send(backups);
@@ -70,7 +70,7 @@ routes.get("/backups", async (_, res) => {
 
 routes.post("/rm-backup", async ({ body }, res) => {
   if (body.backup) {
-    const backup = path.join(BACKUPDIR, body.backup);
+    const backup = path.join(BACKUP_DIR, body.backup);
     if (fs.existsSync(backup)) {
       fs.removeSync(backup);
     }

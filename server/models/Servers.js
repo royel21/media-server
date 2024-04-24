@@ -1,4 +1,7 @@
-export default (sequelize, { INTEGER, STRING, BOOLEAN }) => {
+import { DataTypes } from "sequelize";
+
+export default (sequelize) => {
+  const { INTEGER, STRING, BOOLEAN } = DataTypes;
   const Folder = sequelize.define("Servers", {
     Id: {
       type: INTEGER,

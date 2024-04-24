@@ -1,6 +1,5 @@
 import fs from "fs-extra";
-import db from "../Models/index.js";
-import { findFolder } from "./db-worker.js";
+import { findFolder, getDb } from "./db-worker.js";
 
 import { filterManga, removeRaw, sendMessage } from "./utils.js";
 import { createPage } from "./Crawler.js";
@@ -73,6 +72,8 @@ const evalServer = async (query) => {
 };
 
 export const downloadFromPage = async (Id, state) => {
+  const db = getDb();
+
   const server = await db.Server.findOne({ where: { Id: Id } });
   if (server && server?.HomeQuery) {
     try {

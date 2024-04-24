@@ -1,11 +1,11 @@
 import { Router } from "express";
-import db from "../../websocket/Models/index.js";
 import { Op, literal } from "sequelize";
 import { formatLink } from "../utils.js";
 import RenameRoutes from "./RenameRoutes.js";
 import ExcludeChapRoutes from "./ExcludeChapRoutes.js";
 import EventLogsRoutes from "./EventLogsRoutes.js";
 import ServersRoutes from "./ServersRoutes.js";
+import db from "../../models/index.js";
 
 const routes = Router();
 

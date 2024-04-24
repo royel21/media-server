@@ -3,8 +3,9 @@ import fs from "fs-extra";
 import { nanoid } from "nanoid";
 import { DataTypes } from "sequelize";
 
-export default (sequelize, ImagesPath) => {
-  const genImgPath = (type, fname, name) => `${ImagesPath}/${type}/${fname}/${name}.jpg`;
+export default (sequelize) => {
+  const { IMAGES_DIR } = process.env;
+  const genImgPath = (type, fname, name) => `${IMAGES_DIR}/${type}/${fname}/${name}.jpg`;
 
   const { INTEGER, STRING, DATE, FLOAT, VIRTUAL } = DataTypes;
   const File = sequelize.define(

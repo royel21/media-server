@@ -1,13 +1,9 @@
 import winex from "win-explorer";
-import db from "../../models/index.js";
-
-const { USERNAME, HOST, HOST2, DB_USER, PASSWORD, IMAGES } = process.env;
-console.log(USERNAME, HOST, HOST2, DB_USER, PASSWORD, IMAGES);
+import db from "../models/index.js";
 
 export const getDb = () => db;
 
 export const destroy = async (data) => {
-  console.log("remove:", data.where.Name);
   try {
     await db.file.destroy(data, { Del: true });
   } catch (error) {
@@ -19,18 +15,18 @@ export const findFolder = async (Name) => {
   return db.folder.findOne({ where: { Name } });
 };
 
+const { DOWNLOAD_DIR } = process.env;
+
 export const findOrCreateFolder = async (manga, IsAdult) => {
   let { Name, Description, Genres, AltName, Status, Server, Author } = manga;
   Genres = Genres?.replace(/(, |)Webtoon(, |)/gi, "");
 
-  const Path = `/mnt/5TBHDD/${IsAdult ? "R18/webtoon" : "mangas"}/${Name}`;
+  const Path = path.join(DOWNLOAD_DIR, IsAdult ? "R18/webtoon" : "mangas", Name);
 
   try {
     let folder = await db.folder.findOne({
       where: { Name, FilesType: "mangas" },
     });
-
-    console.log("found", folder?.Path);
 
     if (!folder) {
       let directory = await db.directory.findOne({

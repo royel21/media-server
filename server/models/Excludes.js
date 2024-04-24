@@ -1,4 +1,7 @@
-export default (sequelize, { INTEGER, STRING }) => {
+import { DataTypes } from "sequelize";
+
+export default (sequelize) => {
+  const { INTEGER, STRING } = DataTypes;
   return sequelize.define(
     "Excludes",
     {

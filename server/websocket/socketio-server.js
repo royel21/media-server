@@ -5,11 +5,9 @@ import { Server } from "socket.io";
 
 import db from "../models/index.js";
 import { download } from "./downloader.js";
-import dmDB from "./Models/index.js";
 import { exec } from "node:child_process";
 
 export default async (server, sessionMeddle) => {
-  await dmDB.init();
   const io = new Server(server, { serveClient: false, cookie: true });
   global.io = io;
   io.use((socket, next) => sessionMeddle(socket.request, {}, next));
@@ -35,10 +33,11 @@ export default async (server, sessionMeddle) => {
         socket.on("load-disks", FileManager.diskLoader);
         socket.on("load-content", FileManager.loadContent);
 
-        socket.on("rename-file", FileManager.renameFile);
+        socket.on("rename-file", (data) => FileManager.fileWork("renameFile", data));
+        socket.on("remove-file", (data) => FileManager.fileWork("removeFile", data));
+        socket.on("rename-folder", (data) => FileManager.fileWork("renameFolder", data));
+        socket.on("remove-folder", (data) => FileManager.fileWork("removeFolder", data));
 
-        socket.on("rename-folder", FileManager.renameFolder);
-        socket.on("remove-folder", FileManager.removeFolder);
         socket.on("clean-images", FileManager.cleanImagesDir);
         socket.on("backup-db", FileManager.onBackup);
         socket.on("download-server", download);
@@ -65,7 +64,6 @@ export default async (server, sessionMeddle) => {
         socket.on("reset-recent", (data) => FileManager.resetRecent(data, user));
         socket.on("loadzip-image", (data) => mloader.loadZipImages(data, socket, user.dataValues));
       }
-      socket.on("remove-file", FileManager.removeFile);
 
       socket.on("disconnect", () => console.log("disconnected: ", socket.id));
     } else {

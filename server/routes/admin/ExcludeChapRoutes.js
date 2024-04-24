@@ -1,4 +1,4 @@
-import db from "../../websocket/Models/index.js";
+import db from "../../models/index.js";
 
 export const excludeChapList = async (req, res) => {
   const { LinkName } = req.params;
