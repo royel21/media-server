@@ -118,10 +118,14 @@
   };
 
   const onFolderRename = (data) => {
+    if (data.msg) {
+      setMessage(data.msg);
+    }
+
     let index = items.findIndex((f) => f.Id === data.Id);
+
     if (data.success && index > -1) {
       if (data.Transfer) {
-        setMessage(data.msg);
         reload();
       } else {
         items[index] = data.folder;

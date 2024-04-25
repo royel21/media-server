@@ -82,7 +82,7 @@ const downloadLinks = async (link, page) => {
 
   await updateLastChapter(manga, link);
 
-  let files = await createFolderCover(folder.Path, manga, imgPath, page);
+  let files = await createFolderCover(folder.Path, manga, page);
 
   if (!folder) {
     return sendMessage({ text: "Fail to find or create folder entry in database", color: "red" });
@@ -140,7 +140,7 @@ const cleanUp = async () => {
 
 const onDownload = async (bypass, headless) => {
   if (!state.browser) {
-    state.browser = await startBrowser({ headless: headless ? "new" : false, userDataDir });
+    state.browser = await startBrowser({ headless: headless ? "new" : false, userDataDir: "./user-data/puppeteer" });
   }
 
   const page = await createPage(state.browser);

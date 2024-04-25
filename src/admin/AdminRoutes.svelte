@@ -39,13 +39,14 @@
   const hideMessage = () => {
     toastRef.style.top = -toastRef.offsetHeight - 10 + "px";
     toastRef.style.opacity = -0;
+    message = "";
   };
 
   const onMessege = (data) => {
     if (data) {
       toastRef.style.top = "80px";
       toastRef.style.opacity = 1;
-      setTimeout(hideMessage, 3500);
+      setTimeout(hideMessage, 5000);
       message = data;
     }
   };

@@ -5,6 +5,8 @@ import { createDir, sendMessage } from "./utils.js";
 import axios from "axios";
 import { delay } from "./Crawler.js";
 
+const imgPath = process.env.IMAGES_DIR;
+
 const parseDataUrl = (dataUrl) => {
   const matches = dataUrl.match(/^data:(.+);base64,(.+)$/);
   if (matches.length !== 3) {
@@ -13,7 +15,7 @@ const parseDataUrl = (dataUrl) => {
   return { mime: matches[1], buffer: Buffer.from(matches[2], "base64") };
 };
 
-export const getImgNh = async (imgPath, url, page) => {
+export const getImgNh = async (url, page) => {
   const viewSource = await page.goto(url);
   const buffer = await viewSource.buffer();
 
@@ -52,7 +54,7 @@ const evalWorpressImage = async () => {
   }
 };
 
-export const downloadImg = async (imgPath, url, page, cover, useAxios) => {
+export const downloadImg = async (posterPath, url, page, cover, useAxios) => {
   if (url) {
     let buff;
     try {
@@ -71,6 +73,7 @@ export const downloadImg = async (imgPath, url, page, cover, useAxios) => {
             let viewSource = await page.goto(url.trim());
             buff = await viewSource.buffer();
           } catch (error) {
+            console.log(error);
             if (!error.toString().includes("net::ERR_CONNECTION_CLOSED")) {
               break;
             } else {
@@ -80,7 +83,7 @@ export const downloadImg = async (imgPath, url, page, cover, useAxios) => {
         }
       }
     } catch (error) {
-      console.log(url);
+      console.log(url, error);
       sendMessage({ text: `download-Image Error`, url, color: "red", error });
     }
 
@@ -95,7 +98,7 @@ export const downloadImg = async (imgPath, url, page, cover, useAxios) => {
           await img.resize({ width: 1024 });
         }
 
-        await img.jpeg().toFile(imgPath);
+        await img.jpeg().toFile(posterPath);
         if (!cover) {
           await img.destroy();
         } else {
@@ -136,7 +139,7 @@ export const createThumb = async (fromImg, toImg) => {
 
 const getPadding = (length) => (length > 999 ? 4 : length > 99 ? 3 : 2);
 
-export const createFolderCover = async (mangaDir, data, imgPath, page) => {
+export const createFolderCover = async (mangaDir, data, page) => {
   let files = [];
 
   createDir(mangaDir);

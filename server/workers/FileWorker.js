@@ -62,6 +62,7 @@ const renameFolder = async (datas) => {
 
   let msg = "Folder not found on DB";
   let success = false;
+
   if (folder) {
     let data;
 
@@ -78,6 +79,13 @@ const renameFolder = async (datas) => {
           data.Path = newPath;
           msg = `Folder: ${Name} was moved from ${folder.Directory.FullPath} to ${dir.FullPath}`;
         }
+        sendMessage("folder-renamed", {
+          Id,
+          success: true,
+          msg: `Transfering: ${folder.Name} this may take time please wait until completed message`,
+          folder: { ...folder.dataValues },
+          Transfer,
+        });
       } else {
         msg = `Folder: ${Name} data was Updated`;
       }

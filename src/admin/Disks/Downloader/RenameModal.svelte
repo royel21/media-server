@@ -143,6 +143,10 @@
     padding: 2px;
   }
 
+  .error:empty {
+    display: none;
+  }
+
   @media screen and (max-width: 450px) {
     .modal {
       width: 380px;

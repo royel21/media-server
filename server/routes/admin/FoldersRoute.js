@@ -58,7 +58,7 @@ const getData = async ({ params }, res) => {
 };
 
 import sharp from "sharp";
-const { IMAGES } = process.env;
+const { IMAGES_DIR } = process.env;
 
 routes.post("/image", async (req, res) => {
   const folder = await db.folder.findOne({ where: { Id: req.body.Id } });
@@ -80,7 +80,7 @@ routes.post("/image", async (req, res) => {
           }
           img.jpeg().toFile(path.join(folder.Path, "Cover.jpg"));
 
-          const coverP = path.join(IMAGES, "Folder", folder.FilesType, folder.Name + ".jpg");
+          const coverP = path.join(IMAGES_DIR, "Folder", folder.FilesType, folder.Name + ".jpg");
           img.jpeg().resize(240).toFile(coverP);
 
           return res.send({ valid: true, folder: req.body.Id });

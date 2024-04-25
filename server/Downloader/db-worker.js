@@ -1,5 +1,6 @@
 import winex from "win-explorer";
 import db from "../models/index.js";
+import path from "node:path";
 
 export const getDb = () => db;
 
