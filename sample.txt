@@ -1,0 +1,25 @@
+NODE_ENV=production # for optimization purpose
+# Server Config
+USE_DEV=false
+HOST=ip for production purpose localhost, 127.0.0.1
+PORT=port for production purpose 8080
+
+
+VITE_PORT=for vite server
+VITE_HOST=for vite server
+DEV_HOST=ip for development purpose localhost, 127.0.0.1
+DEV_PORT=port for development purpose 8080
+
+SESSION=sessin secret for express "mysecret"
+#directories
+DOWNLOAD_DIR=where to put the downloads /home/<user>/download
+IMAGES_DIR=where to put the thumbnails  /home/<user>/images
+BACKUP_DIR=where to put backup  /home/<user>/backups
+
+# databse Config
+CONNECTOR=madiadb or sqlite only
+DB_NAME=tabase name
+DB_HOST=ip of the db server or localhost, 127.0.0.1
+DB_USER=db <user> name
+DB_PASSWORD=password of the db if mariadb for CONNECTOR.
+DEV_DB_HOST=ip of the db server or localhost, 127.0.0.1 for when in dev mode
