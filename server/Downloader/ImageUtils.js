@@ -4,8 +4,9 @@ import fs from "fs-extra";
 import { createDir, sendMessage } from "./utils.js";
 import axios from "axios";
 import { delay } from "./Crawler.js";
+import defaulPath from "../path-config.js";
 
-const imgPath = process.env.IMAGES_DIR;
+const imgPath = defaulPath.ImagesDir;
 
 const parseDataUrl = (dataUrl) => {
   const matches = dataUrl.match(/^data:(.+);base64,(.+)$/);

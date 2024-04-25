@@ -1,4 +1,4 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, literal } from "sequelize";
 const { INTEGER, STRING, DATE } = DataTypes;
 
 export default (sequelize) =>
@@ -25,6 +25,6 @@ export default (sequelize) =>
     },
     date: {
       type: DATE,
-      defaultValue: sequelize.fn("NOW"),
+      defaultValue: literal("CURRENT_TIMESTAMP"),
     },
   });

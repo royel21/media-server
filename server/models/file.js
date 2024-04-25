@@ -2,10 +2,10 @@ import path from "path";
 import fs from "fs-extra";
 import { nanoid } from "nanoid";
 import { DataTypes } from "sequelize";
+import defaulPath from "../path-config.js";
 
 export default (sequelize) => {
-  const { IMAGES_DIR } = process.env;
-  const genImgPath = (type, fname, name) => `${IMAGES_DIR}/${type}/${fname}/${name}.jpg`;
+  const genImgPath = (type, fname, name) => `${defaulPath.ImagesDir}/${type}/${fname}/${name}.jpg`;
 
   const { INTEGER, STRING, DATE, FLOAT, VIRTUAL } = DataTypes;
   const File = sequelize.define(
@@ -76,7 +76,7 @@ export default (sequelize) => {
           item.Id = nanoid(10);
         },
         beforeBulkCreate: function (items) {
-          for (var item of items) {
+          for (let item of items) {
             item.Id = nanoid(10);
           }
         },

@@ -4,8 +4,6 @@ import { getVideoThumnail, ZipCover } from "./ThumbnailUtils.js";
 import db from "../models/index.js";
 import { getFileType } from "../websocket/Workers/utils.js";
 
-var { IMAGES_DIR } = process.env;
-
 export const genFileThumbnails = async (folders, sendMessage) => {
   let total = 0;
   let i = 0;
@@ -20,7 +18,7 @@ export const genFileThumbnails = async (folders, sendMessage) => {
     if (existsSync(folder.Path)) {
       let files = [];
 
-      let thumbPath = join(IMAGES_DIR, getFileType(folder), folder.Name);
+      const thumbPath = join(defaulPath.ImagesDir, getFileType(folder), folder.Name);
 
       if (!existsSync(thumbPath)) {
         mkdirSync(thumbPath);

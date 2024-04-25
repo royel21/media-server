@@ -9,6 +9,7 @@ import path from "path";
 import WinDrive from "win-explorer";
 import db from "../models/index.js";
 import { createDir, getFileType } from "../websocket/Workers/utils.js";
+import defaulPath from "../path-config.js";
 
 let folders = [];
 
@@ -19,18 +20,16 @@ Date.prototype.Compare = function (d) {
   }
 };
 
-const { IMAGES_DIR } = process.env;
-
 const ValidFiles = /\.(avi|avi2|mp4|mkv|ogg|webm|rar|zip)/i;
 
 const IMGTYPES = /\.(jpg|jpeg|png|gif|webp|jpe)$/i;
 
 let DirectoryId;
 
-createDir(path.join(IMAGES_DIR, "Folder", "videos"));
-createDir(path.join(IMAGES_DIR, "Folder", "mangas"));
-createDir(path.join(IMAGES_DIR, "Manga"));
-createDir(path.join(IMAGES_DIR, "Video"));
+createDir(path.join(defaulPath.ImagesDir, "Folder", "videos"));
+createDir(path.join(defaulPath.ImagesDir, "Folder", "mangas"));
+createDir(path.join(defaulPath.ImagesDir, "Manga"));
+createDir(path.join(defaulPath.ImagesDir, "Video"));
 
 const sendMessage = (text, event = "info") => {
   process.send({ event, text });
@@ -54,7 +53,7 @@ const rmOrphanFiles = async (folder) => {
     }
     folder.Files = folder.Files.filter((f) => !removed.includes(f.Id));
     const imgs = folder.Files.map((f) => f.Name + ".jpg");
-    const imageDir = path.join(IMAGES_DIR, getFileType(folder), folder.Name);
+    const imageDir = path.join(defaulPath.ImagesDir, getFileType(folder), folder.Name);
 
     const founds = fs.readdirSync(imageDir).filter((f) => /jpg/.test(f));
     for (let img of founds) {
@@ -82,7 +81,7 @@ const foldersPendingCover = [];
 
 const createFolderThumbnail = async (folder, files, isFolder) => {
   try {
-    let CoverPath = path.join(IMAGES_DIR, "Folder", folder.FilesType, folder.Name + ".jpg");
+    let CoverPath = path.join(defaulPath.ImagesDir, "Folder", folder.FilesType, folder.Name + ".jpg");
 
     if (!fs.existsSync(CoverPath) || isFolder) {
       let img = files.find((f) => IMGTYPES.test(f.Name));
@@ -262,7 +261,7 @@ const processJobs = async () => {
   process.exit();
 };
 
-var running = false;
+let running = false;
 process.on("message", (data) => {
   pendingJobs.push(data);
   db.directory.update({ IsLoading: true }, { where: { Id: data.id } });

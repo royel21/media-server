@@ -5,8 +5,8 @@ import sharp from "sharp";
 
 const IMGTYPES = /\.(jpg|jpeg|png|gif|webp)$/i;
 
-var ffmpeg = "ffmpeg";
-var ffprobe = "ffprobe";
+const ffmpeg = "ffmpeg";
+const ffprobe = "ffprobe";
 
 const sortByName = (a, b) => String(a.name).localeCompare(String(b.name));
 

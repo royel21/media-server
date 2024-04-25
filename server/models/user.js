@@ -60,7 +60,7 @@ export default (sequelize) => {
           }
         },
         beforeBulkCreate: (users, opt) => {
-          for (var user of users) {
+          for (let user of users) {
             user.Id = nanoid(10);
             if (opt.encript) {
               user.Password = hashSync(user.Password, genSaltSync(8), null);

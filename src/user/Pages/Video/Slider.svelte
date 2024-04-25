@@ -53,8 +53,8 @@
 
   const onPreview = (e) => {
     if (preview) {
-      var newPos = Math.floor(e.pageX - getLeft(sliderRef));
-      var pos = map(newPos - 1, 0, sliderRef.offsetWidth - 2, 0, 100).toFixed(0);
+      let newPos = Math.floor(e.pageX - getLeft(sliderRef));
+      let pos = map(newPos - 1, 0, sliderRef.offsetWidth - 2, 0, 100).toFixed(0);
       let tempVal = map(newPos - 1, 0, sliderRef.offsetWidth - 2, min, max).toFixed(2);
       pos = clamp(pos, 0, 100);
       let value = clamp(tempVal, 0, max);

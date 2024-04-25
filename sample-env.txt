@@ -1,8 +1,8 @@
 NODE_ENV=production # for optimization purpose
 # Server Config
 USE_DEV=false
-HOST=ip for production purpose localhost, 127.0.0.1
-PORT=port for production purpose 8080
+HOST=ip for production purpose default localhost, 127.0.0.1
+PORT=port for production purpose default 8080
 
 
 VITE_PORT=for vite server
@@ -12,9 +12,9 @@ DEV_PORT=port for development purpose 8080
 
 SESSION=sessin secret for express "mysecret"
 #directories
-DOWNLOAD_DIR=where to put the downloads /home/<user>/download
-IMAGES_DIR=where to put the thumbnails  /home/<user>/images
-BACKUP_DIR=where to put backup  /home/<user>/backups
+DOWNLOAD_DIR=where to put the downloads default /home/<user>/rcstudio/downloads
+IMAGES_DIR=where to put the thumbnails  /home/<user>//rcstudio/images
+BACKUP_DIR=where to put backup  /home/<user>//rcstudio/backups
 
 # databse Config is needed
 CONNECTOR=madiadb or sqlite only

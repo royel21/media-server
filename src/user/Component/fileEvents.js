@@ -6,7 +6,7 @@ const RIGHT = 39;
 const ENTER = 13;
 const HOME = 36;
 const END = 35;
-var selectedIndex = 0;
+let selectedIndex = 0;
 
 Storage.prototype.getObject = function (key) {
   let value = this.getItem(key);

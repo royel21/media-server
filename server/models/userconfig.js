@@ -29,7 +29,7 @@ export default (sequelize) => {
           if (!item.Id) item.Id = nanoid(6);
         },
         beforeBulkCreate: (instances, options) => {
-          for (var item of instances) {
+          for (let item of instances) {
             item.Id = nanoid(10);
           }
         },

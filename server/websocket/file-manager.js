@@ -6,7 +6,7 @@ import winEx from "win-explorer";
 import { nanoid } from "nanoid";
 import db from "../models/index.js";
 
-var io;
+let io;
 
 const setSocket = (_io) => (io = _io);
 

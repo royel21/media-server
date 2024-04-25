@@ -4,12 +4,11 @@ import { config } from "dotenv";
 
 config();
 import db from "../models/index.js";
+import defaulPath from "../path-config.js";
 
 const sendMessage = (text, event = "info") => {
   process.send({ event, text });
 };
-
-const { IMAGES_DIR } = process.env;
 
 const types = {
   Manga: "mangas",
@@ -21,7 +20,7 @@ const cleanImages = async () => {
   //Cleaning Folder Thumbnails
   sendMessage(`Cleaning Folder Thumbnails`);
   for (let dir of ["mangas", "videos"]) {
-    const imgDir = path.join(IMAGES_DIR, "Folder", dir);
+    const imgDir = path.join(defaulPath.ImagesDir, "Folder", dir);
     const imgs = fs.readdirSync(imgDir);
     for (let img of imgs) {
       if ((await db.folder.findOne({ where: { Name: img.replace(".jpg", "") } })) === null) {
@@ -31,7 +30,7 @@ const cleanImages = async () => {
   }
 
   for (const Type of ["Manga", "Video"]) {
-    const imgDir = path.join(IMAGES_DIR, Type);
+    const imgDir = path.join(defaulPath.ImagesDir, Type);
     const folders = fs.readdirSync(imgDir);
     for (const folder of folders) {
       const found = await db.folder.findOne({

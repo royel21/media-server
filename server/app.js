@@ -15,7 +15,7 @@ config();
 import db, { createdb } from "./models/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
-global.appPath = path.dirname(__filename);
+const appPath = path.join(path.dirname(__filename), "public", "static");
 
 import userRoutes from "./routes/UserRoutes.js";
 import filesRoutes from "./routes/FilesRoutes.js";
@@ -26,6 +26,7 @@ import DirectoriesRoute from "./routes/admin/DirectoriesRoute.js";
 import FilesManagerRoute from "./routes/admin/FilesManagerRoute.js";
 import FoldersRoute from "./routes/admin/FoldersRoute.js";
 import DownloaderRoutes from "./routes/admin/DownloaderRoutes.js";
+import defaulPath from "./path-config.js";
 
 const app = express();
 const passport = passportConfig();
@@ -37,18 +38,17 @@ app.use(cookieParser());
 
 app.use(
   compression({
-    filter: function (req, res) {
+    filter: function (req) {
       return !req.url.includes("viewer/video");
     },
   })
 );
 
-app.use(express.static(process.env.IMAGES_DIR));
-app.use(express.static(global.appPath + "/public/static", { dotfiles: "allow" }));
-console.log("images", process.env.IMAGES_DIR);
+app.use(express.static(defaulPath.ImagesDir));
+app.use(express.static(appPath, { dotfiles: "allow" }));
 
 const sessionMeddle = session({
-  name: process.env.SESSION,
+  name: process.env.SESSION || "rcmediaserver",
   secret: "2491eb2c-595d-4dc8-8427",
   resave: false,
   saveUninitialized: false,
@@ -78,7 +78,7 @@ app.use("/api/admin/files", FilesManagerRoute);
 app.use("/api/admin/folders", FoldersRoute);
 app.use("/api/admin/downloader", DownloaderRoutes);
 
-const getPath = (type) => path.join(global.appPath, "public", type, "index.html");
+const getPath = (type) => path.join(path.dirname(__filename), "public", type, "index.html");
 
 // process login page request
 app.get("/login/*", (_, res) => res.sendFile(getPath("/static/login")));
@@ -98,8 +98,8 @@ app.use((e, _, res, __) => {
 });
 
 const { DB_NAME, USE_DEV, PORT, DEV_PORT, HOST, DEV_HOST } = process.env;
-const host = USE_DEV ? DEV_HOST : HOST;
-const port = USE_DEV ? DEV_PORT : PORT;
+const host = (USE_DEV ? DEV_HOST : HOST) || "localhost";
+const port = (USE_DEV ? DEV_PORT : PORT) || 8432;
 
 const iniServer = async () => {
   console.log("Create DB if Needed", DB_NAME);
