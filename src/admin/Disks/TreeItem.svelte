@@ -11,7 +11,6 @@
   const expandFolder = async (event) => {
     let li = event.target.closest("li");
     let item = items.find((d) => d.Id.toString() === li.id);
-    console.log("export folder");
     if (item.Content.length === 0) {
       const data = await apiUtils.post("admin/directories/Content", { Path: item.Path });
       item.Content = data.data;
