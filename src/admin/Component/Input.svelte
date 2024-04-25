@@ -1,9 +1,9 @@
 <script>
   import Icons from "src/icons/Icons.svelte";
 
-  export let item;
-  export let key;
-  export let label;
+  export let item = {};
+  export let key = "";
+  export let label = "";
   let clazz;
   export { clazz as class };
   export let onChange = (e) => {};

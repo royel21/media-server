@@ -22,14 +22,17 @@
     showModal = false;
     item = {};
   };
+  const onDiskdata = (data) => {
+    content = data;
+  };
+  socket.on("disk-loaded", onDiskdata);
+
   onMount(() => {
-    socket.on("disk-loaded", (data) => {
-      content = data;
-    });
     socket.emit("load-disks");
   });
+
   onDestroy(() => {
-    delete socket._callbacks["$disk-loaded"];
+    socket.off("disk-loaded", onDiskdata);
   });
 </script>
 

@@ -1,10 +1,10 @@
 <script>
   export let type = "text";
   export let value;
-  export let name;
-  export let label;
-  export let placeholder;
-  export let width;
+  export let name = "";
+  export let label = "";
+  export let placeholder = "";
+  export let width = "";
 
   function typeAction(node) {
     node.type = type;

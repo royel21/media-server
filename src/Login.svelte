@@ -20,10 +20,10 @@
 <div id="login-container" class:more={showPass}>
   <h3 class="mb-4"><Icons name="signin" /> Login</h3>
   <form on:submit|preventDefault={onSubmit}>
-    <Input width="65px" name="username" bind:value={user.username} placeholder="Name" {error}>
+    <Input width="65px" name="username" bind:value={user.username} placeholder="Name">
       <Icons name="user" slot="label" />
     </Input>
-    <Input width="65px" name="password" type="password" bind:value={user.password} placeholder="Password" {error}>
+    <Input width="65px" name="password" type="password" bind:value={user.password} placeholder="Password">
       <Icons name="key" slot="label" />
     </Input>
     <div class="cp-label">
@@ -32,14 +32,7 @@
         <input type="checkbox" id="toggle-pass" bind:checked={showPass} />
       </label>
       {#if showPass}
-        <Input
-          width="65px"
-          name="newpassword"
-          type="password"
-          bind:value={user.newpassword}
-          placeholder="New Password"
-          {error}
-        >
+        <Input width="65px" name="newpassword" type="password" bind:value={user.newpassword} placeholder="New Password">
           <Icons name="key" slot="label" />
         </Input>
       {/if}
