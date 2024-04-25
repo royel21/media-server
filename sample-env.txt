@@ -16,7 +16,7 @@ DOWNLOAD_DIR=where to put the downloads /home/<user>/download
 IMAGES_DIR=where to put the thumbnails  /home/<user>/images
 BACKUP_DIR=where to put backup  /home/<user>/backups
 
-# databse Config
+# databse Config is needed
 CONNECTOR=madiadb or sqlite only
 DB_NAME=tabase name
 DB_HOST=ip of the db server or localhost, 127.0.0.1

@@ -1,6 +1,7 @@
 import winex from "win-explorer";
 import db from "../models/index.js";
 import path from "node:path";
+import defaulPath from "../path-config.js";
 
 export const getDb = () => db;
 
@@ -16,13 +17,11 @@ export const findFolder = async (Name) => {
   return db.folder.findOne({ where: { Name } });
 };
 
-const { DOWNLOAD_DIR } = process.env;
-
 export const findOrCreateFolder = async (manga, IsAdult) => {
   let { Name, Description, Genres, AltName, Status, Server, Author } = manga;
   Genres = Genres?.replace(/(, |)Webtoon(, |)/gi, "");
 
-  const Path = path.join(DOWNLOAD_DIR, IsAdult ? "R18/webtoon" : "mangas", Name);
+  const Path = path.join(defaulPath.DownloadDir, IsAdult ? "R18/webtoon" : "mangas", Name);
 
   try {
     let folder = await db.folder.findOne({
