@@ -10,6 +10,7 @@
   import CreateFolderModal from "./CreateFolderModal.svelte";
   import ReplaceImage from "./ReplaceImage.svelte";
   import { setMessage } from "../Store/MessageStore";
+  import Modal from "./Modal.svelte";
   const dispatch = createEventDispatcher();
   const socket = getContext("socket");
 
@@ -100,6 +101,18 @@
       scanning = [...scanning, folder.Id];
     }
   };
+  const handleSubmit = ({ detail }) => {
+    //if we are deleting the file
+    if (modalType.Del) {
+      let Del = detail.target.querySelector("input").checked;
+      socket.emit("remove-folder", { Id: folder.Id, Del });
+    }
+  };
+
+  const hideModal = () => {
+    showModal = false;
+    folder = {};
+  };
 
   const onShowImage = (e) => {
     const found = items.find((i) => i.Id === e.currentTarget.id);
@@ -136,6 +149,7 @@
   const onFolderRemove = (data) => {
     if (data.success && data.Id) {
       reload();
+      hideModal();
     }
   };
 
@@ -172,6 +186,10 @@
 
 {#if createFolder}
   <CreateFolderModal hide={() => (createFolder = false)} {socket} />
+{/if}
+
+{#if showModal}
+  <Modal file={folder} {modalType} on:submit={handleSubmit} on:click={hideModal} />
 {/if}
 
 {#if showImage && totalItems}

@@ -10,7 +10,7 @@
   import Icons from "../icons/Icons.svelte";
   import Tools from "./Tools/Tools.svelte";
   import RConsole from "./Component/RConsole.svelte";
-  import { MessageStore } from "./Store/MessageStore";
+  import { MessageStore, setMessage } from "./Store/MessageStore";
 
   let logout = getContext("logout");
   let user = getContext("User");
@@ -36,19 +36,22 @@
     },
   ];
 
+  let tout;
+
   const hideMessage = () => {
     toastRef.style.top = -toastRef.offsetHeight - 10 + "px";
     toastRef.style.opacity = -0;
-    message = "";
+    setMessage("");
   };
 
   const onMessege = (data) => {
     if (data) {
       toastRef.style.top = "80px";
       toastRef.style.opacity = 1;
-      setTimeout(hideMessage, 5000);
-      message = data;
+      clearTimeout(tout);
+      tout = setTimeout(hideMessage, 5000);
     }
+    message = data;
   };
 
   $: onMessege($MessageStore);

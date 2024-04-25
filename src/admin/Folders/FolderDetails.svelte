@@ -47,10 +47,6 @@
       value = validateAuthor(value);
     }
 
-    if (name === "DirectoryId") {
-      folder.Transfer = true;
-    }
-
     if (type === "checkbox") {
       value = checked;
     }
@@ -85,9 +81,10 @@
         return (error = "Name Can't be empty");
       }
 
-      socket.emit("rename-folder", folder);
+      socket.emit("rename-folder", { ...folder, Transfer: transfer });
       hasChanges = false;
       old = { ...folder };
+      transfer = false;
     }
   };
 
