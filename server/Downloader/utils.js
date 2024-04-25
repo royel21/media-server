@@ -1,5 +1,4 @@
 import fs from "fs-extra";
-import { spawnSync } from "node:child_process";
 import { getDb } from "./db-worker.js";
 
 export const isChar = (c) => {
@@ -116,19 +115,16 @@ export function sendMessage(data, event = "info") {
   }
 }
 
-const { DIR_USER } = process.env;
-
 export const createDir = (dir) => {
   try {
     if (!fs.existsSync(dir)) {
       fs.mkdirsSync(dir);
-      if (DIR_USER) {
-        spawnSync("chown", ["-R", `${DIR_USER}:${DIR_USER}`, dir]);
-      }
+      return true;
     }
   } catch (error) {
     console.log(error);
   }
+  return false;
 };
 
 const types = { mangas: "Manga", videos: "Video" };

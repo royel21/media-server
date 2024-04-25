@@ -14,13 +14,13 @@ export const delay = (ms) => {
 };
 //Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.203
 //Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.188
-export const createPage = async (browser) => {
+export const createPage = async (browser, timeout = 180000) => {
   const page = await browser.newPage();
   // page.setUserAgent(
   //   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.203"
   // );
   await page.setViewport({ width: 1200, height: 800 });
-  await page.setDefaultNavigationTimeout(180000);
+  await page.setDefaultNavigationTimeout(timeout);
 
   await page._client().send("Page.setLifecycleEventsEnabled", { enabled: true });
   await page._client().send("Network.enable", {
@@ -61,4 +61,9 @@ export const startBrowser = async (config) => {
   }
 
   return pupeteer;
+};
+
+export const getPages = async () => {
+  const p = await pupeteer?.pages();
+  return p?.length || 1;
 };

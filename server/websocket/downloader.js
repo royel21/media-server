@@ -18,6 +18,8 @@ export const download = async (data) => {
     downloader.on("message", (info) => {
       if (info.event === "update-download") {
         global.io.sockets.emit("update-download", info);
+      } else if (info.event === "create-cover") {
+        global.io.sockets.emit("cover-update", info.data);
       } else {
         global.io.sockets.emit("info", info.data);
       }

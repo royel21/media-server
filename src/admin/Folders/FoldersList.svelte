@@ -132,7 +132,7 @@
 
   const onFolderRename = (data) => {
     if (data.msg) {
-      setMessage(data.msg);
+      setMessage(data);
     }
 
     let index = items.findIndex((f) => f.Id === data.Id);
@@ -194,7 +194,10 @@
 
 {#if showImage && totalItems}
   <div class="thumbnail">
-    <img src={`/Folder/${showImage.FilesType}/${encodeURIComponent(showImage?.Name)}.jpg`} alt="Cover Not Found" />
+    <img
+      src={`/Folder/${showImage.FilesType}/${encodeURIComponent(showImage?.Name)}.jpg?v=${new Date().getTime()}`}
+      alt="Cover Not Found"
+    />
   </div>
 {/if}
 

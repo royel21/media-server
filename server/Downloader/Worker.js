@@ -5,8 +5,8 @@ import { findOrCreateFolder, getDb } from "./db-worker.js";
 import { evaluetePage, adultEvalPage } from "./evaluator.js";
 
 import { createFolderCover } from "./ImageUtils.js";
-import { filterManga, dateDiff, removeRaw, sendMessage, createDir } from "./utils.js";
-import { startBrowser, createPage } from "./Crawler.js";
+import { filterManga, dateDiff, removeRaw, sendMessage } from "./utils.js";
+import { startBrowser, createPage, getPages } from "./Crawler.js";
 
 import { downloadLink } from "./link-downloader.js";
 import { downloadFromPage } from "./checkServer.js";
@@ -82,7 +82,7 @@ const downloadLinks = async (link, page) => {
 
   await updateLastChapter(manga, link);
 
-  let files = await createFolderCover(folder.Path, manga, page);
+  let { files } = await createFolderCover(folder.Path, manga, page);
 
   if (!folder) {
     return sendMessage({ text: "Fail to find or create folder entry in database", color: "red" });
@@ -127,15 +127,24 @@ const downloadLinks = async (link, page) => {
   await db.Link.update({ Date: new Date() }, { where: { Name: folder.Name } });
 };
 
-const cleanUp = async () => {
-  state.links = [];
-  state.running = false;
-  state.size = 0;
-  state.stopped = false;
-  state.browser = null;
-  await state.browser?.close();
-  sendMessage({ text: "Finish - All Job" }, "stop-process");
-  process.exit();
+const cleanUp = async (error) => {
+  if (error) {
+    sendMessage({ text: "Process Stopped - Internal Error", color: "red", error });
+  }
+  const pcount = await getPages();
+  if (pcount === 1 || state.stopped) {
+    state.links = [];
+    state.running = false;
+    state.size = 0;
+    state.stopped = false;
+    state.browser = null;
+    if (state.browser) {
+      await state.browser.close();
+    }
+    console.log("pages", pcount);
+    sendMessage({ text: "Finish - All Job" }, "stop-process");
+    process.exit();
+  }
 };
 
 const onDownload = async (bypass, headless) => {
@@ -173,6 +182,8 @@ const onDownload = async (bypass, headless) => {
       sendMessage({ text: `Link ${link.Name} was checked recently`, color: "red" });
     }
   }
+
+  await page.close();
 };
 
 const loadLinks = async (datas) => {
@@ -192,6 +203,19 @@ const loadLinks = async (datas) => {
     }
     state.size += count;
   }
+};
+
+const onCreateCover = async ({ Id, imgUrl }) => {
+  const page = await createPage(state.browser, 3000);
+  if (/http/i.test(imgUrl)) {
+    const folder = await db.folder.findOne({ where: { Id } });
+    if (folder) {
+      const { result } = await createFolderCover(folder.Path, { poster: imgUrl, Name: folder.Name }, page, true);
+      sendMessage({ Id, valid: result }, "create-cover");
+    }
+  }
+  await page.close();
+  await cleanUp();
 };
 
 process.on("message", async ({ action, datas, headless, remove, bypass, server }) => {
@@ -223,15 +247,13 @@ process.on("message", async ({ action, datas, headless, remove, bypass, server }
 
       if (!state.running) {
         state.running = true;
-
-        onDownload(bypass, headless, cleanUp)
-          .catch((error) => {
-            sendMessage({ text: "Process Stopped - Internal Error", color: "red", error });
-            cleanUp();
-          })
-          .then(async () => await cleanUp());
+        onDownload(bypass, headless).catch(cleanUp).then(cleanUp);
       }
       break;
+    }
+
+    case "Create-Cover": {
+      onCreateCover(datas);
     }
   }
 });

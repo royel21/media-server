@@ -139,28 +139,32 @@ export const createThumb = async (fromImg, toImg) => {
 
 const getPadding = (length) => (length > 999 ? 4 : length > 99 ? 3 : 2);
 
-export const createFolderCover = async (mangaDir, data, page) => {
+export const createFolderCover = async (mangaDir, data, page, update) => {
   let files = [];
-
-  createDir(mangaDir);
-
-  files = fs.readdirSync(mangaDir);
-  const poster = files.find((f) => /\.(jpg|webp|png|jpeg)/gi.test(f));
+  let result = false;
   try {
     let posterPath = path.join(mangaDir, "Cover.jpg");
-    if (!poster) {
-      await downloadImg(posterPath, data.poster, page, true);
+    let poster = false;
+
+    if (!createDir(mangaDir)) {
+      files = fs.readdirSync(mangaDir);
+      poster = files.find((f) => /\.(jpg|webp|png|jpeg)/gi.test(f));
+    }
+
+    if (!poster || update) {
+      result = await downloadImg(posterPath, data.poster, page, true);
     }
 
     let Cover = path.join(imgPath, "Folder", "mangas", data.Name + ".jpg");
-    if (!fs.existsSync(Cover) && fs.existsSync(posterPath)) {
+    if ((!fs.existsSync(Cover) && fs.existsSync(posterPath)) || update) {
       await sharp(posterPath).jpeg().toFile(Cover);
     }
   } catch (error) {
+    result = false;
     sendMessage({ text: `Folder-Cover-Error: ${data.poster}`, color: "Red", error });
   }
 
-  return files.filter((f) => f.includes(".zip"));
+  return { files: files.filter((f) => f.includes(".zip")), result };
 };
 
 export const downloadAllIMages = async (page, links, dir, linkData) => {

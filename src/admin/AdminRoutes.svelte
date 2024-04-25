@@ -41,11 +41,11 @@
   const hideMessage = () => {
     toastRef.style.top = -toastRef.offsetHeight - 10 + "px";
     toastRef.style.opacity = -0;
-    setMessage("");
+    setMessage({});
   };
 
   const onMessege = (data) => {
-    if (data) {
+    if (data.msg) {
       toastRef.style.top = "80px";
       toastRef.style.opacity = 1;
       clearTimeout(tout);
@@ -64,7 +64,7 @@
 
 <Router>
   <div class="toast-container">
-    <span bind:this={toastRef} class="toast" on:click={hideMessage}>{message}</span>
+    <span bind:this={toastRef} class="toast" class:error={message.error} on:click={hideMessage}>{message.msg}</span>
   </div>
   <Navbar on:click {navItems}>
     <span id="admin-label" on:click={logout} slot="user" title="Log Out" on:keydown>
@@ -109,11 +109,18 @@
     position: absolute;
     top: -20px;
     background-color: rgb(58, 119, 172);
-    padding: 2px 5px;
+    padding: 4px 5px;
     border-radius: 0.25rem;
     opacity: 0;
     max-width: 750px;
     transition: all 0.3s;
+    overflow-wrap: break-word;
+  }
+
+  .toast.error {
+    background-color: firebrick;
+    font-weight: 600;
+    color: white;
   }
   @media screen and (max-width: 600px) {
     .content {

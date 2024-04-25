@@ -6,6 +6,7 @@
   import TextAreaInput from "../Component/TextAreaInput.svelte";
   import Input from "../Component/Input.svelte";
   import { isDiff, validGenres, validateAuthor } from "../Utils";
+  import { setMessage } from "../Store/MessageStore";
 
   export let folderId;
   export let Name;
@@ -66,14 +67,23 @@
     hasChanges = false;
   };
 
-  const save = async () => {
-    if (imageData.Url && /^http/.test(imageData.Url)) {
-      const result = await apiUtils.post("admin/folders/image", imageData);
+  const onCoverUpdate = (result) => {
+    if (result.Id === folderId) {
       if (result.valid) {
         imageData.Url = "";
+        setMessage({ msg: `Cover for: ${folder.Name} was updated` });
       } else {
-        return (error = "Couldn't getImage from URL");
+        setMessage({ error: true, msg: `Could't get the image from Url: ${imageData.Url}` });
       }
+    }
+  };
+
+  socket.off("cover-update", onCoverUpdate);
+  socket.on("cover-update", onCoverUpdate);
+
+  const save = async () => {
+    if (imageData.Url && /^http/.test(imageData.Url)) {
+      socket.emit("download-server", { action: "Create-Cover", datas: { Id: folderId, imgUrl: imageData.Url } });
     }
 
     if (hasChanges) {
