@@ -97,16 +97,11 @@
   .modal-container :global(.input-label) {
     width: 145px;
   }
-  .error {
-    color: red;
-    font-weight: 600;
-  }
   .message {
     color: rgb(3 16 255);
     font-weight: 600;
   }
-  .message:empty,
-  .error:empty {
+  .message:empty {
     display: none;
   }
 

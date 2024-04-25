@@ -98,13 +98,6 @@
   label {
     text-align: center;
   }
-  .error:empty {
-    display: none;
-  }
-  .error {
-    color: red;
-    font-weight: 600;
-  }
   @media screen and (max-width: 450px) {
     .modal {
       width: 380px;

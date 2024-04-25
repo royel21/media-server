@@ -147,6 +147,13 @@ input[type="text"]:not(:placeholder-shown) + span {
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
+.error:empty {
+  display: none;
+}
+.error {
+  color: red;
+  font-weight: 600;
+}
 
 /*************************Scrollbar Style********************************/
 

@@ -85,9 +85,6 @@
     text-align: left;
     width: 145px;
   }
-  .error:empty {
-    display: none;
-  }
   .error {
     color: red;
     font-weight: 600;

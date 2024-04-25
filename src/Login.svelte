@@ -68,9 +68,6 @@
   }
 
   .error {
-    display: none;
-  }
-  .error:not(:empty) {
     display: block;
     margin: 10px 0;
     color: firebrick;
