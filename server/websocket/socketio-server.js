@@ -29,12 +29,12 @@ export default async (server, sessionMeddle) => {
       socket.on("user-info", (data) => console.log(data));
       console.log("User: ", user.Name, socket.id);
 
+      socket.on("remove-file", (data) => FileManager.fileWork("removeFile", data));
       if (user.Role.includes("Administrator")) {
         socket.on("load-disks", FileManager.diskLoader);
         socket.on("load-content", FileManager.loadContent);
 
         socket.on("rename-file", (data) => FileManager.fileWork("renameFile", data));
-        socket.on("remove-file", (data) => FileManager.fileWork("removeFile", data));
         socket.on("rename-folder", (data) => FileManager.fileWork("renameFolder", data));
         socket.on("remove-folder", (data) => FileManager.fileWork("removeFolder", data));
 
