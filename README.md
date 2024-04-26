@@ -2,7 +2,7 @@
 
 # Features
 
-### complete open source
+### Complete open source
 
 - Stream Image from zip file
 - Stream mp4, mkv videos
