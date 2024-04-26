@@ -1,25 +1,25 @@
-NODE_ENV=production # for optimization purpose
-# Server Config
-USE_DEV=false
-HOST=ip for production purpose default localhost, 127.0.0.1
-PORT=port for production purpose default 8080
+#--------------------------------Server Config--------------------------------
+NODE_ENV=production                         # for optimization purpose
+HOST=localhost                              # default localhost
+PORT=8428                                   # port for production purpose default 8180
+SESSION=mysecret-session                    # default "mysecret-session"
 
+#--------------------------------directories--------------------------------
+DOWNLOAD_DIR=where to put the downloads     # default <user>/rcstudio/downloads
+IMAGES_DIR=where to put the thumbnails      # default <user>/rcstudio/images
+BACKUP_DIR=where to put backup              # default <user>/rcstudio/backups
 
-VITE_PORT=for vite server
-VITE_HOST=for vite server
-DEV_HOST=ip for development purpose localhost, 127.0.0.1
-DEV_PORT=port for development purpose 8080
+#--------------------------databse Config is needed-----------------------------------
+CONNECTOR=sqlite                            # madiadb or sqlite - default sqlite
+DB_NAME=rcmediaserverdb                     # database name
+DB_HOST=localhost                           # ip of the db server default localhost
+DB_USER=root                                # mariadb username
+DB_PASSWORD=root                            # mariadb password
 
-SESSION=sessin secret for express "mysecret"
-#directories
-DOWNLOAD_DIR=where to put the downloads default /home/<user>/rcstudio/downloads
-IMAGES_DIR=where to put the thumbnails  /home/<user>//rcstudio/images
-BACKUP_DIR=where to put backup  /home/<user>//rcstudio/backups
-
-# databse Config is needed
-CONNECTOR=madiadb or sqlite only
-DB_NAME=tabase name
-DB_HOST=ip of the db server or localhost, 127.0.0.1
-DB_USER=db <user> name
-DB_PASSWORD=password of the db if mariadb for CONNECTOR.
-DEV_DB_HOST=ip of the db server or localhost, 127.0.0.1 for when in dev mode
+#-----------------------------Dev Mode----------------------------------------------
+USE_DEV=false                               # run in dev mode
+VITE_PORT=8034                              # for vite server - default 8084
+VITE_HOST=localhost                         # for vite server localhost
+DEV_HOST=localhost                          # default localhost
+DEV_PORT=8083                               # default 8083
+DEV_DB_HOST=localhost                       # use for devmode

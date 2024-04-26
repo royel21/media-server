@@ -60,19 +60,19 @@
       <thead>
         <tr>
           <th>No.</th>
-          <th>Bakups</th>
           <th class="action">Action</th>
+          <th>Bakups</th>
         </tr>
       </thead>
       <tbody>
         {#each backups as backup, i}
           <tr id={backup}>
             <td>{i + 1}</td>
-            <td>{backup}</td>
-            <td>
+            <td class="action">
               <span on:click={restoreBackup}><Icons name="sync" /></span>
               <span on:click={removeBackup}><Icons name="trash" /></span>
             </td>
+            <td>{backup}</td>
           </tr>
         {/each}
       </tbody>
@@ -91,7 +91,6 @@
     margin-top: 10px;
     padding: 10px;
   }
-  td:last-child,
   .action {
     width: 90px;
     max-width: 90px;

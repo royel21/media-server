@@ -26,7 +26,7 @@ import DirectoriesRoute from "./routes/admin/DirectoriesRoute.js";
 import FilesManagerRoute from "./routes/admin/FilesManagerRoute.js";
 import FoldersRoute from "./routes/admin/FoldersRoute.js";
 import DownloaderRoutes from "./routes/admin/DownloaderRoutes.js";
-import defaulPath from "./path-config.js";
+import defaultConfig from "./default-config.js";
 
 const app = express();
 const passport = passportConfig();
@@ -44,7 +44,7 @@ app.use(
   })
 );
 
-app.use(express.static(defaulPath.ImagesDir));
+app.use(express.static(defaultConfig.ImagesDir));
 app.use(express.static(path.join(appPath, "public", "static"), { dotfiles: "allow" }));
 
 const sessionMeddle = session({

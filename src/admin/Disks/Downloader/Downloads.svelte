@@ -228,7 +228,7 @@
       <Pagination page={datas.page} totalPages={datas.totalPages} on:gotopage={gotopage} />
       <div class="input-group d-items">
         <span class="input-group-text"><Icons name="list" color="black" /></span>
-        <input class="form-control" bind:value={datas.items} on:keydown={changeItems} />
+        <input type="number" class="form-control" bind:value={datas.items} on:keydown={changeItems} />
       </div>
     </span>
   </div>
@@ -260,14 +260,14 @@
             <span title={link.LastChapter}>{link.LastChapter}</span>
           </span>
           <span title={link.Name || nameFromurl(link.Url)}>
-            <span on:click={excludeLink} title="Exclude Link From Group Download" on:keydown>
-              <Icons name="files" box="0 0 464 512" color={link.Exclude ? "firebrick" : "#47f046"} />
-            </span>
             <span on:click={downloadLink} title="Download This Link" on:keydown>
               <Icons name="download" color="lightblue" />
             </span>
             <span on:click={editLink} title="Edit Link" on:keydown>
               <Icons name="edit" />
+            </span>
+            <span on:click={excludeLink} title="Exclude Link From Group Download" on:keydown>
+              <Icons name="files" box="0 0 464 512" color={link.Exclude ? "firebrick" : "#47f046"} />
             </span>
             <span on:click={removeLink} title="Remove Link" on:keydown>
               <Icons name="trash" color="firebrick" />
@@ -320,6 +320,7 @@
     margin-left: 2px;
   }
   .d-items > * {
+    text-align: center;
     height: 32px;
   }
   .container {

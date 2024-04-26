@@ -2,10 +2,10 @@ import path from "path";
 import fs from "fs-extra";
 import { nanoid } from "nanoid";
 import { DataTypes } from "sequelize";
-import defaulPath from "../path-config.js";
+import defaultConfig from "../default-config.js";
 
 export default (sequelize) => {
-  const genImgPath = (type, fname, name) => `${defaulPath.ImagesDir}/${type}/${fname}/${name}.jpg`;
+  const genImgPath = (type, fname, name) => `${defaultConfig.ImagesDir}/${type}/${fname}/${name}.jpg`;
 
   const { INTEGER, STRING, DATE, FLOAT, VIRTUAL } = DataTypes;
   const File = sequelize.define(

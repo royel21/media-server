@@ -2,7 +2,7 @@ import db from "../models/index.js";
 import { literal } from "sequelize";
 import fs from "fs-extra";
 
-const { BACKUP_DIR, DB } = process.env;
+const { BACKUP_DIR, DB_NAME } = process.env;
 
 export const dayfmt = new Intl.DateTimeFormat("en-GB", {
   year: "2-digit",
@@ -141,7 +141,7 @@ export const getUserData = async (users, db) => {
 };
 
 export default async () => {
-  sendMessage(`Bakup ---${DB}---`);
+  sendMessage(`Bakup ---${DB_NAME}---`);
   console.time("Backup");
   if (BACKUP_DIR) {
     try {
@@ -155,11 +155,11 @@ export default async () => {
 
       datas.users = await getUserData(users, db);
 
-      sendMessage("Getting Files From DB this may take a while");
+      sendMessage("Getting Files From DB_NAME this may take a while");
       datas.directory = await getAllDirectories();
 
       fs.mkdirsSync(BACKUP_DIR);
-      const savePath = `${BACKUP_DIR}/${DB} - ${formatAMPM(new Date()).replace(/:/g, "'")}.json`;
+      const savePath = `${BACKUP_DIR}/${DB_NAME} - ${formatAMPM(new Date()).replace(/:/g, "'")}.json`;
       fs.writeJSONSync(savePath, datas);
       sendMessage("Save to " + savePath);
     } catch (error) {

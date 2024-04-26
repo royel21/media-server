@@ -17,33 +17,23 @@ import Excludes from "./Excludes.js";
 
 import dbconfig from "./config.js";
 import { config as configEnv } from "dotenv";
+import defaultConfig from "../default-config.js";
 configEnv();
 
-const { DB_HOST, DEV_DB_HOST, DB_USER, DB_PASSWORD, USE_DEV, DB_NAME, CONNECTOR } = process.env;
+const { dbConnector, dbName, dbStorage, dbUser, dbPassword, dbHost } = defaultConfig;
 
-const host = USE_DEV ? DEV_DB_HOST : DB_HOST;
+const config = dbconfig[dbConnector];
+config.host = dbHost;
+config.storage = dbStorage;
 
-const dbConfig = {
-  user: DB_USER || "root",
-  password: DB_PASSWORD || 123456,
-  host: host || "localhost",
-  dbName: "mediaserverdb",
-  connector: CONNECTOR || "sqlite",
-  storage: `${DB_NAME || "mediaserverdb"}.sqlite`,
-};
-
-const config = dbconfig[dbConfig.connector];
-config.host = dbConfig.host;
-config.storage = `${DB_NAME || dbConfig.dbName}.sqlite`;
-
-const sequelize = new Sequelize(dbConfig.dbName, dbConfig.user, dbConfig.password, config);
+const sequelize = new Sequelize(dbName, dbUser, dbPassword, config);
 
 const db = {
   Op: Sequelize.Op,
   sqlze: sequelize,
   user: user(sequelize),
   file: file(sequelize),
-  folder: folder(sequelize, /sqlite/i.test(dbConfig.connector)),
+  folder: folder(sequelize, /sqlite/i.test(dbConnector)),
   favorite: favorite(sequelize),
   userConfig: userConfig(sequelize),
   directory: directory(sequelize),
@@ -141,9 +131,9 @@ db.init = async (force) => {
 };
 
 export const createdb = async () => {
-  if (dbConfig.connector === "mariadb") {
-    const sequelize = new Sequelize("", dbConfig.user, dbConfig.password, { dialect: dbConfig.connector, host });
-    await sequelize.query(`CREATE DATABASE if not exists ${dbConfig.dbName}`);
+  if (dbConnector === "mariadb") {
+    const sequelize = new Sequelize("", dbUser, dbPassword, { dialect: dbConnector, host: dbHost });
+    await sequelize.query(`CREATE DATABASE if not exists ${dbName}`);
     return sequelize.close();
   }
 };
