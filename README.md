@@ -22,13 +22,13 @@
 - PORT=8180 **# for express server when in production**
 - SESSION=sessin **# secret for express # default "mysecret-session"**
 
-### -> Directory config
+### -> Directory config optional
 
 - DOWNLOAD_DIR=**\<user>/rcstudio/downloads**
 - IMAGES_DIR=**\<user>/rcstudio/images**
 - BACKUP_DIR=**\<user>/rcstudio/backups**
 
-### -> database configuration
+### -> database configuration optional
 
 - CONNECTOR=sqlite **# madiadb or sqlite**
 - DB_NAME=mediaserverdb **# database name**
@@ -36,7 +36,7 @@
 - DB_USER=root **# mariadb username**
 - DB_PASSWORD=root **# mariadb password**
 
-### -> For dev mode
+### -> For dev mode optional
 
 - USE_DEV=false **# optional run in dev mode**
 - VITE_PORT=8084 **# optional for vite server**
