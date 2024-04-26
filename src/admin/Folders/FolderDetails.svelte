@@ -109,11 +109,11 @@
     <TextAreaInput file={folder} key="Genres" style="margin-bottom: 5px" rows="2" {onChange} />
     <TextAreaInput file={folder} key="Description" rows="4" {onChange} />
     <Input key="Author" item={folder} {onChange} />
-    <CheckBox label="Completed" key="Status" item={folder} my="5px" {onChange} />
+    <CheckBox label="Completed" key="Status" item={folder} {onChange} />
     <CheckBox label="Is Adult" key="IsAdult" item={folder} {onChange} />
-    <CheckBox mt="5px" key="transfer" item={{ transfer }} onChange={() => (transfer = !transfer)} />
+    <CheckBox key="transfer" item={{ transfer }} onChange={() => (transfer = !transfer)} />
     {#if transfer}
-      <Select label="Directories" mt="5px" key="DirectoryId" {options} item={folder} {onChange} />
+      <Select label="Directories" key="DirectoryId" {options} item={folder} {onChange} />
     {/if}
     <Input key="Url" item={imageData} onChange={onUrl} />
   </div>

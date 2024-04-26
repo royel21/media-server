@@ -7,7 +7,7 @@
   import TextAreaInput from "../Component/TextAreaInput.svelte";
   import { validGenres } from "../Utils";
 
-  export let error;
+  export let error = "";
   export let ref = null;
   export let hide;
   export let socket;
@@ -71,10 +71,10 @@
         <TextAreaInput {file} key="AltName" style="margin-bottom: 5px" rows="3" {onChange} />
         <TextAreaInput {file} key="Genres" style="margin-bottom: 5px" rows="2" {onChange} />
         <TextAreaInput {file} key="Description" rows="4" {onChange} />
-        <CheckBox label="Completed" key="Status" item={file} my="5px" />
+        <CheckBox label="Completed" key="Status" item={file} />
         <CheckBox label="Is Adult" key="IsAdult" item={file} />
-        <Select label="Files Type" key="FilesType" mt="5px" options={types} item={file} />
-        <Select label="Directories" mt="5px" key="DirectoryId" {options} item={file} />
+        <Select label="Files Type" key="FilesType" options={types} item={file} />
+        <Select label="Directories" key="DirectoryId" {options} item={file} />
       </div>
       <div class="error">{error || ""}</div>
       <div class="message">{message || ""}</div>

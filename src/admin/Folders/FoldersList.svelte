@@ -213,7 +213,6 @@
   {filter}
   {scanning}
   {showGenres}
-  {onShowImage}
   {iconClick}
   on:filter={onFilter}
   on:gotopage={gotopage}

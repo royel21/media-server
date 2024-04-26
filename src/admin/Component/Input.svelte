@@ -4,8 +4,6 @@
   export let item = {};
   export let key = "";
   export let label = "";
-  let clazz;
-  export { clazz as class };
   export let onChange = (e) => {};
   let ref;
   const handler = async () => {
@@ -22,7 +20,7 @@
   };
 </script>
 
-<div class={"input-control " + clazz}>
+<div class={"input-control " + key}>
   <span class="input-label" on:click={handler} on:keydown={() => {}}>{label || key}</span>
   <input bind:this={ref} name={key} class="input" bind:value={item[key]} on:change={onChange} placeholder=" " />
   <span class="clear" on:click={clear}><Icons name="times" /></span>

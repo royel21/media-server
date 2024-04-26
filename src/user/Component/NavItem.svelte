@@ -1,5 +1,5 @@
 <script>
-  import Link from "svelte-routing/src/Link.svelte";
+  import { Link } from "svelte-routing";
   import { getProps } from "src/ShareComponent/DataUtils";
   import Icons from "src/icons/Icons.svelte";
   import { navigate } from "svelte-routing";
@@ -29,7 +29,7 @@
   }
 </script>
 
-<li class="nav-item" on:click={select} on:keydown id={data.items.others[0]?.Id}>
+<li class="nav-item" on:click={select} id={data.items.others[0]?.Id}>
   <Link to={`${item.path}/${data.current}`} {getProps}>
     <Icons name={item.class} height="22px" color={item.color} />
     <span class="nav-title">{item.title}</span>

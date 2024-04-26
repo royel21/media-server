@@ -40,8 +40,8 @@
 </script>
 
 <Router>
-  <Navbar on:click {navItems} filters={["Mangas", "Videos", "Favorites"]} let:item>
-    <NavItem {dirs} {item} slot="nav-item" {User} />
+  <Navbar on:click {navItems} filters={["Mangas", "Videos", "Favorites"]}>
+    <NavItem {dirs} {User} slot="nav-item" />
     <Config slot="user" />
   </Navbar>
 

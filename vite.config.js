@@ -10,13 +10,19 @@ const port = VITE_PORT;
 
 const serverPort = USE_DEV ? DEV_PORT : PORT;
 
+const warings = [
+  "a11y-click-events-have-key-events",
+  "a11y-no-noninteractive-element-interactions",
+  "a11y-no-static-element-interactions",
+];
+
 // https://vitejs.dev/config/
 export default defineConfig({
   root: "./src",
   plugins: [
     svelte({
       onwarn(warning, defaultHandler) {
-        if (warning.code === "a11y-click-events-have-key-events") return;
+        if (warings.includes(warning.code)) return;
 
         // handle all other warnings normally
         defaultHandler(warning);

@@ -13,8 +13,7 @@
   export let color = "white";
   export let width = "25px";
   export let box = "0 0 640 512";
-  let ref;
-
+  const xmlns = "http://www.w3.org/2000/svg";
   let fill = color || "white";
   let icon = icons[name];
 
@@ -22,9 +21,9 @@
   $: fill = color || "white";
 </script>
 
-<svg bind:this={ref} class={"icon-" + name} {fill} xmlns="http://www.w3.org/2000/svg" {height} {width} viewBox={box}
-  >{@html icon}</svg
->
+<svg class={"icon-" + name} {fill} {xmlns} {height} {width} viewBox={box}>
+  {@html icon}
+</svg>
 
 <style>
   svg {

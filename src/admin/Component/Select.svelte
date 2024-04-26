@@ -1,14 +1,12 @@
 <script>
-  export let label;
+  export let label = "";
   export let item;
-  export let key;
+  export let key = "";
   export let options = [];
   export let onChange = () => {};
-  let clazz;
-  export { clazz as class };
 </script>
 
-<div class={"input-control " + clazz}>
+<div class={"input-control " + key}>
   <span class="input-label">{label || key}</span>
   <select name={key} bind:value={item[key]} class="input" on:change={onChange}>
     {#each options as { Id, Name }}

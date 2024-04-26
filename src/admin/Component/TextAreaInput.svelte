@@ -3,8 +3,8 @@
 
   export let file;
   export let key;
-  export let label;
-  export let style;
+  export let label = "";
+  export let style = "";
   export let rows;
   export let ref = null;
   export let focus = false;

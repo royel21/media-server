@@ -4,7 +4,7 @@
 
   export let page;
   export let filter;
-  export let folderId;
+  export let folderId = "";
   export let dirid;
   let Name = "";
   let shwFiles = true;

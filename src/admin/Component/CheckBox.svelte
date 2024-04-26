@@ -3,13 +3,11 @@
 
   export let item = {};
   export let key;
-  export let label;
-  let clazz;
-  export { clazz as class };
+  export let label = "";
   export let onChange = (e) => {};
 </script>
 
-<div class={"input-control " + clazz}>
+<div class={"input-control " + key}>
   <span class="input-label">{label || key}</span>
   <label class="input">
     <Icons name={item[key] ? "check" : "times"} color="black" />
