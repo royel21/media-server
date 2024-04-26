@@ -2,7 +2,8 @@ import { join } from "path";
 import { existsSync, mkdirSync, readdirSync } from "fs";
 import { getVideoThumnail, ZipCover } from "./ThumbnailUtils.js";
 import db from "../models/index.js";
-import { getFileType } from "../websocket/Workers/utils.js";
+import { getFileType } from "../Downloader/utils.js";
+import defaulPath from "../path-config.js";
 
 export const genFileThumbnails = async (folders, sendMessage) => {
   let total = 0;

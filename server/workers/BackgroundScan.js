@@ -8,7 +8,7 @@ import fs from "fs-extra";
 import path from "path";
 import WinDrive from "win-explorer";
 import db from "../models/index.js";
-import { createDir, getFileType } from "../websocket/Workers/utils.js";
+import { createDir, getFileType } from "../Downloader/utils.js";
 import defaulPath from "../path-config.js";
 
 let folders = [];

@@ -15,7 +15,7 @@ config();
 import db, { createdb } from "./models/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
-const appPath = path.join(path.dirname(__filename), "public", "static");
+global.appPath = path.dirname(__filename);
 
 import userRoutes from "./routes/UserRoutes.js";
 import filesRoutes from "./routes/FilesRoutes.js";
@@ -45,7 +45,7 @@ app.use(
 );
 
 app.use(express.static(defaulPath.ImagesDir));
-app.use(express.static(appPath, { dotfiles: "allow" }));
+app.use(express.static(path.join(appPath, "public", "static"), { dotfiles: "allow" }));
 
 const sessionMeddle = session({
   name: process.env.SESSION || "rcmediaserver",
