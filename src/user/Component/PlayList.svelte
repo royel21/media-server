@@ -66,25 +66,19 @@
     <Icons name="list" width="30px" height="24px" />
   </span>
 </label>
-<div
-  id="p-bg"
-  class:hidelist={!hideList}
-  on:click|stopPropagation={(e) => (hideList = true)}
-  tabindex="-1"
-  on:keydown={() => {}}
-/>
+<div id="p-bg" class:hidelist={!hideList} on:click|stopPropagation={(e) => (hideList = true)} tabindex="-1" />
 <input name="show-hide-play-list" type="checkbox" id="p-hide" bind:checked={hideList} />
 <div id="play-list" class:move={!$ToggleMenu}>
   <div id="v-filter">
     <input name="clear-filters" type="text" bind:value={filter} placeholder="Filter" class="form-control" />
-    <span class="clear-filter" on:click={() => (filter = "")} on:keydown={() => {}}>
+    <span class="clear-filter" on:click={() => (filter = "")}>
       <Icons name="timescircle" />
     </span>
   </div>
   <div id="p-list" bind:this={playList}>
     <ul>
       {#each list as { Id, Name, CurrentPos, Duration, Type }}
-        <li id={Id} class={"usn " + (Id === fileId ? "active" : "")} on:click on:keydown={() => {}}>
+        <li id={Id} class={"usn " + (Id === fileId ? "active" : "")} on:click>
           <span class="cover">
             <LazyImage cover={getCover(Type, Name)} />
             <span class="duration">

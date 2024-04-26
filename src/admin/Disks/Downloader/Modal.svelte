@@ -7,8 +7,8 @@
   import TextAreaInput from "../../Component/TextAreaInput.svelte";
   import apiUtils from "src/apiUtils";
 
-  export let server;
-  export let link;
+  export let server = "";
+  export let link = "";
   export let error = "";
   export let hide;
   let ref;

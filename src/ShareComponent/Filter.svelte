@@ -32,7 +32,7 @@
 <div id="filter-control" class="input-group">
   <slot name="pre-btn" />
   <div class="input-group-prepend">
-    <span class="btn-filter input-group-text" on:click={btnFilter} on:keydown={() => {}}>
+    <span class="btn-filter input-group-text" on:click={btnFilter}>
       <Icons name="search" height="22px" color="#495057" />
     </span>
   </div>
@@ -45,7 +45,7 @@
     bind:value={curFilter}
     on:keydown={submitFilter}
   />
-  <span id="clear-filter" on:click={ClearFilter} on:keydown={() => {}}>
+  <span id="clear-filter" on:click={ClearFilter}>
     <Icons name="timescircle" height="22px" color="black" />
   </span>
 </div>

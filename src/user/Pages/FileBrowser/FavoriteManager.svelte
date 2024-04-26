@@ -58,7 +58,7 @@
     <div class="modal-title">
       <div id="fav-controls">
         <div class="input-group-prepend">
-          <label for="fav-name" id="addfav" class="input-group-text" on:click={saveFavorite} on:keydown={() => {}}>
+          <label for="fav-name" id="addfav" class="input-group-text" on:click={saveFavorite}>
             <Icons name="save" />
           </label>
           <div class="i-control">
@@ -69,7 +69,7 @@
               bind:value={currentFav.Name}
               placeholder="New Favorite"
             />
-            <span on:click={clearFavorite} on:keydown={() => {}}>
+            <span on:click={clearFavorite}>
               <Icons name="timescircle" />
             </span>
           </div>
@@ -89,14 +89,14 @@
         <tbody>
           {#each $FavoritesStores as fav}
             <tr id={fav.Id} class:active={fav.Id === id}>
-              <td on:click={loadFavorite} data-title={fav.Name} on:keydown={() => {}}>
+              <td on:click={loadFavorite} data-title={fav.Name}>
                 {fav.Name}
               </td>
               <td class="fa-icons">
-                <span on:click={editFavorite} on:keydown={() => {}}>
+                <span on:click={editFavorite}>
                   <Icons name="edit" color="rgba(20, 139, 236, 0.925)" />
                 </span>
-                <span on:click={removeFav} on:keydown={() => {}}>
+                <span on:click={removeFav}>
                   <Icons name="trash" color="rgba(252, 1, 1, 0.855)" />
                 </span>
               </td>

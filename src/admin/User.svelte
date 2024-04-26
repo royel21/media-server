@@ -51,9 +51,9 @@
   <ModalUser {foundUser} on:closeModal={hideModal} on:updateusers={updateUsers} />
 {/if}
 <div id="u-manager" class="card bg-dark manager">
-  <div class="remove-error" on:click={() => (error = "")} on:keydown={() => {}}>{error}</div>
+  <div class="remove-error" on:click={() => (error = "")}>{error}</div>
   <div class="u-controls">
-    <span class="btn" on:click={saveEdit} on:keydown={() => {}}>
+    <span class="btn" on:click={saveEdit}>
       <Icons name="userplus" />
     </span>
     <h3 class="text-center">Users Manager</h3>
@@ -72,10 +72,10 @@
       {#each users as user}
         <tr id={user.Id} key={user.Name}>
           <td>
-            <span class="u-edit" on:click={saveEdit} on:keydown={() => {}}>
+            <span class="u-edit" on:click={saveEdit}>
               <Icons name="edit" color="rgb(37, 140, 209)" />
             </span>
-            <span class="u-remove ml-2" on:click={removeUser} on:keydown={() => {}}>
+            <span class="u-remove ml-2" on:click={removeUser}>
               <Icons name="trash" color="rgba(252, 1, 1, 0.856)" />
             </span>
           </td>

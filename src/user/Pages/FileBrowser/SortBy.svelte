@@ -23,10 +23,10 @@
   };
 </script>
 
-<span class="config-list" on:click={onShowConfig} on:keydown={() => {}}
+<span class="config-list" on:click={onShowConfig}
   ><Icons name="cog" />
   {#if showConfig}
-    <div class="config-items" on:click|stopPropagation on:keydown={() => {}}>
+    <div class="config-items" on:click|stopPropagation>
       <div class="sortby">
         <label for="orderby">{label}</label>
         <select id="orderby" name="select-sort" class="fa" bind:value={Config.Content.sort}>
@@ -39,7 +39,7 @@
         <label for="items">Items: </label>
         <input id="items" name="items" type="number" bind:value={Config.Content.items} min="0" max="500" />
       </div>
-      <span on:click={save} on:keydown={() => {}}><Icons name="save" /></span>
+      <span on:click={save}><Icons name="save" /></span>
     </div>
   {/if}
 </span>

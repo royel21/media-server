@@ -5,7 +5,7 @@
   import apiUtils from "src/apiUtils";
   import Filter from "src/ShareComponent/Filter.svelte";
 
-  export let server;
+  export let server = "";
   export let hide;
 
   let servers = [];
@@ -87,7 +87,7 @@
               <td>{ser.Type}</td>
               <td on:click={changeState} on:keydown>{ser.Enable ? "True" : "False"}</td>
               <td>
-                <span class="dir-remove ml-2" on:click={removeServer} on:keydown={() => {}}>
+                <span class="dir-remove ml-2" on:click={removeServer}>
                   <Icons name="trash" />
                 </span>
               </td>

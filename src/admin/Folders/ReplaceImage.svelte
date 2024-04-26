@@ -31,7 +31,7 @@
     <form action="#" on:submit|preventDefault={submit}>
       <div class="modal-body">
         <div class="input-group">
-          <span class="input-group-text" on:click={onPaste} on:keydown={() => {}}>Url</span>
+          <span class="input-group-text" on:click={onPaste}>Url</span>
           <input class="form-control" bind:value={imageData.url} />
         </div>
       </div>

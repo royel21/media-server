@@ -6,7 +6,7 @@
   import Icons from "src/icons/Icons.svelte";
 
   export let hide;
-  export let linkId;
+  export let linkId = "";
 
   let nameList = [];
   let error = "";
