@@ -13,7 +13,7 @@
 - Content manager for admin
 - manga downloader with puppeeter
 
-# Server Configiuations
+# Server Configurations
 
 ### -> we need a .env file with the following Variables.
 
