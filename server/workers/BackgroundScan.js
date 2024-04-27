@@ -9,7 +9,7 @@ import path from "path";
 import WinDrive from "win-explorer";
 import db from "../models/index.js";
 import { createDir, getFileType } from "../Downloader/utils.js";
-import defaulPath from "../path-config.js";
+import defaultConfig from "../default-config.js";
 
 let folders = [];
 
@@ -26,10 +26,10 @@ const IMGTYPES = /\.(jpg|jpeg|png|gif|webp|jpe)$/i;
 
 let DirectoryId;
 
-createDir(path.join(defaulPath.ImagesDir, "Folder", "videos"));
-createDir(path.join(defaulPath.ImagesDir, "Folder", "mangas"));
-createDir(path.join(defaulPath.ImagesDir, "Manga"));
-createDir(path.join(defaulPath.ImagesDir, "Video"));
+createDir(path.join(defaultConfig.ImagesDir, "Folder", "videos"));
+createDir(path.join(defaultConfig.ImagesDir, "Folder", "mangas"));
+createDir(path.join(defaultConfig.ImagesDir, "Manga"));
+createDir(path.join(defaultConfig.ImagesDir, "Video"));
 
 const sendMessage = (text, event = "info") => {
   process.send({ event, text });
@@ -53,7 +53,7 @@ const rmOrphanFiles = async (folder) => {
     }
     folder.Files = folder.Files.filter((f) => !removed.includes(f.Id));
     const imgs = folder.Files.map((f) => f.Name + ".jpg");
-    const imageDir = path.join(defaulPath.ImagesDir, getFileType(folder), folder.Name);
+    const imageDir = path.join(defaultConfig.ImagesDir, getFileType(folder), folder.Name);
 
     const founds = fs.readdirSync(imageDir).filter((f) => /jpg/.test(f));
     for (let img of founds) {
@@ -81,7 +81,7 @@ const foldersPendingCover = [];
 
 const createFolderThumbnail = async (folder, files, isFolder) => {
   try {
-    let CoverPath = path.join(defaulPath.ImagesDir, "Folder", folder.FilesType, folder.Name + ".jpg");
+    let CoverPath = path.join(defaultConfig.ImagesDir, "Folder", folder.FilesType, folder.Name + ".jpg");
 
     if (!fs.existsSync(CoverPath) || isFolder) {
       let img = files.find((f) => IMGTYPES.test(f.Name));

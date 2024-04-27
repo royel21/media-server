@@ -8,14 +8,14 @@ import { evaleLinks } from "./evaluator.js";
 
 import { downloadAllIMages, createThumb } from "./ImageUtils.js";
 import { findRaw, sendMessage, createDir } from "./utils.js";
-import defaulPath from "../path-config.js";
+import defaultConfig from "../default-config.js";
 
-createDir(defaulPath.ImagesDir);
+createDir(defaultConfig.ImagesDir);
 
 export const downloadLink = async (d, page, Server, folder, count, adult, state) => {
   const mangaDir = folder.Path;
   const isAdult = adult || Server.Type === "Adult";
-  const imgDir = path.join(defaulPath.ImagesDir, "Manga", folder.Name);
+  const imgDir = path.join(defaultConfig.ImagesDir, "Manga", folder.Name);
 
   createDir(imgDir);
   createDir(mangaDir);

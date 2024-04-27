@@ -4,9 +4,7 @@ import fs from "fs-extra";
 import { createDir, sendMessage } from "./utils.js";
 import axios from "axios";
 import { delay } from "./Crawler.js";
-import defaulPath from "../path-config.js";
-
-const imgPath = defaulPath.ImagesDir;
+import defaultConfig from "../default-config.js";
 
 const parseDataUrl = (dataUrl) => {
   const matches = dataUrl.match(/^data:(.+);base64,(.+)$/);
@@ -23,7 +21,7 @@ export const getImgNh = async (url, page) => {
   await new Promise((resolve) => {
     sharp(buffer)
       .jpeg()
-      .toFile(imgPath, () => {
+      .toFile(defaultConfig.ImagesDir, () => {
         resolve("done");
       });
   });
@@ -156,7 +154,7 @@ export const createFolderCover = async (mangaDir, data, page, update) => {
       result = await downloadImg(posterPath, data.poster, page, true);
     }
 
-    let Cover = path.join(imgPath, "Folder", "mangas", data.Name + ".jpg");
+    let Cover = path.join(defaultConfig.ImagesDir, "Folder", "mangas", data.Name + ".jpg");
     if ((!fs.existsSync(Cover) && fs.existsSync(posterPath)) || update) {
       await sharp(posterPath).jpeg().toFile(Cover);
     }

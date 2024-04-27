@@ -3,7 +3,7 @@ import { existsSync, mkdirSync, readdirSync } from "fs";
 import { getVideoThumnail, ZipCover } from "./ThumbnailUtils.js";
 import db from "../models/index.js";
 import { getFileType } from "../Downloader/utils.js";
-import defaulPath from "../path-config.js";
+import defaultConfig from "../default-config.js";
 
 export const genFileThumbnails = async (folders, sendMessage) => {
   let total = 0;
@@ -19,7 +19,7 @@ export const genFileThumbnails = async (folders, sendMessage) => {
     if (existsSync(folder.Path)) {
       let files = [];
 
-      const thumbPath = join(defaulPath.ImagesDir, getFileType(folder), folder.Name);
+      const thumbPath = join(defaultConfig.ImagesDir, getFileType(folder), folder.Name);
 
       if (!existsSync(thumbPath)) {
         mkdirSync(thumbPath);
