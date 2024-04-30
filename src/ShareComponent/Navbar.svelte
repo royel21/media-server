@@ -3,9 +3,11 @@
   import { ToggleMenu } from "./ToggleMenu";
   import { getProps } from "./DataUtils";
   import Icons from "../icons/Icons.svelte";
+  import NavItem from "src/ShareComponent/NavItem.svelte";
 
   export let navItems;
   export let filters = [];
+  export let dirs = [];
 
   let menuToggle = false;
 
@@ -16,7 +18,7 @@
   <ul class="navbar-nav">
     {#each navItems as item}
       {#if filters.includes(item.title)}
-        <slot {item} name="nav-item" />
+        <NavItem {dirs} {item} slot="nav-item" />
       {:else}
         <li class="nav-item">
           <Link to={item.path} {getProps}>

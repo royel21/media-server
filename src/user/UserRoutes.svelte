@@ -10,7 +10,7 @@
   import Favorites from "./Pages/FileBrowser/Favorites.svelte";
   import Content from "./Pages/FileBrowser/Content.svelte";
   import Viewer from "./Pages/Viewer.svelte";
-  import NavItem from "./Component/NavItem.svelte";
+  import NavItem from "../ShareComponent/NavItem.svelte";
   import apiUtils from "../apiUtils";
   import Config from "./Component/Config.svelte";
   import { setConfig } from "./Stores/PageConfigStore";
@@ -40,8 +40,7 @@
 </script>
 
 <Router>
-  <Navbar on:click {navItems} filters={["Mangas", "Videos", "Favorites"]}>
-    <NavItem {dirs} {User} slot="nav-item" />
+  <Navbar on:click {navItems} {dirs} filters={["Mangas", "Videos", "Favorites"]}>
     <Config slot="user" />
   </Navbar>
 
