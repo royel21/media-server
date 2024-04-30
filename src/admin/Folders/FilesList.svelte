@@ -11,6 +11,7 @@
 
   export let folderId;
   let oldFolder;
+  let mounted = false;
 
   let page = 1;
   let totalPages;
@@ -133,17 +134,21 @@
   };
 
   onMount(async () => {
+    loadFiles(1);
     document.body.addEventListener("mouseleave", onShowInfo);
     socketEvent.forEach(({ name, event }) => socket.on(name, event));
+    mounted = true;
     return () => {
       document.body.removeEventListener("mouseleave", onShowInfo);
       socketEvent.forEach(({ name, event }) => socket.off(name, event));
     };
   });
 
-  $: if (folderId) {
+  $: if (mounted && folderId !== oldFolder) {
     filter = "";
     loadFiles(1);
+    oldFolder = folderId;
+    console.log("folder:", folderId);
   }
 </script>
 

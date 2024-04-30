@@ -14,7 +14,7 @@
   export let scanning = [];
   export let showGenres = false;
   export let iconClick;
-  let clazz;
+  let clazz = "";
   export { clazz as class };
 
   const addGenres = ({ target }) => {
