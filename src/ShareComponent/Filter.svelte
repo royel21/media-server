@@ -1,8 +1,10 @@
 <script>
   import Icons from "../icons/Icons.svelte";
   import { createEventDispatcher } from "svelte";
-  const dispatch = createEventDispatcher();
   export let filter = "";
+
+  const dispatch = createEventDispatcher();
+
   let curFilter = /%/.test(filter) ? decodeURIComponent(filter) : filter;
 
   const send = (text = "") => {

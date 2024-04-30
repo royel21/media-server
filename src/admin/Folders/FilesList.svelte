@@ -133,7 +133,6 @@
   };
 
   onMount(async () => {
-    loadFiles(1);
     document.body.addEventListener("mouseleave", onShowInfo);
     socketEvent.forEach(({ name, event }) => socket.on(name, event));
     return () => {
@@ -142,10 +141,9 @@
     };
   });
 
-  $: if (folderId !== oldFolder) {
+  $: if (folderId) {
     filter = "";
     loadFiles(1);
-    oldFolder = folderId;
   }
 </script>
 

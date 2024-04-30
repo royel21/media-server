@@ -22,10 +22,10 @@
   export let filter = "";
   export let type = "";
   export let title = "";
-  export let handleClick;
+  export let handleClick = null;
   export let useSlot = false;
-  export let onOpen;
-  export let setFolderInfo;
+  export let onOpen = null;
+  export let setFolderInfo = null;
 
   const dateFormat = { year: "numeric", month: "short", day: "numeric" };
 
@@ -59,8 +59,6 @@
       if (pg && data.page && +data.page !== +pg) {
         navigate(`/${type}/${data.page}/${search}`);
       }
-    } else {
-      console.log(data.error);
     }
   };
 
@@ -184,7 +182,7 @@
 </div>
 <div class="controls">
   <slot name="controls" />
-  <Filter {filter} on:filter={fileFilter} maxWidth="250px" />
+  <Filter {filter} on:filter={fileFilter} />
   <Pagination page={parseInt(page || 1)} totalPages={pageData.totalPages} on:gotopage={goToPage} />
   <span class="items">{pageData.totalFiles}</span>
 </div>
