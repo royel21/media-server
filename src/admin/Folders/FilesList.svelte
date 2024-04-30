@@ -148,7 +148,6 @@
     filter = "";
     loadFiles(1);
     oldFolder = folderId;
-    console.log("folder:", folderId);
   }
 </script>
 
