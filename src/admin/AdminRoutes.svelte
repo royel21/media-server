@@ -56,8 +56,10 @@
 
   $: onMessege($MessageStore);
 
-  socket.off("rebuild-message", onMessege);
-  socket.on("rebuild-message", onMessege);
+  const rebuildMessege = (msg) => onMessege({ msg });
+
+  socket.off("rebuild-message", rebuildMessege);
+  socket.on("rebuild-message", rebuildMessege);
 
   document.title = "Content Manager";
 </script>
