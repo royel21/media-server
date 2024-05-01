@@ -17,7 +17,7 @@ export const evaluetePage = (query) => {
     .replace(/:|\?|\*|<|>|"|^,|#/gi, "")
     .replace(/’/g, "'")
     .replace("–", "-")
-    .replace(/ \(official( \& Uncensored|)\)$/i, "")
+    .replace(/ (\(|\[)official( \& Uncensored|)(\)|\])$/i, "")
     .replace(/( )+/g, " ")
     .trim();
   Name = capitalize(Name);
@@ -177,7 +177,7 @@ export const adultEvalPage = async (query) => {
     .replace(/”( |)/g, ", ")
     .replace(/^(18\+|(ENDED|END)(\.|)+|ONGOING|ON GOING|HOT|NEW)/, "")
     .replace(/’/g, "'")
-    .replace(/ \(official( \& Uncensored|)\)$/i, "")
+    .replace(/ (\(|\[)official( \& Uncensored|)(\)|\])$/i, "")
     .replace(/( )+/g, " ");
   Name = Name.trim()
     .replace(/,$/, "")
