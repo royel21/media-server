@@ -11,7 +11,7 @@
   const select = ({ target }) => {
     const id = target.closest("li").id || target.id;
     data.current = id;
-    navigate(`${item.path}/${data.current}`);
+    // navigate(`${item.path}/${data.current}`);
   };
 
   $: if (dirs.Mangas.length) {

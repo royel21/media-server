@@ -27,7 +27,6 @@
   export let onOpen = null;
   export let setFolderInfo = null;
 
-  let oldId = "";
   const config = { ...$ConfigStore[title] };
 
   const dateFormat = { year: "numeric", month: "short", day: "numeric" };
@@ -43,7 +42,6 @@
 
   const loadContent = async (folderId, pg = 1, flt) => {
     if (location.pathname.includes("viewer")) return;
-
     const { items, sort } = config;
     const itemsPerPage = items || getFilesPerPage(3);
     const apiPath = title === "Content" ? `folder-content/${folderId}` : type;
@@ -144,10 +142,7 @@
 
   $: document.title = `${title} Page ${page || ""}`;
 
-  $: if (oldId !== id) {
-    oldId = id;
-    loadContent(id, page, filter || "");
-  }
+  $: loadContent(id, page, filter || "");
 
   let isContent = location.pathname.includes("content");
 </script>
