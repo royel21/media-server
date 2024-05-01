@@ -8,12 +8,12 @@
   let curFilter = /%/.test(filter) ? decodeURIComponent(filter) : filter;
 
   const send = (text = "") => {
-    curFilter = text.replace(/ (\(|\[)official( \& Uncensored|)(\)|\])$/i, "");
+    curFilter = text;
     let ftl = text
       .replace("’", "'")
       .replace(/:|\?|\"| Raw$/gi, "")
       .trim();
-    dispatch("filter", encodeURIComponent(ftl.replace(/ (\(|\[)official( \& Uncensored|)(\)|\])$/i, "")));
+    dispatch("filter", encodeURIComponent(ftl));
   };
 
   const ClearFilter = () => send("");
