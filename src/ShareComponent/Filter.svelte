@@ -11,7 +11,7 @@
     curFilter = text;
     let ftl = text
       .replace("’", "'")
-      .replace(/:|\?|\"/gi, "")
+      .replace(/:|\?|\"| Raw$/gi, "")
       .trim();
     dispatch("filter", encodeURIComponent(ftl));
   };

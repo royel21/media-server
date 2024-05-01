@@ -27,6 +27,9 @@
   export let onOpen = null;
   export let setFolderInfo = null;
 
+  let oldId = "";
+  const config = { ...$ConfigStore[title] };
+
   const dateFormat = { year: "numeric", month: "short", day: "numeric" };
 
   let ver = 1;
@@ -38,9 +41,10 @@
   let pageData = baseData;
   let favClicked = null;
 
-  const loadContent = async (folderId, pg = 1, flt = "") => {
+  const loadContent = async (folderId, pg = 1, flt) => {
     if (location.pathname.includes("viewer")) return;
-    const { items, sort } = $ConfigStore[title];
+
+    const { items, sort } = config;
     const itemsPerPage = items || getFilesPerPage(3);
     const apiPath = title === "Content" ? `folder-content/${folderId}` : type;
     const search = encodeURIComponent(flt || "");
@@ -74,8 +78,10 @@
 
   const handleKeydown = (event) => fileKeypress(event, page, goToPage, title);
 
-  const openFile = ({ target }) => {
-    const el = target.closest(".file");
+  const openFile = (e) => {
+    if (onOpen) onOpen(e);
+
+    const el = e.target.closest(".file");
     ProcessFile(el, "", title);
   };
 
@@ -98,7 +104,7 @@
     pageData.files = pageData.files.filter((f) => f.Id !== detail);
     if (!pageData.files.length) {
       page -= 1;
-      loadContent(id, page, filter || "");
+      loadContent(id, page, filter);
     } else {
       pageData = pageData;
     }
@@ -108,7 +114,7 @@
 
   const reloadDir = (data) => {
     if (data.Id === id && user.Id === data.user) {
-      loadContent(id, page, filter || "").then(() => ver++);
+      loadContent(id, page, filter).then(() => ver++);
     }
   };
 
@@ -122,8 +128,14 @@
 
   onMount(() => {
     ConfigStore.subscribe((value) => {
-      loadContent(id, page, filter, value);
+      const { items, sort } = value[title];
+      if (items !== config.items || sort !== config.sort) {
+        config.items = items;
+        config.sort = sort;
+        loadContent(id, page, filter);
+      }
     });
+
     socket.on("reload", reloadDir);
     return () => {
       socket.off("reload", reloadDir);
@@ -132,7 +144,10 @@
 
   $: document.title = `${title} Page ${page || ""}`;
 
-  $: loadContent(id, page, filter || "");
+  $: if (oldId !== id) {
+    oldId = id;
+    loadContent(id, page, filter || "");
+  }
 
   let isContent = location.pathname.includes("content");
 </script>
@@ -144,7 +159,7 @@
       <div class="file" id={Id} data-type={Type} tabIndex="0" in:fade>
         <div class="file-info">
           <div class="file-btns usn">
-            <span class="file-btn-left" on:click|stopPropagation={onOpen || openFile} on:keydown>
+            <span class="file-btn-left" on:click|stopPropagation={openFile} on:keydown>
               <Icons name={FileTypes[Type].class} height="22px" color={FileTypes[Type].color} />
             </span>
             <span class="file-progress">
@@ -162,7 +177,7 @@
               {/if}
             {/if}
           </div>
-          <div class="file-cover usn" on:dblclick|stopPropagation={onOpen || openFile}>
+          <div class="file-cover usn" on:dblclick|stopPropagation={openFile}>
             <LazyImage cover={getCover(Type, Name, FilesType) + `?v=${ver}`} />
             {#if Type.includes("Folder")}
               <span class="f-status" class:completed={Status}>{Status ? "Completed" : "OnGoing"}</span>

@@ -19,7 +19,6 @@
 
   const menu = document.querySelector("#menu");
 
-  let lastRead = "";
   let folderinfo = { Genres: "Loading Info" };
 
   const socket = getContext("socket");
@@ -61,8 +60,6 @@
   const scanfiles = () => {
     socket.emit("scan-dir", { Id: folderinfo?.Id, isFolder: true });
   };
-
-  const setLastRead = (data) => (lastRead = data);
 
   const setFolderInfo = (data) => {
     folderinfo = data;
@@ -129,7 +126,7 @@
     <button class="btn btn-secondary" on:click={scanfiles}>Update</button>
     <span><SortBy label="Sort By:" {showConfig} toggleConfig={handleClick} /></span>
   </div>
-  <FilesList title={"Content"} {type} filter={filter || ""} {page} {id} {setFolderInfo} {setLastRead} {handleClick}>
+  <FilesList title={"Content"} {type} {filter} {page} {id} {setFolderInfo} {handleClick}>
     <div class="first-controls" slot="controls" on:click={exitFolder} on:keydown>
       <Icons name="reply" />
     </div>
@@ -225,6 +222,7 @@
     border-radius: 0.25rem;
     background-color: #030611;
     margin: 18px 0px;
+    overflow: hidden;
   }
   #img-info {
     position: relative;

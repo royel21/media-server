@@ -10,7 +10,6 @@
   import Favorites from "./Pages/FileBrowser/Favorites.svelte";
   import Content from "./Pages/FileBrowser/Content.svelte";
   import Viewer from "./Pages/Viewer.svelte";
-  import NavItem from "../ShareComponent/NavItem.svelte";
   import apiUtils from "../apiUtils";
   import Config from "./Component/Config.svelte";
   import { setConfig } from "./Stores/PageConfigStore";
