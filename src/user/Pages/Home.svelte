@@ -79,7 +79,7 @@
   <div class="title">
     <span>
       <Icons {...folderIcon} name="folder" />
-      Last View
+      Reading History
     </span>
   </div>
   <div class="files-list" on:keydown={handleKeydown}>
@@ -116,16 +116,20 @@
     fill: rgb(250, 183, 15);
   }
 
-  .title {
-    top: 0;
-    position: sticky;
-    padding-top: 5px;
-    text-align: center;
-    z-index: 9;
+  :global(.icon-folder) {
+    height: 30px;
+    width: 35px;
   }
+
+  .title {
+    padding-top: 10px;
+    text-align: center;
+  }
+
   .title span {
     display: inline-block;
-    font-size: 1.25rem;
+    font-size: 1.5rem;
+    font-weight: 600;
     padding: 0 10px;
     color: black;
     background-color: antiquewhite;
