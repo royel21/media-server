@@ -6,11 +6,13 @@
   import apiUtils from "src/apiUtils";
 
   export let hide;
+  export let servers = [];
+
   let link = { Name: "", AltName: "", Url: "", Raw: false };
   let error = "";
   let ref;
 
-  const submit = async (e) => {
+  const submit = async () => {
     if (!link.Url) return (error = "Url Can't be Empty");
     if (!/^http/.test(link.Url)) return (error = "Not a valid Url");
 
@@ -28,8 +30,24 @@
     if (e.keyCode === 27) hide();
   };
 
+  const handle = ({ target: { name } }) => {
+    if (name === "Url") {
+      if (!link.IsAdult) {
+        const linkParts = link.Url.split("/");
+        let serv = linkParts[2].replace(/www\.|\.html/i, "");
+        for (const id in servers) {
+          if (servers[id].Name === serv) {
+            link.IsAdult = servers[id].Type === "Adult";
+            break;
+          }
+        }
+      }
+    }
+  };
+
   onMount(() => {
     ref?.focus();
+    console.log("links");
   });
 </script>
 
@@ -40,9 +58,9 @@
     </div>
     <form action="#" on:submit|preventDefault={submit}>
       <div class="modal-body">
-        <TextAreaInput key="Name" file={link} />
-        <TextAreaInput key="Url" file={link} />
-        <TextAreaInput key="AltName" file={link} />
+        <TextAreaInput key="Name" file={link} onChange={handle} />
+        <TextAreaInput key="Url" file={link} onChange={handle} />
+        <TextAreaInput key="AltName" file={link} onChange={handle} />
         <CheckBox label="Is Adult" key="IsAdult" item={link} />
         <CheckBox label="Is Raw" key="Raw" item={link} />
       </div>

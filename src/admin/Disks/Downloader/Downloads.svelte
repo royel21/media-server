@@ -186,7 +186,7 @@
 {/if}
 
 {#if showLinkModal}
-  <ModalLink hide={onNewlink} />
+  <ModalLink hide={onNewlink} {servers} />
 {/if}
 
 {#if showRenamer}
