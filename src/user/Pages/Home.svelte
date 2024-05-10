@@ -116,7 +116,7 @@
     fill: rgb(250, 183, 15);
   }
 
-  :global(.icon-folder) {
+  .title :global(.icon-folder) {
     height: 30px;
     width: 35px;
   }
