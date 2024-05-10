@@ -6,9 +6,9 @@ const initialData = {
   time: 0,
 };
 
-var touching = false;
-var gestureDir = 0;
-var touchData = { ...initialData };
+let touching = false;
+let gestureDir = 0;
+let touchData = { ...initialData };
 let time = 0;
 export const setGesture = (player) => {
   if (player) {

@@ -22,6 +22,7 @@
     socket?.close();
     if (isPwa()) {
       history.go(-(history.length - 1));
+      location.reload();
     } else {
       location.href = "/login";
     }
@@ -40,6 +41,7 @@
         console.log(error);
       }
     }
+    localStorage.setItem("user", user.username);
   });
 
   $: if (user.username) {

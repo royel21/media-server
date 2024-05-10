@@ -2,14 +2,14 @@
   import { onMount, getContext, onDestroy } from "svelte";
   import { navigate } from "svelte-routing";
 
-  import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
+  import { ToggleMenu } from "src/ShareComponent/ToggleMenu";
 
-  import apiUtils from "../../apiUtils";
+  import apiUtils from "src/apiUtils";
   import PlayList from "../Component/PlayList.svelte";
   import MangaViewer from "./Manga/MangaViewer.svelte";
   import VideoPLayer from "./Video/VideoPlayer.svelte";
-  import { KeyMap, handleKeyboard, isMobile, isVideo, isManga, showFileName, sortFileByName } from "./pagesUtils";
-  import Icons from "../../icons/Icons.svelte";
+  import { KeyMap, handleKeyboard, isMobile, isVideo, isManga, showFileName } from "./pagesUtils";
+  import Icons from "src/icons/Icons.svelte";
   import { getReturnPath } from "./filesUtils";
 
   export let folderId;
@@ -30,8 +30,9 @@
   let playList = [];
   let file = { Name: "", Type: "", Cover: "" };
   let viewer;
-  let fileIndex = 1;
+  let fileIndex = -1;
   let folderName = "";
+  let isManhwa = false;
 
   const saveFile = () => {
     let { Id, CurrentPos } = file;
@@ -60,22 +61,19 @@
 
   const returnBack = () => {
     saveFile();
-    navigate(getReturnPath("open-folder"));
+    let path = getReturnPath("open-folder");
+    if (!path) {
+      const parts = location.pathname.split("/");
+      path = `/${parts[1]}/content/${parts[3]}`;
+    }
+
+    navigate(path);
   };
 
   NextFile.action = () => changeFile(1);
   NextFile.isctrl = true;
   PrevFile.action = () => changeFile(-1);
   PrevFile.isctrl = true;
-
-  onMount(async () => {
-    let data = await apiUtils.post(`viewer/folder`, { id: folderId });
-    if (!data.fail) {
-      folderName = data.Name;
-      playList = files = data.files.sort(sortFileByName);
-      window.title = playList[0]?.Cover?.split("/")[2] || "";
-    }
-  });
 
   let runningClock;
   window.addEventListener("fullscreenchange", (e) => {
@@ -115,13 +113,53 @@
     fileIndex = playList.findIndex((f) => f.Id === fileId);
   }
 
+  const removeFile = async () => {
+    socket.emit("remove-file", { Id: fileId, Del: true, viewer: true });
+  };
+
+  const onFileRemove = (data) => {
+    if (data.viewer) {
+      const temp = playList[fileIndex];
+      if (temp) {
+        files = files.filter((f) => f.Id !== temp.Id);
+        playList = playList.filter((f) => f.Id !== temp.Id);
+        if (fileIndex === playList.length && fileIndex > 0) fileIndex--;
+        fileId = playList[fileIndex].Id;
+      }
+    }
+  };
+
+  const getFolderName = () => {
+    if (file.Name.includes(folderName)) {
+      return "";
+    }
+    return folderName + " -";
+  };
+
+  onMount(async () => {
+    let data = await apiUtils.post(`viewer/folder`, { id: folderId });
+    if (!data.fail) {
+      folderName = data.Name;
+      isManhwa = data.isManhwa;
+      playList = files = data.files;
+      window.title = playList[0]?.Cover?.split("/")[2] || "";
+    }
+
+    socket.on("file-removed", onFileRemove);
+    return () => {
+      socket.off("file-removed", onFileRemove);
+    };
+  });
+
   menu.style.display = "none";
+
+  const videoPlayer = location.pathname.includes("videos");
 </script>
 
-<div class="viewer" bind:this={viewer} on:keydown={handleKeyboard}>
+<div class="viewer" bind:this={viewer} on:keydown={handleKeyboard} class:video={isVideo(file)}>
   <div class="f-name" class:nomenu={$ToggleMenu}>
     <div class="name-c">
-      <span>{`${folderName} - ${file.Name}`}</span>
+      <span>{`${getFolderName()} ${file.Name}`}</span>
     </div>
   </div>
   <span class="info" class:top={isVideo(file)}>
@@ -132,10 +170,19 @@
     <div id="clock" />
   </span>
   <PlayList {fileId} files={playList} on:click={selectFile} {onFilter} {folderName} />
-  {#if isManga(file)}
-    <MangaViewer {viewer} {file} on:changefile={changeFile} on:returnBack={returnBack} {changePages} {KeyMap} />
-  {:else if isVideo(file)}
+  {#if videoPlayer}
     <VideoPLayer {file} {KeyMap} on:returnBack={returnBack} {viewer} />
+  {:else}
+    <MangaViewer
+      {viewer}
+      {file}
+      {isManhwa}
+      on:changefile={changeFile}
+      on:returnBack={returnBack}
+      {changePages}
+      {KeyMap}
+      {removeFile}
+    />
   {/if}
 </div>
 
@@ -191,6 +238,10 @@
     padding-left: 5px;
   }
   #clock:empty {
+    display: none;
+  }
+
+  .video :global(#btn-playlist) {
     display: none;
   }
 

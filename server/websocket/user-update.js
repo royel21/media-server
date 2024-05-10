@@ -1,24 +1,28 @@
 import db from "../models/index.js";
 
 const recentFolder = async ({ FolderId, CurrentFile }, user) => {
-  try {
-    let recent = await db.recentFolder.findOrCreate({
-      where: { FolderId, RecentId: user.Recent.Id },
-    });
-    await recent[0].update({ LastRead: new Date(), CurrentFile: CurrentFile });
-  } catch (error) {
-    console.log("update-recent-error", error);
+  if (FolderId) {
+    try {
+      let recent = await db.recentFolder.findOrCreate({
+        where: { FolderId, UserId: user.Id },
+      });
+      await recent[0].update({ LastRead: new Date(), CurrentFile: CurrentFile });
+    } catch (error) {
+      console.log("update-recent-error", error);
+    }
   }
 };
 
 const updateFilePos = async (data, user) => {
-  try {
-    let recent = await db.recentFile.findOrCreate({
-      where: { FileId: data.Id, RecentId: user.Recent.Id },
-    });
-    await recent[0].update({ LastPos: data.CurrentPos || 0 });
-  } catch (error) {
-    console.error(error?.Message);
+  if (data.Id) {
+    try {
+      let recent = await db.recentFile.findOrCreate({
+        where: { FileId: data.Id, UserId: user.Id },
+      });
+      await recent[0].update({ LastPos: data.CurrentPos || 0 });
+    } catch (error) {
+      console.error(error?.Message);
+    }
   }
 };
 

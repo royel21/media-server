@@ -275,7 +275,7 @@ function resolve(to, base) {
   // ./       , /users/123 => /users/123
   // ../      , /users/123 => /users
   // ../..    , /users/123 => /
-  // ../../one, /a/b/c/d   => /a/b/one
+  // src/one, /a/b/c/d   => /a/b/one
   // .././one , /a/b/c/d   => /a/b/c/one
   const allSegments = baseSegments.concat(toSegments);
   const segments = [];

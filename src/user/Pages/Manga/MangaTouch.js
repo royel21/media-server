@@ -1,4 +1,4 @@
-import { updateToggleMenu } from "../../../ShareComponent/ToggleMenu";
+import { updateToggleMenu } from "src/ShareComponent/ToggleMenu";
 import { showFileName } from "../pagesUtils";
 let tStart, tEnd;
 let point = {};
@@ -26,9 +26,7 @@ export const onTouchStart = (e) => {
   let { pageX, pageY } = (e.touches && e.touches[0]) || e;
   point = { x: pageX, y: pageY };
 
-  if ((e.touches && e.touches.length === 1) || e.type === "mousedown") {
-    touching = true;
-  }
+  touching = e.touches?.length === 1 || e.type === "mousedown";
 };
 
 export const onTouchMove = (e) => {
@@ -43,7 +41,7 @@ export const onTouchMove = (e) => {
 };
 
 export const onTouchEnd = (e) => {
-  if (!touching) return;
+  if (!touching) return e;
 
   touching = false;
 

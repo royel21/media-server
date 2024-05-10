@@ -1,7 +1,7 @@
 <script>
-  import Icons from "../../icons/Icons.svelte";
-  import apiUtils from "../../apiUtils";
-  import { FavoritesStores } from "../../user/Stores/FavoritesStores";
+  import Icons from "src/icons/Icons.svelte";
+  import apiUtils from "src/apiUtils";
+  import { FavoritesStores } from "src/user/Stores/FavoritesStores";
   export let isFav = [];
   export let favClicked;
 
@@ -34,7 +34,7 @@
   {#if thisEl === favClicked}
     <ul>
       {#each getFavs() as fav}
-        <li id={fav.Id} on:click={addToFav}>{fav.Name}</li>
+        <li id={fav.Id} on:click={addToFav} on:keydown>{fav.Name}</li>
       {/each}
     </ul>
   {/if}
@@ -91,5 +91,10 @@
   }
   li:not(:last-child) {
     border-bottom: 1px solid;
+  }
+  @media screen and (max-width: 480px) {
+    li {
+      padding: 8px;
+    }
   }
 </style>

@@ -1,4 +1,8 @@
-export default (sequelize, { STRING, INTEGER, DATE }) => {
+import { DataTypes } from "sequelize";
+
+export default (sequelize) => {
+  const { STRING, INTEGER, DATE } = DataTypes;
+
   const RecentFolder = sequelize.define(
     "RecentFolders",
     {
@@ -13,12 +17,18 @@ export default (sequelize, { STRING, INTEGER, DATE }) => {
       LastRead: {
         type: DATE,
       },
+      FolderId: {
+        type: STRING(6),
+      },
+      UserId: {
+        type: STRING(10),
+      },
     },
     {
       timestamps: false,
       uniqueKeys: {
         RecentFolder_unique: {
-          fields: ["RecentId", "FolderId"],
+          fields: ["UserId", "FolderId"],
         },
       },
       hooks: {

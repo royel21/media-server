@@ -4,6 +4,7 @@
 
   export let error = "";
   export let logIn;
+  let showPass = false;
 
   let user = { username: "", password: "" };
 
@@ -16,15 +17,27 @@
   document.title = "Media Server";
 </script>
 
-<div id="login-container">
+<div id="login-container" class:more={showPass}>
   <h3 class="mb-4"><Icons name="signin" /> Login</h3>
   <form on:submit|preventDefault={onSubmit}>
-    <Input width="65px" name="username" bind:value={user.username} placeholder="Name" {error}>
+    <Input width="65px" name="username" bind:value={user.username} placeholder="Name">
       <Icons name="user" slot="label" />
     </Input>
-    <Input width="65px" name="password" type="password" bind:value={user.password} placeholder="Password" {error}>
+    <Input width="65px" name="password" type="password" bind:value={user.password} placeholder="Password">
       <Icons name="key" slot="label" />
     </Input>
+    <div class="cp-label">
+      <label for="toggle-pass">
+        Change Password
+        <input type="checkbox" id="toggle-pass" bind:checked={showPass} />
+      </label>
+      {#if showPass}
+        <Input width="65px" name="newpassword" type="password" bind:value={user.newpassword} placeholder="New Password">
+          <Icons name="key" slot="label" />
+        </Input>
+      {/if}
+    </div>
+
     <div class="error">{error}</div>
     <div class="form-footer">
       <button type="submit">Submit</button>
@@ -39,14 +52,55 @@
     margin: 0;
     background: radial-gradient(ellipse at center, #14243d 0, #030611 100%);
   }
-  .error {
-    display: none;
+  :global(*),
+  :global(*::before),
+  :global(*::after) {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
   }
-  .error:not(:empty) {
+
+  :global(#root) {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .error {
     display: block;
     margin: 10px 0;
     color: firebrick;
     font-weight: 600;
+  }
+
+  #login-container {
+    display: flex;
+    flex-direction: column;
+    width: 380px;
+    height: fit-content;
+    user-select: none;
+    background-color: #343a40;
+    border-radius: 0.25rem;
+    border: 1px solid white;
+    padding: 0 20px;
+    color: white;
+    text-align: center;
+  }
+  #login-container.more {
+    height: 312px;
+  }
+
+  .cp-label {
+    display: flex;
+    justify-content: right;
+    flex-direction: column;
+    position: relative;
+    right: 0;
+  }
+  .cp-label label {
+    cursor: pointer;
+    flex-basis: content;
   }
 
   #login-container :global(.icon-signin) {
@@ -62,23 +116,12 @@
     top: 2px;
   }
 
-  #login-container {
-    position: absolute;
-    top: calc(50% - 150px);
-    left: calc(50% - 150px);
-    width: 300px;
-    user-select: none;
-    background-color: #343a40;
-    border-radius: 0.25rem;
-    border: 1px solid white;
-    padding: 5px;
-    color: white;
-    text-align: center;
-  }
-
   h3 {
     font-size: 1.7rem;
-    margin: 10px;
+    margin: 15px;
+  }
+  .form-footer {
+    padding: 15px;
   }
 
   button {
@@ -102,7 +145,17 @@
     border-color: #545b62;
   }
 
-  :global(.input-control) {
+  #login-container :global(.input-control) {
     margin: 10px 0;
+  }
+
+  #login-container :global(.input-control > input),
+  #login-container :global(.input-control > span) {
+    height: 36px;
+  }
+  @media screen and (max-width: 600px) {
+    #login-container {
+      width: 300px;
+    }
   }
 </style>

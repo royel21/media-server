@@ -11,9 +11,9 @@ export const isManga = (file) => file.Type.includes("Manga");
 export function formatTime(time) {
   if (time === 0) return "00:00";
 
-  var h = Math.floor(time / 3600);
-  var min = Math.floor((time / 3600 - h) * 60);
-  var sec = Math.floor(time % 60);
+  let h = Math.floor(time / 3600);
+  let min = Math.floor((time / 3600 - h) * 60);
+  let sec = Math.floor(time % 60);
   return (h === 0 ? "" : h + ":") + String(min).padStart(2, "0") + ":" + String(sec).padStart(2, "0");
 }
 
@@ -25,7 +25,7 @@ export const PageTitles = {
   "folder-content": "Folder-content",
 };
 
-var lastEl = null;
+let lastEl = null;
 export const setfullscreen = (element) => {
   try {
     if (lastEl && element.tagName !== "BODY") {

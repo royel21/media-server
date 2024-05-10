@@ -2,6 +2,7 @@ import { Router } from "express";
 import db from "../models/index.js";
 
 import { getOrderBy } from "./query-helper.js";
+import { Op } from "sequelize";
 
 const routes = Router();
 
@@ -76,10 +77,10 @@ routes.get("/:id/:order/:page/:items/:search?", async (req, res) => {
     const limit = +items || 16;
 
     const query = {
-      attributes: ["Id", "Name", "FileCount", "Type", "CreatedAt"],
+      attributes: ["Id", "Name", "FileCount", "Type", "CreatedAt", "FilesType"],
       where: {
         Name: {
-          [db.Op.like]: `%${search || ""}%`,
+          [Op.like]: `%${search || ""}%`,
         },
       },
       include: [

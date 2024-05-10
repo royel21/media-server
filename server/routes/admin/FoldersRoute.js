@@ -3,11 +3,11 @@ import db from "../../models/index.js";
 import { getFilter } from "../utils.js";
 import fs from "fs-extra";
 import path from "node:path";
-import { literal } from "sequelize";
+import { Op, literal } from "sequelize";
 
 const routes = Router();
 
-const getData = async ({ params, url }, res) => {
+const getData = async ({ params }, res) => {
   const { page, items, filter, folderId, dirId } = params;
   let filterTerm = decodeURIComponent(filter || "");
 
@@ -17,7 +17,7 @@ const getData = async ({ params, url }, res) => {
 
   const query = {
     attributes: ["Id", "Name", "Type"],
-    order: [db.sqlze.literal(`REPLACE(REPLACE(Name, "-", "0"), '[','0')`)], // used for natural ordering
+    order: [literal(`REPLACE(REPLACE(Name, "-", "0"), '[','0')`)], // used for natural ordering
     where: {},
     offset,
     limit,
@@ -30,14 +30,15 @@ const getData = async ({ params, url }, res) => {
   if (folderId) {
     query.where.FolderId = folderId;
     query.where.Name = filters;
+    query.attributes = [...query.attributes, "Size", "CreatedAt"];
     result = await db.file.findAndCountAll(query);
   } else {
     if (dirId && dirId !== "all") {
       query.where.DirectoryId = dirId;
     }
-    query.attributes = [...query.attributes, "Path", "Status", "FilesType", "Scanning"];
+    query.attributes = [...query.attributes, "Path", "Status", "FilesType", "Scanning", "Author"];
 
-    query.where[db.Op.or] = { Path: filters, AltName: filters };
+    query.where[Op.or] = { AltName: filters, Name: filters, Genres: filters, Author: filters };
     result = await db.folder.findAndCountAll(query);
 
     result.rows = result.rows.map((fd) => {
@@ -75,24 +76,27 @@ routes.get("/folder-raw/:Id", async (req, res) => {
 
 const mangaTypes = {
   Mg: "Manga",
-  mhu: "Manhua",
-  mhw: "Manhwa",
-  web: "Webtoon",
+  Mhw: "Manhwa",
+  Web: "Webtoon",
 };
 
 routes.get("/changes-genres/:Id/:genre", async (req, res) => {
   const { Id, genre } = req.params;
   const folder = await db.folder.findOne({ where: { Id } });
-  let genres = folder?.Genres.split(", ");
-
+  let genres = folder?.Genres.split(/,( |)/g);
   if (folder) {
-    if (genre !== "sort" && !genres?.includes("Raw")) {
-      genres = genres.filter((g) => !/manga|manhwa|manhua|webtoon/i.test(g));
+    if (genre !== "sort") {
+      if (!genres.includes("webtoon")) {
+        genres = genres.filter((g) => g && !/manhwa|webtoon/i.test(g));
+      } else {
+        genres = genres.filter((g) => g && !/manga|manhwa|manhua/i.test(g));
+      }
+
       genres.push(mangaTypes[genre]);
     }
 
     genres.sort();
-    folder.Genres = genres.join(", ");
+    folder.Genres = genres.filter((g) => g?.trim()).join(", ");
     await folder.save();
   }
   res.send({ valid: true });
@@ -120,13 +124,18 @@ routes.post("/folder-create", async (req, res) => {
 
 routes.get("/folder/:folderId?", async (req, res) => {
   const folder = await db.folder.findOne({ where: { Id: req.params.folderId || "" } });
+  if (!folder) return res.send({});
+
   const dirs = await db.directory.findAll({ order: ["Name"] });
+
   res.send({
-    Description: folder?.Description,
-    Genres: folder?.Genres,
-    AltName: folder?.AltName,
-    IsAdult: folder?.IsAdult,
-    DirectoryId: folder?.DirectoryId,
+    Description: folder.Description,
+    Genres: folder.Genres,
+    AltName: folder.AltName,
+    IsAdult: folder.IsAdult,
+    DirectoryId: folder.DirectoryId,
+    Author: folder.Author,
+    Status: folder.Status,
     dirs,
   });
 });

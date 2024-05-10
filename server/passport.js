@@ -1,15 +1,16 @@
 import { Strategy as LocalStrategy } from "passport-local";
 import db from "./models/index.js";
 import passport from "passport";
+import { literal } from "sequelize";
 
 export default () => {
   const deserializeUser = async (username, done) => {
     const user = await db.user.findOne({
-      order: [db.sqlze.literal("LOWER(Favorites.Name)")],
+      order: [literal("LOWER(Favorites.Name)")],
       where: {
         Name: username,
       },
-      include: [{ model: db.userConfig }, { model: db.recent }, { model: db.favorite, attributes: ["Id", "Name"] }],
+      include: [{ model: db.userConfig }, { model: db.favorite, attributes: ["Id", "Name"] }],
     });
 
     if (user) {
@@ -26,11 +27,11 @@ export default () => {
     { usernameField: "username", passwordField: "password" },
     async (username, password, done) => {
       const user = await db.user.findOne({
-        order: [db.sqlze.literal("LOWER(Favorites.Name)")],
+        order: [literal("LOWER(Favorites.Name)")],
         where: {
           Name: username,
         },
-        include: [{ model: db.userConfig }, { model: db.recent }, { model: db.favorite, attributes: ["Id", "Name"] }],
+        include: [{ model: db.userConfig }, { model: db.favorite, attributes: ["Id", "Name"] }],
       });
       const isValid = user?.validPassword(password);
       if (isValid) {

@@ -1,12 +1,8 @@
 <script>
-  import { onMount, createEventDispatcher } from "svelte";
+  import { createEventDispatcher } from "svelte";
   import { fade } from "svelte/transition";
-  import apiUtils from "../../apiUtils";
-  import CheckBox from "../Component/CheckBox.svelte";
-  import Select from "../Component/Select.svelte";
-  import Input from "./TextAreaInput.svelte";
-  import Icons from "../../icons/Icons.svelte";
-  import { validGenres } from "./Utils";
+  import TextAreaInput from "../Component/TextAreaInput.svelte";
+  import Icons from "src/icons/Icons.svelte";
 
   export let file;
   export let modalType;
@@ -16,24 +12,6 @@
   let options = [];
   let tempFile = { Name: "", Ex: "" };
   const dispatch = createEventDispatcher();
-
-  onMount(async () => {
-    if (file.Type === "Folder") {
-      const data = await apiUtils.admin(["folders", "folder", file.Id]);
-      file.Description = data.Description;
-      file.Genres = data.Genres;
-      file.AltName = data.AltName;
-      file.IsAdult = data.IsAdult;
-      file.DirectoryId = data.DirectoryId;
-      options = data.dirs.map((d) => ({ Id: d.Id, Name: d.FullPath }));
-    }
-  });
-
-  const onChange = ({ target: { name, value, checked, type } }) => {
-    if (type === "checkbox") value = checked;
-    if (name === "Genres") value = validGenres(value);
-    file[name] = value;
-  };
 
   const loadTemp = (f) => {
     if (/\.(zip|mp4|mkv|ogg|avi)$/i.test(f.Name)) {
@@ -62,7 +40,7 @@
 </script>
 
 <div class="modal-container">
-  <div class="modal card" transition:fade={{ duration: 200 }} on:keydown={onKeyDown} tabindex="0">
+  <div class="modal card" transition:fade={{ duration: 200 }} on:keydown={onKeyDown} tabindex="-1">
     <div class="modal-header">
       <h4>{modalType.title}</h4>
     </div>
@@ -80,18 +58,7 @@
             </label>
           </div>
         {:else}
-          <Input file={tempFile} key="Name" style="margin-bottom: 5px" rows="3" focus={true} />
-          {#if file.Type === "Folder"}
-            <Input {file} key="AltName" style="margin-bottom: 5px" rows="3" />
-            <Input {file} key="Genres" style="margin-bottom: 5px" rows="2" {onChange} />
-            <Input {file} key="Description" rows="4" />
-            <CheckBox label="Completed" key="Status" item={file} my="5px" />
-            <CheckBox label="Is Adult" key="IsAdult" item={file} />
-            <CheckBox mt="5px" key="Transfer" item={file} {onChange} />
-            {#if file.Transfer}
-              <Select label="Directories" mt="5px" key="DirectoryId" {options} item={file} />
-            {/if}
-          {/if}
+          <TextAreaInput file={tempFile} key="Name" style="margin-bottom: 5px" rows="3" focus={true} />
         {/if}
       </div>
       <div class="error">{modalType.error || ""}</div>
@@ -110,6 +77,12 @@
     width: 400px;
     outline: none;
   }
+  .modal-container :global(.input-control) {
+    margin-bottom: 5px;
+  }
+  .modal-container :global(.input-label) {
+    width: 145px;
+  }
   .del-label {
     width: fit-content;
   }
@@ -124,13 +97,6 @@
   }
   label {
     text-align: center;
-  }
-  .error:empty {
-    display: none;
-  }
-  .error {
-    color: red;
-    font-weight: 600;
   }
   @media screen and (max-width: 450px) {
     .modal {

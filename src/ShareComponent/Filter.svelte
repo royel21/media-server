@@ -1,17 +1,19 @@
 <script>
   import Icons from "../icons/Icons.svelte";
   import { createEventDispatcher } from "svelte";
-  const dispatch = createEventDispatcher();
   export let filter = "";
-  let curFilter = decodeURI(filter);
+
+  const dispatch = createEventDispatcher();
+
+  let curFilter = /%/.test(filter) ? decodeURIComponent(filter) : filter;
 
   const send = (text = "") => {
     curFilter = text;
     let ftl = text
       .replace("’", "'")
-      .replace(/:|\?|\"/gi, "")
+      .replace(/:|\?|\"| Raw$/gi, "")
       .trim();
-    dispatch("filter", encodeURI(ftl));
+    dispatch("filter", encodeURIComponent(ftl));
   };
 
   const ClearFilter = () => send("");
@@ -30,6 +32,7 @@
 </script>
 
 <div id="filter-control" class="input-group">
+  <slot name="pre-btn" />
   <div class="input-group-prepend">
     <span class="btn-filter input-group-text" on:click={btnFilter}>
       <Icons name="search" height="22px" color="#495057" />
@@ -39,6 +42,8 @@
     type="text"
     class="form-control filter-file"
     placeholder="Filter"
+    enterkeyhint="done"
+    autocomplete="off"
     bind:value={curFilter}
     on:keydown={submitFilter}
   />
@@ -48,7 +53,7 @@
 </div>
 
 <style>
-  #filter-control :global(svg) {
+  #filter-control :global(.icon-search) {
     top: 0px;
   }
 
@@ -74,7 +79,7 @@
   }
   @media screen and (max-width: 600px) {
     #filter-control {
-      width: 200px;
+      width: 220px;
     }
   }
 </style>

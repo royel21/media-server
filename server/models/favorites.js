@@ -1,6 +1,7 @@
 import { nanoid } from "nanoid";
+import { DataTypes } from "sequelize";
 
-export default (sequelize, DataTypes) => {
+export default (sequelize) => {
   const { STRING } = DataTypes;
   const Favorite = sequelize.define(
     "Favorite",
@@ -28,7 +29,7 @@ export default (sequelize, DataTypes) => {
           item.Id = nanoid(6);
         },
         beforeBulkCreate: (instances) => {
-          for (var item of instances) {
+          for (let item of instances) {
             item.Id = nanoid(6);
           }
         },

@@ -1,9 +1,10 @@
 import { Router } from "express";
 import db from "../../models/index.js";
 
-import { existsSync } from "fs";
-import { join } from "path";
+import fs from "fs-extra";
+import path from "path";
 import { ListFiles } from "win-explorer";
+import { literal } from "sequelize";
 
 const getNewId = () => {
   return Math.random().toString(36).slice(-5);
@@ -11,25 +12,7 @@ const getNewId = () => {
 
 const routes = Router();
 
-routes.get("/", async (req, res) => {
-  const data = await db.directory.findAll({
-    attributes: [
-      "Id",
-      "Name",
-      "FullPath",
-      "Type",
-      "FirstInList",
-      "IsAdult",
-      "IsLoading",
-      [db.sqlze.literal("(Select COUNT(Folders.Id) from Folders where DirectoryId = Directory.Id)"), "FolderCount"],
-      [db.sqlze.literal("(Select SUM(FileCount) from Folders where DirectoryId = Directory.Id)"), "TotalFiles"],
-    ],
-    order: ["IsAdult", "FullPath"],
-  });
-
-  let dirs = data.map((d) => d.dataValues);
-  res.send(dirs);
-});
+const { BACKUP_DIR } = process.env;
 
 routes.post("/remove", (req, res) => {
   let { Id } = req.body;
@@ -50,14 +33,14 @@ routes.post("/remove", (req, res) => {
 
 routes.post("/content", (req, res) => {
   let { Id, Path } = req.body;
-  if (existsSync(Path)) {
-    let dirs = ListFiles(Path, { directory: true });
+  if (fs.existsSync(Path)) {
+    let dirs = ListFiles(Path, { directory: true, hidden: true });
     let tdata = [];
     for (let d of dirs) {
       tdata.push({
         Id: getNewId(),
         Name: d.Name,
-        Path: join(Path, d.Name),
+        Path: path.join(Path, d.Name),
         Content: [],
       });
     }
@@ -74,6 +57,45 @@ routes.post("/update", async (req, res) => {
     success = true;
   }
   res.send({ success });
+});
+
+routes.get("/backups", async (_, res) => {
+  let backups = [];
+  if (fs.existsSync(BACKUP_DIR)) {
+    backups = fs.readdirSync(BACKUP_DIR);
+  }
+
+  res.send(backups);
+});
+
+routes.post("/rm-backup", async ({ body }, res) => {
+  if (body.backup) {
+    const backup = path.join(BACKUP_DIR, body.backup);
+    if (fs.existsSync(backup)) {
+      fs.removeSync(backup);
+    }
+    res.send({ success: true });
+  }
+});
+
+routes.get("/", async (req, res) => {
+  const data = await db.directory.findAll({
+    attributes: [
+      "Id",
+      "Name",
+      "FullPath",
+      "Type",
+      "FirstInList",
+      "IsAdult",
+      "IsLoading",
+      [literal("(Select COUNT(Folders.Id) from Folders where DirectoryId = Directory.Id)"), "FolderCount"],
+      [literal("(Select SUM(FileCount) from Folders where DirectoryId = Directory.Id)"), "TotalFiles"],
+    ],
+    order: ["IsAdult", "FullPath"],
+  });
+
+  let dirs = data.map((d) => d.dataValues);
+  res.send(dirs);
 });
 
 export default routes;

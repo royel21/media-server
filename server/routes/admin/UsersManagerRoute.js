@@ -36,11 +36,10 @@ const createUser = async (req) => {
     Id: null,
     CreatedAt: new Date(),
     Favorites: [{ Name: "Default" }],
-    Recent: { Name },
     UserConfig: { Name, Config },
   };
 
-  let newUser = await db.user.create(user, { encript: true, include: [db.recent, db.favorite, db.userConfig] });
+  let newUser = await db.user.create(user, { encript: true, include: [db.favorite, db.userConfig] });
 
   return {
     user: { ...newUser.dataValues, Password: "" },
@@ -59,6 +58,8 @@ const updateUser = async (req) => {
   if (!valid.user) {
     return { msg: "User Not Found", fail: true };
   }
+
+  if (!Password) delete req.body.Password;
 
   await valid.user.update(req.body, { encript: Password });
   return { fail: false, user: req.body };

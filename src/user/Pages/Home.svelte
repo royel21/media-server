@@ -3,19 +3,21 @@
   import { navigate } from "svelte-routing";
   import { getFilesPerPage, ProcessFile } from "./filesUtils";
 
-  import { clamp } from "../../ShareComponent/utils";
+  import { clamp } from "src/ShareComponent/utils";
   import { ConfigStore } from "../Stores/PageConfigStore";
-  import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
+  import { ToggleMenu } from "src/ShareComponent/ToggleMenu";
   import { fileKeypress, selectByTitle, selectElementById } from "../Component/fileEvents";
 
-  import api from "../../apiUtils";
-  import Filter from "../../ShareComponent/Filter.svelte";
-  import Pagination from "../../ShareComponent/Pagination.svelte";
-  import Icons from "../../icons/Icons.svelte";
+  import api from "src/apiUtils";
+  import Filter from "src/ShareComponent/Filter.svelte";
+  import Pagination from "src/ShareComponent/Pagination.svelte";
+  import Icons from "src/icons/Icons.svelte";
   import LazyImage from "../Component/LazyImage.svelte";
+  import { getLastChap } from "../Component/fileUtils";
 
   export let page = 1;
   export let filter = "";
+
   let title = "Home";
   let reload = true;
 
@@ -24,7 +26,7 @@
   const loadContent = async (pg, flt = "") => {
     if (reload) {
       const items = $ConfigStore.Home.items || getFilesPerPage(3);
-      const data = await api.files(["recents", items, pg, flt]);
+      const data = await api.files(["recents", items, pg, encodeURIComponent(flt)]);
       if (data.valid) {
         pageData = data;
         if (+pg !== +data.page) {
@@ -77,24 +79,24 @@
   <div class="title">
     <span>
       <Icons {...folderIcon} name="folder" />
-      Last View
+      Reading History
     </span>
   </div>
   <div class="files-list" on:keydown={handleKeydown}>
-    {#each pageData.items as { Id, Name, Type, Cover, FileCount, FilesType }, i}
-      <div class="file" id={Id} data-type={Type} data-types={FilesType} tabIndex="0" on:click={handleClick}>
+    {#each pageData.items as { Id, Name, Type, LastChapter, FileCount, FilesType }, i}
+      <div class="file" id={Id} data-type={Type} data-types={FilesType} tabIndex="0" on:click={handleClick} on:keydown>
         <div class="file-info">
           <div class="file-btns">
-            <span class="file-btn-left" on:click|stopPropagation={openFolder}>
+            <span class="file-btn-left" on:click|stopPropagation={openFolder} on:keydown>
               <Icons {...folderIcon} />
             </span>
-            <span class="file-progress">{FileCount}</span>
-            <span class="remove" on:click|stopPropagation={removeRecent}>
+            <span class="file-progress">{getLastChap(LastChapter, FilesType, FileCount)}</span>
+            <span class="remove" on:click|stopPropagation={removeRecent} on:keydown>
               <Icons name="trash" color="rgba(252, 1, 1, 0.856)" />
             </span>
           </div>
           <div class="file-cover" on:dblclick|stopPropagation={openFolder}>
-            <LazyImage cover={encodeURI(`/${Type}/${Name}.jpg`)} />
+            <LazyImage cover={encodeURI(`/${Type}/${FilesType}/${Name}.jpg`)} />
           </div>
           <div class="file-name">{Name}</div>
         </div>
@@ -114,16 +116,20 @@
     fill: rgb(250, 183, 15);
   }
 
-  .title {
-    top: 0;
-    position: sticky;
-    padding-top: 5px;
-    text-align: center;
-    z-index: 9;
+  .title :global(.icon-folder) {
+    height: 30px;
+    width: 35px;
   }
+
+  .title {
+    padding-top: 10px;
+    text-align: center;
+  }
+
   .title span {
     display: inline-block;
-    font-size: 1.25rem;
+    font-size: 1.5rem;
+    font-weight: 600;
     padding: 0 10px;
     color: black;
     background-color: antiquewhite;
@@ -131,14 +137,6 @@
     font-family: monospace;
   }
   .controls {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 5px 4px 5px;
-    z-index: 1;
     pointer-events: none;
   }
 </style>

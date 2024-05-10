@@ -3,32 +3,36 @@
   import { fade } from "svelte/transition";
   import { navigate } from "svelte-routing";
 
-  import { ConfigStore } from "../../user/Stores/PageConfigStore";
+  import { ConfigStore } from "src/user/Stores/PageConfigStore";
 
   import { FileTypes, ProcessFile, getFilesPerPage } from "../Pages/filesUtils";
   import { fileKeypress, selectElementById, selectByTitle } from "./fileEvents";
 
-  import Pagination from "../../ShareComponent/Pagination.svelte";
-  import Filter from "../../ShareComponent/Filter.svelte";
+  import Pagination from "src/ShareComponent/Pagination.svelte";
+  import Filter from "src/ShareComponent/Filter.svelte";
   import FavoriteList from "./FavoriteList.svelte";
-  import { clamp } from "../../ShareComponent/utils";
-  import { getItemsList } from "../../apiUtils";
-  import Icons from "../../icons/Icons.svelte";
+  import { clamp } from "src/ShareComponent/utils";
+  import { getItemsList } from "src/apiUtils";
+  import Icons from "src/icons/Icons.svelte";
   import LazyImage from "./LazyImage.svelte";
+  import { getLastChap } from "./fileUtils";
 
   export let id = "";
   export let page = 1;
   export let filter = "";
   export let type = "";
   export let title = "";
-  export let handleClick;
+  export let handleClick = null;
   export let useSlot = false;
-  export let onOpen;
-  export let setFolderInfo;
+  export let onOpen = null;
+  export let setFolderInfo = null;
+
+  const config = { ...$ConfigStore[title] };
+
+  const dateFormat = { year: "numeric", month: "short", day: "numeric" };
 
   let ver = 1;
   let folder;
-  let lastId = id;
 
   const socket = getContext("socket");
   const user = getContext("User");
@@ -36,12 +40,13 @@
   let pageData = baseData;
   let favClicked = null;
 
-  const loadContent = async (pg = 1, flt = "") => {
-    const { items, sort } = $ConfigStore[title];
+  const loadContent = async (folderId, pg = 1, flt) => {
+    if (location.pathname.includes("viewer")) return;
+    const { items, sort } = config;
     const itemsPerPage = items || getFilesPerPage(3);
-    const apiPath = title === "Content" ? `folder-content/${id}` : type;
-
-    let url = `/api/files/${apiPath}/${sort}/${pg}/${itemsPerPage}/${flt?.replace("%", "") || ""}`;
+    const apiPath = title === "Content" ? `folder-content/${folderId}` : type;
+    const search = encodeURIComponent(flt || "");
+    let url = `/api/files/${apiPath}/${sort}/${pg}/${itemsPerPage}/${search}`;
 
     const data = await getItemsList(url);
 
@@ -54,10 +59,8 @@
       }
 
       if (pg && data.page && +data.page !== +pg) {
-        navigate(`/${type}/${data.page}/${filter || ""}`);
+        navigate(`/${type}/${data.page}/${search}`);
       }
-    } else {
-      console.log(data.error);
     }
   };
 
@@ -65,19 +68,18 @@
     let pg = +detail;
     let { totalPages } = pageData;
     pg = clamp(pg, 1, totalPages);
-    navigate(`/${type}/${pg}/${filter || ""}`);
-    loadContent(pg, filter);
+    const search = encodeURIComponent(filter) || "";
+    navigate(`/${type}/${pg}/${search}`);
   };
 
-  const fileFilter = ({ detail }) => {
-    navigate(`/${type}/${1}/${detail || ""}`);
-    loadContent(1, detail);
-  };
+  const fileFilter = ({ detail }) => navigate(`/${type}/${1}/${detail || ""}`);
 
   const handleKeydown = (event) => fileKeypress(event, page, goToPage, title);
 
-  const openFile = ({ target }) => {
-    const el = target.closest(".file");
+  const openFile = (e) => {
+    if (onOpen) onOpen(e);
+
+    const el = e.target.closest(".file");
     ProcessFile(el, "", title);
   };
 
@@ -100,7 +102,7 @@
     pageData.files = pageData.files.filter((f) => f.Id !== detail);
     if (!pageData.files.length) {
       page -= 1;
-      loadContent(page, filter || "");
+      loadContent(id, page, filter);
     } else {
       pageData = pageData;
     }
@@ -110,20 +112,28 @@
 
   const reloadDir = (data) => {
     if (data.Id === id && user.Id === data.user) {
-      loadContent(page, filter).then(() => ver++);
+      loadContent(id, page, filter).then(() => ver++);
     }
   };
 
-  const getCover = (Type, Name) => {
-    if (folder) Name = `${folder}/${Name}`;
+  const getCover = (Type, Name, FilesType) => {
+    if (FilesType) {
+      return encodeURI(`/Folder/${FilesType}/${Name}.jpg`);
+    }
 
-    return encodeURI(`/${Type}/${Name}.jpg`);
+    return encodeURI(`/${Type}/${folder}/${Name}.jpg`);
   };
 
   onMount(() => {
     ConfigStore.subscribe((value) => {
-      loadContent(page, filter, value);
+      const { items, sort } = value[title];
+      if (items !== config.items || sort !== config.sort) {
+        config.items = items;
+        config.sort = sort;
+        loadContent(id, page, filter);
+      }
     });
+
     socket.on("reload", reloadDir);
     return () => {
       socket.off("reload", reloadDir);
@@ -132,10 +142,7 @@
 
   $: document.title = `${title} Page ${page || ""}`;
 
-  $: if (lastId !== id) {
-    lastId = id;
-    loadContent();
-  }
+  $: loadContent(id, page, filter || "");
 
   let isContent = location.pathname.includes("content");
 </script>
@@ -143,16 +150,16 @@
 <div class="scroll-container" class:r-content={isContent}>
   <slot name="header" />
   <div class="files-list" on:keydown={handleKeydown} on:click={favClick}>
-    {#each pageData.files as { Id, Name, Type, CurrentPos, Duration, isFav, FileCount, Status }}
+    {#each pageData.files as { Id, Name, Type, CurrentPos, Duration, isFav, FilesType, FileCount, LastChapter, Status, CreatedAt, Size, isRaw }}
       <div class="file" id={Id} data-type={Type} tabIndex="0" in:fade>
         <div class="file-info">
           <div class="file-btns usn">
-            <span class="file-btn-left" on:click|stopPropagation={onOpen || openFile}>
+            <span class="file-btn-left" on:click|stopPropagation={openFile} on:keydown>
               <Icons name={FileTypes[Type].class} height="22px" color={FileTypes[Type].color} />
             </span>
             <span class="file-progress">
               {#if Type.includes("Folder")}
-                {FileCount}
+                {getLastChap(LastChapter, FilesType, FileCount)}
               {:else}
                 {FileTypes[Type].formatter(CurrentPos, Duration)}
               {/if}
@@ -165,13 +172,19 @@
               {/if}
             {/if}
           </div>
-          <div class="file-cover usn" on:dblclick|stopPropagation={onOpen || openFile}>
-            <LazyImage cover={getCover(Type, Name) + `?v=${ver}`} />
+          <div class="file-cover usn" on:dblclick|stopPropagation={openFile}>
+            <LazyImage cover={getCover(Type, Name, FilesType) + `?v=${ver}`} />
             {#if Type.includes("Folder")}
-              <span class:completed={Status}>{Status ? "Completed" : "OnGoing"}</span>
+              <span class="f-status" class:completed={Status}>{Status ? "Completed" : "OnGoing"}</span>
+              <span class="f-raw" class:hidden={!isRaw}>Raw</span>
+            {:else}
+              <span class="file-date">
+                <span>{(Size / 1025 / 1024).toFixed(2)}mb</span>
+                <span>{new Date(CreatedAt)?.toLocaleDateString("en-us", dateFormat)}</span>
+              </span>
             {/if}
           </div>
-          <div class="file-name">{Name}</div>
+          <div class="file-name" title={Type !== "Folder" ? Name : ""}>{Name}</div>
         </div>
       </div>
     {/each}
@@ -179,17 +192,16 @@
 </div>
 <div class="controls">
   <slot name="controls" />
-  <Filter {filter} on:filter={fileFilter} maxWidth="250px" />
+  <Filter {filter} on:filter={fileFilter} />
   <Pagination page={parseInt(page || 1)} totalPages={pageData.totalPages} on:gotopage={goToPage} />
   <span class="items">{pageData.totalFiles}</span>
 </div>
 
 <style>
   .scroll-container.r-content {
-    padding-top: 15px;
-    padding-bottom: 0px;
-    height: calc(100% - 44px);
-    min-height: calc(100% - 44px);
+    height: calc(100% - 96px);
+    min-height: calc(100% - 90px);
+    padding-bottom: 90px;
   }
   .file-btn-left {
     cursor: pointer;
@@ -201,24 +213,40 @@
   .file-cover {
     position: relative;
   }
-  .file-cover span {
-    display: inline-block;
-    width: max-content;
+  .file-cover > span {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
     position: absolute;
-    left: 32px;
-    bottom: 7px;
+    bottom: 0px;
     z-index: 1;
-    font-size: 11px;
+    font-size: 1rem;
     font-weight: 600;
-    padding: 0 5px;
-    border-radius: 1.25rem;
-    background-color: darkgreen;
+    padding: 0 4px;
+    background-color: #303030ba;
+  }
+  .file-cover .f-status {
+    display: inline-block;
+    width: auto;
+    left: 0;
+    border-top-right-radius: 0.25rem;
+    background-color: #05a100;
   }
   .file-cover .completed {
     background-color: red;
   }
-  .file-cover:hover span {
-    left: 2px;
-    bottom: 2px;
+  .file-cover .f-raw {
+    display: inline-block;
+    position: absolute;
+    width: inherit;
+    right: 0;
+    left: initial;
+    bottom: 0px;
+    background-color: red;
+    border-top-left-radius: 20%;
+  }
+
+  .file-cover .f-raw.hidden {
+    display: none;
   }
 </style>

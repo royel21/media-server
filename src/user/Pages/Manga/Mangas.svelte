@@ -1,5 +1,5 @@
 <script>
-  import FilesList from "../../Component/FilesList.svelte";
+  import FilesList from "src/user/Component/FilesList.svelte";
 
   export let dir = "";
   export let page = 1;

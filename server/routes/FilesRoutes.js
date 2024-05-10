@@ -4,43 +4,12 @@ import db from "../models/index.js";
 import { getFiles, getFolders } from "./query-helper.js";
 
 import { clamp, getFilter } from "./utils.js";
+import { Op, literal } from "sequelize";
 
 const routes = Router();
 
-const { literal } = db.sqlze;
-
-routes.get("/folder-content/info/:id", async (req, res) => {
-  const { id } = req.params;
-  const currentFile = `(Select currentFile from RecentFolders where FolderId = \`Folders\`.\`Id\` AND RecentId = '${req.user?.Recent.Id}')`;
-
-  const query = {
-    attributes: [
-      "Id",
-      "Name",
-      "Description",
-      "Status",
-      "Genres",
-      "AltName",
-      "Server",
-      [literal(currentFile), "currentFile"],
-    ],
-    where: { Id: id },
-  };
-
-  let folder = { dataValues: {} };
-
-  try {
-    folder = await db.folder.findOne(query);
-    folder.dataValues.isValid = true;
-  } catch (error) {
-    console.log(error);
-  }
-
-  res.send({ ...folder.dataValues });
-});
-
 routes.get("/folder-content/:id/:order/:page?/:items?/:search?", async (req, res) => {
-  getFiles(req.user, req.params, db.folder).then((data) => res.send(data));
+  getFiles(req.user, req.params).then((data) => res.send(data));
 });
 
 routes.post("/recents/remove", async ({ body }, res) => {
@@ -61,27 +30,36 @@ routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
     offset = 0;
   }
 
+  const filters = getFilter(filter);
+
   const query = {
     order: [["LastRead", "DESC"]],
-    where: { RecentId: req.user?.Recent.Id },
+    where: { UserId: req.user.Id },
     include: {
       model: db.folder,
-      attributes: ["Id", "Name", "FileCount", "FilesType", "Type", "Status", "Genres"],
+      attributes: ["Id", "Name", "FileCount", "FilesType", "Type", "Status", "Genres", "Author"],
       where: {
-        [db.Op.or]: { Genres: getFilter(filter) },
-        IsAdult: { [db.Op.lte]: req.user.AdultPass },
+        [Op.or]: { Name: filters, AltName: filters, Genres: filters, Author: filters },
+        IsAdult: { [Op.lte]: req.user.AdultPass },
       },
       required: true,
     },
   };
 
-  const count = await db.recentFolder.count(query);
+  const count = await req.user.countRecentFolders(query);
 
   const totalPages = Math.ceil(count / limit);
 
   p = clamp(p, 1, totalPages);
 
-  const recents = await db.recentFolder.findAll({
+  query.include.attributes.push([
+    literal(
+      `(Select Name from Files where FolderId=RecentFolders.FolderId ORDER BY REPLACE(REPLACE(Files.Name, "-", "0"), "[","0") DESC LIMIT 1)`
+    ),
+    "LastFile",
+  ]);
+
+  const recents = await req.user.getRecentFolders({
     ...query,
     offset,
     limit,
@@ -110,7 +88,7 @@ routes.get("/dirs", async (req, res) => {
   const dirs = await db.directory.findAll({
     order: ["FirstInList"],
     attributes: ["Id", "Name", "Type", "FirstInList", "IsAdult"],
-    where: { IsAdult: { [db.Op.lte]: req.user.AdultPass } },
+    where: { IsAdult: { [Op.lte]: req.user.AdultPass } },
   });
 
   let Mangas = dirs.filter((d) => d.Type === "Mangas");

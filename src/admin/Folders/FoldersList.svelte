@@ -3,22 +3,26 @@
   import { navigate } from "svelte-routing";
 
   import ItemList from "./ItemList.svelte";
-  import Modal from "./Modal.svelte";
-  import { calRows } from "./Utils";
-  import apiUtils from "../../apiUtils";
-  import { clamp } from "../../ShareComponent/utils";
-  import Icons from "../../icons/Icons.svelte";
+  import { calRows } from "../Utils";
+  import apiUtils from "src/apiUtils";
+  import { clamp } from "src/ShareComponent/utils";
+  import Icons from "src/icons/Icons.svelte";
   import CreateFolderModal from "./CreateFolderModal.svelte";
+  import ReplaceImage from "./ReplaceImage.svelte";
+  import { setMessage } from "../Store/MessageStore";
+  import Modal from "./Modal.svelte";
   const dispatch = createEventDispatcher();
   const socket = getContext("socket");
 
   export let page = 1;
   export let filter = "";
+  export let dirid;
   export let folderId;
   export let scanning = [];
   export let showFiles;
+
   let dirs = [];
-  let currentDir = "";
+  let currentDir = dirid || "all";
 
   let totalPages = 1;
   let totalItems = 0;
@@ -29,6 +33,8 @@
   let showImage;
   let fullPathPos = {};
   let createFolder;
+  let showGenres = false;
+  let showReplace = false;
 
   const newFolder = () => (createFolder = true);
 
@@ -50,8 +56,9 @@
       totalPages = data.totalPages;
       totalItems = data.totalItems;
       page = pg;
-      dispatch("folderid", folderId);
-      navigate(`/admin/folders/${pg}/${flt || ""}`);
+      dispatch("folderid", tmp);
+      navigate(`/admin/folders/${currentDir}/${pg}/${flt || ""}`);
+      showImage = "";
     }
   };
 
@@ -74,36 +81,31 @@
 
     if (el.tagName === "LI") {
       folder = items.find((f) => f.Id === folderId);
-      dispatch("folderid", folderId);
-    } else {
-      folder = items.find((f) => f.Id === el.closest("li").id);
-      let cList = el.classList.toString();
-
-      if (/icon-edit/gi.test(cList)) {
-        modalType = { title: "Edit Folder Properties", Del: false };
-        showModal = true;
-      } else if (/icon-trash/gi.test(cList)) {
-        modalType = { title: "Remove Folder", Del: true };
-        showModal = true;
-      } else if (/icon-sync/gi.test(cList)) {
-        socket.emit("scan-dir", { Id: folder.Id, isFolder: true });
-        document.getElementById(folder.Id);
-        scanning = [...scanning, folder.Id];
-      }
+      dispatch("folderid", folder);
     }
   };
+  const iconClick = (e) => {
+    let el = e.target;
+    folder = items.find((f) => f.Id === el.closest("li").id);
+    let cList = el.classList.toString();
 
+    if (/edit/gi.test(cList)) {
+      modalType = { title: "Edit Folder Properties", Del: false };
+      showModal = true;
+    } else if (/trash/gi.test(cList)) {
+      modalType = { title: "Remove Folder", Del: true };
+      showModal = true;
+    } else if (/sync/gi.test(cList)) {
+      socket.emit("scan-dir", { Id: folder.Id, isFolder: true });
+      document.getElementById(folder.Id);
+      scanning = [...scanning, folder.Id];
+    }
+  };
   const handleSubmit = ({ detail }) => {
     //if we are deleting the file
     if (modalType.Del) {
       let Del = detail.target.querySelector("input").checked;
       socket.emit("remove-folder", { Id: folder.Id, Del });
-    } else {
-      if (!folder.Name) {
-        modalType.error = "Name Can't be empty";
-      } else {
-        socket.emit("rename-folder", folder);
-      }
     }
   };
 
@@ -123,24 +125,30 @@
     }
   };
 
+  const reload = () => {
+    let isLast = items.length === 1 && totalPages > 1;
+    loadFolders(isLast ? page - 1 : page);
+  };
+
   const onFolderRename = (data) => {
-    if (data.success && data.Id && data.folder) {
-      let index = items.findIndex((f) => f.Id === data.Id);
-      if (index !== -1) {
+    if (data.msg) {
+      setMessage(data);
+    }
+
+    let index = items.findIndex((f) => f.Id === data.Id);
+
+    if (data.success && index > -1) {
+      if (data.Transfer) {
+        reload();
+      } else {
         items[index] = data.folder;
       }
-      hideModal();
     }
   };
 
   const onFolderRemove = (data) => {
     if (data.success && data.Id) {
-      if (items.length === 1 && totalPages > 1) {
-        loadFolders(page - 1);
-      } else {
-        loadFolders(page);
-      }
-
+      reload();
       hideModal();
     }
   };
@@ -149,7 +157,10 @@
     scanning = scanning.filter((f) => f != data.Id);
   };
 
-  $: if (currentDir) loadFolders(1, currentDir);
+  const changeDir = ({ target: { value } }) => {
+    currentDir = value;
+    loadFolders(1, value);
+  };
 
   const socketEvents = [
     { name: "folder-renamed", handler: onFolderRename },
@@ -165,7 +176,13 @@
       socketEvents.forEach((e) => socket.off(e.name, e.handler));
     };
   });
+
+  $: document.title = `Folders/${dirs.find((d) => d.Id === currentDir)?.FullPath || "All"}/${page}/${filter || ""}`;
 </script>
+
+{#if showReplace}
+  <ReplaceImage hide={() => (showReplace = "")} Id={showReplace} />
+{/if}
 
 {#if createFolder}
   <CreateFolderModal hide={() => (createFolder = false)} {socket} />
@@ -175,14 +192,19 @@
   <Modal file={folder} {modalType} on:submit={handleSubmit} on:click={hideModal} />
 {/if}
 
-{#if showImage}
+{#if showImage && totalItems}
   <div class="thumbnail">
-    <img src={`/Folder/${encodeURIComponent(showImage?.Name)}.jpg`} alt="Cover Not Found" />
+    <img
+      src={`/Folder/${showImage.FilesType}/${encodeURIComponent(showImage?.Name)}.jpg?v=${new Date().getTime()}`}
+      alt="Cover Not Found"
+    />
   </div>
 {/if}
 
 <ItemList
   title="Folders"
+  class="col-6"
+  id="l-folders"
   {folderId}
   {items}
   {page}
@@ -190,7 +212,8 @@
   {totalItems}
   {filter}
   {scanning}
-  {onShowImage}
+  {showGenres}
+  {iconClick}
   on:filter={onFilter}
   on:gotopage={gotopage}
   on:click={itemClick}
@@ -198,9 +221,14 @@
   on:mouseleave={onShowImage}
   on:mousemove={showPath}
 >
-  <span class="create-folder" slot="btn-controls" on:click={newFolder}><Icons name="squareplus" /></span>
-  <span class="show-files" slot="btn-ctr-last" on:click={showFiles} title="Toggle Files List">
-    <Icons name="files" box="0 0 280 512" />
+  <span class="create-folder" slot="btn-controls" on:keydown on:click={newFolder}><Icons name="squareplus" /></span>
+  <span class="show-files" slot="btn-ctr-last">
+    <span on:keydown on:click={() => (showGenres = !showGenres)} title="Toggle Genres List">
+      <Icons name={showGenres ? "eyeslash" : "eye"} box="0 0 612 512" />
+    </span>
+    <span on:keydown on:click={showFiles} title="Toggle Files List">
+      <Icons name="files" box="0 0 280 512" />
+    </span>
   </span>
   <div class="path-tag" slot="first-tag">
     {#if showImage}
@@ -211,8 +239,8 @@
   </div>
   <span class="dir-list" slot="bottom-ctr">
     <span>Dirs: </span>
-    <select class="form-control" bind:value={currentDir}>
-      <option value={""}>All</option>
+    <select class="form-control" on:change={changeDir} value={currentDir}>
+      <option value="all">All</option>
       {#each dirs as { Id, FullPath }}
         <option value={Id}>{FullPath}</option>
       {/each}</select
@@ -225,6 +253,12 @@
     height: 35px;
     width: 43px;
     top: -1px;
+  }
+  .show-files {
+    display: flex;
+  }
+  .show-files span {
+    margin-right: 5px;
   }
   .show-files :global(svg) {
     width: 27px;

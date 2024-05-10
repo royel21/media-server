@@ -1,8 +1,7 @@
 <script>
   import { onMount, getContext } from "svelte";
-  import apiUtils from "../../apiUtils";
-  import RConsole from "./RConsole.svelte";
-  import Icons from "../../icons/Icons.svelte";
+  import apiUtils from "src/apiUtils";
+  import Icons from "src/icons/Icons.svelte";
 
   const socket = getContext("socket");
   let dirs = [];
@@ -101,7 +100,7 @@
       </tr>
     </thead>
     <tbody>
-      {#each dirs as { Id, IsLoading, FullPath, Type, FolderCount, TotalFiles, IsAdult, FirstInList }}
+      {#each dirs as { Id, IsLoading, Name, FullPath, Type, FolderCount, TotalFiles, IsAdult, FirstInList }}
         <tr id={Id} key={Id}>
           <td>
             <span class="dir-sync" on:click={rescan}>
@@ -113,7 +112,8 @@
           </td>
           <td>{Type}</td>
           <td data-name="IsAdult" on:click={updateDir}>{IsAdult}</td>
-          <td>{FullPath}</td>
+          <td class="f-path">{FullPath}</td>
+          <td class="f-name" title={FullPath}>{Name}</td>
           <td>{FolderCount}</td>
           <td>{TotalFiles}</td>
           <td class="order" on:click|stopPropagation={onShowInput}>
@@ -131,7 +131,6 @@
     </tbody>
   </table>
 </div>
-<RConsole />
 
 <style>
   .table-container {
@@ -151,6 +150,10 @@
   th:nth-child(2) {
     min-width: 80px;
     width: 80px;
+  }
+  th:nth-child(6) {
+    min-width: 155px;
+    width: 155px;
   }
   td:nth-child(3) {
     min-width: 90px;
@@ -182,5 +185,17 @@
     height: 36px;
     outline: none;
     text-align: center;
+  }
+  .f-name {
+    display: none;
+  }
+
+  @media screen and (max-width: 500px) {
+    .f-name {
+      display: table-cell;
+    }
+    .f-path {
+      display: none;
+    }
   }
 </style>

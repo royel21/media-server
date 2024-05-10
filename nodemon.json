@@ -6,7 +6,7 @@
         "./*.js",
         "./*.json",
         "./*.txt",
-        "./server/public/*/**",
+        "server/public/**/*",
         "./*.sqlite",
         "./*.db",
         "./backup/*"

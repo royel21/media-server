@@ -9,13 +9,13 @@ Storage.prototype.setObject = function (key, value) {
 //get object fron LocalStorage
 Storage.prototype.getObject = function (key) {
   let value = this.getItem(key);
-  if (value === "undefined") return {};
+
   try {
     value = JSON.parse(value);
   } catch (err) {
     console.log(err);
   }
-  return value;
+  return value || {};
 };
 
 //Work like inckudes but with Case Insensitive

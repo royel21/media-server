@@ -4,6 +4,7 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  --menu-s-height: 50px;
 }
 
 html,
@@ -50,8 +51,10 @@ li {
 
 #menu a {
   z-index: 99;
-  padding: 4px 6px;
+  padding: 0px 6px;
   cursor: pointer;
+  text-align: center;
+  height: calc(100% - 3px);
 }
 
 #menu .nav-item {
@@ -66,7 +69,7 @@ button {
 input[type="text"] + span {
   display: none !important;
   position: absolute;
-  top: 0px;
+  top: 1px;
   right: 6px;
   z-index: 99;
   color: darkgray;
@@ -144,6 +147,13 @@ input[type="text"]:not(:placeholder-shown) + span {
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
+.error:empty {
+  display: none;
+}
+.error {
+  color: red;
+  font-weight: 600;
+}
 
 /*************************Scrollbar Style********************************/
 
@@ -168,6 +178,7 @@ input[type="text"]:not(:placeholder-shown) + span {
   border: 1px solid white;
   padding: 5px;
 }
+
 .btn {
   display: inline-block;
   font-weight: 400;
@@ -224,6 +235,7 @@ svg,
   -moz-user-select: none;
   user-select: none;
 }
+
 svg path {
   pointer-events: none;
 }
@@ -292,7 +304,7 @@ svg path {
 .list-group-item {
   position: relative;
   display: block;
-  padding: 0.35rem 0.4rem;
+  padding: 0.32rem 0.4rem;
   color: #343a40;
   background-color: #fff;
   border: 1px solid rgba(0, 0, 0, 0.125);
@@ -313,16 +325,6 @@ svg path {
   fill: white;
 }
 
-.list-group-item:first-child {
-  border-top-left-radius: 0.25rem;
-  border-top-right-radius: 0.25rem;
-}
-
-.list-group-item:last-child {
-  border-bottom-right-radius: 0.25rem;
-  border-bottom-left-radius: 0.25rem;
-}
-
 .page-link:first-child {
   border-top-left-radius: 0.25rem;
   border-bottom-left-radius: 0.25rem;
@@ -336,11 +338,9 @@ svg path {
 #current-page input {
   height: 30px;
 }
+
 /****************************************************************/
-@media screen and (max-width: 500px) {
-  #menu a {
-    text-align: center;
-  }
+@media screen and (max-width: 640px) {
   ::-webkit-scrollbar {
     width: 0;
   }

@@ -1,11 +1,10 @@
+import { Op, literal } from "sequelize";
 import db from "../models/index.js";
 
 import { clamp, getFilter } from "./utils.js";
 
-const { literal } = db.sqlze;
-
-export const qryCurrentPos = (Recent, table) => [
-  literal(`IFNULL((Select LastPos from RecentFiles where FileId = ${table}.Id and RecentId = '${Recent.Id}'), 0)`),
+export const qryCurrentPos = (user, table) => [
+  literal(`IFNULL((Select LastPos from RecentFiles where FileId = ${table}.Id and UserId = '${user.Id}'), 0)`),
   "CurrentPos",
 ];
 
@@ -22,7 +21,7 @@ export const getOrderBy = (orderby, table = "") => {
 };
 
 const getFolder = async (Id, user) => {
-  const currentFile = `(Select currentFile from RecentFolders where FolderId = \`Folders\`.\`Id\` AND RecentId = '${user?.Recent.Id}')`;
+  const currentFile = `(Select currentFile from RecentFolders where FolderId = \`Folders\`.\`Id\` AND UserId = '${user.Id}')`;
 
   const query = {
     attributes: [
@@ -32,10 +31,12 @@ const getFolder = async (Id, user) => {
       "Status",
       "Genres",
       "AltName",
+      "FilesType",
+      "Author",
       "Server",
       [literal(currentFile), "currentFile"],
     ],
-    where: { Id, IsAdult: { [db.Op.lte]: user.AdultPass } },
+    where: { Id, IsAdult: { [Op.lte]: user.AdultPass } },
   };
 
   try {
@@ -52,23 +53,23 @@ export const getFiles = async (user, data) => {
   for (let s of search.split("|")) {
     searchs.push({
       Name: {
-        [db.Op.like]: "%" + s + "%",
+        [Op.like]: "%" + s + "%",
       },
     });
   }
 
   let query = {
-    attributes: ["Id", "Name", "Type", "Duration", "CreatedAt", qryCurrentPos(user.Recent, "File")],
+    attributes: ["Id", "Name", "Type", "Duration", "CreatedAt", "Size", qryCurrentPos(user, "File")],
     order: getOrderBy(data.order, "File"),
     where: {
-      [db.Op.or]: searchs,
+      [Op.or]: searchs,
       FolderId: data.id,
     },
   };
   // by file type manga or video => future audio
   if (data.type) {
     query.where.Type = {
-      [db.Op.like]: `%${data.type || ""}%`,
+      [Op.like]: `%${data.type || ""}%`,
     };
   }
 
@@ -77,7 +78,7 @@ export const getFiles = async (user, data) => {
 
     if (folder) {
       const count = await db.file.count(query);
-
+      // if (count) {
       const totalPages = Math.ceil(count / data.items);
       let page = clamp(data.page, 1, totalPages);
 
@@ -94,13 +95,22 @@ export const getFiles = async (user, data) => {
         valid: true,
         folder,
       };
+      // }
     } else {
       return { valid: false, msg: "Not Found Or Not authorized" };
     }
   } catch (error) {
-    console.log(error);
-    return { valid: false };
+    console.log(error.toString());
   }
+  return { valid: false };
+};
+
+const mapFiles = ({ dataValues, Favorites }) => {
+  const isFav = Favorites.map((fv) => fv.Id);
+  const isRaw = dataValues.Genres.includes("Raw");
+  delete dataValues.Genres;
+  delete dataValues.Favorites;
+  return { ...dataValues, isFav, isRaw };
 };
 
 export const getFolders = async (req, res) => {
@@ -108,18 +118,18 @@ export const getFolders = async (req, res) => {
 
   let limit = +items || 16;
 
-  let filter = getFilter(search);
+  let filters = getFilter(search);
 
   let query = {
-    attributes: ["Id", "Name", "Type", "Genres", "FilesType", "CreatedAt", "Status", "FileCount"],
+    attributes: ["Id", "Name", "Type", "Genres", "FilesType", "CreatedAt", "Status", "FileCount", "Author"],
     where: {
-      [db.Op.or]: {
-        Name: filter,
-        AltName: filter,
-        Genres: filter,
-        Server: filter,
+      [Op.or]: {
+        Name: filters,
+        AltName: filters,
+        Genres: filters,
+        Author: filters,
       },
-      IsAdult: req.user.AdultPass,
+      IsAdult: { [Op.lte]: req.user.AdultPass },
       FilesType: filetype,
     },
   };
@@ -133,28 +143,28 @@ export const getFolders = async (req, res) => {
 
   try {
     result.count = await db.folder.count(query);
+    if (result.count) {
+      const totalPages = Math.ceil(result.count / limit);
 
-    const totalPages = Math.ceil(result.count / limit);
+      if (p > totalPages) p = totalPages;
+      query.attributes.push([
+        literal(
+          `(Select Name from Files where FolderId=Folders.Id ORDER BY REPLACE(REPLACE(Name, "-", "0"), "[","0") DESC LIMIT 1)`
+        ),
+        "LastChapter",
+      ]);
 
-    if (p > totalPages) p = totalPages;
-
-    result.rows = await db.folder.findAll({
-      ...query,
-      include: { model: db.favorite, attributes: ["Id"], where: { UserId: req.user.Id }, required: false },
-      order: getOrderBy(order, "Folders"),
-      offset: (p - 1) * limit,
-      limit,
-    });
+      result.rows = await db.folder.findAll({
+        ...query,
+        include: { model: db.favorite, attributes: ["Id"], where: { UserId: req.user.Id }, required: false },
+        order: getOrderBy(order, "Folders"),
+        offset: (p - 1) * limit,
+        limit,
+      });
+    }
   } catch (error) {
-    console.log(error);
+    console.log(error.toString());
   }
-
-  const mapFiles = ({ dataValues, Favorites }) => {
-    const isFav = Favorites.map((fv) => fv.Id);
-    delete dataValues.Genres;
-    delete dataValues.Favorites;
-    return { ...dataValues, isFav };
-  };
 
   return res.json({
     files: result.rows.map(mapFiles),

@@ -1,14 +1,17 @@
 <script>
   import FolderList from "./FoldersList.svelte";
-  import FilesList from "./FilesList.svelte";
+  import FolderData from "./FolderData.svelte";
 
   export let page;
   export let filter;
-  export let folderId;
+  export let folderId = "";
+  export let dirid;
+  let Name = "";
   let shwFiles = true;
 
-  const folderid = (event) => {
-    folderId = event.detail;
+  const folderid = ({ detail }) => {
+    folderId = detail?.Id || "";
+    Name = detail?.Path.split(/\/|\\/).pop() || "";
   };
 
   const showFiles = () => {
@@ -18,8 +21,8 @@
 
 <div class="card bg-dark admin-manager" class:has-files={shwFiles}>
   <div class="rows" class:has-files={shwFiles}>
-    <FolderList on:folderid={folderid} page={parseInt(page) || 1} {folderId} {filter} {showFiles} />
-    {#if shwFiles}<FilesList {folderId} /> {/if}
+    <FolderList on:folderid={folderid} page={parseInt(page) || 1} {dirid} {folderId} {filter} {showFiles} />
+    {#if shwFiles}<FolderData {folderId} {Name} />{/if}
   </div>
 </div>
 
@@ -48,7 +51,7 @@
       min-width: 100%;
     }
     .card.has-files {
-      min-width: 184%;
+      min-width: 750px;
     }
 
     .card.has-files :global(#Folders) {

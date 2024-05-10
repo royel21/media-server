@@ -8,6 +8,8 @@ import fs from "fs-extra";
 import path from "path";
 import WinDrive from "win-explorer";
 import db from "../models/index.js";
+import { createDir, getFileType } from "../Downloader/utils.js";
+import defaultConfig from "../default-config.js";
 
 let folders = [];
 
@@ -18,19 +20,16 @@ Date.prototype.Compare = function (d) {
   }
 };
 
-const ThumbnailPath = process.env.IMAGES;
-
 const ValidFiles = /\.(avi|avi2|mp4|mkv|ogg|webm|rar|zip)/i;
 
 const IMGTYPES = /\.(jpg|jpeg|png|gif|webp|jpe)$/i;
 
 let DirectoryId;
 
-if (path.join(ThumbnailPath, "Folder")) {
-  fs.mkdirsSync(path.join(ThumbnailPath, "Folder"));
-  fs.mkdirsSync(path.join(ThumbnailPath, "Manga"));
-  fs.mkdirsSync(path.join(ThumbnailPath, "Video"));
-}
+createDir(path.join(defaultConfig.ImagesDir, "Folder", "videos"));
+createDir(path.join(defaultConfig.ImagesDir, "Folder", "mangas"));
+createDir(path.join(defaultConfig.ImagesDir, "Manga"));
+createDir(path.join(defaultConfig.ImagesDir, "Video"));
 
 const sendMessage = (text, event = "info") => {
   process.send({ event, text });
@@ -53,16 +52,27 @@ const rmOrphanFiles = async (folder) => {
       }
     }
     folder.Files = folder.Files.filter((f) => !removed.includes(f.Id));
+    const imgs = folder.Files.map((f) => f.Name + ".jpg");
+    const imageDir = path.join(defaultConfig.ImagesDir, getFileType(folder), folder.Name);
+
+    const founds = fs.readdirSync(imageDir).filter((f) => /jpg/.test(f));
+    for (let img of founds) {
+      if (!imgs.includes(img)) {
+        try {
+          fs.removeSync(path.join(imageDir, img));
+        } catch (error) {}
+      }
+    }
   } else {
     for (const f of folders) {
-      if (f.IsNoEmpty) {
-        await rmOrphanFiles(f);
-      } else {
-        try {
+      try {
+        if (f.IsNoEmpty) {
+          await rmOrphanFiles(f);
+        } else {
           await f.destroy({ Del: true });
-        } catch (error) {
-          console.log(f.Name, error.toString());
         }
+      } catch (error) {
+        console.log(f.Name, error.toString());
       }
     }
   }
@@ -71,14 +81,14 @@ const foldersPendingCover = [];
 
 const createFolderThumbnail = async (folder, files, isFolder) => {
   try {
-    let CoverPath = path.join(ThumbnailPath, "Folder", folder.Name + ".jpg");
+    let CoverPath = path.join(defaultConfig.ImagesDir, "Folder", folder.FilesType, folder.Name + ".jpg");
 
     if (!fs.existsSync(CoverPath) || isFolder) {
       let img = files.find((f) => IMGTYPES.test(f.Name));
-      //if folder contain a image use as thumbnail
+      //if folder contain a image use as thumbnailError
       if (img) {
         let imgPath = path.join(folder.Path, img.Name);
-        await sharp(imgPath).jpeg().resize(240).toFile(CoverPath);
+        await sharp(imgPath).jpeg().resize({ width: 240 }).toFile(CoverPath);
       } else {
         //else push to list of folder for later process of thumbnail from first file
         const filePath = path.join(folder.Path, files[0].Name);
@@ -126,11 +136,16 @@ const scanFolder = async (curfolder, files, isFolder) => {
 
     folderFiles = await folder.Files;
   } else if (filteredFiles.length) {
-    folder = await createFolder(curfolder, filteredFiles);
+    try {
+      folder = await createFolder(curfolder, filteredFiles);
+    } catch (error) {
+      console.log("142: error-create-folder", error.toString());
+      return;
+    }
     isNoNewFolder = false;
   }
 
-  if (folder && filteredFiles.length) {
+  if (filteredFiles.length) {
     await createFolderThumbnail(folder, files, isFolder);
   }
 
@@ -166,10 +181,21 @@ const scanFolder = async (curfolder, files, isFolder) => {
 const getFolders = async (id, isFolder) => {
   return db.folder.findAll({
     order: ["Path"],
-    attributes: ["Id", "Name", "FileCount", "CreatedAt", "FilesType", "Path", "Scanning"],
+    attributes: ["Id", "Name", "FileCount", "CreatedAt", "FilesType", "Path", "Scanning", "Type"],
     where: isFolder ? { Id: id } : { DirectoryId: id },
     include: { model: db.file, attributes: ["Id", "Name", "Type", "Duration", "FolderId"] },
   });
+};
+
+const cleanFolder = (folder) => {
+  const folders = fs.readdirSync(folder.Path).filter((f) => !/\.[a-zA-Z0-9]{3,4}$/.test(f));
+  for (let fol of folders) {
+    try {
+      fs.removeSync(path.join(folder.Path, fol));
+    } catch (error) {
+      console.log(error);
+    }
+  }
 };
 
 const scanDirectory = async ({ id, dir, isFolder }) => {
@@ -177,9 +203,10 @@ const scanDirectory = async ({ id, dir, isFolder }) => {
   console.log(dir);
   try {
     if (fs.existsSync(dir)) {
+      console.time("list-files");
+      sendMessage("list-files");
       const fis = WinDrive.ListFilesRO(dir);
 
-      console.time("list-files");
       let folder = WinDrive.ListFiles(dir, { oneFile: true });
       folder.Path = dir;
 
@@ -187,13 +214,13 @@ const scanDirectory = async ({ id, dir, isFolder }) => {
 
       if (isFolder && folders[0]) {
         await folders[0].update({ Scanning: true });
+        cleanFolder(folders[0]);
       }
       console.timeEnd("list-files");
 
       sendMessage("cleaning direcory");
       console.time("cleaning direcory");
       await rmOrphanFiles();
-      console.timeEnd("cleaning direcory");
 
       sendMessage("scanning directory");
       console.time("scanning directory");
@@ -234,7 +261,7 @@ const processJobs = async () => {
   process.exit();
 };
 
-var running = false;
+let running = false;
 process.on("message", (data) => {
   pendingJobs.push(data);
   db.directory.update({ IsLoading: true }, { where: { Id: data.id } });

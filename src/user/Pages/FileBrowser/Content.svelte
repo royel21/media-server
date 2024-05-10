@@ -1,13 +1,13 @@
 <script>
-  import { afterUpdate, getContext, onDestroy, onMount } from "svelte";
+  import { afterUpdate, getContext, onDestroy } from "svelte";
 
   import { navigate } from "svelte-routing";
-  import apiUtils from "../../../apiUtils";
+  import apiUtils from "src/apiUtils";
 
-  import FilesList from "../../Component/FilesList.svelte";
+  import FilesList from "src/user/Component/FilesList.svelte";
   import { ProcessFile, getReturnPath } from "../filesUtils";
   import SortBy from "./SortBy.svelte";
-  import Icons from "../../../icons/Icons.svelte";
+  import Icons from "src/icons/Icons.svelte";
 
   export let page = 1;
   export let filter = "";
@@ -19,7 +19,6 @@
 
   const menu = document.querySelector("#menu");
 
-  let lastRead = "";
   let folderinfo = { Genres: "Loading Info" };
 
   const socket = getContext("socket");
@@ -40,12 +39,13 @@
   };
 
   const exitFolder = () => {
-    navigate(pathname || `/${segment[0] || ""}`, { replace: true, state: "" });
+    const url = document.querySelector(`#menu a[href^="/${segment[0]}"]`)?.href;
+    navigate(pathname || url, { replace: true, state: "" });
   };
 
   const onGenres = ({ currentTarget }) => {
-    const g = currentTarget.textContent;
-    const part = pathname.split("/").slice(1, 3);
+    const g = currentTarget.textContent || "";
+    const part = pathname.split("/").slice(1, 3) || "";
     if (/mangas|videos|favorites/i.test(pathname)) {
       navigate(`/${part[0]}/${part[1]}/1/${g}`);
     } else {
@@ -61,8 +61,6 @@
     socket.emit("scan-dir", { Id: folderinfo?.Id, isFolder: true });
   };
 
-  const setLastRead = (data) => (lastRead = data);
-
   const setFolderInfo = (data) => {
     folderinfo = data;
   };
@@ -75,7 +73,7 @@
 </script>
 
 <div class="tabs">
-  <div class="return-to" on:click={exitFolder}>
+  <div class="return-to" on:click={exitFolder} on:keydown>
     <Icons name="reply" />
   </div>
   {#each contents as content}
@@ -87,16 +85,25 @@
   <div id="info">
     <div id="info-content">
       <div id="img-info">
-        <span class="d-state" class:completed={folderinfo?.Status}>{folderinfo?.Status ? "Completed" : "On Going"}</span
-        >
-        <span class="img-d"><img src={encodeURI(`/Folder/${folderinfo?.Name}.jpg`)} alt="Cover Not Found" /></span>
+        <span class="d-state" class:completed={folderinfo?.Status}>
+          {folderinfo?.Status ? "Completed" : "On Going"}
+        </span>
+        <span class="img-d">
+          <img src={encodeURI(`/Folder/${folderinfo.FilesType}/${folderinfo?.Name}.jpg`)} alt="Cover Not Found" />
+        </span>
       </div>
       <div class="manga-name">Name: <span>{folderinfo?.Name || "Name: Loading Info"}</span></div>
-      <div class="manga-name alt">Alternative: <span>{folderinfo?.AltName || "Name: Loading Info"}</span></div>
+      <div class="manga-name">Alternative: <span>{folderinfo?.AltName || "Name: Loading Info"}</span></div>
+      <div class="genres-list">
+        <span class="gen-tag">Author(s): </span>
+        {#each folderinfo?.Author?.split(", ") || [] as auth}
+          <span on:click|preventDefault={onGenres} on:keydown> {auth}</span>
+        {/each}
+      </div>
       <div class="genres-list">
         <span class="gen-tag">Genres: </span>
         {#each folderinfo?.Genres?.split(", ") as genre}
-          <span on:click|preventDefault={onGenres}> {genre}</span>
+          <span on:click|preventDefault={onGenres} on:keydown> {genre}</span>
         {/each}
       </div>
       <div class="m-desc">
@@ -117,23 +124,27 @@
     <button id="last" class="btn btn-secondary" on:click={openFirstLast}>Last</button>
     <button class="btn btn-secondary" on:click={onResetFiles}>Reset All</button>
     <button class="btn btn-secondary" on:click={scanfiles}>Update</button>
+    <span><SortBy label="Sort By:" {showConfig} toggleConfig={handleClick} /></span>
   </div>
-  <fieldset>
-    <legend><span>Files List - <SortBy label="Sort By:" {showConfig} toggleConfig={handleClick} /></span></legend>
-    <FilesList title={"Content"} {type} {filter} {page} {id} {setFolderInfo} {setLastRead} {handleClick}>
-      <div class="first-controls" slot="controls" on:click={exitFolder}>
-        <Icons name="reply" />
-      </div>
-    </FilesList>
-  </fieldset>
+  <FilesList title={"Content"} {type} {filter} {page} {id} {setFolderInfo} {handleClick}>
+    <div class="first-controls" slot="controls" on:click={exitFolder} on:keydown>
+      <Icons name="reply" />
+    </div>
+  </FilesList>
 {/if}
 
 <style>
   input[type="radio"] {
     display: none;
   }
+  .first-controls {
+    background-color: rgb(0 0 0 / 55%);
+    height: 32px;
+    width: 37px;
+    border-radius: 0.25rem;
+  }
   .first-controls :global(.icon-reply) {
-    top: -1px;
+    top: 1px;
     height: 31px;
     width: 42px;
   }
@@ -168,28 +179,6 @@
     background-color: white;
     color: black;
   }
-
-  fieldset {
-    position: relative;
-    text-align: center;
-    height: calc(100% - 95px);
-    min-height: calc(100% - 95px);
-    border-radius: 0.5rem;
-    margin: 0px 2px;
-  }
-  fieldset :global(.files-list) {
-    padding-bottom: 0;
-  }
-  legend {
-    height: 26px;
-    padding: 0 5px;
-  }
-  legend span {
-    display: flex;
-    justify-content: space-around;
-    margin: 0;
-    width: 100%;
-  }
   div {
     pointer-events: all;
   }
@@ -202,11 +191,19 @@
     height: 30px;
     width: 38px;
   }
+  #info {
+    z-index: 999;
+    padding: 4px;
+    text-align: center;
+    padding-top: 5px;
+    height: calc(100% - 50px);
+  }
 
   #info-content {
     position: relative;
     display: flex;
     flex-direction: column;
+    height: 100%;
     max-width: 700px;
     margin: auto;
     background-color: #14243d;
@@ -214,31 +211,26 @@
     border: 1px solid white;
   }
   #info-content > div:not(:last-child) {
+    padding: 0 4px;
     border-bottom: 1px solid;
-  }
-  #info {
-    z-index: 999;
-    padding: 4px;
-    text-align: center;
-    padding-top: 5px;
   }
   .img-d {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2px;
     border: 1px solid;
     border-radius: 0.25rem;
     background-color: #030611;
+    margin: 18px 0px;
+    overflow: hidden;
   }
   #img-info {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4px;
     border-bottom: 1px solid;
-    min-height: 190px;
+    min-height: 250px;
   }
   #img-info .d-state {
     display: inline-block;
@@ -256,7 +248,7 @@
     background-color: red;
   }
   #info img {
-    max-height: 300px;
+    max-height: 240px;
     max-width: 100%;
   }
   img[alt]:after {
@@ -264,6 +256,8 @@
   }
   .m-desc {
     text-align: start;
+    flex-grow: 1;
+    overflow-y: auto;
   }
   #name-gen-tag {
     display: flex;
@@ -282,7 +276,6 @@
   }
   .m-desc .desc-text {
     display: inline-block;
-    height: 100%;
     overflow: hidden;
     text-align: start;
     padding: 0 5px;
@@ -294,19 +287,13 @@
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     text-align: start;
     font-size: 1rem;
-    height: 54px;
-    overflow: hidden;
-  }
-  .alt {
-    height: 80px;
+    overflow: auto;
+    min-height: 54px;
   }
 
   .genres-list {
     text-align: start;
-    padding: 0 5px;
-    min-height: 20%;
     font-size: 14px;
-    height: 51px;
   }
   .gen-tag {
     font-size: 1rem;
@@ -319,9 +306,9 @@
     width: 100%;
   }
   #btn-bar button {
-    margin-right: 15px;
+    margin-right: 12px;
   }
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 640px) {
     .gen-tag {
       font-size: 1rem;
       font-weight: 600;

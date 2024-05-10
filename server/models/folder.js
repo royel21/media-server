@@ -1,10 +1,12 @@
 import fs from "fs-extra";
-import { nanoid } from "nanoid";
 import path from "path";
+import { nanoid } from "nanoid";
+import { DataTypes } from "sequelize";
+import defaultConfig from "../default-config.js";
 
-export default (sequelize, DataTypes, ImagesPath) => {
+export default (sequelize, isSqlite) => {
   const getFileType = ({ FilesType }) => (FilesType === "mangas" ? "Manga" : "Video");
-  const getCoverPath = (name) => path.join(ImagesPath, "Folder", name + ".jpg");
+  const getCoverPath = (name, type) => path.join(defaultConfig.ImagesDir, "Folder", type, name + ".jpg");
 
   const { INTEGER, STRING, DATE, TEXT, BOOLEAN, VIRTUAL } = DataTypes;
   const Folder = sequelize.define(
@@ -70,7 +72,7 @@ export default (sequelize, DataTypes, ImagesPath) => {
         unique: true,
       },
       Description: {
-        type: TEXT + "COLLATE 'utf8mb4_bin'",
+        type: TEXT + (isSqlite ? " " : " COLLATE 'utf8mb4_bin'"),
       },
       Status: {
         type: BOOLEAN,
@@ -87,20 +89,18 @@ export default (sequelize, DataTypes, ImagesPath) => {
         type: BOOLEAN,
         defaultValue: false,
       },
+      Author: {
+        type: STRING(100),
+      },
     },
     {
       timestamps: false,
-      uniqueKeys: {
-        folder_unique: {
-          fields: ["Name", "DirectoryId"],
-        },
-      },
       hooks: {
         beforeValidate: function (item) {
           item.Id = nanoid(6);
         },
         beforeBulkCreate: (instances) => {
-          for (var item of instances) {
+          for (let item of instances) {
             item.Id = nanoid(6);
           }
         },
@@ -110,15 +110,17 @@ export default (sequelize, DataTypes, ImagesPath) => {
             //move or rename folder
             fs.moveSync(old, item.Path, { overwrite: true });
 
-            let oldCover = getCoverPath(opt.Name);
-            const Cover = getCoverPath(item.Name);
+            const type = item._previousDataValues.FilesType;
+
+            let oldCover = getCoverPath(opt.Name, type);
+            const Cover = getCoverPath(item.Name, type);
             //rename cover name
             if (fs.existsSync(oldCover) && Cover !== oldCover) {
               fs.moveSync(oldCover, Cover, { overwrite: true });
             }
             //Rename Folder for thumbnail
             if (opt.Name !== item.Name) {
-              const thumbsPath = `${ImagesPath}/${getFileType(item)}/${opt.Name}`;
+              const thumbsPath = `${defaultConfig.ImagesDir}/${getFileType(item)}/${opt.Name}`;
               if (fs.existsSync(thumbsPath)) {
                 const newthumbsPath = thumbsPath.replace(opt.Name, item.Name);
                 try {
@@ -132,13 +134,13 @@ export default (sequelize, DataTypes, ImagesPath) => {
         },
         beforeDestroy: async function (item, opt) {
           if (opt.Del) {
-            let cPath = getCoverPath(item.Name);
+            let cPath = getCoverPath(item.Name, item.FilesType);
 
             //Remove Cover from images
             if (fs.existsSync(cPath)) fs.removeSync(cPath);
 
             //Remove files Thumbnails from images folder
-            const imagesFolder = `${ImagesPath}/${getFileType(item)}/${item.Name}`;
+            const imagesFolder = path.join(defaultConfig.ImagesDir, getFileType(item), item.Name);
             if (fs.existsSync(imagesFolder)) fs.removeSync(imagesFolder);
 
             //Remove folder from disk

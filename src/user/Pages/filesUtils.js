@@ -2,9 +2,9 @@ import { navigate } from "svelte-routing";
 import { formatTime } from "./pagesUtils";
 import { saveId } from "../Component/fileEvents";
 
-const isMobile = /(android)|(iphone)/i.test(navigator.userAgent);
-const scrollW = isMobile ? 15 : 0;
-const itemW = isMobile ? 170 : 200;
+const isMobile = window.innerWidth < 501;
+const scrollW = isMobile ? 0 : 15;
+const itemW = isMobile ? 204 : 250;
 
 export const FileTypes = {
   Manga: {
@@ -28,14 +28,36 @@ export const FileTypes = {
   },
 };
 
-const pathStore = {};
+Storage.prototype.getObject = function (key) {
+  let value = this.getItem(key);
 
-export const saveReturnPath = (name, path) => {
-  pathStore[name] = path;
-  localStorage.setObject("pathStore", pathStore);
+  try {
+    value = JSON.parse(value);
+  } catch (err) {
+    console.log(err);
+  }
+  return value || {};
 };
 
-export const getReturnPath = (name) => pathStore[name];
+let pathStore = {};
+
+const getPathStore = (key, path) => {
+  const user = localStorage.getItem("user") + "-path";
+  if (!pathStore) {
+    pathStore = localStorage.getObject(user) || {};
+  }
+
+  if (path) {
+    pathStore[key] = path;
+    localStorage.setObject(user, pathStore);
+  }
+
+  return key ? pathStore[key] : pathStore;
+};
+
+export const saveReturnPath = (name, path) => getPathStore(name, path);
+
+export const getReturnPath = (name) => getPathStore(name);
 
 export const getFilesPerPage = (i) => {
   let fwidth = document.body.offsetWidth;

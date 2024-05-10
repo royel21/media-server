@@ -2,7 +2,7 @@
   import { onDestroy, onMount, getContext } from "svelte";
   import TreeItem from "./TreeItem.svelte";
   import DirectoryModal from "./DirectoryModal.svelte";
-  import Icons from "../..//icons/Icons.svelte";
+  import Icons from "src/icons/Icons.svelte";
 
   const socket = getContext("socket");
   let content = [];
@@ -22,14 +22,17 @@
     showModal = false;
     item = {};
   };
+  const onDiskdata = (data) => {
+    content = data;
+  };
+  socket.on("disk-loaded", onDiskdata);
+
   onMount(() => {
-    socket.on("disk-loaded", (data) => {
-      content = data;
-    });
     socket.emit("load-disks");
   });
+
   onDestroy(() => {
-    delete socket._callbacks["$disk-loaded"];
+    socket.off("disk-loaded", onDiskdata);
   });
 </script>
 

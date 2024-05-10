@@ -1,11 +1,11 @@
 <script>
-  import { clamp } from "../../ShareComponent/utils";
+  import { clamp } from "src/ShareComponent/utils";
   import { afterUpdate } from "svelte";
 
-  import Pagination from "../../ShareComponent/Pagination.svelte";
-  import { ToggleMenu } from "../../ShareComponent/ToggleMenu";
+  import Pagination from "src/ShareComponent/Pagination.svelte";
+  import { ToggleMenu } from "src/ShareComponent/ToggleMenu";
   import { formatTime } from "../Pages/pagesUtils";
-  import Icons from "../../icons/Icons.svelte";
+  import Icons from "src/icons/Icons.svelte";
   import LazyImage from "./LazyImage.svelte";
 
   export let files = [];
@@ -55,7 +55,13 @@
   });
 </script>
 
-<label class={"show-list" + (!hideList ? " move" : "")} for="p-hide" style="bottom: 35px" title="play-list">
+<label
+  id="btn-playlist"
+  class={"show-list" + (!hideList ? " move" : "")}
+  for="p-hide"
+  style="bottom: 35px"
+  title="play-list"
+>
   <span class="p-sort">
     <Icons name="list" width="30px" height="24px" />
   </span>
@@ -178,9 +184,8 @@
   #play-list #p-list li {
     display: flex;
     flex-direction: column;
-    padding: 4px;
+    padding: 0px;
     border-bottom: 1px solid;
-    height: 225px;
     cursor: pointer;
   }
 
@@ -198,31 +203,38 @@
 
   #play-list .cover {
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     pointer-events: none;
+    height: 240px;
     width: 100%;
     text-align: center;
   }
 
   #play-list .l-name {
     display: inline-block;
-    padding-left: 5px;
+    padding: 0 4px;
     font-size: 14px;
     text-align: center;
+    border-top: 1px solid;
   }
 
   #play-list .duration {
     position: absolute;
     display: inline-block;
-    right: 0px;
-    bottom: 8px;
+    top: 1px;
+    right: calc(50% - 20px);
     padding: 0 4px;
-    background-color: black;
+    background-color: #283841d4;
     border-radius: 0.25rem;
-    font-size: 13px;
+    font-size: 14px;
+    font-family: monospace;
   }
 
   #play-list :global(img) {
-    max-height: 185px;
+    max-height: 100%;
+    max-width: 100%;
   }
 
   #play-list #p-list::-webkit-scrollbar {

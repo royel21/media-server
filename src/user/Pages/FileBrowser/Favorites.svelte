@@ -1,7 +1,6 @@
 <script>
-  import { FavoritesStores } from "../../Stores/FavoritesStores";
   import FavoriteManager from "./FavoriteManager.svelte";
-  import FilesList from "../../Component/FilesList.svelte";
+  import FilesList from "src/user/Component/FilesList.svelte";
 
   export let page = 1;
   export let filter = "";
@@ -11,6 +10,6 @@
   $: type = `favorites/${id}`;
 </script>
 
-<FilesList title="Favorites" {type} {filter} {page} {id}>
+<FilesList title="Favorites" {type} filter={filter || ""} {page} {id}>
   <FavoriteManager {id} slot="controls" />
 </FilesList>

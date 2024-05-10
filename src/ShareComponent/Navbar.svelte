@@ -3,9 +3,11 @@
   import { ToggleMenu } from "./ToggleMenu";
   import { getProps } from "./DataUtils";
   import Icons from "../icons/Icons.svelte";
+  import NavItem from "src/ShareComponent/NavItem.svelte";
 
   export let navItems;
   export let filters = [];
+  export let dirs = [];
 
   let menuToggle = false;
 
@@ -16,7 +18,7 @@
   <ul class="navbar-nav">
     {#each navItems as item}
       {#if filters.includes(item.title)}
-        <slot {item} name="nav-item" />
+        <NavItem {dirs} {item} slot="nav-item" />
       {:else}
         <li class="nav-item">
           <Link to={item.path} {getProps}>
@@ -42,6 +44,8 @@
     padding: 0;
     background-color: #343a40;
     transition: 0.3s all;
+    max-height: 60px;
+    min-height: 35px;
   }
   #menu.hide {
     top: -66px;

@@ -1,9 +1,9 @@
 "use strict";
-
 import { compareSync, hashSync, genSaltSync } from "bcrypt";
 import { nanoid } from "nanoid";
+import { DataTypes } from "sequelize";
 
-export default (sequelize, DataTypes) => {
+export default (sequelize) => {
   const { STRING, DATE, BOOLEAN } = DataTypes;
   const User = sequelize.define(
     "User",
@@ -60,7 +60,7 @@ export default (sequelize, DataTypes) => {
           }
         },
         beforeBulkCreate: (users, opt) => {
-          for (var user of users) {
+          for (let user of users) {
             user.Id = nanoid(10);
             if (opt.encript) {
               user.Password = hashSync(user.Password, genSaltSync(8), null);

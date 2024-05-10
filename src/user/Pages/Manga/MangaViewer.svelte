@@ -1,20 +1,22 @@
 <script>
   import { getContext, createEventDispatcher, afterUpdate, onMount } from "svelte";
-  import { clamp } from "../../../ShareComponent/utils";
+  import { clamp } from "src/ShareComponent/utils";
   import { isMobile, setfullscreen } from "../pagesUtils";
   import { scrollInView, getEmptyIndex } from "./mangaUtils";
   import { PageObserver, disconnectObvrs, scrollImageLoader } from "./Observers";
   import { onTouchStart, onTouchEnd, onTouchMove, default as controls } from "./MangaTouch";
 
-  import { ToggleMenu } from "../../../ShareComponent/ToggleMenu";
-  import { ConfigStore, updateConfig } from "../../Stores/PageConfigStore";
+  import { ToggleMenu } from "src/ShareComponent/ToggleMenu";
+  import { ConfigStore, updateConfig } from "src/user/Stores/PageConfigStore";
   import MangaConfig from "./MangaConfig.svelte";
-  import Icons from "../../../icons/Icons.svelte";
+  import Icons from "src/icons/Icons.svelte";
 
   export let file;
   export let KeyMap;
   export let viewer;
   export let changePages;
+  export let removeFile;
+  export let isManhwa;
 
   const { NextFile, PrevFile, Fullscreen, SkipForward, SkipBack } = KeyMap;
   const socket = getContext("socket");
@@ -22,7 +24,7 @@
 
   let webtoon = $ConfigStore.Viewer.manga.webtoon;
   let config = $ConfigStore.Viewer.manga;
-  let progress = `${file.CurrentPos + 1}/${file.Duration}`;
+  let progress = "";
   let images = [file.Duration];
   let imgContainer;
   let viewerRef;
@@ -37,7 +39,7 @@
   };
   //emptyImage observer
   const loadImages = (pg, toPage, dir = 1) => {
-    if (!viewerState.loading && !isNaN(pg) && !isNaN(toPage)) {
+    if (file.Id && !viewerState.loading && !isNaN(pg) && !isNaN(toPage)) {
       const indices = getEmptyIndex(images, pg, toPage, dir || 1, file.Duration);
       if (indices.length) {
         viewerState.loading = true;
@@ -67,8 +69,13 @@
   const nextPage = () => changePage(1, NextFile.action);
 
   const jumpTo = (val) => {
-    val = clamp(val, 0, file.Duration - 1);
-    changePage(val - 1);
+    val = clamp(val, 1, file.Duration) - 1;
+
+    changePages(val);
+    if (webtoon) {
+      scrollInView(val);
+    }
+
     viewerState.jumping = webtoon;
     loadImages(val - 5, 10);
     scrollInView(val);
@@ -141,7 +148,7 @@
   controls.prevFile = PrevFile.action;
   controls.file = file;
 
-  $: progress = `${parseInt(file.CurrentPos) + 1}/${file.Duration}`;
+  $: progress = file.Duration ? `${+file.CurrentPos + 1}/${file.Duration}` : "Loading";
 
   $: if (controls.webtoon !== webtoon) {
     controls.webtoon = webtoon;
@@ -151,9 +158,9 @@
       disconnectObvrs(imgContainer);
     }
   }
-
+  $: webtoon = isManhwa;
   //reload on file change
-  $: if (file.Id !== viewerState.lastfId) {
+  $: if (file.Id && file.Id !== viewerState.lastfId) {
     disconnectObvrs(imgContainer);
     viewerState.jumping = webtoon;
     viewerState.loading = false;
@@ -191,9 +198,27 @@
     $ConfigStore.Viewer.manga.webtoon = webtoon;
     updateConfig($ConfigStore);
   }
+  let tout;
+  const onShow = () => {
+    clearTimeout(tout);
+    const elems = [...document.querySelectorAll("#btn-playlist, .fullscreen-progress, .info")];
+    for (let elem of elems) {
+      elem.style.opacity = 1;
+    }
+    tout = setTimeout(() => {
+      for (let elem of elems) {
+        elem.style.opacity = 0;
+      }
+    }, 3000);
+  };
+  let ref;
+  onMount(() => {
+    ref.addEventListener("touchmove", onShow);
+    ref.addEventListener("mousemove", onShow);
+  });
 </script>
 
-<div id="manga-viewer" tabIndex="0" class:hide={$ToggleMenu}>
+<div bind:this={ref} id="manga-viewer" tabIndex="0" class:hide={$ToggleMenu}>
   <span class="fullscreen-progress">
     <Icons name="stickynote" />
     {progress}
@@ -264,15 +289,18 @@
     <span class="config">
       <MangaConfig {ToggleMenu} />
     </span>
-    <span class="btn-fullscr popup-msg" on:click={Fullscreen.action} data-title="Full Screen">
-      <Icons name="expandarrows" />
-    </span>
+    <span class="remove" on:click={removeFile}><Icons name="trash" color="red" /></span>
   </div>
 </div>
 
 <style>
   .controls :global(svg:not(.icon-eye)) {
     width: 36px;
+    height: 30px;
+    top: -2px;
+  }
+  .remove :global(svg.icon-trash) {
+    width: 30px;
     height: 30px;
     top: -2px;
   }
@@ -455,6 +483,10 @@
 
   #manga-viewer.hide .viewer {
     padding: 0;
+  }
+
+  .webtoon-img img:last-child {
+    margin-bottom: 80px;
   }
 
   @media screen and (max-width: 600px) {

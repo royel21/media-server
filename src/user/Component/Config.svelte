@@ -1,7 +1,7 @@
 <script>
   import { getContext, onDestroy, onMount } from "svelte";
-  import { ConfigStore, updateConfig } from "../Stores/PageConfigStore";
-  import Icons from "../../icons/Icons.svelte";
+  import { ConfigStore, updateConfig } from "src/user/Stores/PageConfigStore";
+  import Icons from "src/icons/Icons.svelte";
 
   const User = getContext("User");
   const logout = getContext("logout");
@@ -40,9 +40,9 @@
   <span class="nav-title">{User.username}</span>
 </label>
 <input type="checkbox" name="" id="show-config" title="show-config" bind:this={checkRef} />
-<div id="user-config" on:click|stopPropagation>
+<div id="user-config" on:click|stopPropagation on:keydown>
   <div id="sep">
-    <span class="icon signout" on:click={logout}>
+    <span class="icon signout" on:click={logout} on:keydown>
       <Icons name="signout" height="22px" /> Log out
     </span>
   </div>
@@ -52,6 +52,7 @@
     on:click|stopPropagation={(e) => {
       e.preventDefault();
     }}
+    on:keydown
   >
     <div class="input-group">
       <div class="input-group-prepend">
@@ -80,7 +81,7 @@
       <span id="fpp-tips">0 = auto, max 500</span>
     </div>
   </div>
-  <div><span on:click={save}><Icons name="save" height="22px" color="black" /></span></div>
+  <div><span on:click={save} on:keydown><Icons name="save" height="22px" color="black" /></span></div>
 </div>
 
 <style>
@@ -219,8 +220,16 @@
     #user-label {
       max-width: 100px;
     }
+    .icon :global(svg) {
+      height: 26px;
+    }
     .nav-title {
+      display: inline-block;
       font-size: 16px;
+      white-space: nowrap;
+      max-width: 90px;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
   }
 </style>

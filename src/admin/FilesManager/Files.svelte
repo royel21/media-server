@@ -3,10 +3,10 @@
   import { navigate } from "svelte-routing";
 
   import Modal from "../Folders/Modal.svelte";
-  import Filter from "../../ShareComponent/Filter.svelte";
-  import Pagination from "../../ShareComponent/Pagination.svelte";
-  import apiUtils from "../../apiUtils";
-  import Icons from "../../icons/Icons.svelte";
+  import Filter from "src/ShareComponent/Filter.svelte";
+  import Pagination from "src/ShareComponent/Pagination.svelte";
+  import apiUtils from "src/apiUtils";
+  import Icons from "src/icons/Icons.svelte";
 
   const socket = getContext("socket");
   export let page = 1;
@@ -18,14 +18,17 @@
   let file = {};
   let showModal = false;
   let modalType = {};
+  let rows;
 
   const calRows = () => {
     let container = document.querySelector(".list-container") || {};
-    return parseInt(container.offsetHeight / 45) - 1;
+    const tr = document.querySelector("tbody tr") || {};
+    return parseInt(container.offsetHeight / (tr.offsetHeight || 45)) - 1;
   };
 
   const loadFiles = async (pg) => {
-    const data = await apiUtils.admin(["files", pg, calRows(), filter]);
+    rows = calRows();
+    const data = await apiUtils.admin(["files", pg, rows, filter]);
 
     if (data.files) {
       items = data.files;
@@ -86,12 +89,12 @@
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = ({ detail: { target } }) => {
     if (modalType.Del) {
-      let Del = event.target.querySelector("input").checked;
+      let Del = target.querySelector("input").checked;
       socket.emit("remove-file", { Id: file.Id, Del });
     } else {
-      let Name = event.target.querySelector("input").value;
+      let Name = target.querySelector("textarea").value;
       if (!Name) {
         modalType.error = "Name Can't be empty";
       } else {
@@ -104,6 +107,8 @@
     showModal = false;
     file = {};
   };
+
+  $: console.log((page - 1) * rows);
 </script>
 
 {#if showModal}
@@ -119,6 +124,7 @@
     <table class="table table-bordered table-dark">
       <thead>
         <tr>
+          <th>No.</th>
           <th>Actions</th>
           <th>Name</th>
           <th>Path</th>
@@ -127,11 +133,12 @@
       <tbody>
         {#if items.length < 1}
           <tr>
-            <td colspan="3">No Files Found</td>
+            <td colspan="4">No Files Found</td>
           </tr>
         {:else}
-          {#each items as { Id, Name, Path }}
+          {#each items as { Id, Name, Path }, i}
             <tr id={Id} on:click={itemClick}>
+              <td>{(page - 1) * rows + i + 1}</td>
               <td>
                 <span><Icons name="edit" /></span>
                 <span><Icons name="trash" /></span>
@@ -151,8 +158,11 @@
 
 <style>
   .list-container {
-    height: calc(100% - 85px);
+    height: calc(100% - 80px);
     overflow: auto;
+  }
+  .list-container :global(.input-control) {
+    margin: 0;
   }
 
   .file-list {
@@ -170,12 +180,20 @@
     width: 100%;
   }
   .list-controls {
-    margin-top: 5px;
     text-align: center;
     width: 100%;
   }
   .table {
     width: 100%;
     min-width: max-content;
+  }
+
+  .table tr > *:first-child {
+    width: 50px;
+    min-width: 50px;
+  }
+  .table tr > *:nth-child(2) {
+    width: 85px;
+    min-width: 85px;
   }
 </style>

@@ -4,18 +4,31 @@ import { config } from "dotenv";
 import { fileURLToPath } from "url";
 
 config();
-const { IS_DEV, IP, DEV_PORT, PORT, HOME_IP, NC, DEV_SERVER_PORT } = process.env;
-const host = IS_DEV ? HOME_IP : IP;
-const port = DEV_PORT;
-let serverPort = PORT;
-if (NC) {
-  serverPort = DEV_SERVER_PORT;
-}
+const { VITE_PORT, VITE_HOST, PORT, DEV_PORT, USE_DEV } = process.env;
+const host = VITE_HOST;
+const port = VITE_PORT;
+
+const serverPort = USE_DEV ? DEV_PORT : PORT;
+
+const warings = [
+  "a11y-click-events-have-key-events",
+  "a11y-no-noninteractive-element-interactions",
+  "a11y-no-static-element-interactions",
+];
 
 // https://vitejs.dev/config/
 export default defineConfig({
   root: "./src",
-  plugins: [svelte()],
+  plugins: [
+    svelte({
+      onwarn(warning, defaultHandler) {
+        if (warings.includes(warning.code)) return;
+
+        // handle all other warnings normally
+        defaultHandler(warning);
+      },
+    }),
+  ],
   build: {
     outDir: "../server/public/static",
     emptyOutDir: true,
@@ -26,6 +39,9 @@ export default defineConfig({
         user: fileURLToPath(new URL("./src/user/index.html", import.meta.url)),
       },
     },
+  },
+  resolve: {
+    alias: [{ find: "src", replacement: fileURLToPath(new URL("./src", import.meta.url)) }],
   },
   server: {
     host,

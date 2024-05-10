@@ -2,11 +2,11 @@ const path = require("path");
 const os = require("os");
 const fs = require("fs-extra");
 
-var ListFiles;
-var ListFilesR;
-var ListFilesRO;
+let ListFiles;
+let ListFilesR;
+let ListFilesRO;
 
-var WinExplore = {};
+let WinExplore = {};
 
 if (os.platform().includes("win32")) {
   WinExplore = require("./build/Release/win_explorer");
@@ -27,9 +27,9 @@ if (os.platform().includes("win32")) {
       let f = path.basename(dir);
       return [fileInfo(dir, f)];
     }
-    var foundFiles = fs.readdirSync(dir);
-    var tempFiles = [];
-    var i = 0;
+    let foundFiles = fs.readdirSync(dir);
+    let tempFiles = [];
+    let i = 0;
     for (let f of foundFiles) {
       if (["$"].includes(f[0]) || f.includes("System Volume Information")) continue;
       tempFiles[i] = fileInfo(path.join(dir, f), f);
@@ -41,18 +41,18 @@ if (os.platform().includes("win32")) {
 }
 
 sortFiles = (a, b) => {
-  var a1 = a.Name.replace(/\(/gi, "0").replace(/\[/gi, "1");
-  var b1 = b.Name.replace(/\(/gi, "0").replace(/\[/gi, "1");
+  let a1 = a.Name.replace(/\(/gi, "0").replace(/\[/gi, "1");
+  let b1 = b.Name.replace(/\(/gi, "0").replace(/\[/gi, "1");
   return a1.localeCompare(b1);
 };
 
 ListFiles = (dir, options) => {
-  var d = path.resolve(dir);
+  let d = path.resolve(dir);
   if ((options || {}).oneFile) return WinExplore.ListFiles(d, true)[0];
 
   let opts = options || {};
 
-  var files = WinExplore.ListFiles(d, false).sort(sortFiles);
+  let files = WinExplore.ListFiles(d, false).sort(sortFiles);
 
   const checkFiles = (f) => {
     if (f.isHidden) {
@@ -84,14 +84,14 @@ ListFiles = (dir, options) => {
 };
 
 ListFilesR = (dir) => {
-  var temp = path.resolve(dir);
-  var files = [];
+  let temp = path.resolve(dir);
+  let files = [];
   listAll = (d) => {
     let fs1 = WinExplore.ListFiles(d);
     for (f of fs1) {
       if (f.isDirectory) {
         files.push(f);
-        var p = path.join(d, f.Name);
+        let p = path.join(d, f.Name);
         listAll(p);
       } else {
         files.push(f);
@@ -103,13 +103,13 @@ ListFilesR = (dir) => {
 };
 
 ListFilesRO = (dir) => {
-  var temp = path.resolve(dir);
+  let temp = path.resolve(dir);
   listAll = (d) => {
     let fs1 = WinExplore.ListFiles(d);
     let files = [];
     for (f of fs1) {
       if (f.isDirectory) {
-        var f2 = {
+        let f2 = {
           Name: f.Name,
           Path: path.join(d, f.Name),
           Files: listAll(path.join(d, f.Name)),

@@ -11,21 +11,24 @@ const sendUser = (res, user = { UserConfig: { dataValues: {} } }) => {
     username: user.Name || "",
     isAutenticated: user !== undefined,
     favorites: user.Favorites || [],
-    Config: JSON.parse(user.UserConfig.dataValues.Config),
   });
 };
 
 routes.post("/login", (req, res, next) => {
-  return passport.authenticate("local", (err, user, info) => {
+  return passport.authenticate("local", async (err, user, info) => {
     if (err) return next(err);
 
     if (user) {
-      return req.logIn(user, (err) => {
+      const { newpassword } = req.body;
+      if (newpassword && /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/.test(newpassword)) {
+        user.update({ Password: newpassword }, { encript: newpassword });
+      }
+      req.logIn(user, (err) => {
         if (err) return next(err);
         return sendUser(res, user);
       });
     } else {
-      return res.json({ isAutenticated: false, info });
+      res.json({ isAutenticated: false, info });
     }
   })(req, res, next);
 });
@@ -37,8 +40,7 @@ routes.get("/logout", (req, res) => {
 
 routes.get("/userconfig", (req, res) => {
   if (!req.user) return res.send({});
-  let config = req.user.UserConfig.Config;
-  return res.send(JSON.parse(config));
+  return res.send("no found");
 });
 
 routes.get("/", (req, res) => {

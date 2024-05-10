@@ -81,7 +81,7 @@
         {#if showinput}
           <input
             on:blur={hideInput}
-            type="text"
+            type="number"
             value={page}
             class="form-control"
             on:change={handleChange}
@@ -130,10 +130,10 @@
   }
   #pager .current-page {
     min-width: 60px;
-    width: 60px;
+    width: max-content;
     text-align: center;
     font-size: 14px;
-    padding: 0;
+    padding: 0 6px;
     line-height: 2.2;
     font-weight: 700;
   }
@@ -149,7 +149,10 @@
   }
 
   input {
-    height: 29px;
+    min-width: 60px;
+    width: max-content;
+    max-width: 90px;
+    height: 100%;
     text-align: center;
     padding: 0.1rem 0.2rem;
   }
@@ -176,6 +179,10 @@
     #next-page {
       border-top-right-radius: 0.25rem;
       border-bottom-right-radius: 0.25rem;
+    }
+    #pager li:not(.current-page) {
+      padding: 0 10px;
+      width: 30px;
     }
   }
 </style>

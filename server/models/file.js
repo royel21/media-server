@@ -1,9 +1,11 @@
 import path from "path";
 import fs from "fs-extra";
 import { nanoid } from "nanoid";
+import { DataTypes } from "sequelize";
+import defaultConfig from "../default-config.js";
 
-export default (sequelize, DataTypes, ImagesPath) => {
-  const genImgPath = (type, fname, name) => `${ImagesPath}/${type}/${fname}/${name}.jpg`;
+export default (sequelize) => {
+  const genImgPath = (type, fname, name) => `${defaultConfig.ImagesDir}/${type}/${fname}/${name}.jpg`;
 
   const { INTEGER, STRING, DATE, FLOAT, VIRTUAL } = DataTypes;
   const File = sequelize.define(
@@ -52,8 +54,17 @@ export default (sequelize, DataTypes, ImagesPath) => {
           return this.Folder ? `/${this.Type}/${this.Folder.Name}/${this.Name}.jpg` : "";
         },
       },
+      FolderId: {
+        type: STRING(6),
+      },
     },
     {
+      indexes: [
+        {
+          unique: false,
+          fields: ["FolderId"],
+        },
+      ],
       uniqueKeys: {
         name_folderid_unique: {
           fields: ["Name", "FolderId"],
@@ -65,7 +76,7 @@ export default (sequelize, DataTypes, ImagesPath) => {
           item.Id = nanoid(10);
         },
         beforeBulkCreate: function (items) {
-          for (var item of items) {
+          for (let item of items) {
             item.Id = nanoid(10);
           }
         },
@@ -80,9 +91,9 @@ export default (sequelize, DataTypes, ImagesPath) => {
                 fs.moveSync(fromFile, toFile);
               }
 
-              const oldCover = genImgPath(folder.Name, oldName);
+              const oldCover = genImgPath(item.Type, folder.Name, oldName);
               if (fs.existsSync(oldCover)) {
-                const cover = genImgPath(folder.Name, item.Name);
+                const cover = genImgPath(item.Type, folder.Name, item.Name);
                 fs.moveSync(oldCover, cover);
               }
             }
@@ -92,12 +103,14 @@ export default (sequelize, DataTypes, ImagesPath) => {
           if (opt.Del) {
             try {
               const folder = await item.getFolder();
+              console.log("folder: ", folder?.Name);
               if (folder) {
                 //Delete File
                 const fPath = `${folder.Path}/${item.Name}`;
                 if (fs.existsSync(fPath)) fs.removeSync(fPath);
                 //Delete Cover
                 const cover = genImgPath(item.Type, folder.Name, item.Name);
+                console.log("remove", cover);
                 if (fs.existsSync(cover)) fs.removeSync(cover);
               }
             } catch (error) {

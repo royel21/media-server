@@ -12,7 +12,7 @@ import { fileURLToPath } from "url";
 
 config();
 
-import db from "./models/index.js";
+import db, { createdb } from "./models/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 global.appPath = path.dirname(__filename);
@@ -25,6 +25,8 @@ import UsersManagerRoute from "./routes/admin/UsersManagerRoute.js";
 import DirectoriesRoute from "./routes/admin/DirectoriesRoute.js";
 import FilesManagerRoute from "./routes/admin/FilesManagerRoute.js";
 import FoldersRoute from "./routes/admin/FoldersRoute.js";
+import DownloaderRoutes from "./routes/admin/DownloaderRoutes.js";
+import defaultConfig from "./default-config.js";
 
 const app = express();
 const passport = passportConfig();
@@ -36,17 +38,17 @@ app.use(cookieParser());
 
 app.use(
   compression({
-    filter: function (req, res) {
+    filter: function (req) {
       return !req.url.includes("viewer/video");
     },
   })
 );
 
-app.use(express.static(process.env.IMAGES));
-app.use(express.static(global.appPath + "/public/static", { dotfiles: "allow" }));
+app.use(express.static(defaultConfig.ImagesDir));
+app.use(express.static(path.join(appPath, "public", "static"), { dotfiles: "allow" }));
 
 const sessionMeddle = session({
-  name: process.env.SESSION,
+  name: process.env.SESSION || "rcmediaserver",
   secret: "2491eb2c-595d-4dc8-8427",
   resave: false,
   saveUninitialized: false,
@@ -74,8 +76,9 @@ app.use("/api/admin/users", UsersManagerRoute);
 app.use("/api/admin/directories", DirectoriesRoute);
 app.use("/api/admin/files", FilesManagerRoute);
 app.use("/api/admin/folders", FoldersRoute);
+app.use("/api/admin/downloader", DownloaderRoutes);
 
-const getPath = (type) => path.join(global.appPath, "public", type, "index.html");
+const getPath = (type) => path.join(path.dirname(__filename), "public", type, "index.html");
 
 // process login page request
 app.get("/login/*", (_, res) => res.sendFile(getPath("/static/login")));
@@ -94,13 +97,18 @@ app.use((e, _, res, __) => {
   }
 });
 
-const { PORT, PORT2, IP, HOME_IP, IP_LOCAL, USE_LOCAL } = process.env;
-let host = USE_LOCAL ? IP_LOCAL : process.env.USERNAME === "rconsoro" ? IP : HOME_IP;
-const port = process.env.USERNAME === "rconsoro" ? PORT2 : PORT;
+const { DB_NAME, USE_DEV, PORT, DEV_PORT, HOST, DEV_HOST } = process.env;
+const host = (USE_DEV ? DEV_HOST : HOST) || "localhost";
+const port = (USE_DEV ? DEV_PORT : PORT) || 8432;
 
-console.log(process.env.NODE_ENV, host, port);
-
-db.init().then(() => {
+const iniServer = async () => {
+  console.log("Create DB if Needed", DB_NAME);
+  await createdb();
+  console.log("Initialize db Tables");
+  await db.init();
+  console.log("Initialize Server");
   websocketConfig(app.listen(port, host), sessionMeddle);
-  console.log(`Node server is running.. at http://${host}:${port}`);
-});
+  console.log(`Server is running.. at http://${host}:${port}`);
+};
+
+iniServer().catch((err) => console.log(err));

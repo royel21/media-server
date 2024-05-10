@@ -10,7 +10,6 @@
   import Favorites from "./Pages/FileBrowser/Favorites.svelte";
   import Content from "./Pages/FileBrowser/Content.svelte";
   import Viewer from "./Pages/Viewer.svelte";
-  import NavItem from "./Component/NavItem.svelte";
   import apiUtils from "../apiUtils";
   import Config from "./Component/Config.svelte";
   import { setConfig } from "./Stores/PageConfigStore";
@@ -22,12 +21,10 @@
     { title: "Favorites", path: "/favorites", class: "heart" },
   ];
 
-  let dirs = { selected: {}, Mangas: [] };
   const User = getContext("User");
+  let dirs = { selected: {}, Mangas: [], Favorites: User.favorites };
 
   FavoritesStores.set(User.favorites);
-
-  setConfig(User.username);
 
   onMount(async () => {
     const data = await apiUtils.files(["dirs/"]);
@@ -37,11 +34,12 @@
   });
 
   document.title = "Home";
+  $: setConfig(User.username);
+  $: dirs.Favorites = $FavoritesStores;
 </script>
 
 <Router>
-  <Navbar on:click {navItems} filters={["Mangas", "Videos", "Favorites"]} let:item>
-    <NavItem {dirs} {item} slot="nav-item" {User} />
+  <Navbar on:click {navItems} {dirs} filters={["Mangas", "Videos", "Favorites"]}>
     <Config slot="user" />
   </Navbar>
 
