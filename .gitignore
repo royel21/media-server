@@ -34,3 +34,4 @@ mediaserver.sqlite-journal
 mariadb.txt
 sessions/
 others/
+user-data/
