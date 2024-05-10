@@ -36,3 +36,5 @@ mariadb.txt
 sessions/
 others/
 note.txt
+/vite.config.js.timestamp-*
+.gitignore
