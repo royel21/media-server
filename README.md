@@ -20,7 +20,8 @@
 - NODE_ENV=production **#Tell Nodejs we are in production**
 - HOST=localhost **#for IP Address for external access**
 - PORT=8180 **# for express server when in production**
-- SESSION=sessin **# secret for express # default "mysecret-session"**
+- SESSION_NAME=rcmediaserver **# name for express session**
+- SESSION_SECRET=rcmediaserver **# Secret for express session**
 
 ### -> Directory config optional
 

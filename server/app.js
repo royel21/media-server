@@ -48,8 +48,8 @@ app.use(express.static(defaultConfig.ImagesDir));
 app.use(express.static(path.join(appPath, "public", "static"), { dotfiles: "allow" }));
 
 const sessionMeddle = session({
-  name: process.env.SESSION || "rcmediaserver",
-  secret: "2491eb2c-595d-4dc8-8427",
+  name: defaultConfig.sessionName,
+  secret: defaultConfig.sessionSecret,
   resave: false,
   saveUninitialized: false,
   maxAge: 24 * 60 * 60 * 1000 * 30,
@@ -97,17 +97,13 @@ app.use((e, _, res, __) => {
   }
 });
 
-const { DB_NAME, USE_DEV, PORT, DEV_PORT, HOST, DEV_HOST } = process.env;
-const host = (USE_DEV ? DEV_HOST : HOST) || "localhost";
-const port = (USE_DEV ? DEV_PORT : PORT) || 8432;
-
 const iniServer = async () => {
-  console.log("Create DB if Needed", DB_NAME);
+  console.log("Create DB if Needed", defaultConfig.dbName);
   await createdb();
   console.log("Initialize db Tables");
   await db.init();
   console.log("Initialize Server");
-  websocketConfig(app.listen(port, host), sessionMeddle);
+  websocketConfig(app.listen(defaultConfig.port, defaultConfig.host), sessionMeddle);
   console.log(`Server is running.. at http://${host}:${port}`);
 };
 
