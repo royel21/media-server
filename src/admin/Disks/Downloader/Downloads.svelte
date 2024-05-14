@@ -64,12 +64,15 @@
   };
 
   const loadItems = async () => {
-    const result = await apiUtils.get(["admin", "downloader", "links", datas.items, datas.page, datas.filter]);
+    const { items, page, filter } = datas;
+    console.log(decodeURIComponent(filter));
+    const result = await apiUtils.post("admin/downloader/links", { items, page, filter: decodeURIComponent(filter) });
     servers = await apiUtils.get(["admin", "downloader", "servers"]);
-
-    datas.links = result.links;
-    datas.totalPages = result.totalPages;
-    datas.totalItems = result.totalItems;
+    if (result.links) {
+      datas.links = result.links;
+      datas.totalPages = result.totalPages;
+      datas.totalItems = result.totalItems;
+    }
   };
 
   const gotopage = ({ detail }) => {

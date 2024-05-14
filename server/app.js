@@ -104,7 +104,7 @@ const iniServer = async () => {
   await db.init();
   console.log("Initialize Server");
   websocketConfig(app.listen(defaultConfig.port, defaultConfig.host), sessionMeddle);
-  console.log(`Server is running.. at http://${host}:${port}`);
+  console.log(`Server is running.. at http://${defaultConfig.host}:${defaultConfig.port}`);
 };
 
 iniServer().catch((err) => console.log(err));

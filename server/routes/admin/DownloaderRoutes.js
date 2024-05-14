@@ -32,8 +32,8 @@ routes.get("/remove-link/:Id", async ({ params }, res) => {
   res.send({ valid: false });
 });
 
-routes.get("/links/:items/:page?/:filter?", async ({ params }, res) => {
-  const { page = 1, items, filter = "" } = params;
+routes.post("/links", async ({ body }, res) => {
+  const { page = 1, items, filter = "" } = body;
   let limit = +items || 10;
   let offset = (page - 1) * limit || 0;
 
@@ -41,7 +41,7 @@ routes.get("/links/:items/:page?/:filter?", async ({ params }, res) => {
   const order = "Date";
 
   const datas = await db.Link.findAndCountAll({
-    where: { [Op.or]: { Name: qfilter, AltName: qfilter, "$Server.Name$": qfilter } },
+    where: { [Op.or]: { Name: qfilter, AltName: qfilter, "$Server.Name$": qfilter, Url: qfilter } },
     limit,
     offset,
     include: { model: db.Server, Attributes: ["Id", "Name"], required: true, where: { Enable: true } },
