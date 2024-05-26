@@ -69,7 +69,7 @@ const renameFolder = async (datas) => {
     try {
       const Path = folder.Path.replace(folder.Name, Name);
 
-      data = { Name, Path, Description, Genres, Status, IsAdult, AltName, Author };
+      data = { Name, Path, Description, Genres, Status, IsAdult: IsAdult || 0, AltName, Author };
 
       if (Transfer) {
         const dir = await db.directory.findOne({ where: { Id: DirectoryId } });
