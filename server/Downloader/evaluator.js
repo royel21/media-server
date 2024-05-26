@@ -314,11 +314,20 @@ export const adultEvalPage = async (query) => {
     }
   }
 
-  let chaps = [...document.querySelectorAll(query.Chapters)];
+  let as = [...document.querySelectorAll(query.Chapters)];
+
+  let chaps = [];
+  as.forEach((a) => {
+    try {
+      let num = a.textContent.match(/^\d+/)[0];
+      if (!chaps.includes(num)) chaps.push(num);
+    } catch (error) {}
+  });
+
   const padding = chaps.length > 999 ? 4 : 3;
 
   let data = [];
-  chaps.forEach((a) => {
+  as.forEach((a) => {
     let text = (a.querySelector("strong,b,san") || a).textContent?.trim();
 
     let fileName = text
