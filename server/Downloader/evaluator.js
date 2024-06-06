@@ -401,8 +401,8 @@ export const adultEvalPage = async (query) => {
         const num = d.name.match(/^\d+/);
         let nextN = `${i + 1}`.padStart(3, "0");
 
-        if (!num || num !== nextN) {
-          d.name = `${i + 1}`.padStart(3, "0") + " " + d.name;
+        if ((!num || d.name, includes(nextN))) {
+          d.name = nextN + " " + d.name;
         }
         return d;
       })
