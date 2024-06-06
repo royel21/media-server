@@ -91,8 +91,8 @@ routes.get("/dirs", async (req, res) => {
     where: { IsAdult: { [Op.lte]: req.user.AdultPass } },
   });
 
-  let Mangas = dirs.filter((d) => d.Type === "Mangas");
-  let Videos = dirs.filter((d) => d.Type === "Videos");
+  let Mangas = [...dirs.filter((d) => d.Type === "Mangas"), { Id: "all", Name: "All" }];
+  let Videos = [...dirs.filter((d) => d.Type === "Videos"), { Id: "all", Name: "All" }];
 
   return res.send({
     Mangas,

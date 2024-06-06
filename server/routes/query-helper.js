@@ -134,7 +134,7 @@ export const getFolders = async (req, res) => {
     },
   };
 
-  if (["mangas", "videos"].includes(filetype)) {
+  if (["mangas", "videos"].includes(filetype) && dirid !== "all") {
     query.where.DirectoryId = dirid;
   }
 
