@@ -21,7 +21,7 @@
   $: fill = color || "white";
 </script>
 
-<svg class={"icon-" + name} {fill} {xmlns} {height} {width} viewBox={box}>
+<svg class={"icon-" + name} {fill} xmlns="http://www.w3.org/2000/svg" {height} {width} viewBox={box}>
   {@html icon}
 </svg>
 
