@@ -61,6 +61,11 @@ export const evaluetePage = (query) => {
         val = val.replace(n, n.padStart(padding, "0"));
       }
 
+      if (/^Tales Of Demons/i.test(Name)) {
+        val = val.replace("-6", "-5");
+        val = val.replace("-1", "");
+      }
+
       return { name: val, url: a.href.replace(/-page-\d+/gi, "") };
     })
     .filter((a) => {
@@ -342,6 +347,11 @@ export const adultEvalPage = async (query) => {
       .replace(/( )+/g, " ")
       .trim();
 
+    if (/^Tales Of Demons/i.test(Name)) {
+      fileName = fileName.replace("-6", "-5");
+      fileName = fileName.replace("-1", "");
+    }
+
     const season = text.match(/^Season \d+/i);
     if (season) {
       fileName = fileName + " " + season[0];
@@ -359,6 +369,7 @@ export const adultEvalPage = async (query) => {
 
     data.push({ name: fileName, url: a.href, n });
   });
+
   data = data.filter((a) => {
     if (/\d+-/.test(a.name)) {
       let num = a.name.match(/^\d+/);
