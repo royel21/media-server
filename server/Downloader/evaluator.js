@@ -124,7 +124,7 @@ export const evaleLinks = async (query) => {
     });
   };
 
-  if (query.Name.includes("manhuascan")) {
+  if (query.Name.includes("kaliscan")) {
     let divs = document.querySelectorAll(".chapter-image");
 
     for (let div of divs) {
@@ -305,7 +305,7 @@ export const adultEvalPage = async (query) => {
     }
   }
 
-  if (location.href.includes("manhuascan") && !Author) {
+  if (location.href.includes("kaliscan") && !Author) {
     let text = [...document.querySelectorAll(".book-info .meta p")]
       .map((p) => p.textContent)
       .find((text) => authorRegex.test(text));
