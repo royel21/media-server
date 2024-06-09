@@ -55,6 +55,10 @@ export const downloadLink = async (d, page, Server, folder, count, adult, state)
     await page.select(".loadImgType", "1");
   }
 
+  if ((await page.$(".listing-chapters_wrap li a")) && Server.Name.includes("mangaread")) {
+    return;
+  }
+
   await page.waitForSelector(Server.Imgs);
 
   links = await page.evaluate(evaleLinks, Server.dataValues);
