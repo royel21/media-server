@@ -65,12 +65,7 @@
 
   const loadItems = async () => {
     const { items, page, filter } = datas;
-    console.log(decodeURIComponent(filter));
-    const result = await apiUtils.post("admin/downloader/links", {
-      items,
-      page,
-      filter: decodeURIComponent(filter?.replace(/ (\[|\(|)official(\]|\)|)$/i, "")),
-    });
+    const result = await apiUtils.post("admin/downloader/links", { items, page, filter: decodeURIComponent(filter) });
     servers = await apiUtils.get(["admin", "downloader", "servers"]);
     if (result.links) {
       datas.links = result.links;

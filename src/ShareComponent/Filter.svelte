@@ -13,7 +13,7 @@
       .replace("’", "'")
       .replace(/:|\?|\"| Raw$/gi, "")
       .trim();
-    dispatch("filter", encodeURIComponent(ftl));
+    dispatch("filter", encodeURIComponent(ftl.replace(/ (\[|\(|)official(\]|\)|)$/i, "")));
   };
 
   const ClearFilter = () => send("");

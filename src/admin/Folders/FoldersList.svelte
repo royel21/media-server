@@ -46,9 +46,7 @@
   };
 
   const loadFolders = async (pg, dir) => {
-    let flt = encodeURIComponent(
-      (filter?.replace(/ (\[|\(|)official(\]|\)|)$/i, "") || "")?.replace(/|:|\?|\^|"|\*|<|>|\t|\n/gi, "")
-    );
+    let flt = filter?.replace(/|:|\?|\^|"|\*|<|>|\t|\n/gi, "") || "";
     let data = await apiUtils.admin(["folders", dir || currentDir || "all", pg, calRows(), flt]);
 
     if (data.items) {
