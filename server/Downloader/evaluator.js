@@ -412,7 +412,7 @@ export const adultEvalPage = async (query) => {
         const num = d.name.match(/^\d+/);
         let nextN = `${i + 1}`.padStart(3, "0");
 
-        if (!num || d.name !== includes(nextN)) {
+        if (!num || !d.name.includes(nextN)) {
           d.name = nextN + " " + d.name;
         }
         return d;

@@ -72,6 +72,7 @@
   afterUpdate(() => selectByTitle(title));
 
   $: document.title = page ? `Home - Page - ${pageData.page}` : "Home";
+  $: console.log(pageData);
   const folderIcon = { name: "folderopen", color: "rgb(250, 183, 15);" };
 </script>
 

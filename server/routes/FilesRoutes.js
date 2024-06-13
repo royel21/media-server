@@ -72,6 +72,7 @@ routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
     return {
       ...rc.dataValues,
       ...rc.Folder.dataValues,
+      IsCompleted: rc.Genres.includes("Completed"),
     };
   });
 
