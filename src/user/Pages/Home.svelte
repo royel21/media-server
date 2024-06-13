@@ -72,7 +72,6 @@
   afterUpdate(() => selectByTitle(title));
 
   $: document.title = page ? `Home - Page - ${pageData.page}` : "Home";
-  $: console.log(pageData);
   const folderIcon = { name: "folderopen", color: "rgb(250, 183, 15);" };
 </script>
 
@@ -84,7 +83,7 @@
     </span>
   </div>
   <div class="files-list" on:keydown={handleKeydown}>
-    {#each pageData.items as { Id, Name, Type, LastChapter, FileCount, FilesType }, i}
+    {#each pageData.items as { Id, Name, Type, LastChapter, FileCount, FilesType, Status, isRaw }, i}
       <div class="file" id={Id} data-type={Type} data-types={FilesType} tabIndex="0" on:click={handleClick} on:keydown>
         <div class="file-info">
           <div class="file-btns">
@@ -98,6 +97,8 @@
           </div>
           <div class="file-cover" on:dblclick|stopPropagation={openFolder}>
             <LazyImage cover={encodeURI(`/${Type}/${FilesType}/${Name}.jpg`)} />
+            <span class="f-status" class:completed={Status}>{Status ? "Completed" : "OnGoing"}</span>
+            <span class="f-raw" class:hidden={!isRaw}>Raw</span>
           </div>
           <div class="file-name">{Name}</div>
         </div>

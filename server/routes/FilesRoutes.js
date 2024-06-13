@@ -66,13 +66,14 @@ routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
   });
   //Map Folder
   const folders = recents.map((rc) => {
+    const isRaw = rc.Folder.dataValues.Genres.includes("Raw");
     delete rc.dataValues.Folder;
     delete rc.dataValues.LastRead;
     delete rc.Folder.dataValues.Genres;
     return {
       ...rc.dataValues,
       ...rc.Folder.dataValues,
-      IsCompleted: rc.Genres.includes("Completed"),
+      isRaw,
     };
   });
 

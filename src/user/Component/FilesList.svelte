@@ -210,43 +210,4 @@
   .scroll-container::-webkit-scrollbar-thumb {
     border-radius: 0.4rem;
   }
-  .file-cover {
-    position: relative;
-  }
-  .file-cover > span {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    position: absolute;
-    bottom: 0px;
-    z-index: 1;
-    font-size: 1rem;
-    font-weight: 600;
-    padding: 0 4px;
-    background-color: #303030ba;
-  }
-  .file-cover .f-status {
-    display: inline-block;
-    width: auto;
-    left: 0;
-    border-top-right-radius: 0.25rem;
-    background-color: #05a100;
-  }
-  .file-cover .completed {
-    background-color: red;
-  }
-  .file-cover .f-raw {
-    display: inline-block;
-    position: absolute;
-    width: inherit;
-    right: 0;
-    left: initial;
-    bottom: 0px;
-    background-color: red;
-    border-top-left-radius: 20%;
-  }
-
-  .file-cover .f-raw.hidden {
-    display: none;
-  }
 </style>
