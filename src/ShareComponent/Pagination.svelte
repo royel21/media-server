@@ -166,7 +166,7 @@
   .border-r-right {
     border-top-right-radius: 0.25rem;
   }
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 640px) {
     #last-page,
     #first-page {
       display: none;

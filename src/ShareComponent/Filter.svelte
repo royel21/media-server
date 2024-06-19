@@ -68,6 +68,7 @@
     width: 100%;
     pointer-events: all;
     max-width: 350px;
+    margin-right: 4px;
   }
   #filter-control > * {
     height: 32px;
@@ -76,10 +77,5 @@
     padding: 2px 5px;
     border-top-right-radius: 0.25rem;
     border-bottom-right-radius: 0.25rem;
-  }
-  @media screen and (max-width: 600px) {
-    #filter-control {
-      width: 220px;
-    }
   }
 </style>
