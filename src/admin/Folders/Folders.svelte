@@ -6,12 +6,10 @@
   export let filter;
   export let folderId = "";
   export let dirid;
-  let Name = "";
   let shwFiles = true;
 
   const folderid = ({ detail }) => {
     folderId = detail?.Id || "";
-    Name = detail?.Path.split(/\/|\\/).pop() || "";
   };
 
   const showFiles = () => {
@@ -22,7 +20,7 @@
 <div class="card bg-dark admin-manager" class:has-files={shwFiles}>
   <div class="rows" class:has-files={shwFiles}>
     <FolderList on:folderid={folderid} page={parseInt(page) || 1} {dirid} {folderId} {filter} {showFiles} />
-    {#if shwFiles}<FolderData {folderId} {Name} />{/if}
+    {#if shwFiles}<FolderData {folderId} />{/if}
   </div>
 </div>
 

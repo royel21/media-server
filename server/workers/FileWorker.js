@@ -29,23 +29,30 @@ const renameFile = async ({ Id, Name }) => {
 /************ Remove file from db and system ***********************/
 
 const removeFile = async ({ Id, Del, viewer }) => {
-  let file = await db.file.findOne({
+  let files = await db.file.findAll({
     where: { Id },
     include: { model: db.folder },
   });
 
   const message = { success: false, msg: "", viewer };
 
-  if (file) {
-    try {
-      await file.destroy({ Del });
-      if (file.Folder.FileCount > 1) {
-        await file.Folder.update({ FileCount: file.Folder.FileCount - 1 });
+  if (files.length) {
+    let folder = files[0].Folder;
+
+    for (let file of files) {
+      try {
+        await file.destroy({ Del });
+        if (folder.FileCount) folder.FileCount--;
+
+        message.success = true;
+      } catch (err) {
+        console.log(err);
+        message.msg = "Server Error 500";
       }
-      message.success = true;
-    } catch (err) {
-      console.log(err);
-      message.msg = "Server Error 500";
+    }
+    //Update file count
+    if (folder) {
+      await folder.update({ FileCount: folder.FileCount });
     }
   } else {
     message.msg = "File not found on db";

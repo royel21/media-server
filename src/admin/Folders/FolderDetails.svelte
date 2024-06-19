@@ -9,7 +9,6 @@
   import { setMessage } from "../Store/MessageStore";
 
   export let folderId;
-  export let Name;
   let hasChanges = false;
   let error = "";
   const socket = getContext("socket");
@@ -20,12 +19,13 @@
 
   let options = [];
 
-  const loadDetails = async (Id, Name) => {
-    folder = { Id, Name };
+  const loadDetails = async (Id) => {
+    folder = { Id };
     imageData = { Id, Url: "" };
     const data = await apiUtils.admin(["folders", "folder", Id]);
     if (data.dirs) {
       imageData.Id = Id;
+      folder.Name = data.Name;
       folder.Description = data.Description;
       folder.Genres = data.Genres;
       folder.AltName = data.AltName;
@@ -98,7 +98,7 @@
     }
   };
 
-  $: loadDetails(folderId, Name);
+  $: loadDetails(folderId);
 </script>
 
 <div class="detail">

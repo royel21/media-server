@@ -6,6 +6,8 @@
   import Modal from "./Modal.svelte";
   import apiUtils from "src/apiUtils";
   import { clamp } from "src/ShareComponent/utils";
+  import Icons from "src/icons/Icons.svelte";
+  import CCheckbox from "../Component/CCheckbox.svelte";
 
   const socket = getContext("socket");
 
@@ -22,6 +24,9 @@
   let showModal = false;
   let showFileinfo = false;
   let modalType = {};
+  let removeList = [];
+  let isChecked = false;
+
   const dateFormat = { year: "numeric", month: "short", day: "numeric" };
 
   const loadFiles = async (pg) => {
@@ -63,6 +68,7 @@
       }
 
       hideModal();
+      removeList = [];
     } else {
       modalType.error = data.msg;
     }
@@ -113,7 +119,7 @@
   const handleSubmit = ({ detail }) => {
     if (modalType.Del) {
       let Del = detail.target.querySelector("input").checked;
-      socket.emit("remove-file", { Id: file.Id, Del });
+      socket.emit("remove-file", { Id: file.Id ? file.Id : removeList, Del });
     } else {
       if (!file.Name) {
         modalType.error = "Name Can't be empty";
@@ -121,6 +127,42 @@
         socket.emit("rename-file", { Id: file.Id, Name: file.Name });
       }
     }
+  };
+
+  const onCheck = ({ target }) => {
+    const id = target.closest("li").id;
+    if (id) {
+      if (!removeList.includes(id)) {
+        removeList = [...removeList, id];
+      } else {
+        removeList = removeList.filter((item) => item !== id);
+      }
+    }
+  };
+
+  const validateCheck = () => {
+    if (removeList.length === 0) return false;
+
+    for (const item of items) {
+      if (!removeList.includes(item.Id)) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const onCheckAll = () => {
+    if (validateCheck()) {
+      removeList = removeList.filter((item) => !items.find((i) => i.Id === item));
+    } else {
+      removeList = [...removeList, ...items.filter((item) => !removeList.includes(item.Id)).map((item) => item.Id)];
+    }
+  };
+
+  const onRemoveSelected = () => {
+    showModal = true;
+    modalType = { title: "Remove Selected Files", Del: true, isFile: true };
+    file = { Name: "Selected Files" };
   };
 
   const hideModal = () => {
@@ -149,6 +191,7 @@
     loadFiles(1);
     oldFolder = folderId;
   }
+  $: if (removeList && page) isChecked = validateCheck();
 </script>
 
 {#if showModal}
@@ -164,12 +207,22 @@
   {totalPages}
   {totalItems}
   {filter}
+  {removeList}
   {iconClick}
   on:filter={onFilter}
   on:gotopage={goToPage}
   on:mouseenter={onShowInfo}
   on:mouseleave={onShowInfo}
+  on:change={onCheck}
 >
+  <span id="del-files" slot="btn-controls">
+    <CCheckbox on:change={onCheckAll} {isChecked} title="Select All Files" />
+    {#if removeList.length}
+      <span on:click={onRemoveSelected}>
+        <Icons name="trash" box="0 0 420 512" />
+      </span>
+    {/if}
+  </span>
   <div slot="item-slot" class="f-info" let:item>
     {#if file?.Id === item && showFileinfo}
       <span>{(file.Size / 1024 / 1024).toFixed(2)}mb</span> -
@@ -189,5 +242,10 @@
     background: rgba(0, 0, 0, 0.7);
     color: white;
     pointer-events: none;
+  }
+  #del-files {
+    display: inline-block;
+    min-width: fit-content;
+    margin: 0 5px;
   }
 </style>

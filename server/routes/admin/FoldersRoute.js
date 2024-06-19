@@ -129,6 +129,7 @@ routes.get("/folder/:folderId?", async (req, res) => {
   const dirs = await db.directory.findAll({ order: ["Name"] });
 
   res.send({
+    Name: folder.Name,
     Description: folder.Description,
     Genres: folder.Genres,
     AltName: folder.AltName,

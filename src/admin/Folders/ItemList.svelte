@@ -3,6 +3,7 @@
   import Icons from "src/icons/Icons.svelte";
   import Filter from "src/ShareComponent/Filter.svelte";
   import Pagination from "src/ShareComponent/Pagination.svelte";
+  import CCheckbox from "../Component/CCheckbox.svelte";
   export let id;
   export let filter;
   export let title;
@@ -14,6 +15,7 @@
   export let scanning = [];
   export let showGenres = false;
   export let iconClick;
+  export let removeList = [];
   let clazz = "";
   export { clazz as class };
 
@@ -69,6 +71,7 @@
                 </span>
               {/if}
             {:else}
+              <CCheckbox on:change isChecked={removeList.includes(Id)} />
               <span on:keydown class="edit" on:click={iconClick}><Icons name="edit" /></span>
             {/if}
             <span on:keydown class="trash" on:click={iconClick}><Icons name="trash" box="0 0 420 512" /></span>

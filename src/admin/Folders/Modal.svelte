@@ -9,7 +9,6 @@
   export let ref = null;
   export let deleteFromSys = null;
 
-  let options = [];
   let tempFile = { Name: "", Ex: "" };
   const dispatch = createEventDispatcher();
 
