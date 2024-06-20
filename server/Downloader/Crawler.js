@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer-extra";
+import puppeteerCore from "puppeteer-core";
 
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 puppeteer.use(StealthPlugin());
@@ -6,7 +7,6 @@ puppeteer.use(StealthPlugin());
 // const addBlocker from "puppeteer-extra-plugin-adblocker");
 // puppeteer.use(addBlocker());
 
-// const puppeteer from "puppeteer-core");
 export const delay = (ms) => {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
@@ -55,7 +55,13 @@ export const startBrowser = async (config) => {
       pupeteer = null;
     }
     config.args = ["--no-sandbox"];
-    pupeteer = await puppeteer.launch(config);
+    if (process.env.USE_DEV && os.platform() === "win32") {
+      config.headless = false;
+      config.executablePath = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
+      pupeteer = await puppeteerCore.launch(config);
+    } else {
+      pupeteer = await puppeteer.launch(config);
+    }
   } catch (error) {
     console.log("Some error", error);
   }

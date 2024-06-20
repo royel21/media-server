@@ -215,8 +215,11 @@
       top: 80px;
       right: 16px;
     }
-    .important {
-      font-size: 1.2rem;
+    .text-list .important {
+      font-size: 1.1rem;
+    }
+    .text-list {
+      font-size: 0.8rem;
     }
   }
 </style>
