@@ -17,7 +17,7 @@ const getData = async ({ params }, res) => {
 
   const query = {
     attributes: ["Id", "Name", "Type"],
-    order: [literal(`REPLACE(REPLACE(Name, "-", "0"), '[','0')`)], // used for natural ordering
+    order: [literal(`REPLACE(REPLACE(Name, "-", "0"), '[','0')`), "DESC"], // used for natural ordering
     where: {},
     offset,
     limit,
