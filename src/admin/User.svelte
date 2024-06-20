@@ -45,6 +45,7 @@
       error = "";
     }, 5000);
   }
+  document.title = "Users";
 </script>
 
 {#if foundUser}

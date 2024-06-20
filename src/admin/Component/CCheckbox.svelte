@@ -28,7 +28,9 @@
     top: 4px;
     height: 20px;
     width: 20px;
-    background-color: #eee;
+    background-color: #aca7a7;
+    border: 1px solid black;
+    border-radius: 0.3em;
   }
   .checkmark:after {
     content: "";

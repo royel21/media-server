@@ -15,6 +15,7 @@
   $: {
     navigate(`/admin/content-manager/${tab || "tab-3"}`, { replace: true });
   }
+  document.title = "Manager";
 </script>
 
 <div class="card bg-dark text-light admin-manager">

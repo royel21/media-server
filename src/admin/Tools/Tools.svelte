@@ -45,6 +45,8 @@
       socket.off("reload-backups", reload);
     };
   });
+
+  document.title = "Tools";
 </script>
 
 <div>
