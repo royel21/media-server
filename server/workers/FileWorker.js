@@ -97,7 +97,7 @@ const renameFolder = async (datas) => {
         msg = `Folder: ${Name} data was Updated`;
       }
       //add Completed id
-      let gens = Genres.split(", ").filter((g) => g !== "Completed");
+      let gens = Genres?.split(", ").filter((g) => g !== "Completed") || "";
       if (Status) {
         gens.push("Completed");
         gens.sort();
