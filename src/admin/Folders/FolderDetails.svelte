@@ -94,7 +94,7 @@
       if (!folder.Name) {
         return (error = "Name Can't be empty");
       }
-
+      console.log(folder);
       socket.emit("rename-folder", { ...folder, Transfer: transfer });
       hasChanges = false;
       old = { ...folder };
