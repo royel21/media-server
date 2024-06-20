@@ -26,7 +26,15 @@
 
 <div class="input-control" {style}>
   <div id="t-label" for="Name" class="input-label" on:click={handler}>{label || key}</div>
-  <textarea bind:this={ref} name={key} class="input" {rows} bind:value={file[key]} on:change={onChange} />
+  <textarea
+    bind:this={ref}
+    name={key}
+    class="input"
+    {rows}
+    bind:value={file[key]}
+    on:change={onChange}
+    on:blur={onChange}
+  />
 </div>
 
 <style>

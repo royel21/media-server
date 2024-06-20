@@ -26,6 +26,10 @@ export const validateAuthor = (auth) => {
     .join(" ");
 };
 
+export const validAltName = (v) => {
+  return v.replace(/( |)(•|\/)( |)/g, "; ");
+};
+
 export const map = (val, min, max) => Math.min(Math.max(min, val), max);
 
 export const isDiff = (obj1, obj2) => {

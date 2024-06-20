@@ -5,7 +5,7 @@
   import Select from "../Component/Select.svelte";
   import TextAreaInput from "../Component/TextAreaInput.svelte";
   import Input from "../Component/Input.svelte";
-  import { isDiff, validGenres, validateAuthor } from "../Utils";
+  import { isDiff, validGenres, validateAuthor, validAltName } from "../Utils";
   import { setMessage } from "../Store/MessageStore";
 
   export let folderId;
@@ -42,6 +42,10 @@
   const onChange = ({ target: { name, value, type, checked } }) => {
     if (name === "Genres") {
       value = validGenres(value);
+    }
+
+    if (name === "AltName") {
+      value = validAltName(value);
     }
 
     if (name === "Author") {
