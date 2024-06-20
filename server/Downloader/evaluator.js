@@ -228,15 +228,16 @@ export const adultEvalPage = async (query) => {
     const raw = / raw/i.test(title) || query.link.Raw ? "Raw" : "";
     let parts = [];
 
-    if (text.includes(",")) {
-      parts = text.split(/,( |)/);
+    if (/\/|,/g.test(text)) {
+      parts = text.replace("/", ",").split(/,( |)/);
     } else {
       parts = text.split(/(  )+/);
     }
-    parts = [raw, ...parts]
-      .map((d) => d.replace("(W)", "").trim())
-      .filter((d) => d && !/Adulto/i.test(d))
-      .map((d) => genres.add(d));
+    [raw, ...parts].forEach((d) => {
+      if (d && !/Adulto/i.test(d)) {
+        genres.add(d.replace(/\((W|M|G|B|ML|Kid)\)/, "").trim());
+      }
+    });
     return capitalize([...genres].sort().join(", "));
   };
 
