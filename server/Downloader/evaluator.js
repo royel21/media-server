@@ -229,7 +229,7 @@ export const adultEvalPage = async (query) => {
     let parts = [];
 
     if (/\/|,/g.test(text)) {
-      parts = text.replace("/", ",").split(/,( |)/);
+      parts = text.replace("/", ",").split(/,/);
     } else {
       parts = text.split(/(  )+/);
     }
