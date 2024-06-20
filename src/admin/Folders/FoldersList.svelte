@@ -144,6 +144,7 @@
         items[index] = data.folder;
       }
     }
+    console.log("f-r:", data);
   };
 
   const onFolderRemove = (data) => {

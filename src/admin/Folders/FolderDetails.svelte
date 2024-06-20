@@ -59,7 +59,6 @@
     folder[name] = value || null;
 
     hasChanges = isDiff(old, folder);
-    console.log(folder);
     error = "";
   };
   const onUrl = ({ target: { value } }) => {

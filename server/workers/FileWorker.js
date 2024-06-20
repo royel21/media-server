@@ -111,7 +111,7 @@ const renameFolder = async (datas) => {
       console.log(error);
     }
 
-    sendMessage("folder-renamed", { Id, success, msg, folder: { ...folder.dataValues }, Transfer });
+    sendMessage("folder-renamed", { Id, success, msg, data, folder: { ...folder.dataValues }, Transfer });
   } else {
     sendMessage("folder-renamed", { Id, success });
   }
