@@ -59,6 +59,7 @@
     folder[name] = value || null;
 
     hasChanges = isDiff(old, folder);
+    console.log(folder);
     error = "";
   };
   const onUrl = ({ target: { value } }) => {
@@ -94,7 +95,6 @@
       if (!folder.Name) {
         return (error = "Name Can't be empty");
       }
-      console.log(folder);
       socket.emit("rename-folder", { ...folder, Transfer: transfer });
       hasChanges = false;
       old = { ...folder };
