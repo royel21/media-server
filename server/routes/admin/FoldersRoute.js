@@ -17,7 +17,7 @@ const getData = async ({ params }, res) => {
 
   const query = {
     attributes: ["Id", "Name", "Type"],
-    order: [[literal(`REPLACE(REPLACE(Name, "-", "0"), '[','0')`), "DESC"]], // used for natural ordering
+    order: [[literal(`REPLACE(REPLACE(Name, "-", "0"), '[','0')`)]], // used for natural ordering
     where: {},
     offset,
     limit,
@@ -31,6 +31,7 @@ const getData = async ({ params }, res) => {
     query.where.FolderId = folderId;
     query.where.Name = filters;
     query.attributes = [...query.attributes, "Size", "CreatedAt"];
+    query.order[0].push("DESC");
     result = await db.file.findAndCountAll(query);
   } else {
     if (dirId && dirId !== "all") {
