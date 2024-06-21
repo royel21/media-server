@@ -117,52 +117,6 @@ export const evaluetePage = (query) => {
   return { Name, data, poster, AltName, Description, Genres, Status, Author };
 };
 
-export const evaleLinks = async (query) => {
-  const delay = (ms) => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  };
-
-  if (query.Name.includes("kaliscan")) {
-    let divs = document.querySelectorAll(".chapter-image");
-
-    for (let div of divs) {
-      while (!div.classList.contains("loaded")) await delay(100);
-    }
-  }
-
-  let data = [];
-  let imgs = document.querySelectorAll(query.Imgs);
-
-  if (query.Name.includes("mangas.in")) {
-    for (let img of imgs) {
-      while (img.src.includes("loading.gif")) {
-        img?.scrollIntoView();
-        await delay(100);
-      }
-    }
-  }
-
-  for (let img of imgs) {
-    img?.scrollIntoView();
-    await delay(query.Delay);
-    const { src, dataset } = img;
-    let nSrc = (dataset.lazySrc || dataset.src || dataset.lzlSrc || src)?.trim();
-
-    if (/\.(ico|svg)/.test(nSrc) || /manhwa-freak.com(.*).gif|.svg$/gi.test(nSrc)) continue;
-
-    if (location.href.includes("mangaclash")) {
-      if (nSrc.includes("mangaclash")) {
-        data.push(nSrc);
-      }
-    } else {
-      data.push(nSrc);
-    }
-  }
-  return data;
-};
-
 //******************************Adult Section******************************************************/
 
 export const adultEvalPage = async (query) => {
@@ -234,7 +188,7 @@ export const adultEvalPage = async (query) => {
       parts = text.split(/(  )+/g);
     }
     [raw, ...parts].forEach((d) => {
-      if (d && !/Adulto/i.test(d)) {
+      if (d.trim() && !/Adulto|Full Color/i.test(d)) {
         genres.add(d.replace(/\((W|M|G|B|ML|Kid)\)/, "").trim());
       }
     });
@@ -299,9 +253,9 @@ export const adultEvalPage = async (query) => {
         Author = text
           .replace(authorRegex, "")
           .trim()
-          .split("/")
+          .split(/\//g)
           .map((a) => capitalize(a).trim())
-          .join("; ");
+          .join(", ");
       }
     }
   }
@@ -427,4 +381,50 @@ export const adultEvalPage = async (query) => {
   }
 
   return { Name, data, poster, Description, Status, posterData, Genres, AltName, title, Author };
+};
+
+export const evaleLinks = async (query) => {
+  const delay = (ms) => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  };
+
+  if (query.Name.includes("kaliscan")) {
+    let divs = document.querySelectorAll(".chapter-image");
+
+    for (let div of divs) {
+      while (!div.classList.contains("loaded")) await delay(100);
+    }
+  }
+
+  let data = [];
+  let imgs = document.querySelectorAll(query.Imgs);
+
+  if (query.Name.includes("mangas.in")) {
+    for (let img of imgs) {
+      while (img.src.includes("loading.gif")) {
+        img?.scrollIntoView();
+        await delay(100);
+      }
+    }
+  }
+
+  for (let img of imgs) {
+    img?.scrollIntoView();
+    await delay(query.Delay);
+    const { src, dataset } = img;
+    let nSrc = (dataset.lazySrc || dataset.src || dataset.lzlSrc || src)?.trim();
+
+    if (/\.(ico|svg)/.test(nSrc) || /manhwa-freak.com(.*).gif|.svg$/gi.test(nSrc)) continue;
+
+    if (location.href.includes("mangaclash")) {
+      if (nSrc.includes("mangaclash")) {
+        data.push(nSrc);
+      }
+    } else {
+      data.push(nSrc);
+    }
+  }
+  return data;
 };
