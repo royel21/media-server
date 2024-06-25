@@ -10,6 +10,7 @@ import { startBrowser, createPage, getPages } from "./Crawler.js";
 
 import { downloadLink } from "./link-downloader.js";
 import { downloadFromPage } from "./checkServer.js";
+import { downloadNHentai } from "./nhentai.js";
 // add stealth plugin and use defaults (all evasion techniques)
 const state = { links: [], running: false, size: 0, checkServer: false };
 
@@ -171,7 +172,11 @@ const onDownload = async (bypass, headless) => {
         url: link.Url,
       });
       try {
-        await downloadLinks(link, page, link.Server, link.IsAdult);
+        if (link.Url.includes("nhentai")) {
+          await downloadNHentai(link, page, link.Server);
+        } else {
+          await downloadLinks(link, page, link.Server, link.IsAdult);
+        }
 
         await link.reload();
         sendMessage({ link }, "update-download");

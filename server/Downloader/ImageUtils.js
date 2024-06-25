@@ -14,14 +14,14 @@ const parseDataUrl = (dataUrl) => {
   return { mime: matches[1], buffer: Buffer.from(matches[2], "base64") };
 };
 
-export const getImgNh = async (url, page) => {
+export const getImgNh = async (imgPath, url, page) => {
   const viewSource = await page.goto(url);
   const buffer = await viewSource.buffer();
 
   await new Promise((resolve) => {
     sharp(buffer)
       .jpeg()
-      .toFile(defaultConfig.ImagesDir, () => {
+      .toFile(imgPath, () => {
         resolve("done");
       });
   });
