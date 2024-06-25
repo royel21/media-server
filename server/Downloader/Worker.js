@@ -176,9 +176,9 @@ const onDownload = async (bypass, headless) => {
           await downloadNHentai(link, page, link.Server);
         } else {
           await downloadLinks(link, page, link.Server, link.IsAdult);
+          await link.reload();
         }
 
-        await link.reload();
         sendMessage({ link }, "update-download");
       } catch (error) {
         sendMessage({ text: `Error ${link.Url} was no properly downloaded`, color: "red", error });
