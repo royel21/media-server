@@ -54,7 +54,7 @@ export const findOrCreateFolder = async (manga, IsAdult) => {
       await folder.update({ Description });
     }
 
-    if (!folder.Server !== Server) {
+    if (folder?.Server !== Server) {
       await folder.update({ Server });
     }
 
