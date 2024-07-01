@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 
-export default (sequelize) => {
+export default (sequelize, isSqlite) => {
   const { INTEGER, DATE, STRING, VIRTUAL, BOOLEAN, TEXT } = DataTypes;
   const Link = sequelize.define(
     "Links",
@@ -21,7 +21,7 @@ export default (sequelize) => {
         },
       },
       AltName: {
-        type: TEXT,
+        type: TEXT + (isSqlite ? " " : " COLLATE 'utf8mb4_bin'"),
         defaultValue: "",
       },
 

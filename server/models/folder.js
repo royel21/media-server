@@ -29,7 +29,7 @@ export default (sequelize, isSqlite) => {
         type: STRING,
       },
       AltName: {
-        type: TEXT,
+        type: TEXT + (isSqlite ? " " : " COLLATE 'utf8mb4_bin'"),
       },
       Genres: {
         type: STRING(255),

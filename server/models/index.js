@@ -27,13 +27,13 @@ config.host = dbHost;
 config.storage = dbStorage;
 
 const sequelize = new Sequelize(dbName, dbUser, dbPassword, config);
-
+const isSqlite = /sqlite/i.test(dbConnector);
 const db = {
   Op: Sequelize.Op,
   sqlze: sequelize,
   user: user(sequelize),
   file: file(sequelize),
-  folder: folder(sequelize, /sqlite/i.test(dbConnector)),
+  folder: folder(sequelize, isSqlite),
   favorite: favorite(sequelize),
   userConfig: userConfig(sequelize),
   directory: directory(sequelize),
@@ -41,7 +41,7 @@ const db = {
   recentFolder: recentFolder(sequelize),
   recentFile: recentFile(sequelize),
   eventLog: eventLog(sequelize),
-  Link: Links(sequelize),
+  Link: Links(sequelize, isSqlite),
   Server: Servers(sequelize),
   NameList: NameLists(sequelize),
   Exclude: Excludes(sequelize),
