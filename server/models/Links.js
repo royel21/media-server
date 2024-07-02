@@ -21,7 +21,7 @@ export default (sequelize, isSqlite) => {
         },
       },
       AltName: {
-        type: TEXT + (isSqlite ? " " : " COLLATE 'utf8mb4_bin'"),
+        type: TEXT + (isSqlite ? " " : " COLLATE 'utf8mb4_unicode_ci'"),
         defaultValue: "",
       },
 
