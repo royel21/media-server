@@ -215,12 +215,12 @@ export const adultEvalPage = async (query) => {
 
   let Genres = "";
   let AltName = "";
-  let genreRegex = /genre((\(|)(s|)(\)|( |):(\n|)|))|Género(( |):|)/gi;
+  const genreRegex = /genre((\(|)(s|)(\)|( |):(\n|)|))|Género(( |):|)/gi;
   const authorRegex = /(author|Autor)((\(|)s(\)|)|)( |)(:|)( |)/i;
   let Author = "";
   let items = document.querySelectorAll(query.AltTitle);
   if (items.length > 1) {
-    for (let item of document.querySelectorAll(query.AltTitle)) {
+    for (let item of items) {
       let text = item?.textContent.trim();
       if (text) {
         if (/Alternative|Nombres|Other name/i.test(text)) {
@@ -260,10 +260,9 @@ export const adultEvalPage = async (query) => {
     }
   }
 
-  if (location.href.includes("kaliscan") && !Author) {
-    let text = [...document.querySelectorAll(".book-info .meta p")]
-      .map((p) => p.textContent)
-      .find((text) => authorRegex.test(text));
+  if (location.href.includes("kaliscan")) {
+    const meta = [...document.querySelectorAll(".book-info .meta p")].map((p) => p.textContent);
+    let text = meta.find((ctext) => authorRegex.test(ctext));
     if (text && !/unknown/i.test(text)) {
       Author = text
         .replace(authorRegex, "")
@@ -272,6 +271,8 @@ export const adultEvalPage = async (query) => {
         .map((p) => p.trim())
         .join(", ");
     }
+    text = meta.find((ctext) => genreRegex.test(ctext)).replace(genreRegex, "");
+    Genres = formatGenres(text);
   }
 
   let as = [...document.querySelectorAll(query.Chapters)];
@@ -294,9 +295,10 @@ export const adultEvalPage = async (query) => {
       .replace("  ", " ")
       .trim()
       .replace(
-        /^ |vol.\d+ |volume \d+ |season \d+|(chapter|chap|ch|Capítulo|Episodio|episode|part)( | - |-|\.)|\||\/|:|\?|\^|"|\*|<|>|\t|\n/gi,
+        /^ |vol.\d+ |volume \d+ |season \d+|(chapter|chap|ch|Capítulo|Episodio|episode|part|oneshot)( | - |-|\.)|\||\/|:|\?|\^|"|\*|<|>|\t|\n/gi,
         ""
       )
+      .replaceAll("🌟", "")
       .replace(/(\.)+$/, "")
       .replace(/\./gi, "-")
       .replace(/( )+/g, " ")
