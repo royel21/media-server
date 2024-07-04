@@ -1,7 +1,7 @@
-import { getDb } from "./db-worker.js";
+import { createFile, getDb } from "./db-worker.js";
 import path from "node:path";
 import { sendMessage } from "./utils.js";
-import { getImgNh } from "./ImageUtils.js";
+import { createThumb, getImgNh } from "./ImageUtils.js";
 import defaultConfig from "../default-config.js";
 import zipper from "zip-local";
 import fs from "fs-extra";
@@ -42,6 +42,13 @@ const dirs = {
   yaoi: path.join(BASEPATH, "R18", "Manga-Hentai", "Yaoi"),
   anthology: path.join(BASEPATH, "R18", "Manga-Hentai", "Anthology"),
   nHentai: path.join(BASEPATH, "R18", "Manga-Hentai", "Tankoubon"),
+};
+
+const createThumbFile = async (filePath, file, folder) => {
+  const fromImg = path.join(filePath, "001.jpg");
+  const cover = path.join(defaultConfig.ImagesDir, "Manga", folder.Name, file + ".jpg");
+
+  await createThumb(fromImg, cover);
 };
 
 export const downloadNHentai = async (link, page, server) => {
@@ -109,6 +116,10 @@ export const downloadNHentai = async (link, page, server) => {
 
   const curDir = dirs[data.type];
 
+  const folder = await db.folder.findOne({
+    where: { Path: { [db.Op.like]: `%Manga-Hentai/${curDir.split(path.sep).pop()}%` } },
+  });
+
   data.name = nameFormat(data.name);
 
   data.name = capitalize(data.name.trim());
@@ -134,7 +145,7 @@ export const downloadNHentai = async (link, page, server) => {
       for (let i = 1; i < data.total + 1; ) {
         try {
           let imagePath = `${filePath}/${i.toString().padStart("3", "0")}.${newEX}`;
-          process.stdout.write(`\t IMG: ${i + 1} / ${data.total}\r`);
+          process.stdout.write(`\t IMG: ${i} / ${data.total}\r`);
           if (!fs.existsSync(imagePath)) {
             await getImgNh(imagePath, initalUrl.replace(`/1.${ex}`, `/${i}.${newEX}`), page);
           }
@@ -157,15 +168,18 @@ export const downloadNHentai = async (link, page, server) => {
         i++;
       }
 
-      let FileCount = fs.readdirSync(filePath).length;
+      let files = fs.readdirSync(filePath);
 
-      if (FileCount === data.total) {
+      if (files.length === data.total) {
+        await createThumbFile(filePath, data.name + ".zip", folder);
         zipper.sync
           .zip(filePath)
           .compress()
           .save(filePath + ".zip");
         fs.removeSync(filePath);
         found = true;
+
+        await createFile(filePath + ".zip", folder.Id, files.length);
       }
     }
   }
