@@ -2,6 +2,7 @@ import { Router } from "express";
 import db from "../../models/index.js";
 
 import { getFilter } from "../utils.js";
+import { Op } from "sequelize";
 
 const routes = Router();
 
@@ -9,6 +10,7 @@ routes.get("/:page/:items/:filter?", async (req, res) => {
   const { page, items, filter } = req.params;
 
   const limit = +items || 12;
+  const FolderId = await db.folder.findAll({ attributes: ["Id", "Path"], where: { Path: getFilter(filter) } });
 
   const query = {
     order: ["Name"],
@@ -21,7 +23,7 @@ routes.get("/:page/:items/:filter?", async (req, res) => {
     offset: ((+page || 1) - 1) * limit,
     limit,
     where: {
-      Name: getFilter(filter),
+      [Op.or]: [{ Name: getFilter(filter) }, { FolderId: FolderId.map((fd) => fd.Id) }],
     },
   };
 

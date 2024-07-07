@@ -107,8 +107,6 @@
     showModal = false;
     file = {};
   };
-
-  $: console.log((page - 1) * rows);
   document.title = "Files";
 </script>
 

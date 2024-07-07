@@ -1,5 +1,4 @@
 import { Op } from "sequelize";
-import db from "../models/index.js";
 
 export const mapFilter = (f) => ({ [Op.like]: `%${f || ""}%` });
 
