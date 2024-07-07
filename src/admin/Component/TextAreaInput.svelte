@@ -1,5 +1,6 @@
 <script>
   import { onMount } from "svelte";
+  import { handlerPaste } from "./util";
 
   export let file;
   export let key;
@@ -8,20 +9,14 @@
   export let rows;
   export let ref = null;
   export let focus = false;
+  export let sept = "";
   export let onChange = () => {};
 
   onMount(() => {
     if (ref && focus) ref.focus();
   });
 
-  const handler = async () => {
-    let text = await navigator.clipboard?.readText();
-    if (text) {
-      ref.value = text;
-      file[key] = text;
-      ref.dispatchEvent(new Event("change"));
-    }
-  };
+  const handler = async () => handlerPaste(file, key, sept, ref);
 </script>
 
 <div class="input-control" {style}>

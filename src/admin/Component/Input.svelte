@@ -1,19 +1,14 @@
 <script>
   import Icons from "src/icons/Icons.svelte";
+  import { handlerPaste } from "./util";
 
   export let item = {};
   export let key = "";
   export let label = "";
+  export let sept = "";
   export let onChange = (e) => {};
   let ref;
-  const handler = async () => {
-    let text = await navigator.clipboard?.readText();
-    if (text) {
-      ref.value = text;
-      item[key] = text;
-      ref.dispatchEvent(new Event("change"));
-    }
-  };
+  const handler = async () => handlerPaste(item, key, sept, ref);
   const clear = () => {
     ref.value = "";
     ref.dispatchEvent(new Event("change"));

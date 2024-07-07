@@ -60,7 +60,7 @@
       <div class="modal-body">
         <TextAreaInput key="Name" file={link} onChange={handle} />
         <TextAreaInput key="Url" file={link} onChange={handle} />
-        <TextAreaInput key="AltName" file={link} onChange={handle} />
+        <TextAreaInput key="AltName" sept="; " file={link} onChange={handle} />
         <CheckBox label="Is Adult" key="IsAdult" item={link} />
         <CheckBox label="Is Raw" key="Raw" item={link} />
       </div>

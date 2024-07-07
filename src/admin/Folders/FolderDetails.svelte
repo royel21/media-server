@@ -108,10 +108,10 @@
   <div class="error">{error || ""}</div>
   <div class="d-content">
     <TextAreaInput file={folder} key="Name" style="margin-bottom: 5px" rows="3" {onChange} />
-    <TextAreaInput file={folder} key="AltName" style="margin-bottom: 5px" rows="3" {onChange} />
-    <TextAreaInput file={folder} key="Genres" style="margin-bottom: 5px" rows="2" {onChange} />
+    <TextAreaInput file={folder} key="AltName" style="margin-bottom: 5px" sept="; " rows="3" {onChange} />
+    <TextAreaInput file={folder} key="Genres" style="margin-bottom: 5px" rows="2" sept="," {onChange} />
     <TextAreaInput file={folder} key="Description" rows="4" {onChange} />
-    <Input key="Author" item={folder} {onChange} />
+    <Input key="Author" item={folder} {onChange} sept=", " />
     <CheckBox label="Completed" key="Status" item={folder} {onChange} />
     <CheckBox label="Is Adult" key="IsAdult" item={folder} {onChange} />
     <CheckBox key="transfer" item={{ transfer }} onChange={() => (transfer = !transfer)} />
