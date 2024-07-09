@@ -154,7 +154,7 @@ export const createFolderCover = async (mangaDir, data, page, update) => {
       result = await downloadImg(posterPath, data.poster, page, true);
     }
 
-    let Cover = path.join(defaultConfig.ImagesDir, "Folder", "mangas", data.Name + ".jpg");
+    let Cover = path.join(defaultConfig.ImagesDir, "Folder", data.type, data.Name + ".jpg");
     if ((!fs.existsSync(Cover) && fs.existsSync(posterPath)) || update) {
       await sharp(posterPath).jpeg().toFile(Cover);
     }

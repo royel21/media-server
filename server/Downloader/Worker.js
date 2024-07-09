@@ -215,7 +215,12 @@ const onCreateCover = async ({ Id, imgUrl }) => {
   if (/http/i.test(imgUrl)) {
     const folder = await db.folder.findOne({ where: { Id } });
     if (folder) {
-      const { result } = await createFolderCover(folder.Path, { poster: imgUrl, Name: folder.Name }, page, true);
+      const { result } = await createFolderCover(
+        folder.Path,
+        { poster: imgUrl, Name: folder.Name, type: folder.FilesType },
+        page,
+        true
+      );
       sendMessage({ Id, valid: result }, "create-cover");
     }
   }
