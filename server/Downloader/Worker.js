@@ -82,6 +82,7 @@ const downloadLinks = async (link, page) => {
   manga.data = manga.data.filter(removeRaw(manga.data)).filter((f) => !exclude.find((ex) => f.name.includes(ex.Name)));
 
   await updateLastChapter(manga, link);
+  manga.type = "mangas";
 
   let { files } = await createFolderCover(folder.Path, manga, page);
 
