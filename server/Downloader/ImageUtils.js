@@ -57,7 +57,7 @@ export const downloadImg = async (posterPath, url, page, cover, useAxios) => {
   if (url) {
     let buff;
     try {
-      if (/%20$/.test(url) || /manhwaclub/.test(url) || useAxios) {
+      if (/%20$|manhwaclub|\/.webp$/.test(url) || useAxios) {
         const { data } = await axios(url, { responseType: "arraybuffer" });
         buff = data;
       } else if (url.includes("wordpress.com")) {
