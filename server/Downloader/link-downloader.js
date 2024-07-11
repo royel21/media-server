@@ -69,7 +69,7 @@ export const downloadLink = async (d, page, Server, folder, count, adult, state)
 
   const images = fs.readdirSync(dir);
 
-  if (images.length === links.length && !state.stopped) {
+  if (images.length >= links.length - 1 && !state.stopped) {
     const fromImg = path.join(dir, images[0]);
 
     const toImg = path.join(imgDir, d.name + ".zip.jpg");
