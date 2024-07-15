@@ -118,7 +118,7 @@ export const evaluetePage = (query) => {
   }
   data = data.filter((d) => d);
 
-  return { Name, data, poster, AltName, Description, Genres, Status, Author };
+  return { Name, data, poster, AltName, Description, Genres, Status, Author, maxNum };
 };
 
 //******************************Adult Section******************************************************/
@@ -284,7 +284,7 @@ export const adultEvalPage = async (query) => {
   let maxNum = 0;
   as.forEach((a) => {
     try {
-      let num = +a.textContent.match(/\d+/)[0];
+      let num = +(a.querySelector("strong,b,san") || a).textContent.match(/\d+/)[0];
       if (maxNum < num) {
         maxNum = num;
       }
