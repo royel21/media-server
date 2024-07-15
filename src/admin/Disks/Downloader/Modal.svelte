@@ -61,6 +61,7 @@
           <Input key="Status" item={server} />
           <CheckBox label="Raw" key="Raw" item={server} />
           <CheckBox label="Local Images" key="LocalImages" item={server} />
+          <CheckBox label="Is Mobile" key="isMobile" item={server} />
         {/if}
       </div>
       <div class="error">{error || ""}</div>
