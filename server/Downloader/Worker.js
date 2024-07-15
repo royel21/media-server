@@ -13,7 +13,7 @@ import { downloadFromPage } from "./checkServer.js";
 import { downloadNHentai } from "./nhentai.js";
 
 import { KnownDevices } from "puppeteer";
-const androidDevice = KnownDevices["Samsung Galaxy S9+"];
+const androidDevice = KnownDevices["Galaxy S9+"];
 
 // add stealth plugin and use defaults (all evasion techniques)
 const state = { links: [], running: false, size: 0, checkServer: false };
