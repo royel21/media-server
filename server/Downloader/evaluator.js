@@ -28,16 +28,20 @@ export const evaluetePage = (query) => {
   let as = [...document.querySelectorAll(query.Chapters)];
 
   /**********************Format Chapters Name************************* */
-  let chaps = [];
+
+  let maxNum = 0;
   as.forEach((a) => {
     try {
-      let num = a.textContent.match(/\d+/)[0];
-      if (!chaps.includes(num)) chaps.push(num);
+      let num = +a.textContent.match(/\d+/)[0];
+      if (maxNum < num) {
+        maxNum = num;
+      }
     } catch (error) {}
   });
-  const nameRegex = new RegExp(` - ${Name}`, "i");
 
-  const padding = chaps.length > 999 ? 4 : 3;
+  const padding = maxNum > 950 ? 4 : 3;
+
+  const nameRegex = new RegExp(` - ${Name}`, "i");
 
   let data = as
     .map((a) => {
@@ -277,15 +281,17 @@ export const adultEvalPage = async (query) => {
 
   let as = [...document.querySelectorAll(query.Chapters)];
 
-  let chaps = [];
+  let maxNum = 0;
   as.forEach((a) => {
     try {
-      let num = a.textContent.match(/^\d+/)[0];
-      if (!chaps.includes(num)) chaps.push(num);
+      let num = +a.textContent.match(/\d+/)[0];
+      if (maxNum < num) {
+        maxNum = num;
+      }
     } catch (error) {}
   });
 
-  const padding = chaps.length > 999 ? 4 : 3;
+  const padding = maxNum > 950 ? 4 : 3;
 
   let data = [];
   as.forEach((a) => {
