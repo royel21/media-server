@@ -14,10 +14,10 @@ export const delay = (ms) => {
   });
 };
 
-const androidDevice = puppeteer.devices["Samsung Galaxy S9+"];
 //Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.203
 //Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.188
 export const createPage = async (browser, timeout = 180000) => {
+  const androidDevice = browser.devices["Samsung Galaxy S9+"];
   const page = await browser.newPage();
   // page.setUserAgent(
   //   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.203"
