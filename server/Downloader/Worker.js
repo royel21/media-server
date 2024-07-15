@@ -12,9 +12,6 @@ import { downloadLink } from "./link-downloader.js";
 import { downloadFromPage } from "./checkServer.js";
 import { downloadNHentai } from "./nhentai.js";
 
-import { KnownDevices } from "puppeteer";
-const androidDevice = KnownDevices["Galaxy S9+"];
-
 // add stealth plugin and use defaults (all evasion techniques)
 const state = { links: [], running: false, size: 0, checkServer: false };
 
@@ -61,8 +58,8 @@ const downloadLinks = async (link, page) => {
   const { Server } = link;
   let isAdult = link.IsAdult;
 
-  if (Server.isMoble) {
-    await page.emulate(androidDevice);
+  if (Server.isMobile) {
+    await page.setViewport({ width: 480, height: 840, deviceScaleFactor: 1 });
   }
 
   try {
