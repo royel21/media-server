@@ -37,9 +37,9 @@ const getData = async ({ params }, res) => {
     if (dirId && dirId !== "all") {
       query.where.DirectoryId = dirId;
     }
-    query.attributes = [...query.attributes, "Path", "Status", "FilesType", "Scanning", "Author"];
+    query.attributes = [...query.attributes, "Path", "Status", "FilesType", "Scanning", "Author", "Server"];
 
-    query.where[Op.or] = { AltName: filters, Name: filters, Genres: filters, Author: filters };
+    query.where[Op.or] = { AltName: filters, Name: filters, Genres: filters, Author: filters, Server: filters };
     result = await db.folder.findAndCountAll(query);
 
     result.rows = result.rows.map((fd) => {
