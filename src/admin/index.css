@@ -56,11 +56,6 @@
 }
 
 /*************Modal*************************/
-.error {
-  color: red;
-  text-align: center;
-  padding: 4px 0;
-}
 
 .modal-container {
   display: flex;
@@ -91,9 +86,7 @@
 }
 
 .modal .errors {
-  color: rgb(226, 35, 35);
   font-size: 20px;
-  text-align: center;
 }
 
 .modal label,

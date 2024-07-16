@@ -74,6 +74,10 @@
     font-weight: 600;
   }
 
+  .error:empty {
+    display: none;
+  }
+
   #login-container {
     display: flex;
     flex-direction: column;
@@ -155,7 +159,7 @@
   }
   @media screen and (max-width: 600px) {
     #login-container {
-      width: 300px;
+      width: calc(100% - 15px);
     }
   }
 </style>

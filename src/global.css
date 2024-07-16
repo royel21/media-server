@@ -66,7 +66,7 @@ button {
   overflow: visible;
 }
 
-input[type="text"] + span {
+input[type="text"]+span {
   display: none !important;
   position: absolute;
   top: 1px;
@@ -76,7 +76,7 @@ input[type="text"] + span {
   font-size: 20px;
 }
 
-input[type="text"]:not(:placeholder-shown) + span {
+input[type="text"]:not(:placeholder-shown)+span {
   display: initial !important;
 }
 
@@ -147,12 +147,15 @@ input[type="text"]:not(:placeholder-shown) + span {
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
+
 .error:empty {
   display: none;
 }
+
 .error {
   color: red;
-  font-weight: 600;
+  text-align: center;
+  padding: 4px 0;
 }
 
 /*************************Scrollbar Style********************************/
@@ -230,7 +233,7 @@ svg,
 .btn,
 .table thead,
 .modal label,
-.modal-header > * {
+.modal-header>* {
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
@@ -269,7 +272,7 @@ svg path {
   fill: rgba(248, 224, 6, 0.952);
 }
 
-.icon-folder-open + .file-progress {
+.icon-folder-open+.file-progress {
   background-color: rgba(252, 1, 1, 0.856);
 }
 

@@ -215,12 +215,4 @@
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
   }
-  .errors {
-    color: red;
-    font-weight: 600;
-    margin: 5px auto;
-  }
-  .errors:empty {
-    display: none;
-  }
 </style>

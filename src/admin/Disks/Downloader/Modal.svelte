@@ -86,10 +86,6 @@
     text-align: left;
     width: 145px;
   }
-  .error {
-    color: red;
-    font-weight: 600;
-  }
   @media screen and (max-width: 450px) {
     .modal {
       width: 380px;
