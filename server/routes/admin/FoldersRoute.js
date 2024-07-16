@@ -138,6 +138,7 @@ routes.get("/folder/:folderId?", async (req, res) => {
     DirectoryId: folder.DirectoryId,
     Author: folder.Author,
     Status: folder.Status,
+    Server: folder.Server,
     dirs,
   });
 });

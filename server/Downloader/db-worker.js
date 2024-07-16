@@ -48,29 +48,29 @@ export const findOrCreateFolder = async (manga, IsAdult) => {
         Server,
         Author,
       });
-    }
+    } else {
+      if (!folder.Description && Description) {
+        await folder.update({ Description });
+      }
 
-    if (!folder.Description && Description) {
-      await folder.update({ Description });
-    }
+      if (!folder.Server && Server) {
+        await folder.update({ Server });
+      }
 
-    if (folder?.Server !== Server) {
-      await folder.update({ Server });
-    }
+      if (!folder.Genres && Genres) {
+        await folder.update({ Genres });
+      }
 
-    if (!folder.Genres && Genres) {
-      await folder.update({ Genres });
-    }
+      if (!folder.AltName && AltName) {
+        await folder.update({ AltName });
+      }
 
-    if (!folder.AltName && AltName) {
-      await folder.update({ AltName });
-    }
+      if (!folder.Author && Author) {
+        await folder.update({ Author });
+      }
 
-    if (!folder.Author && Author) {
-      await folder.update({ Author });
+      await folder.update({ Status });
     }
-
-    await folder.update({ Status });
 
     return folder;
   } catch (error) {

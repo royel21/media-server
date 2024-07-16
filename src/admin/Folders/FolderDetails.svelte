@@ -33,6 +33,7 @@
       folder.DirectoryId = data.DirectoryId;
       folder.Author = data.Author;
       folder.Status = data.Status;
+      folder.Server = data.Server;
       options = data.dirs.map((d) => ({ Id: d.Id, Name: d.FullPath }));
       old = { ...folder };
     }
@@ -112,6 +113,7 @@
     <TextAreaInput file={folder} key="Genres" style="margin-bottom: 5px" rows="2" sept="," {onChange} />
     <TextAreaInput file={folder} key="Description" rows="4" {onChange} />
     <Input key="Author" item={folder} {onChange} sept=", " />
+    <Input key="Server" item={folder} {onChange} />
     <CheckBox label="Completed" key="Status" item={folder} {onChange} />
     <CheckBox label="Is Adult" key="IsAdult" item={folder} {onChange} />
     <CheckBox key="transfer" item={{ transfer }} onChange={() => (transfer = !transfer)} />

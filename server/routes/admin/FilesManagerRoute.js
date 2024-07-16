@@ -3,6 +3,8 @@ import db from "../../models/index.js";
 
 import { getFilter } from "../utils.js";
 import { Op } from "sequelize";
+import fs from "fs-extra";
+import path from "node:path";
 
 const routes = Router();
 
@@ -22,15 +24,23 @@ routes.get("/:page/:items/:filter?", async (req, res) => {
     ],
     offset: ((+page || 1) - 1) * limit,
     limit,
-    where: {
-      [Op.or]: [{ Name: getFilter(filter) }, { FolderId: FolderId.map((fd) => fd.Id) }],
-    },
   };
+
+  if (filter) {
+    query.where = { [Op.or]: [{ Name: getFilter(filter) }, { FolderId: FolderId.map((fd) => fd.Id) }] };
+  }
 
   let files = await db.file.findAndCountAll(query);
 
   let data = {
-    files: files.rows.map((f) => f.dataValues),
+    files: files.rows.map((f) => {
+      let Size = 0;
+      const file = path.join(f.dataValues.Path, f.Name);
+      if (fs.existsSync(file)) {
+        Size = fs.statSync(file).size;
+      }
+      return { ...f.dataValues, Size };
+    }),
     totalPages: Math.ceil(files.count / limit),
     totalItems: files.count,
   };

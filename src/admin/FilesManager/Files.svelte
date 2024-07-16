@@ -127,6 +127,7 @@
           <th>Actions</th>
           <th>Name</th>
           <th>Path</th>
+          <th>Size</th>
         </tr>
       </thead>
       <tbody>
@@ -135,7 +136,7 @@
             <td colspan="4">No Files Found</td>
           </tr>
         {:else}
-          {#each items as { Id, Name, Path }, i}
+          {#each items as { Id, Name, Path, Size }, i}
             <tr id={Id} on:click={itemClick}>
               <td>{(page - 1) * rows + i + 1}</td>
               <td>
@@ -144,6 +145,7 @@
               </td>
               <td>{Name}</td>
               <td>{Path}</td>
+              <td>{(Size / 1024 / 1024).toFixed(2)}mb</td>
             </tr>
           {/each}
         {/if}
