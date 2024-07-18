@@ -324,5 +324,9 @@
     .dir-list:not(:only-child) {
       max-width: 60%;
     }
+
+    .dir-list select {
+      font-size: 0.8rem;
+    }
   }
 </style>
