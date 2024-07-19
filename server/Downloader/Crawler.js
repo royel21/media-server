@@ -43,8 +43,8 @@ export const createPage = async (browser, timeout = 180000) => {
       // window.alert = () => true;
     }
   });
-
-  const userAgent = await page.evaluate(() => navigator.userAgent);
+  await page.goto("https://google.com");
+  const userAgent = await page.evaluate(() => navigator?.userAgent);
   sendMessage({ text: userAgent });
   return page;
 };
