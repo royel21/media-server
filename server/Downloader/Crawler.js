@@ -1,6 +1,7 @@
 import puppeteer from "puppeteer-extra";
 import puppeteerCore from "puppeteer-core";
 import os from "node:os";
+import { sendMessage } from "./utils";
 
 // import StealthPlugin from "puppeteer-extra-plugin-stealth";
 // puppeteer.use(StealthPlugin());
@@ -42,6 +43,9 @@ export const createPage = async (browser, timeout = 180000) => {
       // window.alert = () => true;
     }
   });
+
+  const userAgent = await page.evaluate(() => navigator.userAgent);
+  sendMessage({ text: userAgent });
   return page;
 };
 
