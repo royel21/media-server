@@ -24,6 +24,7 @@
 
   socket.on("info", (data) => {
     if (data.text) {
+      console.log(data);
       updateConsole(data);
     }
   });
