@@ -156,7 +156,7 @@ const cleanUp = async (error) => {
 
 const onDownload = async (bypass, headless) => {
   if (!state.browser) {
-    state.browser = await startBrowser({ headless: headless ? "new" : false, userDataDir: "./user-data/puppeteer" });
+    state.browser = await startBrowser({ headless: false, userDataDir: "./user-data/puppeteer" });
   }
 
   const page = await createPage(state.browser);
@@ -237,7 +237,7 @@ const onCreateCover = async ({ Id, imgUrl }) => {
 process.on("message", async ({ action, datas, headless, remove, bypass, server }) => {
   console.log("server", action, state.checkServer);
   if (!state.browser) {
-    state.browser = await startBrowser({ headless: headless ? "new" : false, userDataDir: "./user-data/puppeteer" });
+    state.browser = await startBrowser({ headless: false, userDataDir: "./user-data/puppeteer" });
   }
 
   switch (action) {

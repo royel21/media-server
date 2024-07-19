@@ -35,7 +35,9 @@ if (/mariadb/.test(CONNECTOR) && !DB_USER && !DB_PASSWORD) {
 }
 
 for (const key of ["DownloadDir", "ImagesDir", "BackupDir"]) {
-  createDir(defaultConfig[key]);
+  try {
+    createDir(defaultConfig[key]);
+  } catch (error) {}
 }
 
 export default defaultConfig;

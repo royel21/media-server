@@ -20,7 +20,10 @@
   };
 
   const submit = (e) => {
-    file.Name = tempFile.Name + tempFile.Ex;
+    if (file) {
+      file.Name = tempFile.Name + tempFile.Ex;
+      dispatch("submit", e);
+    }
     dispatch("submit", e);
   };
 
@@ -35,7 +38,7 @@
 
   const onChanges = ({ target: { checked } }) => (deleteFromSys = checked);
 
-  loadTemp(file);
+  if (file) loadTemp(file);
 </script>
 
 <div class="modal-container">
