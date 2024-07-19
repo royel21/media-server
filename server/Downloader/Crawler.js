@@ -18,6 +18,8 @@ export const delay = (ms) => {
 //Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.188
 //Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36
 //Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36
+const userAgent =
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0";
 export const createPage = async (browser, timeout = 180000) => {
   const page = await browser.newPage();
   await page.setViewport({ width: 1200, height: 800 });
@@ -42,15 +44,7 @@ export const createPage = async (browser, timeout = 180000) => {
       // window.alert = () => true;
     }
   });
-  try {
-    const userAgent = await await browser.userAgent();
-    // console.log(await browser.userAgent());
-    await page.setUserAgent(
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0"
-    );
-    const userAgent2 = await page.evaluate(() => navigator.userAgent);
-    sendMessage({ text: userAgent2 });
-  } catch (error) {}
+  await page.setUserAgent(userAgent);
   return page;
 };
 
