@@ -24,8 +24,11 @@
 
   socket.on("info", (data) => {
     if (data.text) {
-      console.log(data);
       updateConsole(data);
+    }
+
+    if (data.error) {
+      console.log(data.error);
     }
   });
 
