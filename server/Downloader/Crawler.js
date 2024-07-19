@@ -2,8 +2,8 @@ import puppeteer from "puppeteer-extra";
 import puppeteerCore from "puppeteer-core";
 import os from "node:os";
 
-import StealthPlugin from "puppeteer-extra-plugin-stealth";
-puppeteer.use(StealthPlugin());
+// import StealthPlugin from "puppeteer-extra-plugin-stealth";
+// puppeteer.use(StealthPlugin());
 
 // const addBlocker from "puppeteer-extra-plugin-adblocker");
 // puppeteer.use(addBlocker());
