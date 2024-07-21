@@ -5,7 +5,7 @@ import { findOrCreateFolder, getDb } from "./db-worker.js";
 import { evaluetePage, adultEvalPage } from "./evaluator.js";
 
 import { createFolderCover } from "./ImageUtils.js";
-import { filterManga, dateDiff, removeRaw, sendMessage } from "./utils.js";
+import { filterManga, dateDiff, removeRaw, sendMessage, createDir } from "./utils.js";
 import { startBrowser, createPage, getPages } from "./Crawler.js";
 
 import { downloadLink } from "./link-downloader.js";
@@ -117,6 +117,7 @@ const downloadLinks = async (link, page) => {
       sendMessage({ text: `chapter ${Name} - ${d.name} navigation error`, error });
     }
   }
+  createDir(folder.Path);
 
   let FileCount = fs.readdirSync(folder.Path).filter((f) => f.includes(".zip")).length;
 

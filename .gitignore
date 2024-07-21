@@ -8,7 +8,7 @@ modules/win-explorer/bin
 ./files*
 test.js
 user-data/
-
+config-list.txt
 *.map
 *.db
 *.log
