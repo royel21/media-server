@@ -49,7 +49,6 @@ routes.post("/links", async ({ body }, res) => {
       [literal(`Links.LastChapter = ""`), "DESC"],
       [literal(`Links.Date = null`), "DESC"],
       [order, "DESC"],
-      ["LastChapter", "DESC"],
       ["Name", "ASC"],
     ],
   });

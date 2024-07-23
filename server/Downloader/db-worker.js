@@ -84,7 +84,7 @@ export const createFile = async (file, FolderId, Duration) => {
 
   let found = await db.file.findOne({ where: { Name: f.Name, Type: "Manga", FolderId } });
   if (found) {
-    await found.update({ Size: f.Size, CreatedAt: f.LastModified, Duration });
+    await found.update({ Size: f.Size, Duration });
   } else {
     found = await db.file.create({
       Name: f.Name,

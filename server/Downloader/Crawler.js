@@ -19,7 +19,7 @@ export const delay = (ms) => {
 //Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36
 //Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36
 const userAgent =
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.182 Safari/537.36 Edg/126.0.6478.182";
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0";
 export const createPage = async (browser, timeout = 180000) => {
   const page = await browser.newPage();
   await page.setViewport({ width: 1200, height: 800 });
@@ -44,7 +44,8 @@ export const createPage = async (browser, timeout = 180000) => {
       // window.alert = () => true;
     }
   });
-  // await page.setUserAgent(userAgent);
+  await page.setUserAgent(userAgent);
+  // await page.goto("http:\\www.google.com");
   return page;
 };
 
@@ -59,7 +60,7 @@ export const startBrowser = async (config) => {
     }
     config.args = ["--no-sandbox", "--disable-gpu"];
     config.env = { DISPLAY: ":99" };
-    config.headless = "new";
+    // config.headless = "new";
     if (process.env.USE_DEV && os.platform() === "win32") {
       config.headless = false;
       config.executablePath = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
