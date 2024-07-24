@@ -59,8 +59,8 @@ export const startBrowser = async (config) => {
       pupeteer = null;
     }
     config.args = ["--no-sandbox", "--disable-gpu"];
-    config.env = { DISPLAY: ":99" };
-    // config.headless = "new";
+    // config.env = { DISPLAY: ":99" };
+    config.headless = "new";
     if (process.env.USE_DEV && os.platform() === "win32") {
       config.headless = false;
       config.executablePath = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";

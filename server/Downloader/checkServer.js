@@ -41,6 +41,11 @@ const evalServer = async (query) => {
         }
         name = name.replace(/\./gi, "-");
 
+        if (/^Tales Of Demons/i.test(Name)) {
+          name = name.replace("-6", "-5");
+          name = name.replace("-1", "");
+        }
+
         let n = name.match(/\d+/);
         if (n) {
           n = n[0];
