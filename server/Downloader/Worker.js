@@ -182,6 +182,7 @@ const onDownload = async (bypass, headless) => {
         if (link.Url.includes("nhentai")) {
           await downloadNHentai(link, page, link.Server);
         } else {
+          await link.update({ IsDownloading: false });
           await downloadLinks(link, page, link.Server, link.IsAdult);
           await link.reload();
         }
@@ -190,6 +191,7 @@ const onDownload = async (bypass, headless) => {
       } catch (error) {
         sendMessage({ text: `Error ${link.Url} was no properly downloaded`, color: "red", error });
       }
+      await link.update({ IsDownloading: false });
     } else {
       sendMessage({ text: `Link ${link.Name} was checked recently`, color: "red" });
     }

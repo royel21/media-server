@@ -43,6 +43,7 @@ export default (sequelize, isSqlite) => {
       Exclude: { type: BOOLEAN, defaultValue: false, allowNull: false },
       IsAdult: { type: BOOLEAN, defaultValue: false, allowNull: false },
       Raw: { type: BOOLEAN, defaultValue: false, allowNull: false },
+      IsDownloading: { type: BOOLEAN, defaultValue: false, allowNull: false },
     },
     {
       uniqueKeys: {

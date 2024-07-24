@@ -85,11 +85,11 @@ db.Link.belongsTo(db.Server, { foreignKey: "ServerId" });
 db.init = async (force) => {
   await sequelize.sync({ force });
 
-  // try {
-  //   await db.sqlze.query("ALTER TABLE Folders ADD Author VARCHAR(100) NULL;");
-  // } catch (error) {
-  //   console.log("add COLUMN fail Server");
-  // }
+  try {
+    await db.sqlze.query("ALTER TABLE Links ADD IsDownloading TINYINT(1) NULL DEFAULT '0';");
+  } catch (error) {
+    console.log("add COLUMN fail Server");
+  }
 
   try {
     let admin = await db.user.findOne({ where: { Name: "Administrator" } });

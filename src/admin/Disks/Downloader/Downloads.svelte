@@ -97,7 +97,9 @@
       const found = datas.links.find((f) => f.Id === +id);
       if (found) {
         running = true;
+        found.IsDownloading = true;
         socket.emit("download-server", { datas: { [found.ServerId]: [found.Id] }, action: "Add-Download" });
+        datas.links = [...datas.links];
       }
     }
   };
@@ -263,7 +265,7 @@
           </span>
           <span title={link.Name || nameFromurl(link.Url)}>
             <span on:click={downloadLink} title="Download This Link" on:keydown>
-              <Icons name="download" color="lightblue" />
+              <Icons name="download" color={link.IsDownloading ? "green" : "lightblue"} />
             </span>
             <span on:click={editLink} title="Edit Link" on:keydown>
               <Icons name="edit" />
