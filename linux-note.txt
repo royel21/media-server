@@ -1,5 +1,7 @@
-rsync -avu --delete "/home/user/A/" "/home/user/B"
+rsync -avu --del --exclude='[0-9]*.jpg' --prune-empty-dirs "/mnt/source/" "/mnt/dest"
     -a archive mode; equals -rlptgoD (no -H, -A, -X)
     -v run verbosely
     -u only copy files with a newer modification time (or size difference if the times are equal)
-    --delete delete the files in target folder that do not exist in the source
+    --del delete the files in target folder that do not exist in the source
+    --exclude='[0-9]*.jpg' exclude all file that start with number and have extension .jpg
+    --prube-empty-dir don't copy empty dir or full of exclude files
