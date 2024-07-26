@@ -53,21 +53,28 @@
     dirs = dirs;
   };
 
+  const hideInput = ({ target }) => {
+    const { name, value } = target;
+    if (value !== dir[name].toString()) {
+      apiUtils.post("admin/directories/update", { id: dir.Id, [name]: value });
+    }
+    target.parentElement.innerHTML = value;
+  };
+
   const onShowInput = ({ target }) => {
     let tr = target.closest("tr");
     let found = dirs.find((d) => d.Id === tr.id);
     if (found) {
       dir = found;
-      showInput = true;
+      target.innerHTML = "";
+      const input = document.createElement("input");
+      input.name = target.id;
+      input.value = found[target.id];
+      input.onblur = hideInput;
+      target.appendChild(input);
+      input.focus();
     }
   };
-
-  const hideInput = () => {
-    apiUtils.post("admin/directories/update", { id: dir.Id, FirstInList: dir.FirstInList });
-    showInput = false;
-  };
-
-  const focusInput = (node) => node?.focus();
 
   onMount(async () => {
     dirs = await apiUtils.admin(["directories"]);
@@ -112,16 +119,12 @@
           </td>
           <td>{Type}</td>
           <td data-name="IsAdult" on:click={updateDir}>{IsAdult}</td>
-          <td class="f-path">{FullPath}</td>
+          <td class="f-path order" id="FullPath" on:click={onShowInput}>{FullPath}</td>
           <td class="f-name" title={FullPath}>{Name}</td>
           <td>{FolderCount}</td>
           <td>{TotalFiles}</td>
-          <td class="order" on:click|stopPropagation={onShowInput}>
-            {#if showInput && Id === dir.Id}
-              <input bind:value={dir.FirstInList} on:blur={hideInput} use:focusInput />
-            {:else}
-              {FirstInList}
-            {/if}
+          <td class="order" id="FirstInList" on:click={onShowInput}>
+            {FirstInList}
           </td>
         </tr>
       {/each}
@@ -180,11 +183,15 @@
   .order:has(input) {
     padding: 0;
   }
-  .order input {
+  .order :global(input) {
     width: 100%;
     height: 36px;
     outline: none;
     text-align: center;
+  }
+  .f-path.order :global(input) {
+    padding: 0 8px;
+    text-align: left;
   }
   .f-name {
     display: none;
