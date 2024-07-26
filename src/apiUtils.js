@@ -13,10 +13,9 @@ export const post = async (route, params) => {
 };
 
 export const get = async (route) => {
-  const p = route.filter((p) => p).join("/");
-
+  const url = ["/api", ...route].filter((p) => p).join("/");
   try {
-    return await fetch(`/api/${p}`).then((res) => res.json());
+    return await fetch(url).then((res) => res.json());
   } catch (error) {
     return { error, valid: false };
   }

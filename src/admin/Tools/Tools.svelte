@@ -28,7 +28,9 @@
 
   const reload = async () => {
     const result = await apiUtils.get(["admin", "directories", "backups"]);
-    backups = result.sort().reverse();
+    if (result) {
+      backups = result.sort().reverse();
+    }
   };
 
   const onUpdateServer = () => {
@@ -50,7 +52,6 @@
 </script>
 
 <div>
-  <h2>Tools</h2>
   <div>
     <button class="btn" on:click={onBackup}>Backup</button>
     <button class="btn" on:click={onCleanImages}>Clean Images</button>
@@ -83,12 +84,6 @@
 </div>
 
 <style>
-  h2 {
-    text-align: center;
-    border-bottom: 2px solid;
-    margin-bottom: 5px;
-    padding-bottom: 10px;
-  }
   .data-table {
     margin-top: 10px;
     padding: 10px;

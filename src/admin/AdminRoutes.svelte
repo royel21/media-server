@@ -8,9 +8,9 @@
   import Files from "./FilesManager/Files.svelte";
   import Redirect from "./Component/Redirect.svelte";
   import Icons from "../icons/Icons.svelte";
-  import Tools from "./Tools/Tools.svelte";
   import RConsole from "./Component/RConsole.svelte";
   import { MessageStore, setMessage } from "./Store/MessageStore";
+  import Configs from "./Tools/Configs.svelte";
 
   let logout = getContext("logout");
   let user = getContext("User");
@@ -29,8 +29,8 @@
       color: "#80bdff",
     },
     {
-      title: "Tools",
-      path: "/admin/tools",
+      title: "Configs",
+      path: "/admin/configs",
       class: "cog",
       color: "grey",
     },
@@ -78,7 +78,7 @@
     <Route path="/admin/folders/:dirid/:page/:filter" component={Folders} />
     <Route path="/admin/content-manager/:tab" component={DiskManager} />
     <Route path="/admin/files/:page/:filter" component={Files} />
-    <Route path="/admin/tools" component={Tools} />
+    <Route path="/admin/configs/:tab" component={Configs} />
     <Route path="/admin/" component={User} />
     <Route path="/"><Redirect to="/admin/" /></Route>
   </div>

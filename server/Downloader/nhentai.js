@@ -59,7 +59,6 @@ export const downloadNHentai = async (link, page, server) => {
   } catch (error) {
     console.log(error);
   }
-  0;
 
   let data = await page.evaluate((server) => {
     try {
