@@ -173,8 +173,7 @@ export const downloadAllIMages = async (page, links, state, imgPath, folder, des
     if (img) {
       const newImg = `${i}`.padStart(padding, "0") + ".jpg";
       const buff = await img.toFormat("jpg").toBuffer();
-      if (i === thumb) {
-        //if (i === 0 && !fs.existsSync(imgPath)) {
+      if (i === 0 && !fs.existsSync(imgPath)) {
         const isSave = await saveThumbnail(buff, imgPath);
         if (!isSave) {
           thumb++;
