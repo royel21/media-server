@@ -1,10 +1,10 @@
 import sharp from "sharp";
 import path from "path";
 import fs from "fs-extra";
-import { createDir, sendMessage } from "./utils.js";
+import { sendMessage } from "./utils.js";
 import axios from "axios";
-import { delay } from "./Crawler.js";
 import defaultConfig from "../default-config.js";
+import AdmZip from "adm-zip";
 
 const parseDataUrl = (dataUrl) => {
   const matches = dataUrl.match(/^data:(.+);base64,(.+)$/);
@@ -14,17 +14,18 @@ const parseDataUrl = (dataUrl) => {
   return { mime: matches[1], buffer: Buffer.from(matches[2], "base64") };
 };
 
-export const getImgNh = async (imgPath, url, page) => {
+export const getImgNh = async (url, page) => {
   const viewSource = await page.goto(url);
   const buffer = await viewSource.buffer();
 
-  await new Promise((resolve) => {
-    sharp(buffer)
-      .jpeg()
-      .toFile(imgPath, () => {
-        resolve("done");
-      });
-  });
+  const img = await sharp(buffer);
+  const meta = await img.metadata();
+
+  if (meta.width > 1024) {
+    await img.resize({ width: 1024 });
+  }
+
+  return img;
 };
 
 const evalWorpressImage = async () => {
@@ -53,11 +54,11 @@ const evalWorpressImage = async () => {
   }
 };
 
-export const downloadImg = async (posterPath, url, page, cover, useAxios) => {
+export const downloadImg = async (url, page, name = "", isCover) => {
   if (url) {
     let buff;
     try {
-      if (/%20$\/.webp$/.test(url) || useAxios) {
+      if (/%20$\/.webp$/.test(url)) {
         const { data } = await axios(url, { responseType: "arraybuffer" });
         buff = data;
       } else if (url.includes("wordpress.com")) {
@@ -76,14 +77,14 @@ export const downloadImg = async (posterPath, url, page, cover, useAxios) => {
             if (!error.toString().includes("net::ERR_CONNECTION_CLOSED")) {
               break;
             } else {
-              sendMessage({ text: `download-Image Error`, url, color: "red", error });
+              sendMessage({ text: `${name} download-Image Error`, url, color: "red", error });
             }
           }
         }
       }
     } catch (error) {
       console.log(url, error);
-      sendMessage({ text: `download-Image Error`, url, color: "red", error });
+      sendMessage({ text: `${name} download-Image Error`, url, color: "red", error });
     }
 
     if (buff?.length > 0 && !buff.includes("<html>")) {
@@ -91,47 +92,18 @@ export const downloadImg = async (posterPath, url, page, cover, useAxios) => {
         const img = await sharp(buff);
         const meta = await img.metadata();
 
-        if (!cover && meta.width < 400) return false;
+        if (!isCover && meta.width < 400) return false;
 
-        if (!cover && meta.width > 1024) {
+        if (meta.width > 1024) {
           await img.resize({ width: 1024 });
         }
 
-        await img.jpeg().toFile(posterPath);
-        if (!cover) {
-          await img.destroy();
-        } else {
-          return img;
-        }
-        return true;
+        return img;
       } catch (error) {
-        sendMessage({ text: `ResizeImage-Error: ${url}`, color: "red", error });
+        sendMessage({ text: `${name} ResizeImage-Error: ${url}`, color: "red", error });
       }
     } else {
-      sendMessage({ text: `buffer-Error: ${url} - could't get the image`, url, color: "red" });
-    }
-  }
-};
-
-export const createThumb = async (fromImg, toImg) => {
-  if (!fs.existsSync(toImg)) {
-    try {
-      let img = await sharp(fromImg);
-      let meta = await img.metadata();
-
-      if (meta.height > 1650) {
-        img = await img.extract({
-          height: 1200,
-          width: meta.width,
-          top: 0,
-          left: 0,
-        });
-      }
-
-      await img.resize({ width: 240 }).toFile(toImg);
-      await img.destroy();
-    } catch (error) {
-      sendMessage({ text: `Error Creating thumb: ${fromImg}`, color: "red", error });
+      sendMessage({ text: `${name} buffer-Error: ${url} - could't get the image`, url, color: "red" });
     }
   }
 };
@@ -145,18 +117,19 @@ export const createFolderCover = async (mangaDir, data, page, update) => {
     let posterPath = path.join(mangaDir, "Cover.jpg");
     let poster = false;
 
-    if (!createDir(mangaDir)) {
-      files = fs.readdirSync(mangaDir);
-      poster = files.find((f) => /\.(jpg|webp|png|jpeg)/gi.test(f));
-    }
+    files = fs.readdirSync(mangaDir);
+    poster = files.find((f) => /\.(jpg|webp|png|jpeg)/gi.test(f));
 
     if (!poster || update) {
-      result = await downloadImg(posterPath, data.poster, page, true);
+      result = await downloadImg(data.poster, page, "", true);
+      if (result) {
+        await result.jpeg().toFile(posterPath);
+      }
     }
 
     let Cover = path.join(defaultConfig.ImagesDir, "Folder", data.type, data.Name + ".jpg");
     if ((!fs.existsSync(Cover) && fs.existsSync(posterPath)) || update) {
-      await sharp(posterPath).jpeg().toFile(Cover);
+      await sharp(posterPath).toFormat("jpg").resize({ width: 340 }).toFile(Cover);
     }
   } catch (error) {
     result = false;
@@ -166,18 +139,58 @@ export const createFolderCover = async (mangaDir, data, page, update) => {
   return { files: files.filter((f) => f.includes(".zip")), result };
 };
 
-export const downloadAllIMages = async (page, links, dir, linkData) => {
-  const length = links.length;
-  let padding = getPadding(links.length);
-  for (let i = 0; i < links.length; i++) {
-    if (linkData.stopped) return;
-    delay(60);
-    process.stdout.write(`\t IMG: ${i + 1} / ${length}\r`);
-    let newImg = path.join(dir, `${i}`.padStart(padding, "0") + ".jpg");
+export const saveThumbnail = async (buff, thumbPath) => {
+  let img = sharp(buff);
+  const meta = await img.metadata();
 
-    if (!fs.existsSync(newImg)) {
-      const result = await downloadImg(newImg, links[i], page);
-      if (!result) --links.length;
+  if (meta.height > 500) {
+    if (meta.height > 1650) {
+      img = await img.extract({
+        height: 1200,
+        width: meta.width,
+        top: 0,
+        left: 0,
+      });
+    }
+    await img.toFormat("jpg").resize({ width: 340 }).toFile(thumbPath);
+    await img.destroy();
+    return true;
+  }
+};
+
+export const downloadAllIMages = async (page, links, state, imgPath, folder, destZip) => {
+  var zip = new AdmZip();
+
+  const length = links.length;
+  let padding = getPadding(length);
+  const result = { valid: false, count: 0 };
+  let thumb = 0;
+  for (let i = 0; i < length; i++) {
+    if (state.stopped) return result;
+    process.stdout.write(`\t IMG: ${i + 1} / ${length}\r`);
+
+    const img = await downloadImg(links[i], page, folder);
+    if (img) {
+      const newImg = `${i}`.padStart(padding, "0") + ".jpg";
+      const buff = await img.toFormat("jpg").toBuffer();
+      if (i === thumb) {
+        //if (i === 0 && !fs.existsSync(imgPath)) {
+        const isSave = await saveThumbnail(buff, imgPath);
+        if (!isSave) {
+          thumb++;
+        } else {
+          thumb = 0;
+        }
+      }
+      zip.addFile(newImg, buff);
+      result.count++;
     }
   }
+
+  result.valid = result.count >= length - 1;
+
+  if (result.valid) {
+    zip.writeZip(destZip);
+  }
+  return result;
 };

@@ -81,6 +81,7 @@ const downloadLinks = async (link, page) => {
   manga.Server = link.Url;
 
   let folder = await findOrCreateFolder(manga, isAdult);
+  createDir(folder.Path);
 
   const exclude = await db.Exclude.findAll({ where: { LinkName: folder.Name } });
 
@@ -112,12 +113,11 @@ const downloadLinks = async (link, page) => {
     if (state.stopped) break;
     try {
       ++count;
-      await downloadLink(d, page, Server, folder, `${count}/${data.length}`, link.IsAdult, state);
+      await downloadLink(d, page, Server, folder, `${count}/${data.length}`, state);
     } catch (error) {
       sendMessage({ text: `chapter ${Name} - ${d.name} navigation error`, error });
     }
   }
-  createDir(folder.Path);
 
   let FileCount = fs.readdirSync(folder.Path).filter((f) => f.includes(".zip")).length;
 
@@ -135,12 +135,24 @@ const downloadLinks = async (link, page) => {
   await db.Link.update({ Date: new Date() }, { where: { Name: folder.Name } });
 };
 
+const stopDownloads = async () => {
+  if (state.current) {
+    await state.current.update({ IsDownloading: false });
+  }
+
+  for (const link of state.links) {
+    await link.update({ IsDownloading: false });
+    console.log("stopping", link.Name);
+  }
+};
+
 const cleanUp = async (error) => {
   if (error) {
     sendMessage({ text: "Process Stopped - Internal Error", color: "red", error });
   }
   const pcount = await getPages();
   if (pcount === 1 || state.stopped) {
+    await stopDownloads();
     state.links = [];
     state.running = false;
     state.size = 0;
@@ -167,6 +179,8 @@ const onDownload = async (bypass, headless) => {
     const link = state.links.shift();
     await link.reload();
 
+    state.current = link;
+
     //Exclude link from download
     if (link.Exclude) {
       sendMessage({ text: `Link ${link.AltName} Is Exclude From Download`, color: "red" });
@@ -182,8 +196,8 @@ const onDownload = async (bypass, headless) => {
         if (link.Url.includes("nhentai")) {
           await downloadNHentai(link, page, link.Server);
         } else {
-          await link.update({ IsDownloading: false });
           await downloadLinks(link, page, link.Server, link.IsAdult);
+          await link.update({ IsDownloading: false });
           await link.reload();
         }
 
@@ -191,7 +205,6 @@ const onDownload = async (bypass, headless) => {
       } catch (error) {
         sendMessage({ text: `Error ${link.Url} was no properly downloaded`, color: "red", error });
       }
-      await link.update({ IsDownloading: false });
     } else {
       sendMessage({ text: `Link ${link.Name} was checked recently`, color: "red" });
     }
@@ -211,6 +224,7 @@ const loadLinks = async (datas) => {
     let count = 0;
     for (const found of founds) {
       if (!state.links.find((l) => l.Url === found.Url)) {
+        await found.update({ IsDownloading: true });
         state.links.push(found);
         count++;
       }
@@ -245,11 +259,16 @@ process.on("message", async ({ action, datas, headless, remove, bypass, server }
 
   switch (action) {
     case "Exit": {
+      stopDownloads();
       state.stopped = true;
       await cleanUp();
       break;
     }
     case "Remove": {
+      const toRemove = state.links.filter((ld) => remove.includes(ld.Id));
+      for (const link of toRemove) {
+        await link.update({ IsDownloading: false });
+      }
       state.links = state.links.filter((ld) => !remove.includes(ld.Id));
       break;
     }

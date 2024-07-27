@@ -18,22 +18,30 @@ export const ZipCover = async (file, coverP, exist) => {
     if (!exist) {
       const entries = Object.values(await zipfile.entries())
         .sort(sortByName)
-        .filter((entry) => !entry.isDirectory);
+        .filter((entry) => !entry.isDirectory && IMGTYPES.test(entry.name));
 
-      const firstImg = entries.find((e) => IMGTYPES.test(e.name) && e.size > 1024 * 20);
-      if (firstImg) {
-        const buff = await zipfile.entryData(firstImg);
+      for (const entry of entries) {
+        const buff = await zipfile.entryData(entry);
+        try {
+          let img = sharp(buff);
+          const meta = await img.metadata();
 
-        let sharData = sharp(buff);
-
-        let meta = await sharData.metadata();
-
-        if (meta.width / meta.height < 0.6 && meta.height > 1800) {
-          const height = Math.ceil(meta.width / 0.67);
-          sharData = await sharData.extract({ height, width: meta.width, top: 0, left: 0 });
+          if (meta.height > 524) {
+            if (meta.height > 1650) {
+              img = await img.extract({
+                height: 1200,
+                width: meta.width,
+                top: 0,
+                left: 0,
+              });
+            }
+            await img.toFormat("jpg").resize({ width: 340 }).toFile(coverP);
+            await img.destroy();
+            break;
+          }
+        } catch (error) {
+          console.log("thumb-resizer", error);
         }
-
-        await sharData.jpeg().resize({ width: 240 }).toFile(coverP);
       }
     }
     const count = zipfile.entriesCount;

@@ -6,15 +6,14 @@ import { createFile, destroy } from "./db-worker.js";
 
 import { evaleLinks } from "./evaluator.js";
 
-import { downloadAllIMages, createThumb } from "./ImageUtils.js";
+import { downloadAllIMages } from "./ImageUtils.js";
 import { findRaw, sendMessage, createDir } from "./utils.js";
 import defaultConfig from "../default-config.js";
 
 createDir(defaultConfig.ImagesDir);
 
-export const downloadLink = async (d, page, Server, folder, count, adult, state) => {
+export const downloadLink = async (d, page, Server, folder, count, state) => {
   const mangaDir = folder.Path;
-  const isAdult = adult || Server.Type === "Adult";
   const imgDir = path.join(defaultConfig.ImagesDir, "Manga", folder.Name);
 
   createDir(imgDir);
@@ -37,8 +36,6 @@ export const downloadLink = async (d, page, Server, folder, count, adult, state)
   }
 
   let links = [];
-
-  createDir(dir);
 
   let query = {};
   if (!Server.LocalImages) {
@@ -64,26 +61,12 @@ export const downloadLink = async (d, page, Server, folder, count, adult, state)
   links = await page.evaluate(evaleLinks, Server.dataValues);
   sendMessage({ text: `Dwn: ${count} imgs: ${links.length} - ${folder.Name} - ${d.name}`, url: d.url });
 
-  // await delay(60000);
-  await downloadAllIMages(page, links, dir, state, Server.LocalImages);
+  const destZip = dir + ".zip";
+  const imgPath = path.join(imgDir, d.name + ".zip.jpg");
+  const result = await downloadAllIMages(page, links, state, imgPath, folder.Name + "/" + d.name, destZip);
 
-  const images = fs.readdirSync(dir);
-
-  if (images.length >= links.length - 1 && !state.stopped) {
-    const fromImg = path.join(dir, images[0]);
-
-    const toImg = path.join(imgDir, d.name + ".zip.jpg");
-    await createThumb(fromImg, toImg);
-
-    zipper.sync
-      .zip(dir)
-      .compress()
-      .save(dir + ".zip");
-
-    sendMessage({ text: `The file: ${d.name}.zip was saved!` });
-    await createFile(dir + ".zip", folder.Id, images.length, isAdult);
-
-    fs.removeSync(dir);
+  if (result.valid && !state.stopped) {
+    await createFile(destZip, folder.Id, result.count);
     return true;
   } else {
     sendMessage({ text: `Some Images Pendding for: ${d.name}`, color: "red", url: d.url });

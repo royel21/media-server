@@ -1,10 +1,10 @@
 import { createFile, getDb } from "./db-worker.js";
 import path from "node:path";
 import { sendMessage } from "./utils.js";
-import { createThumb, getImgNh } from "./ImageUtils.js";
+import { getImgNh, saveThumbnail } from "./ImageUtils.js";
 import defaultConfig from "../default-config.js";
-import zipper from "zip-local";
 import fs from "fs-extra";
+import AdmZip from "adm-zip";
 
 const isChar = (c) => {
   return c.match(/[a-z]/i);
@@ -42,13 +42,6 @@ const dirs = {
   yaoi: path.join(BASEPATH, "R18", "Manga-Hentai", "Yaoi"),
   anthology: path.join(BASEPATH, "R18", "Manga-Hentai", "Anthology"),
   nHentai: path.join(BASEPATH, "R18", "Manga-Hentai", "Tankoubon"),
-};
-
-const createThumbFile = async (filePath, file, folder) => {
-  const fromImg = path.join(filePath, "001.jpg");
-  const cover = path.join(defaultConfig.ImagesDir, "Manga", folder.Name, file + ".jpg");
-
-  await createThumb(fromImg, cover);
 };
 
 export const downloadNHentai = async (link, page, server) => {
@@ -134,51 +127,38 @@ export const downloadNHentai = async (link, page, server) => {
     });
 
     if (initalUrl) {
-      fs.mkdirs(filePath);
-
       let ex = initalUrl.split(".").pop();
       let format = ["png", "gif", "jpg"];
       let f = 0;
       let newEX = ex;
       let count = 0;
+
+      var zip = new AdmZip();
+      const cover = path.join(defaultConfig.ImagesDir, "Manga", folder.Name, data.name + ".zip.jpg");
       for (let i = 1; i < data.total + 1; ) {
+        const newImg = `${i.toString().padStart("3", "0")}.${newEX}`;
+        process.stdout.write(`\t IMG: ${i} / ${data.total}\r`);
+        const url = initalUrl.replace(`/1.${ex}`, `/${i}.${newEX}`);
         try {
-          let imagePath = `${filePath}/${i.toString().padStart("3", "0")}.${newEX}`;
-          process.stdout.write(`\t IMG: ${i} / ${data.total}\r`);
-          if (!fs.existsSync(imagePath)) {
-            await getImgNh(imagePath, initalUrl.replace(`/1.${ex}`, `/${i}.${newEX}`), page);
-          }
-
-          if (!fs.existsSync(imagePath)) {
-            if (format[f]) {
-              i--;
-              newEX = format[f];
-              f++;
+          const img = await getImgNh(url, page);
+          if (img) {
+            zip.addFile(newImg, buff);
+            count++;
+            if (i === 0 && !fs.existsSync(cover)) {
+              await saveThumbnail(img, cover);
             }
-          } else {
-            f = 0;
           }
-        } catch (err) {
-          console.log("initalUrl: ", initalUrl.replace(`/1.${ex}`, `/${i}.${newEX}`), err);
-          count++;
-          if (count > 10) break;
+          f = 0;
+          i++;
+        } catch (error) {
+          console.log("format-error: " + url);
+          newEX = format[f++];
         }
-
-        i++;
       }
 
-      let files = fs.readdirSync(filePath);
-
-      if (files.length === data.total) {
-        await createThumbFile(filePath, data.name + ".zip", folder);
-        zipper.sync
-          .zip(filePath)
-          .compress()
-          .save(filePath + ".zip");
-        fs.removeSync(filePath);
-        found = true;
-
-        await createFile(filePath + ".zip", folder.Id, files.length);
+      if (count >= data.total - 1) {
+        zip.writeZip(filePath + ".zip");
+        await createFile(filePath + ".zip", folder.Id, count);
       }
     }
   }
