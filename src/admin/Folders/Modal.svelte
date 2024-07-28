@@ -38,7 +38,7 @@
 
   const onChanges = ({ target: { checked } }) => (deleteFromSys = checked);
 
-  if (file) loadTemp(file);
+  if (file?.Name) loadTemp(file);
 </script>
 
 <div class="modal-container">
