@@ -165,8 +165,12 @@ export const downloadAllIMages = async (page, links, state, imgPath, folder, des
   let padding = getPadding(length);
   const result = { valid: false, count: 0 };
   let thumb = 0;
+  let skip = 0;
   for (let i = 0; i < length; i++) {
     if (state.stopped) return result;
+
+    if (skip > 1) return result;
+
     process.stdout.write(`\t IMG: ${i + 1} / ${length}\r`);
 
     const img = await downloadImg(links[i], page, folder);
@@ -184,6 +188,8 @@ export const downloadAllIMages = async (page, links, state, imgPath, folder, des
       }
       zip.addFile(newImg, buff);
       result.count++;
+    } else {
+      skip++;
     }
   }
 
