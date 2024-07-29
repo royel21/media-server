@@ -158,6 +158,7 @@ const cleanUp = async (error) => {
     state.size = 0;
     state.stopped = false;
     state.browser = null;
+    state.checkServer = false;
     if (state.browser) {
       await state.browser.close();
     }
@@ -274,6 +275,7 @@ process.on("message", async ({ action, datas, headless, remove, bypass, server }
     }
     case "Check-Server": {
       if (!state.checkServer) {
+        state.checkServer = true;
         console.log("start-server");
         downloadFromPage(server, state).then(cleanUp).catch(cleanUp);
       }

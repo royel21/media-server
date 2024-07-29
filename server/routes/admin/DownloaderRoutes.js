@@ -32,15 +32,25 @@ routes.get("/remove-link/:Id", async ({ params }, res) => {
   res.send({ valid: false });
 });
 
+const getServers = async () => {
+  const servers = await db.Server.findAll({ order: ["Name"], where: { Enable: true } });
+  const datas = {};
+
+  servers.forEach((srv) => {
+    datas[srv.Id] = srv;
+  });
+  return datas;
+};
+
 routes.post("/links", async ({ body }, res) => {
-  const { page = 1, items, filter = "" } = body;
+  const { page = 1, items, filter = "", IsDownloading, first } = body;
   let limit = +items || 10;
   let offset = (page - 1) * limit || 0;
 
   const qfilter = { [Op.like]: `%${filter}%` };
   const order = "Date";
 
-  const datas = await db.Link.findAndCountAll({
+  const query = {
     where: { [Op.or]: { Name: qfilter, AltName: qfilter, "$Server.Name$": qfilter, Url: qfilter } },
     limit,
     offset,
@@ -51,26 +61,23 @@ routes.post("/links", async ({ body }, res) => {
       [order, "DESC"],
       ["Name", "ASC"],
     ],
-  });
+  };
+
+  if (IsDownloading) query.where.IsDownloading = 1;
+
+  const datas = await db.Link.findAndCountAll(query);
+  let servers;
+
+  if (first) servers = await getServers();
 
   res.send({
+    servers,
     totalItems: datas.count,
     totalPages: Math.ceil(datas.count / limit),
     links: datas.rows.map((lnk) => {
-      delete lnk.dataValues.Server;
-      return lnk.dataValues;
+      return { ...lnk.dataValues, Server: { Name: lnk.dataValues.Server.Name } };
     }),
   });
-});
-
-routes.get("/servers", async (req, res) => {
-  const servers = await db.Server.findAll({ order: ["Name"], where: { Enable: true } });
-  const datas = {};
-
-  servers.forEach((srv) => {
-    datas[srv.Id] = srv;
-  });
-  res.send(datas);
 });
 
 routes.post("/item-update", async ({ body }, res) => {

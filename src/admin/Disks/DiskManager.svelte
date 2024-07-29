@@ -3,17 +3,15 @@
   import Tree from "./Tree.svelte";
   import Directories from "./Directories.svelte";
   import Icons from "src/icons/Icons.svelte";
-  import Downloads from "./Downloader/Downloads.svelte";
-  export let tab = "tab-3";
+  export let tab = "tab-1";
 
   const components = {
     "tab-1": Directories,
     "tab-2": Tree,
-    "tab-3": Downloads,
   };
 
   $: {
-    navigate(`/admin/content-manager/${tab || "tab-3"}`, { replace: true });
+    navigate(`/admin/content-manager/${tab || "tab-1"}`, { replace: true });
   }
   document.title = "Manager";
 </script>
@@ -21,13 +19,6 @@
 <div class="card bg-dark text-light admin-manager">
   <div class="disk-controls">
     <div class="usn nav nav-tabs">
-      <div class="nav-item">
-        <input type="radio" bind:group={tab} value="tab-3" id="tab3" />
-        <label class="nav-link" for="tab3">
-          <Icons name="download" />
-          <span id="disks">Downloads</span>
-        </label>
-      </div>
       <div class="nav-item">
         <input type="radio" bind:group={tab} value="tab-1" id="tab1" />
         <label class="nav-link" for="tab1">

@@ -6,25 +6,20 @@
   import Icons from "src/icons/Icons.svelte";
   import Modal from "./Modal.svelte";
   import ModalLink from "./ModalLink.svelte";
-  import RenameModal from "./RenameModal.svelte";
   import ExcludeChapModal from "./ExcludeChapModal.svelte";
-  import ModalServerList from "./ModalServerList.svelte";
+  import { excludeLink } from "./utils";
 
   let start = 0;
   let editor = { show: false };
-  let servers = {};
-  let showLinkModal = false;
-  let showRenamer = false;
   let showExcludeChapModal;
   let running = false;
-  let showServerList = false;
 
   const socket = getContext("socket");
 
   const datas = {
     links: [],
     page: 1,
-    totalPages: 50,
+    totalPages: 0,
     totalItems: 0,
     items: +localStorage.getItem("d-items") || 100,
     filter: "",
@@ -52,11 +47,6 @@
     return datas.links.find((f) => f.Id === +id);
   };
 
-  const downloadServer = ({ target: { dataset } }) => {
-    running = true;
-    socket.emit("download-server", { server: +dataset.id, action: "Check-Server" });
-  };
-
   const onFilter = ({ detail }) => {
     datas.filter = detail;
     datas.page = 1;
@@ -65,8 +55,13 @@
 
   const loadItems = async () => {
     const { items, page, filter } = datas;
-    const result = await apiUtils.post("admin/downloader/links", { items, page, filter: decodeURIComponent(filter) });
-    servers = await apiUtils.get(["admin", "downloader", "servers"]);
+    const result = await apiUtils.post("admin/downloader/links", {
+      items,
+      page,
+      filter: decodeURIComponent(filter),
+      IsDownloading: true,
+    });
+
     if (result.links) {
       datas.links = result.links;
       datas.totalPages = result.totalPages;
@@ -79,38 +74,10 @@
     loadItems();
   };
 
-  const excludeLink = async ({ target }) => {
-    const id = target.closest(".link").id;
-    if (id) {
-      const result = await apiUtils.get(["admin", "downloader", "exclude-link", id]);
-      if (result.valid) {
-        const found = datas.links.findIndex((f) => f.Id === +id);
-        if (found > -1) {
-          datas.links[found].Exclude = !datas.links[found].Exclude;
-        }
-      }
-    }
-  };
-  const downloadLink = async ({ target }) => {
-    const id = target.closest(".link").id;
-    if (id) {
-      const found = datas.links.find((f) => f.Id === +id);
-      if (found) {
-        running = true;
-        found.IsDownloading = true;
-        socket.emit("download-server", { datas: { [found.ServerId]: [found.Id] }, action: "Add-Download" });
-        datas.links = [...datas.links];
-      }
-    }
-  };
   const removeLink = async ({ target }) => {
-    const id = target.closest(".link").id;
-    if (id) {
-      const result = await apiUtils.get(["admin", "downloader", "remove-link", id]);
-      if (result.valid) {
-        loadItems();
-      }
-    }
+    const Id = target.closest(".link").id;
+    datas.links = datas.links.filter((lk) => +lk.Id !== +Id);
+    socket.emit("download-server", { action: "Remove", remove: [Id] });
   };
 
   const changeItems = ({ keyCode }) => {
@@ -120,12 +87,6 @@
     }
   };
 
-  const editServer = ({ target }) => {
-    const link = getLink(target);
-    if (link) {
-      editor = { show: true, server: servers[link.ServerId] };
-    }
-  };
   const editLink = async ({ target }) => {
     const link = getLink(target);
     if (link) {
@@ -138,11 +99,6 @@
     datas.links = [...datas.links];
   };
 
-  const onHideServerList = async (reload) => {
-    if (reload) await loadItems();
-    showServerList = false;
-  };
-
   const onUpdate = ({ data }) => {
     if (data.link) {
       const found = datas.links.findIndex((f) => f.Id === data.link.Id);
@@ -151,11 +107,9 @@
       }
     }
   };
-  const onNewlink = (newLink) => {
-    if (newLink) {
-      loadItems();
-    }
-    showLinkModal = false;
+
+  const onExcludeLink = async (e) => {
+    datas.links = await excludeLink(e, datas);
   };
 
   const stopDownloads = () => {
@@ -189,18 +143,6 @@
   <Modal server={editor.server} link={editor.link} hide={hideModal} />
 {/if}
 
-{#if showLinkModal}
-  <ModalLink hide={onNewlink} {servers} />
-{/if}
-
-{#if showRenamer}
-  <RenameModal hide={() => (showRenamer = false)} />
-{/if}
-
-{#if showServerList}
-  <ModalServerList hide={onHideServerList} />
-{/if}
-
 {#if showExcludeChapModal}
   <ExcludeChapModal
     linkId={showExcludeChapModal}
@@ -214,15 +156,6 @@
   <div class="d-controls">
     <Filter on:filter={onFilter} filter={datas.filter}>
       <span class="btns" slot="pre-btn">
-        <span class="btn-add" on:click={() => (showLinkModal = true)} on:keydown>
-          <Icons name="squareplus" />
-        </span>
-        <span class="r-list btn-ser-config" on:click={() => (showServerList = true)} on:keydown>
-          <Icons name="cog" />
-        </span>
-        <span class="r-list" title="Show Rename List" on:click={() => (showRenamer = true)} on:keydown>
-          <Icons name="list" />
-        </span>
         <span class="r-list btn-stop" title="Stop All Download" class:running on:click={stopDownloads} on:keydown>
           <Icons name="stopcircle" color="firebrick" />
         </span>
@@ -249,8 +182,7 @@
         <div class="link" id={link.Id}>
           <span>{i + 1 + start}</span>
           <span>
-            <span on:click={editServer} on:keydown title="Show Site Config"><Icons name="cog" /></span>
-            <span data-id={link.ServerId} on:click={downloadServer} on:keydown>{servers[link.ServerId]?.Name}</span>
+            <span data-id={link.ServerId} on:keydown>{link.Server?.Name.split(".")[0]}</span>
           </span>
           <span>
             <span
@@ -264,17 +196,14 @@
             <span title={link.LastChapter}>{link.LastChapter}</span>
           </span>
           <span title={link.Name || nameFromurl(link.Url)}>
-            <span on:click={downloadLink} title="Download This Link" on:keydown>
-              <Icons name="download" color={link.IsDownloading ? "green" : "lightblue"} />
+            <span on:click={removeLink} title="Remove Link" on:keydown>
+              <Icons name="trash" color="firebrick" />
             </span>
             <span on:click={editLink} title="Edit Link" on:keydown>
               <Icons name="edit" />
             </span>
-            <span on:click={excludeLink} title="Exclude Link From Group Download" on:keydown>
+            <span on:click={onExcludeLink} title="Exclude Link From Group Download" on:keydown>
               <Icons name="files" box="0 0 464 512" color={link.Exclude ? "firebrick" : "#47f046"} />
-            </span>
-            <span on:click={removeLink} title="Remove Link" on:keydown>
-              <Icons name="trash" color="firebrick" />
             </span>
             <a href={link.Url} target="_blank">{link.Name || nameFromurl(link.Url)}</a>
           </span>
@@ -380,7 +309,7 @@
     border-left: 1px solid;
   }
   .d-table div > span:nth-child(2) {
-    width: 185px;
+    width: 110px;
     cursor: pointer;
   }
   .d-table div > span:nth-child(3) {

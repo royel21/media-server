@@ -32,7 +32,7 @@
 
   const handle = ({ target: { name } }) => {
     if (name === "Url") {
-      if (!link.IsAdult) {
+      if (!link.IsAdult && servers) {
         const linkParts = link.Url.split("/");
         let serv = linkParts[2].replace(/www\.|\.html/i, "");
         for (const id in servers) {

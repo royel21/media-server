@@ -11,6 +11,7 @@
   import RConsole from "./Component/RConsole.svelte";
   import { MessageStore, setMessage } from "./Store/MessageStore";
   import Configs from "./Tools/Configs.svelte";
+  import DownloadManager from "./Downloader/DownloadManager.svelte";
 
   let logout = getContext("logout");
   let user = getContext("User");
@@ -22,6 +23,12 @@
     { title: "Users", path: "/admin/", class: "users", color: "rgb(37, 140, 209)" },
     { title: "Files", path: "/admin/files", class: "file", color: "rgba(248, 224, 6, 0.952)" },
     { title: "Folders", path: "/admin/folders", class: "folder", color: "rgb(250, 183, 15)" },
+    {
+      title: "Downloads",
+      path: "/admin/downloads",
+      class: "download",
+      color: "grey",
+    },
     {
       title: "Manager",
       path: "/admin/content-manager",
@@ -77,6 +84,7 @@
   <div class="content">
     <Route path="/admin/folders/:dirid/:page/:filter" component={Folders} />
     <Route path="/admin/content-manager/:tab" component={DiskManager} />
+    <Route path="/admin/downloads/:tab" component={DownloadManager} />
     <Route path="/admin/files/:page/:filter" component={Files} />
     <Route path="/admin/configs/:tab" component={Configs} />
     <Route path="/admin/" component={User} />
@@ -134,6 +142,14 @@
     }
     .toast {
       max-width: 380px;
+    }
+
+    :global(#menu .nav-title) {
+      display: none;
+    }
+
+    :global(#menu a) {
+      width: 40px;
     }
   }
 

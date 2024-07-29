@@ -1,10 +1,10 @@
 <script>
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
-  import Input from "../../Component/Input.svelte";
-  import Select from "../../Component/Select.svelte";
-  import CheckBox from "../../Component/CheckBox.svelte";
-  import TextAreaInput from "../../Component/TextAreaInput.svelte";
+  import Input from "src/admin/Component/Input.svelte";
+  import Select from "src/admin/Component/Select.svelte";
+  import CheckBox from "src/admin/Component/CheckBox.svelte";
+  import TextAreaInput from "src/admin/Component/TextAreaInput.svelte";
   import apiUtils from "src/apiUtils";
 
   export let server = "";
