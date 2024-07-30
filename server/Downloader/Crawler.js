@@ -52,14 +52,7 @@ export const createPage = async (browser, timeout = 180000) => {
 let pupeteer;
 
 export const startBrowser = async (config) => {
-  try {
-    if (pupeteer) {
-      await pupeteer.close();
-      delay(500);
-      pupeteer = null;
-    }
     config.args = ["--no-sandbox", "--disable-gpu"];
-    // config.env = { DISPLAY: ":99" };
     config.headless = "new";
     if (process.env.USE_DEV && os.platform() === "win32") {
       config.headless = false;
@@ -68,9 +61,6 @@ export const startBrowser = async (config) => {
     } else {
       pupeteer = await puppeteer.launch(config);
     }
-  } catch (error) {
-    console.log("Some error", error);
-  }
 
   return pupeteer;
 };
