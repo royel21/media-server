@@ -149,13 +149,17 @@
     }
 
     :global(#menu a) {
-      width: 40px;
+      width: 48px;
+    }
+
+    :global(#menu li svg) {
+      transform: scale(1.2);
     }
   }
 
   @media (max-width: 600px) and (pointer: none), (pointer: coarse) {
     .content {
-      height: calc(100% - 64px);
+      height: calc(100% - 45px);
     }
   }
 </style>
