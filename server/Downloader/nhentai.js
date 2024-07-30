@@ -154,8 +154,6 @@ export const downloadNHentai = async (link, page, server, state) => {
           f = 0;
           i++;
         } catch (error) {
-          console.log("format-error: " + url, error);
-          sendMessage({ text: "nh-error", error }, "error");
           if (f > 2) break;
           newEX = format[f++];
         }
