@@ -39,7 +39,7 @@
       title: "Configs",
       path: "/admin/configs",
       class: "cog",
-      color: "grey",
+      color: "deepskyblue",
     },
   ];
 
