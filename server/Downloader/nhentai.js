@@ -44,7 +44,7 @@ const dirs = {
   nHentai: path.join(BASEPATH, "R18", "Manga-Hentai", "Tankoubon"),
 };
 
-export const downloadNHentai = async (link, page, server) => {
+export const downloadNHentai = async (link, page, server, state) => {
   const db = getDb();
   try {
     await page.goto(link.Url, { waitUntil: "domcontentloaded" });
@@ -118,7 +118,7 @@ export const downloadNHentai = async (link, page, server) => {
   let filePath = path.join(curDir, data.name.split("|")[0]);
 
   const Name = { [db.Op.like]: `%${data.name.replace(" [Digital]", "")}%` };
-  let found = (await db.file.findOne({ where: { Name } })) || fs.existsSync(filePath + ".zip");
+  let found = (await db.file.findOne({ where: { Name } })) && fs.existsSync(filePath + ".zip");
 
   if (!found) {
     await page.goto(data.url, { waitUntil: "domcontentloaded" });
@@ -128,7 +128,7 @@ export const downloadNHentai = async (link, page, server) => {
 
     if (initalUrl) {
       let ex = initalUrl.split(".").pop();
-      let format = ["png", "gif", "jpg"];
+      let format = ["jpg", "png", "gif"];
       let f = 0;
       let newEX = ex;
       let count = 0;
@@ -136,12 +136,15 @@ export const downloadNHentai = async (link, page, server) => {
       var zip = new AdmZip();
       const cover = path.join(defaultConfig.ImagesDir, "Manga", folder.Name, data.name + ".zip.jpg");
       for (let i = 1; i < data.total + 1; ) {
+        if (state.stopped) return;
+
         const newImg = `${i.toString().padStart("3", "0")}.${newEX}`;
         process.stdout.write(`\t IMG: ${i} / ${data.total}\r`);
         const url = initalUrl.replace(`/1.${ex}`, `/${i}.${newEX}`);
         try {
           const img = await getImgNh(url, page);
           if (img) {
+            const buff = await img.toFormat("jpg").toBuffer();
             zip.addFile(newImg, buff);
             count++;
             if (i === 0 && !fs.existsSync(cover)) {
@@ -151,8 +154,9 @@ export const downloadNHentai = async (link, page, server) => {
           f = 0;
           i++;
         } catch (error) {
+          console.log("format-error: " + url, error);
           sendMessage({ text: "nh-error", error }, "error");
-          console.log("format-error: " + url);
+          if (f > 2) break;
           newEX = format[f++];
         }
       }
@@ -160,6 +164,7 @@ export const downloadNHentai = async (link, page, server) => {
       if (count >= data.total - 1) {
         zip.writeZip(filePath + ".zip");
         await createFile(filePath + ".zip", folder.Id, count);
+        await link.destroy();
       }
     }
   }

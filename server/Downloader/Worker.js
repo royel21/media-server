@@ -195,7 +195,7 @@ const onDownload = async (bypass, headless) => {
       });
       try {
         if (link.Url.includes("nhentai")) {
-          await downloadNHentai(link, page, link.Server);
+          await downloadNHentai(link, page, link.Server, state);
         } else {
           await downloadLinks(link, page, link.Server, link.IsAdult);
           await link.update({ IsDownloading: false });
