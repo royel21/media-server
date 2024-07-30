@@ -257,7 +257,7 @@ let wait = false;
 process.on("message", async ({ action, datas, headless, remove, bypass, server }) => {
   console.log("server", action, state.checkServer);
   if (wait) {
-    await delay(100);
+    await delay(200);
   }
 
   if (!state.browser) {
