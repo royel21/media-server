@@ -219,6 +219,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    margin-bottom: 10px;
   }
   .d-controls .r-list :global(svg),
   .d-controls :global(.icon-squareplus) {
@@ -266,7 +267,6 @@
     min-height: calc(100% - 37px);
     height: calc(100% - 37px);
     overflow-x: auto;
-    padding-bottom: 10px;
   }
   .d-table {
     min-width: 1000px;

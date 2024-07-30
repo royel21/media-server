@@ -169,7 +169,7 @@ export const downloadAllIMages = async (page, links, state, imgPath, folder, des
   for (let i = 0; i < length; i++) {
     if (state.stopped) return result;
 
-    if (skip > 1) {
+    if (skip === 1) {
       return result;
     }
 

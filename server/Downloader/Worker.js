@@ -6,7 +6,7 @@ import { evaluetePage, adultEvalPage } from "./evaluator.js";
 
 import { createFolderCover } from "./ImageUtils.js";
 import { filterManga, dateDiff, removeRaw, sendMessage, createDir } from "./utils.js";
-import { startBrowser, createPage, getPages } from "./Crawler.js";
+import { startBrowser, createPage, getPages, delay } from "./Crawler.js";
 
 import { downloadLink } from "./link-downloader.js";
 import { downloadFromPage } from "./checkServer.js";
@@ -252,10 +252,18 @@ const onCreateCover = async ({ Id, imgUrl }) => {
   await cleanUp();
 };
 
+let wait = false;
+
 process.on("message", async ({ action, datas, headless, remove, bypass, server }) => {
   console.log("server", action, state.checkServer);
+  if (wait) {
+    await delay(100);
+  }
+
   if (!state.browser) {
+    wait = true;
     state.browser = await startBrowser({ headless: false, userDataDir: "./user-data/puppeteer" });
+    wait = false;
   }
 
   switch (action) {
