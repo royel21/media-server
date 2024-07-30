@@ -169,7 +169,9 @@ export const downloadAllIMages = async (page, links, state, imgPath, folder, des
   for (let i = 0; i < length; i++) {
     if (state.stopped) return result;
 
-    if (skip > 1) return result;
+    if (skip > 1) {
+      return result;
+    }
 
     process.stdout.write(`\t IMG: ${i + 1} / ${length}\r`);
 
@@ -189,6 +191,7 @@ export const downloadAllIMages = async (page, links, state, imgPath, folder, des
       zip.addFile(newImg, buff);
       result.count++;
     } else {
+      sendMessage({ text: `Error Skip: ${links[i]}` });
       skip++;
     }
   }
