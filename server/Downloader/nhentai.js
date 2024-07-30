@@ -144,18 +144,17 @@ export const downloadNHentai = async (link, page, server, state) => {
         try {
           const img = await getImgNh(url, page);
           if (img) {
+            const buff = await img.toFormat("jpg").toBuffer();
+            zip.addFile(newImg, buff);
+            count++;
+
+            if (i === 0 && !fs.existsSync(cover)) {
+              await saveThumbnail(buff, cover);
+            }
+
+            f = 0;
+            i++;
           }
-
-          const buff = await img.toFormat("jpg").toBuffer();
-          zip.addFile(newImg, buff);
-          count++;
-
-          if (i === 0 && !fs.existsSync(cover)) {
-            await saveThumbnail(buff, cover);
-          }
-
-          f = 0;
-          i++;
         } catch (error) {
           if (f > 2) break;
           newEX = format[f++];
