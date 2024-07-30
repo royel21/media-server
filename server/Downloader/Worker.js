@@ -257,7 +257,7 @@ let wait = false;
 process.on("message", async ({ action, datas, headless, remove, bypass, server }) => {
   console.log("server", action, state.checkServer);
   if (wait) {
-    await delay(200);
+    await delay(500);
   }
 
   if (!state.browser) {
@@ -265,7 +265,7 @@ process.on("message", async ({ action, datas, headless, remove, bypass, server }
     try {
       state.browser = await startBrowser({ headless: false, userDataDir: "./user-data/puppeteer" });
     } catch (error) {
-      sendMessage({ text: "Error trying to start scraper", error }, "error");
+      sendMessage({ text: "Error trying to start scraper", error: error.toString() }, "error");
     }
     wait = false;
   }
