@@ -216,8 +216,8 @@
       max-height: calc(100% - 230px);
     }
     label {
-      top: 80px;
-      right: 16px;
+      top: 64px;
+      right: 20px;
     }
     .text-list .important {
       font-size: 1.1rem;

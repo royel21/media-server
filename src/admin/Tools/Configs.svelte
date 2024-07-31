@@ -104,12 +104,4 @@
   input[type="radio"]:checked + label span {
     display: inline-block;
   }
-  #tabs-content {
-    position: absolute;
-    top: 60px;
-    width: 100%;
-    height: calc(100% - 62px);
-    padding: 5px 8px;
-    overflow-y: auto;
-  }
 </style>

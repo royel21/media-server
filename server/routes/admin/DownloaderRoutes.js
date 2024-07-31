@@ -63,19 +63,25 @@ routes.post("/links", async ({ body }, res) => {
     ],
   };
 
-  if (IsDownloading) query.where.IsDownloading = 1;
+  let downloadList;
+  if (IsDownloading) {
+    query.where.IsDownloading = 1;
+  }
 
   const datas = await db.Link.findAndCountAll(query);
   let servers;
 
-  if (first) servers = await getServers();
-
+  if (first) {
+    servers = await getServers();
+  }
   res.send({
     servers,
+    downloadList,
     totalItems: datas.count,
     totalPages: Math.ceil(datas.count / limit),
     links: datas.rows.map((lnk) => {
-      return { ...lnk.dataValues, Server: { Name: lnk.dataValues.Server.Name } };
+      const serv = lnk.dataValues.Server;
+      return { ...lnk.dataValues, Server: { Id: serv.Id, Name: serv.Name } };
     }),
   });
 });
@@ -126,6 +132,61 @@ routes.post("/add-link", async ({ body }, res) => {
   }
 
   res.send(result);
+});
+
+const getDownloads = async (DownloadingListId) => {
+  return await db.Downloading.findAll({
+    where: { DownloadingListId },
+    attributes: {
+      include: [
+        [literal("(Select Name from links where LinkId=Id)"), "Name"],
+        [literal("(Select Url from links where LinkId=Id)"), "Url"],
+      ],
+    },
+  });
+};
+
+routes.post("/remove-dlist", async ({ body }, res) => {
+  const result = await db.DownloadingList.destroy({ where: { Id: body.Id } });
+  res.send({ valid: result });
+});
+
+routes.post("/remove-dlink", async ({ body }, res) => {
+  const result = await db.Downloading.destroy({ where: { Id: body.Id } });
+  res.send({ valid: result });
+});
+
+routes.get("/download-list", async (_, res) => {
+  const datas = { downloads: {}, DownloadingList: [] };
+
+  datas.DownloadingList = await db.DownloadingList.findAll({ order: ["Name"] });
+
+  if (datas.DownloadingList.length) {
+    datas.downloads = await getDownloads(datas.DownloadingList[0].Id);
+  }
+
+  return res.send(datas);
+});
+
+routes.get("/downloads/:Id", async ({ params }, res) => {
+  if (params.Id) {
+    return res.send(await getDownloads(params.Id));
+  }
+  res.send([]);
+});
+
+routes.post("/save-downloads", async ({ body }, res) => {
+  try {
+    const download = await db.DownloadingList.create(
+      { Name: body.Name, Downloadings: body.links },
+      { include: { model: db.Downloading } }
+    );
+
+    res.send({ download });
+  } catch (error) {
+    console.log(error);
+    res.send({ error: `Name: ${body.Name} is in use` });
+  }
 });
 
 routes.get("/events/:page?", EventLogsRoutes.allEvents);

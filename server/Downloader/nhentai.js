@@ -44,6 +44,8 @@ const dirs = {
   nHentai: path.join(BASEPATH, "R18", "Manga-Hentai", "Tankoubon"),
 };
 
+const formats = ["jpg", "png", "gif"];
+
 export const downloadNHentai = async (link, page, server, state) => {
   const db = getDb();
   try {
@@ -112,10 +114,8 @@ export const downloadNHentai = async (link, page, server, state) => {
     where: { Path: { [db.Op.like]: `%Manga-Hentai/${curDir.split(path.sep).pop()}%` } },
   });
 
-  data.name = nameFormat(data.name);
-
-  data.name = capitalize(data.name.trim());
-  let filePath = path.join(curDir, data.name.split("|")[0]);
+  data.name = nameFormat(data.name.split("|")[0].trim());
+  let filePath = path.join(curDir, data.name);
 
   const Name = { [db.Op.like]: `%${data.name.replace(" [Digital]", "")}%` };
   let found = (await db.file.findOne({ where: { Name } })) && fs.existsSync(filePath + ".zip");
@@ -128,25 +128,25 @@ export const downloadNHentai = async (link, page, server, state) => {
 
     if (initalUrl) {
       let ex = initalUrl.split(".").pop();
-      let format = ["jpg", "png", "gif"];
       let f = 0;
       let newEX = ex;
       let count = 0;
 
       var zip = new AdmZip();
       const cover = path.join(defaultConfig.ImagesDir, "Manga", folder.Name, data.name + ".zip.jpg");
+      const padding = data.total.toString().length;
+
       for (let i = 1; i < data.total + 1; ) {
         if (state.stopped) return;
-
-        const newImg = `${i.toString().padStart("3", "0")}.${newEX}`;
-        process.stdout.write(`\t IMG: ${i} / ${data.total}\r`);
+        const numb = i.toString().padStart(padding, "0");
+        process.stdout.write(`\t IMG: ${numb} / ${data.total}\r`);
         const url = initalUrl.replace(`/1.${ex}`, `/${i}.${newEX}`);
+
         try {
           const img = await getImgNh(url, page);
           if (img) {
             const buff = await img.toFormat("jpg").toBuffer();
-            zip.addFile(newImg, buff);
-            count++;
+            zip.addFile(`${numb}.${newEX}`, buff);
 
             if (i === 0 && !fs.existsSync(cover)) {
               await saveThumbnail(buff, cover);
@@ -154,10 +154,11 @@ export const downloadNHentai = async (link, page, server, state) => {
 
             f = 0;
             i++;
+            count++;
           }
         } catch (error) {
           if (f > 2) break;
-          newEX = format[f++];
+          newEX = formats[f++];
         }
       }
 

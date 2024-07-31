@@ -5,14 +5,17 @@
   import Pagination from "src/ShareComponent/Pagination.svelte";
   import Icons from "src/icons/Icons.svelte";
   import Modal from "./Modal.svelte";
-  import ModalLink from "./ModalLink.svelte";
   import ExcludeChapModal from "./ExcludeChapModal.svelte";
   import { excludeLink } from "./utils";
+  import SaveDownloadModal from "./SaveDownloadModal.svelte";
+  import DownloadListModal from "./DownloadListModal.svelte";
 
   let start = 0;
   let editor = { show: false };
   let showExcludeChapModal;
   let running = false;
+  let showSaveDialog = false;
+  let showDownList = false;
 
   const socket = getContext("socket");
 
@@ -124,11 +127,24 @@
     }
   };
 
+  const loadDownloads = (Id) => {
+    socket.emit("download-server", { datas: { Id }, action: "Load-Downloads" });
+    showDownList = false;
+    running = true;
+  };
+  const reloadDownloads = async () => {
+    await loadItems();
+    console.log("reload-downloads");
+  };
+
+  const saveDownloads = () => (showSaveDialog = true);
+
   onMount(() => {
     loadItems();
     socket.on("update-download", onUpdate);
-    socket.emit("download-server", { action: "is-running" });
     socket.on("is-running", updateRunning);
+    socket.on("reload-downloads", reloadDownloads);
+    socket.emit("download-server", { action: "is-running" });
     return () => {
       socket.off("update-download", onUpdate);
       socket.off("is-running", updateRunning);
@@ -141,6 +157,14 @@
 
 {#if editor.show}
   <Modal server={editor.server} link={editor.link} hide={hideModal} />
+{/if}
+
+{#if showSaveDialog}
+  <SaveDownloadModal links={datas.links} hide={() => (showSaveDialog = false)} />
+{/if}
+
+{#if showDownList}
+  <DownloadListModal hide={() => (showDownList = false)} {loadDownloads} />
 {/if}
 
 {#if showExcludeChapModal}
@@ -156,6 +180,12 @@
   <div class="d-controls">
     <Filter on:filter={onFilter} filter={datas.filter}>
       <span class="btns" slot="pre-btn">
+        <span class="btn-add" on:click={saveDownloads} on:keydown>
+          <Icons name="save" />
+        </span>
+        <span class="btn-add" on:click={() => (showDownList = true)} on:keydown>
+          <Icons name="upload" />
+        </span>
         <span class="r-list btn-stop" title="Stop All Download" class:running on:click={stopDownloads} on:keydown>
           <Icons name="stopcircle" color="firebrick" />
         </span>
@@ -222,7 +252,7 @@
     margin-bottom: 10px;
   }
   .d-controls .r-list :global(svg),
-  .d-controls :global(.icon-squareplus) {
+  .d-controls .btns :global(svg) {
     height: 35px;
     width: 45px;
     top: -1px;

@@ -142,7 +142,6 @@ const stopDownloads = async () => {
 
   for (const link of state.links) {
     await link.update({ IsDownloading: false });
-    console.log("stopping", link.Name);
   }
 };
 
@@ -215,10 +214,9 @@ const onDownload = async (bypass, headless) => {
 };
 
 const loadLinks = async (datas) => {
-  for (const ServerId in datas) {
+  for (const Id in datas) {
     const founds = await db.Link.findAll({
-      where: { Id: datas[ServerId] },
-      ServerId,
+      where: { Id },
       include: ["Server"],
     });
 
@@ -252,22 +250,25 @@ const onCreateCover = async ({ Id, imgUrl }) => {
   await cleanUp();
 };
 
-let wait = false;
+const loadFromList = async (DownloadingListId) => {
+  const downloads = await db.Downloading.findAll({ where: { DownloadingListId } });
+  await loadLinks(downloads.map((lk) => lk.Id));
+  sendMessage({}, "reload-downloads");
+};
 
 process.on("message", async ({ action, datas, headless, remove, bypass, server }) => {
   console.log("server", action, state.checkServer);
-  if (wait) {
+  if (!state.running) {
     await delay(500);
   }
-
-  if (!state.browser) {
-    wait = true;
+  if (!state.browser && !["Exit", "Remove"].includes(action)) {
     try {
+      state.stopped = false;
       state.browser = await startBrowser({ headless: false, userDataDir: "./user-data/puppeteer" });
+      state.running = true;
     } catch (error) {
       sendMessage({ text: "Error trying to start scraper", error: error.toString() }, "error");
     }
-    wait = false;
   }
 
   switch (action) {
@@ -283,6 +284,10 @@ process.on("message", async ({ action, datas, headless, remove, bypass, server }
         await link.update({ IsDownloading: false });
       }
       state.links = state.links.filter((ld) => !remove.includes(ld.Id));
+      console.log(state.browser);
+      if (!state.browser) {
+        process.exit();
+      }
       break;
     }
     case "Check-Server": {
@@ -293,17 +298,21 @@ process.on("message", async ({ action, datas, headless, remove, bypass, server }
       }
       break;
     }
-    case "Add-Download": {
-      state.stopped = false;
-      await loadLinks(datas, headless);
-
+    case "Load-Downloads": {
+      await loadFromList(datas.Id);
       if (!state.running) {
-        state.running = true;
         onDownload(bypass, headless).catch(cleanUp).then(cleanUp);
       }
       break;
     }
+    case "Add-Download": {
+      await loadLinks(datas, headless);
 
+      if (!state.running) {
+        onDownload(bypass, headless).catch(cleanUp).then(cleanUp);
+      }
+      break;
+    }
     case "Create-Cover": {
       onCreateCover(datas);
     }

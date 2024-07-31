@@ -14,6 +14,8 @@ import Links from "./Links.js";
 import Servers from "./Servers.js";
 import NameLists from "./NameLists.js";
 import Excludes from "./Excludes.js";
+import DownloadingList from "./DownloadingList.js";
+import Downloading from "./Downloading.js";
 
 import dbconfig from "./config.js";
 import { config as configEnv } from "dotenv";
@@ -45,6 +47,8 @@ const db = {
   Server: Servers(sequelize),
   NameList: NameLists(sequelize),
   Exclude: Excludes(sequelize),
+  DownloadingList: DownloadingList(sequelize),
+  Downloading: Downloading(sequelize),
 };
 
 db.favorite.belongsToMany(db.folder, { through: { model: db.favoriteFolder } });
@@ -82,14 +86,11 @@ db.user.hasOne(db.userConfig, { onDelete: "cascade" });
 db.Server.hasMany(db.Link, { onDelete: "CASCADE" });
 db.Link.belongsTo(db.Server, { foreignKey: "ServerId" });
 
+db.DownloadingList.hasMany(db.Downloading, { onDelete: "CASCADE" });
+db.Downloading.belongsTo(db.Link, { foreignKey: "LinkId", onDelete: "CASCADE" });
+
 db.init = async (force) => {
   await sequelize.sync({ force });
-
-  try {
-    await db.sqlze.query("ALTER TABLE Links ADD IsDownloading TINYINT(1) NULL DEFAULT '0';");
-  } catch (error) {
-    console.log("add COLUMN fail Server");
-  }
 
   try {
     let admin = await db.user.findOne({ where: { Name: "Administrator" } });

@@ -47,7 +47,6 @@
 
   onMount(() => {
     ref?.focus();
-    console.log("links");
   });
 </script>
 
