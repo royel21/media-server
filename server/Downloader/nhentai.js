@@ -148,7 +148,7 @@ export const downloadNHentai = async (link, page, server, state) => {
             const buff = await img.toFormat("jpg").toBuffer();
             zip.addFile(`${numb}.${newEX}`, buff);
 
-            if (i === 0 && !fs.existsSync(cover)) {
+            if (i === 1 && !fs.existsSync(cover)) {
               await saveThumbnail(buff, cover);
             }
 
