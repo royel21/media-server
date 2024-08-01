@@ -288,7 +288,7 @@ process.on("message", async ({ action, datas, remove, bypass, server }) => {
       break;
     }
     case "Check-Server": {
-      if (state.checkServer) {
+      if (!state.checkServer) {
         state.checkServer = true;
         console.log("start-server");
         downloadFromPage(server, state).then(cleanUp).catch(cleanUp);
