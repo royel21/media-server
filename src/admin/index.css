@@ -129,6 +129,7 @@ input::-webkit-inner-spin-button {
 .input-control {
   display: flex;
   flex-direction: row;
+  width: 100%;
 }
 
 .input-control>* {

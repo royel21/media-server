@@ -14,7 +14,6 @@
   let editor = { show: false };
   let showExcludeChapModal;
   let running = false;
-  let showSaveDialog = false;
   let showDownList = false;
 
   const socket = getContext("socket");
@@ -134,8 +133,6 @@
   };
   const reloadDownloads = async () => loadItems();
 
-  const saveDownloads = () => (showSaveDialog = true);
-
   onMount(() => {
     loadItems();
     socket.on("update-download", onUpdate);
@@ -156,10 +153,6 @@
   <Modal server={editor.server} link={editor.link} hide={hideModal} />
 {/if}
 
-{#if showSaveDialog}
-  <SaveDownloadModal links={datas.links} hide={() => (showSaveDialog = false)} />
-{/if}
-
 {#if showDownList}
   <DownloadListModal hide={() => (showDownList = false)} {loadDownloads} />
 {/if}
@@ -177,11 +170,8 @@
   <div class="d-controls">
     <Filter on:filter={onFilter} filter={datas.filter}>
       <span class="btns" slot="pre-btn">
-        <span class="btn-add" on:click={saveDownloads} on:keydown>
-          <Icons name="save" />
-        </span>
         <span class="btn-add" on:click={() => (showDownList = true)} on:keydown>
-          <Icons name="upload" />
+          <Icons name="list" />
         </span>
         <span class="r-list btn-stop" title="Stop All Download" class:running on:click={stopDownloads} on:keydown>
           <Icons name="stopcircle" color="firebrick" />

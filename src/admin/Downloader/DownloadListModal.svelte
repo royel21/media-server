@@ -11,12 +11,50 @@
   let downloadList = [];
   let downloads = [];
   let item = {};
-  let edit = false;
+  let temp = { Name: "" };
 
+  const sortList = (a, b) => a.Name.localeCompare(b.Name);
+  //nhentai-list
   const getLinks = async (Id) => await apiUtils.get(["admin", "downloader", "downloads", Id]);
 
-  const updateName = () => {
-    edit = false;
+  const onCancel = () => {
+    if (temp.Name || temp.isNew) {
+      temp = { Name: "" };
+    } else {
+      hide();
+    }
+  };
+
+  const addNew = () => {
+    temp.isNew = true;
+  };
+
+  const reloadLinks = async () => {
+    const result = await apiUtils.post("admin/downloader/save-downloads", { Name: item.Name });
+    downloadList = [...downloadList, result.list].sort(sortList);
+  };
+
+  const updateName = async () => {
+    let result = {};
+    if (temp.isNew) {
+      result = await apiUtils.post("admin/downloader/save-downloads", { Name: temp.Name });
+    } else {
+      result = await apiUtils.post("admin/downloader/update-dlist-name", { Id: item.Id, Name: temp.Name });
+    }
+
+    if (result.error) {
+      return (error = result.error);
+    }
+
+    if (!temp.isNew) {
+      item.Name = temp.Name;
+    } else {
+      item = result.list;
+      downloads = result.downloads;
+      downloadList = [...downloadList, result.list].sort(sortList);
+    }
+
+    temp = { Name: "" };
   };
 
   const onChange = async ({ target: { value } }) => {
@@ -26,10 +64,13 @@
 
   const removeDList = async () => {
     const result = await apiUtils.post("admin/downloader/remove-dlist", { Id: item.Id });
+    console.log(result);
     if (result.valid) {
       downloadList = downloadList.filter((dl) => dl.Id != +item.Id);
       if (downloadList.length) {
-        downloads = getLinks(downloadList[0].Id);
+        console.log(item);
+        item = downloadList[0];
+        downloads = await getLinks(item.Id);
       } else {
         downloads = [];
       }
@@ -52,32 +93,35 @@
       downloads = result.downloads;
     }
   });
+
+  $: console.log(temp);
 </script>
 
 <div class="modal-container" tabindex="-1">
   <div class="modal card" transition:fade={{ duration: 200 }}>
     <div class="modal-header">
-      <h3>Save Download List</h3>
+      <h3><span on:click={addNew}><Icons name="squareplus" /></span> Saved Download List</h3>
     </div>
     <div class="modal-body">
-      {#if edit}
-        <Input label="Edit Name" key="Name" {item} />
+      {#if temp.isNew || temp.Name}
+        <Input label="Edit Name" key="Name" item={temp} />
       {:else}
+        <span on:click={removeDList}><Icons name="trash" /></span>
         <Select label="Downloads" key="Id" {item} options={downloadList} {onChange} />
+        <span id="sync" on:click={reloadLinks}><Icons name="sync" /></span>
       {/if}
     </div>
     <div class="modal-footer">
-      {#if edit}
-        <button type="button" class="btn" on:click={updateName}>Update Name</button>
+      <button type="button" class="btn" on:click={onCancel}>Cancel</button>
+      {#if temp.Name || temp.isNew}
+        <button type="button" class="btn" on:click={updateName}>{temp.isNew ? "Save" : "Update Name"}</button>
       {:else}
-        <button type="button" class="btn" on:click={hide}>Cancel</button>
-        <button type="button" class="btn" on:click={removeDList}>Remove</button>
-        <button type="submit" class="btn" on:click={() => (edit = true)}>Edit</button>
+        <button type="submit" class="btn" on:click={() => (temp.Name = item.Name)}>Edit</button>
         <button type="submit" class="btn" on:click={() => loadDownloads(item.Id)}>Load</button>
       {/if}
     </div>
     {#if downloads.length}
-      <h4>Links</h4>
+      <h4>Links {downloads.length}</h4>
       <ol>
         {#each downloads as { Id, Name, Url }}
           <li>
@@ -91,6 +135,15 @@
 </div>
 
 <style>
+  .modal-body {
+    display: flex;
+  }
+  h3 span :global(svg) {
+    height: 32px;
+    width: 35px;
+    top: 5px;
+  }
+
   .modal {
     width: 360px;
     outline: none;
@@ -108,6 +161,15 @@
     text-align: center;
     border-top: 1px solid white;
     border-bottom: 1px solid white;
+  }
+
+  h3 {
+    position: relative;
+  }
+
+  h3 span {
+    position: absolute;
+    left: 0;
   }
 
   a:hover {
@@ -129,6 +191,14 @@
 
   .btn {
     padding: 2px;
-    min-width: 60px;
+    min-width: 70px;
+  }
+
+  #sync {
+    margin-left: 5px;
+  }
+
+  .modal-body :global(.icon-sync) {
+    fill: blue;
   }
 </style>

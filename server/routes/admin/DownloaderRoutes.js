@@ -190,10 +190,22 @@ routes.post("/save-downloads", async ({ body: { Name } }, res) => {
       await db.Downloading.bulkCreate(links.map((lnk) => ({ LinkId: lnk.Id, DownloadingListId: dl.Id })));
     }
 
-    res.send({});
+    res.send({
+      list: dl,
+      downloads: await getDownloads(dl.Id),
+    });
   } catch (error) {
     console.log(error);
     res.send({ error: `Name: ${body.Name} is in use` });
+  }
+});
+
+routes.post("/update-dlist-name", async ({ body: { Id, Name } }, res) => {
+  try {
+    await db.DownloadingList.update({ Name }, { where: { Id } });
+    res.send({});
+  } catch (error) {
+    res.send({ error: `Name: ${Name} in use` });
   }
 });
 
