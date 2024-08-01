@@ -250,6 +250,13 @@ const loadFromList = async (DownloadingListId) => {
   sendMessage({ text: "downloadings-reload" }, "reload-downloads");
 };
 
+const removeDownloading = async (Id) => {
+  for (const found of await db.Link.findAll({ where: { Id } })) {
+    await found.update({ IsDownloading: false });
+  }
+  state.links = state.links.filter((ld) => !Id.includes(ld.Id));
+};
+
 process.on("message", async ({ action, datas, remove, bypass, server }) => {
   console.log("server", action, state.checkServer);
   if (!state.running) {
@@ -273,12 +280,8 @@ process.on("message", async ({ action, datas, remove, bypass, server }) => {
       break;
     }
     case "Remove": {
-      const toRemove = state.links.filter((ld) => remove.includes(ld.Id));
-      for (const link of toRemove) {
-        await link.update({ IsDownloading: false });
-      }
-      state.links = state.links.filter((ld) => !remove.includes(ld.Id));
-      console.log(state.browser);
+      removeDownloading(remove);
+
       if (!state.browser) {
         process.exit();
       }
