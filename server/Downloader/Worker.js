@@ -211,6 +211,7 @@ const onDownload = async (bypass) => {
 };
 
 const loadLinks = async (Id) => {
+  console.log(Id);
   const founds = await db.Link.findAll({
     where: { Id },
     include: ["Server"],
@@ -245,7 +246,7 @@ const onCreateCover = async ({ Id, imgUrl }) => {
 
 const loadFromList = async (DownloadingListId) => {
   const downloads = await db.Downloading.findAll({ where: { DownloadingListId } });
-  await loadLinks(downloads.map((lk) => lk.Id));
+  await loadLinks(downloads.map((lk) => lk.LinkId));
   sendMessage({}, "reload-downloads");
 };
 
