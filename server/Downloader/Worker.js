@@ -136,9 +136,13 @@ const downloadLinks = async (link, page) => {
 };
 
 const stopDownloads = async () => {
-  try {
-    await db.Link.update({ IsDownloading: false }, { where: { IsDownloading: true } });
-  } catch (error) {}
+  if (state.current) {
+    await state.current.update({ IsDownloading: false });
+  }
+
+  for (const link of state.links) {
+    await link.update({ IsDownloading: false });
+  }
 };
 
 const cleanUp = async (error) => {
@@ -158,13 +162,12 @@ const cleanUp = async (error) => {
       await state.browser.close();
     }
     console.log("pages", pcount);
-    sendMessage({ text: "Finish - All Job" }, "stop-process");
+    sendMessage({ text: "Finish - All Job" });
     process.exit();
   }
 };
 
-const onDownload = async (bypass) => {
-  state.running = true;
+const onDownload = async (bypass, headless) => {
   if (!state.browser) {
     state.browser = await startBrowser({ headless: false, userDataDir: "./user-data/puppeteer" });
   }
@@ -210,40 +213,37 @@ const onDownload = async (bypass) => {
   await page.close();
 };
 
-const loadLinks = async (Id) => {
-  const founds = await db.Link.findAll({
-    where: { Id },
-    include: ["Server"],
-  });
+const loadLinks = async (datas) => {
+  for (const Id in datas) {
+    const founds = await db.Link.findAll({
+      where: { Id },
+      include: ["Server"],
+    });
 
-  let count = 0;
-  for (const found of founds) {
-    if (!state.links.find((l) => l.Url === found.Url)) {
-      await found.update({ IsDownloading: true });
-      state.links.push(found);
-      count++;
+    let count = 0;
+    for (const found of founds) {
+      if (!state.links.find((l) => l.Url === found.Url)) {
+        await found.update({ IsDownloading: true });
+        state.links.push(found);
+        count++;
+      }
     }
+    state.size += count;
   }
-  state.size += count;
 };
 
 const onCreateCover = async ({ Id, imgUrl }) => {
   const page = await createPage(state.browser, 60000);
   if (/http/i.test(imgUrl)) {
-    try {
-      const folder = await db.folder.findOne({ where: { Id } });
-      if (folder) {
-        const { result } = await createFolderCover(
-          folder.Path,
-          { poster: imgUrl, Name: folder.Name, type: folder.FilesType },
-          page,
-          true
-        );
-        console.log("result", result);
-        sendMessage({ Id, valid: result }, "cover-update");
-      }
-    } catch (error) {
-      console.log(error);
+    const folder = await db.folder.findOne({ where: { Id } });
+    if (folder) {
+      const { result } = await createFolderCover(
+        folder.Path,
+        { poster: imgUrl, Name: folder.Name, type: folder.FilesType },
+        page,
+        true
+      );
+      sendMessage({ Id, valid: result }, "create-cover");
     }
   }
   await page.close();
@@ -252,20 +252,20 @@ const onCreateCover = async ({ Id, imgUrl }) => {
 
 const loadFromList = async (DownloadingListId) => {
   const downloads = await db.Downloading.findAll({ where: { DownloadingListId } });
-  await loadLinks(downloads.map((lk) => lk.LinkId));
+  await loadLinks(downloads.map((lk) => lk.Id));
   sendMessage({}, "reload-downloads");
 };
 
-process.on("message", async ({ action, datas, remove, bypass, server }) => {
-  console.log("server-action: " + action);
+process.on("message", async ({ action, datas, headless, remove, bypass, server }) => {
+  console.log("server", action, state.checkServer);
   if (!state.running) {
     await delay(500);
   }
-  if (!state.browser && !["Exit", "Remove", "is-running"].includes(action)) {
+  if (!state.browser && !["Exit", "Remove"].includes(action)) {
     try {
-      console.log("starting server");
       state.stopped = false;
       state.browser = await startBrowser({ headless: false, userDataDir: "./user-data/puppeteer" });
+      state.running = true;
     } catch (error) {
       sendMessage({ text: "Error trying to start scraper", error: error.toString() }, "error");
     }
@@ -284,6 +284,7 @@ process.on("message", async ({ action, datas, remove, bypass, server }) => {
         await link.update({ IsDownloading: false });
       }
       state.links = state.links.filter((ld) => !remove.includes(ld.Id));
+      console.log(state.browser);
       if (!state.browser) {
         process.exit();
       }
@@ -300,23 +301,20 @@ process.on("message", async ({ action, datas, remove, bypass, server }) => {
     case "Load-Downloads": {
       await loadFromList(datas.Id);
       if (!state.running) {
-        onDownload(bypass).catch(cleanUp).then(cleanUp);
+        onDownload(bypass, headless).catch(cleanUp).then(cleanUp);
       }
       break;
     }
     case "Add-Download": {
-      await loadLinks(datas);
+      await loadLinks(datas, headless);
 
       if (!state.running) {
-        onDownload(bypass).catch(cleanUp).then(cleanUp);
+        onDownload(bypass, headless).catch(cleanUp).then(cleanUp);
       }
       break;
     }
     case "Create-Cover": {
       onCreateCover(datas);
-    }
-    case "is-running": {
-      sendMessage({ IsRunning: state.running }, "is-running");
     }
   }
 });
