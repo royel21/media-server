@@ -12,3 +12,5 @@ Shenwu Tianzun
 Toshiue Shachoha Tennen Dekiai Monster Kosaizeronichi Shojoo Tsumareta Asani Propose
 Young Master, Please don't show off - mangas.in
 Dungeon Kurashi No Moto Yuusha
+
+UPDATE recentfiles set LastPos=coalesce((SELECT Duration FROM files WHERE Id=recentfiles.FileId AND recentfiles.LastPos>Duration), LastPos)
