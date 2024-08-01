@@ -280,7 +280,7 @@ process.on("message", async ({ action, datas, remove, bypass, server }) => {
       break;
     }
     case "Remove": {
-      removeDownloading(remove);
+      await removeDownloading(remove);
 
       if (!state.browser) {
         process.exit();

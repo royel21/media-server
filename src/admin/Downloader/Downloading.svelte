@@ -80,7 +80,7 @@
   const removeLink = async ({ target }) => {
     const Id = target.closest(".link").id;
     datas.links = datas.links.filter((lk) => +lk.Id !== +Id);
-    socket.emit("download-server", { action: "Remove", remove: [Id] });
+    socket.emit("download-server", { action: "Remove", remove: [+Id] });
   };
 
   const changeItems = ({ keyCode }) => {
