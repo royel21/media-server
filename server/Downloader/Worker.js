@@ -168,10 +168,6 @@ const cleanUp = async (error) => {
 };
 
 const onDownload = async (bypass, headless) => {
-  if (!state.browser) {
-    state.browser = await startBrowser({ headless: false, userDataDir: "./user-data/puppeteer" });
-  }
-
   const page = await createPage(state.browser);
 
   while (state.links.length) {
@@ -213,22 +209,18 @@ const onDownload = async (bypass, headless) => {
   await page.close();
 };
 
-const loadLinks = async (datas) => {
-  for (const Id in datas) {
-    const founds = await db.Link.findAll({
-      where: { Id },
-      include: ["Server"],
-    });
+const loadLinks = async (Id) => {
+  const founds = await db.Link.findAll({
+    where: { Id },
+    include: ["Server"],
+  });
 
-    let count = 0;
-    for (const found of founds) {
-      if (!state.links.find((l) => l.Url === found.Url)) {
-        await found.update({ IsDownloading: true });
-        state.links.push(found);
-        count++;
-      }
+  for (const found of founds) {
+    if (!state.links.find((l) => l.Url === found.Url)) {
+      await found.update({ IsDownloading: true });
+      state.links.push(found);
+      state.size++;
     }
-    state.size += count;
   }
 };
 
@@ -266,6 +258,7 @@ process.on("message", async ({ action, datas, headless, remove, bypass, server }
       state.stopped = false;
       state.browser = await startBrowser({ headless: false, userDataDir: "./user-data/puppeteer" });
       state.running = true;
+      console.log("starting puppteer");
     } catch (error) {
       sendMessage({ text: "Error trying to start scraper", error: error.toString() }, "error");
     }
@@ -291,7 +284,7 @@ process.on("message", async ({ action, datas, headless, remove, bypass, server }
       break;
     }
     case "Check-Server": {
-      if (!state.checkServer) {
+      if (state.checkServer) {
         state.checkServer = true;
         console.log("start-server");
         downloadFromPage(server, state).then(cleanUp).catch(cleanUp);
@@ -300,7 +293,7 @@ process.on("message", async ({ action, datas, headless, remove, bypass, server }
     }
     case "Load-Downloads": {
       await loadFromList(datas.Id);
-      if (!state.running) {
+      if (state.running) {
         onDownload(bypass, headless).catch(cleanUp).then(cleanUp);
       }
       break;
@@ -308,7 +301,7 @@ process.on("message", async ({ action, datas, headless, remove, bypass, server }
     case "Add-Download": {
       await loadLinks(datas, headless);
 
-      if (!state.running) {
+      if (state.running) {
         onDownload(bypass, headless).catch(cleanUp).then(cleanUp);
       }
       break;
