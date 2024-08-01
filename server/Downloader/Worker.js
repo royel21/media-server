@@ -167,7 +167,8 @@ const cleanUp = async (error) => {
   }
 };
 
-const onDownload = async (bypass, headless) => {
+const onDownload = async (bypass) => {
+  state.running = true;
   const page = await createPage(state.browser);
 
   while (state.links.length) {
@@ -248,7 +249,7 @@ const loadFromList = async (DownloadingListId) => {
   sendMessage({}, "reload-downloads");
 };
 
-process.on("message", async ({ action, datas, headless, remove, bypass, server }) => {
+process.on("message", async ({ action, datas, remove, bypass, server }) => {
   console.log("server", action, state.checkServer);
   if (!state.running) {
     await delay(500);
@@ -257,7 +258,6 @@ process.on("message", async ({ action, datas, headless, remove, bypass, server }
     try {
       state.stopped = false;
       state.browser = await startBrowser({ headless: false, userDataDir: "./user-data/puppeteer" });
-      state.running = true;
       console.log("starting puppteer");
     } catch (error) {
       sendMessage({ text: "Error trying to start scraper", error: error.toString() }, "error");
@@ -293,16 +293,16 @@ process.on("message", async ({ action, datas, headless, remove, bypass, server }
     }
     case "Load-Downloads": {
       await loadFromList(datas.Id);
-      if (state.running) {
-        onDownload(bypass, headless).catch(cleanUp).then(cleanUp);
+      if (!state.running) {
+        onDownload(bypass).catch(cleanUp).then(cleanUp);
       }
       break;
     }
     case "Add-Download": {
-      await loadLinks(datas, headless);
+      await loadLinks(datas);
 
-      if (state.running) {
-        onDownload(bypass, headless).catch(cleanUp).then(cleanUp);
+      if (!state.running) {
+        onDownload(bypass).catch(cleanUp).then(cleanUp);
       }
       break;
     }
