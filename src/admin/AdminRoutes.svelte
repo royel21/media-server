@@ -159,6 +159,7 @@
 
     :global(#menu a.active .nav-title) {
       display: initial;
+      margin-right: 5px;
     }
 
     :global(#menu li svg) {

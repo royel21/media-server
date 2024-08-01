@@ -22,7 +22,7 @@
       {:else}
         <li class="nav-item">
           <Link to={item.path} {getProps}>
-            <Icons name={item.class} height="22px" color={item.color} />
+            <Icons name={item.class} height="22px" color={item.color} class={item.class} />
             <span class="nav-title">{item.title}</span>
           </Link>
         </li>
