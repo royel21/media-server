@@ -95,7 +95,7 @@ export function sendMessage(data, event = "info") {
   if (data.text || data.error) {
     console.log(data.text || "", data.error || "");
     if (data.error) {
-      data.error = data.error.toString();
+      data.error = data.error.toString().slice(0, 500);
     }
   }
   if (data.text?.includes("\x1B[1;31m")) {
