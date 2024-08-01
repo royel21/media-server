@@ -96,7 +96,7 @@
 <div class="modal-container" tabindex="-1">
   <div class="modal card" transition:fade={{ duration: 200 }}>
     <div class="modal-header">
-      <h3>Saved Download List {downloads.length}</h3>
+      <h3>Saved Download List <strong>- {downloads.length}</strong></h3>
       <div class="m-controls">
         {#if temp.isNew || temp.Name}
           <Input label="Edit Name" key="Name" item={temp} />
@@ -139,6 +139,9 @@
     width: 500px;
     outline: none;
     padding: 0;
+  }
+  strong {
+    color: black;
   }
   h3 {
     border-bottom: 1px solid;
