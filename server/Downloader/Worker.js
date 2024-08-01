@@ -247,7 +247,7 @@ const onCreateCover = async ({ Id, imgUrl }) => {
 const loadFromList = async (DownloadingListId) => {
   const downloads = await db.Downloading.findAll({ where: { DownloadingListId } });
   await loadLinks(downloads.map((lk) => lk.LinkId));
-  sendMessage({}, "reload-downloads");
+  sendMessage({ text: "downloadings-reload" }, "reload-downloads");
 };
 
 process.on("message", async ({ action, datas, remove, bypass, server }) => {
