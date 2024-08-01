@@ -131,6 +131,7 @@ export const createFolderCover = async (mangaDir, data, page, update) => {
     if ((!fs.existsSync(Cover) && fs.existsSync(posterPath)) || update) {
       await sharp(posterPath).toFormat("jpg").resize({ width: 340 }).toFile(Cover);
     }
+    result = true;
   } catch (error) {
     result = false;
     sendMessage({ text: `Folder-Cover-Error: ${data.poster}`, color: "Red", error });

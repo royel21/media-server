@@ -65,6 +65,7 @@
     });
 
     if (result.links) {
+      console.log(result);
       datas.links = result.links;
       datas.totalPages = result.totalPages;
       datas.totalItems = result.totalItems;
@@ -131,13 +132,12 @@
     showDownList = false;
     running = true;
   };
-  const reloadDownloads = async () => loadItems();
 
   onMount(() => {
     loadItems();
     socket.on("update-download", onUpdate);
     socket.on("is-running", updateRunning);
-    socket.on("reload-downloads", reloadDownloads);
+    socket.on("reload-downloads", loadItems);
     socket.emit("download-server", { action: "is-running" });
     return () => {
       socket.off("update-download", onUpdate);

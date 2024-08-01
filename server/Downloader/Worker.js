@@ -230,15 +230,20 @@ const loadLinks = async (Id) => {
 const onCreateCover = async ({ Id, imgUrl }) => {
   const page = await createPage(state.browser, 60000);
   if (/http/i.test(imgUrl)) {
-    const folder = await db.folder.findOne({ where: { Id } });
-    if (folder) {
-      const { result } = await createFolderCover(
-        folder.Path,
-        { poster: imgUrl, Name: folder.Name, type: folder.FilesType },
-        page,
-        true
-      );
-      sendMessage({ Id, valid: result }, "create-cover");
+    try {
+      const folder = await db.folder.findOne({ where: { Id } });
+      if (folder) {
+        const { result } = await createFolderCover(
+          folder.Path,
+          { poster: imgUrl, Name: folder.Name, type: folder.FilesType },
+          page,
+          true
+        );
+        console.log("result", result);
+        sendMessage({ Id, valid: result }, "cover-update");
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
   await page.close();
