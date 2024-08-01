@@ -27,12 +27,15 @@
   };
 </script>
 
-{#each items as { Content, Id, Name }}
-  <li id={Id} class="tree-item">
+{#each items as { Content, Id, Name, size }}
+  <li id={Id} class={`tree-item`}>
     <span class="dir" on:click={scanDirectory}>
       <Icons name={type} />
       {Name}
     </span>
+    {#if size}
+      <span class="size">{size}</span>
+    {/if}
     <span class="caret" on:click={expandFolder}>▶</span>
     {#if Content.length > 0}
       <ul class="tree-node usn">
@@ -50,6 +53,7 @@
     margin-left: 29px;
   }
   li {
+    position: relative;
     min-height: 30px;
   }
   li:hover > span:first-child {
@@ -99,5 +103,10 @@
     height: 10px;
     background-color: #007bff;
     transform: rotate(45deg);
+  }
+
+  .size {
+    position: absolute;
+    right: 5px;
   }
 </style>

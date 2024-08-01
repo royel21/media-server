@@ -5,6 +5,7 @@ import path from "path";
 import winEx from "win-explorer";
 import { nanoid } from "nanoid";
 import db from "../models/index.js";
+import diskusage from "diskusage";
 
 let io;
 
@@ -90,27 +91,30 @@ const startWork = async (model, isFolder, user) => {
   await db.directory.update({ IsLoading: true }, { where: { Id: data.id } });
   worker.send(data);
 };
+
+const sizeInGB = (size) => (size / 1024 / 1024 / 1024).toFixed(1) + "GB";
 // List all hdd
-const diskLoader = () => {
-  drivelist.list().then((drives) => {
-    let disks = [];
-    drives.forEach((drive) => {
-      if (drive) {
-        if (drive.mountpoints.length > 0) {
-          let mp = drive.mountpoints[0].path;
-          mp = mp === "/" ? "/home" : mp;
-          disks.push({
-            Id: nanoid(5),
-            Name: mp,
-            Path: mp,
-            Content: [],
-          });
-        }
-      }
-    });
-    disks.sort((a, b) => a.Name.localeCompare(b.Name));
-    io.sockets.emit("disk-loaded", disks);
-  });
+const diskLoader = async () => {
+  const drives = await drivelist.list();
+  let disks = [];
+
+  for (const drive of drives) {
+    if (drive.mountpoints.length > 0) {
+      let mp = drive.mountpoints[0].path;
+      mp = mp === "/" ? "/home" : mp;
+      const data = await diskusage.check(drive.mountpoints[0].path);
+
+      disks.push({
+        Id: nanoid(5),
+        Name: `${mp} -> ${drive.description ? drive.description : ""}`,
+        Path: mp,
+        Content: [],
+        size: `free: ${sizeInGB(data.free)}<>Size: ${sizeInGB(data.total)}`,
+      });
+    }
+  }
+  disks.sort((a, b) => a.Name.localeCompare(b.Name));
+  io.sockets.emit("disk-loaded", disks);
 };
 
 const resetRecent = async (data, user) => {
