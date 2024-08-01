@@ -144,7 +144,7 @@
       max-width: 380px;
     }
 
-    :global(#menu a:not(.active) .nav-title) {
+    :global(#menu .nav-title) {
       display: none;
     }
 
@@ -155,6 +155,10 @@
     :global(#menu a.active) {
       display: flex;
       width: fit-content;
+    }
+
+    :global(#menu a.active .nav-title) {
+      display: initial;
     }
 
     :global(#menu li svg) {
