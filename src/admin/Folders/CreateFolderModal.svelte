@@ -47,7 +47,6 @@
     if (type === "checkbox") value = checked;
     if (name === "Genres") value = validGenres(value);
     file[name] = value;
-    console.log(name, file[name]);
   };
 
   onMount(async () => {

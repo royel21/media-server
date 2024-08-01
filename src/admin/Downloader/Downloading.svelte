@@ -65,7 +65,6 @@
     });
 
     if (result.links) {
-      console.log(result);
       datas.links = result.links;
       datas.totalPages = result.totalPages;
       datas.totalItems = result.totalItems;

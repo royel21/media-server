@@ -64,11 +64,9 @@
 
   const removeDList = async () => {
     const result = await apiUtils.post("admin/downloader/remove-dlist", { Id: item.Id });
-    console.log(result);
     if (result.valid) {
       downloadList = downloadList.filter((dl) => dl.Id != +item.Id);
       if (downloadList.length) {
-        console.log(item);
         item = downloadList[0];
         downloads = await getLinks(item.Id);
       } else {
@@ -93,8 +91,6 @@
       downloads = result.downloads;
     }
   });
-
-  $: console.log(temp);
 </script>
 
 <div class="modal-container" tabindex="-1">
