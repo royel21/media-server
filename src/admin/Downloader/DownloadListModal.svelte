@@ -96,15 +96,31 @@
 <div class="modal-container" tabindex="-1">
   <div class="modal card" transition:fade={{ duration: 200 }}>
     <div class="modal-header">
-      <h3><span on:click={addNew}><Icons name="squareplus" /></span> Saved Download List</h3>
+      <h3>Saved Download List {downloads.length}</h3>
+      <div class="m-controls">
+        {#if temp.isNew || temp.Name}
+          <Input label="Edit Name" key="Name" item={temp} />
+        {:else}
+          <span on:click={addNew}><Icons name="squareplus" /></span>
+          {#if !temp.isNew}
+            <span on:click={() => (temp.Name = item.Name)}><Icons name="edit" /></span>
+          {/if}
+          <span on:click={removeDList}><Icons name="trash" /></span>
+          <span id="sync" on:click={reloadLinks}><Icons name="sync" /></span>
+          <Select label="Downloads" key="Id" {item} options={downloadList} {onChange} />
+        {/if}
+      </div>
     </div>
     <div class="modal-body">
-      {#if temp.isNew || temp.Name}
-        <Input label="Edit Name" key="Name" item={temp} />
-      {:else}
-        <span on:click={removeDList}><Icons name="trash" /></span>
-        <Select label="Downloads" key="Id" {item} options={downloadList} {onChange} />
-        <span id="sync" on:click={reloadLinks}><Icons name="sync" /></span>
+      {#if downloads.length}
+        <ol>
+          {#each downloads as { Id, Name, Url }}
+            <li>
+              <span id={"dlink-" + Id} on:click={removeLink}> <Icons name="trash" color="firebrick" /></span>
+              <a href={Url} target="_blank">{Name || Url}</a>
+            </li>
+          {/each}
+        </ol>
       {/if}
     </div>
     <div class="modal-footer">
@@ -112,37 +128,36 @@
       {#if temp.Name || temp.isNew}
         <button type="button" class="btn" on:click={updateName}>{temp.isNew ? "Save" : "Update Name"}</button>
       {:else}
-        <button type="submit" class="btn" on:click={() => (temp.Name = item.Name)}>Edit</button>
         <button type="submit" class="btn" on:click={() => loadDownloads(item.Id)}>Load</button>
       {/if}
     </div>
-    {#if downloads.length}
-      <h4>Links {downloads.length}</h4>
-      <ol>
-        {#each downloads as { Id, Name, Url }}
-          <li>
-            <span id={"dlink-" + Id} on:click={removeLink}> <Icons name="trash" color="firebrick" /></span>
-            <a href={Url} target="_blank">{Name || Url}</a>
-          </li>
-        {/each}
-      </ol>
-    {/if}
   </div>
 </div>
 
 <style>
+  .modal {
+    width: 500px;
+    outline: none;
+    padding: 0;
+  }
+  h3 {
+    border-bottom: 1px solid;
+  }
+  .m-controls {
+    display: flex;
+    padding: 5px;
+    border-bottom: 1px solid;
+  }
+  .modal-container :global(svg) {
+    transform: scale(1.1);
+  }
   .modal-body {
     display: flex;
+    flex-direction: column;
+    padding: 4px;
   }
-  h3 span :global(svg) {
-    height: 32px;
-    width: 35px;
-    top: 5px;
-  }
-
-  .modal {
-    width: 360px;
-    outline: none;
+  .modal-footer {
+    border-top: 1px solid;
   }
   .modal-container :global(.input-control) {
     margin-bottom: 5px;
@@ -151,21 +166,6 @@
     padding-left: 0.35rem;
     text-align: left;
     min-width: 100px;
-  }
-
-  h4 {
-    text-align: center;
-    border-top: 1px solid white;
-    border-bottom: 1px solid white;
-  }
-
-  h3 {
-    position: relative;
-  }
-
-  h3 span {
-    position: absolute;
-    left: 0;
   }
 
   a:hover {
@@ -196,5 +196,11 @@
 
   .modal-body :global(.icon-sync) {
     fill: blue;
+  }
+
+  @media screen and (max-width: 600px) {
+    .modal {
+      width: 400px;
+    }
   }
 </style>
