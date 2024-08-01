@@ -242,7 +242,7 @@ input[type="radio"] {
 .disk-controls .nav {
   display: flex;
   justify-content: space-evenly;
-  max-width: 440px;
+  max-width: 300px;
   margin: 0 auto;
 }
 

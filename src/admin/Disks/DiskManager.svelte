@@ -56,12 +56,6 @@
     height: 24px;
   }
 
-  .disk-controls .nav {
-    display: flex;
-    justify-content: space-evenly;
-    max-width: 440px;
-    margin: 0 auto;
-  }
   .nav-link {
     padding: 5px 10px;
   }
@@ -103,5 +97,10 @@
   }
   input[type="radio"]:checked + label span {
     display: inline-block;
+  }
+
+  #tabs-content {
+    height: calc(100% - 63px);
+    overflow-x: auto;
   }
 </style>

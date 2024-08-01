@@ -21,6 +21,10 @@
     if (result.valid) hide();
   };
 
+  const onChange = ({ target: { value } }) => {
+    server.Type = value;
+  };
+
   const onKeyDown = (e) => {
     if (e.keyCode === 13 && e.ctrlKey) {
       submit(e);
@@ -49,7 +53,7 @@
           <CheckBox label="Is Adult" key="IsAdult" item={link} />
           <CheckBox label="Is Raw" key="Raw" item={link} />
         {:else}
-          <Select key="Type" options={[{ Id: "Manga" }, { Id: "Adult" }]} item={server} />
+          <Select key="Type" options={[{ Id: "Manga" }, { Id: "Adult" }]} item={server} {onChange} />
           <Input key="Title" item={server} />
           <Input key="AltTitle" item={server} />
           <Input key="Chapters" item={server} />

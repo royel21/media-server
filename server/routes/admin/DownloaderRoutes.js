@@ -135,15 +135,19 @@ routes.post("/add-link", async ({ body }, res) => {
 });
 
 const getDownloads = async (DownloadingListId) => {
-  return await db.Downloading.findAll({
-    where: { DownloadingListId },
-    attributes: {
-      include: [
-        [literal("(Select Name from links where LinkId=Id)"), "Name"],
-        [literal("(Select Url from links where LinkId=Id)"), "Url"],
-      ],
-    },
-  });
+  try {
+    return await db.Downloading.findAll({
+      where: { DownloadingListId },
+      attributes: {
+        include: [
+          [literal("(Select Name from Links where LinkId=Id)"), "Name"],
+          [literal("(Select Url from Links where LinkId=Id)"), "Url"],
+        ],
+      },
+    });
+  } catch (error) {
+    return [];
+  }
 };
 
 routes.post("/remove-dlist", async ({ body }, res) => {
@@ -175,14 +179,18 @@ routes.get("/downloads/:Id", async ({ params }, res) => {
   res.send([]);
 });
 
-routes.post("/save-downloads", async ({ body }, res) => {
+routes.post("/save-downloads", async ({ body: { Name } }, res) => {
   try {
-    const download = await db.DownloadingList.create(
-      { Name: body.Name, Downloadings: body.links },
-      { include: { model: db.Downloading } }
-    );
+    const links = await db.Link.findAll({ where: { IsDownloading: true } });
 
-    res.send({ download });
+    const [dl] = await db.DownloadingList.findOrCreate({ where: { Name } });
+
+    if (dl) {
+      await db.Downloading.destroy({ where: { DownloadingListId: dl.Id } });
+      await db.Downloading.bulkCreate(links.map((lnk) => ({ LinkId: lnk.Id, DownloadingListId: dl.Id })));
+    }
+
+    res.send({});
   } catch (error) {
     console.log(error);
     res.send({ error: `Name: ${body.Name} is in use` });

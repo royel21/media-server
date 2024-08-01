@@ -73,8 +73,8 @@
         <TextAreaInput {file} key="Description" rows="4" {onChange} />
         <CheckBox label="Completed" key="Status" item={file} />
         <CheckBox label="Is Adult" key="IsAdult" item={file} />
-        <Select label="Files Type" key="FilesType" options={types} item={file} />
-        <Select label="Directories" key="DirectoryId" {options} item={file} />
+        <Select label="Files Type" key="FilesType" options={types} item={file} {onChange} />
+        <Select label="Directories" key="DirectoryId" {options} item={file} {onChange} />
       </div>
       <div class="error">{error || ""}</div>
       <div class="message">{message || ""}</div>

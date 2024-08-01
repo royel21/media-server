@@ -1,12 +1,10 @@
 <script>
-  import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   import Input from "../Component/Input.svelte";
   import apiUtils from "src/apiUtils";
 
   export let hide;
-  export let links = [];
-  export let downloads = { Name: "", links: [] };
+  export let downloads = { Name: "" };
   let ref;
   let error = "";
 
@@ -21,10 +19,6 @@
       error = "Name can't be empty";
     }
   };
-
-  onMount(() => {
-    downloads.links = links.map((lnk) => ({ LinkId: lnk.Id }));
-  });
 </script>
 
 <div bind:this={ref} class="modal-container" tabindex="-1">

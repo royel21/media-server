@@ -4,17 +4,23 @@
   import { onMount } from "svelte";
   import apiUtils from "src/apiUtils";
   import Icons from "src/icons/Icons.svelte";
+  import Input from "../Component/Input.svelte";
 
   export let hide;
   export let loadDownloads;
   let downloadList = [];
   let downloads = [];
   let item = {};
+  let edit = false;
 
   const getLinks = async (Id) => await apiUtils.get(["admin", "downloader", "downloads", Id]);
 
+  const updateName = () => {
+    edit = false;
+  };
+
   const onChange = async ({ target: { value } }) => {
-    item.Id = +value;
+    item = downloadList.find((dl) => +dl.Id === +value);
     downloads = await getLinks(value);
   };
 
@@ -42,7 +48,7 @@
     const result = await apiUtils.get(["admin", "downloader", "download-list"]);
     if (result.DownloadingList.length) {
       downloadList = result.DownloadingList;
-      item.Id = downloadList[0].Id;
+      item = downloadList[0];
       downloads = result.downloads;
     }
   });
@@ -54,12 +60,21 @@
       <h3>Save Download List</h3>
     </div>
     <div class="modal-body">
-      <Select label="Downloads" key="Id" {item} options={downloadList} {onChange} />
+      {#if edit}
+        <Input label="Edit Name" key="Name" {item} />
+      {:else}
+        <Select label="Downloads" key="Id" {item} options={downloadList} {onChange} />
+      {/if}
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn" on:click={hide}>Cancel</button>
-      <button type="button" class="btn" on:click={removeDList}>Remove</button>
-      <button type="submit" class="btn" on:click={() => loadDownloads(item.Id)}>Load</button>
+      {#if edit}
+        <button type="button" class="btn" on:click={updateName}>Update Name</button>
+      {:else}
+        <button type="button" class="btn" on:click={hide}>Cancel</button>
+        <button type="button" class="btn" on:click={removeDList}>Remove</button>
+        <button type="submit" class="btn" on:click={() => (edit = true)}>Edit</button>
+        <button type="submit" class="btn" on:click={() => loadDownloads(item.Id)}>Load</button>
+      {/if}
     </div>
     {#if downloads.length}
       <h4>Links</h4>
@@ -67,7 +82,7 @@
         {#each downloads as { Id, Name, Url }}
           <li>
             <span id={"dlink-" + Id} on:click={removeLink}> <Icons name="trash" color="firebrick" /></span>
-            <a href={Url} target="_blank">{Name}</a>
+            <a href={Url} target="_blank">{Name || Url}</a>
           </li>
         {/each}
       </ol>
@@ -110,5 +125,10 @@
   ol {
     height: 232px;
     overflow-y: auto;
+  }
+
+  .btn {
+    padding: 2px;
+    min-width: 60px;
   }
 </style>

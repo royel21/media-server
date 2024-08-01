@@ -86,8 +86,18 @@
 <style>
   .data-table {
     margin-top: 10px;
-    padding: 10px;
   }
+
+  tr td:first-child,
+  tr th:first-child {
+    width: 50px;
+    min-width: 50px;
+  }
+
+  tr td:last-child {
+    font-size: 0.8rem;
+  }
+
   .action {
     width: 90px;
     max-width: 90px;

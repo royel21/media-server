@@ -136,13 +136,9 @@ const downloadLinks = async (link, page) => {
 };
 
 const stopDownloads = async () => {
-  if (state.current) {
-    await state.current.update({ IsDownloading: false });
-  }
-
-  for (const link of state.links) {
-    await link.update({ IsDownloading: false });
-  }
+  try {
+    await db.Link.update({ IsDownloading: false }, { where: { IsDownloading: true } });
+  } catch (error) {}
 };
 
 const cleanUp = async (error) => {
@@ -167,7 +163,8 @@ const cleanUp = async (error) => {
   }
 };
 
-const onDownload = async (bypass, headless) => {
+const onDownload = async (bypass) => {
+  state.running = true;
   if (!state.browser) {
     state.browser = await startBrowser({ headless: false, userDataDir: "./user-data/puppeteer" });
   }
@@ -213,23 +210,21 @@ const onDownload = async (bypass, headless) => {
   await page.close();
 };
 
-const loadLinks = async (datas) => {
-  for (const Id in datas) {
-    const founds = await db.Link.findAll({
-      where: { Id },
-      include: ["Server"],
-    });
+const loadLinks = async (Id) => {
+  const founds = await db.Link.findAll({
+    where: { Id },
+    include: ["Server"],
+  });
 
-    let count = 0;
-    for (const found of founds) {
-      if (!state.links.find((l) => l.Url === found.Url)) {
-        await found.update({ IsDownloading: true });
-        state.links.push(found);
-        count++;
-      }
+  let count = 0;
+  for (const found of founds) {
+    if (!state.links.find((l) => l.Url === found.Url)) {
+      await found.update({ IsDownloading: true });
+      state.links.push(found);
+      count++;
     }
-    state.size += count;
   }
+  state.size += count;
 };
 
 const onCreateCover = async ({ Id, imgUrl }) => {
@@ -252,20 +247,20 @@ const onCreateCover = async ({ Id, imgUrl }) => {
 
 const loadFromList = async (DownloadingListId) => {
   const downloads = await db.Downloading.findAll({ where: { DownloadingListId } });
-  await loadLinks(downloads.map((lk) => lk.Id));
+  await loadLinks(downloads.map((lk) => lk.LinkId));
   sendMessage({}, "reload-downloads");
 };
 
-process.on("message", async ({ action, datas, headless, remove, bypass, server }) => {
-  console.log("server", action, state.checkServer);
+process.on("message", async ({ action, datas, remove, bypass, server }) => {
+  console.log("server-action: " + action);
   if (!state.running) {
     await delay(500);
   }
-  if (!state.browser && !["Exit", "Remove"].includes(action)) {
+  if (!state.browser && !["Exit", "Remove", "is-running"].includes(action)) {
     try {
+      console.log("starting server");
       state.stopped = false;
       state.browser = await startBrowser({ headless: false, userDataDir: "./user-data/puppeteer" });
-      state.running = true;
     } catch (error) {
       sendMessage({ text: "Error trying to start scraper", error: error.toString() }, "error");
     }
@@ -284,7 +279,6 @@ process.on("message", async ({ action, datas, headless, remove, bypass, server }
         await link.update({ IsDownloading: false });
       }
       state.links = state.links.filter((ld) => !remove.includes(ld.Id));
-      console.log(state.browser);
       if (!state.browser) {
         process.exit();
       }
@@ -301,20 +295,23 @@ process.on("message", async ({ action, datas, headless, remove, bypass, server }
     case "Load-Downloads": {
       await loadFromList(datas.Id);
       if (!state.running) {
-        onDownload(bypass, headless).catch(cleanUp).then(cleanUp);
+        onDownload(bypass).catch(cleanUp).then(cleanUp);
       }
       break;
     }
     case "Add-Download": {
-      await loadLinks(datas, headless);
+      await loadLinks(datas);
 
       if (!state.running) {
-        onDownload(bypass, headless).catch(cleanUp).then(cleanUp);
+        onDownload(bypass).catch(cleanUp).then(cleanUp);
       }
       break;
     }
     case "Create-Cover": {
       onCreateCover(datas);
+    }
+    case "is-running": {
+      sendMessage({ IsRunning: state.running }, "is-running");
     }
   }
 });

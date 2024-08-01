@@ -102,11 +102,11 @@
     datas.links = [...datas.links];
   };
 
-  const onUpdate = ({ data }) => {
-    if (data.link) {
-      const found = datas.links.findIndex((f) => f.Id === data.link.Id);
+  const onUpdate = ({ link }) => {
+    if (link) {
+      const found = datas.links.findIndex((f) => f.Id === link.Id);
       if (found > -1) {
-        datas.links[found] = data.link;
+        datas.links[found] = link;
       }
     }
   };
@@ -132,10 +132,7 @@
     showDownList = false;
     running = true;
   };
-  const reloadDownloads = async () => {
-    await loadItems();
-    console.log("reload-downloads");
-  };
+  const reloadDownloads = async () => loadItems();
 
   const saveDownloads = () => (showSaveDialog = true);
 
@@ -245,94 +242,19 @@
 </div>
 
 <style>
-  .d-controls {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-bottom: 10px;
-  }
+  @import "./styles.css";
+
   .d-controls .r-list :global(svg),
   .d-controls .btns :global(svg) {
-    height: 35px;
-    width: 45px;
+    height: 32px;
+    width: 35px;
     top: -1px;
   }
+
   .d-controls :global(.icon-list) {
     top: initial;
   }
-  .ex-cfg {
-    display: inline-block;
-    width: 20px;
-  }
-  .btn-stop {
-    display: none;
-  }
-  .running {
-    display: initial;
-  }
-  .input-group-text {
-    padding: 0.2rem 0.1rem 0.2rem 0.35rem;
-  }
-  .d-controls .form-control {
-    padding: 0.2rem;
-  }
-  .d-controls > span {
-    display: flex;
-  }
-  .d-items {
-    width: 75px;
-    margin-left: 2px;
-  }
-  .d-items > * {
-    text-align: center;
-    height: 32px;
-  }
-  .container {
-    width: 100%;
-    height: 100%;
-  }
-  .t-container {
-    position: relative;
-    width: 100%;
-    min-height: calc(100% - 37px);
-    height: calc(100% - 37px);
-    overflow-x: auto;
-  }
-  .d-table {
-    min-width: 1000px;
-  }
-  .d-table > div:first-child {
-    position: sticky;
-    background-color: #212529;
-    top: 0;
-    z-index: 99;
-  }
-  .d-table > div:first-child span {
-    border-top: 1px solid;
-  }
-  .d-table > div:first-child span:first-child {
-    border-top-left-radius: 0.25rem;
-  }
-  .d-table > div:first-child span:last-child {
-    border-top-right-radius: 0.25rem;
-  }
-  .d-table > div:last-child {
-    border-bottom-left-radius: 0.25rem;
-    border-bottom-right-radius: 0.25rem;
-  }
-  .d-table > div {
-    display: flex;
-    flex-direction: row;
-  }
-  .d-table > div {
-    border-bottom: 1px solid;
-  }
-  .d-table div > span {
-    padding: 0.2rem;
-  }
-  .d-table div > span {
-    border-right: 1px solid;
-  }
+
   .d-table div > span:first-child {
     width: 50px;
     text-align: center;
@@ -367,25 +289,5 @@
 
   .d-controls :global(#filter-control) {
     max-width: 500px;
-  }
-
-  @media screen and (max-width: 450px) {
-    .d-controls :global(#filter-control) {
-      margin-right: 2px;
-      max-width: 350px;
-      width: 250px;
-    }
-    .d-controls :global(.btn-filter) {
-      padding: 0.3rem 0.2rem;
-    }
-    .d-controls {
-      padding-bottom: 10px;
-    }
-    .d-items {
-      display: none;
-    }
-    .btns span:not(.btn-add, .btn-stop) {
-      display: none;
-    }
   }
 </style>

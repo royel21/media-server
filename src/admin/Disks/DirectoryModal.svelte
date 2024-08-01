@@ -11,6 +11,10 @@
     IsAdult: false,
   };
 
+  const onChange = ({ target: { value } }) => {
+    values.Type = value;
+  };
+
   const options = [
     { Name: "Mangas", Id: "Mangas" },
     { Name: "Videos", Id: "Videos" },
@@ -27,7 +31,7 @@
       <h3>Add <strong>{Name}</strong> To Directories</h3>
     </div>
     <div class="modal-body">
-      <Select item={values} key="Type" {options} />
+      <Select item={values} key="Type" {options} {onChange} />
       <CheckBox label="Is Adult" key="IsAdult" item={values} />
     </div>
     <div class="modal-footer">
