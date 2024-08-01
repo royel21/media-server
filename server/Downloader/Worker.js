@@ -313,6 +313,10 @@ process.on("message", async ({ action, datas, remove, bypass, server }) => {
     case "Create-Cover": {
       onCreateCover(datas);
     }
+
+    case "is-running": {
+      sendMessage({ IsRunning: state.running }, "is-running");
+    }
   }
 });
 
