@@ -237,7 +237,7 @@ const onCreateCover = async ({ Id, imgUrl }) => {
         page,
         true
       );
-      sendMessage({ Id, valid: result }, "create-cover");
+      sendMessage({ Id, valid: result }, "cover-update");
     }
   }
   await page.close();
