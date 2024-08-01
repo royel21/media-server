@@ -7,7 +7,6 @@
   import Modal from "./Modal.svelte";
   import ExcludeChapModal from "./ExcludeChapModal.svelte";
   import { excludeLink } from "./utils";
-  import SaveDownloadModal from "./SaveDownloadModal.svelte";
   import DownloadListModal from "./DownloadListModal.svelte";
 
   let start = 0;
@@ -102,12 +101,7 @@
   };
 
   const onUpdate = ({ link }) => {
-    if (link) {
-      const found = datas.links.findIndex((f) => f.Id === link.Id);
-      if (found > -1) {
-        datas.links[found] = link;
-      }
-    }
+    datas.links = datas.links.filter((f) => f.Id !== link?.Id);
   };
 
   const onExcludeLink = async (e) => {
