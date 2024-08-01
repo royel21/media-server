@@ -76,7 +76,7 @@
   $: fill = color || "white";
 </script>
 
-<svg class={`icon-${name} ${clazz}`} {fill} xmlns="http://www.w3.org/2000/svg" {height} {width} viewBox={box}>
+<svg class={`icon-${name} ico-${clazz}`} {fill} xmlns="http://www.w3.org/2000/svg" {height} {width} viewBox={box}>
   {@html icon}
 </svg>
 

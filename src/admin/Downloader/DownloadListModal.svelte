@@ -31,7 +31,7 @@
 
   const reloadLinks = async () => {
     const result = await apiUtils.post("admin/downloader/save-downloads", { Name: item.Name });
-    downloadList = [...downloadList, result.list].sort(sortList);
+    downloads = result.downloads;
   };
 
   const updateName = async () => {
