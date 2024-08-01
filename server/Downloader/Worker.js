@@ -319,9 +319,10 @@ process.on("message", async ({ action, datas, remove, bypass, server }) => {
     }
   }
 });
+const errorToSkip = /Missing frame|Parent frame|Target closed|Session closed|Page.addScriptToEvaluateOnNewDocument/gi;
 
 process.on("uncaughtException", async (error, source) => {
-  if (!/Missing frame|Parent frame|Target closed|Session closed/gi.test(error.toString())) {
+  if (!errorToSkip.test(error.toString())) {
     sendMessage({ text: "uncaughtException Process Stopped - Internal Error", color: "red", error });
   }
 });

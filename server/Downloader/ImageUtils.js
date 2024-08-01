@@ -100,7 +100,7 @@ export const downloadImg = async (url, page, name = "", isCover) => {
 
         return img;
       } catch (error) {
-        sendMessage({ text: `${name} ResizeImage-Error: ${url}`, color: "red", error });
+        sendMessage({ text: `${name} ResizeImage-Error: ${url}`, color: "red", error, url });
       }
     } else {
       sendMessage({ text: `${name} buffer-Error: ${url} - could't get the image`, url, color: "red" });
