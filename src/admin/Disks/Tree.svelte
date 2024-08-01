@@ -27,6 +27,7 @@
   const onDiskdata = (data) => {
     content = data;
     loading = false;
+    console.log(content);
   };
   socket.on("disk-loaded", onDiskdata);
 

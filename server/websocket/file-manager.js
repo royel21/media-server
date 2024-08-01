@@ -6,6 +6,7 @@ import winEx from "win-explorer";
 import { nanoid } from "nanoid";
 import db from "../models/index.js";
 import diskusage from "diskusage";
+import os from "node:os";
 
 let io;
 
@@ -96,25 +97,38 @@ const sizeInGB = (size) => (size / 1024 / 1024 / 1024).toFixed(1) + "GB";
 // List all hdd
 const diskLoader = async () => {
   const drives = await drivelist.list();
-  let disks = [];
-
+  const disks = [];
   for (const drive of drives) {
     if (drive.mountpoints.length > 0) {
-      let mp = drive.mountpoints[0].path;
+      let mp = drive.mountpoints[0];
+      if (mp.path.includes("/boot")) continue;
+
+      const data = await diskusage.check(mp.path);
       mp = mp === "/" ? "/home" : mp;
-      const data = await diskusage.check(drive.mountpoints[0].path);
 
       disks.push({
         Id: nanoid(5),
-        Name: `${mp} -> ${drive.description ? drive.description : ""}`,
-        Path: mp,
+        Name: `${mp.label ? mp.label : mp.path}`,
+        Path: mp.path,
         Content: [],
         size: `free: ${sizeInGB(data.free)}<>Size: ${sizeInGB(data.total)}`,
       });
     }
   }
   disks.sort((a, b) => a.Name.localeCompare(b.Name));
-  io.sockets.emit("disk-loaded", disks);
+
+  const hdata = await diskusage.check(os.platform() ? "/" : "C:\\");
+  let diskData = [
+    {
+      Id: nanoid(5),
+      Name: "Home",
+      Path: `homedir`,
+      Content: [],
+      size: `free: ${sizeInGB(hdata.free)}<>Size: ${sizeInGB(hdata.total)}`,
+    },
+    ...disks,
+  ];
+  io.sockets.emit("disk-loaded", diskData);
 };
 
 const resetRecent = async (data, user) => {
@@ -124,25 +138,11 @@ const resetRecent = async (data, user) => {
   }
   io.sockets.emit("reload", { Id: data.Id, user: user.Id });
 };
-//Load content of a folder
-const loadContent = (data) => {
-  //If is it root of disk return;
-  if (fs.existsSync(data.Path)) {
-    let dirs = winEx.ListFiles(data.Path, { directory: true });
-    let tdata = [];
-    for (let d of dirs) {
-      tdata.push({
-        Id: nanoid(5),
-        Name: d.Name,
-        Path: path.join(data.Path, d.Name),
-        Content: [],
-      });
-    }
-    io.sockets.emit("content-loaded", { data: tdata, Id: data.Id });
-  }
-};
+
+const homeDir = os.homedir();
 //Scan all files of a direcotry
 const scanDir = async ({ Id, Path, Type, isFolder, IsAdult }, user) => {
+  if (Path.includes("homedir")) Path = Path.replace("homedir", homeDir);
   //If is it root of disk return;
   if (!Id && !Path) return io.sockets.emit("scan-info", "Id And Path both can't be null");
   if (/^([a-z]:\\|^\/)$/gi.test(path)) return io.sockets.emit("scan-info", "Can't add root of a disk");
@@ -215,7 +215,6 @@ export default {
   onBackup,
   cleanImagesDir,
   scanDir,
-  loadContent,
   resetRecent,
   diskLoader,
   setSocket,

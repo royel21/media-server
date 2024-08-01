@@ -5,6 +5,7 @@ import fs from "fs-extra";
 import path from "path";
 import { ListFiles } from "win-explorer";
 import { literal } from "sequelize";
+import os from "node:os";
 
 const getNewId = () => {
   return Math.random().toString(36).slice(-5);
@@ -31,20 +32,36 @@ routes.post("/remove", (req, res) => {
     });
 });
 
+const homeDir = os.homedir();
+
 routes.post("/content", (req, res) => {
-  let { Id, Path } = req.body;
-  if (fs.existsSync(Path)) {
-    let dirs = ListFiles(Path, { directory: true, hidden: true });
-    let tdata = [];
-    for (let d of dirs) {
-      tdata.push({
-        Id: getNewId(),
-        Name: d.Name,
-        Path: path.join(Path, d.Name),
-        Content: [],
-      });
+  try {
+    let { Id, Path } = req.body;
+
+    let tempPath = Path;
+
+    if (tempPath.includes("homedir")) {
+      tempPath = tempPath.replace("homedir", homeDir);
     }
-    res.send({ data: tdata, Id });
+
+    if (fs.existsSync(tempPath)) {
+      let dirs = ListFiles(tempPath, { directory: true, hidden: true });
+      let tdata = [];
+      for (let d of dirs) {
+        if (/^\./.test(d.Name)) continue;
+
+        tdata.push({
+          Id: getNewId(),
+          Name: d.Name,
+          Path: path.join(Path, d.Name),
+          Content: [],
+        });
+      }
+      res.send({ data: tdata, Id });
+    }
+  } catch (error) {
+    console.log(error);
+    res.send({ data: [], Id });
   }
 });
 
