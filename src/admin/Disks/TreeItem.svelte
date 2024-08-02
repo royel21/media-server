@@ -2,7 +2,6 @@
   import { createEventDispatcher } from "svelte";
   import Icons from "src/icons/Icons.svelte";
   import apiUtils from "src/apiUtils";
-  import Content from "src/user/Pages/FileBrowser/Content.svelte";
   export let items = [];
   export let type;
   let item = {};
@@ -53,6 +52,7 @@
   }
   .dir:hover {
     text-decoration: underline;
+    background-color: #add8e647;
   }
   .caret {
     display: inline-block;
@@ -108,5 +108,9 @@
     top: 0;
     background-color: #343a40;
     z-index: 99;
+    pointer-events: none;
+  }
+  .caret {
+    pointer-events: all;
   }
 </style>
