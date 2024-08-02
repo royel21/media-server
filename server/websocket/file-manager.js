@@ -115,13 +115,12 @@ const diskLoader = async () => {
         Used: sizeInGB(data.total - data.free),
         Size: sizeInGB(data.total),
       });
-      console.log(data);
     }
   }
   disks.sort((a, b) => a.Name.localeCompare(b.Name));
 
   if (os.platform() === "linux") {
-    const hdata = await diskusage.check(os.platform() ? "/" : "C:\\");
+    const hdata = await diskusage.check("/");
     let diskData = [
       {
         Id: nanoid(5),

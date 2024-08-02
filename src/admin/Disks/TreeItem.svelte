@@ -49,7 +49,7 @@
     min-height: 30px;
   }
   ul {
-    margin-left: 29px;
+    margin-left: 25px;
   }
   .dir:hover {
     text-decoration: underline;
@@ -74,7 +74,7 @@
   }
   .dir {
     display: inline-block;
-    width: 91%;
+    width: 98%;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
@@ -107,5 +107,6 @@
     position: sticky;
     top: 0;
     background-color: #343a40;
+    z-index: 99;
   }
 </style>

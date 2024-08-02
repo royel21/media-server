@@ -1,5 +1,5 @@
 <script>
-  import { onDestroy, onMount, getContext } from "svelte";
+  import { onDestroy, onMount, getContext, afterUpdate } from "svelte";
   import TreeItem from "./TreeItem.svelte";
   import DirectoryModal from "./DirectoryModal.svelte";
   import Icons from "src/icons/Icons.svelte";
@@ -10,6 +10,8 @@
   let showModal = false;
   let item = {};
   let loading = true;
+  let ref;
+  let height = 39;
 
   const scanDir = ({ detail }) => {
     item = detail;
@@ -27,24 +29,30 @@
   const onDiskdata = (data) => {
     content = data;
     loading = false;
-    console.log(content);
   };
   socket.on("disk-loaded", onDiskdata);
 
   onMount(() => {
-    socket.emit("load-disks");
+    setTimeout(() => {
+      socket.emit("load-disks");
+    }, 50);
   });
 
   onDestroy(() => {
     socket.off("disk-loaded", onDiskdata);
   });
+
+  afterUpdate(() => {
+    height = ref?.offsetHeight || 39;
+  });
+  $: console.log("content", content);
 </script>
 
 {#if showModal}
   <DirectoryModal {createDirectory} {hideModal} Name={item.Name} />
 {/if}
 
-<div class="d-info">
+<div class="d-info" bind:this={ref}>
   <table>
     <thead>
       <tr>
@@ -67,7 +75,7 @@
   </table>
 </div>
 
-<div class="tree-title">
+<div class="tree-title" style={`height: calc(100% - ${height}px)`}>
   <Icons name="hdd" />
   <span class="tree-name">Server</span>
   {#if loading}
@@ -83,10 +91,12 @@
 
 <style>
   .tree-title {
+    height: calc(100% - 39px);
+    overflow-y: auto;
     padding: 5px 8px;
   }
   ul {
-    margin-left: 40px;
+    margin-left: 25px;
     padding-bottom: 5px;
   }
   .d-loading {

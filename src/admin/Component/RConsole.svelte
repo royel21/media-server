@@ -7,7 +7,7 @@
   let ref;
   let items = [];
   let toggle = true;
-  let canShow = /content-manager|tools/.test(location.pathname);
+  let canShow = /configs|downloads/.test(location.pathname);
   let update = false;
   let dragger;
   let rconsole;
