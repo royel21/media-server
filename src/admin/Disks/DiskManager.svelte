@@ -41,6 +41,9 @@
 </div>
 
 <style>
+  #tabs-content {
+    padding: 0;
+  }
   .admin-manager {
     position: relative;
     height: 100%;

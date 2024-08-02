@@ -138,6 +138,7 @@
 <style>
   .table-container {
     height: calc(100% - 180px);
+    padding: 5px 8px;
   }
   .message {
     display: none;

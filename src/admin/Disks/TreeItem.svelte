@@ -2,6 +2,7 @@
   import { createEventDispatcher } from "svelte";
   import Icons from "src/icons/Icons.svelte";
   import apiUtils from "src/apiUtils";
+  import Content from "src/user/Pages/FileBrowser/Content.svelte";
   export let items = [];
   export let type;
   let item = {};
@@ -27,16 +28,13 @@
   };
 </script>
 
-{#each items as { Content, Id, Name, size }}
-  <li id={Id} class={`tree-item`}>
-    <span class="dir" on:click={scanDirectory}>
+{#each items as { Content, Id, Name }}
+  <li id={Id} class="tree-item">
+    <span class="caret" class:content={Content.length} class:atop={type === "hdd"} on:click={expandFolder}>▶</span>
+    <span class="dir" class:atop={type === "hdd"} on:click={scanDirectory}>
       <Icons name={type} />
       {Name}
     </span>
-    {#if size}
-      <span class="size">{size}</span>
-    {/if}
-    <span class="caret" on:click={expandFolder}>▶</span>
     {#if Content.length > 0}
       <ul class="tree-node usn">
         <svelte:self type="folder" items={Content} on:scanDir />
@@ -48,23 +46,24 @@
 <style>
   .tree-item {
     position: relative;
+    min-height: 30px;
   }
   ul {
     margin-left: 29px;
   }
-  li {
-    position: relative;
-    min-height: 30px;
-  }
-  li:hover > span:first-child {
+  .dir:hover {
     text-decoration: underline;
   }
   .caret {
-    position: absolute;
+    display: inline-block;
+    position: sticky;
+    top: 0;
     left: -25px;
     font-family: "Helvetica Neue", Arial, sans-serif;
     cursor: pointer;
     font-size: 1.1rem;
+  }
+  .caret.content {
     transform: rotate(90deg);
   }
   .caret:last-child {
@@ -104,9 +103,9 @@
     background-color: #007bff;
     transform: rotate(45deg);
   }
-
-  .size {
-    position: absolute;
-    right: 5px;
+  .atop {
+    position: sticky;
+    top: 0;
+    background-color: #343a40;
   }
 </style>
