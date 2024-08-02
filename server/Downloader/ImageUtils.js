@@ -187,7 +187,7 @@ export const downloadAllIMages = async (page, links, state, imgPath, folder, des
       continue;
     }
 
-    if (img) {
+    if (img && img.toFormat) {
       const newImg = `${i}`.padStart(padding, "0") + ".jpg";
       const buff = await img.toFormat("jpg").toBuffer();
 
