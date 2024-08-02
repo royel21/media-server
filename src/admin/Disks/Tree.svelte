@@ -56,7 +56,7 @@
   <table>
     <thead>
       <tr>
-        <th>DisK</th>
+        <th class="skip">DisK</th>
         <th>Size</th>
         <th>Free</th>
         <th>Used</th>
@@ -65,7 +65,7 @@
     <tbody>
       {#each content as { Name, Free, Used, Size }}
         <tr>
-          <td>{Name}</td>
+          <td class="skip">{Name}</td>
           <td>{Size}</td>
           <td>{Free}</td>
           <td>{Used}</td>
@@ -108,5 +108,9 @@
   }
   table {
     width: 100%;
+  }
+  th:not(.skip),
+  td:not(.skip) {
+    text-align: left;
   }
 </style>
