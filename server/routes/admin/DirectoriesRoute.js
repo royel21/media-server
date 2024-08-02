@@ -97,18 +97,13 @@ routes.post("/rm-backup", async ({ body }, res) => {
 
 routes.get("/", async (req, res) => {
   const data = await db.directory.findAll({
-    attributes: [
-      "Id",
-      "Name",
-      "FullPath",
-      "Type",
-      "FirstInList",
-      "IsAdult",
-      "IsLoading",
-      [literal("(Select COUNT(Folders.Id) from Folders where DirectoryId = Directory.Id)"), "FolderCount"],
-      [literal("(Select SUM(FileCount) from Folders where DirectoryId = Directory.Id)"), "TotalFiles"],
-    ],
-    order: ["IsAdult", "FullPath"],
+    attributes: {
+      include: [
+        [literal("(Select COUNT(Folders.Id) from Folders where DirectoryId = Directory.Id)"), "FolderCount"],
+        [literal("(Select SUM(FileCount) from Folders where DirectoryId = Directory.Id)"), "TotalFiles"],
+      ],
+    },
+    order: ["FullPath", "IsAdult"],
   });
 
   let dirs = data.map((d) => d.dataValues);
