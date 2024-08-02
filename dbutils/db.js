@@ -127,14 +127,14 @@ const copyFavToMariadb = async () => {
   process.exit();
 };
 
-const mapFolders = (f) => f.replace("/mnt/5TBHDD/", "F:\\").split("/").join("\\");
+const mapFolders = (f) => f.replace("/mnt/8TBHDD/", "F:\\").split("/").join("\\");
 const mapFolders2 = (f) => {
-  f.Folder = f.Folder.replace("/mnt/5TBHDD/", "F:\\").split("/").join("\\");
+  f.Folder = f.Folder.replace("/mnt/8TBHDD/", "F:\\").split("/").join("\\");
 
   return f;
 };
 const mapFolders3 = (f) => {
-  f.Path = f.Path.replace("/mnt/5TBHDD/", "F:\\").split("/").join("\\");
+  f.Path = f.Path.replace("/mnt/8TBHDD/", "F:\\").split("/").join("\\");
 
   return f;
 };

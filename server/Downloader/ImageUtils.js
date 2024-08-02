@@ -54,7 +54,7 @@ const evalWorpressImage = async () => {
   }
 };
 
-export const downloadImg = async (url, page, name = "", isCover) => {
+const downloadImg = async (url, page, name = "", isCover) => {
   if (url) {
     let buff;
     try {
@@ -92,7 +92,9 @@ export const downloadImg = async (url, page, name = "", isCover) => {
         const img = await sharp(buff);
         const meta = await img.metadata();
 
-        if (!isCover && meta.width < 400) return false;
+        if (!isCover && meta.width < 400) {
+          return { badImg: true };
+        }
 
         if (meta.width > 1024) {
           await img.resize({ width: 1024 });
@@ -105,6 +107,7 @@ export const downloadImg = async (url, page, name = "", isCover) => {
     } else {
       sendMessage({ text: `${name} buffer-Error: ${url} - could't get the image`, url, color: "red" });
     }
+    return {};
   }
 };
 
@@ -122,7 +125,7 @@ export const createFolderCover = async (mangaDir, data, page, update) => {
 
     if (!poster || update) {
       result = await downloadImg(data.poster, page, "", true);
-      if (result) {
+      if (!result.badImg) {
         await result.jpeg().toFile(posterPath);
       }
     }
@@ -162,7 +165,7 @@ export const saveThumbnail = async (buff, thumbPath) => {
 export const downloadAllIMages = async (page, links, state, imgPath, folder, destZip) => {
   var zip = new AdmZip();
 
-  const length = links.length;
+  let length = links.length;
   let padding = getPadding(length);
   const result = { valid: false, count: 0 };
   let thumb = 0;
@@ -177,6 +180,13 @@ export const downloadAllIMages = async (page, links, state, imgPath, folder, des
     process.stdout.write(`\t IMG: ${i + 1} / ${length}\r`);
 
     const img = await downloadImg(links[i], page, folder);
+
+    if (img.badImg) {
+      length--;
+      thumb++;
+      continue;
+    }
+
     if (img) {
       const newImg = `${i}`.padStart(padding, "0") + ".jpg";
       const buff = await img.toFormat("jpg").toBuffer();
