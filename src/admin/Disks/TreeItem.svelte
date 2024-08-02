@@ -82,25 +82,28 @@
     position: relative;
     cursor: pointer;
   }
+  .dir:hover:after,
+  .dir:hover:before {
+    position: absolute;
+    background-color: #007bff;
+    pointer-events: none;
+    z-index: 999;
+  }
   .dir:hover:after {
     content: "Click To Add";
-    position: absolute;
     top: -40px;
     left: 25px;
     width: max-content;
     padding: 5px;
     border-radius: 0.25rem;
-    background-color: #007bff;
   }
   .dir:hover:before {
     display: inline-block;
     content: " ";
-    position: absolute;
     top: -11px;
     left: 66px;
     width: 10px;
     height: 10px;
-    background-color: #007bff;
     transform: rotate(45deg);
   }
   .atop {

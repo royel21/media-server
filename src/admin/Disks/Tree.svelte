@@ -93,7 +93,7 @@
   .tree-title {
     height: calc(100% - 39px);
     overflow-y: auto;
-    padding: 5px 8px;
+    padding: 0px 8px;
   }
   ul {
     margin-left: 25px;
