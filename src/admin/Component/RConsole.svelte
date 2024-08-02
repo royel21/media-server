@@ -91,7 +91,7 @@
   });
 
   $: if (update) {
-    canShow = /tools|downloads/i.test(location.pathname);
+    canShow = /configs|downloads/i.test(location.pathname);
   }
 </script>
 
