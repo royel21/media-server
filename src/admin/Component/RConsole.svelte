@@ -91,7 +91,7 @@
   });
 
   $: if (update) {
-    canShow = /content-manager|tools|downloads/i.test(location.pathname);
+    canShow = /tools|downloads/i.test(location.pathname);
   }
 </script>
 
