@@ -110,7 +110,6 @@ routes.post("/add-link", async ({ body }, res) => {
     let [server] = await db.Server.findOrCreate({ where: { Name: serverName } });
 
     let adult = IsAdult !== undefined ? IsAdult : server.Type === "Adult";
-    console.log(IsAdult, adult, Url, Name, Raw);
 
     try {
       await db.Link.create({

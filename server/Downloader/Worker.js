@@ -174,7 +174,12 @@ const onDownload = async (bypass) => {
   while (state.links.length) {
     if (state.stopped) break;
     const link = state.links.shift();
-    await link.reload();
+    try {
+      await link.reload();
+    } catch (error) {
+      console.log(error);
+      continue;
+    }
 
     state.current = link;
 
@@ -258,7 +263,7 @@ const removeDownloading = async (Id) => {
 };
 
 process.on("message", async ({ action, datas, remove, bypass, server }) => {
-  console.log("server", action, state.checkServer);
+  console.log("server", action, state.checkServer, state.running);
   if (!state.running) {
     await delay(500);
   }
