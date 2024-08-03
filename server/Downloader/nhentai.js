@@ -5,6 +5,7 @@ import { getImgNh, saveThumbnail } from "./ImageUtils.js";
 import defaultConfig from "../default-config.js";
 import fs from "fs-extra";
 import AdmZip from "adm-zip";
+import { createPage } from "./Crawler.js";
 
 const isChar = (c) => {
   return c.match(/[a-z]/i);
@@ -46,7 +47,7 @@ const dirs = {
 
 const formats = ["jpg", "png", "gif"];
 
-export const downloadNHentai = async (link, page, server, state) => {
+const download = async (link, page, server, state) => {
   const db = getDb();
   try {
     await page.goto(link.Url, { waitUntil: "domcontentloaded" });
@@ -139,7 +140,7 @@ export const downloadNHentai = async (link, page, server, state) => {
       for (let i = 1; i < data.total + 1; ) {
         if (state.stopped) return;
         const numb = i.toString().padStart(padding, "0");
-        process.stdout.write(`\t IMG: ${numb} / ${data.total}\r`);
+        process.stdout.write(`\t\t IMG: ${numb} / ${data.total}\r`);
         const url = initalUrl.replace(`/1.${ex}`, `/${i}.${newEX}`);
 
         try {
@@ -174,4 +175,39 @@ export const downloadNHentai = async (link, page, server, state) => {
     await link.destroy();
     process.send({ event: "link-update", data: { Id: link.Id, ServerId: server.Id } });
   }
+};
+
+export const downloadNHentais = async (state) => {
+  let page;
+  try {
+    page = await createPage(state.browser);
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+  const size = state.nhentais.length;
+  while (state.nhentais.length) {
+    if (state.stopped) break;
+    const link = state.nhentais.shift();
+    try {
+      await link.reload();
+    } catch (error) {
+      console.log(error);
+      continue;
+    }
+
+    const count = size - state.nhentais.length;
+    sendMessage({
+      text: `\u001b[1;31m ${count}/${size} - ${link.Name || link.Url} \u001b[0m`,
+      url: link.Url,
+    });
+    try {
+      await download(link, page, link.Server, state);
+    } catch (error) {
+      sendMessage({ text: `Error ${link.Url} was no properly downloaded`, color: "red", error });
+    }
+
+    sendMessage({ Id: link.Id, ServerId: link.Server.Id }, "link-update");
+  }
+  await page.close();
 };

@@ -67,6 +67,7 @@ export const downloadLink = async (d, page, Server, folder, count, state) => {
 
   if (result.valid && !state.stopped) {
     await createFile(destZip, folder.Id, result.count);
+    sendMessage({ text: `Save: ${d.name}` });
     return true;
   } else {
     sendMessage({ text: `Some Images Pendding for: ${d.name}`, color: "red", url: d.url });

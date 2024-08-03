@@ -10,10 +10,10 @@ import { startBrowser, createPage, getPages, delay } from "./Crawler.js";
 
 import { downloadLink } from "./link-downloader.js";
 import { downloadFromPage } from "./checkServer.js";
-import { downloadNHentai } from "./nhentai.js";
+import { downloadNHentais } from "./nhentai.js";
 
 // add stealth plugin and use defaults (all evasion techniques)
-const state = { links: [], running: false, size: 0, checkServer: false };
+const state = { links: [], running: false, size: 0, checkServer: false, hentais: [], hrunning: false };
 
 const db = getDb();
 
@@ -136,13 +136,7 @@ const downloadLinks = async (link, page) => {
 };
 
 const stopDownloads = async () => {
-  if (state.current) {
-    await state.current.update({ IsDownloading: false });
-  }
-
-  for (const link of state.links) {
-    await link.update({ IsDownloading: false });
-  }
+  await db.Link.update({ IsDownloading: false }, { where: { IsDownloading: true } });
 };
 
 const cleanUp = async (error) => {
@@ -153,6 +147,7 @@ const cleanUp = async (error) => {
   if (pcount === 1 || state.stopped) {
     await stopDownloads();
     state.links = [];
+    state.hentai = [];
     state.running = false;
     state.size = 0;
     state.stopped = false;
@@ -195,39 +190,57 @@ const onDownload = async (bypass) => {
         url: link.Url,
       });
       try {
-        if (link.Url.includes("nhentai")) {
-          await downloadNHentai(link, page, link.Server, state);
-        } else {
-          await downloadLinks(link, page, link.Server, link.IsAdult);
-          await link.update({ IsDownloading: false });
-          await link.reload();
-        }
+        await downloadLinks(link, page, link.Server, link.IsAdult);
+        await link.reload();
 
         sendMessage({ link }, "update-download");
       } catch (error) {
         sendMessage({ text: `Error ${link.Url} was no properly downloaded`, color: "red", error });
       }
+
+      await link.update({ IsDownloading: false });
     } else {
       sendMessage({ text: `Link ${link.Name} was checked recently`, color: "red" });
     }
   }
 
+  state.running = false;
   await page.close();
 };
 
 const loadLinks = async (Id) => {
-  console.log(Id);
+  const temps = [];
+  const htemps = [];
   const founds = await db.Link.findAll({
     where: { Id },
     include: ["Server"],
   });
 
   for (const found of founds) {
-    if (!state.links.find((l) => l.Url === found.Url)) {
+    if (![...state.links, ...state.hentai].find((l) => l.Url === found.Url)) {
       await found.update({ IsDownloading: true });
-      state.links.push(found);
-      state.size++;
+      if (found.Url.includes("nhentai")) {
+        htemps.push(found);
+      } else {
+        temps.links.push(found);
+        state.size++;
+      }
     }
+  }
+
+  state.links = [...state.links, ...temps];
+  state.nhentais = [...state.nhentais, ...htemps];
+
+  if (!state.running && temps.length) {
+    console.log("links: ", temps.length, "\n");
+    state.running = true;
+    onDownload(bypass).catch(cleanUp).then(cleanUp);
+  }
+
+  if (!state.hrunning && htemps.length) {
+    console.log("hentais: ", temps.length, "\n");
+    state.hrunning = true;
+    downloadNHentais(state).then(cleanUp).catch(cleanUp);
   }
 };
 
@@ -302,17 +315,10 @@ process.on("message", async ({ action, datas, remove, bypass, server }) => {
     }
     case "Load-Downloads": {
       await loadFromList(datas.Id);
-      if (!state.running) {
-        onDownload(bypass).catch(cleanUp).then(cleanUp);
-      }
       break;
     }
     case "Add-Download": {
       await loadLinks(datas);
-
-      if (!state.running) {
-        onDownload(bypass).catch(cleanUp).then(cleanUp);
-      }
       break;
     }
     case "Create-Cover": {
@@ -320,7 +326,7 @@ process.on("message", async ({ action, datas, remove, bypass, server }) => {
     }
 
     case "is-running": {
-      sendMessage({ IsRunning: state.running }, "is-running");
+      sendMessage({ IsRunning: state.browser !== undefined }, "is-running");
     }
   }
 });

@@ -98,7 +98,10 @@
       if (found) {
         running = true;
         found.IsDownloading = true;
-        socket.emit("download-server", { datas: [found.Id], action: "Add-Download" });
+        socket.emit("download-server", {
+          datas: [found.Id],
+          action: "Add-Download",
+        });
         datas.links = [...datas.links];
       }
     }

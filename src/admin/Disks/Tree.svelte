@@ -109,8 +109,11 @@
   table {
     width: 100%;
   }
+  .skip {
+    white-space: nowrap;
+  }
   th:not(.skip),
   td:not(.skip) {
-    text-align: left;
+    text-align: right;
   }
 </style>
