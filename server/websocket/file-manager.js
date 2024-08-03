@@ -1,6 +1,5 @@
 import { fork } from "child_process";
 import drivelist from "drivelist";
-import fs from "fs-extra";
 import path from "path";
 import winEx from "win-explorer";
 import { nanoid } from "nanoid";
@@ -147,10 +146,8 @@ const resetRecent = async (data, user) => {
   io.sockets.emit("reload", { Id: data.Id, user: user.Id });
 };
 
-const homeDir = os.homedir();
 //Scan all files of a direcotry
 const scanDir = async ({ Id, Path, Type, isFolder, IsAdult }, user) => {
-  if (Path.includes("homedir")) Path = Path.replace("homedir", homeDir);
   //If is it root of disk return;
   if (!Id && !Path) return io.sockets.emit("scan-info", "Id And Path both can't be null");
   if (/^([a-z]:\\|^\/)$/gi.test(path)) return io.sockets.emit("scan-info", "Can't add root of a disk");
