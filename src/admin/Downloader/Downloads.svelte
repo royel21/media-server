@@ -9,7 +9,7 @@
   import RenameModal from "./RenameModal.svelte";
   import ExcludeChapModal from "./ExcludeChapModal.svelte";
   import ModalServerList from "./ModalServerList.svelte";
-  import { excludeLink } from "./utils";
+  import { excludeLink, updateLink } from "./utils";
 
   let start = 0;
   let editor = { show: false };
@@ -147,18 +147,13 @@
   };
 
   const onUpdate = ({ link }) => {
-    if (link) {
-      if (link.remove) {
-        datas.links = datas.links.filter((f) => f.Id !== link?.Id);
-      } else {
-        const found = datas.links.findIndex((f) => f.Id === link.Id);
-        if (found > -1) {
-          datas.links[found] = link;
-          datas.links = [...datas.links];
-        }
-      }
+    if (link.remove) {
+      datas.links = datas.links.filter((f) => f.Id !== link?.Id);
+    } else {
+      datas.links = updateLink(link, datas);
     }
   };
+
   const onNewlink = (newLink) => {
     if (newLink) {
       loadItems();

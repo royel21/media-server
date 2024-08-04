@@ -105,6 +105,9 @@ const downloadLinks = async (link, page) => {
   let { data } = manga;
   data.sort((a, b) => a.name.localeCompare(b.name));
 
+  await link.reload();
+  sendMessage({ link }, "update-download");
+
   let count = 0;
   for (let d of data) {
     if (link.Raw && !/ raw$/i.test(d.name)) {

@@ -101,7 +101,11 @@
   };
 
   const onUpdate = ({ link }) => {
-    datas.links = datas.links.filter((f) => f.Id !== link?.Id);
+    if (link.remove || !link.IsDownloading) {
+      datas.links = datas.links.filter((f) => f.Id !== link?.Id);
+    } else {
+      datas.links = updateLink(link, datas);
+    }
   };
 
   const onExcludeLink = async (e) => {
