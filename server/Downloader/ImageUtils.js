@@ -181,7 +181,7 @@ export const downloadAllIMages = async (page, links, state, imgPath, folder, des
       return result;
     }
 
-    process.stdout.write(`\t IMG: ${i + 1} / ${length}\r`);
+    process.stdout.write(`IMG: ${i + 1} / ${length}\r`);
 
     const img = await downloadImg(links[i], page, folder);
 
