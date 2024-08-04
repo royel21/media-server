@@ -196,14 +196,13 @@ const onDownload = async (bypass) => {
       });
       try {
         await downloadLinks(link, page, link.Server, link.IsAdult);
-        await link.reload();
-
-        sendMessage({ link }, "update-download");
       } catch (error) {
         sendMessage({ text: `Error ${link.Url} was no properly downloaded`, color: "red", error });
       }
 
       await link.update({ IsDownloading: false });
+      await link.reload();
+      sendMessage({ link }, "update-download");
     } else {
       sendMessage({ text: `Link ${link.Name} was checked recently`, color: "red" });
     }
@@ -292,7 +291,7 @@ process.on("message", async ({ action, datas, remove, bypass, server }) => {
     try {
       state.stopped = false;
       state.browser = await startBrowser({ headless: false, userDataDir: "./user-data/puppeteer" });
-      console.log("starting puppteer");
+      sendMessage({ IsRunning: state.browser !== undefined }, "is-running");
     } catch (error) {
       sendMessage({ text: "Error trying to start scraper", error: error.toString() }, "error");
     }

@@ -1,4 +1,5 @@
 import apiUtils from "src/apiUtils";
+import { sortByName } from "src/ShareComponent/utils";
 
 export const excludeLink = async ({ target }, datas) => {
   const id = target.closest(".link").id;
@@ -14,12 +15,13 @@ export const excludeLink = async ({ target }, datas) => {
   return datas.links;
 };
 
-export const updateLink = (link, datas) => {
+export const updateLink = (link, datas, add) => {
   if (link) {
     const found = datas.links.findIndex((f) => f.Id === link.Id);
     if (found > -1) {
       datas.links[found] = link;
-      datas.links = [...datas.links];
+    } else if (add) {
+      datas.links = [...datas.links, link].sort(sortByName);
     }
     return [...datas.links];
   }

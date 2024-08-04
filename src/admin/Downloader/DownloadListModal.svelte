@@ -8,6 +8,7 @@
 
   export let hide;
   export let loadDownloads;
+  export let addToDownload;
   let downloadList = [];
   let downloads = [];
   let item = {};
@@ -114,9 +115,12 @@
     <div class="modal-body">
       {#if downloads.length}
         <ol>
-          {#each downloads as { Id, Name, Url }}
+          {#each downloads as { Id, Name, Url, LinkId }}
             <li>
               <span id={"dlink-" + Id} on:click={removeLink}> <Icons name="trash" color="firebrick" /></span>
+              <span id={LinkId} on:click={addToDownload} title="Download This Link" on:keydown>
+                <Icons name="download" />
+              </span>
               <a href={Url} target="_blank">{Name || Url}</a>
             </li>
           {/each}

@@ -100,11 +100,18 @@
     datas.links = [...datas.links];
   };
 
+  const addToDownload = async ({ target }) => {
+    socket.emit("download-server", {
+      datas: [+target.closest("span").id],
+      action: "Add-Download",
+    });
+  };
+
   const onUpdate = ({ link }) => {
-    if (link.remove || !link.IsDownloading) {
+    if (link.remove === true || link.IsDownloading === false) {
       datas.links = datas.links.filter((f) => f.Id !== link?.Id);
     } else {
-      datas.links = updateLink(link, datas);
+      datas.links = updateLink(link, datas, true);
     }
   };
 
@@ -151,7 +158,7 @@
 {/if}
 
 {#if showDownList}
-  <DownloadListModal hide={() => (showDownList = false)} {loadDownloads} />
+  <DownloadListModal hide={() => (showDownList = false)} {loadDownloads} {addToDownload} />
 {/if}
 
 {#if showExcludeChapModal}
