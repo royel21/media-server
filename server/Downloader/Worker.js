@@ -13,7 +13,7 @@ import { downloadFromPage } from "./checkServer.js";
 import { downloadNHentais } from "./nhentai.js";
 
 // add stealth plugin and use defaults (all evasion techniques)
-const state = { links: [], running: false, size: 0, checkServer: false, hentais: [], hrunning: false };
+const state = { links: [], running: false, size: 0, checkServer: false, nhentais: [], hrunning: false, hsize: 0 };
 
 const db = getDb();
 
@@ -150,6 +150,7 @@ const cleanUp = async (error) => {
     state.hentai = [];
     state.running = false;
     state.size = 0;
+    state.hsize = 0;
     state.stopped = false;
     state.browser = null;
     state.checkServer = false;
@@ -163,7 +164,6 @@ const cleanUp = async (error) => {
 };
 
 const onDownload = async (bypass) => {
-  state.running = true;
   const page = await createPage(state.browser);
 
   while (state.links.length) {
@@ -208,21 +208,23 @@ const onDownload = async (bypass) => {
   await page.close();
 };
 
-const loadLinks = async (Id) => {
+const loadLinks = async (Id, bypass) => {
   const temps = [];
   const htemps = [];
+
   const founds = await db.Link.findAll({
     where: { Id },
     include: ["Server"],
   });
 
   for (const found of founds) {
-    if (![...state.links, ...state.hentai].find((l) => l.Url === found.Url)) {
+    if (![...state.links, ...state.nhentais].find((l) => l.Url === found.Url)) {
       await found.update({ IsDownloading: true });
       if (found.Url.includes("nhentai")) {
         htemps.push(found);
+        state.hsize++;
       } else {
-        temps.links.push(found);
+        temps.push(found);
         state.size++;
       }
     }
@@ -238,7 +240,7 @@ const loadLinks = async (Id) => {
   }
 
   if (!state.hrunning && htemps.length) {
-    console.log("hentais: ", temps.length, "\n");
+    console.log("hentais: ", htemps.length, "\n");
     state.hrunning = true;
     downloadNHentais(state).then(cleanUp).catch(cleanUp);
   }
@@ -273,6 +275,7 @@ const removeDownloading = async (Id) => {
     await found.update({ IsDownloading: false });
   }
   state.links = state.links.filter((ld) => !Id.includes(ld.Id));
+  state.nhentais = state.nhentais.filter((ld) => !Id.includes(ld.Id));
 };
 
 process.on("message", async ({ action, datas, remove, bypass, server }) => {
@@ -318,7 +321,7 @@ process.on("message", async ({ action, datas, remove, bypass, server }) => {
       break;
     }
     case "Add-Download": {
-      await loadLinks(datas);
+      await loadLinks(datas, bypass);
       break;
     }
     case "Create-Cover": {

@@ -148,9 +148,14 @@
 
   const onUpdate = ({ link }) => {
     if (link) {
-      const found = datas.links.findIndex((f) => f.Id === link.Id);
-      if (found > -1) {
-        datas.links[found] = link;
+      if (link.remove) {
+        datas.links = datas.links.filter((f) => f.Id !== link?.Id);
+      } else {
+        const found = datas.links.findIndex((f) => f.Id === link.Id);
+        if (found > -1) {
+          datas.links[found] = link;
+          datas.links = [...datas.links];
+        }
       }
     }
   };

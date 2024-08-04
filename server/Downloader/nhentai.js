@@ -109,10 +109,11 @@ const download = async (link, page, server, state) => {
 
   if (!data.name) return;
 
-  const curDir = dirs[data.type];
+  const curDir = dirs[data.type] || dirs.nHentai;
+  console.log("hdir", curDir);
 
   const folder = await db.folder.findOne({
-    where: { Path: { [db.Op.like]: `%Manga-Hentai/${curDir.split(path.sep).pop()}%` } },
+    where: { Path: { [db.Op.like]: `%${curDir}%` } },
   });
 
   data.name = nameFormat(data.name.split("|")[0].trim());
@@ -185,7 +186,7 @@ export const downloadNHentais = async (state) => {
     console.log(error);
     return;
   }
-  const size = state.nhentais.length;
+
   while (state.nhentais.length) {
     if (state.stopped) break;
     const link = state.nhentais.shift();
@@ -196,9 +197,9 @@ export const downloadNHentais = async (state) => {
       continue;
     }
 
-    const count = size - state.nhentais.length;
+    const count = state.hsize - state.nhentais.length;
     sendMessage({
-      text: `\u001b[1;31m ${count}/${size} - ${link.Name || link.Url} \u001b[0m`,
+      text: `\u001b[1;31m ${count}/${state.hsize} - ${link.Name || link.Url} \u001b[0m`,
       url: link.Url,
     });
     try {
@@ -207,7 +208,9 @@ export const downloadNHentais = async (state) => {
       sendMessage({ text: `Error ${link.Url} was no properly downloaded`, color: "red", error });
     }
 
-    sendMessage({ Id: link.Id, ServerId: link.Server.Id }, "link-update");
+    sendMessage({ link: link, remove: true }, "link-update");
   }
+  state.hrunning = false;
+  state.hsize = 0;
   await page.close();
 };

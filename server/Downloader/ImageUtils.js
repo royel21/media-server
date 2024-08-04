@@ -72,6 +72,10 @@ const downloadImg = async (url, page, name = "", isCover) => {
           try {
             let viewSource = await page.goto(url.trim());
             buff = await viewSource.buffer();
+
+            if (buff.length === 0) {
+              return { badImg: true };
+            }
           } catch (error) {
             console.log(error);
             if (!error.toString().includes("net::ERR_CONNECTION_CLOSED")) {
