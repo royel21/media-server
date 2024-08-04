@@ -122,6 +122,8 @@ const downloadLinks = async (link, page) => {
     }
   }
 
+  sendMessage({ link }, "link-update");
+
   let FileCount = fs.readdirSync(folder.Path).filter((f) => f.includes(".zip")).length;
 
   if (FileCount != folder.FileCount) {

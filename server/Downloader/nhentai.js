@@ -164,6 +164,7 @@ const download = async (link, page, server, state) => {
         }
       }
 
+      sendMessage({ link, remove: true }, "link-update");
       if (count >= data.total - 1) {
         zip.writeZip(filePath + ".zip");
         await createFile(filePath + ".zip", folder.Id, count);

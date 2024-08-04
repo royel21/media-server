@@ -6,7 +6,7 @@
   import Icons from "src/icons/Icons.svelte";
   import Modal from "./Modal.svelte";
   import ExcludeChapModal from "./ExcludeChapModal.svelte";
-  import { excludeLink } from "./utils";
+  import { excludeLink, updateLink } from "./utils";
   import DownloadListModal from "./DownloadListModal.svelte";
 
   let start = 0;
