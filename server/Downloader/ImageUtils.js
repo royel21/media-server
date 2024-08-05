@@ -18,7 +18,7 @@ export const getImgNh = async (url, page) => {
   const viewSource = await page.goto(url);
   const buffer = await viewSource.buffer();
 
-  const img = await sharp(buffer);
+  const img = await sharp(buffer, { failOnError: false });
   const meta = await img.metadata();
 
   if (meta.width > 1024) {
@@ -93,7 +93,7 @@ const downloadImg = async (url, page, name = "", isCover) => {
 
     if (buff?.length > 0 && !buff.includes("<html>")) {
       try {
-        const img = await sharp(buff);
+        const img = await sharp(buff, { failOnError: false });
         const meta = await img.metadata();
 
         if (!isCover && meta.width < 400) {
@@ -148,7 +148,7 @@ export const createFolderCover = async (mangaDir, data, page, update) => {
 };
 
 export const saveThumbnail = async (buff, thumbPath) => {
-  let img = sharp(buff);
+  let img = sharp(buff, { failOnError: false });
   const meta = await img.metadata();
 
   if (meta.height > 500) {
