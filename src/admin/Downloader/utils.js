@@ -26,3 +26,22 @@ export const updateLink = (link, datas, add) => {
     return [...datas.links];
   }
 };
+
+const dayfmt = new Intl.DateTimeFormat("en-GB", {
+  year: "2-digit",
+  month: "short",
+  day: "2-digit",
+  hour: "2-digit",
+  second: "2-digit",
+  minute: "numeric",
+  hour12: true,
+});
+
+export const formatDate = dayfmt.format;
+
+export const nameFromurl = (url = "") => {
+  const part = url.split("/");
+  let name = "";
+  while (!name && part.length) name = part.pop();
+  return name.replaceAll("-", " ");
+};

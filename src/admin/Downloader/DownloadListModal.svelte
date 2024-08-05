@@ -128,12 +128,12 @@
       {/if}
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn" on:click={onCancel}>Cancel</button>
       {#if temp.Name || temp.isNew}
         <button type="button" class="btn" on:click={updateName}>{temp.isNew ? "Save" : "Update Name"}</button>
       {:else}
         <button type="submit" class="btn" on:click={() => loadDownloads(item.Id)}>Load</button>
       {/if}
+      <button type="button" class="btn" on:click={onCancel}>Cancel</button>
     </div>
   </div>
 </div>

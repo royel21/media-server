@@ -1,16 +1,4 @@
-Risou no Himo Seikatsu
-Martial Inverse
-100,000 Levels Of Body Refining All The Dogs I Raise Are The Emperor
-
-Pervert diary
-
-Clever Cleaning Life Of The Returned Genius Hunter
-Son-in-law Does Cheap Cultivation
-The Star Of A Supreme Ruler
-Shenwu Tianzun
-
-Toshiue Shachoha Tennen Dekiai Monster Kosaizeronichi Shojoo Tsumareta Asani Propose
 Young Master, Please don't show off - mangas.in
-Dungeon Kurashi No Moto Yuusha
+Take A Good Look At Me Now
 
 UPDATE recentfiles set LastPos=coalesce((SELECT Duration FROM files WHERE Id=recentfiles.FileId AND recentfiles.LastPos>Duration), LastPos)

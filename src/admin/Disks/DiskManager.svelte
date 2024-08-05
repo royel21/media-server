@@ -52,7 +52,12 @@
   .disk-controls {
     border-bottom: 1px solid;
   }
-
+  label span {
+    display: none;
+  }
+  input:checked label span {
+    display: inline-block;
+  }
   .admin-manager .disk-controls :global(svg) {
     top: 0px;
     width: 32px;

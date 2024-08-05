@@ -42,7 +42,7 @@
 <div bind:this={ref} class="modal-container" class:server on:keydown={onKeyDown} tabindex="-1">
   <div class="modal card" transition:fade={{ duration: 200 }}>
     <div class="modal-header">
-      <h4>{server ? "Edit Server Config" : "Edit Link"}</h4>
+      <h4>{server ? `Editing ${server.Name} Configurations` : "Edit Link"}</h4>
     </div>
     <form action="#" on:submit|preventDefault={submit}>
       <div class="modal-body">

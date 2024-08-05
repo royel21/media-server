@@ -65,10 +65,10 @@
       </div>
       <div class="error">{modalType.error || ""}</div>
       <div class="modal-footer">
-        <button type="button" class="btn" on:click>Cancel</button>
         <button type="submit" class="btn">
           {modalType.Del ? "Remove" : "Update"}
         </button>
+        <button type="button" class="btn" on:click>Cancel</button>
       </div>
     </form>
   </div>

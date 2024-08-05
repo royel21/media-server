@@ -43,7 +43,7 @@ const getServers = async () => {
 };
 
 routes.post("/links", async ({ body }, res) => {
-  const { page = 1, items, filter = "", IsDownloading, first } = body;
+  const { page = 1, items, filter = "", IsDownloading, first, ServerId } = body;
   let limit = +items || 10;
   let offset = (page - 1) * limit || 0;
 
@@ -63,20 +63,28 @@ routes.post("/links", async ({ body }, res) => {
     ],
   };
 
-  let downloadList;
   if (IsDownloading) {
     query.where.IsDownloading = 1;
   }
 
-  const datas = await db.Link.findAndCountAll(query);
   let servers;
+  console.log("sv: ", ServerId, "first: ", first);
 
   if (first) {
-    servers = await getServers();
+    if (ServerId) {
+      servers = await db.Server.findAll({ order: ["Name"], where: { Enable: true } });
+      query.where.ServerId = servers[0]?.Id || "";
+    } else {
+      servers = await getServers();
+    }
   }
+
+  if (ServerId && !query.where.ServerId) query.where.ServerId = +ServerId;
+
+  const datas = await db.Link.findAndCountAll(query);
+
   res.send({
     servers,
-    downloadList,
     totalItems: datas.count,
     totalPages: Math.ceil(datas.count / limit),
     links: datas.rows.map((lnk) => {

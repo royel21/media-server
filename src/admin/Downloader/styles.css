@@ -1,3 +1,7 @@
+#tabs-content {
+    height: calc(100% - 62px);
+}
+
 .d-controls {
     display: flex;
     flex-direction: row;
@@ -47,8 +51,8 @@
 .t-container {
     position: relative;
     width: 100%;
-    min-height: calc(100% - 15px);
-    height: calc(100% - 37px);
+    min-height: initial;
+    height: calc(100% - 32px);
     overflow-x: auto;
     padding-bottom: 10px;
 }
@@ -98,31 +102,31 @@
     border-right: 1px solid;
 }
 
-.d-table div>span:first-child {
+.d-table div>.col-count {
     width: 50px;
     text-align: center;
     border-left: 1px solid;
 }
 
-.d-table div>span:nth-child(2) {
+.d-table div>.col-serv {
     width: 185px;
     cursor: pointer;
 }
 
-.d-table div>span:nth-child(3) {
+.d-table div>.col-chapt {
     width: 80px;
     overflow: hidden;
     white-space: nowrap;
 }
 
-.d-table div>span:nth-child(4) {
+.d-table div>.col-name {
     white-space: nowrap;
     flex-grow: 1;
     width: 300px;
     overflow-x: hidden;
 }
 
-.d-table div>span:last-child {
+.d-table div>.col-date {
     width: 180px;
 }
 
@@ -131,15 +135,15 @@ span a:hover {
     text-decoration: underline;
 }
 
-.d-table div:not(:first-child)>span:nth-child(3):hover {
-    text-decoration: underline;
-}
-
 .d-controls :global(#filter-control) {
     max-width: 500px;
 }
 
 @media screen and (max-width: 450px) {
+    .t-container {
+        height: calc(100% - 45px);
+    }
+
     .d-controls :global(#filter-control) {
         margin-right: 2px;
         max-width: 350px;

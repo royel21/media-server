@@ -2,14 +2,14 @@
   import { onMount, getContext } from "svelte";
   import apiUtils from "src/apiUtils";
   import Filter from "src/ShareComponent/Filter.svelte";
-  import Pagination from "src/ShareComponent/Pagination.svelte";
   import Icons from "src/icons/Icons.svelte";
   import Modal from "./Modal.svelte";
   import ModalLink from "./ModalLink.svelte";
   import RenameModal from "./RenameModal.svelte";
   import ExcludeChapModal from "./ExcludeChapModal.svelte";
   import ModalServerList from "./ModalServerList.svelte";
-  import { excludeLink, updateLink } from "./utils";
+  import LinkTable from "./LinkTable.svelte";
+  import LinkPager from "./LinkPager.svelte";
 
   let start = 0;
   let editor = { show: false };
@@ -29,33 +29,6 @@
     totalItems: 0,
     items: +localStorage.getItem("d-items") || 100,
     filter: "",
-  };
-
-  const dayfmt = new Intl.DateTimeFormat("en-GB", {
-    year: "2-digit",
-    month: "short",
-    day: "2-digit",
-    hour: "2-digit",
-    second: "2-digit",
-    minute: "numeric",
-    hour12: true,
-  });
-
-  const nameFromurl = (url = "") => {
-    const part = url.split("/");
-    let name = "";
-    while (!name && part.length) name = part.pop();
-    return name.replaceAll("-", " ");
-  };
-
-  const getLink = (target) => {
-    const id = target.closest(".link")?.id;
-    return datas.links.find((f) => f.Id === +id);
-  };
-
-  const downloadServer = ({ target: { dataset } }) => {
-    running = true;
-    socket.emit("download-server", { server: +dataset.id, action: "Check-Server" });
   };
 
   const onFilter = ({ detail }) => {
@@ -82,60 +55,6 @@
     }
   };
 
-  const gotopage = ({ detail }) => {
-    datas.page = detail;
-    loadItems();
-  };
-
-  const onExcludeLink = async (e) => {
-    datas.links = await excludeLink(e, datas);
-  };
-
-  const downloadLink = async ({ target }) => {
-    const id = target.closest(".link").id;
-    if (id) {
-      const found = datas.links.find((f) => f.Id === +id);
-      if (found) {
-        running = true;
-        found.IsDownloading = true;
-        socket.emit("download-server", {
-          datas: [found.Id],
-          action: "Add-Download",
-        });
-        datas.links = [...datas.links];
-      }
-    }
-  };
-  const removeLink = async ({ target }) => {
-    const id = target.closest(".link").id;
-    if (id) {
-      const result = await apiUtils.get(["admin", "downloader", "remove-link", id]);
-      if (result.valid) {
-        loadItems();
-      }
-    }
-  };
-
-  const changeItems = ({ keyCode }) => {
-    if (keyCode === 13) {
-      datas.page = 1;
-      loadItems();
-    }
-  };
-
-  const editServer = ({ target }) => {
-    const link = getLink(target);
-    if (link) {
-      editor = { show: true, server: servers[link.ServerId] };
-    }
-  };
-  const editLink = async ({ target }) => {
-    const link = getLink(target);
-    if (link) {
-      editor = { show: true, link };
-    }
-  };
-
   const hideModal = () => {
     editor = {};
     datas.links = [...datas.links];
@@ -146,20 +65,14 @@
     showServerList = false;
   };
 
-  const onUpdate = ({ link }) => {
-    if (link.remove) {
-      datas.links = datas.links.filter((f) => f.Id !== link?.Id);
-    } else {
-      datas.links = updateLink(link, datas);
-    }
-  };
-
   const onNewlink = (newLink) => {
     if (newLink) {
       loadItems();
     }
     showLinkModal = false;
   };
+
+  const updateLinkList = (links) => (datas.links = [...links]);
 
   const stopDownloads = () => {
     running = false;
@@ -172,20 +85,26 @@
       loadItems();
     }
   };
+  const removeLink = async ({ target }) => {
+    const id = target.closest(".link").id;
+    if (id) {
+      const result = await apiUtils.get(["admin", "downloader", "remove-link", id]);
+      if (result.valid) {
+        loadItems();
+      }
+    }
+  };
 
   onMount(() => {
     loadItems(true);
-    socket.on("update-download", onUpdate);
     socket.emit("download-server", { action: "is-running" });
     socket.on("is-running", updateRunning);
     return () => {
-      socket.off("update-download", onUpdate);
       socket.off("is-running", updateRunning);
     };
   });
 
   $: start = (datas.page - 1) * datas.items;
-  $: localStorage.setItem("d-items", datas.items);
 </script>
 
 {#if editor.show}
@@ -231,61 +150,9 @@
         </span>
       </span>
     </Filter>
-    <span>
-      <Pagination page={datas.page} totalPages={datas.totalPages} on:gotopage={gotopage} />
-      <div class="input-group d-items">
-        <span class="input-group-text"><Icons name="list" color="black" /></span>
-        <input type="number" class="form-control" bind:value={datas.items} on:keydown={changeItems} />
-      </div>
-    </span>
+    <LinkPager {loadItems} {datas} />
   </div>
-  <div class="t-container">
-    <div class="d-table">
-      <div>
-        <span>{datas.totalItems}</span>
-        <span>Server</span>
-        <span>Chapter</span>
-        <span>Name</span>
-        <span>Update</span>
-      </div>
-      {#each datas.links as link, i}
-        <div class="link" id={link.Id}>
-          <span>{i + 1 + start}</span>
-          <span>
-            <span on:click={editServer} on:keydown title="Show Site Config"><Icons name="cog" /></span>
-            <span data-id={link.ServerId} on:click={downloadServer} on:keydown>{servers[link.ServerId]?.Name}</span>
-          </span>
-          <span>
-            <span
-              class="ex-cfg"
-              on:click={() => (showExcludeChapModal = link.Name)}
-              on:keydown
-              title="Show Exclude Chapt List "
-            >
-              <Icons name="cog" />
-            </span>
-            <span title={link.LastChapter}>{link.LastChapter}</span>
-          </span>
-          <span title={link.Name || nameFromurl(link.Url)}>
-            <span on:click={downloadLink} title="Download This Link" on:keydown>
-              <Icons name="download" color={link.IsDownloading ? "green" : "lightblue"} />
-            </span>
-            <span on:click={editLink} title="Edit Link" on:keydown>
-              <Icons name="edit" />
-            </span>
-            <span on:click={onExcludeLink} title="Exclude Link From Group Download" on:keydown>
-              <Icons name="files" box="0 0 464 512" color={link.Exclude ? "firebrick" : "#47f046"} />
-            </span>
-            <span on:click={removeLink} title="Remove Link" on:keydown>
-              <Icons name="trash" color="firebrick" />
-            </span>
-            <a href={link.Url} target="_blank">{link.Name || nameFromurl(link.Url)}</a>
-          </span>
-          <span>{dayfmt.format(new Date(link.Date))}</span>
-        </div>
-      {/each}
-    </div>
-  </div>
+  <LinkTable {datas} {socket} {updateLinkList} {removeLink} {servers} />
 </div>
 
 <style>
