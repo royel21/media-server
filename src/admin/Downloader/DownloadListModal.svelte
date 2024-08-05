@@ -118,7 +118,7 @@
           {#each downloads as { Id, Name, Url, LinkId }}
             <li>
               <span id={"dlink-" + Id} on:click={removeLink}> <Icons name="trash" color="firebrick" /></span>
-              <span id={LinkId} title="Download This Link" on:keydown>
+              <span id={LinkId} on:click={addToDownload} title="Download This Link" on:keydown>
                 <Icons name="download" />
               </span>
               <a href={Url} target="_blank">{Name || Url}</a>
