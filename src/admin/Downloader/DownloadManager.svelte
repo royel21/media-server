@@ -21,25 +21,25 @@
 <div class="card bg-dark text-light admin-manager">
   <div class="disk-controls">
     <div class="usn nav nav-tabs">
-      <div class="nav-item">
+      <div class="nav-item" title="Links List">
         <input type="radio" bind:group={tab} value="downloads" id="tab1" />
         <label class="nav-link" for="tab1">
           <Icons name="list" />
-          <span id="disks">Downloads List</span>
+          <span id="disks">All Links</span>
         </label>
       </div>
-      <div class="nav-item">
+      <div class="nav-item" title="Downloading List">
         <input type="radio" bind:group={tab} value="downloading" id="tab2" />
         <label class="nav-link" for="tab2">
           <Icons name="download" />
-          <span id="dirs">Downloading</span>
+          <span id="dirs">Downloading List</span>
         </label>
       </div>
-      <div class="nav-item">
+      <div class="nav-item" title="Server List">
         <input type="radio" bind:group={tab} value="servers" id="tab3" />
         <label class="nav-link" for="tab3">
           <Icons name="pc" />
-          <span id="dirs">Server</span>
+          <span id="dirs">Server List</span>
         </label>
       </div>
     </div>

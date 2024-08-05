@@ -35,8 +35,8 @@
       <CheckBox label="Is Adult" key="IsAdult" item={values} />
     </div>
     <div class="modal-footer">
-      <button class="btn" on:click={hideModal}>Cancel</button>
       <button class="btn" on:click={create}>Create</button>
+      <button class="btn" on:click={hideModal}>Cancel</button>
     </div>
   </div>
 </div>

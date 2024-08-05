@@ -81,10 +81,10 @@
       <div class="errors">{error}</div>
     </div>
     <div class="modal-footer">
-      <button class="btn" on:click={closeModal}>Cancel</button>
       <button class="btn" on:click={submit}>
         {foundUser.Id ? "Update" : "Save"}
       </button>
+      <button class="btn" on:click={closeModal}>Cancel</button>
     </div>
   </div>
 </div>

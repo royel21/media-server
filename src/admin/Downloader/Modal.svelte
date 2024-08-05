@@ -70,8 +70,8 @@
       </div>
       <div class="error">{error || ""}</div>
       <div class="modal-footer">
-        <button type="button" class="btn" on:click={hide}>Cancel</button>
         <button type="submit" class="btn">Update</button>
+        <button type="button" class="btn" on:click={hide}>Cancel</button>
       </div>
     </form>
   </div>

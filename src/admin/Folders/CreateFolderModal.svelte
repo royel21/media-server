@@ -78,8 +78,8 @@
       <div class="error">{error || ""}</div>
       <div class="message">{message || ""}</div>
       <div class="modal-footer">
-        <button type="button" class="btn" on:click={hide}>Close</button>
         <button type="submit" class="btn">Create</button>
+        <button type="button" class="btn" on:click={hide}>Close</button>
       </div>
     </form>
   </div>
