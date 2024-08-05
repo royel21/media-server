@@ -303,7 +303,3 @@ input[type="radio"]:checked+label span {
   height: calc(100% - 84px);
   padding: 5px 8px;
 }
-
-span svg:has(+ :is(.icon-download, .icon-trash, .icon-files, .icon-edit)) {
-  transform: scale(1.1)
-}

@@ -132,6 +132,14 @@
     font-weight: 600;
     color: white;
   }
+
+  :global(span:active > .icon-download),
+  :global(span:active > .icon-trash),
+  :global(span:active > .icon-files),
+  :global(span:active > .icon-edit),
+  :global(span:active > .icon-sync) {
+    transform: scale(1.2);
+  }
   @media screen and (max-width: 600px) {
     .content {
       height: calc(100% - 67px);
