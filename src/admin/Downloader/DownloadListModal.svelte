@@ -5,6 +5,7 @@
   import apiUtils from "src/apiUtils";
   import Icons from "src/icons/Icons.svelte";
   import Input from "../Component/Input.svelte";
+  import { sortByName } from "src/ShareComponent/utils";
 
   export let hide;
   export let loadDownloads;
@@ -32,7 +33,7 @@
 
   const reloadLinks = async () => {
     const result = await apiUtils.post("admin/downloader/save-downloads", { Name: item.Name });
-    downloads = result.downloads;
+    downloads = result.downloads.sort(sortByName);
   };
 
   const updateName = async () => {
@@ -89,7 +90,7 @@
     if (result.DownloadingList.length) {
       downloadList = result.DownloadingList;
       item = downloadList[0];
-      downloads = result.downloads;
+      downloads = result.downloads.sort(sortByName);
     }
   });
 </script>
@@ -161,7 +162,6 @@
   .modal-body {
     display: flex;
     flex-direction: column;
-    padding: 4px;
   }
   .modal-footer {
     border-top: 1px solid;
@@ -185,6 +185,8 @@
   li {
     white-space: nowrap;
     overflow-x: hidden;
+    padding: 5px;
+    border-bottom: 1px solid white;
   }
 
   ol {

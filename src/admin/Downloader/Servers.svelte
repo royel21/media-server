@@ -131,7 +131,10 @@
     <span on:click={downloadAll} title="Download All Link from This Server" on:keydown>
       <Icons name="download" color="lightblue" />
     </span>
-    <span on:click={onShowServerEdit}><Icons name="cog" /></span>
+    <span title="Open Web Page">
+      <a href={`https://${server.Name}`} target="_blank"><Icons name="wolrd" color="forestgreen" /></a>
+    </span>
+    <span title="Open Server Config" on:click={onShowServerEdit}><Icons name="cog" /></span>
     <span on:click={() => (showRemoveConfirm = true)}><Icons name="trash" /></span>
     <Select2 label="Servers" bind:item={server} options={servers} {onChange} />
   </div>
@@ -164,6 +167,9 @@
 
   .d-controls :global(.icon-list) {
     top: initial;
+  }
+  #srv :global(.t-container) {
+    height: calc(100% - 46px);
   }
   #srv {
     height: calc(100% - 30px);
