@@ -14,6 +14,7 @@
 
   let totalPages = 0;
   let totalItems = 0;
+  let currentPage = page || 1;
   let items = [];
   let file = {};
   let showModal = false;
@@ -34,8 +35,8 @@
       items = data.files;
       totalPages = data.totalPages || 0;
       totalItems = data.totalItems || 0;
-      page = +pg;
-      navigate(`/admin/files/${pg}/${filter || ""}`);
+      currentPage = +pg;
+      navigate(`/admin/files/${pg || 1}/${filter || ""}`);
     }
   };
 
@@ -51,7 +52,7 @@
 
     socket.on("file-removed", (data) => {
       if (data.success) {
-        loadFiles(page);
+        loadFiles(currentPage);
         hideModal();
       }
     });
@@ -70,8 +71,8 @@
   const goToPage = (pg) => {
     pg = +pg.detail;
     if (pg < 1 || pg > totalPages) return;
-    page = pg < 1 ? 1 : pg > totalPages ? totalPages : pg;
-    loadFiles(page);
+    currentPage = pg < 1 ? 1 : pg > totalPages ? totalPages : pg;
+    loadFiles(currentPage);
   };
 
   const itemClick = (event) => {
@@ -138,7 +139,7 @@
         {:else}
           {#each items as { Id, Name, Path, Size }, i}
             <tr id={Id} on:click={itemClick}>
-              <td>{(page - 1) * rows + i + 1}</td>
+              <td>{(currentPage - 1) * rows + i + 1}</td>
               <td>
                 <span><Icons name="edit" /></span>
                 <span><Icons name="trash" /></span>
@@ -153,7 +154,7 @@
     </table>
   </div>
   <div class="list-controls">
-    <Pagination {page} {totalPages} on:gotopage={goToPage} />
+    <Pagination page={currentPage} {totalPages} on:gotopage={goToPage} />
   </div>
 </div>
 

@@ -6,6 +6,7 @@
   import Icons from "src/icons/Icons.svelte";
   import Input from "../Component/Input.svelte";
   import { sortByName } from "src/ShareComponent/utils";
+  import Filter from "src/ShareComponent/Filter.svelte";
 
   export let hide;
   export let loadDownloads;
@@ -13,7 +14,17 @@
   let downloadList = [];
   let downloads = [];
   let item = {};
+  let filter = "";
   let temp = { Name: "" };
+
+  const onFilter = ({ detail }) => {
+    filter = detail;
+    console.log(filter);
+  };
+
+  const filterDownloads = (dl) => {
+    return dl.Name.includes(filter) || dl.Url.includes(filter);
+  };
 
   const sortList = (a, b) => a.Name.localeCompare(b.Name);
   //nhentai-list
@@ -114,9 +125,12 @@
       </div>
     </div>
     <div class="modal-body">
+      <div class="dl-filter">
+        <Filter on:filter={onFilter} {filter} />
+      </div>
       {#if downloads.length}
         <ol>
-          {#each downloads as { Id, Name, Url, LinkId }}
+          {#each downloads.filter(filterDownloads) as { Id, Name, Url, LinkId }}
             <li>
               <span id={"dlink-" + Id} on:click={removeLink}> <Icons name="trash" color="firebrick" /></span>
               <span id={LinkId} on:click={addToDownload} title="Download This Link" on:keydown>
@@ -148,13 +162,21 @@
   strong {
     color: black;
   }
+  .modal-header {
+    border-bottom: 1px solid;
+  }
+  .dl-filter {
+    padding: 0 5px;
+  }
+  .dl-filter :global(#filter-control) {
+    max-width: 100%;
+  }
   h3 {
     border-bottom: 1px solid;
   }
   .m-controls {
     display: flex;
     padding: 5px;
-    border-bottom: 1px solid;
   }
   .modal-container :global(svg) {
     transform: scale(1.1);

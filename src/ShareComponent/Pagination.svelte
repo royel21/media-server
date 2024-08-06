@@ -166,6 +166,10 @@
   .border-r-right {
     border-top-right-radius: 0.25rem;
   }
+  #pager .page-link:last-child,
+  #pager .page-link:first-child {
+    padding: 0 9px;
+  }
   @media screen and (max-width: 640px) {
     #last-page,
     #first-page {

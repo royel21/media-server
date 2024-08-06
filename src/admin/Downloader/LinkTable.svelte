@@ -145,12 +145,12 @@
           <span on:click={onExcludeLink} title="Exclude Link From Group Download" on:keydown>
             <Icons name="files" box="0 0 464 512" color={link.Exclude ? "firebrick" : "#47f046"} />
           </span>
-          <span class="col-date" on:click={removeLink} title="Remove Link" on:keydown>
+          <span on:click={removeLink} title="Remove Link" on:keydown>
             <Icons name="trash" color="firebrick" />
           </span>
           <a href={link.Url} target="_blank">{link.Name || nameFromurl(link.Url)}</a>
         </span>
-        <span>{formatDate(new Date(link.Date))}</span>
+        <span class="col-date">{formatDate(new Date(link.Date))}</span>
       </div>
     {/each}
   </div>

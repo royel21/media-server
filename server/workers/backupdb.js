@@ -1,8 +1,7 @@
 import db from "../models/index.js";
 import { literal } from "sequelize";
 import fs from "fs-extra";
-
-const { BACKUP_DIR, DB_NAME } = process.env;
+import defaultConfig from "../default-config.js";
 
 export const dayfmt = new Intl.DateTimeFormat("en-GB", {
   year: "2-digit",
@@ -31,7 +30,7 @@ const sendMessage = (text, event = "info") => {
 };
 
 //*****************Backup Helpers***********************************/
-const mapData = (rf) => {
+const removeId = (rf) => {
   delete rf.dataValues.Id;
   return rf.dataValues;
 };
@@ -40,16 +39,29 @@ const getRecentFolders = async (UserId, db) => {
   const result = await db.recentFolder.findAll({
     attributes: [
       "LastRead",
-      "CurrentFile",
       [
         literal(`(Select Name from Files where Id = RecentFolders.CurrentFile AND FolderId=RecentFolders.FolderId)`),
         "File",
       ],
-      [literal(`(Select Path from Folders where Id = RecentFolders.FolderId)`), "Path"],
+      [literal(`(Select Name from Folders where Id = RecentFolders.FolderId)`), "Folder"],
+      [literal(`(Select FilesType from Folders where Id = RecentFolders.FolderId)`), "Type"],
     ],
     where: { UserId },
   });
-  return result.map(mapData);
+
+  const datas = [];
+  for (let file of result) {
+    const { File, Folder, Type, LastRead } = file.dataValues;
+    if (File) {
+      datas.push({
+        File,
+        LastRead,
+        Folder: { Folder, Type },
+      });
+    }
+  }
+
+  return datas;
 };
 
 const getRecentFiles = async (UserId, db) => {
@@ -59,12 +71,31 @@ const getRecentFiles = async (UserId, db) => {
       "LastPos",
       [literal("(SELECT Name From Files Where Id=RecentFiles.FileId)"), "Name"],
       [
-        literal("(SELECT PATH FROM Folders where Id = (SELECT FolderId FROM Files WHERE Id=RecentFiles.FileId))"),
+        literal(
+          "(SELECT Folders.Name FROM Folders where Id = (SELECT FolderId FROM Files WHERE Id=RecentFiles.FileId))"
+        ),
         "Folder",
+      ],
+      [
+        literal(
+          "(SELECT Folders.FilesType FROM Folders where Id = (SELECT FolderId FROM Files WHERE Id=RecentFiles.FileId))"
+        ),
+        "Type",
       ],
     ],
   });
-  return result.map((r) => r.dataValues);
+  const datas = {};
+  for (let file of result) {
+    const { Name, Folder, Type, LastPos } = file.dataValues;
+    if (LastPos) {
+      if (!datas[Folder]) {
+        datas[Folder] = { Type, files: [] };
+      }
+      datas[Folder].files.push({ Name, LastPos });
+    }
+  }
+
+  return datas;
 };
 
 const mapDirectory = (dir) => {
@@ -117,7 +148,7 @@ export const getUserData = async (users, db) => {
       const RecentFolders = await getRecentFolders(u.Id, db);
       sendMessage("RecentFolders: " + RecentFolders.length);
       const RecentFiles = await getRecentFiles(u.Id, db);
-      sendMessage("RecentFiles: " + RecentFiles.length);
+      sendMessage("RecentFiles: " + Object.keys(RecentFolders).length);
 
       const Favorites = [];
 
@@ -141,9 +172,9 @@ export const getUserData = async (users, db) => {
 };
 
 export default async () => {
-  sendMessage(`Bakup ---${DB_NAME}---`);
+  sendMessage(`Bakup ---${defaultConfig.dbName}---`);
   console.time("Backup");
-  if (BACKUP_DIR) {
+  if (defaultConfig.BackupDir) {
     try {
       const datas = { users: [], directory: [] };
 
@@ -158,8 +189,11 @@ export default async () => {
       sendMessage("Getting Files From DB_NAME this may take a while");
       datas.directory = await getAllDirectories();
 
-      fs.mkdirsSync(BACKUP_DIR);
-      const savePath = `${BACKUP_DIR}/${DB_NAME} - ${formatAMPM(new Date()).replace(/:/g, "'")}.json`;
+      fs.mkdirsSync(defaultConfig.BackupDir);
+      const savePath = `${defaultConfig.BackupDir}/${defaultConfig.dbName} - ${formatAMPM(new Date()).replace(
+        /:/g,
+        "'"
+      )}.json`;
       fs.writeJSONSync(savePath, datas);
       sendMessage("Save to " + savePath);
     } catch (error) {

@@ -18,7 +18,7 @@
   document.title = "Manager";
 </script>
 
-<div class="card bg-dark text-light admin-manager">
+<div id="d-manager" class="card bg-dark text-light admin-manager">
   <div class="disk-controls">
     <div class="usn nav nav-tabs">
       <div class="nav-item" title="Links List">
@@ -50,6 +50,7 @@
 </div>
 
 <style>
+  @import "./styles.css";
   label span {
     display: none;
   }

@@ -63,12 +63,13 @@
   }
 
   #filter-control {
+    display: flex;
     position: relative;
     flex-shrink: 1;
     width: 100%;
     pointer-events: all;
     max-width: 350px;
-    margin-right: 4px;
+    align-items: center;
   }
   #filter-control > * {
     height: 32px;

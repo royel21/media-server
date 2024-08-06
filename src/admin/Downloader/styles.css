@@ -8,6 +8,20 @@
     justify-content: space-between;
 }
 
+#d-manager .d-controls>div>span svg,
+#d-manager .d-controls>span svg {
+    height: 32px;
+    width: 35px;
+    top: -1px;
+}
+
+#d-manager .d-controls>div:first-child {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    width: 100%;
+}
+
 .ex-cfg {
     display: inline-block;
     width: 20px;
@@ -34,7 +48,7 @@
 }
 
 .d-items {
-    width: 75px;
+    width: 100px;
     margin-left: 2px;
 }
 
@@ -139,23 +153,18 @@ span a:hover {
     max-width: 500px;
 }
 
+#d-manager #pager {
+    margin-left: 5px;
+}
+
 @media screen and (max-width: 450px) {
     .t-container {
         height: calc(100% - 45px);
     }
 
-    .d-controls :global(#filter-control) {
-        margin-right: 2px;
-        max-width: 350px;
-        width: 250px;
-    }
 
-    .d-controls :global(.btn-filter) {
+    .d-controls .btn-filter {
         padding: 0.3rem 0.2rem;
-    }
-
-    .d-controls {
-        padding-bottom: 10px;
     }
 
     .d-items {
@@ -164,5 +173,9 @@ span a:hover {
 
     .btns span:not(.btn-add, .btn-stop) {
         display: none;
+    }
+
+    #d-manager #filter-control {
+        max-width: initial;
     }
 }

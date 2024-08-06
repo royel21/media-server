@@ -159,15 +159,6 @@
 </div>
 
 <style>
-  .d-controls span :global(svg) {
-    height: 32px;
-    width: 35px;
-    top: -1px;
-  }
-
-  .d-controls :global(.icon-list) {
-    top: initial;
-  }
   #srv :global(.t-container) {
     height: calc(100% - 46px);
   }

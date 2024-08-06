@@ -9,6 +9,8 @@
         "server/public/**/*",
         "./*.sqlite",
         "./*.db",
-        "./backup/*"
+        "./backup/*",
+        "user-data/**/*",
+        "server/Workers/**/*"
     ]
 }

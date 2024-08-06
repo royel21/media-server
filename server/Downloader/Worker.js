@@ -169,8 +169,6 @@ const cleanUp = async (error) => {
 };
 
 const onDownload = async (bypass) => {
-  const page = await createPage(state.browser);
-
   while (state.links.length) {
     if (state.stopped) break;
     const link = state.links.shift();
@@ -194,12 +192,14 @@ const onDownload = async (bypass) => {
         text: `\u001b[1;31m ${state.size - state.links.length}/${state.size} - ${link.Name || link.Url} \u001b[0m`,
         url: link.Url,
       });
+      const page = await createPage(state.browser);
       try {
         await downloadLinks(link, page, link.Server, link.IsAdult);
       } catch (error) {
         sendMessage({ text: `Error ${link.Url} was no properly downloaded`, color: "red", error });
       }
 
+      await page.close();
       await link.update({ IsDownloading: false });
       await link.reload();
       sendMessage({ link }, "update-download");
@@ -209,7 +209,6 @@ const onDownload = async (bypass) => {
   }
 
   state.running = false;
-  await page.close();
 };
 
 const loadLinks = async (Id, bypass) => {

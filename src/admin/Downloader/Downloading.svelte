@@ -111,16 +111,15 @@
 
 <div class="container">
   <div class="d-controls">
-    <Filter on:filter={onFilter} filter={datas.filter}>
-      <span class="btns" slot="pre-btn">
-        <span class="btn-add" on:click={() => (showDownList = true)} on:keydown>
-          <Icons name="list" />
-        </span>
-        <span class="r-list btn-stop" title="Stop All Download" class:running on:click={stopDownloads} on:keydown>
-          <Icons name="stopcircle" color="firebrick" />
-        </span>
+    <div>
+      <span class="btn-add" on:click={() => (showDownList = true)} on:keydown>
+        <Icons name="list" />
       </span>
-    </Filter>
+      <span class="r-list btn-stop" title="Stop All Download" class:running on:click={stopDownloads} on:keydown>
+        <Icons name="stopcircle" color="firebrick" />
+      </span>
+      <Filter on:filter={onFilter} filter={datas.filter} />
+    </div>
     <LinkPager {loadItems} {datas} />
   </div>
 
@@ -128,19 +127,6 @@
 </div>
 
 <style>
-  @import "./styles.css";
-
-  .d-controls .r-list :global(svg),
-  .d-controls .btns :global(svg) {
-    height: 32px;
-    width: 35px;
-    top: -1px;
-  }
-
-  .d-controls :global(.icon-list) {
-    top: initial;
-  }
-
   .d-controls :global(#filter-control) {
     max-width: 500px;
   }
