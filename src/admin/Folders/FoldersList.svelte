@@ -303,12 +303,11 @@
   .dir-list {
     flex-grow: 1;
     display: flex;
-    padding: 0px 5px;
     align-items: center;
     background-color: grey;
-    margin: 0 5px;
-    border-radius: 0.25rem;
     padding: 2px 5px;
+    margin-right: 5px;
+    border-radius: 0.25rem;
   }
   .dir-list select {
     margin-left: 2px;
@@ -319,10 +318,6 @@
     .thumbnail {
       right: 11px;
       top: 47px;
-    }
-
-    .dir-list:not(:only-child) {
-      max-width: 60%;
     }
 
     .dir-list select {
