@@ -17,13 +17,9 @@
   let filter = "";
   let temp = { Name: "" };
 
-  const onFilter = ({ detail }) => {
-    filter = detail;
-    console.log(filter);
-  };
-
   const filterDownloads = (dl) => {
-    return dl.Name.includes(filter) || dl.Url.includes(filter);
+    const regx = new RegExp(filter, "i");
+    return regx.test(dl.Name) || regx.test(dl.Url);
   };
 
   const sortList = (a, b) => a.Name.localeCompare(b.Name);
@@ -104,6 +100,10 @@
       downloads = result.downloads.sort(sortByName);
     }
   });
+
+  let filtered = [];
+
+  $: filter, (filtered = downloads.filter(filterDownloads));
 </script>
 
 <div class="modal-container" tabindex="-1">
@@ -126,21 +126,19 @@
     </div>
     <div class="modal-body">
       <div class="dl-filter">
-        <Filter on:filter={onFilter} {filter} />
+        <Filter bind:filter />
       </div>
-      {#if downloads.length}
-        <ol>
-          {#each downloads.filter(filterDownloads) as { Id, Name, Url, LinkId }}
-            <li>
-              <span id={"dlink-" + Id} on:click={removeLink}> <Icons name="trash" color="firebrick" /></span>
-              <span id={LinkId} on:click={addToDownload} title="Download This Link" on:keydown>
-                <Icons name="download" />
-              </span>
-              <a href={Url} target="_blank">{Name || Url}</a>
-            </li>
-          {/each}
-        </ol>
-      {/if}
+      <ol>
+        {#each filtered as { Id, Name, Url, LinkId }}
+          <li>
+            <span id={"dlink-" + Id} on:click={removeLink}> <Icons name="trash" color="firebrick" /></span>
+            <span id={LinkId} on:click={addToDownload} title="Download This Link" on:keydown>
+              <Icons name="download" />
+            </span>
+            <a href={Url} target="_blank">{Name || Url}</a>
+          </li>
+        {/each}
+      </ol>
     </div>
     <div class="modal-footer">
       {#if temp.Name || temp.isNew}
@@ -170,6 +168,11 @@
   }
   .dl-filter :global(#filter-control) {
     max-width: 100%;
+  }
+
+  .dl-filter :global(#filter-control .icon-timescircle) {
+    top: 6px;
+    right: -7px;
   }
   h3 {
     border-bottom: 1px solid;

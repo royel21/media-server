@@ -29,6 +29,8 @@
     }
     send(text);
   };
+
+  $: filter = curFilter;
 </script>
 
 <div id="filter-control" class="input-group">
@@ -58,7 +60,7 @@
   }
 
   #filter-control :global(.icon-timescircle) {
-    top: 3px;
+    top: 2px;
     right: -7px;
   }
 
@@ -72,7 +74,7 @@
     align-items: center;
   }
   #filter-control > * {
-    height: 32px;
+    height: 30px;
   }
   .filter-file {
     padding: 2px 5px;
