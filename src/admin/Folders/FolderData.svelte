@@ -35,7 +35,7 @@
 <style>
   #folder-data {
     border-left: 1px solid;
-    width: 35%;
+    width: 50%;
     height: 100%;
   }
 
