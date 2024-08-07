@@ -10,7 +10,7 @@
 
 #d-manager .d-controls>div>span svg,
 #d-manager .d-controls>span svg {
-    height: 32px;
+    height: 30px;
     width: 35px;
     top: -1px;
 }
@@ -54,7 +54,7 @@
 
 .d-items>* {
     text-align: center;
-    height: 32px;
+    height: 30px;
 }
 
 .container {
@@ -155,6 +155,10 @@ span a:hover {
 
 #d-manager #pager {
     margin-left: 5px;
+}
+
+#d-manager #pager li {
+    height: 30px;
 }
 
 @media screen and (max-width: 450px) {

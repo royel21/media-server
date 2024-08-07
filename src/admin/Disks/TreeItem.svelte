@@ -73,14 +73,12 @@
     text-transform: scale(1.2);
   }
   .dir {
-    display: inline-block;
-    width: 98%;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-  .dir {
     position: relative;
     cursor: pointer;
+    display: inline-block;
+    width: calc(100% - 25px);
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   .dir:hover:after,
   .dir:hover:before {
