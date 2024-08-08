@@ -35,7 +35,9 @@
 
 {#each items as { Content, Id, Name, Type }}
   <li id={Id} class="tree-item">
-    <span class="caret" class:content={expanded.Id === Id} class:atop={type === "hdd"} on:click={expandFolder}>▶</span>
+    {#if Type==="Folder"}
+      <span class="caret" class:content={expanded.Id === Id} class:atop={type === "hdd"} on:click={expandFolder}>▶</span>
+    {/if}
     <span class="dir" class:atop={type === "hdd"} on:click={scanDirectory}>
       <Icons name={Type || type} />
       {Name}
