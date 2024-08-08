@@ -35,7 +35,7 @@
 
 {#each items as { Content, Id, Name, Type }}
   <li id={Id} class="tree-item">
-    {#if Type === "Folder" || type === "hdd"}
+    {#if Type === "folder" || type === "hdd"}
       <span class="caret" class:content={expanded.Id === Id} class:atop={type === "hdd"} on:click={expandFolder}
         >▶</span
       >
