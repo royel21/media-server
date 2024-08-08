@@ -45,17 +45,17 @@ routes.post("/content", (req, res) => {
     }
 
     if (fs.existsSync(tempPath)) {
-      let dirs = ListFiles(tempPath, { directory: true, hidden: true });
+      let dirs = ListFiles(tempPath, { hidden: true });
       let tdata = [];
       for (let d of dirs) {
-        if (/^\./.test(d.Name)) continue;
-
-        tdata.push({
-          Id: getNewId(),
-          Name: d.Name,
-          Path: path.join(Path, d.Name),
-          Content: [],
-        });
+        if (d.isDirectory || /\zip|mp4|mkv|rar/.test(d.Extension)) {
+          tdata.push({
+            Id: getNewId(),
+            Name: d.Name,
+            Path: path.join(Path, d.Name),
+            Content: [],
+          });
+        }
       }
       res.send({ data: tdata, Id });
     }

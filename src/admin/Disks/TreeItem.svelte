@@ -4,6 +4,8 @@
   import apiUtils from "src/apiUtils";
   export let items = [];
   export let type;
+  export let expanded;
+
   let item = {};
 
   const dispatch = createEventDispatcher();
@@ -15,9 +17,13 @@
       const data = await apiUtils.post("admin/directories/Content", { Path: item.Path });
       item.Content = data.data;
       items = items;
+      if (data.data.length) {
+        expanded.Id = item.Id;
+      }
     } else {
       item.Content = [];
       items = items;
+      expanded.Id = "";
     }
   };
   const scanDirectory = (event) => {
@@ -27,16 +33,16 @@
   };
 </script>
 
-{#each items as { Content, Id, Name }}
+{#each items as { Content, Id, Name, Type }}
   <li id={Id} class="tree-item">
-    <span class="caret" class:content={Content.length} class:atop={type === "hdd"} on:click={expandFolder}>▶</span>
+    <span class="caret" class:content={expanded.Id === Id} class:atop={type === "hdd"} on:click={expandFolder}>▶</span>
     <span class="dir" class:atop={type === "hdd"} on:click={scanDirectory}>
-      <Icons name={type} />
+      <Icons name={Type || type} />
       {Name}
     </span>
-    {#if Content.length > 0}
+    {#if Content.length > 0 && expanded.Id === Id}
       <ul class="tree-node usn">
-        <svelte:self type="folder" items={Content} on:scanDir />
+        <svelte:self type="folder" items={Content} on:scanDir {expanded} />
       </ul>
     {/if}
   </li>
