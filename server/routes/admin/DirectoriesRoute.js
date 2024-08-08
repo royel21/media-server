@@ -54,6 +54,7 @@ routes.post("/content", (req, res) => {
             Name: d.Name,
             Path: path.join(Path, d.Name),
             Content: [],
+            Type: d.isDirectory ? "folder" : "file"
           });
         }
       }
