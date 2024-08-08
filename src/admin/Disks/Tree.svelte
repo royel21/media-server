@@ -12,7 +12,6 @@
   let loading = true;
   let ref;
   let height = 39;
-  let expanded = {};
 
   const scanDir = ({ detail }) => {
     item = detail;
@@ -46,7 +45,6 @@
   afterUpdate(() => {
     height = ref?.offsetHeight || 39;
   });
-  $: console.log("content", expanded);
 </script>
 
 {#if showModal}
@@ -85,7 +83,7 @@
     </div>
   {:else}
     <ul class="tree-view usn">
-      <TreeItem type="hdd" items={content} on:scanDir={scanDir} {expanded} />
+      <TreeItem type="hdd" items={content} on:scanDir={scanDir} />
     </ul>
   {/if}
 </div>

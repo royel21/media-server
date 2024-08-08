@@ -54,7 +54,7 @@ routes.post("/content", (req, res) => {
             Name: d.Name,
             Path: path.join(Path, d.Name),
             Content: [],
-            Type: d.isDirectory ? "folder" : "file"
+            Type: d.isDirectory ? "folder" : "file",
           });
         }
       }
@@ -63,6 +63,16 @@ routes.post("/content", (req, res) => {
   } catch (error) {
     console.log(error);
     res.send({ data: [], Id });
+  }
+});
+
+routes.post("/remove-file", async (req, res) => {
+  const { body } = req;
+  try {
+    fs.removeSync(body.Path);
+    res.send({ success: true });
+  } catch (error) {
+    res.send({ success: false });
   }
 });
 
