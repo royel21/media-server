@@ -50,7 +50,7 @@ export default async (server, sessionMeddle) => {
             }
             if (reload) {
               console.log("reloadig server");
-              exec("yarn&&pm2 restart all");
+              exec("pm2 restart all", { cwd: "" });
             }
             console.log(`stdout: ${stdout}`);
             socket.emit("rebuild-message", "Finish Building App - Reload");
