@@ -14,7 +14,7 @@ export const destroy = async (data) => {
 };
 
 export const findFolder = async (Name) => {
-  return db.folder.findOne({ where: { Name } });
+  return db.folder.findOne({ where: { Name, FilesType: "mangas" } });
 };
 
 export const findOrCreateFolder = async (manga, IsAdult) => {
