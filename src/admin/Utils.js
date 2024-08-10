@@ -27,7 +27,7 @@ export const validateAuthor = (auth) => {
 };
 
 export const validAltName = (v) => {
-  return v.replace(/( |)(•|\/)( |)/g, "; ");
+  return v.replace(/( |)(•|\/)( |)/g, "; ").replace("N; A", "N/A");
 };
 
 export const map = (val, min, max) => Math.min(Math.max(min, val), max);
