@@ -12,6 +12,7 @@
   let loading = true;
   let ref;
   let height = 39;
+  let showDiskInfo = false;
 
   const scanDir = ({ detail }) => {
     item = detail;
@@ -52,6 +53,8 @@
 {/if}
 
 <div class="d-info" bind:this={ref}>
+  <input type="checkbox" name="" id="d-info" bind:checked={showDiskInfo} />
+  <h4><label for="d-info">Disk Info {showDiskInfo ? "Hide" : "Show"}</label></h4>
   <table>
     <thead>
       <tr>
@@ -94,6 +97,9 @@
     overflow-y: auto;
     padding: 0px 8px;
   }
+  .tree-title .tree-name {
+    user-select: none;
+  }
   ul {
     margin-left: 25px;
     padding-bottom: 5px;
@@ -114,5 +120,19 @@
   th:not(.skip),
   td:not(.skip) {
     text-align: right;
+  }
+  h4 {
+    text-align: center;
+    border-bottom: 1px solid white;
+    user-select: none;
+  }
+  #d-info {
+    display: none;
+  }
+  #d-info:not(:checked) + h4 + table {
+    display: none;
+  }
+  #d-info:not(:checked) + h4 {
+    border-bottom: initial;
   }
 </style>

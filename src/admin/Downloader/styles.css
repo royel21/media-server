@@ -182,4 +182,8 @@ span a:hover {
     #d-manager #filter-control {
         max-width: initial;
     }
+
+    .col-serv {
+        user-select: none;
+    }
 }
