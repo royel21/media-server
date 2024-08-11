@@ -129,6 +129,8 @@ routes.get("/folder/:folderId?", async (req, res) => {
 
   const dirs = await db.directory.findAll({ order: ["Name"] });
 
+  const files = fs.readdirSync(folder.Path).filter((f) => !/\.(webp|jpg|png|gif|jpeg)/.test(f));
+
   res.send({
     Name: folder.Name,
     Description: folder.Description,
@@ -139,6 +141,8 @@ routes.get("/folder/:folderId?", async (req, res) => {
     Author: folder.Author,
     Status: folder.Status,
     Server: folder.Server,
+    Last: files.length > 1 ? files[files.length - 1] : "N/A",
+    Total: files.length > 1 ? files.length : 0,
     dirs,
   });
 });

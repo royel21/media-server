@@ -25,17 +25,11 @@
     const data = await apiUtils.admin(["folders", "folder", Id]);
     if (data.dirs) {
       imageData.Id = Id;
-      folder.Name = data.Name;
-      folder.Description = data.Description;
-      folder.Genres = data.Genres;
-      folder.AltName = data.AltName;
-      folder.IsAdult = data.IsAdult;
-      folder.DirectoryId = data.DirectoryId;
-      folder.Author = data.Author;
-      folder.Status = data.Status;
-      folder.Server = data.Server;
       options = data.dirs.map((d) => ({ Id: d.Id, Name: d.FullPath }));
       old = { ...folder };
+      delete data.dirs;
+      folder = { ...folder, ...data };
+      console.log(folder);
     }
     transfer = false;
   };
@@ -107,6 +101,9 @@
 
 <div class="detail">
   <div class="error">{error || ""}</div>
+  <div class="f-count">
+    <span class="ccount">Files in Folder: {folder.Total || 0}</span><span>Last Chapter: {folder.Last || "N/A"}</span>
+  </div>
   <div class="d-content">
     <TextAreaInput file={folder} key="Name" style="margin-bottom: 5px" rows="3" {onChange} />
     <TextAreaInput file={folder} key="AltName" style="margin-bottom: 5px" sept="; " rows="3" {onChange} />
@@ -133,9 +130,21 @@
 <style>
   .detail {
     position: relative;
-    padding-top: 10px;
     height: calc(100% - 90px);
     overflow-y: auto;
+  }
+  .f-count {
+    display: flex;
+    justify-content: space-around;
+    font-size: 0.9rem;
+    margin: 5px 0;
+    background-color: #0db9d8;
+    border-radius: 0.25rem;
+    color: black;
+    font-weight: 600;
+  }
+  .f-count span {
+    padding: 2px 4px;
   }
   .detail :global(.input-label) {
     width: 145px;
@@ -149,5 +158,9 @@
   }
   .d-buttons .btn:not(:last-child) {
     margin-right: 15px;
+  }
+  .ccount {
+    min-width: 140px;
+    border-right: 1px solid white;
   }
 </style>
