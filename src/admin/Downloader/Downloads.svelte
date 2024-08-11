@@ -153,3 +153,11 @@
   </div>
   <LinkTable {datas} {socket} {updateLinkList} {removeLink} {servers} />
 </div>
+
+<style>
+  @media screen and (max-width: 540px) {
+    .d-controls span:not(.btn-add, .btn-stop) {
+      display: none;
+    }
+  }
+</style>
