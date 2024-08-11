@@ -54,7 +54,7 @@ routes.post("/links", async ({ body }, res) => {
     where: { [Op.or]: { Name: qfilter, AltName: qfilter, "$Server.Name$": qfilter, Url: qfilter } },
     limit,
     offset,
-    include: { model: db.Server, Attributes: ["Id", "Name"], required: true, where: { Enable: true } },
+    include: { model: db.Server, Attributes: ["Id", "Name"], required: true },
     order: [
       [literal(`Links.LastChapter = ""`), "DESC"],
       [literal(`Links.Date = null`), "DESC"],

@@ -131,7 +131,7 @@
     <span on:click={downloadAll} title="Download All Link from This Server" on:keydown>
       <Icons name="download" color="lightblue" />
     </span>
-    <span title="Open Web Page">
+    <span title="Open Web Page" class="op-ser-page">
       <a href={`https://${server.Name}`} target="_blank"><Icons name="wolrd" color="forestgreen" /></a>
     </span>
     <span title="Open Server Config" on:click={onShowServerEdit}><Icons name="cog" /></span>
@@ -170,5 +170,10 @@
   }
   #srv .d-controls:first-child {
     padding-bottom: 0px;
+  }
+  @media screen and (max-width: 540px) {
+    .d-controls .op-ser-page {
+      display: none;
+    }
   }
 </style>
