@@ -48,7 +48,7 @@ routes.post("/content", (req, res) => {
       let dirs = ListFiles(tempPath, { hidden: true });
       let tdata = [];
       for (let d of dirs) {
-        if (d.isDirectory || /\zip|mp4|mkv|rar|exe/.test(d.Extension)) {
+        if (d.isDirectory || /\zip|mp4|mkv|rar|exe|avi|ogg/.test(d.Extension)) {
           tdata.push({
             Id: getNewId(),
             Name: d.Name,
