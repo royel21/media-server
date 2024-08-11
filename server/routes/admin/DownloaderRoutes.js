@@ -33,7 +33,7 @@ routes.get("/remove-link/:Id", async ({ params }, res) => {
 });
 
 const getServers = async () => {
-  const servers = await db.Server.findAll({ order: ["Name"], where: { Enable: true } });
+  const servers = await db.Server.findAll({ order: ["Name"] });
   const datas = {};
 
   servers.forEach((srv) => {
@@ -80,6 +80,10 @@ routes.post("/links", async ({ body }, res) => {
   }
 
   if (ServerId && !query.where.ServerId) query.where.ServerId = +ServerId;
+
+  if (!ServerId && !IsDownloading) {
+    query.include.where = { Enable: true };
+  }
 
   const datas = await db.Link.findAndCountAll(query);
 
