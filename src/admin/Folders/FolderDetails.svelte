@@ -26,10 +26,9 @@
     if (data.dirs) {
       imageData.Id = Id;
       options = data.dirs.map((d) => ({ Id: d.Id, Name: d.FullPath }));
-      old = { ...folder };
       delete data.dirs;
       folder = { ...folder, ...data };
-      console.log(folder);
+      old = { ...folder };
     }
     transfer = false;
   };
