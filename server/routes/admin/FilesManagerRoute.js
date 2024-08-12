@@ -2,7 +2,7 @@ import { Router } from "express";
 import db from "../../models/index.js";
 
 import { getFilter } from "../utils.js";
-import { Op } from "sequelize";
+import { Op, where } from "sequelize";
 import fs from "fs-extra";
 import path from "node:path";
 
@@ -12,7 +12,6 @@ routes.get("/:page/:items/:filter?", async (req, res) => {
   const { page, items, filter } = req.params;
 
   const limit = +items || 12;
-  const FolderId = await db.folder.findAll({ attributes: ["Id", "Path"], where: { Path: getFilter(filter) } });
 
   const query = {
     order: ["Name"],
@@ -24,10 +23,12 @@ routes.get("/:page/:items/:filter?", async (req, res) => {
     ],
     offset: ((+page || 1) - 1) * limit,
     limit,
+    where: { FolderId: { [Op.not]: null } },
   };
 
   if (filter) {
-    query.where = { [Op.or]: [{ Name: getFilter(filter) }, { FolderId: FolderId.map((fd) => fd.Id) }] };
+    const FolderId = await db.folder.findAll({ attributes: ["Id", "Path"], where: { Path: getFilter(filter) } });
+    query.where[Op.or] = [{ Name: getFilter(filter) }, { FolderId: FolderId.map((fd) => fd.Id) }];
   }
 
   let files = await db.file.findAndCountAll(query);
@@ -39,7 +40,7 @@ routes.get("/:page/:items/:filter?", async (req, res) => {
       if (fs.existsSync(file)) {
         Size = fs.statSync(file).size;
       }
-      return { ...f.dataValues, Size };
+      return { ...f.dataValues, ...f, Size };
     }),
     totalPages: Math.ceil(files.count / limit),
     totalItems: files.count,
