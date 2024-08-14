@@ -17,7 +17,6 @@ const renameVideoFile = (src, dest, file, regex) => {
   try {
     let nFile = file.replace(regex, "");
     const num = nFile.match(/^\d+/);
-    console.log(num[0], num[0].length);
 
     if (num[0] && num[0].length < 2) {
       nFile = nFile.replace(num[0], num[0].padStart(2, "0"));
