@@ -212,7 +212,7 @@
   }
   .dir:hover {
     text-decoration: underline;
-    background-color: #add8e647;
+    background-color: #696a6b;
   }
   .caret {
     display: inline-block;
