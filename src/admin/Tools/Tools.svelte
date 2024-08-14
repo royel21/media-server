@@ -54,7 +54,6 @@
 <div>
   <div>
     <button class="btn" on:click={onBackup}>Backup</button>
-    <button class="btn" on:click={onCleanImages}>Clean Images</button>
     <button class="btn" on:click={onUpdateServer}>Build App</button>
     <button class="btn" on:click={rebuildAndReload}>Reload Server</button>
   </div>
