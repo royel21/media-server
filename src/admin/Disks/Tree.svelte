@@ -12,8 +12,11 @@
   let item = {};
   let loading = true;
   let ref;
+  let treeRef;
   let height = 39;
   let showDiskInfo = false;
+  let offset = 0;
+  let zIndex = 98;
 
   const scanDir = ({ detail }) => {
     item = detail;
@@ -36,6 +39,14 @@
   const onCleanupMessage = (message) => {
     console.log(message);
     setMessage({ msg: message });
+  };
+
+  const scrollToTop = () => {
+    treeRef.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
   };
 
   socket.on("finish-cleaning", onCleanupMessage);
@@ -86,7 +97,7 @@
   </table>
 </div>
 
-<div class="tree-title" style={`height: calc(100% - ${height}px)`}>
+<div class="tree-title" style={`height: calc(100% - ${height}px)`} bind:this={treeRef}>
   <Icons name="hdd" />
   <span class="tree-name">Server</span>
   {#if loading}
@@ -95,7 +106,7 @@
     </div>
   {:else}
     <ul class="tree-view usn">
-      <TreeItem type="hdd" items={content} on:scanDir={scanDir} />
+      <TreeItem type="hdd" items={content} on:scanDir={scanDir} {scrollToTop} {offset} {zIndex} />
     </ul>
   {/if}
 </div>

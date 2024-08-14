@@ -10,12 +10,17 @@
 
   export let items = [];
   export let type;
+  export let scrollToTop;
+  export let offset;
+  export let zIndex;
+
   let item = {};
   let showMenu = false;
   let showConfirm;
   let showMoveTo = false;
   let showRename = false;
   let showModalPass = false;
+  let offsetNext = offset + 1;
 
   const dispatch = createEventDispatcher();
   const socket = getContext("socket");
@@ -120,6 +125,12 @@
       document.body.removeEventListener("contextmenu", hideMenu);
     };
   });
+
+  const getStyle = (type, content) => {
+    if (type === "hdd") return "";
+
+    if (content.length) return `top: ${offset * 27}px; z-index: ${zIndex--}`;
+  };
 </script>
 
 {#if showConfirm}
@@ -152,21 +163,37 @@
   <li
     id={Id}
     class={`tree-item ${Type}`}
+    class:spanded={Content?.length}
     on:contextmenu|preventDefault|stopPropagation={(e) => (showMenu = { e, Type })}
   >
     {#if Type === "folder" || type === "hdd"}
-      <span class="caret" class:content={Content?.length} class:atop={type === "hdd"} on:click={expandFolder}>▶</span>
+      <span
+        class="caret"
+        style={getStyle(type, Content)}
+        class:content={Content?.length}
+        class:atop={type === "hdd"}
+        on:click={expandFolder}>▶</span
+      >
     {:else}
       <span on:click={() => removeFile({ Id, Path })}><Icons name="trash" /></span>
     {/if}
-    <span class="dir" class:atop={type === "hdd"} on:click={expandFolder}>
+    <span
+      class="dir"
+      class:atop={type === "hdd"}
+      class:content={Content?.length}
+      style={getStyle(type, Content)}
+      on:click={expandFolder}
+    >
       <Icons name={Type || type} />
       {Name}
     </span>
     {#if Content.length > 0}
       <ul class="tree-node usn">
-        <svelte:self type="folder" items={Content} on:scanDir />
+        <svelte:self type="folder" items={Content} on:scanDir {scrollToTop} offset={offsetNext} {zIndex} />
       </ul>
+      <span class="scroll-top" on:click={scrollToTop}>
+        <Icons name="arrowcircleup" />
+      </span>
     {/if}
   </li>
 {/each}
@@ -217,6 +244,7 @@
   .file .dir:hover:before {
     display: none;
   }
+  .content,
   .atop {
     position: sticky;
     top: 0;
@@ -252,5 +280,15 @@
   #removeDFolder {
     color: rgb(248, 16, 16);
     font-weight: 700;
+  }
+  .scroll-top {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+  }
+
+  .scroll-top :global(.icon-arrowcircleup) {
+    width: 35px;
+    height: 30px;
   }
 </style>
