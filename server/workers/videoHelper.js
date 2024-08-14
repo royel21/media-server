@@ -19,9 +19,9 @@ const renameVideoFile = (src, dest, file, regex, text) => {
     nFile = nFile
       .replace(/^.*. - /, "")
       .replace(/^.*. Movie /, "Movie ")
-      .replace(/^.*. Ova /, "Ova ")
-      .replace(/^.*. Especial /, "Especial ")
-      .replace(/^.*. Special /, "Special ");
+      .replace(/^.*.( - | )Ova /, "Ova ")
+      .replace(/^.*.( - | )Especial /, "Especial ")
+      .replace(/^.*.( - | )Special /, "Special ");
 
     const num = nFile.match(/^\d+/);
 
