@@ -16,8 +16,8 @@ const renameVideoFile = (src, dest, file, regex, text) => {
 
   try {
     let nFile = file.replace(regex, "").replace(text, "");
-    nFile = file
-      .replace(/^.*. -- /, "")
+    nFile = nFile
+      .replace(/^.*. - /, "")
       .replace(/^.*. Movie /, "Movie ")
       .replace(/^.*. Ova /, "Ova ")
       .replace(/^.*. Especial /, "Especial ")
