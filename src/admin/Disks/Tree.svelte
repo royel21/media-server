@@ -37,8 +37,12 @@
   };
 
   const onCleanupMessage = (message) => {
-    console.log(message);
-    setMessage({ msg: message });
+    if (message.error) {
+      setMessage({ error: true, msg: message.error });
+    } else {
+      console.log(message);
+      setMessage({ msg: message });
+    }
   };
 
   const scrollToTop = () => {
