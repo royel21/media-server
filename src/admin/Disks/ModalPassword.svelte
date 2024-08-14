@@ -18,7 +18,7 @@
 </script>
 
 <div bind:this={ref} class="modal-container" tabindex="-1">
-  <div class="modal card" transition:fade={{ duration: 200 }}>
+  <div id="disk-renamer" class="modal card" transition:fade={{ duration: 200 }}>
     <div class="modal-header">
       <h4>Password if needed or left empty</h4>
     </div>
@@ -47,5 +47,10 @@
   }
   .modal-footer {
     border-top: 1px solid;
+  }
+  #disk-renamer :global(.input-label) {
+    width: 200px;
+    padding-right: 5px;
+    text-align: right;
   }
 </style>
