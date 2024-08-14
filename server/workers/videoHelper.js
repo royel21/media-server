@@ -8,7 +8,9 @@ const sendMessage = (message, event = "finish-cleaning") => {
   process.send({ event, message });
 };
 
-const renameVideoFile = (src, dest, file, regex) => {
+const renameVideoFile = (src, dest, file, regex, text) => {
+  file = file.replace(text, "");
+
   if (/movie/gi.test(file)) {
     fs.moveSync(path.join(src, file), path.join(dest, `Movie.${file.split(".").pop()}`));
     return;
@@ -28,7 +30,7 @@ const renameVideoFile = (src, dest, file, regex) => {
   } catch (error) {}
 };
 
-const checkedToremove = (file, pass) => {
+const checkedToremove = (file) => {
   if (/\.(txt|url|html|htm|png|jpg)$/.test(file)) {
     fs.removeSync(file);
     return true;
@@ -39,7 +41,7 @@ const checkedToremove = (file, pass) => {
 
 const vRex = /\.(mp4|mkv|avi)/;
 
-export const workVideos = ({ folder, pass }) => {
+export const workVideos = ({ folder, pass, text }) => {
   const { Name, Path } = folder;
 
   pass = pass ? `-p'${pass}'` : "";
@@ -73,11 +75,11 @@ export const workVideos = ({ folder, pass }) => {
       file = fs.readdirSync(fpath).find((f) => vRex.test(f));
 
       if (file) {
-        renameVideoFile(fpath, Path, file, regex);
+        renameVideoFile(fpath, Path, file, regex, text);
       }
       fs.removeSync(fpath);
     } else {
-      renameVideoFile(Path, Path, file, regex);
+      renameVideoFile(Path, Path, file, regex, text);
     }
   }
 
