@@ -199,7 +199,7 @@ const scanDir = async ({ Id, Path, Type, isFolder, IsAdult }, user) => {
 };
 
 let fileWorker;
-const fileWork = (action, data) => {
+const fileWork = (data) => {
   if (!fileWorker) {
     fileWorker = fork(appPath + "/workers/FileWorker.js");
 
@@ -212,7 +212,7 @@ const fileWork = (action, data) => {
     });
   }
 
-  fileWorker.send({ action, data });
+  fileWorker.send(data);
 };
 
 export default {

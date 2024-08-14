@@ -84,8 +84,7 @@
         modalType = { title: "Edit File", Del: false, isFile: true };
         showModal = true;
       } else {
-        // modalType = { title: "Remove File", Del: true, isFile: true };
-        socket.emit("remove-file", { Id: file.Id, Del: true });
+        socket.emit("file-work", { action: "renameFile", data: { Id: file.Id, Del: true } });
       }
     }
   };
@@ -93,13 +92,13 @@
   const handleSubmit = ({ detail: { target } }) => {
     if (modalType.Del) {
       let Del = target.querySelector("input").checked;
-      socket.emit("remove-file", { Id: file.Id, Del });
+      socket.emit("file-work", { action: "renameFile", data: { Id: file.Id, Del } });
     } else {
       let Name = target.querySelector("textarea").value;
       if (!Name) {
         modalType.error = "Name Can't be empty";
       } else {
-        socket.emit("rename-file", { Id: file.Id, Name });
+        socket.emit("file-work", { action: "renameFile", data: { Id: file.Id, Name } });
       }
     }
   };

@@ -105,7 +105,7 @@
     //if we are deleting the file
     if (modalType.Del) {
       let Del = detail.target.querySelector("input").checked;
-      socket.emit("remove-folder", { Id: folder.Id, Del });
+      socket.emit("file-work", { action: "removeFolder", data: { Id: folder.Id, Del } });
     }
   };
 
@@ -148,6 +148,7 @@
 
   const onFolderRemove = (data) => {
     if (data.success && data.Id) {
+      setMessage({ msg: `Folder: ${data.Name} was Removed` });
       reload();
       hideModal();
     }

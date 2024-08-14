@@ -4,6 +4,7 @@
   export let text = "";
   export let cancel;
   export let acept;
+  export let data = "";
   let ref;
 
   onMount(() => {
@@ -11,7 +12,7 @@
   });
 
   const onConfirm = () => {
-    acept();
+    acept(data);
     cancel();
   };
 </script>

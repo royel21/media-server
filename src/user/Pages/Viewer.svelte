@@ -114,7 +114,7 @@
   }
 
   const removeFile = async () => {
-    socket.emit("remove-file", { Id: fileId, Del: true, viewer: true });
+    socket.emit("file-work", { action: "renameFile", data: { Id: fileId, Del: true, viewer: true } });
   };
 
   const onFileRemove = (data) => {

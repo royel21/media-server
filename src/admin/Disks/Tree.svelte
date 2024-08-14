@@ -4,6 +4,7 @@
   import DirectoryModal from "./DirectoryModal.svelte";
   import Icons from "src/icons/Icons.svelte";
   import Loading from "src/ShareComponent/Loading.svelte";
+  import { setMessage } from "../Store/MessageStore";
 
   const socket = getContext("socket");
   let content = [];
@@ -31,6 +32,13 @@
     content = data;
     loading = false;
   };
+
+  const onCleanupMessage = (message) => {
+    console.log(message);
+    setMessage({ msg: message });
+  };
+
+  socket.on("finish-cleaning", onCleanupMessage);
   socket.on("disk-loaded", onDiskdata);
 
   onMount(() => {
@@ -40,6 +48,7 @@
   });
 
   onDestroy(() => {
+    socket.off("finish-cleaning", onCleanupMessage);
     socket.off("disk-loaded", onDiskdata);
   });
 
@@ -95,7 +104,6 @@
   .tree-title {
     height: calc(100% - 39px);
     overflow-y: auto;
-    padding: 0px 8px;
   }
   .tree-title .tree-name {
     user-select: none;

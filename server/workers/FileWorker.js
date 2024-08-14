@@ -1,4 +1,5 @@
 import db from "../models/index.js";
+import { moveToDir, remFolder, removeDFolder, workVideos } from "./videoHelper.js";
 
 const sendMessage = (event, message) => {
   process.send({ event, message });
@@ -138,6 +139,10 @@ const actions = {
   removeFile,
   renameFolder,
   removeFolder,
+  workVideos,
+  removeDFolder,
+  moveToDir,
+  remFolder,
 };
 
 const works = {
