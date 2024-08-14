@@ -9,15 +9,14 @@ const sendMessage = (message, event = "finish-cleaning") => {
 };
 
 const renameVideoFile = (src, dest, file, regex, text) => {
-  file = file.replace(text, "");
-
   if (/movie/gi.test(file)) {
     fs.moveSync(path.join(src, file), path.join(dest, `Movie.${file.split(".").pop()}`));
     return;
   }
 
   try {
-    let nFile = file.replace(regex, "");
+    let nFile = file.replace(regex, "").replace(text, "");
+
     const num = nFile.match(/^\d+/);
 
     if (num[0] && num[0].length < 2) {
