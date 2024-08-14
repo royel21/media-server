@@ -1,6 +1,7 @@
 import path from "path";
 import fs from "fs-extra";
 import db from "../models/index.js";
+import { execSync } from "child_process";
 
 const sendMessage = (message, event = "finish-cleaning") => {
   console.log(message);
@@ -8,14 +9,27 @@ const sendMessage = (message, event = "finish-cleaning") => {
 };
 
 const renameVideoFile = (src, dest, file, regex) => {
-  if (/movie/gi.test(file)) return;
+  if (/movie/gi.test(file)) {
+    fs.moveSync(path.join(src, file), path.join(dest, `Movie.${file.split(".").pop()}`));
+    return;
+  }
 
   try {
-    fs.moveSync(path.join(src, file), path.join(dest, file.replace(regex, "")));
+    let nFile = file.replace(regex, "");
+    const num = nFile.match(/^\d+/);
+    console.log(num[0], num[0].length);
+
+    if (num[0] && num[0].length < 2) {
+      nFile = nFile.replace(num[0], num[0].padStart(2, "0"));
+    }
+
+    if (file !== nFile) {
+      fs.moveSync(path.join(src, file), path.join(dest, nFile));
+    }
   } catch (error) {}
 };
 
-const checkedToremove = (file) => {
+const checkedToremove = (file, pass) => {
   if (/\.(txt|url|html|htm|png|jpg)$/.test(file)) {
     fs.removeSync(file);
     return true;
@@ -26,7 +40,23 @@ const checkedToremove = (file) => {
 
 const vRex = /\.(mp4|mkv|avi)/;
 
-export const workVideos = ({ Name, Path }) => {
+export const workVideos = ({ folder, pass }) => {
+  const { Name, Path } = folder;
+
+  pass = pass ? `-p'${pass}'` : "";
+
+  for (const file of fs.readdirSync(Path).filter((f) => /\.exe$/.test(f))) {
+    try {
+      const filePath = path.join(Path, file);
+      const result = execSync(`unrar x -y ${pass} '${filePath}' '${Path}'`);
+      if (/All Ok/gi.test(result.toString())) {
+        fs.removeSync(path.join(Path, file));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   sendMessage(`Starting to clean up: ${Name}`);
 
   const items = fs.readdirSync(Path);
@@ -38,7 +68,7 @@ export const workVideos = ({ Name, Path }) => {
 
     const fpath = path.join(Path, item);
 
-    if (checkedToremove(fpath)) continue;
+    if (checkedToremove(fpath, pass)) continue;
 
     if (!vRex.test(item)) {
       file = fs.readdirSync(fpath).find((f) => vRex.test(f));
@@ -67,6 +97,10 @@ export const removeDFolder = ({ Name, Path }) => {
   }
 };
 
+function timeout(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export const moveToDir = async ({ folder, DirectoryId }) => {
   const dir = await db.directory.findOne({ where: { Id: DirectoryId } });
   const { Name } = folder;
@@ -77,7 +111,14 @@ export const moveToDir = async ({ folder, DirectoryId }) => {
     sendMessage(`Moving: ${Name} from: ${folder.Path} -> To: ${Path}`);
 
     try {
-      fs.moveSync(folder.Path, Path, { overwrite: true });
+      const files = fs.readdirSync(folder.Path);
+      for (const file of files) {
+        fs.moveSync(path.join(folder.Path, file), path.join(Path, file), { overwrite: true });
+      }
+      await timeout(500);
+
+      fs.removeSync(folder.Path);
+
       const FileCount = fs.readdirSync(Path).filter((f) => vRex.test(f)).length;
       let found = await db.folder.findOne({ where: { Name, DirectoryId } });
 

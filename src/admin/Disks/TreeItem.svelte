@@ -6,6 +6,7 @@
   import MoveModal from "./MoveModal.svelte";
   import { setMessage } from "../Store/MessageStore";
   import RenameModal from "./RenameModal.svelte";
+  import ModalPassword from "./ModalPassword.svelte";
 
   export let items = [];
   export let type;
@@ -14,6 +15,7 @@
   let showConfirm;
   let showMoveTo = false;
   let showRename = false;
+  let showModalPass = false;
 
   const dispatch = createEventDispatcher();
   const socket = getContext("socket");
@@ -43,17 +45,20 @@
     }
   };
 
+  const cleanDir = (data) => {
+    if (data.folder.Path) {
+      socket.emit("file-work", { action: "workVideos", data });
+    }
+    showModalPass = false;
+  };
+
   const menuActions = (event, id) => {
     let li = event.target.closest("li");
     item = items.find((d) => d.Id.toString() === li.id);
 
     const actions = {
       scanDirectory: () => dispatch("scanDir", item),
-      cleanupVideos: () => {
-        if (item.Path) {
-          socket.emit("file-work", { action: "workVideos", data: item });
-        }
-      },
+      cleanupVideos: () => (showModalPass = item),
       removeDFolder: () => (showConfirm = item),
       moveToDir: () => (showMoveTo = item),
       remFolder: () => (showRename = item),
@@ -127,6 +132,10 @@
 
 {#if showRename}
   <RenameModal data={showRename} hide={hideRename} acept={onRename} />
+{/if}
+
+{#if showModalPass}
+  <ModalPassword data={showModalPass} acept={cleanDir} hide={() => (showModalPass = false)} />
 {/if}
 
 {#if showMenu && /folder/.test(showMenu.Type)}
