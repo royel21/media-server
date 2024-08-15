@@ -215,6 +215,12 @@
   }
   .dir {
     user-select: initial;
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+    width: calc(100% - 25px);
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   .dir span {
     display: none;
@@ -240,14 +246,6 @@
   }
   .caret:active {
     text-transform: scale(1.2);
-  }
-  .dir {
-    position: relative;
-    cursor: pointer;
-    display: inline-block;
-    width: calc(100% - 25px);
-    white-space: nowrap;
-    text-overflow: ellipsis;
   }
   .file .dir:hover:after,
   .file .dir:hover:before {
