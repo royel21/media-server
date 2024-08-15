@@ -119,6 +119,7 @@
   .tree-title {
     height: calc(100% - 39px);
     overflow-y: auto;
+    padding-left: 5px;
   }
   .tree-title .tree-name {
     user-select: none;

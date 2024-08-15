@@ -7,7 +7,6 @@
   import { setMessage } from "../Store/MessageStore";
   import RenameModal from "./RenameModal.svelte";
   import ModalPassword from "./ModalPassword.svelte";
-  import Content from "src/user/Pages/FileBrowser/Content.svelte";
 
   export let items = [];
   export let type;
@@ -109,8 +108,8 @@
       console.log(error);
       return setMessage({ error: true, msg: msg });
     }
-    console.log(folder);
-    items = items.filter((it) => it.Id !== folder.Id);
+    items = items.filter((it) => it.Name !== folder.Name);
+    console.log(items);
     if (FolderId) {
       socket.emit("scan-dir", { Id: FolderId, isFolder: true });
     }
