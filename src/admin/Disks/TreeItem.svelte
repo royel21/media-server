@@ -188,7 +188,7 @@
     >
       <Icons name={Type || type} />
       {Name}
-      <span class="count">Files: {Content.length}</span>
+      <span class:count={Content.length}>Files: {Content.length}</span>
     </span>
     {#if Content.length > 0}
       <ul class="tree-node usn">
@@ -215,6 +215,9 @@
   }
   .dir {
     user-select: initial;
+  }
+  .dir span {
+    display: none;
   }
   .dir:hover {
     text-decoration: underline;
@@ -294,6 +297,7 @@
   }
 
   .count {
+    display: inline-block;
     position: absolute;
     background-color: #080808;
     right: 5px;
