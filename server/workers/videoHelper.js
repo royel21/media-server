@@ -9,30 +9,42 @@ const sendMessage = (message, event = "finish-cleaning") => {
 };
 
 const renameVideoFile = (src, dest, file, regex, text) => {
-  if (/movie/gi.test(file)) {
-    fs.moveSync(path.join(src, file), path.join(dest, `Movie.${file.split(".").pop()}`));
-    return;
-  }
-
   try {
-    let nFile = file.replace(regex, "").replace(text, "");
-    nFile = nFile
-      .replace(/^.*. - /, "")
-      .replace(/^.*. Movie /, "Movie ")
-      .replace(/^.*.( - | )Ova /, "Ova ")
-      .replace(/^.*.( - | )Especial /, "Especial ")
-      .replace(/^.*.( - | )Special /, "Special ");
+    const extension = "." + file.split(".").pop();
 
-    const num = nFile.match(/^\d+/);
+    if (/move/i.test(file)) {
+      file = file.replace(/^.*. Movie|^Movie( |)/i, "Movie ");
 
-    if (num.length) {
+      fs.moveSync(path.join(src, file), path.join(dest, file.trim()));
+      return;
+    }
+
+    let nFile = file.replace(extension, "").replace(text, "").replace(regex, "");
+
+    if (/ova|especial|special/i.test(file)) {
+      nFile = nFile
+        .replace(/^.*.( - | )Ova /i, "Ova ")
+        .replace(/^.*.( - | )Especial /i, "Especial ")
+        .replace(/^.*.( - | )Special /i, "Special ")
+        .trim();
+    } else {
+      nFile = nFile.replace(/^.*. - /, "").trim();
+    }
+
+    const num = nFile.match(/\d+/);
+
+    nFile += extension.toLocaleLowerCase();
+
+    if (num && num[0]?.length < 2) {
       nFile = nFile.replace(num[0], num[0].padStart(2, "0"));
     }
 
     if (file !== nFile) {
       fs.moveSync(path.join(src, file), path.join(dest, nFile));
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const checkedToremove = (file) => {
@@ -48,6 +60,7 @@ const vRex = /\.(mp4|mkv|avi)/;
 
 export const workVideos = ({ folder, pass, text }) => {
   const { Name, Path } = folder;
+  sendMessage(`Starting to clean up: ${Name}`);
 
   pass = pass ? `-p'${pass}'` : "";
 
@@ -59,11 +72,13 @@ export const workVideos = ({ folder, pass, text }) => {
         fs.removeSync(path.join(Path, file));
       }
     } catch (error) {
-      console.log(error);
+      if (error.toString().includes("Enter password")) {
+        sendMessage({ error: `Password Error For: ${Name}` });
+      }
+      console.log(error.toString());
+      return;
     }
   }
-
-  sendMessage(`Starting to clean up: ${Name}`);
 
   const items = fs.readdirSync(Path);
 

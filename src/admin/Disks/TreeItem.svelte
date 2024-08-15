@@ -108,11 +108,13 @@
       console.log(error);
       return setMessage({ error: true, msg: msg });
     }
-    items = items.filter((it) => it.Path !== folder.Path);
-    if (FolderId) {
-      socket.emit("scan-dir", { Id: FolderId, isFolder: true });
+    if (items.find((it) => it.Name === folder.Name)) {
+      items = items.filter((it) => it.Name !== folder.Name);
+      if (FolderId) {
+        socket.emit("scan-dir", { Id: FolderId, isFolder: true });
+      }
+      setMessage({ msg: "Finish Moving Folder: " + folder.Name });
     }
-    setMessage({ msg: "Finish Moving Folder: " + folder.Name });
   };
 
   onMount(() => {
@@ -188,6 +190,7 @@
       {Name}
     </span>
     {#if Content.length > 0}
+      <span class="count">Files: {Content.length}</span>
       <ul class="tree-node usn">
         <svelte:self type="folder" items={Content} on:scanDir {scrollToTop} offset={offsetNext} {zIndex} />
       </ul>
@@ -209,6 +212,9 @@
   }
   ul {
     margin-left: 25px;
+  }
+  .dir {
+    user-select: initial;
   }
   .dir:hover {
     text-decoration: underline;
@@ -285,6 +291,16 @@
     position: fixed;
     left: 20px;
     bottom: 20px;
+  }
+
+  .count {
+    position: absolute;
+    background-color: #080808;
+    right: 5px;
+    top: 0;
+    z-index: 300;
+    padding: 2px;
+    border-radius: 0.25rem;
   }
 
   .scroll-top :global(.icon-arrowcircleup) {
