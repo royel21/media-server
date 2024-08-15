@@ -109,7 +109,8 @@
       console.log(error);
       return setMessage({ error: true, msg: msg });
     }
-    items = items.filter((it) => it.Path !== folder.Path);
+    console.log(folder);
+    items = items.filter((it) => it.Id !== folder.Id);
     if (FolderId) {
       socket.emit("scan-dir", { Id: FolderId, isFolder: true });
     }
@@ -211,6 +212,9 @@
   }
   ul {
     margin-left: 25px;
+  }
+  .dir {
+    user-select: initial;
   }
   .dir:hover {
     text-decoration: underline;
