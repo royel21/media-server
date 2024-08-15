@@ -107,8 +107,12 @@
   }
   .r-names :global(.icon-squareplus) {
     height: 35px;
-    width: 45px;
-    top: -1px;
+    width: 37px;
+    top: 2px;
+  }
+  .r-names :global(.icon-timescircle) {
+    top: 8px;
+    right: -7px;
   }
   .r-names :global(.input-label) {
     padding-left: 0.35rem;

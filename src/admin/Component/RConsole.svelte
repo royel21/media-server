@@ -165,7 +165,7 @@
   label {
     position: absolute;
     background: #0847ef;
-    z-index: 99999999;
+    z-index: 99;
     right: 20px;
     top: 60px;
     padding: 0 5px;

@@ -89,8 +89,8 @@
     <Route path="/admin/configs/:tab" component={Configs} />
     <Route path="/admin/" component={User} />
     <Route path="/"><Redirect to="/admin/" /></Route>
+    <RConsole />
   </div>
-  <RConsole />
 </Router>
 
 <style>
