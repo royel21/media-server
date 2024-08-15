@@ -7,6 +7,7 @@
   import { setMessage } from "../Store/MessageStore";
   import RenameModal from "./RenameModal.svelte";
   import ModalPassword from "./ModalPassword.svelte";
+  import Content from "src/user/Pages/FileBrowser/Content.svelte";
 
   export let items = [];
   export let type;
@@ -188,6 +189,7 @@
       {Name}
     </span>
     {#if Content.length > 0}
+      <span class="count">Files: {Content.length}</span>
       <ul class="tree-node usn">
         <svelte:self type="folder" items={Content} on:scanDir {scrollToTop} offset={offsetNext} {zIndex} />
       </ul>
@@ -285,6 +287,16 @@
     position: fixed;
     left: 20px;
     bottom: 20px;
+  }
+
+  .count {
+    position: absolute;
+    background-color: #080808;
+    right: 5px;
+    top: 0;
+    z-index: 300;
+    padding: 2px;
+    border-radius: 0.25rem;
   }
 
   .scroll-top :global(.icon-arrowcircleup) {
