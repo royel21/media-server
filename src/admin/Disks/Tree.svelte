@@ -78,7 +78,7 @@
 
 <div class="d-info" bind:this={ref}>
   <input type="checkbox" name="" id="d-info" bind:checked={showDiskInfo} />
-  <h4><label for="d-info">Disk Info {showDiskInfo ? "Hide" : "Show"}</label></h4>
+  <h4><label for="d-info">{showDiskInfo ? "Hide" : "Show"} Disk Info</label></h4>
   <table>
     <thead>
       <tr>

@@ -188,9 +188,9 @@
     >
       <Icons name={Type || type} />
       {Name}
+      <span class="count">Files: {Content.length}</span>
     </span>
     {#if Content.length > 0}
-      <span class="count">Files: {Content.length}</span>
       <ul class="tree-node usn">
         <svelte:self type="folder" items={Content} on:scanDir {scrollToTop} offset={offsetNext} {zIndex} />
       </ul>
