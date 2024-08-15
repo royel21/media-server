@@ -229,6 +229,16 @@
     text-decoration: underline;
     background-color: #696a6b;
   }
+  .dir .count {
+    display: inline-block;
+    position: absolute;
+    background-color: #080808;
+    right: 5px;
+    top: 0;
+    z-index: 300;
+    padding: 2px;
+    border-radius: 0.25rem;
+  }
   .caret {
     display: inline-block;
     position: sticky;
@@ -292,17 +302,6 @@
     position: fixed;
     left: 20px;
     bottom: 20px;
-  }
-
-  .count {
-    display: inline-block;
-    position: absolute;
-    background-color: #080808;
-    right: 5px;
-    top: 0;
-    z-index: 300;
-    padding: 2px;
-    border-radius: 0.25rem;
   }
 
   .scroll-top :global(.icon-arrowcircleup) {
