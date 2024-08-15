@@ -108,12 +108,13 @@
       console.log(error);
       return setMessage({ error: true, msg: msg });
     }
-    items = items.filter((it) => it.Name !== folder.Name);
-    console.log(items);
-    if (FolderId) {
-      socket.emit("scan-dir", { Id: FolderId, isFolder: true });
+    if (items.find((it) => it.Name === folder.Name)) {
+      items = items.filter((it) => it.Name !== folder.Name);
+      if (FolderId) {
+        socket.emit("scan-dir", { Id: FolderId, isFolder: true });
+      }
+      setMessage({ msg: "Finish Moving Folder: " + folder.Name });
     }
-    setMessage({ msg: "Finish Moving Folder: " + folder.Name });
   };
 
   onMount(() => {
