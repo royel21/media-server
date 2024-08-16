@@ -11,7 +11,6 @@ const sendMessage = (message, event = "finish-cleaning") => {
 const renameVideoFile = (src, dest, file, regex, text) => {
   try {
     const extension = "." + file.split(".").pop();
-    file = file.replace("_", " ");
 
     if (/move/i.test(file)) {
       file = file.replace(/^.*. Movie|^Movie( |)/i, "Movie ");
@@ -20,7 +19,13 @@ const renameVideoFile = (src, dest, file, regex, text) => {
       return;
     }
 
-    let nFile = file.replace(extension, "").replace(text, "").replace(regex, "");
+    let nFile = file
+      .replaceAll("_", " ")
+      .replace(extension, "")
+      .replace(text, "")
+      .replace(".", "-")
+      .replace(regex, "")
+      .replace(/( |)\[(.*?)\]( |)|( |)\((.*?)\)( |)/g, "");
 
     if (/ova|especial|special/i.test(file)) {
       nFile = nFile
@@ -28,7 +33,7 @@ const renameVideoFile = (src, dest, file, regex, text) => {
         .replace(/^.*.( - | )Especial /i, "Especial ")
         .replace(/^.*.( - | )Special /i, "Special ")
         .trim();
-    } else {
+    } else if (!/^\d+/.test(nFile)) {
       nFile = nFile.replace(/^.*. - /, "").trim();
     }
 
@@ -67,6 +72,9 @@ export const workVideos = ({ folder, pass, text }) => {
 
   for (const file of fs.readdirSync(Path).filter((f) => /\.exe$/.test(f))) {
     try {
+      if (!/\.part1/i.test(file) && /\.part\d+/i.test(file)) {
+        continue;
+      }
       const filePath = path.join(Path, file);
       const result = execSync(`unrar x -y ${pass} '${filePath}' '${Path}'`);
       if (/All Ok/gi.test(result.toString())) {
@@ -83,7 +91,7 @@ export const workVideos = ({ folder, pass, text }) => {
 
   const items = fs.readdirSync(Path);
 
-  const regex = new RegExp(`( |)\\[(.*?)\\]( |)|${Name.replace(/ BD$| s\d+( -|)/gi, "")}( -|) `, "gi");
+  const regex = new RegExp(`${Name.replace(/ BD$| s\d+( -|)/gi, "")}( -|) `, "gi");
 
   for (const item of items) {
     let file = item;

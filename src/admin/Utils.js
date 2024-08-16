@@ -3,13 +3,50 @@ export const calRows = (query) => {
   return parseInt(container.offsetHeight / 40);
 };
 
+const tags = [
+  "Age Gap",
+  "Battle Royale",
+  "Borderline H",
+  "Body Swapping",
+  "Brother Complex",
+  "Childhood Friends",
+  "College Life",
+  "Coming of Age",
+  "Demon King",
+  "Explicit Sex",
+  "Gender Bender",
+  "Gender Swap",
+  "Love Triangle",
+  "Love Life",
+  "Magical Girl",
+  "Martial Arts",
+  "Mature Themes",
+  "Office Workers",
+  "Physical Abuse",
+  "Sexual Abuse",
+  "School Club",
+  "School Life",
+  "Slice of life",
+  "Slow Life",
+  "Super Power",
+  "Time Travel",
+  "Tower Climbing",
+  "Video Games",
+  "Virtual Reality",
+  "Reverse Harem",
+  "Time Loop",
+  "Unrequited Love",
+  "Work Life",
+];
+
+const regex = new RegExp(tags.join("|"), "ig");
+
 export const validGenres = (g) => {
-  return g
-    .split(/,|\/|\n/g)
-    .filter((g) => g)
-    .map((ge) => (/school,/gi.test(ge) ? "School Life" : ge.trim()))
-    .sort()
-    .join(", ");
+  const parts = g.match(regex) || [];
+
+  const gens = new Set([...parts, ...g.replace(regex, "").split(/,|\/|\n| /g)].sort());
+  console.log(parts, gens);
+  return [...gens].filter((g) => g).join(", ");
 };
 
 export const validateAuthor = (auth) => {
