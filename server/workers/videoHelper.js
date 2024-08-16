@@ -11,6 +11,7 @@ const sendMessage = (message, event = "finish-cleaning") => {
 const renameVideoFile = (src, dest, file, regex, text) => {
   try {
     const extension = "." + file.split(".").pop();
+    file = file.replace("_", " ");
 
     if (/move/i.test(file)) {
       file = file.replace(/^.*. Movie|^Movie( |)/i, "Movie ");
