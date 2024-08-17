@@ -38,6 +38,7 @@ const tags = [
   "Unrequited Love",
   "Work Life",
   "Child Protagonists",
+  "Boarding School",
 ];
 
 const regex = new RegExp(tags.join("|"), "ig");

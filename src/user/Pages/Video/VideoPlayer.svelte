@@ -256,7 +256,7 @@
     margin-right: 5px;
   }
   .player-btns *:not(.v-volume) {
-    margin-right: 8px;
+    margin: 0 15px;
   }
   .player-btns .btn-screen {
     margin-right: 0px;
@@ -360,6 +360,10 @@
 
     :global(body #play-list) {
       bottom: 0 !important;
+    }
+
+    .player-btns *:not(.v-volume) {
+      margin: 0 5px;
     }
   }
 </style>
