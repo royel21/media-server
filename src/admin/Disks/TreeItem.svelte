@@ -28,19 +28,21 @@
   const expandFolder = async (event) => {
     let li = event.target.closest("li");
     item = items.find((d) => d.Id.toString() === li.id);
-    if (item.Content.length === 0) {
-      const data = await apiUtils.post("admin/directories/Content", { Path: item.Path });
-      item.Content = data.data;
-      items = items;
-    } else {
-      item.Content = [];
-      items = items;
-    }
-    items.forEach((it) => {
-      if (it.Id !== item.Id) {
-        it.Content = [];
+    if (item.Type !== "file") {
+      if (item.Content.length === 0) {
+        const data = await apiUtils.post("admin/directories/Content", { Path: item.Path });
+        item.Content = data.data;
+        items = items;
+      } else {
+        item.Content = [];
+        items = items;
       }
-    });
+      items.forEach((it) => {
+        if (it.Id !== item.Id) {
+          it.Content = [];
+        }
+      });
+    }
   };
 
   const removeFile = async (file) => {
@@ -214,13 +216,13 @@
     margin-left: 25px;
   }
   .dir {
-    user-select: initial;
     position: relative;
     cursor: pointer;
     display: inline-block;
     width: calc(100% - 25px);
     white-space: nowrap;
     text-overflow: ellipsis;
+    user-select: text;
   }
   .dir span {
     display: none;

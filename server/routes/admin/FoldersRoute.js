@@ -132,7 +132,7 @@ routes.get("/folder/:folderId?", async (req, res) => {
   let files = [];
 
   if (fs.existsSync(folder.Path)) {
-    fs.readdirSync(folder.Path).filter((f) => !/\.(webp|jpg|png|gif|jpeg)/.test(f));
+    files = fs.readdirSync(folder.Path).filter((f) => !/\.(webp|jpg|png|gif|jpeg)/.test(f));
   }
 
   res.send({

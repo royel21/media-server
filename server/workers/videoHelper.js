@@ -4,7 +4,9 @@ import db from "../models/index.js";
 import { execSync } from "child_process";
 
 const sendMessage = (message, event = "finish-cleaning") => {
-  console.log(message);
+  if (event === "finish-cleaning") {
+    console.log(message);
+  }
   process.send({ event, message });
 };
 
@@ -25,6 +27,7 @@ const renameVideoFile = (src, dest, file, regex, text) => {
       .replace(text, "")
       .replace(".", "-")
       .replace(regex, "")
+      .replace(/Season \d+ (- |)/i, "")
       .replace(/( |)\[(.*?)\]( |)|( |)\((.*?)\)( |)/g, "");
 
     if (/ova|especial|special/i.test(file)) {

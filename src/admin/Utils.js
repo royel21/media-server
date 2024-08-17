@@ -37,6 +37,7 @@ const tags = [
   "Time Loop",
   "Unrequited Love",
   "Work Life",
+  "Child Protagonists",
 ];
 
 const regex = new RegExp(tags.join("|"), "ig");
