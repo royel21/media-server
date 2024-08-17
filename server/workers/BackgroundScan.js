@@ -219,7 +219,6 @@ const scanDirectory = async ({ id, dir, isFolder }) => {
       console.timeEnd("list-files");
 
       sendMessage("cleaning direcory");
-      console.time("cleaning direcory");
       await rmOrphanFiles();
 
       sendMessage("scanning directory");
