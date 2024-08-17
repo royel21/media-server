@@ -129,7 +129,11 @@ routes.get("/folder/:folderId?", async (req, res) => {
 
   const dirs = await db.directory.findAll({ order: ["Name"] });
 
-  const files = fs.readdirSync(folder.Path).filter((f) => !/\.(webp|jpg|png|gif|jpeg)/.test(f));
+  let files = [];
+
+  if (fs.existsSync(folder.Path)) {
+    fs.readdirSync(folder.Path).filter((f) => !/\.(webp|jpg|png|gif|jpeg)/.test(f));
+  }
 
   res.send({
     Name: folder.Name,
