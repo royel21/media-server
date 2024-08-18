@@ -39,6 +39,7 @@ const tags = [
   "Work Life",
   "Child Protagonists",
   "Boarding School",
+  "Sci Fi",
 ];
 
 const regex = new RegExp(tags.join("|"), "ig");
@@ -47,7 +48,6 @@ export const validGenres = (g) => {
   const parts = g.match(regex) || [];
 
   const gens = new Set([...parts, ...g.replace(regex, "").split(/,|\/|\n| /g)].sort());
-  console.log(parts, gens);
   return [...gens].filter((g) => g).join(", ");
 };
 
