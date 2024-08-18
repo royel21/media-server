@@ -18,6 +18,14 @@
 
   const getLeft = (t) => t.getBoundingClientRect().left;
 
+  const updateValue = (val) => {
+    let tempVal = Number(map(val - 1, 0, sliderRef.offsetWidth - 2, min, max).toFixed(2));
+    tempVal = tempVal < 0 ? 0 : tempVal > max ? max : tempVal;
+    if (tempVal > -0.01) {
+      onChange(tempVal);
+    }
+  };
+
   const onMDown = (e) => {
     isMdown = { is: true, id: uniqId };
     let xpos;
@@ -75,13 +83,6 @@
     } else {
       document.on("mousemove", globalMMove);
     }
-    e.stopPropagation();
-  };
-
-  const updateValue = (val) => {
-    let tempVal = Number(map(val - 1, 0, sliderRef.offsetWidth - 2, min, max).toFixed(2));
-    tempVal = tempVal < 0 ? 0 : tempVal > max ? max : tempVal;
-    onChange(tempVal);
   };
 
   $: progress = map(value, min, max, 0, 100);
@@ -96,15 +97,20 @@
   <div
     id={uniqId}
     class="rc-track"
-    on:mousedown={onMDown}
-    on:touchstart={onMDown}
+    on:mousedown|stopPropagation={onMDown}
+    on:touchstart|stopPropagation={onMDown}
     bind:this={sliderRef}
     on:mousemove={onPreview}
   >
     <div class="rc-t">
       <div class="rc-progress" style={`width: ${progress?.toFixed(2) || 0}%`} />
     </div>
-    <span class="rc-thumb" style={`left: calc(${progress}% - 11px)`} on:mousedown={handleThumb} />
+    <span
+      class="rc-thumb"
+      style={`left: calc(${progress}% - 11px)`}
+      on:touchstart|stopPropagation={handleThumb}
+      on:mousedown|stopPropagation={handleThumb}
+    />
     {#if preview}
       <span
         class="rc-preview"
@@ -150,6 +156,7 @@
     width: 100%;
     overflow: hidden;
     border-radius: 0.3rem;
+    pointer-events: none;
   }
 
   .rc-slider .rc-progress {
