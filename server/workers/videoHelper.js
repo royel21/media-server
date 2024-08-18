@@ -85,7 +85,7 @@ export const workVideos = ({ folder, pass, text }) => {
       }
     } catch (error) {
       if (error.toString().includes("Enter password")) {
-        sendMessage({ error: `Password Error For: ${Name}` });
+        sendMessage({ error: `Wrong Password For: ${Name}` });
       }
       console.log(error.toString());
       return;
