@@ -40,6 +40,7 @@
   .modal {
     width: 395px;
     outline: none;
+    pointer-events: all;
   }
   .modal-body {
     padding: 15px 5px;
