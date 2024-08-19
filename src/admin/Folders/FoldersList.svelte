@@ -324,5 +324,8 @@
     .dir-list select {
       font-size: 0.8rem;
     }
+    option {
+      font-size: 0.8rem;
+    }
   }
 </style>
