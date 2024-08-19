@@ -20,6 +20,7 @@
 
   const { NextFile, PrevFile, Fullscreen, SkipForward, SkipBack } = KeyMap;
   const socket = getContext("socket");
+  const User = getContext("User");
   const dispatch = createEventDispatcher();
 
   let webtoon = $ConfigStore.Viewer.manga.webtoon;
@@ -289,7 +290,9 @@
     <span class="config">
       <MangaConfig {ToggleMenu} />
     </span>
-    <span class="remove" on:click={removeFile}><Icons name="trash" color="red" /></span>
+    {#if User.Name.includes("Royel")}
+      <span class="remove" on:click={removeFile}><Icons name="trash" color="red" /></span>
+    {/if}
   </div>
 </div>
 
