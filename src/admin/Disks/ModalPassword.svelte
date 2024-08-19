@@ -17,7 +17,7 @@
   };
 </script>
 
-<div bind:this={ref} class="modal-container" tabindex="-1">
+<div bind:this={ref} class="modal-container" tabindex="-1" on:contextmenu|stopPropagation={() => {}}>
   <div id="disk-renamer" class="modal card" transition:fade={{ duration: 200 }}>
     <div class="modal-header">
       <h4>Password if needed or left empty</h4>

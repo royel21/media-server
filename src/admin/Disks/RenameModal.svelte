@@ -27,7 +27,7 @@
   };
 </script>
 
-<div bind:this={ref} class="modal-container" tabindex="-1">
+<div bind:this={ref} class="modal-container" tabindex="-1" on:contextmenu|stopPropagation={() => {}}>
   <div class="modal card" transition:fade={{ duration: 200 }}>
     <div class="modal-header">
       <h4>Move Folder to Directory</h4>
