@@ -10,6 +10,8 @@ const sendMessage = (message, event = "finish-cleaning") => {
   process.send({ event, message });
 };
 
+let count = 0;
+
 const renameVideoFile = (src, dest, file, regex, text) => {
   try {
     const extension = "." + file.split(".").pop();
@@ -48,6 +50,10 @@ const renameVideoFile = (src, dest, file, regex, text) => {
       nFile = nFile.replace(num[0], num[0].padStart(2, "0"));
     }
 
+    if (nFile === extension.toLocaleLowerCase()) {
+      nFile = "0" + count++ + extension;
+    }
+
     if (file !== nFile) {
       fs.moveSync(path.join(src, file), path.join(dest, nFile));
     }
@@ -68,6 +74,7 @@ const checkedToremove = (file) => {
 const vRex = /\.(mp4|mkv|avi)/;
 
 export const workVideos = ({ folder, pass, text }) => {
+  count = 0;
   const { Name, Path } = folder;
   sendMessage(`Starting to clean up: ${Name}`);
 
