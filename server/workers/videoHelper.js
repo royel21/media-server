@@ -93,7 +93,7 @@ export const workVideos = ({ folder, pass, text }) => {
       }
     } catch (error) {
       if (error.toString().includes("Enter password")) {
-        sendMessage({ error: `Wrong Password For: ${Name}` });
+        sendMessage({ error: true, msg: `Wrong Password For: ${Name}` });
       }
       console.log(error.toString());
       return;
@@ -152,6 +152,10 @@ export const moveToDir = async ({ folder, DirectoryId }) => {
     sendMessage(`Moving: ${Name} from: ${folder.Path} -> To: ${Path}`);
 
     try {
+      if (files.find((f) => f.split(".").pop() === "")) {
+        return sendMessage({ error: true, msg: `Folder can't contain other folders` });
+      }
+
       const files = fs.readdirSync(folder.Path);
       for (const file of files) {
         fs.moveSync(path.join(folder.Path, file), path.join(Path, file), { overwrite: true });
