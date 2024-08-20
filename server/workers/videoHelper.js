@@ -152,11 +152,16 @@ export const moveToDir = async ({ folder, DirectoryId }) => {
     sendMessage(`Moving: ${Name} from: ${folder.Path} -> To: ${Path}`);
 
     try {
-      if (files.find((f) => f.split(".").pop() === "")) {
-        return sendMessage({ error: true, msg: `Folder can't contain other folders` });
+      const files = fs.readdirSync(folder.Path);
+
+      //if contain folder cancer transfer
+      if (files.find((f) => !/\.[a-zA-Z0-9]{3,4}$/.test(f))) {
+        return sendMessage(
+          { error: true, msg: `Transfer Canceled Folder, can't contain other folders` },
+          "folder-move"
+        );
       }
 
-      const files = fs.readdirSync(folder.Path);
       for (const file of files) {
         fs.moveSync(path.join(folder.Path, file), path.join(Path, file), { overwrite: true });
       }
