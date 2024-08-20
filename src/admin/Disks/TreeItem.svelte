@@ -7,6 +7,7 @@
   import { setMessage } from "../Store/MessageStore";
   import RenameModal from "./RenameModal.svelte";
   import ModalPassword from "./ModalPassword.svelte";
+  import Menu from "./Menu.svelte";
 
   export let items = [];
   export let type;
@@ -152,15 +153,8 @@
 {#if showModalPass}
   <ModalPassword data={showModalPass} acept={cleanDir} hide={() => (showModalPass = false)} />
 {/if}
-
 {#if showMenu && /folder/.test(showMenu.Type)}
-  <div id="c-menu" style={`left: ${showMenu.e.pageX + 5}px; top:${showMenu.e.pageY + 10}px`} on:click={onMenuClick}>
-    <div id="scanDirectory">Add to Directories</div>
-    <div id="remFolder">Rename Folder</div>
-    <div id="cleanupVideos">Clean Videos</div>
-    <div id="moveToDir">Move To Directory</div>
-    <div id="removeDFolder">Delete Folder</div>
-  </div>
+  <Menu {showMenu} {onMenuClick} />
 {/if}
 
 {#each items as { Content, Id, Name, Type, Path }}
@@ -276,24 +270,6 @@
 
   .file {
     margin: 0;
-  }
-
-  #c-menu {
-    z-index: 300;
-    position: fixed;
-    width: max-content;
-    background-color: rgb(95, 91, 91);
-    cursor: pointer;
-    border-radius: 0.25rem;
-  }
-  #c-menu div {
-    padding: 2px 5px;
-  }
-  #c-menu div:not(:last-child) {
-    border-bottom: 1px solid;
-  }
-  #c-menu div:hover {
-    background-color: #add8e647;
   }
 
   #removeDFolder {
