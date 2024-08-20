@@ -44,11 +44,12 @@ const renameVideoFile = (src, dest, file, regex, text) => {
 
     const num = nFile.match(/\d+/);
 
-    nFile += extension.toLocaleLowerCase();
-
     if (num && num[0]?.length < 2) {
       nFile = nFile.replace(num[0], num[0].padStart(2, "0"));
     }
+
+    nFile = nFile.replace(/\d+nd Season - /, "");
+    nFile += extension.toLocaleLowerCase();
 
     if (nFile === extension.toLocaleLowerCase()) {
       nFile = "0" + count++ + extension;
@@ -157,8 +158,6 @@ export const moveToDir = async ({ folder, DirectoryId }) => {
       }
       await timeout(500);
 
-      fs.removeSync(folder.Path);
-
       const FileCount = fs.readdirSync(Path).filter((f) => vRex.test(f)).length;
       let found = await db.folder.findOne({ where: { Name, DirectoryId } });
 
@@ -174,6 +173,8 @@ export const moveToDir = async ({ folder, DirectoryId }) => {
           CreatedAt: new Date(),
         });
       }
+
+      fs.removeSync(folder.Path);
       sendMessage({ folder, FolderId: found.Id }, "folder-move");
     } catch (error) {
       console.log(error);
