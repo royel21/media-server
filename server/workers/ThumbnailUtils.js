@@ -1,7 +1,12 @@
 import StreamZip from "node-stream-zip";
 import { exec, execFileSync } from "child_process";
-
 import sharp from "sharp";
+import fs from "fs-extra";
+
+import db from "../models/index.js";
+import path from "path";
+import { createDir } from "../Downloader/utils.js";
+import defaultConfig from "../default-config.js";
 
 const IMGTYPES = /\.(jpg|jpeg|png|gif|webp)$/i;
 
@@ -89,4 +94,25 @@ export const getVideoThumnail = async (video, toPath, exist) => {
     return duration;
   }
   return duration;
+};
+
+export const createFolderThumb = async ({ folderId, file }) => {
+  const folder = await db.folder.findOne({ where: { Id: folderId } });
+  try {
+    if (folder && file.data) {
+      const posterPath = path.join(folder.Path, "Cover.jpg");
+
+      createDir(folder.Path);
+
+      const img = sharp(Buffer(file.data));
+      await img.jpeg().toFile(posterPath);
+
+      let Cover = path.join(defaultConfig.ImagesDir, "Folder", folder.FilesType, folder.Name + ".jpg");
+      if (!fs.existsSync(Cover) && fs.existsSync(posterPath)) {
+        await sharp(posterPath).toFormat("jpg").resize({ width: 340 }).toFile(Cover);
+      }
+    }
+  } catch (error) {
+    console.log(error.toString());
+  }
 };

@@ -107,7 +107,7 @@ export const createDir = (dir) => {
       return true;
     }
   } catch (error) {
-    console.log(error);
+    console.log("create-dir-error: ", error);
   }
   return false;
 };

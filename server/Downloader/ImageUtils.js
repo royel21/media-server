@@ -177,17 +177,19 @@ export const downloadAllIMages = async (page, links, state, imgPath, folder, des
   for (let i = 0; i < length; i++) {
     if (state.stopped) return result;
 
-    if (skip === 1) {
+    if (skip > 1) {
+      sendMessage({ text: `Error Skip: ${links[i]}` });
       return result;
     }
 
-    process.stdout.write(`IMG: ${i + 1} / ${length}\r`);
+    process.stdout.write(`IMG: ${(i + 1).toString().padStart(padding, "0")} / ${length}\r`);
 
     const img = await downloadImg(links[i], page, folder);
 
     if (img.badImg) {
       length--;
       thumb++;
+      skip++;
       continue;
     }
 
@@ -205,9 +207,6 @@ export const downloadAllIMages = async (page, links, state, imgPath, folder, des
       }
       zip.addFile(newImg, buff);
       result.count++;
-    } else {
-      sendMessage({ text: `Error Skip: ${links[i]}` });
-      skip++;
     }
   }
 

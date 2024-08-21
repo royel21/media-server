@@ -13,7 +13,7 @@
   let error = "";
   const socket = getContext("socket");
   let folder = {};
-  let imageData = { Id: "", Url: "" };
+  let imageData = { Id: "", Url: "", file: "" };
   let old = {};
   let transfer = false;
 
@@ -21,7 +21,7 @@
 
   const loadDetails = async (Id) => {
     folder = { Id };
-    imageData = { Id, Url: "" };
+    imageData = { Id, Url: "", file: "" };
     const data = await apiUtils.admin(["folders", "folder", Id]);
     if (data.dirs) {
       imageData.Id = Id;
@@ -57,11 +57,13 @@
   };
   const onUrl = ({ target: { value } }) => {
     imageData.Url = value;
+    console.log(imageData);
     error = "";
   };
 
   const cancel = () => {
     folder = { ...old };
+    imageData = {};
     hasChanges = false;
   };
 
@@ -69,6 +71,7 @@
     if (result.Id === folderId) {
       if (result.valid) {
         imageData.Url = "";
+        imageData.file = "";
         setMessage({ msg: `Cover for: ${folder.Name} was updated` });
       } else {
         setMessage({ error: true, msg: `Could't get the image from Url: ${imageData.Url}` });
@@ -81,7 +84,14 @@
 
   const save = async () => {
     if (imageData.Url && /^http/.test(imageData.Url)) {
-      socket.emit("download-server", { action: "Create-Cover", datas: { Id: folderId, imgUrl: imageData.Url } });
+      socket.emit("download-server", {
+        action: "Create-Cover",
+        datas: { Id: folderId, ...imageData },
+      });
+    }
+
+    if (imageData.file) {
+      socket.emit("file-work", { action: "createFolderThumb", data: { folderId, file: imageData.file } });
     }
 
     if (hasChanges) {
@@ -119,7 +129,7 @@
     <Input key="Url" item={imageData} onChange={onUrl} />
   </div>
 </div>
-{#if hasChanges || imageData.Url}
+{#if hasChanges || imageData.Url || imageData.file}
   <div class="d-buttons">
     <button type="button" class="btn primary" on:click={save}>Save</button>
     <button type="button" class="btn" on:click={cancel}>Cancel</button>
