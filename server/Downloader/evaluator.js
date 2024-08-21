@@ -298,10 +298,6 @@ export const adultEvalPage = async (query) => {
   as.reverse().forEach((a) => {
     let text = (a.querySelector("strong,b,san") || a).textContent?.trim();
 
-    if (!/^\d+/i.test(text)) {
-      text = `${extraCount++} ${text}`;
-    }
-
     let fileName = text
       .replace("  ", " ")
       .trim()
@@ -333,6 +329,10 @@ export const adultEvalPage = async (query) => {
 
     if (/ raw$/i.test(title) || Genres?.includes("Raw")) {
       if (!fileName.includes(" raw")) fileName = fileName + " raw";
+    }
+
+    if (!/^\d+/i.test(text)) {
+      text = `${extraCount++} ${text}`;
     }
 
     data.push({ name: fileName, url: a.href, n });
