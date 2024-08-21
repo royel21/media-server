@@ -10,6 +10,7 @@ import defaultConfig from "../default-config.js";
 
 const sendMessage = (event, message) => {
   process.send({ event, message });
+  console.log(event, message);
 };
 
 const IMGTYPES = /\.(jpg|jpeg|png|gif|webp)$/i;
