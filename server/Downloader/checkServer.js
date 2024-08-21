@@ -116,14 +116,14 @@ export const downloadFromPage = async (Id, state) => {
             });
             const files = fs.readdirSync(folder.Path);
 
-            d.chaps = d.chaps.filter(removeRaw(d.chaps)).filter(filterManga(files));
+            d.chaps = d.chaps.filter(filterManga(files));
             const excludes = await db.Exclude.findAll({ where: { LinkName: d.link.Name } });
 
             let updateFolder = false;
 
             let chaptCount = 1;
             for (let chap of d.chaps) {
-              if (/ raw/.test(chap.name) && removeRaw(chap, d.chaps)) continue;
+              if (/ raw/.test(chap.name) && removeRaw(chap, files)) continue;
 
               if (chap.name && !excludes.find((ex) => chap.name.includes(ex.Name))) {
                 try {
