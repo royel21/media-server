@@ -156,10 +156,9 @@ routes.get("/folder/:folderId?", async (req, res) => {
 
 routes.post("/cover", async (req, res) => {
   const { files, body } = req;
-  console.log(body.folderId, files.length);
+
   if (body.folderId && files.image) {
     const folder = await db.folder.findOne({ where: { Id: body.folderId } });
-    console.log(folder.Name);
     try {
       if (folder) {
         const posterPath = path.join(folder.Path, "Cover.jpg");
@@ -173,7 +172,8 @@ routes.post("/cover", async (req, res) => {
 
         createDir(path.join(defaultConfig.ImagesDir, "Folder", folder.FilesType));
 
-        await Sharp(posterPath).toFormat("jpg").resize({ width: 340 }).toFile(Cover);
+        await img.toFormat("jpg").resize({ width: 340 }).toFile(Cover);
+        console.log(Cover);
       }
       res.send({ valid: true });
     } catch (error) {

@@ -1,5 +1,5 @@
 const getImage = async () => {
-  const item_list = await navigator.clipboard.read();
+  const item_list = await navigator.clipboard?.read();
   let image_type; // we will feed this later
   const item = item_list.find(
     (
@@ -19,25 +19,28 @@ const getImage = async () => {
 };
 
 export const handlerPaste = async (item, key, sept, ref) => {
-  let text = await navigator.clipboard?.readText();
+  try {
+    let text = await navigator.clipboard?.readText();
 
-  if (text) {
-    if (item[key] && sept) {
-      if (!item[key].includes(text)) {
-        item[key] = item[key] + sept + text;
+    if (text) {
+      if (item[key] && sept) {
+        if (!item[key].includes(text)) {
+          item[key] = item[key] + sept + text;
+        }
+      } else {
+        item[key] = text;
       }
-    } else {
-      item[key] = text;
+      ref.value = item[key];
+      return ref.dispatchEvent(new Event("change"));
     }
-    ref.value = item[key];
-    ref.dispatchEvent(new Event("change"));
-  }
-
-  let image = await getImage();
-  if (!text && image) {
-    item.file = image;
-    ref.value = "";
-    item.url = "";
-    ref.dispatchEvent(new Event("change"));
+    let image = await getImage();
+    if (!text && image) {
+      item.file = image;
+      ref.value = "";
+      item.url = "";
+      ref.dispatchEvent(new Event("change"));
+    }
+  } catch (error) {
+    console.log(error);
   }
 };

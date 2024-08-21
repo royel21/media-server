@@ -256,6 +256,7 @@ const loadLinks = async (Id, bypass) => {
 
 const onCreateCover = async ({ Id, imgUrl }) => {
   const page = await createPage(state.browser, 60000);
+  console.log(Id, imgUrl);
   if (/http/i.test(imgUrl)) {
     const folder = await db.folder.findOne({ where: { Id } });
     if (folder) {

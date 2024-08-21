@@ -84,9 +84,10 @@
 
   const save = async () => {
     if (imageData.Url && /^http/.test(imageData.Url)) {
+      setMessage({ msg: "Updatng Cover Please Wait" });
       socket.emit("download-server", {
         action: "Create-Cover",
-        datas: { Id: folderId, ...imageData },
+        datas: { Id: folderId, imgUrl: imageData.Url },
       });
     }
 
