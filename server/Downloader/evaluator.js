@@ -294,7 +294,7 @@ export const adultEvalPage = async (query) => {
   const padding = maxNum > 950 ? 4 : 3;
 
   let data = [];
-  let extraCount = maxNum + 1;
+  let extraCount = maxNum ? maxNum + 1 : 0;
   as.reverse().forEach((a) => {
     let text = (a.querySelector("strong,b,san") || a).textContent?.trim();
 
@@ -321,6 +321,11 @@ export const adultEvalPage = async (query) => {
       fileName = fileName + " " + season[0];
     }
 
+    // if name is extra and don't start with number
+    if (!/^\d+/i.test(fileName)) {
+      fileName = `${extraCount++} ${fileName}`;
+    }
+
     let n = fileName.match(/\d+/);
     if (n) {
       n = n[0];
@@ -329,10 +334,6 @@ export const adultEvalPage = async (query) => {
 
     if (/ raw$/i.test(title) || Genres?.includes("Raw")) {
       if (!fileName.includes(" raw")) fileName = fileName + " raw";
-    }
-
-    if (!/^\d+/i.test(fileName)) {
-      fileName = `${extraCount++} ${fileName}`;
     }
 
     data.push({ name: fileName, url: a.href, n });
