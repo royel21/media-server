@@ -295,7 +295,7 @@ export const adultEvalPage = async (query) => {
 
   let data = [];
   let extraCount = maxNum + 1;
-  as.forEach((a) => {
+  as.reverse().forEach((a) => {
     let text = (a.querySelector("strong,b,san") || a).textContent?.trim();
 
     if (!/^\d+/i.test(text)) {
@@ -338,7 +338,7 @@ export const adultEvalPage = async (query) => {
     data.push({ name: fileName, url: a.href, n });
   });
 
-  data = data.filter((a) => {
+  data = data.reverse().filter((a) => {
     if (/\d+-/.test(a.name)) {
       let num = a.name.match(/^\d+/);
       let regex = new RegExp(`^${num}( |$)`);
