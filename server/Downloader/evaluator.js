@@ -294,8 +294,13 @@ export const adultEvalPage = async (query) => {
   const padding = maxNum > 950 ? 4 : 3;
 
   let data = [];
+  let extraCount = maxNum + 1;
   as.forEach((a) => {
     let text = (a.querySelector("strong,b,san") || a).textContent?.trim();
+
+    if (!/^\d+/i.test(text)) {
+      text = `${extraCount++} ${text}`;
+    }
 
     let fileName = text
       .replace("  ", " ")

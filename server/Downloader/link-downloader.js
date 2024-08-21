@@ -35,8 +35,6 @@ export const downloadLink = async (d, page, Server, folder, count, state) => {
     return;
   }
 
-  let links = [];
-
   let query = {};
   if (!Server.LocalImages) {
     query.waitUntil = "domcontentloaded";
@@ -48,17 +46,13 @@ export const downloadLink = async (d, page, Server, folder, count, state) => {
     await page.goto(d.url, query);
   }
 
-  if (Server.Name.includes("manganatos")) {
-    await page.select(".loadImgType", "1");
-  }
-
-  if ((await page.$(".listing-chapters_wrap li a")) && Server.Name.includes("mangaread")) {
+  if (Server.Name.includes("mangaread") && (await page.$(".listing-chapters_wrap li a"))) {
     return;
   }
 
   await page.waitForSelector(Server.Imgs);
 
-  links = await page.evaluate(evaleLinks, Server.dataValues);
+  const links = await page.evaluate(evaleLinks, Server.dataValues);
   sendMessage({ text: `Dwn: ${count} imgs: ${links.length} - ${folder.Name} - ${d.name}`, url: d.url });
 
   const destZip = dir + ".zip";
