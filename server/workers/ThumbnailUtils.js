@@ -99,27 +99,3 @@ export const getVideoThumnail = async (video, toPath, exist) => {
   }
   return duration;
 };
-
-export const createFolderThumb = async ({ folderId, file }) => {
-  const folder = await db.folder.findOne({ where: { Id: folderId } });
-  try {
-    if (folder && file.data) {
-      const posterPath = path.join(folder.Path, "Cover.jpg");
-
-      createDir(folder.Path);
-
-      const img = sharp(Buffer.from(file.data));
-      await img.jpeg().toFile(posterPath);
-
-      let Cover = path.join(defaultConfig.ImagesDir, "Folder", folder.FilesType, folder.Name + ".jpg");
-
-      createDir(path.join(defaultConfig.ImagesDir, "Folder", folder.FilesType));
-
-      await sharp(posterPath).toFormat("jpg").resize({ width: 340 }).toFile(Cover);
-    }
-    sendMessage("cover-update", { Id: folderId, valid: true });
-  } catch (error) {
-    sendMessage("cover-update", { text: "File not valid", color: "red" });
-    console.log(error.toString());
-  }
-};

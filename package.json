@@ -8,7 +8,7 @@
     "vite-dev-win": "set USE_DEV=true&&vite",
     "vite-dev-linux": "export USE_DEV=true&&vite",
     "server": "node server/app",
-    "server-dev": "set USE_DEV=true&&node server/app",
+    "server-dev": "nodemon server/app",
     "serv-dev-win": "set USE_DEV=true&&nodemon server/app",
     "serv-dev-linux": "export USE_DEV=true&&nodemon server/app",
     "----": "",

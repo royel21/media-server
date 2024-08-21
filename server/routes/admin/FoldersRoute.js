@@ -4,6 +4,9 @@ import { getFilter } from "../utils.js";
 import fs from "fs-extra";
 import path from "node:path";
 import { Op, literal } from "sequelize";
+import Sharp from "sharp";
+import defaultConfig from "../../default-config.js";
+import { createDir } from "../../Downloader/utils.js";
 
 const routes = Router();
 
@@ -149,6 +152,36 @@ routes.get("/folder/:folderId?", async (req, res) => {
     Total: files.length > 0 ? files.length : 0,
     dirs,
   });
+});
+
+routes.post("/cover", async (req, res) => {
+  const { files, body } = req;
+  console.log(body.folderId, files.length);
+  if (body.folderId && files.image) {
+    const folder = await db.folder.findOne({ where: { Id: body.folderId } });
+    console.log(folder.Name);
+    try {
+      if (folder) {
+        const posterPath = path.join(folder.Path, "Cover.jpg");
+
+        createDir(folder.Path);
+
+        const img = Sharp(Buffer.from(files?.image.data));
+        await img.jpeg().toFile(posterPath);
+
+        let Cover = path.join(defaultConfig.ImagesDir, "Folder", folder.FilesType, folder.Name + ".jpg");
+
+        createDir(path.join(defaultConfig.ImagesDir, "Folder", folder.FilesType));
+
+        await Sharp(posterPath).toFormat("jpg").resize({ width: 340 }).toFile(Cover);
+      }
+      res.send({ valid: true });
+    } catch (error) {
+      res.send({ msg: "Unsupported Image", error });
+
+      console.log(error);
+    }
+  }
 });
 
 routes.get("/files/:folderId/:page/:items/:filter?", getData);

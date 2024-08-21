@@ -91,8 +91,18 @@
     }
 
     if (imageData.file) {
-      socket.emit("file-work", { action: "createFolderThumb", data: { folderId, file: imageData.file } });
+      // socket.emit("file-work", { action: "createFolderThumb", data: { folderId, file: imageData.file } });
+      const { file } = imageData;
       setMessage({ msg: "Sending File Please Wait: " + imageData.file.type });
+      const result = await apiUtils.postFile("admin/folders/cover", { folderId, image: new File([file], "image") });
+      if (result.valid) {
+        setMessage({ msg: "Image Updated" });
+        hasChanges = false;
+        imageData.file = "";
+      } else {
+        setMessage(result);
+      }
+      console.log(result);
     }
 
     if (hasChanges) {

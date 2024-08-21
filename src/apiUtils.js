@@ -12,6 +12,16 @@ export const post = async (route, params) => {
   }
 };
 
+export const postFile = async (route, data) => {
+  let body = new FormData();
+
+  for (const k in data) {
+    body.append(k, data[k]);
+  }
+
+  return await fetch(`/api/${route}`, { method: "POST", body }).then((res) => res.json());
+};
+
 export const get = async (route) => {
   const url = ["/api", ...route].filter((p) => p).join("/");
   try {
@@ -45,4 +55,5 @@ export default {
   admin,
   files,
   postFav,
+  postFile,
 };

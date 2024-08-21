@@ -1,5 +1,4 @@
 import db from "../models/index.js";
-import { createFolderThumb } from "./ThumbnailUtils.js";
 import { moveToDir, remFolder, removeDFolder, workVideos } from "./videoHelper.js";
 
 const sendMessage = (event, message) => {
@@ -144,7 +143,6 @@ const actions = {
   removeDFolder,
   moveToDir,
   remFolder,
-  createFolderThumb,
 };
 
 const works = {
@@ -156,7 +154,6 @@ const startToWork = async () => {
   works.isWorking = true;
   while (works.pendding.length) {
     const work = works.pendding.shift();
-    console.log(work);
     if (actions[work.action]) {
       await actions[work.action](work.data);
     }
