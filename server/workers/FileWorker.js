@@ -156,6 +156,7 @@ const startToWork = async () => {
   works.isWorking = true;
   while (works.pendding.length) {
     const work = works.pendding.shift();
+    console.log(work);
     if (actions[work.action]) {
       await actions[work.action](work.data);
     }

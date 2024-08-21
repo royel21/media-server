@@ -1,7 +1,6 @@
 import StreamZip from "node-stream-zip";
 import { exec, execFileSync } from "child_process";
 import sharp from "sharp";
-import fs from "fs-extra";
 
 import db from "../models/index.js";
 import path from "path";
