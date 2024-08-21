@@ -8,6 +8,10 @@ import path from "path";
 import { createDir } from "../Downloader/utils.js";
 import defaultConfig from "../default-config.js";
 
+const sendMessage = (event, message) => {
+  process.send({ event, message });
+};
+
 const IMGTYPES = /\.(jpg|jpeg|png|gif|webp)$/i;
 
 const ffmpeg = "ffmpeg";
@@ -112,7 +116,9 @@ export const createFolderThumb = async ({ folderId, file }) => {
         await sharp(posterPath).toFormat("jpg").resize({ width: 340 }).toFile(Cover);
       }
     }
+    sendMessage("cover-update", { Id: folderId, valid: true });
   } catch (error) {
+    sendMessage("cover-update", { text: "File not valid", color: "red" });
     console.log(error.toString());
   }
 };
