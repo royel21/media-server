@@ -69,7 +69,7 @@ export const findRaw = (name) => (f) => {
 };
 
 export const removeRaw = (f, data) => {
-  let num = f.name.match(/\d+(-\d+|)/);
+  let num = f.name?.match(/\d+(-\d+|)/);
   return !data.find((d2) => d2.name.startsWith(num[0]) && !/ raw/i.test(d2.name));
 };
 
