@@ -332,7 +332,7 @@ export const adultEvalPage = async (query) => {
     }
 
     if (!/^\d+/i.test(text)) {
-      text = `${extraCount++} ${text}`;
+      fileName = `${extraCount++} ${fileName}`;
     }
 
     data.push({ name: fileName, url: a.href, n });
