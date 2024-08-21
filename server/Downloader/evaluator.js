@@ -331,7 +331,7 @@ export const adultEvalPage = async (query) => {
       if (!fileName.includes(" raw")) fileName = fileName + " raw";
     }
 
-    if (!/^\d+/i.test(text)) {
+    if (!/^\d+/i.test(fileName)) {
       fileName = `${extraCount++} ${fileName}`;
     }
 
