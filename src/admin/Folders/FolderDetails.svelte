@@ -92,6 +92,7 @@
 
     if (imageData.file) {
       socket.emit("file-work", { action: "createFolderThumb", data: { folderId, file: imageData.file } });
+      setMessage({ msg: "Sending File Please Wait: " + imageData.file.type });
     }
 
     if (hasChanges) {
