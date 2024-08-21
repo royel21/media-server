@@ -5,7 +5,7 @@
   export let hide;
   export let acept;
   export let data = "";
-  let item = { pass: "", text: "" };
+  let item = { pass: "", text: "", padding: 2 };
   let ref;
 
   onMount(async () => {
@@ -27,6 +27,7 @@
       <span class="dir-list">
         <Input label="Text To Remove" key="text" {item} />
         <Input label="Password" key="pass" {item} />
+        <Input label="0 Padding" key="padding" {item} type="number" />
       </span>
     </div>
     <div class="modal-footer">

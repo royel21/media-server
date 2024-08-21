@@ -12,7 +12,7 @@ const sendMessage = (message, event = "finish-cleaning") => {
 
 let count = 0;
 
-const renameVideoFile = (src, dest, file, regex, text) => {
+const renameVideoFile = (src, dest, file, regex, text, padding) => {
   try {
     const extension = "." + file.split(".").pop();
 
@@ -44,8 +44,8 @@ const renameVideoFile = (src, dest, file, regex, text) => {
 
     const num = nFile.match(/\d+/);
 
-    if (num && num[0]?.length < 2) {
-      nFile = nFile.replace(num[0], num[0].padStart(2, "0"));
+    if (num && num[0]?.length < +padding) {
+      nFile = nFile.replace(num[0], num[0].padStart(+padding || 2, "0"));
     }
 
     nFile = nFile.replace(/\d+nd Season - /, "");
@@ -74,7 +74,7 @@ const checkedToremove = (file) => {
 
 const vRex = /\.(mp4|mkv|avi)/;
 
-export const workVideos = ({ folder, pass, text }) => {
+export const workVideos = ({ folder, pass, text, padding }) => {
   count = 0;
   const { Name, Path } = folder;
   sendMessage(`Starting to clean up: ${Name}`);
@@ -83,9 +83,10 @@ export const workVideos = ({ folder, pass, text }) => {
 
   for (const file of fs.readdirSync(Path).filter((f) => /\.(exe|rar)$/.test(f))) {
     try {
-      if (!/\.part1/i.test(file) && /\.part\d+/i.test(file)) {
+      if (!/\.part1$/i.test(file) && /\.part\d+$/i.test(file)) {
         continue;
       }
+
       const filePath = path.join(Path, file);
       const result = execSync(`unrar x -y ${pass} '${filePath}' '${Path}'`);
       if (/All Ok/gi.test(result.toString())) {
@@ -107,6 +108,10 @@ export const workVideos = ({ folder, pass, text }) => {
   for (const item of items) {
     let file = item;
 
+    if (/\.part$/i.test(file)) {
+      continue;
+    }
+
     const fpath = path.join(Path, item);
 
     if (checkedToremove(fpath, pass)) continue;
@@ -115,11 +120,11 @@ export const workVideos = ({ folder, pass, text }) => {
       file = fs.readdirSync(fpath).find((f) => vRex.test(f));
 
       if (file) {
-        renameVideoFile(fpath, Path, file, regex, text);
+        renameVideoFile(fpath, Path, file, regex, text, padding);
       }
       fs.removeSync(fpath);
     } else {
-      renameVideoFile(Path, Path, file, regex, text);
+      renameVideoFile(Path, Path, file, regex, text, padding);
     }
   }
 

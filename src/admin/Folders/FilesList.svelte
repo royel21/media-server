@@ -121,10 +121,12 @@
       let Del = detail.target.querySelector("input").checked;
       socket.emit("file-work", { action: "removeFile", data: { Id: file.Id ? file.Id : removeList, Del } });
     } else {
-      if (!file.Name) {
-        modalType.error = "Name Can't be empty";
-      } else {
-        socket.emit("file-work", { action: "renameFile", data: { Id: file.Id, Name: file.Name } });
+      if (file) {
+        if (!file.Name) {
+          modalType.error = "Name Can't be empty";
+        } else {
+          socket.emit("file-work", { action: "renameFile", data: { Id: file.Id, Name: file.Name } });
+        }
       }
     }
   };

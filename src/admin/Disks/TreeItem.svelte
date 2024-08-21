@@ -20,7 +20,7 @@
   let showConfirm;
   let showMoveTo = false;
   let showRename = false;
-  let showModalPass = false;
+  let showCleanupModal = false;
   let offsetNext = offset + 1;
 
   const dispatch = createEventDispatcher();
@@ -57,7 +57,7 @@
     if (data.folder.Path) {
       socket.emit("file-work", { action: "workVideos", data });
     }
-    showModalPass = false;
+    showCleanupModal = false;
   };
 
   const menuActions = (event, id) => {
@@ -66,7 +66,7 @@
 
     const actions = {
       scanDirectory: () => dispatch("scanDir", item),
-      cleanupVideos: () => (showModalPass = item),
+      cleanupVideos: () => (showCleanupModal = item),
       removeDFolder: () => (showConfirm = item),
       moveToDir: () => (showMoveTo = item),
       remFolder: () => (showRename = item),
@@ -150,8 +150,8 @@
   <RenameModal data={showRename} hide={hideRename} acept={onRename} />
 {/if}
 
-{#if showModalPass}
-  <ModalPassword data={showModalPass} acept={cleanDir} hide={() => (showModalPass = false)} />
+{#if showCleanupModal}
+  <ModalPassword data={showCleanupModal} acept={cleanDir} hide={() => (showCleanupModal = false)} />
 {/if}
 {#if showMenu && /folder/.test(showMenu.Type)}
   <Menu {showMenu} {onMenuClick} />
