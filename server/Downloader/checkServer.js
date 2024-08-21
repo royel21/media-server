@@ -123,6 +123,8 @@ export const downloadFromPage = async (Id, state) => {
 
             let chaptCount = 1;
             for (let chap of d.chaps) {
+              if (removeRaw(chap, d.chaps)) continue;
+
               if (chap.name && !excludes.find((ex) => chap.name.includes(ex.Name))) {
                 try {
                   if (
