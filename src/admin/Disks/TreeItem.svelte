@@ -14,6 +14,7 @@
   export let offset;
   export let zIndex;
   export let setFiles;
+  export let current;
 
   const menuItems = [
     { Id: "scanDirectory", Name: "Add to Directories" },
@@ -165,7 +166,7 @@
   <li
     id={Id}
     class={`tree-item ${Type}`}
-    class:spanded={Content?.length}
+    class:current={current.Id === Id}
     on:contextmenu|preventDefault|stopPropagation={(e) => (showMenu = { e, Type })}
   >
     <span
@@ -189,7 +190,7 @@
     </span>
     {#if Content.length > 0}
       <ul class="tree-node usn">
-        <svelte:self type="folder" items={Content} on:scanDir offset={offsetNext} {zIndex} {setFiles} />
+        <svelte:self type="folder" items={Content} on:scanDir offset={offsetNext} {zIndex} {setFiles} {current} />
       </ul>
     {/if}
   </li>
@@ -282,5 +283,8 @@
   #removeDFolder {
     color: rgb(248, 16, 16);
     font-weight: 700;
+  }
+  .current {
+    background-color: rgb(156, 206, 223);
   }
 </style>

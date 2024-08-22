@@ -16,6 +16,7 @@
   let offset = 0;
   let zIndex = 98;
   let files = [];
+  let current = {};
 
   const scanDir = ({ detail }) => {
     item = detail;
@@ -88,7 +89,7 @@
           <Icons name="hdd" color="black" />
           <span class="tree-name">Server</span>
           <ul class="tree-view usn">
-            <TreeItem type="hdd" items={content} on:scanDir={scanDir} {offset} {zIndex} {setFiles} />
+            <TreeItem type="hdd" items={content} on:scanDir={scanDir} {offset} {zIndex} {setFiles} {current} />
           </ul>
         </div>
       </div>
