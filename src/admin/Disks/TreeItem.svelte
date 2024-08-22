@@ -41,9 +41,10 @@
     if (item.Type !== "file") {
       if (item.Content.length === 0) {
         const data = await apiUtils.post("admin/directories/Content", { Path: item.Path });
-        item.Content = data.data.filter((it) => !/\.[a-z0-9]{2,4}$/i.test(it.Name));
+        item.Content = data.data.filter((it) => it.Type !== "file");
         items = items;
-        setFiles(data.data.filter((it) => /\.[a-z0-9]{2,4}$/i.test(it.Name)));
+        current = item;
+        setFiles(data.data.filter((it) => it.Type === "file"));
       } else {
         item.Content = [];
         items = items;
@@ -166,7 +167,6 @@
   <li
     id={Id}
     class={`tree-item ${Type}`}
-    class:current={current.Id === Id}
     on:contextmenu|preventDefault|stopPropagation={(e) => (showMenu = { e, Type })}
   >
     <span
@@ -185,8 +185,8 @@
       on:click={expandFolder}
     >
       <Icons name={Type || type} color="black" />
-      {Name}
-      <span class:count={Content.length}>Folders: {Content.length}</span>
+      <span class:selected={current?.Content?.length === 0 && current.Id === Id}>{Name}</span>
+      <span class:count={Content.length} class="f-count">Folders: {Content.length}</span>
     </span>
     {#if Content.length > 0}
       <ul class="tree-node usn">
@@ -221,7 +221,10 @@
     user-select: text;
     color: white;
   }
-  .dir span {
+  .dir .selected {
+    color: red;
+  }
+  .dir .f-count {
     display: none;
   }
   .dir:hover {

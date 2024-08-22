@@ -2,6 +2,7 @@
   import Icons from "../icons/Icons.svelte";
   import { createEventDispatcher } from "svelte";
   export let filter = "";
+  export let id = "filter-control";
 
   const dispatch = createEventDispatcher();
 
@@ -33,7 +34,7 @@
   $: filter = curFilter;
 </script>
 
-<div id="filter-control" class="input-group">
+<div {id} class="input-group c-filter">
   <slot name="pre-btn" />
   <div class="input-group-prepend">
     <span class="btn-filter input-group-text" on:click={btnFilter}>
@@ -41,6 +42,7 @@
     </span>
   </div>
   <input
+    id="filter-input"
     type="text"
     class="form-control filter-file"
     placeholder="Filter"
@@ -55,16 +57,16 @@
 </div>
 
 <style>
-  #filter-control :global(.icon-search) {
+  .c-filter :global(.icon-search) {
     top: 0px;
   }
 
-  #filter-control :global(.icon-timescircle) {
+  .c-filter :global(.icon-timescircle) {
     top: 2px;
     right: -7px;
   }
 
-  #filter-control {
+  .c-filter {
     display: flex;
     position: relative;
     flex-shrink: 1;
@@ -73,7 +75,7 @@
     max-width: 350px;
     align-items: center;
   }
-  #filter-control > * {
+  .c-filter > * {
     height: 30px;
   }
   .filter-file {

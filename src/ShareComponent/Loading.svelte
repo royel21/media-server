@@ -1,6 +1,10 @@
+<script>
+  export let text = "Loading Please Wait";
+</script>
+
 <div class="loading">
   <div class="spin" />
-  <h4>Loading Please Wait</h4>
+  <h4>{text}</h4>
 </div>
 
 <style>

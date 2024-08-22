@@ -1,6 +1,4 @@
 <script>
-  import apiUtils from "src/apiUtils";
-  import Menu from "./Menu.svelte";
   import MoveFileDialog from "./MoveFileDialog.svelte";
   import Icons from "src/icons/Icons.svelte";
   import CCheckbox from "../Component/CCheckbox.svelte";
@@ -8,14 +6,19 @@
   import { onDestroy } from "svelte";
   import Confirm from "../Component/Confirm.svelte";
   import { setMessage } from "../Store/MessageStore";
+  import Filter from "src/ShareComponent/Filter.svelte";
+  import Loading from "src/ShareComponent/Loading.svelte";
 
   export let files = [];
   export let socket;
+  let filtered = files;
 
   let showConfirm = false;
   let showMoveDialog;
   let removeList = [];
   let isChecked = false;
+  let transfer = false;
+  let filter = "";
 
   const onCheck = ({ target }) => {
     const id = target.closest("li").id;
@@ -29,10 +32,10 @@
   };
 
   const onCheckAll = () => {
-    if (validateCheck(removeList, files)) {
-      removeList = removeList.filter((item) => !files.find((i) => i.Id === item));
+    if (validateCheck(removeList, filtered)) {
+      removeList = removeList.filter((item) => !filtered.find((i) => i.Id === item));
     } else {
-      removeList = [...removeList, ...files.filter((item) => !removeList.includes(item.Id)).map((item) => item.Id)];
+      removeList = [...removeList, ...filtered.filter((item) => !removeList.includes(item.Id)).map((item) => item.Id)];
     }
   };
 
@@ -43,18 +46,22 @@
   };
 
   const onTransfer = () => {
-    const items = files.filter((f) => removeList.includes(f.Id));
+    const items = filtered.filter((f) => removeList.includes(f.Id));
     showMoveDialog = { files: items };
   };
 
   const acept = (data) => {
     showMoveDialog = false;
     socket.emit("file-work", { action: "moveFiles", data });
+    transfer = true;
   };
 
   const onFileInfo = ({ msg, items, error }) => {
     console.log(error, msg);
     setMessage({ msg: error || msg, error });
+    if (items || error) {
+      transfer = false;
+    }
     if (items) {
       files = files.filter((f) => !items.includes(f.Id));
       removeList = [];
@@ -65,7 +72,10 @@
     socket.off("files-info", onFileInfo);
   });
 
-  $: isChecked = removeList.length === files.length;
+  $: isChecked = filtered.length && removeList.length === filtered.length;
+  $: {
+    filtered = files.filter((f) => f.Name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()));
+  }
 </script>
 
 {#if showMoveDialog}
@@ -73,26 +83,29 @@
 {/if}
 
 {#if showConfirm}
-  <Confirm text="those Files" acept={removeFiles} cancel={() => (showConfirm = false)} data={showConfirm} />
+  <Confirm text={`${files.length} Files`} acept={removeFiles} cancel={() => (showConfirm = false)} data={showConfirm} />
 {/if}
 
 <div class="col">
   <div class="tree-files">
-    <h4>
-      <span id="f-controls">
-        <CCheckbox id="check-all" on:change={onCheckAll} {isChecked} title="Select All Files" />
-        {#if removeList.length}
-          <span on:click={onTransfer}><Icons name="right-left" /></span>
-        {/if}
-      </span>
-      <span>Files - {files.length}</span>
-
-      {#if removeList.length}
-        <span class="rm-all" on:click={() => (showConfirm = true)}><Icons name="trash" /></span>
-      {/if}
-    </h4>
+    {#if transfer}
+      <Loading text="Transfer In Process - Please Wait" />
+    {/if}
+    <div class="ftree-control">
+      <h4>Files - {files.length}</h4>
+      <div class="filter">
+        <span>
+          <CCheckbox id="check-all" on:change={onCheckAll} {isChecked} title="Select All Files" />
+          {#if removeList.length}
+            <span on:click={onTransfer}><Icons name="right-left" /></span>
+            <span class="rm-all" on:click={() => (showConfirm = true)}><Icons name="trash" /></span>
+          {/if}
+        </span>
+        <Filter id="file-filter" bind:filter />
+      </div>
+    </div>
     <ul>
-      {#each files as file}
+      {#each filtered as file}
         <li id={file.Id} title={file.Name}>
           <CCheckbox on:change={onCheck} isChecked={removeList.includes(file.Id)} />
           <span on:click={onCheck}>{file.Name}</span>
@@ -106,6 +119,17 @@
   .col {
     position: relative;
   }
+  .col :global(.loading) {
+    position: absolute;
+    width: 100%;
+    z-index: 999;
+    background-color: rgb(221 170 94 / 13%);
+  }
+  .col :global(.loading .spin::before) {
+    height: 400px;
+    width: 400px;
+  }
+
   .tree-files {
     height: 100%;
     overflow-y: auto;
@@ -122,35 +146,49 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  h4 {
+  .ftree-control {
     position: sticky;
     top: 0;
     text-align: center;
-    border-bottom: 1px solid;
     background-color: #535353;
     z-index: 9;
   }
-  h4 span {
-    display: inline-block;
-  }
-  #f-controls {
-    position: absolute;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    top: -2px;
-    width: 63px;
+  h4 {
+    border-bottom: 1px solid;
   }
   .tree-files :global(#check-all) {
-    top: 4px;
-    left: -4px;
-  }
-  .rm-all {
-    position: absolute;
-    right: 0;
+    top: 2px;
+    left: -15px;
+    width: 30px;
+    margin-left: 3px;
   }
   li:hover span:last-child {
     cursor: pointer;
     text-decoration: underline;
+  }
+  .filter {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+    border-bottom: 1px solid white;
+  }
+  .filter :global(#filter-control) {
+    margin: 0 5px;
+  }
+  .filter span {
+    display: flex;
+    flex-direction: raw;
+  }
+  .filter span > span {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    padding: 0 5px;
+    text-align: center;
+  }
+
+  .filter > span :global(.icon-trash) {
+    left: 3px;
   }
 </style>

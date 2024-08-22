@@ -1,6 +1,6 @@
 <script>
   import { onMount, getContext } from "svelte";
-  import { calRows, validateCheck } from "../Utils";
+  import { calRows } from "../Utils";
 
   import ItemList from "./ItemList.svelte";
   import Modal from "./Modal.svelte";
@@ -119,14 +119,12 @@
   const handleSubmit = ({ detail }) => {
     if (modalType.Del) {
       let Del = detail.target.querySelector("input").checked;
-      socket.emit("file-work", { action: "removeFile", data: { Id: file.Id ? file.Id : removeList, Del } });
+      socket.emit("remove-file", { Id: file.Id ? file.Id : removeList, Del });
     } else {
-      if (file) {
-        if (!file.Name) {
-          modalType.error = "Name Can't be empty";
-        } else {
-          socket.emit("file-work", { action: "renameFile", data: { Id: file.Id, Name: file.Name } });
-        }
+      if (!file.Name) {
+        modalType.error = "Name Can't be empty";
+      } else {
+        socket.emit("rename-file", { Id: file.Id, Name: file.Name });
       }
     }
   };
@@ -142,8 +140,19 @@
     }
   };
 
+  const validateCheck = () => {
+    if (removeList.length === 0) return false;
+
+    for (const item of items) {
+      if (!removeList.includes(item.Id)) {
+        return false;
+      }
+    }
+    return true;
+  };
+
   const onCheckAll = () => {
-    if (validateCheck(removeList, items)) {
+    if (validateCheck()) {
       removeList = removeList.filter((item) => !items.find((i) => i.Id === item));
     } else {
       removeList = [...removeList, ...items.filter((item) => !removeList.includes(item.Id)).map((item) => item.Id)];
