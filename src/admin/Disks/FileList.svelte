@@ -12,26 +12,10 @@
   export let files = [];
   export let socket;
 
-  let showMoveTo;
   let showConfirm = false;
   let showMoveDialog;
   let removeList = [];
   let isChecked = false;
-
-  const menuItems = [{ Id: "moveFileTo", Name: "Move File To" }];
-
-  const removeFile = async (file) => {
-    const data = await apiUtils.post("admin/directories/remove-file", { Path: file.Path });
-    if (data.success) {
-      files = files.filter((it) => it.Path !== file.Path);
-    }
-  };
-
-  const onshowMoveDialog = () => {
-    showMoveDialog.files = [showMoveTo.file];
-    showMoveTo = false;
-    console.log("menu click", showMoveDialog);
-  };
 
   const onCheck = ({ target }) => {
     const id = target.closest("li").id;
@@ -65,7 +49,6 @@
 
   const acept = (data) => {
     showMoveDialog = false;
-    console.log(data);
     socket.emit("file-work", { action: "moveFiles", data });
   };
 
@@ -74,6 +57,7 @@
     setMessage({ msg: error || msg, error });
     if (items) {
       files = files.filter((f) => !items.includes(f.Id));
+      removeList = [];
     }
   };
   socket.on("files-info", onFileInfo);
@@ -86,10 +70,6 @@
 
 {#if showMoveDialog}
   <MoveFileDialog files={showMoveDialog.files} hide={() => (showMoveDialog = false)} {acept} />
-{/if}
-
-{#if showMoveTo}
-  <Menu event={showMoveTo.e} {menuItems} onMenuClick={onshowMoveDialog} />
 {/if}
 
 {#if showConfirm}
@@ -113,9 +93,8 @@
     </h4>
     <ul>
       {#each files as file}
-        <li id={file.Id} title={file.Name} on:contextmenu={(e) => (showMoveTo = { e, file })}>
+        <li id={file.Id} title={file.Name}>
           <CCheckbox on:change={onCheck} isChecked={removeList.includes(file.Id)} />
-          <span on:click={() => removeFile(file)}><Icons name="trash" /></span>
           <span on:click={onCheck}>{file.Name}</span>
         </li>
       {/each}
