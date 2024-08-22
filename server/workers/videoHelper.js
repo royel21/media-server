@@ -29,7 +29,7 @@ const renameVideoFile = (src, dest, file, regex, text, padding) => {
       .replace(text, "")
       .replace(".", "-")
       .replace(regex, "")
-      .replace(/Season \d+ (- |)/i, "")
+      .replace(/\d+[a-z]+ Season |Season \d+[a-z]+ (- |)|episodio /gi, "")
       .replace(/( |)\[(.*?)\]( |)|( |)\((.*?)\)( |)/g, "");
 
     if (/ova|especial|special/i.test(file)) {

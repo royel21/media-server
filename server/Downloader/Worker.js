@@ -85,6 +85,8 @@ const downloadLinks = async (link, page) => {
 
   const exclude = await db.Exclude.findAll({ where: { LinkName: folder.Name } });
 
+  manga.data = manga.data.filter(removeRaw(manga.data)).filter((f) => !exclude.find((ex) => f.name.includes(ex.Name)));
+
   await updateLastChapter(manga, link);
   manga.type = "mangas";
 
@@ -108,17 +110,10 @@ const downloadLinks = async (link, page) => {
 
   let count = 0;
   for (let d of data) {
-    if (state.stopped) break;
-
-    //if link name is in exclude skip
-    if (exclude.find((ex) => d.name.includes(ex.Name))) continue;
-
-    if (/ raw/.test(d.name) && removeRaw(d, data)) continue;
-
     if (link.Raw && !/ raw$/i.test(d.name)) {
       d.name = d.name + " raw";
     }
-
+    if (state.stopped) break;
     try {
       ++count;
       await downloadLink(d, page, Server, folder, `${count}/${data.length}`, state);
@@ -256,7 +251,6 @@ const loadLinks = async (Id, bypass) => {
 
 const onCreateCover = async ({ Id, imgUrl }) => {
   const page = await createPage(state.browser, 60000);
-  console.log(Id, imgUrl);
   if (/http/i.test(imgUrl)) {
     const folder = await db.folder.findOne({ where: { Id } });
     if (folder) {

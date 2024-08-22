@@ -68,9 +68,15 @@ export const findRaw = (name) => (f) => {
   return false;
 };
 
-export const removeRaw = (f, data) => {
-  let num = f.name?.match(/\d+(-\d+|)/);
-  return !data.find((d2) => d2.name.startsWith(num[0]) && !/ raw/i.test(d2.name));
+export const removeRaw = (data) => (f) => {
+  if (!/^\d+/.test(f.name)) return false;
+
+  if (/ raw/i.test(f.name)) {
+    let num = f.name.match(/\d+(-\d+|)/);
+    return !data.find((d2) => d2.name.startsWith(num[0]) && !/ raw/i.test(d2.name));
+  }
+
+  return f.name;
 };
 
 export const dateDiff = (d1, d2) => parseInt(Math.abs(d1 - d2) / 36e5);
@@ -107,7 +113,7 @@ export const createDir = (dir) => {
       return true;
     }
   } catch (error) {
-    console.log("create-dir-error: ", error);
+    console.log(error);
   }
   return false;
 };
