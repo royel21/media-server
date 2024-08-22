@@ -249,6 +249,7 @@
     cursor: pointer;
     font-size: 1.1rem;
     color: black;
+    user-select: none;
   }
   .caret.content {
     transform: rotate(90deg);
