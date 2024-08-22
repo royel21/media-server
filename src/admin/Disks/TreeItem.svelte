@@ -237,6 +237,8 @@
     padding: 2px;
     border-radius: 0.25rem;
     color: white;
+    position: none;
+    user-select: none;
   }
   .caret {
     display: inline-block;
