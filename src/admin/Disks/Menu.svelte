@@ -1,12 +1,13 @@
 <script>
   import { afterUpdate } from "svelte";
 
-  export let showMenu;
+  export let event;
   export let onMenuClick;
+  export let menuItems;
   let ref;
 
-  let left = showMenu.e?.pageX;
-  let top = showMenu.e?.pageY;
+  let left = event?.pageX;
+  let top = event?.pageY;
 
   afterUpdate(() => {
     const h = document.body.offsetHeight;
@@ -21,18 +22,16 @@
     }
   });
 
-  $: if (showMenu) {
-    left = showMenu.e?.pageX;
-    top = showMenu.e?.pageY;
+  $: if (event) {
+    left = event?.pageX;
+    top = event?.pageY;
   }
 </script>
 
 <div bind:this={ref} id="c-menu" style={`left: ${left}px; top:${top}px`} on:click={onMenuClick}>
-  <div id="scanDirectory">Add to Directories</div>
-  <div id="remFolder">Rename Folder</div>
-  <div id="cleanupVideos">Clean Videos</div>
-  <div id="moveToDir">Move To Directory</div>
-  <div id="removeDFolder">Delete Folder</div>
+  {#each menuItems as mItem}
+    <div id={mItem.Id}>{mItem.Name}</div>
+  {/each}
 </div>
 
 <style>

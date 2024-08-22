@@ -1,36 +1,27 @@
 <script>
-  import { afterUpdate, onDestroy } from "svelte";
-  export let height;
-  export let socket;
+  import { getContext, onDestroy } from "svelte";
+
+  const socket = getContext("socket");
 
   let diskData = [];
 
   let ref;
-  let showDiskInfo = false;
 
   const onDiskdata = (data) => {
     diskData = data;
   };
 
   socket.on("disk-loaded", onDiskdata);
-
-  afterUpdate(() => {
-    height = ref?.offsetHeight || 39;
-  });
+  socket.emit("load-disks");
 
   onDestroy(() => {
     socket.off("disk-loaded", onDiskdata);
   });
-
-  $: if (showDiskInfo) {
-    socket.emit("load-disks");
-  }
 </script>
 
 <div class="d-info" bind:this={ref}>
-  <input type="checkbox" name="" id="d-info" bind:checked={showDiskInfo} />
-  <h4><label for="d-info">{showDiskInfo ? "Hide" : "Show"} Disk Info</label></h4>
-  {#if showDiskInfo}
+  <h4><span>Disk Info</span></h4>
+  <div class="disk-content">
     <table>
       <thead>
         <tr>
@@ -51,18 +42,24 @@
         {/each}
       </tbody>
     </table>
-  {/if}
+  </div>
 </div>
 
 <style>
   .d-info {
-    padding: 5px 8px;
-    border-bottom: 1px solid;
+    height: 100%;
+  }
+  .disk-content {
+    height: calc(100% - 34px);
+    overflow-x: auto;
   }
   table {
     width: 100%;
+    margin: 0 auto;
+    max-width: 950px;
   }
   .skip {
+    text-align: left;
     white-space: nowrap;
   }
   th:not(.skip),
@@ -74,13 +71,8 @@
     border-bottom: 1px solid white;
     user-select: none;
   }
-  #d-info {
-    display: none;
-  }
-  #d-info:not(:checked) + h4 + table {
-    display: none;
-  }
-  #d-info:not(:checked) + h4 {
-    border-bottom: initial;
+  th,
+  td {
+    padding: 0 10px;
   }
 </style>

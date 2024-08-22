@@ -158,16 +158,6 @@ input[type="text"]:not(:placeholder-shown)+span {
   padding: 4px 0;
 }
 
-/*************************Scrollbar Style********************************/
-
-::-webkit-scrollbar {
-  width: 15px;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 123, 255, 0.95);
-  box-shadow: inset 0 0 6px rgba(15, 1, 228, 0.9);
-}
 
 .card {
   position: relative;
@@ -285,16 +275,6 @@ svg path {
   animation: 2s linear infinite icon-spin;
 }
 
-@keyframes icon-spin {
-  0% {
-    transform: rotate(0);
-  }
-
-  to {
-    transform: rotate(1turn);
-  }
-}
-
 .list-group {
   display: flex;
   flex-direction: column;
@@ -342,10 +322,32 @@ svg path {
   height: 30px;
 }
 
+/*************************Scrollbar Style********************************/
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 123, 255, 0.95);
+  box-shadow: inset 0 0 6px rgba(15, 1, 228, 0.9);
+}
+
 /****************************************************************/
-@media screen and (max-width: 640px) {
+@keyframes icon-spin {
+  0% {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@media (pointer:none),
+(pointer:coarse) and (max-width: 640px) {
   ::-webkit-scrollbar {
-    width: 0;
+    display: none;
   }
 }
 

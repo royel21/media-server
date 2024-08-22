@@ -24,7 +24,7 @@
     </div>
 
     <div class="modal-body">
-      <p>Are you Sure want to remove this <strong>{text}</strong></p>
+      <p>Are you Sure want to remove <strong>{text}</strong></p>
     </div>
     <div class="modal-footer">
       <button type="submit" class="btn" on:click={onConfirm}>Ok</button>
@@ -36,6 +36,7 @@
 <style>
   .modal {
     width: 400px;
+    max-width: 92%;
     outline: none;
   }
   .modal-body {

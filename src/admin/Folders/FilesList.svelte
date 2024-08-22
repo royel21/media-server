@@ -1,6 +1,6 @@
 <script>
   import { onMount, getContext } from "svelte";
-  import { calRows } from "../Utils";
+  import { calRows, validateCheck } from "../Utils";
 
   import ItemList from "./ItemList.svelte";
   import Modal from "./Modal.svelte";
@@ -142,19 +142,8 @@
     }
   };
 
-  const validateCheck = () => {
-    if (removeList.length === 0) return false;
-
-    for (const item of items) {
-      if (!removeList.includes(item.Id)) {
-        return false;
-      }
-    }
-    return true;
-  };
-
   const onCheckAll = () => {
-    if (validateCheck()) {
+    if (validateCheck(removeList, items)) {
       removeList = removeList.filter((item) => !items.find((i) => i.Id === item));
     } else {
       removeList = [...removeList, ...items.filter((item) => !removeList.includes(item.Id)).map((item) => item.Id)];

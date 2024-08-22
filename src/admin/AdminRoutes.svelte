@@ -140,10 +140,7 @@
   :global(span:active > .icon-sync) {
     transform: scale(1.2);
   }
-  @media screen and (max-width: 600px) {
-    .content {
-      height: calc(100% - 67px);
-    }
+  @media screen and (max-width: 790px) {
     #admin-label {
       max-width: 100px;
       text-overflow: ellipsis;

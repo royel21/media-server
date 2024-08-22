@@ -5,7 +5,7 @@
   import Icons from "src/icons/Icons.svelte";
   import Loading from "src/ShareComponent/Loading.svelte";
   import { setMessage } from "../Store/MessageStore";
-  import DiskInfo from "./DiskInfo.svelte";
+  import FileList from "./FileList.svelte";
 
   const socket = getContext("socket");
   let content = [];
@@ -15,12 +15,14 @@
   let treeRef;
   let offset = 0;
   let zIndex = 98;
-  let height = 39;
-  let first = false;
+  let files = [];
 
   const scanDir = ({ detail }) => {
     item = detail;
     showModal = true;
+  };
+  const setFiles = (fileContent) => {
+    files = fileContent;
   };
   const createDirectory = (Type, IsAdult) => {
     socket.emit("scan-dir", { Path: item.Path, Type, IsAdult });
@@ -74,36 +76,99 @@
   <DirectoryModal {createDirectory} {hideModal} Name={item.Name} />
 {/if}
 
-<DiskInfo {height} {socket} />
-
-<div class="tree-title" style={`height: calc(100% - ${height}px)`} bind:this={treeRef}>
-  <Icons name="hdd" />
-  <span class="tree-name">Server</span>
-  {#if loading}
-    <div class="d-loading">
-      <Loading />
+{#if loading}
+  <div class="d-loading">
+    <Loading />
+  </div>
+{:else}
+  <div class="d-content" class:expanded={files.length}>
+    <div class="rows">
+      <div class="col" class:no-files={files.length === 0}>
+        <div class="tree" bind:this={treeRef}>
+          <Icons name="hdd" color="black" />
+          <span class="tree-name">Server</span>
+          <ul class="tree-view usn">
+            <TreeItem type="hdd" items={content} on:scanDir={scanDir} {offset} {zIndex} {setFiles} />
+          </ul>
+        </div>
+      </div>
+      {#if files.length}
+        <FileList {files} {socket} />
+      {/if}
+      {#if files.length}
+        <span class="scroll-top" on:click={scrollToTop}>
+          <Icons name="arrowcircleup" />
+        </span>
+      {/if}
     </div>
-  {:else}
-    <ul class="tree-view usn">
-      <TreeItem type="hdd" items={content} on:scanDir={scanDir} {scrollToTop} {offset} {zIndex} />
-    </ul>
-  {/if}
-</div>
+  </div>
+{/if}
 
 <style>
-  .tree-title {
-    height: calc(100% - 39px);
-    overflow-y: auto;
-    padding-left: 5px;
+  .d-content {
+    height: 100%;
+    padding-bottom: 5px;
   }
-  .tree-title .tree-name {
+  .d-content.expanded {
+    min-width: 760px;
+  }
+  .d-content .rows {
+    position: relative;
+    padding: 5px;
+    padding: 0px 5px;
+  }
+  .tree {
+    height: 100%;
+    overflow-y: auto;
+    padding: 0 5px;
+    overflow-x: hidden;
+  }
+  :global(.d-content .col) {
+    height: 100%;
+    background-color: #535353;
+    border-radius: 0.3rem;
+    width: 50%;
+    overflow: hidden;
+  }
+  .col:first-child {
+    margin-right: 5px;
+  }
+  .d-content .no-files {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .rows {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+  }
+  .tree .tree-name {
     user-select: none;
   }
+
   ul {
     margin-left: 25px;
     padding-bottom: 5px;
   }
   .d-loading {
     height: calc(100% - 150px);
+  }
+  .scroll-top {
+    position: absolute;
+    left: 10px;
+    bottom: 6px;
+    z-index: 999;
+  }
+
+  .scroll-top :global(.icon-arrowcircleup) {
+    width: 35px;
+    height: 30px;
+  }
+  @media screen and (max-width: 640px) {
+    .d-content.expanded {
+      min-width: calc(100% * 2 - 10px);
+    }
   }
 </style>

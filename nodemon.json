@@ -11,6 +11,7 @@
         "./*.db",
         "./backup/*",
         "user-data/**/*",
-        "server/Workers/**/*"
+        "server/Workers/**/*",
+        "build/**"
     ]
 }

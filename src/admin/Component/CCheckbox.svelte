@@ -14,7 +14,7 @@
     display: inline-block;
     position: relative;
     height: 20px;
-    width: 20px;
+    width: 25px;
     cursor: pointer;
   }
   .select-file input {

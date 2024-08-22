@@ -41,3 +41,14 @@ export const isDiff = (obj1, obj2) => {
 
   return false;
 };
+
+export const validateCheck = (list, items) => {
+  if (list.length === 0) return false;
+
+  for (const item of items) {
+    if (!list.includes(item.Id)) {
+      return false;
+    }
+  }
+  return true;
+};

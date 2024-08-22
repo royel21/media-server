@@ -11,9 +11,17 @@
 
   export let items = [];
   export let type;
-  export let scrollToTop;
   export let offset;
   export let zIndex;
+  export let setFiles;
+
+  const menuItems = [
+    { Id: "scanDirectory", Name: "Add to Directories" },
+    { Id: "remFolder", Name: "Rename Folder" },
+    { Id: "cleanupVideos", Name: "Clean Videos" },
+    { Id: "moveToDir", Name: "Move To Directory" },
+    { Id: "removeDFolder", Name: "Delete Folder" },
+  ];
 
   let item = {};
   let showMenu = false;
@@ -32,24 +40,19 @@
     if (item.Type !== "file") {
       if (item.Content.length === 0) {
         const data = await apiUtils.post("admin/directories/Content", { Path: item.Path });
-        item.Content = data.data;
+        item.Content = data.data.filter((it) => !/\.[a-z0-9]{2,4}$/i.test(it.Name));
         items = items;
+        setFiles(data.data.filter((it) => /\.[a-z0-9]{2,4}$/i.test(it.Name)));
       } else {
         item.Content = [];
         items = items;
+        setFiles([]);
       }
       items.forEach((it) => {
         if (it.Id !== item.Id) {
           it.Content = [];
         }
       });
-    }
-  };
-
-  const removeFile = async (file) => {
-    const data = await apiUtils.post("admin/directories/remove-file", { Path: file.Path });
-    if (data.success) {
-      items = items.filter((it) => it.Path !== file.Path);
     }
   };
 
@@ -139,7 +142,7 @@
 </script>
 
 {#if showConfirm}
-  <Confirm text={showConfirm.Name} acept={onRemove} {cancel} data={showConfirm} />
+  <Confirm text={`this folder: ${showConfirm.Name}`} acept={onRemove} {cancel} data={showConfirm} />
 {/if}
 
 {#if showMoveTo}
@@ -153,8 +156,9 @@
 {#if showCleanupModal}
   <ModalPassword data={showCleanupModal} acept={cleanDir} hide={() => (showCleanupModal = false)} />
 {/if}
+
 {#if showMenu && /folder/.test(showMenu.Type)}
-  <Menu {showMenu} {onMenuClick} />
+  <Menu {menuItems} event={showMenu.e} {onMenuClick} />
 {/if}
 
 {#each items as { Content, Id, Name, Type, Path }}
@@ -164,35 +168,29 @@
     class:spanded={Content?.length}
     on:contextmenu|preventDefault|stopPropagation={(e) => (showMenu = { e, Type })}
   >
-    {#if Type === "folder" || type === "hdd"}
-      <span
-        class="caret"
-        style={getStyle(type, Content)}
-        class:content={Content?.length}
-        class:atop={type === "hdd"}
-        on:click={expandFolder}>▶</span
-      >
-    {:else}
-      <span on:click={() => removeFile({ Id, Path })}><Icons name="trash" /></span>
-    {/if}
+    <span
+      class="caret"
+      style={getStyle(type, Content)}
+      class:content={Content?.length}
+      class:atop={type === "hdd"}
+      on:click={expandFolder}>▶</span
+    >
     <span
       class="dir"
       class:atop={type === "hdd"}
       class:content={Content?.length}
       style={getStyle(type, Content)}
+      title={Name}
       on:click={expandFolder}
     >
-      <Icons name={Type || type} />
+      <Icons name={Type || type} color="black" />
       {Name}
-      <span class:count={Content.length}>Files: {Content.length}</span>
+      <span class:count={Content.length}>Folders: {Content.length}</span>
     </span>
     {#if Content.length > 0}
       <ul class="tree-node usn">
-        <svelte:self type="folder" items={Content} on:scanDir {scrollToTop} offset={offsetNext} {zIndex} />
+        <svelte:self type="folder" items={Content} on:scanDir offset={offsetNext} {zIndex} {setFiles} />
       </ul>
-      <span class="scroll-top" on:click={scrollToTop}>
-        <Icons name="arrowcircleup" />
-      </span>
     {/if}
   </li>
 {/each}
@@ -206,6 +204,9 @@
   .tree-item :global(.icon-trash) {
     width: 20px;
   }
+  li {
+    color: black;
+  }
   ul {
     margin-left: 25px;
   }
@@ -217,6 +218,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     user-select: text;
+    color: white;
   }
   .dir span {
     display: none;
@@ -228,12 +230,13 @@
   .dir .count {
     display: inline-block;
     position: absolute;
-    background-color: #080808;
+    background-color: black;
     right: 5px;
     top: 0;
     z-index: 300;
     padding: 2px;
     border-radius: 0.25rem;
+    color: white;
   }
   .caret {
     display: inline-block;
@@ -243,6 +246,7 @@
     font-family: "Helvetica Neue", Arial, sans-serif;
     cursor: pointer;
     font-size: 1.1rem;
+    color: black;
   }
   .caret.content {
     transform: rotate(90deg);
@@ -261,7 +265,7 @@
   .atop {
     position: sticky;
     top: 0;
-    background-color: #343a40;
+    background-color: #535353;
     z-index: 99;
   }
   .caret {
@@ -275,15 +279,5 @@
   #removeDFolder {
     color: rgb(248, 16, 16);
     font-weight: 700;
-  }
-  .scroll-top {
-    position: fixed;
-    left: 20px;
-    bottom: 20px;
-  }
-
-  .scroll-top :global(.icon-arrowcircleup) {
-    width: 35px;
-    height: 30px;
   }
 </style>

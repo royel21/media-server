@@ -1,4 +1,5 @@
 import db from "../models/index.js";
+import { moveFiles, removeFiles } from "./fileHelpers.js";
 import { moveToDir, remFolder, removeDFolder, workVideos } from "./videoHelper.js";
 
 const sendMessage = (event, message) => {
@@ -143,6 +144,8 @@ const actions = {
   removeDFolder,
   moveToDir,
   remFolder,
+  moveFiles,
+  removeFiles,
 };
 
 const works = {
@@ -163,6 +166,5 @@ const startToWork = async () => {
 
 process.on("message", (work) => {
   works.pendding.push(work);
-
   if (!works.isWorking) startToWork();
 });

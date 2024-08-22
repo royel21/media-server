@@ -68,7 +68,6 @@ routes.post("/links", async ({ body }, res) => {
   }
 
   let servers;
-  console.log("sv: ", ServerId, "first: ", first);
 
   if (first) {
     if (ServerId) {
