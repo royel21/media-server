@@ -77,7 +77,6 @@
     datas.running = IsRunning;
     if (!IsRunning && !loading) {
       loadItems();
-      console.log("running");
     }
   };
 

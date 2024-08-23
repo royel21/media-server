@@ -7,9 +7,11 @@
   import apiUtils from "./apiUtils";
   import ConfigPage from "./ConfigPage.svelte";
   import { navigate } from "svelte-routing";
+  import Loading from "./ShareComponent/Loading.svelte";
 
   let user = { username: "" };
   let error = "";
+  let loading = true;
 
   const getUrl = ({ role }) => `/${/admin/gi.test(role) ? "admin" : ""}`;
 
@@ -18,6 +20,7 @@
     if (data.isAutenticated) {
       user = data;
     }
+    loading = false;
   });
 
   const logIn = async (userData) => {
@@ -38,7 +41,9 @@
   };
 </script>
 
-{#if user.username}
+{#if loading}
+  <Loading text="Checkin User Please Wait" />
+{:else if user.username}
   <ConfigPage {user}>
     {#if user.role.includes("Admin")}
       <AdminRoutes />

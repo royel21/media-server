@@ -6,6 +6,7 @@
   export let key = "";
   export let label = "";
   export let sept = "";
+  export let placeholder = " ";
   export let onChange = (e) => {};
   let ref;
   const handler = async () => handlerPaste(item, key, sept, ref);
@@ -17,7 +18,7 @@
 
 <div class={"input-control " + key}>
   <span class="input-label" on:click={handler}>{label || key}</span>
-  <input bind:this={ref} name={key} class="input" bind:value={item[key]} on:change={onChange} placeholder=" " />
+  <input bind:this={ref} name={key} class="input" bind:value={item[key]} on:change={onChange} {placeholder} />
   <span class="clear" on:click={clear}><Icons name="times" /></span>
 </div>
 

@@ -40,3 +40,31 @@ export const removeFiles = ({ files }) => {
   }
   sendMessage({ msg: "Finish Removing Files", items: files.map((f) => f.Id) });
 };
+
+const getNewId = () => {
+  return "nw-" + Math.random().toString(36).slice(-5);
+};
+
+export const createFolder = ({ file, Name }) => {
+  const data = { folderId: file.Id };
+
+  if (fs.existsSync(file?.Path)) {
+    const Path = path.join(file.Path, Name);
+
+    if (fs.existsSync(Path)) {
+      data.error = true;
+      data.msg = `Folder: ${Name} Already Exist`;
+      return sendMessage(data, "folder-create");
+    }
+
+    fs.mkdirsSync(Path);
+
+    data.msg = `Folder: ${Name} was create`;
+    data.folder = { Id: getNewId(), Name: Name, Type: "folder", Path, Content: [] };
+
+    return sendMessage(data, "folder-create");
+  }
+  data.error = true;
+  data.msg = `Path: ${file?.Path} was not found`;
+  sendMessage(data, "folder-create");
+};

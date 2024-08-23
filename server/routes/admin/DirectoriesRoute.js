@@ -38,14 +38,12 @@ routes.post("/content", (req, res) => {
   try {
     let { Id, Path } = req.body;
 
-    let tempPath = Path;
-
-    if (tempPath.includes("homedir")) {
-      tempPath = tempPath.replace("homedir", homeDir);
+    if (Path.includes("homedir")) {
+      Path = Path.replace("homedir", homeDir);
     }
 
-    if (fs.existsSync(tempPath)) {
-      let dirs = ListFiles(tempPath, { hidden: true });
+    if (fs.existsSync(Path)) {
+      let dirs = ListFiles(Path, { hidden: true });
       let tdata = [];
       for (let d of dirs) {
         if (d.isDirectory || !/^\./.test(d.Extension)) {

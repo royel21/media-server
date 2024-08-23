@@ -1,3 +1,12 @@
+*:active>svg {
+  transform: scale(1.15);
+  transition: 0.2s;
+}
+
+* {
+  outline: none;
+}
+
 .scroll-container {
   position: relative;
   height: calc(100% - 38px);
@@ -39,11 +48,6 @@ svg:hover {
 button:active {
   transform: scale(1.2);
   transition: 0.25s;
-}
-
-*:active>svg {
-  transform: scale(1.15);
-  transition: 0.2s;
 }
 
 /***************File Style****************************/

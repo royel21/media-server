@@ -1,17 +1,11 @@
 <script>
-  import { onMount } from "svelte";
-  import { fade } from "svelte/transition";
   import Input from "../Component/Input.svelte";
+  import Dialog from "./Dialog.svelte";
   export let hide;
   export let acept;
   export let data = "";
   let item = { ...data };
   let errors = [];
-  let ref;
-
-  onMount(async () => {
-    ref?.focus();
-  });
 
   const onConfirm = () => {
     errors = [];
@@ -23,44 +17,12 @@
       errors.push("Folder Name should't not have any of those Simbols");
       return errors.push(':  ?  * < >  / \\ " |');
     }
-    return acept({ folder: data, Name: item.Name });
+    acept({ folder: data, Name: item.Name });
+    return hide();
   };
 </script>
 
-<div bind:this={ref} class="modal-container" tabindex="-1" on:contextmenu|stopPropagation={() => {}}>
-  <div class="modal card" transition:fade={{ duration: 200 }}>
-    <div class="modal-header">
-      <h4>Move Folder to Directory</h4>
-    </div>
-
-    <div class="modal-body">
-      <span class="dir-list">
-        <Input label="New Name" key="Name" {item} />
-      </span>
-      <p class="error">
-        {#each errors as error}
-          <div>{error}</div>
-        {/each}
-      </p>
-    </div>
-    <div class="modal-footer">
-      <button type="submit" class="btn" on:click={onConfirm}>Ok</button>
-      <button type="button" class="btn" on:click={hide}>Cancel</button>
-    </div>
-  </div>
-</div>
-
-<style>
-  .modal {
-    width: 395px;
-    outline: none;
-    pointer-events: all;
-  }
-  .modal-body {
-    padding: 15px 5px;
-    border-top: 1px solid;
-  }
-  .modal-footer {
-    border-top: 1px solid;
-  }
-</style>
+<Dialog cancel={hide} confirm={onConfirm} {errors}>
+  <h4 slot="modal-header">Rename Folder</h4>
+  <span slot="modal-body"><Input label="New Name" key="Name" {item} /></span>
+</Dialog>

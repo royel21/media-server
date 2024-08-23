@@ -6,6 +6,7 @@
   import Loading from "src/ShareComponent/Loading.svelte";
   import { setMessage } from "../Store/MessageStore";
   import FileList from "./FileList.svelte";
+  import TreeMenu from "./TreeMenu.svelte";
 
   const socket = getContext("socket");
   let content = [];
@@ -17,9 +18,10 @@
   let zIndex = 98;
   let files = [];
   let current = {};
+  let showMenu = false;
 
-  const scanDir = ({ detail }) => {
-    item = detail;
+  const scanDir = (data) => {
+    item = data;
     showModal = true;
   };
   const setFiles = (fileContent) => {
@@ -41,14 +43,7 @@
     }
   };
 
-  const onCleanupMessage = (message) => {
-    if (message.error) {
-      setMessage({ error: true, msg: message.error });
-    } else {
-      console.log(message);
-      setMessage({ msg: message });
-    }
-  };
+  const onCleanupMessage = (message) => setMessage({ error: message.error, msg: message });
 
   const scrollToTop = () => {
     treeRef.scrollTo({
@@ -58,16 +53,23 @@
     });
   };
 
+  const onMenu = (e, file) => {
+    showMenu = { e, file };
+  };
+  const hideMenu = () => (showMenu = false);
+
   socket.on("finish-cleaning", onCleanupMessage);
   socket.on("disk-loaded", onDiskdata);
 
   onMount(() => {
+    document.body.addEventListener("click", hideMenu);
     setTimeout(() => {
       socket.emit("load-disks");
     }, 50);
   });
 
   onDestroy(() => {
+    document.body.removeEventListener("click", hideMenu);
     socket.off("finish-cleaning", onCleanupMessage);
     socket.off("disk-loaded", onDiskdata);
   });
@@ -76,6 +78,8 @@
 {#if showModal}
   <DirectoryModal {createDirectory} {hideModal} Name={item.Name} />
 {/if}
+
+<TreeMenu {showMenu} {scanDir} />
 
 {#if loading}
   <div class="d-loading">
@@ -89,7 +93,7 @@
           <Icons name="hdd" color="black" />
           <span class="tree-name">Server</span>
           <ul class="tree-view usn">
-            <TreeItem type="hdd" items={content} on:scanDir={scanDir} {offset} {zIndex} {setFiles} {current} />
+            <TreeItem type="hdd" items={content} {offset} {zIndex} {setFiles} {current} {onMenu} />
           </ul>
         </div>
       </div>

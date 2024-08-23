@@ -164,11 +164,18 @@
 
     :global(#menu a.active .nav-title) {
       display: initial;
-      margin-right: 5px;
     }
 
     :global(#menu li svg) {
       transform: scale(1.2);
+    }
+    :global(#menu li .active .icon-users),
+    :global(#menu li .active .icon-download),
+    :global(#menu li .active .icon-sitemap) {
+      margin-right: 5px;
+    }
+    :global(#menu li .active .icon-sitemap) {
+      margin-right: 7px;
     }
   }
 

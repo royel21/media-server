@@ -1,13 +1,9 @@
 <script>
-  import { createEventDispatcher, getContext, onMount } from "svelte";
+  import { getContext, onMount } from "svelte";
   import Icons from "src/icons/Icons.svelte";
   import apiUtils from "src/apiUtils";
-  import Confirm from "../Component/Confirm.svelte";
-  import MoveModal from "./MoveModal.svelte";
   import { setMessage } from "../Store/MessageStore";
-  import RenameModal from "./RenameModal.svelte";
-  import ModalPassword from "./ModalPassword.svelte";
-  import Menu from "./Menu.svelte";
+  import { sortByName } from "src/ShareComponent/utils";
 
   export let items = [];
   export let type;
@@ -15,24 +11,12 @@
   export let zIndex;
   export let setFiles;
   export let current;
-
-  const menuItems = [
-    { Id: "scanDirectory", Name: "Add to Directories" },
-    { Id: "remFolder", Name: "Rename Folder" },
-    { Id: "cleanupVideos", Name: "Clean Videos" },
-    { Id: "moveToDir", Name: "Move To Directory" },
-    { Id: "removeDFolder", Name: "Delete Folder" },
-  ];
+  export let onMenu;
 
   let item = {};
-  let showMenu = false;
-  let showConfirm;
-  let showMoveTo = false;
-  let showRename = false;
-  let showCleanupModal = false;
   let offsetNext = offset + 1;
+  let hasFiles = false;
 
-  const dispatch = createEventDispatcher();
   const socket = getContext("socket");
 
   const expandFolder = async (event) => {
@@ -44,10 +28,14 @@
         item.Content = data.data.filter((it) => it.Type !== "file");
         items = items;
         current = item;
-        setFiles(data.data.filter((it) => it.Type === "file"));
+        const files = data.data.filter((it) => it.Type === "file");
+        hasFiles = files.length;
+        setFiles(files);
       } else {
         item.Content = [];
         items = items;
+        hasFiles = false;
+        current = {};
         setFiles([]);
       }
       items.forEach((it) => {
@@ -58,65 +46,17 @@
     }
   };
 
-  const cleanDir = (data) => {
-    if (data.folder.Path) {
-      socket.emit("file-work", { action: "workVideos", data });
+  const onShowMenu = (e) => {
+    const li = e.target.closest("li") || li;
+    const found = items.find((it) => it.Id === li.id);
+    if (found) {
+      onMenu(e, found);
+      item = found;
     }
-    showCleanupModal = false;
-  };
-
-  const menuActions = (event, id) => {
-    let li = event.target.closest("li");
-    item = items.find((d) => d.Id.toString() === li.id);
-
-    const actions = {
-      scanDirectory: () => dispatch("scanDir", item),
-      cleanupVideos: () => (showCleanupModal = item),
-      removeDFolder: () => (showConfirm = item),
-      moveToDir: () => (showMoveTo = item),
-      remFolder: () => (showRename = item),
-    };
-
-    return actions[id] && actions[id]();
-  };
-
-  const hideRename = () => (showRename = false);
-
-  const onRename = ({ folder, Name }) => {
-    socket.emit("file-work", { action: "remFolder", data: { folder, Name } });
-
-    const item = items.find((it) => it.Path === folder.Path);
-    item.Path = item.Path.replace(item.Name, Name);
-    item.Name = Name;
-    items = items;
-    showRename = false;
-  };
-
-  const hideMenu = () => {
-    showMenu = false;
-  };
-
-  const onMenuClick = ({ target }) => menuActions(showMenu.e, target.id);
-
-  const cancel = () => (showConfirm = false);
-  const onRemove = (data) => {
-    if (data.Path) {
-      socket.emit("file-work", { action: "removeDFolder", data });
-      items = items.filter((it) => it.Path !== data.Path);
-    }
-  };
-
-  const hideMoveTo = () => (showMoveTo = false);
-  const confirmMove = (data) => {
-    socket.emit("file-work", { action: "moveToDir", data });
   };
 
   const onFolderMove = ({ error, msg, folder, FolderId }) => {
-    if (error) {
-      console.log(error);
-      return setMessage({ error: true, msg: msg });
-    }
-    if (items.find((it) => it.Name === folder.Name)) {
+    if (findFile(folder.Id, msg, error)) {
       items = items.filter((it) => it.Name !== folder.Name);
       if (FolderId) {
         socket.emit("scan-dir", { Id: FolderId, isFolder: true });
@@ -125,14 +65,49 @@
     }
   };
 
+  const findFile = (Id, msg, error) => {
+    const found = items.find((it) => it.Id === Id);
+    if (found) {
+      if (error) return setMessage({ msg, error });
+      setMessage({ msg, error });
+      return found;
+    }
+  };
+
+  const onFolderCreate = ({ folder, folderId, msg, error }) => {
+    if (findFile(folderId, msg, error)) {
+      item.Content.push(folder);
+      item.Content.sort(sortByName);
+      items = items;
+    }
+  };
+
+  const onRename = ({ folder, error, msg, Name }) => {
+    const found = findFile(folder.Id, msg, error);
+    if (found) {
+      found.Path = found.Path.replace(item.Name, Name);
+      found.Name = Name;
+      items = items;
+    }
+  };
+
+  const onFolderRemove = ({ error, msg, folder }) => {
+    if (findFile(folder.Id, msg, error)) {
+      items = items.filter((f) => f.Id !== folder.Id);
+      item = null;
+    }
+  };
+
   onMount(() => {
+    socket.on("folder-create", onFolderCreate);
+    socket.on("folder-rename", onRename);
     socket.on("folder-move", onFolderMove);
-    document.body.addEventListener("click", hideMenu);
-    document.body.addEventListener("contextmenu", hideMenu);
+    socket.on("folder-remove", onFolderRemove);
     return () => {
       socket.off("folder-move", onFolderMove);
-      document.body.removeEventListener("click", hideMenu);
-      document.body.removeEventListener("contextmenu", hideMenu);
+      socket.off("folder-rename", onRename);
+      socket.off("folder-create", onFolderCreate);
+      socket.on("folder-remove", onFolderRemove);
     };
   });
 
@@ -143,32 +118,8 @@
   };
 </script>
 
-{#if showConfirm}
-  <Confirm text={`this folder: ${showConfirm.Name}`} acept={onRemove} {cancel} data={showConfirm} />
-{/if}
-
-{#if showMoveTo}
-  <MoveModal data={showMoveTo} hide={hideMoveTo} acept={confirmMove} />
-{/if}
-
-{#if showRename}
-  <RenameModal data={showRename} hide={hideRename} acept={onRename} />
-{/if}
-
-{#if showCleanupModal}
-  <ModalPassword data={showCleanupModal} acept={cleanDir} hide={() => (showCleanupModal = false)} />
-{/if}
-
-{#if showMenu && /folder/.test(showMenu.Type)}
-  <Menu {menuItems} event={showMenu.e} {onMenuClick} />
-{/if}
-
 {#each items as { Content, Id, Name, Type, Path }}
-  <li
-    id={Id}
-    class={`tree-item ${Type}`}
-    on:contextmenu|preventDefault|stopPropagation={(e) => (showMenu = { e, Type })}
-  >
+  <li id={Id} class={`tree-item ${Type}`} on:contextmenu|preventDefault|stopPropagation={onShowMenu}>
     <span
       class="caret"
       style={getStyle(type, Content)}
@@ -185,12 +136,21 @@
       on:click={expandFolder}
     >
       <Icons name={Type || type} color="black" />
-      <span class:selected={current?.Content?.length === 0 && current.Id === Id}>{Name}</span>
+      <span class:selected={hasFiles && current.Id === Id}>{Name}</span>
       <span class:count={Content.length} class="f-count">Folders: {Content.length}</span>
     </span>
     {#if Content.length > 0}
       <ul class="tree-node usn">
-        <svelte:self type="folder" items={Content} on:scanDir offset={offsetNext} {zIndex} {setFiles} {current} />
+        <svelte:self
+          type="folder"
+          items={Content}
+          on:scanDir
+          offset={offsetNext}
+          {zIndex}
+          {setFiles}
+          {current}
+          {onMenu}
+        />
       </ul>
     {/if}
   </li>
@@ -222,7 +182,7 @@
     color: white;
   }
   .dir .selected {
-    color: red;
+    color: #00fff3;
   }
   .dir .f-count {
     display: none;
@@ -241,8 +201,7 @@
     padding: 2px;
     border-radius: 0.25rem;
     color: white;
-    position: none;
-    user-select: none;
+    pointer-events: none;
   }
   .caret {
     display: inline-block;

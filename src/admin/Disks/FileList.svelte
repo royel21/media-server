@@ -42,7 +42,6 @@
   const removeFiles = () => {
     const items = files.filter((f) => removeList.includes(f.Id));
     socket.emit("file-work", { action: "removeFiles", data: { files: items } });
-    console.log("confirm");
   };
 
   const onTransfer = () => {
@@ -57,7 +56,6 @@
   };
 
   const onFileInfo = ({ msg, items, error }) => {
-    console.log(error, msg);
     setMessage({ msg: error || msg, error });
     if (items || error) {
       transfer = false;

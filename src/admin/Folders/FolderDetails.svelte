@@ -57,7 +57,6 @@
   };
   const onUrl = ({ target: { value } }) => {
     imageData.Url = value;
-    console.log(imageData);
     error = "";
   };
 
@@ -103,7 +102,6 @@
       } else {
         setMessage(result);
       }
-      console.log(result);
     }
 
     if (hasChanges) {

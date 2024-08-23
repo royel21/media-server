@@ -1,5 +1,5 @@
 import db from "../models/index.js";
-import { moveFiles, removeFiles } from "./fileHelpers.js";
+import { createFolder, moveFiles, removeFiles } from "./fileHelpers.js";
 import { moveToDir, remFolder, removeDFolder, workVideos } from "./videoHelper.js";
 
 const sendMessage = (event, message) => {
@@ -146,6 +146,7 @@ const actions = {
   remFolder,
   moveFiles,
   removeFiles,
+  createFolder,
 };
 
 const works = {

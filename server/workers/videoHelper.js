@@ -131,18 +131,6 @@ export const workVideos = ({ folder, pass, text, padding }) => {
   sendMessage(`Finish Cleaning: ${Name}`);
 };
 
-export const removeDFolder = ({ Name, Path }) => {
-  if (fs.existsSync(Path)) {
-    try {
-      sendMessage(`Removing: ${Name}`);
-      fs.removeSync(Path);
-      sendMessage(`Finish Removing: ${Name}`);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-};
-
 function timeout(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -203,19 +191,31 @@ export const moveToDir = async ({ folder, DirectoryId }) => {
   }
 };
 
-export const remFolder = ({ folder, Name }) => {
-  if (fs.existsSync(folder.Path)) {
+export const removeDFolder = ({ Id, Name, Path }) => {
+  console.log("remove", Id, Name, Path);
+  if (fs.existsSync(Path)) {
     try {
-      fs.moveSync(folder.Path, folder.Path.replace(folder.Name, Name));
-      sendMessage(`Folder: ${folder.Name} -> Rename to: ${Name}`);
+      fs.removeSync(Path);
+      sendMessage({ msg: `Finish Removing: ${Name}`, folder: { Id, Name, Path } }, "folder-remove");
     } catch (error) {
       sendMessage(
-        {
-          error: error.toString(),
-          msg: `Some Error Happen when trying to move Folder: ${folder.Name}`,
-        },
-        "folder-move"
+        { error: error.toString(), msg: `Error Removing: ${Name}`, folder: { Id, Name, Path } },
+        "folder-remove"
       );
+    }
+  }
+};
+export const remFolder = ({ folder, Name }) => {
+  if (fs.existsSync(folder.Path)) {
+    const data = { msg: "", error: "", folder, Name };
+    try {
+      fs.moveSync(folder.Path, folder.Path.replace(folder.Name, Name));
+      data.msg = `Folder: ${folder.Name} -> Rename to: ${Name}`;
+      sendMessage(data, "folder-rename");
+    } catch (error) {
+      data.msg = `Some Error Happen when trying to move Folder: ${folder.Name}`;
+      data.error = error;
+      sendMessage(data, "folder-rename");
     }
   }
 };

@@ -14,17 +14,17 @@
     const w = document.body.offsetWidth;
 
     if (top + ref.offsetHeight > h) {
-      top = top - ref.offsetHeight;
+      top = top - ref.offsetHeight - 10;
     }
 
     if (left + ref.offsetWidth > w) {
-      top = top - ref.offsetWidth;
+      left = left - ref.offsetWidth - 10;
     }
   });
 
   $: if (event) {
-    left = event?.pageX;
-    top = event?.pageY;
+    left = event?.pageX + 10;
+    top = event?.pageY + 10;
   }
 </script>
 
@@ -39,7 +39,7 @@
     z-index: 300;
     position: fixed;
     width: max-content;
-    background-color: rgb(95, 91, 91);
+    background-color: rgb(35 33 33);
     cursor: pointer;
     border-radius: 0.25rem;
   }

@@ -1,15 +1,9 @@
 <script>
-  import { onMount } from "svelte";
-  import { fade } from "svelte/transition";
+  import Dialog from "../Disks/Dialog.svelte";
   export let text = "";
   export let cancel;
   export let acept;
   export let data = "";
-  let ref;
-
-  onMount(() => {
-    ref?.focus();
-  });
 
   const onConfirm = () => {
     acept(data);
@@ -17,31 +11,12 @@
   };
 </script>
 
-<div bind:this={ref} class="modal-container" tabindex="-1">
-  <div class="modal card" transition:fade={{ duration: 200 }}>
-    <div class="modal-header">
-      <h4>Confirmation Dialog</h4>
-    </div>
-
-    <div class="modal-body">
-      <p>Are you Sure want to remove <strong>{text}</strong></p>
-    </div>
-    <div class="modal-footer">
-      <button type="submit" class="btn" on:click={onConfirm}>Ok</button>
-      <button type="button" class="btn" on:click={cancel}>Cancel</button>
-    </div>
-  </div>
-</div>
+<Dialog {cancel} confirm={onConfirm}>
+  <h4 slot="modal-header">Remove Confirm</h4>
+  <span slot="modal-body"><p>Are you Sure want to remove <strong>{text}</strong></p></span>
+</Dialog>
 
 <style>
-  .modal {
-    width: 400px;
-    max-width: 92%;
-    outline: none;
-  }
-  .modal-body {
-    padding: 15px 5px;
-  }
   strong {
     color: red;
   }
