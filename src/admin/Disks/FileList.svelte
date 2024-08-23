@@ -56,7 +56,7 @@
   };
 
   const onFileInfo = ({ msg, items, error }) => {
-    setMessage({ msg: error || msg, error });
+    setMessage({ error, msg });
     if (items || error) {
       transfer = false;
     }

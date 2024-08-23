@@ -15,13 +15,9 @@ export const moveFiles = ({ files, Path, overwrite }) => {
 
   for (const file of files) {
     try {
-      if (fs.existsSync(file.Path)) {
-        fs.moveSync(file.Path, path.join(Path, file.Name), { overwrite });
-      }
+      fs.moveSync(file.Path, path.join(Path, file.Name), { overwrite });
     } catch (error) {
-      if (!overwrite) {
-        sendMessage({ error: `Error moving: ${file.Name}`, err: error });
-      }
+      sendMessage({ msg: `Error moving: ${file.Name}`, error });
     }
   }
   sendMessage({ msg: `Finish Moving Files to: ${Path}`, items: files.map((f) => f.Id) });
