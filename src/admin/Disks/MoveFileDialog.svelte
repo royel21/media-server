@@ -26,7 +26,7 @@
       return errors.push("Path must be on User Space");
     }
 
-    return acept(item);
+    return acept({ files, ...item });
   };
 </script>
 
