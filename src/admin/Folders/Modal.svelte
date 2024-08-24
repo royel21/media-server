@@ -1,5 +1,4 @@
 <script>
-  import { createEventDispatcher } from "svelte";
   import { fade } from "svelte/transition";
   import TextAreaInput from "../Component/TextAreaInput.svelte";
   import Icons from "src/icons/Icons.svelte";
@@ -8,9 +7,10 @@
   export let modalType;
   export let ref = null;
   export let deleteFromSys = null;
+  export let hide;
+  export let acept;
 
   let tempFile = { Name: "", Ex: "" };
-  const dispatch = createEventDispatcher();
 
   const loadTemp = (f) => {
     if (/\.(zip|mp4|mkv|ogg|avi)$/i.test(f.Name)) {
@@ -19,21 +19,22 @@
     tempFile.Name = f.Name?.replace(tempFile.Ex, "");
   };
 
-  const submit = (e) => {
-    if (file) {
+  const submit = () => {
+    if (file.Name) {
       file.Name = tempFile.Name + tempFile.Ex;
-      dispatch("submit", e);
+      acept(file, deleteFromSys);
     }
-    dispatch("submit", e);
   };
 
   const onKeyDown = (e) => {
-    if (e.keyCode === 13 && e.ctrlKey) {
-      submit(e);
-      e.preventDefault();
-      e.stopPropagation();
+    if (file) {
+      if (e.keyCode === 13 && e.ctrlKey) {
+        submit();
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      if (e.keyCode === 27) hide();
     }
-    if (e.keyCode === 27) dispatch("click", e);
   };
 
   const onChanges = ({ target: { checked } }) => (deleteFromSys = checked);
@@ -68,7 +69,7 @@
         <button type="submit" class="btn">
           {modalType.Del ? "Remove" : "Update"}
         </button>
-        <button type="button" class="btn" on:click>Cancel</button>
+        <button type="button" class="btn" on:click={hide}>Cancel</button>
       </div>
     </form>
   </div>
