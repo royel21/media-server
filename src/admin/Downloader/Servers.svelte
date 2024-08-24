@@ -134,8 +134,8 @@
       <a href={`https://${server.Name}`} target="_blank"><Icons name="wolrd" color="forestgreen" /></a>
     </span>
     <span title="Open Server Config" on:click={onShowServerEdit}><Icons name="cog" /></span>
-    <span on:click={() => (showRemoveConfirm = true)}><Icons name="trash" /></span>
     <Select2 label="Servers" bind:item={server} options={servers} {onChange} />
+    <span id="trash" on:click={() => (showRemoveConfirm = true)}><Icons name="trash" box="0 0 495 500" /></span>
   </div>
   <div class="d-controls">
     <Filter on:filter={onFilter} filter={datas.filter}>
@@ -166,6 +166,12 @@
   }
   #srv .d-controls {
     padding-bottom: 5px;
+  }
+  #srv .d-controls :global(.icon-trash) {
+    width: 28px;
+  }
+  #srv #trash {
+    margin-left: 5px;
   }
   #srv .d-controls:first-child {
     padding-bottom: 0px;

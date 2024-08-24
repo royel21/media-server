@@ -142,9 +142,10 @@ export const moveToDir = async ({ folder, DirectoryId }) => {
   if (fs.existsSync(dir?.FullPath)) {
     const Path = path.join(dir.FullPath, folder.Name);
 
-    sendMessage(`Moving: ${Name} from: ${folder.Path} -> To: ${Path}`);
+    sendMessage({ msg: `Moving: ${Name} from: ${folder.Path} -> To: ${Path}` }, "folder-info");
 
     try {
+      if (!fs.exists(folder.Path)) return;
       const files = fs.readdirSync(folder.Path);
 
       //if contain folder cancer transfer

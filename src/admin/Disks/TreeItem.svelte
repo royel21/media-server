@@ -56,7 +56,7 @@
   };
 
   const onFolderMove = ({ error, msg, folder, FolderId }) => {
-    if (findFile(folder.Id, msg, error)) {
+    if (findFile(folder?.Id, msg, error)) {
       items = items.filter((it) => it.Name !== folder.Name);
       if (FolderId) {
         socket.emit("scan-dir", { Id: FolderId, isFolder: true });
@@ -98,12 +98,16 @@
     }
   };
 
+  const onInfo = ({ msg, error }) => setMessage({ error, msg });
+
   onMount(() => {
+    socket.on("folder-info", onInfo);
     socket.on("folder-create", onFolderCreate);
     socket.on("folder-rename", onRename);
     socket.on("folder-move", onFolderMove);
     socket.on("folder-remove", onFolderRemove);
     return () => {
+      socket.off("folder-info", onInfo);
       socket.off("folder-move", onFolderMove);
       socket.off("folder-rename", onRename);
       socket.off("folder-create", onFolderCreate);
