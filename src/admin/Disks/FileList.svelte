@@ -11,6 +11,7 @@
 
   export let files = [];
   export let socket;
+  export let Name = "";
   let filtered = files;
 
   let showConfirm = false;
@@ -90,7 +91,7 @@
       <Loading text="Transfer In Process - Please Wait" />
     {/if}
     <div class="ftree-control">
-      <h4>Files - {files.length}</h4>
+      <h4>{files.length} - {Name}</h4>
       <div class="filter">
         <span>
           <CCheckbox id="check-all" on:change={onCheckAll} {isChecked} title="Select All Files" />
@@ -152,7 +153,15 @@
     z-index: 9;
   }
   h4 {
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+    width: calc(100% - 50px);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    user-select: text;
     border-bottom: 1px solid;
+    overflow-x: hidden;
   }
   .tree-files :global(#check-all) {
     top: 2px;

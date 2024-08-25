@@ -24,8 +24,9 @@
     item = data;
     showModal = true;
   };
-  const setFiles = (fileContent) => {
+  const setFiles = (fileContent, cur) => {
     files = fileContent;
+    current = cur;
   };
   const createDirectory = (Type, IsAdult) => {
     socket.emit("scan-dir", { Path: item.Path, Type, IsAdult });
@@ -73,6 +74,7 @@
     socket.off("finish-cleaning", onCleanupMessage);
     socket.off("disk-loaded", onDiskdata);
   });
+  $: console.log(current);
 </script>
 
 {#if showModal}
@@ -98,7 +100,7 @@
         </div>
       </div>
       {#if files.length}
-        <FileList {files} {socket} />
+        <FileList {files} {socket} Name={current?.Name} />
       {/if}
       {#if files.length}
         <span class="scroll-top" on:click={scrollToTop}>

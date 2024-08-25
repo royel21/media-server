@@ -27,16 +27,14 @@
         const data = await apiUtils.post("admin/directories/Content", { Path: item.Path });
         item.Content = data.data.filter((it) => it.Type !== "file");
         items = items;
-        current = item;
         const files = data.data.filter((it) => it.Type === "file");
         hasFiles = files.length;
-        setFiles(files);
+        setFiles(files, item);
       } else {
         item.Content = [];
         items = items;
         hasFiles = false;
-        current = {};
-        setFiles([]);
+        setFiles([], {});
       }
       items.forEach((it) => {
         if (it.Id !== item.Id) {
