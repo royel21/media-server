@@ -59,6 +59,9 @@
       if (FolderId) {
         socket.emit("scan-dir", { Id: FolderId, isFolder: true });
       }
+      if (item.Id === folder.Id) {
+        setFiles([], {});
+      }
       setMessage({ msg: "Finish Moving Folder: " + folder.Name });
     }
   };
@@ -120,7 +123,7 @@
   };
 </script>
 
-{#each items as { Content, Id, Name, Type, Path }}
+{#each items as { Content, Id, Name, Type }}
   <li id={Id} class={`tree-item ${Type}`} on:contextmenu|preventDefault|stopPropagation={onShowMenu}>
     <span
       class="caret"

@@ -156,12 +156,7 @@ export const moveToDir = async ({ folder, DirectoryId }) => {
         );
       }
 
-      for (const file of files) {
-        fs.moveSync(path.join(folder.Path, file), path.join(Path, file), { overwrite: true });
-      }
-      await timeout(500);
-
-      const FileCount = fs.readdirSync(Path).filter((f) => vRex.test(f)).length;
+      const FileCount = files.filter((f) => vRex.test(f)).length;
       let found = await db.folder.findOne({ where: { Name, DirectoryId } });
 
       if (found) {
@@ -177,6 +172,10 @@ export const moveToDir = async ({ folder, DirectoryId }) => {
         });
       }
 
+      for (const file of files) {
+        fs.moveSync(path.join(folder.Path, file), path.join(Path, file), { overwrite: true });
+      }
+      await timeout(100);
       fs.removeSync(folder.Path);
       sendMessage({ folder, FolderId: found.Id }, "folder-move");
     } catch (error) {
