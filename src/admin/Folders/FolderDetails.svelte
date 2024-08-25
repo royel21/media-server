@@ -16,6 +16,7 @@
   let imageData = { Id: "", Url: "", file: "" };
   let old = {};
   let transfer = false;
+  let tags = [];
 
   let options = [];
 
@@ -29,13 +30,14 @@
       delete data.dirs;
       folder = { ...folder, ...data };
       old = { ...folder };
+      tags = data.tags;
     }
     transfer = false;
   };
 
   const onChange = ({ target: { name, value, type, checked } }) => {
     if (name === "Genres") {
-      value = validGenres(value);
+      value = validGenres(value, tags);
     }
 
     if (name === "AltName") {

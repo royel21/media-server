@@ -10,6 +10,8 @@ import { createDir } from "../../Downloader/utils.js";
 
 const routes = Router();
 
+const tagsPath = "./server/data/tags.json";
+
 const getData = async ({ params }, res) => {
   const { page, items, filter, folderId, dirId } = params;
   let filterTerm = decodeURIComponent(filter || "");
@@ -137,6 +139,10 @@ routes.get("/folder/:folderId?", async (req, res) => {
   if (fs.existsSync(folder.Path)) {
     files = fs.readdirSync(folder.Path).filter((f) => !/\.(webp|jpg|png|gif|jpeg)/.test(f));
   }
+  let tags = [];
+  if (fs.existsSync(tagsPath)) {
+    tags = fs.readJSONSync(tagsPath);
+  }
 
   res.send({
     Name: folder.Name,
@@ -151,6 +157,7 @@ routes.get("/folder/:folderId?", async (req, res) => {
     Last: files.length > 0 ? files[files.length - 1] : "N/A",
     Total: files.length > 0 ? files.length : 0,
     dirs,
+    tags,
   });
 });
 
@@ -184,10 +191,7 @@ routes.post("/cover", async (req, res) => {
   }
 });
 
-const tagsPath = "./server/data/tags.json";
-
 routes.get("/tags", async (req, res) => {
-  console.log(path.resolve("./"));
   try {
     return res.send(fs.readJSONSync(tagsPath));
   } catch (error) {
@@ -196,7 +200,6 @@ routes.get("/tags", async (req, res) => {
   res.send([]);
 });
 routes.post("/tags", async (req, res) => {
-  console.log("tag-uploaded");
   const { tags } = req.body;
   if (tags && tags.length > 0) {
     fs.writeJSONSync(tagsPath, tags.sort());

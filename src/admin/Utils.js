@@ -1,13 +1,10 @@
-import tags from "src/admin/Tags.json";
-
 export const calRows = (query) => {
   let container = document.querySelector(query || ".list-container") || {};
   return parseInt(container.offsetHeight / 40);
 };
 
-const regex = new RegExp(tags.join("|"), "ig");
-
-export const validGenres = (g) => {
+export const validGenres = (g, tags) => {
+  const regex = new RegExp(tags.join("|"), "ig");
   const parts = g.match(regex) || [];
 
   const gens = new Set([...parts, ...g.replace(regex, "").split(/,|\/|\n| /g)].sort());

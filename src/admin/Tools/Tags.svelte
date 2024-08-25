@@ -52,7 +52,7 @@
   $: filter, (filtered = items.filter(filterTags));
 </script>
 
-<div class="file-list">
+<div id="tag-list" class="file-list">
   <slot name="first-tag" />
   <div class="controls">
     <span class="create-folder" on:click={addTag}><Icons name="squareplus" box="0 0 512 512" /></span>
@@ -81,59 +81,59 @@
 </div>
 
 <style>
-  .file-list {
+  #tag-list {
     height: 100%;
   }
 
-  .list-container {
+  #tag-list .list-container {
     height: calc(100% - 45px);
     overflow-y: auto;
     background-color: white;
     border-radius: 5px;
   }
-  li {
+  #tag-list li {
     position: relative;
     display: flex;
     align-items: center;
     padding: 0;
   }
-  .controls {
+  #tag-list .controls {
     position: initial;
     display: flex;
     padding: 5px 0;
     justify-content: initial;
   }
-  .list-group-item {
+  #tag-list .list-group-item {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .empty-list:only-child {
+  #tag-list .empty-list:only-child {
     text-align: center;
   }
-  li span:hover {
+  #tag-list li span:hover {
     cursor: ponter;
   }
-  li :global(svg) {
+  #tag-list li :global(svg) {
     pointer-events: none;
   }
-  .controls :global(.icon-squareplus) {
+  #tag-list .controls :global(.icon-squareplus) {
     width: 35px;
     height: 35px;
     left: 5px;
   }
-  .create-folder {
+  #tag-list .create-folder {
     margin-right: 8px;
   }
-  :global(#filter-control) {
+  #tag-list :global(#filter-control) {
     min-width: calc(100% - 50px);
   }
 
-  li .icon {
+  #tag-list li .icon {
     cursor: pointer;
     user-select: none;
   }
-  li > span {
+  #tag-list li > span {
     padding: 5px;
   }
 </style>
