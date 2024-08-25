@@ -2,12 +2,12 @@
   import { navigate } from "svelte-routing";
   import Icons from "src/icons/Icons.svelte";
   import Tools from "./Tools.svelte";
-  import Defaults from "./Defaults.svelte";
+  import Tags from "./Tags.svelte";
   export let tab = "tab-1";
 
   const components = {
     "tab-1": Tools,
-    "tab-2": Defaults,
+    "tab-2": Tags,
   };
 
   $: {
@@ -29,8 +29,8 @@
       <div class="nav-item">
         <input type="radio" bind:group={tab} value="tab-2" id="tab2" />
         <label class="nav-link" for="tab2">
-          <Icons name="cogs" />
-          <span id="dirs">Defaults</span>
+          <Icons name="tags" />
+          <span id="dirs">Tags</span>
         </label>
       </div>
     </div>

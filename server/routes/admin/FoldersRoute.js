@@ -184,6 +184,25 @@ routes.post("/cover", async (req, res) => {
   }
 });
 
+const tagsPath = "./server/data/tags.json";
+
+routes.get("/tags", async (req, res) => {
+  console.log(path.resolve("./"));
+  try {
+    return res.send(fs.readJSONSync(tagsPath));
+  } catch (error) {
+    console.log(error);
+  }
+  res.send([]);
+});
+routes.post("/tags", async (req, res) => {
+  console.log("tag-uploaded");
+  const { tags } = req.body;
+  if (tags && tags.length > 0) {
+    fs.writeJSONSync(tagsPath, tags.sort());
+  }
+});
+
 routes.get("/files/:folderId/:page/:items/:filter?", getData);
 
 routes.get("/:dirId/:page/:items/:filter?", getData);

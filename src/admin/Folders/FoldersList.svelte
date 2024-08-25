@@ -101,11 +101,10 @@
       scanning = [...scanning, folder.Id];
     }
   };
-  const handleSubmit = ({ detail }) => {
+  const handleSubmit = ({ Id }, Del) => {
     //if we are deleting the file
     if (modalType.Del) {
-      let Del = detail.target.querySelector("input").checked;
-      socket.emit("file-work", { action: "removeFolder", data: { Id: folder.Id, Del } });
+      socket.emit("file-work", { action: "removeFolder", data: { Id, Del } });
     }
   };
 
@@ -190,7 +189,7 @@
 {/if}
 
 {#if showModal}
-  <Modal file={folder} {modalType} on:submit={handleSubmit} on:click={hideModal} />
+  <Modal file={folder} {modalType} acept={handleSubmit} hide={hideModal} />
 {/if}
 
 {#if showImage && totalItems}

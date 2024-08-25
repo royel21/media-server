@@ -132,7 +132,7 @@ const removeFolder = async ({ Id, Del }) => {
   } catch (err) {
     console.log(err);
   }
-  sendMessage("folder-removed", { success, Id });
+  sendMessage("folder-removed", { success, Id, Name: folder?.Name });
 };
 
 const actions = {

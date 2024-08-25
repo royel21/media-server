@@ -12,6 +12,7 @@
         "./backup/*",
         "user-data/**/*",
         "server/Workers/**/*",
-        "build/**"
+        "build/**",
+        "server/data/**"
     ]
 }

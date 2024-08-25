@@ -4,6 +4,7 @@
   export let cancel;
   export let confirm;
   export let errors = [];
+
   let ref;
 
   onMount(async () => {
@@ -11,7 +12,13 @@
   });
 </script>
 
-<div bind:this={ref} class="modal-container" tabindex="-1" on:contextmenu|stopPropagation={() => {}}>
+<div
+  bind:this={ref}
+  class="modal-container"
+  tabindex="-1"
+  on:contextmenu|stopPropagation={() => {}}
+  on:keydown|stopPropagation
+>
   <div class="modal card move-to" transition:fade={{ duration: 200 }}>
     <form on:submit|preventDefault={confirm}>
       <div class="modal-header">
