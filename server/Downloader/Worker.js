@@ -96,7 +96,7 @@ const downloadLinks = async (link, page) => {
     return sendMessage({ text: "Fail to find or create folder entry in database", color: "red" });
   }
 
-  sendMessage({ text: `Files: ${files.length} - ${manga.data.length}` });
+  sendMessage({ text: `Files: ${files.length} - Server: ${manga.data.length}` });
 
   if (files.length) {
     manga.data = manga.data.filter(filterManga(files));
