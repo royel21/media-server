@@ -13,6 +13,12 @@ const sendMessage = (message, event = "finish-cleaning") => {
 let count = 0;
 
 const renameVideoFile = (src, dest, file, regex, text, padding) => {
+  if (!/\d+|movie|ova|ending|opening|(e|)special/.test(file)) {
+    return;
+  }
+
+  count++;
+  const nextNum = count.toString().padStart(padding, "0");
   try {
     const extension = "." + file.split(".").pop();
 
@@ -24,22 +30,23 @@ const renameVideoFile = (src, dest, file, regex, text, padding) => {
     }
 
     let nFile = file
-      .replaceAll("_", " ")
       .replace(extension, "")
       .replace(text, "")
+      .replaceAll("_", " ")
       .replace(".", "-")
       .replace(regex, "")
-      .replace(/\d+[a-z]+ Season |Season \d+[a-z]+ (- |)|episodio /gi, "")
-      .replace(/( |)\[(.*?)\]( |)|( |)\((.*?)\)( |)/g, "");
+      .replace(/\d+[a-z]+ Season |Season \d+[a-z]+ (- |)|episodio |capitulo /gi, "")
+      .replace(/(( )+|)((\[|\()(.*?)(\]|\)))(( )+|)/g, "");
 
-    if (/ova|especial|special/i.test(file)) {
+    if (/ending|opening|ova|(e|)special/i.test(file)) {
       nFile = nFile
-        .replace(/^.*.( - | )Ova /i, "Ova ")
-        .replace(/^.*.( - | )Especial /i, "Especial ")
-        .replace(/^.*.( - | )Special /i, "Special ")
+        .replace(/^.*.( - | )Ova( |)/i, "Ova ")
+        .replace(/^.*.( - | )Especial( |)/i, "Especial ")
+        .replace(/^.*.( - | )Special( |)/i, "Special ")
         .trim();
     } else if (!/^\d+/.test(nFile)) {
-      nFile = nFile.replace(/^.*. - /, "").trim();
+      nFile = nFile.replace(/([\w-]*[^\d]+)|^.*. (- |)/, "").trim();
+      console.log("no ending|opening", nFile);
     }
 
     const num = nFile.match(/\d+/);
@@ -49,11 +56,20 @@ const renameVideoFile = (src, dest, file, regex, text, padding) => {
     }
 
     nFile = nFile.replace(/\d+nd Season - /, "");
-    nFile += extension.toLocaleLowerCase();
-
-    if (nFile === extension.toLocaleLowerCase()) {
-      nFile = "0" + count++ + extension;
+    if (!/\d+/.test(nFile) && !/ending|opening|ova|(e|)special/i.test(nFile)) {
+      if (/Ending|Opening/i.test(file)) {
+        const parts = file.match(/(Ending|Opening)( \d+|)/i);
+        if (parts[0] && /\d+/.test(parts[0])) {
+          nFile = parts[0];
+        } else {
+          nFile = `${parts[0]} - ${nextNum}`;
+        }
+      } else {
+        nFile = `${nextNum} - ${nFile}`;
+      }
     }
+
+    nFile += extension.toLocaleLowerCase();
 
     if (file !== nFile) {
       fs.moveSync(path.join(src, file), path.join(dest, nFile));

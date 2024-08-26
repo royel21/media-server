@@ -74,7 +74,6 @@
     socket.off("finish-cleaning", onCleanupMessage);
     socket.off("disk-loaded", onDiskdata);
   });
-  $: console.log(current);
 </script>
 
 {#if showModal}
@@ -173,9 +172,15 @@
     width: 35px;
     height: 30px;
   }
-  @media screen and (max-width: 640px) {
+  @media (pointer: none), (pointer: coarse) and (max-width: 640px) {
     .d-content.expanded {
       min-width: calc(100% * 2 - 10px);
+    }
+    .tree {
+      height: 100%;
+      overflow-y: auto;
+      padding: 0 5px;
+      overflow-x: auto;
     }
   }
 </style>

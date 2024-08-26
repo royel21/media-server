@@ -33,7 +33,7 @@
         </p>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn" on:click={confirm}>Ok</button>
+        <button type="submit" class="btn">Ok</button>
         <button type="button" class="btn" on:click={cancel}>Cancel</button>
       </div>
     </form>

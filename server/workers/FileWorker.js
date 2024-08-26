@@ -162,6 +162,7 @@ const startToWork = async () => {
       await actions[work.action](work.data);
     }
   }
+  console.log("Process exit");
   process.exit();
 };
 
