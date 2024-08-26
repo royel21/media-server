@@ -96,7 +96,7 @@ const downloadImg = async (url, page, name = "", isCover) => {
         const img = await sharp(buff, { failOnError: false });
         const meta = await img.metadata();
 
-        if (!isCover && meta.width < 400) {
+        if (!isCover && meta.width < 300) {
           return { badImg: true };
         }
 
