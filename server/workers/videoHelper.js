@@ -97,7 +97,7 @@ export const workVideos = ({ folder, pass, text, padding }) => {
 
   pass = pass ? `-p'${pass}'` : "";
 
-  for (const file of fs.readdirSync(Path).filter((f) => /\.(exe|rar)$/.test(f))) {
+  for (const file of fs.readdirSync(Path).filter((f) => /\.(exe|rar|zip)$/.test(f))) {
     try {
       if (!/\.part1$/i.test(file) && /\.part\d+$/i.test(file)) {
         continue;
