@@ -32,7 +32,7 @@
 <Dialog cancel={hide} confirm={onConfirm} {errors}>
   <h4 slot="modal-header">Move Folder to Directory</h4>
   <span slot="modal-body" class="dir-list">
-    <span>Select Directory: </span>
+    <div><span>Select Directory </span></div>
     <select class="form-control" bind:value={current}>
       {#each Directories as dir}
         <option value={dir}>{dir.FullPath}</option>
@@ -40,3 +40,10 @@
     </select>
   </span>
 </Dialog>
+
+<style>
+  .dir-list div {
+    text-align: center;
+    font-weight: 600;
+  }
+</style>
