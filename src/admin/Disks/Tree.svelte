@@ -176,11 +176,10 @@
     .d-content.expanded {
       min-width: calc(100% * 2 - 10px);
     }
-    .tree {
+    .tree:not(.no-files) {
       height: 100%;
       overflow-y: auto;
       padding: 0 5px;
-      overflow-x: auto;
     }
   }
 </style>
