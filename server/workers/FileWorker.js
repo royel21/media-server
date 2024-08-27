@@ -1,6 +1,10 @@
+import path from "path";
+import Sharp from "sharp";
 import db from "../models/index.js";
 import { createFolder, moveFiles, removeFiles } from "./fileHelpers.js";
 import { moveToDir, remFolder, removeDFolder, workVideos } from "./videoHelper.js";
+import { createDir } from "../Downloader/utils.js";
+import defaultConfig from "../default-config.js";
 
 const sendMessage = (event, message) => {
   process.send({ event, message });
@@ -135,6 +139,32 @@ const removeFolder = async ({ Id, Del }) => {
   sendMessage("folder-removed", { success, Id, Name: folder?.Name });
 };
 
+const createFolderThumb = async ({ folderId, file }) => {
+  const folder = await db.folder.findOne({ where: { Id: folderId } });
+  try {
+    if (folder) {
+      const posterPath = path.join(folder.Path, "Cover.jpg");
+
+      createDir(folder.Path);
+
+      const img = Sharp(Buffer.from(file.data));
+      await img.jpeg().toFile(posterPath);
+
+      let Cover = path.join(defaultConfig.ImagesDir, "Folder", folder.FilesType, folder.Name + ".jpg");
+
+      createDir(path.join(defaultConfig.ImagesDir, "Folder", folder.FilesType));
+
+      await img.toFormat("jpg").resize({ width: 340 }).toFile(Cover);
+      console.log(Cover);
+    }
+
+    sendMessage("cover-update", { Id: folderId, valid: { text: `Cover update for: ${folder.Name}` } });
+  } catch (error) {
+    sendMessage("cover-update", { valid: { text: `Folder-Cover-Error: ${folder.Name}`, color: "Red", error } });
+    console.log(error);
+  }
+};
+
 const actions = {
   renameFile,
   removeFile,
@@ -147,6 +177,7 @@ const actions = {
   moveFiles,
   removeFiles,
   createFolder,
+  createFolderThumb,
 };
 
 const works = {

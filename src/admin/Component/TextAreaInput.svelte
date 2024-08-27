@@ -46,6 +46,7 @@
   }
   .input::-webkit-scrollbar {
     width: 10px;
+    height: 10px;
   }
   .input-control .input {
     height: initial;

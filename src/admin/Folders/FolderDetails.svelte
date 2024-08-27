@@ -12,13 +12,13 @@
   let hasChanges = false;
   let error = "";
   const socket = getContext("socket");
-  let folder = {};
-  let imageData = { Id: "", Url: "", file: "" };
   let old = {};
-  let transfer = false;
   let tags = [];
-
+  let folder = {};
   let options = [];
+  let imageData = { Id: "", Url: "", file: "" };
+  let transfer = false;
+  let isModified;
 
   const loadDetails = async (Id) => {
     folder = { Id };
@@ -84,28 +84,6 @@
   socket.on("cover-update", onCoverUpdate);
 
   const save = async () => {
-    if (imageData.Url && /^http/.test(imageData.Url)) {
-      setMessage({ msg: "Updatng Cover Please Wait" });
-      socket.emit("download-server", {
-        action: "Create-Cover",
-        datas: { Id: folderId, imgUrl: imageData.Url },
-      });
-    }
-
-    if (imageData.file) {
-      // socket.emit("file-work", { action: "createFolderThumb", data: { folderId, file: imageData.file } });
-      const { file } = imageData;
-      setMessage({ msg: "Sending File Please Wait: " + imageData.file.type });
-      const result = await apiUtils.postFile("admin/folders/cover", { folderId, image: new File([file], "image") });
-      if (result.valid) {
-        setMessage({ msg: "Image Updated" });
-        hasChanges = false;
-        imageData.file = "";
-      } else {
-        setMessage(result);
-      }
-    }
-
     if (hasChanges) {
       if (!folder.Name) {
         return (error = "Name Can't be empty");
@@ -115,12 +93,26 @@
       old = { ...folder };
       transfer = false;
     }
+    if (/^http/.test(imageData.Url)) {
+      setMessage({ msg: "Updatng Cover Please Wait" });
+      socket.emit("download-server", {
+        action: "Create-Cover",
+        datas: { Id: folderId, imgUrl: imageData.Url },
+      });
+    }
+
+    if (imageData.file) {
+      const { file } = imageData;
+      setMessage({ msg: "Sending File Please Wait: " + imageData.file.type });
+      socket.emit("file-work", { action: "createFolderThumb", data: { folderId, file } });
+    }
   };
 
   $: loadDetails(folderId);
+  $: isModified = hasChanges || imageData.Url || imageData.file;
 </script>
 
-<div class="detail">
+<div class="detail" class:change={isModified}>
   <div class="error">{error || ""}</div>
   <div class="f-count">
     <span class="ccount">Files in Folder: {folder.Total || 0}</span><span>Last Chapter: {folder.Last || "N/A"}</span>
@@ -141,7 +133,7 @@
     <Input key="Url" item={imageData} onChange={onUrl} />
   </div>
 </div>
-{#if hasChanges || imageData.Url || imageData.file}
+{#if isModified}
   <div class="d-buttons">
     <button type="button" class="btn primary" on:click={save}>Save</button>
     <button type="button" class="btn" on:click={cancel}>Cancel</button>
@@ -151,8 +143,11 @@
 <style>
   .detail {
     position: relative;
-    height: calc(100% - 90px);
+    height: calc(100% - 50px);
     overflow-y: auto;
+  }
+  .detail.change {
+    height: calc(100% - 90px);
   }
   .f-count {
     display: flex;

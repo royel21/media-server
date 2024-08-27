@@ -22,7 +22,7 @@ export const handlerPaste = async (item, key, sept, ref) => {
   try {
     let text = await navigator.clipboard?.readText();
 
-    if (text) {
+    if (/^http/.test(text)) {
       if (item[key] && sept) {
         if (!item[key].includes(text)) {
           item[key] = item[key] + sept + text;
@@ -34,7 +34,8 @@ export const handlerPaste = async (item, key, sept, ref) => {
       return ref.dispatchEvent(new Event("change"));
     }
     let image = await getImage();
-    if (!text && image) {
+    console.log("image", image);
+    if (image) {
       item.file = image;
       ref.value = "";
       item.url = "";

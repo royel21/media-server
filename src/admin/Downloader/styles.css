@@ -68,7 +68,7 @@
     min-height: initial;
     height: calc(100% - 32px);
     overflow-x: auto;
-    padding-bottom: 10px;
+    padding-bottom: 5px;
 }
 
 .d-table {
@@ -163,7 +163,7 @@ span a:hover {
 
 @media screen and (max-width: 450px) {
     .t-container {
-        height: calc(100% - 45px);
+        height: calc(100% - 36px);
     }
 
 
