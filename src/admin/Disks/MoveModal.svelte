@@ -30,7 +30,10 @@
 </script>
 
 <Dialog cancel={hide} confirm={onConfirm} {errors}>
-  <h4 slot="modal-header">Move Folder to Directory</h4>
+  <h4 slot="modal-header">
+    <p>Move Folder <span>"{data.Name}"</span></p>
+    <p>to Directory <span>"{current.Name}"</span></p>
+  </h4>
   <span slot="modal-body" class="dir-list">
     <div><span>Select Directory </span></div>
     <select class="form-control" bind:value={current}>
@@ -45,5 +48,8 @@
   .dir-list div {
     text-align: center;
     font-weight: 600;
+  }
+  h4 span {
+    color: firebrick;
   }
 </style>

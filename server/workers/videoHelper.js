@@ -105,7 +105,7 @@ export const workVideos = ({ folder, pass, text, padding }) => {
 
       const filePath = path.join(Path, file);
       let result;
-      if (/\.zip$/) {
+      if (/\.zip$/.test(file)) {
         result = execSync(`unzip '${filePath}' '-d ${Path}'`);
       } else {
         result = execSync(`unrar x -y ${pass} '${filePath}' '${Path}'`);
