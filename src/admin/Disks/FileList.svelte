@@ -9,6 +9,7 @@
   import Filter from "src/ShareComponent/Filter.svelte";
   import Loading from "src/ShareComponent/Loading.svelte";
   import RenameModal from "./RenameModal.svelte";
+  import { sortByName } from "src/ShareComponent/utils";
 
   export let files = [];
   export let socket;
@@ -68,7 +69,7 @@
       const index = files.findIndex((f) => f.Id === file.Id);
       if (index > -1) {
         files[index] = file;
-        files = files;
+        files = files.sort(sortByName);
       }
     } else if (items) {
       files = files.filter((f) => !items.includes(f.Id));
