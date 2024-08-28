@@ -150,8 +150,11 @@
     background-color: rgb(221 170 94 / 13%);
   }
   .col :global(.loading .spin::before) {
-    height: 400px;
-    width: 400px;
+    height: 350px;
+    width: 350px;
+  }
+  .col :global(.loading h4) {
+    font-size: 1.2rem;
   }
 
   .tree-files {
