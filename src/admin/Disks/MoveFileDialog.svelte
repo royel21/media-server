@@ -5,7 +5,7 @@
   export let hide;
   export let files;
   export let acept;
-  let item = { Path: "", overwrite: false };
+  let item = { Path: "/mnt/", overwrite: false };
   let errors = [];
 
   const onConfirm = () => {
@@ -31,9 +31,9 @@
 </script>
 
 <Dialog cancel={hide} confirm={onConfirm} {errors}>
-  <h4 slot="modal-header">Move {files.length > 1 ? "Files" : "File"} to Path</h4>
+  <h4 slot="modal-header">Move <span>{files.length}</span> {files.length > 1 ? "Files" : "File"} to Path</h4>
   <span class="dir-list" slot="modal-body">
-    <Input label="Path" key="Path" {item} />
+    <Input focus={true} label="Path" key="Path" {item} />
     <CheckBox key="Override" {item} />
   </span>
 </Dialog>
@@ -41,5 +41,8 @@
 <style>
   .dir-list :global(.input-label) {
     width: 100px;
+  }
+  h4 span {
+    color: firebrick;
   }
 </style>

@@ -1,24 +1,11 @@
 <script>
-  import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   export let cancel;
   export let confirm;
   export let errors = [];
-
-  let ref;
-
-  onMount(async () => {
-    ref?.focus();
-  });
 </script>
 
-<div
-  bind:this={ref}
-  class="modal-container"
-  tabindex="-1"
-  on:contextmenu|stopPropagation={() => {}}
-  on:keydown|stopPropagation
->
+<div class="modal-container" tabindex="-1" on:contextmenu|stopPropagation={() => {}} on:keydown|stopPropagation>
   <div class="modal card move-to" transition:fade={{ duration: 200 }}>
     <form on:submit|preventDefault={confirm}>
       <div class="modal-header">

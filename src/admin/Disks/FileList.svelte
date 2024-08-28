@@ -8,18 +8,21 @@
   import { setMessage } from "../Store/MessageStore";
   import Filter from "src/ShareComponent/Filter.svelte";
   import Loading from "src/ShareComponent/Loading.svelte";
+  import RenameModal from "./RenameModal.svelte";
 
   export let files = [];
   export let socket;
   export let Name = "";
   let filtered = files;
 
-  let showConfirm = false;
-  let showMoveDialog;
   let removeList = [];
   let isChecked = false;
   let transfer = false;
   let filter = "";
+
+  let showMoveDialog;
+  let showConfirm = false;
+  let showRename = false;
 
   const onCheck = ({ target }) => {
     const id = target.closest("li").id;
@@ -56,16 +59,27 @@
     transfer = true;
   };
 
-  const onFileInfo = ({ msg, items, error }) => {
+  const onFileInfo = ({ msg, items, error, ren, file }) => {
     setMessage({ error, msg });
     if (items || error) {
       transfer = false;
     }
-    if (items) {
+    if (ren) {
+      const index = files.findIndex((f) => f.Id === file.Id);
+      if (index > -1) {
+        files[index] = file;
+        files = files;
+      }
+    } else if (items) {
       files = files.filter((f) => !items.includes(f.Id));
       removeList = [];
     }
   };
+
+  const renameFile = (data) => {
+    socket.emit("file-work", { action: "renFile", data: { file: data.folder, Name: data.Name } });
+  };
+
   socket.on("files-info", onFileInfo);
   onDestroy(() => {
     socket.off("files-info", onFileInfo);
@@ -82,7 +96,16 @@
 {/if}
 
 {#if showConfirm}
-  <Confirm text={`${files.length} Files`} acept={removeFiles} cancel={() => (showConfirm = false)} data={showConfirm} />
+  <Confirm
+    text={`${removeList.length} Files`}
+    acept={removeFiles}
+    cancel={() => (showConfirm = false)}
+    data={showConfirm}
+  />
+{/if}
+
+{#if showRename}
+  <RenameModal data={showRename} acept={renameFile} hide={() => (showRename = false)} />
 {/if}
 
 <div class="col">
@@ -107,6 +130,7 @@
       {#each filtered as file}
         <li id={file.Id} title={file.Name}>
           <CCheckbox on:change={onCheck} isChecked={removeList.includes(file.Id)} />
+          <span on:click={() => (showRename = file)}><Icons name="edit" /></span>
           <span on:click={onCheck}>{file.Name}</span>
         </li>
       {/each}

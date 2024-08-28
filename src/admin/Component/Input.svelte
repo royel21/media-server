@@ -1,12 +1,14 @@
 <script>
   import Icons from "src/icons/Icons.svelte";
   import { handlerPaste } from "./util";
+  import { onMount } from "svelte";
 
   export let item = {};
   export let key = "";
   export let label = "";
   export let sept = "";
   export let placeholder = " ";
+  export let focus = false;
   export let onChange = (e) => {};
   let ref;
   const handler = async () => handlerPaste(item, key, sept, ref);
@@ -14,6 +16,10 @@
     ref.value = "";
     ref.dispatchEvent(new Event("change"));
   };
+
+  onMount(() => {
+    if (focus) ref.focus();
+  });
 </script>
 
 <div class={"input-control " + key}>

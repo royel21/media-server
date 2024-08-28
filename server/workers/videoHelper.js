@@ -226,6 +226,7 @@ export const removeDFolder = ({ Id, Name, Path }) => {
     }
   }
 };
+
 export const remFolder = ({ folder, Name }) => {
   if (fs.existsSync(folder.Path)) {
     const data = { msg: "", error: "", folder, Name };

@@ -4,6 +4,7 @@
   export let hide;
   export let acept;
   export let data = "";
+  export let title = "Folder";
   let item = { ...data };
   let errors = [];
 
@@ -23,6 +24,6 @@
 </script>
 
 <Dialog cancel={hide} confirm={onConfirm} {errors}>
-  <h4 slot="modal-header">Rename Folder</h4>
-  <span slot="modal-body"><Input label="New Name" key="Name" {item} /></span>
+  <h4 slot="modal-header">Rename {title}</h4>
+  <span slot="modal-body"><Input label="New Name" key="Name" {item} focus={true} /></span>
 </Dialog>

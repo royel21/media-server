@@ -64,3 +64,23 @@ export const createFolder = ({ file, Name }) => {
   data.msg = `Path: ${file?.Path} was not found`;
   sendMessage(data, "folder-create");
 };
+
+//Rename local file
+export const renFile = ({ file, Name }) => {
+  if (fs.existsSync(file.Path)) {
+    const data = { msg: "", error: "", file, Name };
+    try {
+      const Path = file.Path.replace(file.Name, Name);
+      fs.moveSync(file.Path, file.Path.replace(file.Name, Name));
+      data.msg = `File "${file.Name}" Rename to  -> "${Name}"`;
+      data.file.Name = Name;
+      data.file.Path = Path;
+      data.ren = true;
+      sendMessage(data);
+    } catch (error) {
+      data.msg = `Some Error Happen when trying to Rename File: ${file.Name}`;
+      data.error = error;
+      sendMessage(data);
+    }
+  }
+};
