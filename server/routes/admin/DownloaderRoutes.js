@@ -72,7 +72,8 @@ routes.post("/links", async ({ body }, res) => {
   if (first) {
     if (ServerId) {
       servers = await db.Server.findAll({ order: ["Name"] });
-      query.where.ServerId = servers[0]?.Id || "";
+      const srv = servers.find((sv) => sv.Id === ServerId) || servers[0];
+      query.where.ServerId = srv.Id;
     } else {
       servers = await getServers();
     }
