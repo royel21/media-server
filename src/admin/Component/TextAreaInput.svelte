@@ -6,7 +6,7 @@
   export let key;
   export let label = "";
   export let style = "";
-  export let rows;
+  export let rows = "";
   export let ref = null;
   export let focus = false;
   export let sept = "";

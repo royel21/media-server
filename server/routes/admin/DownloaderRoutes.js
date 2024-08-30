@@ -72,8 +72,9 @@ routes.post("/links", async ({ body }, res) => {
   if (first) {
     if (ServerId) {
       servers = await db.Server.findAll({ order: ["Name"] });
-      const srv = servers.find((sv) => sv.Id === ServerId) || servers[0];
+      const srv = servers.find((sv) => sv.Id === +ServerId) || servers[0];
       query.where.ServerId = srv.Id;
+      console.log("Server", srv.Id, ServerId);
     } else {
       servers = await getServers();
     }
@@ -119,8 +120,7 @@ routes.post("/add-link", async ({ body }, res) => {
   if (validRegex.test(Url) || !/=/.test(Url)) {
     const { url, serverName } = formatLink(body.Url);
 
-    let [server] = await db.Server.findOrCreate({ where: { Name: serverName } });
-
+    let [server, isNew] = await db.Server.findOrCreate({ where: { Name: serverName } });
     let adult = IsAdult !== undefined ? IsAdult : server.Type === "Adult";
 
     try {
@@ -134,6 +134,8 @@ routes.post("/add-link", async ({ body }, res) => {
         Raw,
       });
       result.valid = true;
+      result.ServerId = server.Id;
+      result.server = isNew ? server.dataValues : null;
     } catch (error) {
       if (error.toString().includes("SequelizeUniqueConstraintError")) {
         result.error = `Can't Add Duplicate Link`;

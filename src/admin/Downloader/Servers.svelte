@@ -9,6 +9,7 @@
   import Modal from "./Modal.svelte";
   import Confirm from "../Component/Confirm.svelte";
   import ModalLink from "./ModalLink.svelte";
+  import { sortByName } from "src/ShareComponent/utils";
 
   const socket = getContext("socket");
 
@@ -110,8 +111,18 @@
 
   const onNewlink = (newLink) => {
     if (newLink) {
+      if (newLink.server) {
+        server = newLink.server;
+        servers = [...servers, server].sort(sortByName);
+      } else {
+        const found = servers.find((ser) => ser.Id == newLink.ServerId);
+        if (found) {
+          server = found;
+        }
+      }
       loadItems();
     }
+
     showLinkModal = false;
   };
 

@@ -18,7 +18,8 @@
 
     const result = await apiUtils.post("admin/downloader/add-link", link);
     error = result.error;
-    if (result.valid) hide(true);
+    console.log("result: ", result);
+    if (result.valid) hide(result);
   };
 
   const onKeyDown = (e) => {
