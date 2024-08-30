@@ -143,16 +143,21 @@ const download = async (link, page, server, state) => {
       const cover = path.join(imageBasePath, data.name + ".zip.jpg");
       for (let i = 1; i < data.total + 1; ) {
         if (state.stopped) return;
-
         const newImg = `${i.toString().padStart("3", "0")}.${newEX}`;
         process.stdout.write(`\t\t\t\th: IMG: ${i} / ${data.total}\r`);
         const url = initalUrl.replace(`/1.${ex}`, `/${i}.${newEX}`);
+
+        if (f > 2) {
+          sendMessage({ text: `Error ${url} was no properly downloaded` + error.toString(), color: "red", error });
+          break;
+        }
+
         try {
           const img = await getImgNh(url, page);
 
           if (img.badImage) {
-            if (f > 2) break;
             newEX = formats[f++];
+            console.log(newEX);
           } else {
             const buff = await img.toFormat("jpg").toBuffer();
             zip.addFile(newImg, buff);
@@ -165,6 +170,8 @@ const download = async (link, page, server, state) => {
           }
         } catch (error) {
           console.log(error);
+          newEX = formats[f];
+          f++;
         }
       }
 

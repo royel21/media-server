@@ -8,14 +8,17 @@
   import apiUtils from "src/apiUtils";
   import Modal from "./Modal.svelte";
   import Confirm from "../Component/Confirm.svelte";
+  import ModalLink from "./ModalLink.svelte";
 
   const socket = getContext("socket");
 
   let loading = false;
-  let server = {};
-  let servers = [];
   let showServerEditor = false;
   let showRemoveConfirm = false;
+  let showLinkModal;
+  let serverId = localStorage.getItem("server");
+  let server = { Id: serverId };
+  let servers = [];
 
   const datas = {
     links: [],
@@ -37,8 +40,8 @@
     });
 
     if (result.servers) {
-      server = result.servers[0] || {};
       servers = result.servers;
+      server = servers.find((sv) => sv.Id.toString() === serverId) || servers[0] || {};
     }
     if (result.links) {
       datas.links = result.links;
@@ -105,6 +108,13 @@
     }
   };
 
+  const onNewlink = (newLink) => {
+    if (newLink) {
+      loadItems();
+    }
+    showLinkModal = false;
+  };
+
   const updateLinkList = (links) => (datas.links = [...links]);
 
   onMount(() => {
@@ -116,7 +126,17 @@
       socket.off("is-running", updateRunning);
     };
   });
+
+  $: if (server.Id && serverId !== server.Id) {
+    datas.page = 1;
+    serverId = server.Id;
+    localStorage.setItem("server", serverId);
+  }
 </script>
+
+{#if showLinkModal}
+  <ModalLink hide={onNewlink} {servers} />
+{/if}
 
 {#if showRemoveConfirm}
   <Confirm text={server.Name} cancel={() => (showRemoveConfirm = false)} acept={onRemoveServer} />
@@ -127,6 +147,9 @@
 
 <div id="srv">
   <div class="d-controls">
+    <span class="btn-add" on:click={() => (showLinkModal = true)} on:keydown>
+      <Icons name="squareplus" />
+    </span>
     <span on:click={downloadAll} title="Download All Link from This Server" on:keydown>
       <Icons name="download" color="lightblue" />
     </span>

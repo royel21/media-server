@@ -18,6 +18,10 @@ export const getImgNh = async (url, page) => {
   const viewSource = await page.goto(url);
   const buffer = await viewSource.buffer();
 
+  if (buffer.slice(0, 40).includes("html")) {
+    return { badImage: true };
+  }
+
   const img = await sharp(buffer, { failOnError: false });
   const meta = await img.metadata();
 
@@ -129,8 +133,10 @@ export const createFolderCover = async (mangaDir, data, page, update) => {
 
     if (!poster || update) {
       result = await downloadImg(data.poster, page, "", true);
-      if (!result.badImg) {
+      if (result.jpeg) {
         await result.jpeg().toFile(posterPath);
+      } else {
+        return;
       }
     }
 
