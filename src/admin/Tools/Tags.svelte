@@ -19,7 +19,10 @@
 
     try {
       if (navigator.clipboard) {
-        text = await navigator.clipboard?.read();
+        const tag = await navigator.clipboard?.readText();
+        if (!items.includes(tag)) {
+          text = tag.trim();
+        }
       }
     } catch (error) {
       console.log(error);
@@ -38,12 +41,13 @@
     }
   };
   const save = async () => await apiUtils.post("admin/folders/tags", { tags: items });
+
   const saveTag = async () => {
     const index = items.findIndex((it) => it === editing.tag);
     if (items[index] !== editing.name.trim()) {
       items[index] = editing.name.trim();
       items.sort();
-      save();
+      await save();
     }
     editing = {};
   };
@@ -51,7 +55,6 @@
     const li = target.closest("li");
     const input = li.querySelector("input");
     const tag = (input?.value || li.textContent).trim();
-    console.log("remove", tag);
     if (items.includes(tag)) {
       items = items.filter((it) => it !== tag);
       save();

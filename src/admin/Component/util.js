@@ -31,6 +31,7 @@ export const handlerPaste = async (item, key, sept, ref) => {
 
     let text = await navigator.clipboard?.readText();
     if (text) {
+      text = text.trim();
       if (item[key] && sept) {
         if (!item[key].includes(text)) {
           item[key] = item[key] + sept + text;
