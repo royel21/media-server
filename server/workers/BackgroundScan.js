@@ -154,16 +154,21 @@ const scanFolder = async (curfolder, files, isFolder) => {
     if (f.isDirectory) {
       await scanFolder(f, f.Files);
       //Check if file is in folder
-    } else if (!folderFiles.find((fd) => fd.Name === f.Name) && ValidFiles.test(f.Name)) {
-      const Type = /rar|zip/gi.test(f.Extension) ? "Manga" : "Video";
+    } else {
+      const found = folderFiles.find((fd) => fd.Name === f.Name);
+      if (!found && ValidFiles.test(f.Name)) {
+        const Type = /rar|zip/gi.test(f.Extension) ? "Manga" : "Video";
 
-      tempFiles.push({
-        Name: f.Name,
-        Type,
-        FolderId: folder.Id,
-        Size: f.Size,
-        CreatedAt: f.LastModified,
-      });
+        tempFiles.push({
+          Name: f.Name,
+          Type,
+          FolderId: folder.Id,
+          Size: f.Size,
+          CreatedAt: f.LastModified,
+        });
+      } else if (found && found.Size !== f.Size) {
+        await found.update({ Size: f.Size });
+      }
     }
   }
 

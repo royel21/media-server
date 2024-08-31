@@ -14,10 +14,18 @@
     return tag.toLocaleLowerCase().includes(filter.toLocaleLowerCase());
   };
 
-  const addTag = () => {
-    if (!items.includes("New Tag")) {
-      items.unshift("New Tag");
-      editing = { name: "New Tag", tag: "New Tag" };
+  const addTag = async () => {
+    let text = "New Tag";
+
+    try {
+      if (navigator.clipboard) {
+        text = await navigator.clipboard?.read();
+      }
+    } catch (error) {}
+
+    if (!items.includes(text)) {
+      items.unshift();
+      editing = { name: text, tag: text };
       items = items;
     }
   };
@@ -30,8 +38,8 @@
   const save = async () => await apiUtils.post("admin/folders/tags", { tags: items });
   const saveTag = async () => {
     const index = items.findIndex((it) => it === editing.tag);
-    if (items[index] !== editing.name) {
-      items[index] = editing.name;
+    if (items[index] !== editing.name.trim()) {
+      items[index] = editing.name.trim();
       items.sort();
       save();
     }
