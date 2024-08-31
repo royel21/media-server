@@ -21,11 +21,13 @@
       if (navigator.clipboard) {
         text = await navigator.clipboard?.read();
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
 
     if (!items.includes(text)) {
-      items.unshift();
       editing = { name: text, tag: text };
+      items.unshift(text);
       items = items;
     }
   };
@@ -46,7 +48,10 @@
     editing = {};
   };
   const removeTag = ({ target }) => {
-    const tag = target.closest("li").textContent.trim();
+    const li = target.closest("li");
+    const input = li.querySelector("input");
+    const tag = (input?.value || li.textContent).trim();
+    console.log("remove", tag);
     if (items.includes(tag)) {
       items = items.filter((it) => it !== tag);
       save();
@@ -126,9 +131,13 @@
     pointer-events: none;
   }
   #tag-list .controls :global(.icon-squareplus) {
+    top: 3px;
+    left: 5px;
     width: 35px;
     height: 35px;
-    left: 5px;
+  }
+  #tag-list .controls :global(#clear-filter) {
+    top: 6px;
   }
   #tag-list .create-folder {
     margin-right: 8px;
