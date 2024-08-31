@@ -110,10 +110,6 @@
     width: 37px;
     top: 2px;
   }
-  .r-names :global(.icon-timescircle) {
-    top: 8px;
-    right: -7px;
-  }
   .r-names :global(.input-label) {
     padding-left: 0.35rem;
     text-align: left;

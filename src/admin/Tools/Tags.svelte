@@ -116,7 +116,8 @@
   #tag-list .controls {
     position: initial;
     display: flex;
-    padding: 5px 0;
+    align-items: center;
+    padding: 0px 0 4px 0;
     justify-content: initial;
   }
   #tag-list .list-group-item {
@@ -138,9 +139,6 @@
     left: 5px;
     width: 35px;
     height: 35px;
-  }
-  #tag-list .controls :global(#clear-filter) {
-    top: 6px;
   }
   #tag-list .create-folder {
     margin-right: 8px;

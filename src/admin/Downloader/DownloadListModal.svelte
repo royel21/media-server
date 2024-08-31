@@ -170,10 +170,6 @@
     max-width: 100%;
   }
 
-  .dl-filter :global(#filter-control .icon-timescircle) {
-    top: 6px;
-    right: -7px;
-  }
   h3 {
     border-bottom: 1px solid;
   }

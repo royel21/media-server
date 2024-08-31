@@ -61,26 +61,32 @@
     top: 0px;
   }
 
-  .c-filter :global(.icon-timescircle) {
-    top: 2px;
-    right: -7px;
-  }
-
   .c-filter {
     display: flex;
     position: relative;
     flex-shrink: 1;
     width: 100%;
     pointer-events: all;
+    height: 32px;
     max-width: 350px;
     align-items: center;
   }
-  .c-filter > * {
+  .c-filter > input {
     height: 30px;
+    padding-right: 10px;
   }
   .filter-file {
     padding: 2px 5px;
     border-top-right-radius: 0.25rem;
     border-bottom-right-radius: 0.25rem;
+  }
+  #clear-filter {
+    position: absolute;
+    top: 0px;
+    right: 2px;
+    z-index: 99;
+    color: darkgray;
+    font-size: 20px;
+    height: 20px;
   }
 </style>

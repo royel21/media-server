@@ -174,7 +174,7 @@
     display: flex;
     justify-content: space-between;
     border: none;
-    height: 45px;
+    height: 37px;
   }
   .f-controls h4 {
     flex-grow: 1;

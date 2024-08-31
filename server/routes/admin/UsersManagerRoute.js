@@ -73,9 +73,13 @@ routes.post("/create-update", async (req, res) => {
 routes.post("/remove", async (req, res) => {
   let valid = await getUser(req);
 
-  if (req.user.Id === valid.user.Id) return res.send({ msg: "Can't Remove Current Admin", removed: false });
+  if (valid.user === undefined) {
+    return res.send({ msg: "User Not Found", removed: false });
+  }
 
-  if (valid.user) return res.send({ msg: "User Not Found", removed: false });
+  if (req.user.Id === valid.user.Id) {
+    return res.send({ msg: "Can't Remove Current Admin", removed: false });
+  }
 
   await valid.user.destroy();
   return res.send({ removed: true });

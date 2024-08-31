@@ -18,6 +18,7 @@
   const removeUser = async ({ target }) => {
     let user = users.find((u) => u.Id === target.closest("tr")?.id);
     const data = await apiUtils.post("admin/users/remove", user);
+    console.log(user, data);
     if (data.removed) {
       users = users.filter((u) => u.Id !== user.Id);
     } else {

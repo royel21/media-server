@@ -322,6 +322,10 @@ svg path {
   height: 30px;
 }
 
+body .c-filter {
+  position: relative;
+}
+
 /*************************Scrollbar Style********************************/
 
 ::-webkit-scrollbar {
