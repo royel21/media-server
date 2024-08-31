@@ -97,13 +97,13 @@
   <table id="dir-list" class="table table-dark table-hover table-bordered">
     <thead>
       <tr>
-        <th>Actions</th>
-        <th>Type</th>
-        <th>Is Adult</th>
-        <th>Path</th>
-        <th>Folder {count}</th>
-        <th>Total Files {allFiles}</th>
-        <th>Order In Menu</th>
+        <th class="d-action">Actions</th>
+        <th class="d-type">Type</th>
+        <th class="d-path">Path</th>
+        <th class="d-adult">Is Adult</th>
+        <th class="d-cont">Folder {count}</th>
+        <th class="d-total">Total Files {allFiles}</th>
+        <th class="d-order">Order In Menu</th>
       </tr>
     </thead>
     <tbody>
@@ -118,9 +118,9 @@
             </span>
           </td>
           <td>{Type}</td>
-          <td data-name="IsAdult" on:click={updateDir}>{IsAdult}</td>
-          <td class="f-path order" id="FullPath" on:click={onShowInput}>{FullPath}</td>
           <td class="f-name" title={FullPath}>{Name}</td>
+          <td class="f-path order" id="FullPath" on:click={onShowInput}>{FullPath}</td>
+          <td data-name="IsAdult" on:click={updateDir}>{IsAdult}</td>
           <td>{FolderCount}</td>
           <td>{TotalFiles}</td>
           <td class="order" id="FirstInList" on:click={onShowInput}>
@@ -147,33 +147,29 @@
     display: block;
     color: red;
   }
-  th:first-child {
+  .d-action {
     width: 90px;
     min-width: 90px;
   }
-  th:nth-child(2) {
+  .d-type {
     min-width: 80px;
     width: 80px;
   }
-  th:nth-child(6) {
-    min-width: 155px;
-    width: 155px;
-  }
-  td:nth-child(3) {
+  .d-adult {
     min-width: 90px;
     width: 90px;
     cursor: pointer;
   }
-  td:nth-child(4) {
+  .d-path {
     white-space: nowrap;
   }
-  th:nth-child(5) {
+  .d-cont {
     min-width: 120px;
     width: 120px;
   }
-  td:nth-child(6) {
-    width: 155px;
+  .d-total {
     min-width: 155px;
+    width: 155px;
   }
   td:last-child {
     text-align: center;
@@ -196,6 +192,8 @@
   }
   .f-name {
     display: none;
+    width: 155px;
+    min-width: 155px;
   }
 
   @media screen and (max-width: 500px) {

@@ -20,6 +20,8 @@
   let transfer = false;
   let isModified;
 
+  const regx = /:|\?/g;
+
   const loadDetails = async (Id) => {
     folder = { Id };
     imageData = { Id, Url: "", file: "" };
@@ -41,7 +43,7 @@
     }
 
     if (name === "AltName") {
-      value = validAltName(value);
+      value = validAltName(value.replace(regx, ""));
     }
 
     if (name === "Author") {

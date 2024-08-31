@@ -22,7 +22,7 @@ const renameVideoFile = (src, dest, file, regex, text, padding) => {
   try {
     const extension = "." + file.split(".").pop();
 
-    if (/move/i.test(file)) {
+    if (/movie/i.test(file)) {
       file = file.replace(/^.*. Movie|^Movie( |)/i, "Movie ");
 
       fs.moveSync(path.join(src, file), path.join(dest, file.trim()));
@@ -38,14 +38,15 @@ const renameVideoFile = (src, dest, file, regex, text, padding) => {
       .replace(/\d+[a-z]+ Season |Season \d+[a-z]+ (- |)|episodio |capitulo /gi, "")
       .replace(/(( )+|)((\[|\()(.*?)(\]|\)))(( )+|)/g, "");
 
-    if (/ending|opening|ova|(e|)special/i.test(file)) {
+    if (/ending|opening|ova|(e|)special|Extra/i.test(file)) {
       nFile = nFile
         .replace(/^.*.( - | )Ova( |)/i, "Ova ")
         .replace(/^.*.( - | )Especial( |)/i, "Especial ")
         .replace(/^.*.( - | )Special( |)/i, "Special ")
+        .replace(/^.*.( - | )Extra( |)/i, "Special ")
         .trim();
     } else if (!/^\d+/.test(nFile)) {
-      nFile = nFile.replace(/([\w-]*[^\d]+)|^.*. (- |)/, "").trim();
+      nFile = nFile.replace(/([\w-]*[^\d]+)|([\w-]*(- |))/, "").trim();
       console.log("no ending|opening", nFile);
     }
 
@@ -56,7 +57,7 @@ const renameVideoFile = (src, dest, file, regex, text, padding) => {
     }
 
     nFile = nFile.replace(/\d+nd Season - /, "");
-    if (!/\d+/.test(nFile) && !/ending|opening|ova|(e|)special/i.test(nFile)) {
+    if (!/\d+/.test(nFile) && !/ending|opening|ova|(e|)special|extra|Movie/i.test(nFile)) {
       if (/Ending|Opening/i.test(file)) {
         const parts = file.match(/(Ending|Opening)( \d+|)/i);
         if (parts[0] && /\d+/.test(parts[0])) {
@@ -71,7 +72,7 @@ const renameVideoFile = (src, dest, file, regex, text, padding) => {
 
     nFile += extension.toLocaleLowerCase();
 
-    if (file !== nFile) {
+    if (path.join(src, file) !== path.join(dest, nFile)) {
       fs.moveSync(path.join(src, file), path.join(dest, nFile));
     }
   } catch (error) {
@@ -144,6 +145,7 @@ export const workVideos = ({ folder, pass, text, padding }) => {
         renameVideoFile(fpath, Path, file, regex, text, padding);
       }
       fs.removeSync(fpath);
+      console.log("rmove fil", file);
     } else {
       renameVideoFile(Path, Path, file, regex, text, padding);
     }

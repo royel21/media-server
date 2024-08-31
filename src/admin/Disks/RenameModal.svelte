@@ -7,6 +7,7 @@
   export let title = "Folder";
   let item = { ...data };
   let errors = [];
+  let extension;
 
   const onConfirm = () => {
     errors = [];
@@ -18,12 +19,27 @@
       errors.push("Folder Name should't not have any of those Simbols");
       return errors.push(':  ?  * < >  / \\ " |');
     }
-    acept({ folder: data, Name: item.Name });
+    let Name = item.Name + (extension ? extension : "");
+    acept({ folder: data, Name });
     return hide();
   };
+
+  if (item.Name) {
+    const parts = item.Name.match(/\.(mp4|mkv|avi|ogg)/i);
+    if (parts) {
+      extension = parts[0];
+      item.Name = item.Name.replace(extension, "");
+    }
+  }
 </script>
 
 <Dialog cancel={hide} confirm={onConfirm} {errors}>
   <h4 slot="modal-header">Rename {title}</h4>
-  <span slot="modal-body"><Input label="New Name" key="Name" {item} focus={true} /></span>
+  <span id="f-rename" slot="modal-body"><Input label="New Name" key="Name" {item} focus={true} /></span>
 </Dialog>
+
+<style>
+  #f-rename :global(.input-control .input:focus) {
+    padding-right: 35px;
+  }
+</style>

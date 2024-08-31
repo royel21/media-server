@@ -112,7 +112,7 @@ routes.get("/", async (req, res) => {
         [literal("(Select SUM(FileCount) from Folders where DirectoryId = Directory.Id)"), "TotalFiles"],
       ],
     },
-    order: ["FullPath", "IsAdult"],
+    order: ["Type", "FullPath", "IsAdult"],
   });
 
   let dirs = data.map((d) => d.dataValues);

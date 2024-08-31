@@ -46,10 +46,10 @@
     const index = items.findIndex((it) => it === editing.tag);
     if (items[index] !== editing.name.trim()) {
       items[index] = editing.name.trim();
-      items.sort();
-      await save();
     }
+    items.sort();
     editing = {};
+    await save();
   };
   const removeTag = ({ target }) => {
     const li = target.closest("li");
