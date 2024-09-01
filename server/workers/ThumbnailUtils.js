@@ -35,19 +35,17 @@ export const ZipCover = async (file, coverP, exist) => {
           let img = sharp(buff);
           const meta = await img.metadata();
 
-          if (meta.height > 524) {
-            if (meta.height > 1650) {
-              img = await img.extract({
-                height: 1200,
-                width: meta.width,
-                top: 0,
-                left: 0,
-              });
-            }
-            await img.toFormat("jpg").resize({ width: 340 }).toFile(coverP);
-            await img.destroy();
-            break;
+          if (meta.height > 1650) {
+            img = await img.extract({
+              height: 1200,
+              width: meta.width,
+              top: 0,
+              left: 0,
+            });
           }
+          await img.toFormat("jpg").resize({ width: 340 }).toFile(coverP);
+          await img.destroy();
+          break;
         } catch (error) {
           console.log("thumb-resizer", error);
         }
