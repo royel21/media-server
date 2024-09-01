@@ -21,6 +21,13 @@ routes.post("/recents/remove", async ({ body }, res) => {
   return res.send({ valid: false, msg: "Invalid Id" });
 });
 
+routes.post("/file-update", async (req, res) => {
+  try {
+    await updateFilePos(req.body);
+  } catch (error) {}
+  res.send({ valid: true });
+});
+
 routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
   const { page, items, filter } = req.params;
   let p = +page || 1;

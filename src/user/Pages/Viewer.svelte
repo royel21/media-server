@@ -34,9 +34,9 @@
   let folderName = "";
   let isManhwa = false;
 
-  const saveFile = () => {
+  const saveFile = async () => {
     let { Id, CurrentPos } = file;
-    socket.emit("file-update-pos", { Id, CurrentPos });
+    await apiUtils.post("files/file-update", { Id, CurrentPos });
   };
 
   const onFilter = (val) => {
@@ -59,8 +59,8 @@
     }
   };
 
-  const returnBack = () => {
-    saveFile();
+  const returnBack = async () => {
+    await saveFile();
     let path = getReturnPath("open-folder");
     if (!path) {
       const parts = location.pathname.split("/");
@@ -114,7 +114,6 @@
   }
 
   const removeFile = async () => {
-    console.log("remove", fileId);
     socket.emit("file-work", { action: "removeFile", data: { Id: [fileId], Del: true, viewer: true } });
   };
 
