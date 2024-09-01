@@ -201,6 +201,9 @@
   #srv .d-controls {
     padding-bottom: 5px;
   }
+  #srv .d-controls :global(.icon-timescircle) {
+    top: 3px;
+  }
   #srv .d-controls :global(.icon-trash) {
     width: 28px;
   }

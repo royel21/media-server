@@ -271,7 +271,7 @@
   .thumbnail {
     position: absolute;
     right: 18px;
-    top: 47px;
+    top: 80px;
     z-index: 99;
     pointer-events: none;
     padding: 0px 1px;
