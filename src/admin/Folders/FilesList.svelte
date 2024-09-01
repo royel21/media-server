@@ -164,11 +164,9 @@
 
   onMount(async () => {
     loadFiles(1);
-    document.body.addEventListener("mouseleave", onShowInfo);
     socketEvent.forEach(({ name, event }) => socket.on(name, event));
     mounted = true;
     return () => {
-      document.body.removeEventListener("mouseleave", onShowInfo);
       socketEvent.forEach(({ name, event }) => socket.off(name, event));
     };
   });
