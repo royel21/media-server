@@ -41,7 +41,7 @@ const removeFile = async ({ Id, Del, viewer }) => {
   });
 
   const message = { success: false, msg: "", viewer };
-
+  console.log("remove: ", files.length);
   if (files.length) {
     let folder = files[0].Folder;
 

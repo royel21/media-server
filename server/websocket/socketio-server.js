@@ -29,7 +29,7 @@ export default async (server, sessionMeddle) => {
       socket.on("user-info", (data) => console.log(data));
       console.log("User: ", user.Name, socket.id);
 
-      socket.on("file-work", ({ data }) => {
+      socket.on("file-work", (data) => {
         if (data?.action === "removeFile") {
           FileManager.fileWork(data);
         }

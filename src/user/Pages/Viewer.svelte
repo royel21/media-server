@@ -114,6 +114,7 @@
   }
 
   const removeFile = async () => {
+    console.log("remove", fileId);
     socket.emit("file-work", { action: "removeFile", data: { Id: [fileId], Del: true, viewer: true } });
   };
 

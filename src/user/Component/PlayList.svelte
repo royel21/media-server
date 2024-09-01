@@ -25,6 +25,7 @@
 
   let playList;
   let hideList = true;
+  let start = pageData.pg * filePerPage;
 
   const goToPage = (pg) => {
     pageData.pg = clamp(pg.detail - 1, 0, pageData.totalPages - 1);
@@ -47,7 +48,6 @@
   };
 
   afterUpdate(() => {
-    const start = pageData.pg * filePerPage;
     list = files.slice(start, start + filePerPage);
 
     let current = document.getElementById(fileId);
@@ -77,7 +77,7 @@
   </div>
   <div id="p-list" bind:this={playList}>
     <ul>
-      {#each list as { Id, Name, CurrentPos, Duration, Type }}
+      {#each list as { Id, Name, CurrentPos, Duration, Type }, i}
         <li id={Id} class={"usn " + (Id === fileId ? "active" : "")} on:click>
           <span class="cover">
             <LazyImage cover={getCover(Type, Name)} />
@@ -86,6 +86,7 @@
             </span>
           </span>
           <span class="l-name">{Name}</span>
+          <span class="f-index">#{(start + i + 1).toString().padStart(3, "0")}</span>
         </li>
       {/each}
     </ul>
@@ -180,6 +181,9 @@
     padding: 0;
     list-style: none;
   }
+  #play-list li {
+    position: relative;
+  }
 
   #play-list #p-list li {
     display: flex;
@@ -272,6 +276,13 @@
     position: absolute;
     bottom: 0px;
     width: 100%;
+  }
+  .f-index {
+    position: absolute;
+    left: 2px;
+    padding: 2px 4px;
+    border-radius: 0.25rem;
+    background-color: rgba(0, 0, 0, 0.801);
   }
   @media screen and (max-width: 600px) {
     #p-list::-webkit-scrollbar {
