@@ -48,8 +48,8 @@
   };
 
   afterUpdate(() => {
+    start = pageData.pg * filePerPage;
     list = files.slice(start, start + filePerPage);
-
     let current = document.getElementById(fileId);
     playList.scroll({ top: Math.max(current?.offsetTop - 250, 0) });
   });
