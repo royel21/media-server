@@ -43,17 +43,17 @@
     playList = files.filter((f) => f.Name.toLocaleLowerCase().includes(val.toLocaleLowerCase()));
   };
 
-  const selectFile = ({ target: { id } }) => {
-    saveFile();
+  const selectFile = async ({ target: { id } }) => {
+    await saveFile();
     navigate(`/${basePath}/${id}`);
   };
 
-  const changeFile = (dir = 0) => {
+  const changeFile = async (dir = 0) => {
     if (playList.length) {
       let temp = playList.findIndex((f) => f.Id === fileId) + dir;
       if (temp > -1 && temp < playList.length) {
         fileIndex = temp;
-        saveFile();
+        await saveFile();
         navigate(`/${basePath}/${playList[fileIndex].Id}`);
       }
     }

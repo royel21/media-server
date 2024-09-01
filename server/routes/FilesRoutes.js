@@ -21,10 +21,15 @@ routes.post("/recents/remove", async ({ body }, res) => {
   return res.send({ valid: false, msg: "Invalid Id" });
 });
 
-routes.post("/file-update", async (req, res) => {
+routes.post("/file-update", async ({ body, user }, res) => {
   try {
-    await updateFilePos(req.body);
-  } catch (error) {}
+    let recent = await db.recentFile.findOrCreate({
+      where: { FileId: body.Id, UserId: user.Id },
+    });
+    await recent[0].update({ LastPos: body.CurrentPos || 0 });
+  } catch (error) {
+    console.log(error);
+  }
   res.send({ valid: true });
 });
 
