@@ -9,6 +9,13 @@
 
   const onDiskdata = (data) => {
     diskData = data;
+    const { Free, Used, Size } = data[0];
+  };
+
+  const getPercent = (total, val) => {
+    const tval = total.replace("GB", "");
+    const vval = val.replace("GB", "");
+    return parseInt((vval / tval) * 100) + "%";
   };
 
   socket.on("disk-loaded", onDiskdata);
@@ -36,8 +43,8 @@
           <tr>
             <td class="skip">{Name}</td>
             <td>{Size}</td>
-            <td>{Free}</td>
-            <td>{Used}</td>
+            <td>{Free}({getPercent(Size, Free)})</td>
+            <td>{Used}({getPercent(Size, Used)})</td>
           </tr>
         {/each}
       </tbody>

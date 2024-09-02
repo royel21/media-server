@@ -4,11 +4,20 @@
 
   export let error = "";
   export let logIn;
+  let uref;
+  let pref;
   let showPass = false;
 
   let user = { username: "", password: "" };
 
   const onSubmit = () => {
+    if (uref) {
+      user.username = uref.value;
+    }
+    if (pref) {
+      user.password = pref.value;
+    }
+
     if (!user.username) return (error = "User can't be empty");
     if (!user.password) return (error = "Password can't be empty");
     logIn(user);
@@ -20,10 +29,17 @@
 <div id="login-container" class:more={showPass}>
   <h3 class="mb-4"><Icons name="signin" /> Login</h3>
   <form on:submit|preventDefault={onSubmit}>
-    <Input width="65px" name="username" bind:value={user.username} placeholder="Name">
+    <Input bind:ref={uref} width="65px" name="username" bind:value={user.username} placeholder="Name">
       <Icons name="user" slot="label" />
     </Input>
-    <Input width="65px" name="password" type="password" bind:value={user.password} placeholder="Password">
+    <Input
+      bind:ref={pref}
+      width="65px"
+      name="password"
+      type="password"
+      bind:value={user.password}
+      placeholder="Password"
+    >
       <Icons name="key" slot="label" />
     </Input>
     <div class="cp-label">

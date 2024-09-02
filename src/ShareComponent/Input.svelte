@@ -5,6 +5,7 @@
   export let label = "";
   export let placeholder = "";
   export let width = "";
+  export let ref = {};
 
   function typeAction(node) {
     node.type = type;
@@ -19,7 +20,14 @@
       <slot name="label" />
     {/if}
   </span>
-  <input use:typeAction {name} bind:value {placeholder} autocomplete={type === "password" ? "current-password" : ""} />
+  <input
+    bind:this={ref}
+    use:typeAction
+    {name}
+    bind:value
+    {placeholder}
+    autocomplete={type === "password" ? "current-password" : ""}
+  />
 </div>
 
 <style>
