@@ -9,13 +9,12 @@
 
   const onDiskdata = (data) => {
     diskData = data;
-    const { Free, Used, Size } = data[0];
   };
 
   const getPercent = (total, val) => {
     const tval = total.replace("GB", "");
     const vval = val.replace("GB", "");
-    return parseInt((vval / tval) * 100) + "%";
+    return parseFloat((vval / tval) * 100).toFixed(1) + "%";
   };
 
   socket.on("disk-loaded", onDiskdata);
