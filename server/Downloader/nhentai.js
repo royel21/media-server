@@ -180,6 +180,7 @@ const download = async (link, page, server, state) => {
         await createFile(filePath + ".zip", folder.Id, count);
         await link.destroy();
         sendMessage({ text: `Save: ${data.name}\n` });
+        await folder.update({ FileCount: folder.FileCount + 1 });
       }
     }
   }
