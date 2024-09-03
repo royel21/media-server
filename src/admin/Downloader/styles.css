@@ -10,7 +10,7 @@
 
 #d-manager .d-controls>div>span svg:not(.icon-timescircle),
 #d-manager .d-controls>span svg:not(.icon-timescircle) {
-    height: 30px;
+    height: 35px;
     width: 35px;
     top: -1px;
 }
@@ -164,11 +164,6 @@ span a:hover {
 @media screen and (max-width: 450px) {
     .t-container {
         height: calc(100% - 36px);
-    }
-
-
-    .d-controls .btn-filter {
-        padding: 0.3rem 0.2rem;
     }
 
     .d-items {

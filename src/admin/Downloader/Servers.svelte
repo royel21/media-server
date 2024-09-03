@@ -205,7 +205,8 @@
     top: 3px;
   }
   #srv .d-controls :global(.icon-trash) {
-    width: 28px;
+    width: 24px;
+    height: 30px;
   }
   #srv #trash {
     margin-left: 5px;
