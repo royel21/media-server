@@ -37,7 +37,7 @@
     <h4 class="text-center usn">{totalItems} <strong>- {title}</strong></h4>
     <slot name="btn-ctr-last" />
   </div>
-  <div class="list-container" {id}>
+  <div class="list-container" {id} on:keydown>
     <ul class="list-group text-dark">
       {#if items.length < 1}
         <li class="list-group-item empty-list">{`Not ${title} Found`}</li>
@@ -52,29 +52,29 @@
             on:mouseenter
             on:mouseleave
             on:mousemove
-            on:keydown
+            tabindex="-1"
           >
             {#if Type.includes("Folder")}
-              <span class="sync" on:click={iconClick} on:keydown>
+              <span class="sync" on:click={iconClick}>
                 <Icons name="sync" box="0 0 512 512" class={scanning.includes(Id) || Scanning ? "icon-spin" : ""} />
               </span>
               {#if showGenres}
                 <span class="g-list">
                   {#if /manga/.test(FilesType)}
-                    <span on:keydown on:click={addGenres}>Mg</span>
-                    <span on:keydown on:click={addGenres}>Mhw</span>
-                    <span on:keydown on:click={addGenres}>Web</span>
-                    <span on:keydown on:click={addRaw}>Raw</span>
+                    <span on:click={addGenres}>Mg</span>
+                    <span on:click={addGenres}>Mhw</span>
+                    <span on:click={addGenres}>Web</span>
+                    <span on:click={addRaw}>Raw</span>
                   {:else}
-                    <span on:keydown on:click={addGenres}>sort</span>
+                    <span on:click={addGenres}>sort</span>
                   {/if}
                 </span>
               {/if}
             {:else}
               <CCheckbox on:change isChecked={removeList.includes(Id)} />
-              <span on:keydown class="edit" on:click={iconClick}><Icons name="edit" /></span>
+              <span class="edit" on:click={iconClick}><Icons name="edit" /></span>
             {/if}
-            <span on:keydown class="trash" on:click={iconClick}><Icons name="trash" box="0 0 420 512" /></span>
+            <span class="trash" on:click={iconClick}><Icons name="trash" box="0 0 420 512" /></span>
             {Name}
             <slot name="item-slot" item={Id} />
           </li>

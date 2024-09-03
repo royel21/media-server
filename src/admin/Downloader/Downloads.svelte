@@ -138,14 +138,14 @@
       <span class="btn-add" on:click={() => (showLinkModal = true)} on:keydown>
         <Icons name="squareplus" />
       </span>
+      <span class="r-list btn-stop" title="Stop All Download" class:running on:click={stopDownloads} on:keydown>
+        <Icons name="stopcircle" color="firebrick" />
+      </span>
       <span class="r-list btn-ser-config" on:click={() => (showServerList = true)} on:keydown>
         <Icons name="cog" />
       </span>
       <span class="r-list" title="Show Rename List" on:click={() => (showRenamer = true)} on:keydown>
         <Icons name="list" />
-      </span>
-      <span class="r-list btn-stop" title="Stop All Download" class:running on:click={stopDownloads} on:keydown>
-        <Icons name="stopcircle" color="firebrick" />
       </span>
       <Filter on:filter={onFilter} filter={datas.filter} />
     </div>

@@ -69,6 +69,7 @@
 
   const gotopage = (pg) => {
     pg = parseInt(pg.detail);
+    console.log("gt", pg);
 
     if (pg < 1 || pg > totalPages) return;
 
@@ -153,6 +154,34 @@
     }
   };
 
+  const handlerKeydown = ({ currentTarget, keyCode, ctrlKey }) => {
+    if ([40, 38].includes(keyCode)) {
+      let element = currentTarget.querySelector(".active");
+      if (keyCode === 40) {
+        element = element.nextElementSibling;
+      }
+
+      if (keyCode === 38) {
+        element = element.previousElementSibling;
+      }
+      if (element) {
+        itemClick({ target: element });
+        element.focus();
+      }
+    }
+
+    if ([37, 39].includes(keyCode)) {
+      let nextPage;
+      if (keyCode === 37) {
+        nextPage = -1;
+      }
+      if (keyCode === 39) {
+        nextPage = 1;
+      }
+      gotopage({ detail: +page + nextPage });
+    }
+  };
+
   const scanFinish = (data) => {
     scanning = scanning.filter((f) => f != data.Id);
   };
@@ -220,6 +249,7 @@
   on:mouseenter={onShowImage}
   on:mouseleave={onShowImage}
   on:mousemove={showPath}
+  on:keydown={handlerKeydown}
 >
   <span class="create-folder" slot="btn-controls" on:keydown on:click={newFolder}><Icons name="squareplus" /></span>
   <span class="show-files" slot="btn-ctr-last">
