@@ -295,8 +295,8 @@ export const adultEvalPage = async (query) => {
 
   let data = [];
   let extraCount = maxNum ? maxNum + 1 : 0;
-  as.reverse().forEach((a) => {
-    let text = (a.querySelector("strong,b,san") || a).textContent?.trim();
+  as.reverse().forEach((a, i) => {
+    let text = (a.querySelector("strong,b,san,.chapter-name") || a).textContent?.trim();
 
     let fileName = text
       .replace("  ", " ")
@@ -309,6 +309,7 @@ export const adultEvalPage = async (query) => {
       .replace(/(\.)+$/, "")
       .replace(/\./gi, "-")
       .replace(/( )+/g, " ")
+      .replace(/^-( |)/, "")
       .trim();
 
     if (/^Tales Of Demons/i.test(Name)) {
@@ -321,8 +322,8 @@ export const adultEvalPage = async (query) => {
       fileName = fileName + " " + season[0];
     }
 
-    // if name is extra and don't start with number
     if (!/^\d+/i.test(fileName)) {
+      // if name is extra and don't start with number
       fileName = `${extraCount++} ${fileName}`;
     }
 
@@ -334,6 +335,19 @@ export const adultEvalPage = async (query) => {
 
     if (/ raw$/i.test(title) || Genres?.includes("Raw")) {
       if (!fileName.includes(" raw")) fileName = fileName + " raw";
+    }
+
+    const endRegex = / (- |-|)(\[|)end(\]|)/gi;
+    if ((i < as.length - 1 && endRegex.test(fileName)) || /volume \d+/i.test(text)) {
+      fileName = fileName.replace(endRegex, "");
+    }
+
+    if (data.find((f) => f.name === fileName) && /volume \d+/i.test(text)) {
+      fileName = (data.length + 1).toString().padStart(padding, "0");
+    }
+
+    if (i === as.length - 1 && endRegex.test(text)) {
+      fileName += " - End";
     }
 
     data.push({ name: fileName, url: a.href, n });
