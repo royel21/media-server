@@ -65,17 +65,18 @@
     handlerPage(event.target.value);
   };
 
-  const width = 22;
+  const box = "0 0 320 512";
+  const box2 = "0 0 512 512";
 </script>
 
 {#if totalPages > 1}
   <div id="pager" class="usn" on:click={pagerClick}>
     <ul class="pagination">
       <li id="first-page" class="page-link" class:d-none={hideFL}>
-        <Icons name="angledoubleleft" {color} />
+        <Icons name="angledoubleleft" {color} {box2} />
       </li>
       <li id="prev-page" class="page-link" class:border-r-left={hideFL}>
-        <Icons name="angleleft" {color} />
+        <Icons name="angleleft" {color} {box} />
       </li>
       <li class="page-link current-page" on:click={onShowinput}>
         {#if showinput}
@@ -91,10 +92,10 @@
         {:else}{page + "/" + totalPages}{/if}
       </li>
       <li id="next-page" class="page-link" class:border-r-right={hideFL}>
-        <Icons name="angleright" {color} />
+        <Icons name="angleright" {color} {box} />
       </li>
       <li id="last-page" class="page-link" class:d-none={hideFL}>
-        <Icons name="angledoubleright" {color} />
+        <Icons name="angledoubleright" {color} {box2} />
       </li>
     </ul>
   </div>
@@ -124,9 +125,20 @@
     width: 45px;
     cursor: pointer;
   }
+  #pager #prev-page,
+  #pager #next-page {
+    width: initial;
+  }
+  #pager #prev-page :global(svg),
+  #pager #next-page :global(svg) {
+    width: 40px;
+  }
+  #pager #next-page :global(svg) {
+    right: -3px;
+  }
   #pager li:not(.current-page) {
     line-height: 2;
-    padding: 0 15px;
+    padding: 0 0;
   }
   #pager .current-page {
     min-width: 60px;
@@ -183,10 +195,6 @@
     #next-page {
       border-top-right-radius: 0.25rem;
       border-bottom-right-radius: 0.25rem;
-    }
-    #pager li:not(.current-page) {
-      padding: 0 10px;
-      width: 30px;
     }
   }
 </style>

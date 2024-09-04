@@ -157,6 +157,7 @@ span a:hover {
     margin-left: 5px;
 }
 
+#d-manager #pager li svg,
 #d-manager #pager li {
     height: 30px;
 }

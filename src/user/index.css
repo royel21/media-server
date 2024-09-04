@@ -55,10 +55,9 @@ button:active {
 .items {
   color: #fff;
   background-color: #007bff;
-  padding: 0.25em 0.7em;
-  font-size: 75%;
+  padding: 0.20em 0.3em;
+  font-size: 1rem;
   font-weight: 700;
-  line-height: 2;
   border-radius: 0.25rem;
 }
 

@@ -210,4 +210,7 @@
   .scroll-container::-webkit-scrollbar-thumb {
     border-radius: 0.4rem;
   }
+  .controls :global(#pager) {
+    margin: 0 5px;
+  }
 </style>
