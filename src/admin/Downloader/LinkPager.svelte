@@ -23,7 +23,7 @@
 <span>
   <Pagination page={datas.page} totalPages={datas.totalPages} on:gotopage={gotopage} />
   <div class="input-group d-items">
-    <span class="input-group-text"><Icons name="list" color="black" /></span>
+    <span id="d-items" class="input-group-text"><Icons name="list" color="black" box="0 0 512 512" /></span>
     <input type="number" class="form-control" bind:value={datas.items} on:keydown={changeItems} />
   </div>
 </span>

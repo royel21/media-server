@@ -162,6 +162,12 @@ span a:hover {
     height: 30px;
 }
 
+#d-manager #d-items .icon-list {
+    top: 0;
+    width: 28px;
+    height: 23px;
+}
+
 @media screen and (max-width: 450px) {
     .t-container {
         height: calc(100% - 36px);
