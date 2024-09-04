@@ -32,7 +32,6 @@ const dayfmt = new Intl.DateTimeFormat("en-GB", {
   month: "short",
   day: "2-digit",
   hour: "2-digit",
-  second: "2-digit",
   minute: "numeric",
   hour12: true,
 });

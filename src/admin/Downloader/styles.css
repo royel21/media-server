@@ -72,7 +72,7 @@
 }
 
 .d-table {
-    min-width: 1000px;
+    min-width: 800px;
 }
 
 .d-table>div:first-child {
@@ -109,7 +109,7 @@
 }
 
 .d-table div>span {
-    padding: 0.2rem;
+    padding: 0.2rem 0.3rem;
 }
 
 .d-table div>span {
@@ -117,14 +117,16 @@
 }
 
 .d-table div>.col-count {
-    width: 50px;
+    width: 40px;
     text-align: center;
     border-left: 1px solid;
 }
 
 .d-table div>.col-serv {
-    width: 185px;
+    display: flex;
+    width: 150px;
     cursor: pointer;
+    overflow: hidden;
 }
 
 .d-table div>.col-chapt {
@@ -141,7 +143,7 @@
 }
 
 .d-table div>.col-date {
-    width: 180px;
+    width: 160px;
 }
 
 span a:hover {
