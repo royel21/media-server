@@ -32,13 +32,14 @@
   };
 
   $: filter = curFilter;
+  const box = "0 0 512 512";
 </script>
 
 <div {id} class="input-group c-filter">
   <slot name="pre-btn" />
   <div class="input-group-prepend">
     <span class="btn-filter input-group-text" on:click={btnFilter}>
-      <Icons name="search" height="22px" color="#495057" />
+      <Icons name="search" height="22px" color="#495057" {box} />
     </span>
   </div>
   <input
@@ -67,7 +68,7 @@
     flex-shrink: 1;
     width: 100%;
     pointer-events: all;
-    height: 32px;
+    height: 30px;
     max-width: 350px;
     align-items: center;
   }
@@ -88,5 +89,9 @@
     color: darkgray;
     font-size: 20px;
     height: 20px;
+  }
+  .btn-filter {
+    height: 30px;
+    padding: 0 5px;
   }
 </style>

@@ -111,6 +111,7 @@
     width: fit-content;
     padding: 0;
     pointer-events: all;
+    margin: 0 3px;
   }
   .pagination {
     display: flex;
@@ -121,7 +122,7 @@
     margin: 0;
   }
   #pager li {
-    height: 32px;
+    height: 30px;
     width: 45px;
     cursor: pointer;
   }
