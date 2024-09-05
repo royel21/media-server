@@ -318,6 +318,7 @@
     right: 0px;
     left: 0;
     bottom: 0;
+    margin: 0;
     display: flex;
     justify-content: center;
     height: 34px;
