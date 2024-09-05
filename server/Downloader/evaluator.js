@@ -420,9 +420,13 @@ export const evaleLinks = async (query) => {
 
   if (query.Name.includes("kaliscan")) {
     let divs = document.querySelectorAll(".chapter-image");
-
     for (let div of divs) {
-      while (!div.classList.contains("loaded")) await delay(100);
+      let timeOut = 5;
+      while (!div.classList.contains("loaded"))
+        if (!timeOut--) {
+          await delay(100);
+          break;
+        }
     }
   }
 
