@@ -109,13 +109,13 @@
   <DownloadListModal hide={() => (showDownList = false)} {loadDownloads} {addToDownload} />
 {/if}
 
-<div class="container">
+<div id="downloading" class="container">
   <div class="d-controls">
     <div>
-      <span class="btn-add" on:click={() => (showDownList = true)} on:keydown>
+      <span class="d-btn" on:click={() => (showDownList = true)} on:keydown>
         <Icons name="list" />
       </span>
-      <span class="r-list btn-stop" title="Stop All Download" class:running on:click={stopDownloads} on:keydown>
+      <span class="d-btn btn-stop" title="Stop All Download" class:running on:click={stopDownloads} on:keydown>
         <Icons name="stopcircle" color="firebrick" />
       </span>
       <Filter on:filter={onFilter} filter={datas.filter} />
@@ -127,6 +127,10 @@
 </div>
 
 <style>
+  #downloading {
+    height: calc(100% - 5px);
+  }
+
   .d-controls :global(#filter-control) {
     max-width: 500px;
   }

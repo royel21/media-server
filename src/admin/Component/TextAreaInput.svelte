@@ -44,10 +44,6 @@
     border-top-left-radius: 0.25rem;
     user-select: none;
   }
-  .input::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-  }
   .input-control .input {
     height: initial;
     border-top-right-radius: 0;

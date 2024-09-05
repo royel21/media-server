@@ -329,6 +329,7 @@ body .c-filter {
 /*************************Scrollbar Style********************************/
 
 ::-webkit-scrollbar {
+  height: 10px;
   width: 10px;
 }
 

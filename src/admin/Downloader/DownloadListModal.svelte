@@ -165,6 +165,7 @@
   }
   .dl-filter {
     padding: 0 5px;
+    padding-bottom: 7px;
   }
   .dl-filter :global(#filter-control) {
     max-width: 100%;
@@ -205,9 +206,7 @@
 
   li {
     white-space: nowrap;
-    overflow-x: hidden;
-    padding: 5px;
-    border-bottom: 1px solid white;
+    padding: 2px 5px;
   }
 
   ol {

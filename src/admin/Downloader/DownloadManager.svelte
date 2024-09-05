@@ -18,7 +18,7 @@
   document.title = "Manager";
 </script>
 
-<div id="d-manager" class="card bg-dark text-light admin-manager">
+<div class="card bg-dark text-light admin-manager d-manager">
   <div class="disk-controls">
     <div class="usn nav nav-tabs">
       <div class="nav-item" title="Links List">

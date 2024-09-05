@@ -8,14 +8,14 @@
     justify-content: space-between;
 }
 
-#d-manager .d-controls>div>span svg:not(.icon-timescircle),
-#d-manager .d-controls>span svg:not(.icon-timescircle) {
+.d-manager .d-controls>div>span svg:not(.icon-timescircle),
+.d-manager .d-controls>span svg:not(.icon-timescircle) {
     height: 35px;
     width: 35px;
     top: -1px;
 }
 
-#d-manager .d-controls>div:first-child {
+.d-manager .d-controls>div:first-child {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
@@ -151,23 +151,24 @@ span a:hover {
     text-decoration: underline;
 }
 
-.d-controls :global(#filter-control) {
-    max-width: 500px;
-}
 
-#d-manager #pager {
+.d-manager #pager {
     margin-left: 5px;
 }
 
-#d-manager #pager li svg,
-#d-manager #pager li {
+.d-manager #pager li svg,
+.d-manager #pager li {
     height: 30px;
 }
 
-#d-manager #d-items .icon-list {
+.d-manager #d-items .icon-list {
     top: 0;
     width: 28px;
     height: 23px;
+}
+
+.d-manager .d-controls .d-btn .icon {
+    top: -3px;
 }
 
 @media screen and (max-width: 450px) {
@@ -183,7 +184,7 @@ span a:hover {
         display: none;
     }
 
-    #d-manager #filter-control {
+    .d-manager #filter-control {
         max-width: initial;
     }
 

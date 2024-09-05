@@ -158,29 +158,23 @@
 
 <div id="srv">
   <div class="d-controls">
-    <span class="btn-add" on:click={() => (showLinkModal = true)} on:keydown>
+    <span class="d-btn btn-add" on:click={() => (showLinkModal = true)}>
       <Icons name="squareplus" />
     </span>
-    <span on:click={downloadAll} title="Download All Link from This Server" on:keydown>
+    <span class="d-btn" on:click={downloadAll} title="Download All Link from This Server">
       <Icons name="download" color="lightblue" />
     </span>
-    <span title="Open Web Page" class="op-ser-page">
+    <span class="d-btn op-ser-page" title="Open Web Page">
       <a href={`https://${server.Name}`} target="_blank"><Icons name="wolrd" color="forestgreen" /></a>
     </span>
-    <span title="Open Server Config" on:click={onShowServerEdit}><Icons name="cog" /></span>
+    <span class="d-btn" title="Open Server Config" on:click={onShowServerEdit}><Icons name="cog" /></span>
     <Select2 label="Servers" bind:item={server} options={servers} {onChange} />
     <span id="trash" on:click={() => (showRemoveConfirm = true)}><Icons name="trash" box="0 0 495 500" /></span>
   </div>
   <div class="d-controls">
     <Filter on:filter={onFilter} filter={datas.filter}>
       <span class="btns" slot="pre-btn">
-        <span
-          class="r-list btn-stop"
-          title="Stop All Download"
-          class:running={datas.running}
-          on:click={stopDownloads}
-          on:keydown
-        >
+        <span class="r-list btn-stop" title="Stop All Download" class:running={datas.running} on:click={stopDownloads}>
           <Icons name="stopcircle" color="firebrick" />
         </span>
       </span>
@@ -193,7 +187,7 @@
 
 <style>
   #srv :global(.t-container) {
-    height: calc(100% - 46px);
+    height: calc(100% - 41px);
   }
   #srv {
     height: calc(100% - 30px);

@@ -241,10 +241,6 @@
     max-width: 100%;
   }
 
-  #play-list #p-list::-webkit-scrollbar {
-    width: 10px;
-  }
-
   #play-list #v-filter {
     flex-grow: 1;
   }
@@ -285,12 +281,6 @@
     background-color: rgba(0, 0, 0, 0.801);
   }
   @media screen and (max-width: 600px) {
-    #p-list::-webkit-scrollbar {
-      display: none;
-      width: 0;
-      height: 0;
-    }
-
     #play-list.move {
       bottom: 31px;
     }
