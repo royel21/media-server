@@ -448,7 +448,7 @@ export const evaleLinks = async (query) => {
     const { src, dataset } = img;
     let nSrc = (dataset.lazySrc || dataset.src || dataset.lzlSrc || src)?.trim();
 
-    if (/\.(ico|svg)|banner/.test(nSrc) || /manhwa-freak.com(.*).gif|.svg$/gi.test(nSrc)) continue;
+    if (/\.(ico|svg|com$)/.test(nSrc)) continue;
 
     if (location.href.includes("mangaclash")) {
       if (nSrc.includes("mangaclash")) {

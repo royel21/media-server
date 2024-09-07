@@ -62,7 +62,7 @@ const downloadImg = async (url, page, name = "", isCover) => {
   if (url) {
     let buff;
     try {
-      if (/%20$\/.webp$/.test(url)) {
+      if (/%20$/.test(url)) {
         const { data } = await axios(url, { responseType: "arraybuffer" });
         buff = data;
       } else if (url.includes("wordpress.com")) {
