@@ -33,24 +33,22 @@ export const genFileThumbnails = async (folders, sendMessage) => {
 
         let exist = files.includes(file.Name + ".jpg");
 
-        if (file.Duration === 0 || !exist) {
-          try {
-            let filePath = join(folder.Path, file.Name);
+        try {
+          let filePath = join(folder.Path, file.Name);
 
-            let coverPath = join(thumbPath, file.Name + ".jpg");
+          let coverPath = join(thumbPath, file.Name + ".jpg");
 
-            if (file.Type.includes("Manga")) {
-              Duration = await ZipCover(filePath, coverPath, exist);
-            } else {
-              Duration = await getVideoThumnail(filePath, coverPath, exist);
-            }
-
-            if (file.Duration !== Duration) {
-              toUpdate.push({ Id: file.Id, Duration });
-            }
-          } catch (err) {
-            console.log(folder.Path, file.Name, err);
+          if (file.Type.includes("Manga")) {
+            Duration = await ZipCover(filePath, coverPath, exist);
+          } else {
+            Duration = await getVideoThumnail(filePath, coverPath, exist);
           }
+
+          if (file.Duration !== Duration) {
+            toUpdate.push({ Id: file.Id, Duration });
+          }
+        } catch (err) {
+          console.log(folder.Path, file.Name, err);
         }
         i++;
       }
