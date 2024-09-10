@@ -6,21 +6,16 @@
   export let filter;
   export let folderId = "";
   export let dirid;
-  let shwFiles = true;
 
   const folderid = ({ detail }) => {
     folderId = detail?.Id || "";
   };
-
-  const showFiles = () => {
-    shwFiles = !shwFiles;
-  };
 </script>
 
-<div class="card bg-dark admin-manager" class:has-files={shwFiles}>
-  <div class="rows" class:has-files={shwFiles}>
-    <FolderList on:folderid={folderid} page={parseInt(page) || 1} {dirid} {folderId} {filter} {showFiles} />
-    {#if shwFiles}<FolderData {folderId} />{/if}
+<div class="card bg-dark admin-manager has-files">
+  <div class="rows has-files">
+    <FolderList on:folderid={folderid} page={parseInt(page) || 1} {dirid} {folderId} {filter} />
+    <FolderData {folderId} />
   </div>
 </div>
 

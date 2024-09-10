@@ -19,7 +19,6 @@
   export let dirid;
   export let folderId;
   export let scanning = [];
-  export let showFiles;
 
   let dirs = [];
   let currentDir = dirid || "all";
@@ -256,9 +255,6 @@
     <span on:keydown on:click={() => (showGenres = !showGenres)} title="Toggle Genres List">
       <Icons name={showGenres ? "eyeslash" : "eye"} box="0 0 612 512" />
     </span>
-    <span on:keydown on:click={showFiles} title="Toggle Files List">
-      <Icons name="files" box="0 0 280 512" />
-    </span>
   </span>
   <div class="path-tag" slot="first-tag">
     {#if showImage}
@@ -347,7 +343,6 @@
   @media screen and (max-width: 600px) {
     .thumbnail {
       right: 11px;
-      top: 47px;
     }
 
     .dir-list select {
