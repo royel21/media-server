@@ -122,6 +122,7 @@
   .controls {
     position: initial;
     display: flex;
+    align-items: center;
     padding: 5px 0;
     border: none;
     height: 45px;
@@ -171,6 +172,7 @@
     }
     .controls h4 {
       width: 60px;
+      margin: 0 6px;
     }
   }
 </style>

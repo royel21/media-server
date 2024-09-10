@@ -276,19 +276,9 @@
 
 <style>
   .create-folder :global(svg) {
-    height: 35px;
+    height: 32px;
     width: 43px;
-    top: -1px;
-  }
-  .show-files {
-    display: flex;
-  }
-  .show-files span {
-    margin-right: 5px;
-  }
-  .show-files :global(svg) {
-    width: 27px;
-    height: 28px;
+    top: 3px;
   }
   .path-tag {
     position: relative;
