@@ -66,14 +66,13 @@
   };
 
   const box = "0 0 320 512";
-  const box2 = "0 0 512 512";
 </script>
 
 {#if totalPages > 1}
   <div id="pager" class="usn" on:click={pagerClick}>
     <ul class="pagination">
       <li id="first-page" class="page-link" class:d-none={hideFL}>
-        <Icons name="angledoubleleft" {color} {box2} />
+        <Icons name="angledoubleleft" {color} />
       </li>
       <li id="prev-page" class="page-link" class:border-r-left={hideFL}>
         <Icons name="angleleft" {color} {box} />
@@ -95,7 +94,7 @@
         <Icons name="angleright" {color} {box} />
       </li>
       <li id="last-page" class="page-link" class:d-none={hideFL}>
-        <Icons name="angledoubleright" {color} {box2} />
+        <Icons name="angledoubleright" {color} />
       </li>
     </ul>
   </div>

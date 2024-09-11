@@ -117,7 +117,7 @@
 <div class="detail" class:change={isModified}>
   <div class="error">{error || ""}</div>
   <div class="f-count">
-    <span class="ccount">Files in Folder: {folder.Total || 0}</span><span>Last Chapter: {folder.Last || "N/A"}</span>
+    <span class="ccount">Total: {folder.Total || 0}</span><span>Last Chapter: {folder.Last || "N/A"}</span>
   </div>
   <div class="d-content">
     <TextAreaInput file={folder} key="Name" style="margin-bottom: 5px" rows="3" {onChange} />
@@ -153,7 +153,6 @@
   }
   .f-count {
     display: flex;
-    justify-content: space-around;
     font-size: 0.9rem;
     margin: 5px 0;
     background-color: #0db9d8;
@@ -162,7 +161,12 @@
     font-weight: 600;
   }
   .f-count span {
+    display: inline-block;
     padding: 2px 4px;
+  }
+  .f-count span:last-child {
+    padding-left: 10px;
+    width: 100%;
   }
   .detail :global(.input-label) {
     width: 145px;
@@ -177,8 +181,9 @@
   .d-buttons .btn:not(:last-child) {
     margin-right: 15px;
   }
-  .ccount {
-    min-width: 140px;
+  .f-count .ccount {
+    min-width: 85px;
+    text-align: center;
     border-right: 1px solid white;
   }
 </style>

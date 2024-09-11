@@ -105,10 +105,20 @@
     border-bottom: 1px solid;
     margin-bottom: 5px;
   }
+  .r-names :global(.c-filter) {
+    height: initial;
+  }
   .r-names :global(.icon-squareplus) {
     height: 35px;
     width: 37px;
     top: 2px;
+  }
+  .r-names :global(.icon-times) {
+    width: 20px;
+    right: -3px;
+  }
+  .r-names :global(.input-control .input) {
+    padding-right: 18px;
   }
   .r-names :global(.input-label) {
     padding-left: 0.35rem;
