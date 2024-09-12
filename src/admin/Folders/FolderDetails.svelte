@@ -69,6 +69,8 @@
       AltName = "";
     }
 
+    if (AltName.includes(value)) return;
+
     folder.AltName = `${value}${AltName ? "; " + AltName : ""}`;
     hasChanges = isDiff(old, folder);
   };
