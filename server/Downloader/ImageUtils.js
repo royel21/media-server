@@ -114,6 +114,7 @@ const downloadImg = async (url, page, name = "", isCover) => {
       }
     } else {
       sendMessage({ text: `${name} buffer-Error: ${url} - could't get the image`, url, color: "red" });
+      return { badImg: true };
     }
     return {};
   }
