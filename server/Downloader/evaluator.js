@@ -448,6 +448,8 @@ export const evaleLinks = async (query) => {
     const { src, dataset } = img;
     let nSrc = (dataset.lazySrc || dataset.src || dataset.lzlSrc || src)?.trim();
 
+    if (img.width < 300 && img.height < 400) continue;
+
     if (/\.(ico|svg|com$)/.test(nSrc)) continue;
 
     if (location.href.includes("mangaclash")) {
