@@ -5,6 +5,7 @@
   import Select from "../Component/Select.svelte";
   import TextAreaInput from "../Component/TextAreaInput.svelte";
   import Input from "../Component/Input.svelte";
+  import Icons from "src/icons/Icons.svelte";
   import { isDiff, validGenres, validateAuthor, validAltName } from "../Utils";
   import { setMessage } from "../Store/MessageStore";
 
@@ -59,6 +60,19 @@
     hasChanges = isDiff(old, folder);
     error = "";
   };
+
+  const prePaste = async () => {
+    let text = await navigator.clipboard?.readText();
+    let { AltName } = folder;
+    const value = validAltName(text.replace(regx, ""));
+    if (value && AltName === "N/A") {
+      AltName = "";
+    }
+
+    folder.AltName = `${value}${AltName ? "; " + AltName : ""}`;
+    hasChanges = isDiff(old, folder);
+  };
+
   const onUrl = ({ target: { value } }) => {
     imageData.Url = value;
     error = "";
@@ -121,7 +135,11 @@
   </div>
   <div class="d-content">
     <TextAreaInput file={folder} key="Name" style="margin-bottom: 5px" rows="3" {onChange} />
-    <TextAreaInput file={folder} key="AltName" style="margin-bottom: 5px" sept="; " rows="3" {onChange} />
+    <TextAreaInput file={folder} key="AltName" style="margin-bottom: 5px" sept="; " rows="3" {onChange}>
+      <span class="pre-paste" slot="btn-left" on:click={prePaste}>
+        <Icons name="paste" color="black" />
+      </span>
+    </TextAreaInput>
     <TextAreaInput file={folder} key="Genres" style="margin-bottom: 5px" rows="2" sept="," {onChange} />
     <TextAreaInput file={folder} key="Description" rows="4" {onChange} />
     <Input key="Author" item={folder} {onChange} sept=", " />
@@ -185,5 +203,9 @@
     min-width: 85px;
     text-align: center;
     border-right: 1px solid white;
+  }
+  .pre-paste {
+    position: absolute;
+    left: 5px;
   }
 </style>
