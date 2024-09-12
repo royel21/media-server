@@ -217,7 +217,7 @@ export const downloadAllIMages = async (page, links, state, imgPath, folder, des
     }
   }
 
-  result.valid = result.count >= length - 1;
+  result.valid = result.count >= length - 1 && result.count > 0;
 
   if (result.valid) {
     zip.writeZip(destZip);
