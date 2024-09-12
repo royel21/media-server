@@ -146,7 +146,7 @@
       text-overflow: ellipsis;
     }
     .toast {
-      max-width: 380px;
+      max-width: 390px;
     }
 
     :global(#menu .nav-title) {

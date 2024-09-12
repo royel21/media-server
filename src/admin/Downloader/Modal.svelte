@@ -53,6 +53,7 @@
           <CheckBox label="Is Adult" key="IsAdult" item={link} />
           <CheckBox label="Is Raw" key="Raw" item={link} />
         {:else}
+          <CheckBox label="Enable" key="Enable" item={server} />
           <Select key="Type" options={[{ Id: "Manga" }, { Id: "Adult" }]} item={server} {onChange} />
           <Input key="Title" item={server} />
           <Input key="AltTitle" item={server} />
@@ -92,14 +93,13 @@
   }
   @media screen and (max-width: 450px) {
     .modal {
-      width: 380px;
+      width: 390px;
     }
   }
 
   @media screen and (max-height: 600px) {
     .server {
       overflow: auto;
-      padding-top: 95px;
     }
   }
 </style>

@@ -141,7 +141,7 @@
     color: black;
     background: white;
     height: max-content;
-    width: 380px;
+    width: 390px;
     bottom: -121px;
     left: -149px;
     padding: 5px;

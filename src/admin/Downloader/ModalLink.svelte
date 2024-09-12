@@ -18,7 +18,6 @@
 
     const result = await apiUtils.post("admin/downloader/add-link", link);
     error = result.error;
-    console.log("result: ", result);
     if (result.valid) hide(result);
   };
 
@@ -88,7 +87,7 @@
   }
   @media screen and (max-width: 450px) {
     .modal {
-      width: 380px;
+      width: 390px;
     }
   }
 </style>

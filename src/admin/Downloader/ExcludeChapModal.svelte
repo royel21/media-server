@@ -142,7 +142,7 @@
 
   @media screen and (max-width: 450px) {
     .modal {
-      width: 380px;
+      width: 390px;
     }
   }
 </style>

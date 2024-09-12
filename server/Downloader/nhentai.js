@@ -111,7 +111,7 @@ const download = async (link, page, server, state) => {
   if (!data.name) return;
 
   const curDir = dirs[data.type] || dirs.nHentai;
-  console.log("hdir", curDir);
+  console.log("current-dir:", curDir);
 
   const folder = await db.folder.findOne({
     where: { Path: { [db.Op.like]: `%${curDir}%` } },
@@ -157,7 +157,6 @@ const download = async (link, page, server, state) => {
 
           if (img.badImage) {
             newEX = formats[f++];
-            console.log(newEX);
           } else {
             const buff = await img.toFormat("jpg").toBuffer();
             zip.addFile(newImg, buff);

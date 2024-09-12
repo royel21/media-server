@@ -141,9 +141,6 @@
       <span class="d-btn r-list btn-stop" title="Stop All Download" class:running on:click={stopDownloads} on:keydown>
         <Icons name="stopcircle" color="firebrick" />
       </span>
-      <span class="d-btn r-list btn-ser-config" on:click={() => (showServerList = true)} on:keydown>
-        <Icons name="cog" />
-      </span>
       <span class="d-btn r-list" title="Show Rename List" on:click={() => (showRenamer = true)} on:keydown>
         <Icons name="list" />
       </span>

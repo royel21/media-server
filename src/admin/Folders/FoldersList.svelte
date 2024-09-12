@@ -68,7 +68,6 @@
 
   const gotopage = (pg) => {
     pg = parseInt(pg.detail);
-    console.log("gt", pg);
 
     if (pg < 1 || pg > totalPages) return;
 

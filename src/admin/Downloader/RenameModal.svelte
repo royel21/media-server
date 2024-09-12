@@ -98,17 +98,25 @@
   .modal {
     height: calc(100% - 100px);
     max-height: 500px;
-    width: 750px;
+    max-width: calc(100% - 30px);
+    width: 650px;
     outline: none;
   }
   .modal-header {
+    padding: 6px 0;
     border-bottom: 1px solid;
     margin-bottom: 5px;
   }
   .r-names :global(.c-filter) {
     height: initial;
+    max-width: 100%;
   }
-  .r-names :global(.icon-squareplus) {
+
+  .r-names :global(.c-filter .icon-timescircle) {
+    top: 3px;
+  }
+
+  .r-names .modal-body :global(.icon-squareplus) {
     height: 35px;
     width: 37px;
     top: 2px;
@@ -151,11 +159,5 @@
     flex-grow: 1;
     margin-right: 3px;
     padding: 2px;
-  }
-
-  @media screen and (max-width: 450px) {
-    .modal {
-      width: 380px;
-    }
   }
 </style>

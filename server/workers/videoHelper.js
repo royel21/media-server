@@ -47,7 +47,6 @@ const renameVideoFile = (src, dest, file, regex, text, padding) => {
         .trim();
     } else if (!/^\d+/.test(nFile)) {
       nFile = nFile.replace(/([\w-]*[^\d]+)|([\w-]*(- |))/, "").trim();
-      console.log("no ending|opening", nFile);
     }
 
     const num = nFile.match(/\d+/);
@@ -145,7 +144,6 @@ export const workVideos = ({ folder, pass, text, padding }) => {
         renameVideoFile(fpath, Path, file, regex, text, padding);
       }
       fs.removeSync(fpath);
-      console.log("rmove fil", file);
     } else {
       renameVideoFile(Path, Path, file, regex, text, padding);
     }
@@ -215,7 +213,6 @@ export const moveToDir = async ({ folder, DirectoryId }) => {
 };
 
 export const removeDFolder = ({ Id, Name, Path }) => {
-  console.log("remove", Id, Name, Path);
   if (fs.existsSync(Path)) {
     try {
       fs.removeSync(Path);

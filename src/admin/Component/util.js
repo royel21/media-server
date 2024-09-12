@@ -21,7 +21,6 @@ const getImage = async () => {
 export const handlerPaste = async (item, key, sept, ref) => {
   try {
     let image = await getImage();
-    console.log("image", image);
     if (image) {
       item.file = image;
       ref.value = "";

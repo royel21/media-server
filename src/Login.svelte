@@ -97,7 +97,7 @@
   #login-container {
     display: flex;
     flex-direction: column;
-    width: 380px;
+    width: 390px;
     height: fit-content;
     user-select: none;
     background-color: #343a40;

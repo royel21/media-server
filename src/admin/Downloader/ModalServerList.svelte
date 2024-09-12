@@ -155,14 +155,13 @@
 
   @media screen and (max-width: 450px) {
     .modal {
-      width: 380px;
+      width: 390px;
     }
   }
 
   @media screen and (max-height: 600px) {
     .server {
       overflow: auto;
-      padding-top: 95px;
     }
   }
 </style>
