@@ -75,6 +75,10 @@
     hasChanges = isDiff(old, folder);
   };
 
+  const copyName = async () => {
+    await navigator.clipboard?.writeText(folder.Name);
+  };
+
   const onUrl = ({ target: { value } }) => {
     imageData.Url = value;
     error = "";
@@ -136,7 +140,11 @@
     <span class="ccount">Total: {folder.Total || 0}</span><span>Last Chapter: {folder.Last || "N/A"}</span>
   </div>
   <div class="d-content">
-    <TextAreaInput file={folder} key="Name" style="margin-bottom: 5px" rows="3" {onChange} />
+    <TextAreaInput file={folder} key="Name" style="margin-bottom: 5px" rows="3" {onChange}>
+      <span class="pre-paste" slot="btn-left" on:click={copyName}>
+        <Icons name="copy" color="lightblue" />
+      </span>
+    </TextAreaInput>
     <TextAreaInput file={folder} key="AltName" style="margin-bottom: 5px" sept="; " rows="3" {onChange}>
       <span class="pre-paste" slot="btn-left" on:click={prePaste}>
         <Icons name="paste" color="black" />
