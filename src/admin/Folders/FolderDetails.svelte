@@ -141,12 +141,12 @@
   </div>
   <div class="d-content">
     <TextAreaInput file={folder} key="Name" style="margin-bottom: 5px" rows="3" {onChange}>
-      <span class="pre-paste" slot="btn-left" on:click={copyName}>
-        <Icons name="copy" color="lightblue" />
+      <span class="pre-paste" slot="btn-left" on:click={copyName} title="Copy Name">
+        <Icons name="copy" color="#045cba" />
       </span>
     </TextAreaInput>
     <TextAreaInput file={folder} key="AltName" style="margin-bottom: 5px" sept="; " rows="3" {onChange}>
-      <span class="pre-paste" slot="btn-left" on:click={prePaste}>
+      <span class="pre-paste" slot="btn-left" on:click={prePaste} title="Paste To The Left">
         <Icons name="paste" color="black" />
       </span>
     </TextAreaInput>
