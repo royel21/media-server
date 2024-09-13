@@ -6,6 +6,12 @@ import axios from "axios";
 import defaultConfig from "../default-config.js";
 import AdmZip from "adm-zip";
 
+const delay = (ms) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+};
+
 const parseDataUrl = (dataUrl) => {
   const matches = dataUrl.match(/^data:(.+);base64,(.+)$/);
   if (matches.length !== 3) {
@@ -60,7 +66,7 @@ const evalWorpressImage = async () => {
 
 const downloadImg = async (url, page, name = "", isCover) => {
   if (url) {
-    let buff;
+    let buff = [];
     try {
       if (/%20$/.test(url)) {
         const { data } = await axios(url, { responseType: "arraybuffer" });
@@ -71,8 +77,8 @@ const downloadImg = async (url, page, name = "", isCover) => {
         const { buffer } = parseDataUrl(result);
         buff = buffer;
       } else {
-        let retry = 2;
-        while (retry-- && !buff) {
+        let retry = 3;
+        while (retry-- && buff.length === 0) {
           try {
             let viewSource = await page.goto(url.trim());
             buff = await viewSource.buffer();
@@ -87,6 +93,7 @@ const downloadImg = async (url, page, name = "", isCover) => {
             } else {
               sendMessage({ text: `${name} download-Image Error`, url, color: "red", error });
             }
+            await delay(500);
           }
         }
       }
