@@ -38,13 +38,19 @@
   };
 
   const submit = async (e) => {
-    const result = await apiUtils.post("admin/downloader/add-altname", { nameList });
+    const result = await apiUtils.post("admin/downloader/add-altname", { nameList: nameList.filter((n) => n.updated) });
     error = result.error;
     if (result.valid) hide(true);
   };
 
   const loadItems = async () => {
     nameList = await apiUtils.get(["admin", "downloader", "rename-list"]);
+  };
+
+  const onChange = ({ target }) => {
+    const id = target.closest(".name-item").id;
+    const found = nameList.find((n) => n.Id.toString() === id);
+    if (found) found.updated = true;
   };
 
   const onKeyDown = (e) => {
@@ -78,8 +84,8 @@
         {#each filteredList as name}
           <div class="name-item" id={name.Id}>
             <span>
-              <Input key="Name" item={name} />
-              <Input key="AltName" item={name} />
+              <Input key="Name" item={name} {onChange} />
+              <Input key="AltName" item={name} {onChange} />
             </span>
             <span on:click={onRemove} on:keydown><Icons name="trash" /></span>
           </div>
@@ -96,8 +102,8 @@
 
 <style>
   .modal {
-    height: calc(100% - 100px);
-    max-height: 500px;
+    height: calc(100% - 80px);
+    max-height: 550px;
     max-width: calc(100% - 30px);
     width: 650px;
     outline: none;
@@ -113,11 +119,11 @@
   }
 
   .r-names :global(.c-filter .icon-timescircle) {
-    top: 3px;
+    top: 7px;
   }
 
-  .r-names .modal-body :global(.icon-squareplus) {
-    height: 35px;
+  .r-names :global(.icon-squareplus) {
+    height: 32px;
     width: 37px;
     top: 2px;
   }
@@ -140,7 +146,7 @@
     margin: 0;
   }
   .r-names form {
-    height: calc(100% - 85px);
+    height: calc(100% - 95px);
   }
   .r-names .modal-body {
     height: 100%;

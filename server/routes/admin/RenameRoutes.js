@@ -15,7 +15,9 @@ export const addAltname = async ({ body }, res) => {
       } else {
         await db.NameList.update(name, { where: { Id: +name.Id } });
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   res.send({ valid: true });
