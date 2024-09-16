@@ -448,7 +448,7 @@ export const evaleLinks = async (query) => {
     const { src, dataset } = img;
     let nSrc = (dataset.lazySrc || dataset.src || dataset.lzlSrc || src)?.trim();
 
-    // if (img.width < 100) continue;
+    if (img.naturalWidth < 100) continue;
 
     if (/\.(ico|svg|com$)/.test(nSrc)) continue;
 
