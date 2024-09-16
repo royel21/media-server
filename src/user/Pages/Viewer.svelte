@@ -89,11 +89,13 @@
       clearInterval(runningClock);
       clock.innerText = "";
     }
-    if (isMobile && isVideo(file) && document.fullscreenElement) {
-      window.screen.orientation.lock("landscape");
-    } else {
-      window.screen.orientation.unlock();
-    }
+    try {
+      if (isVideo(file) && document.fullscreenElement) {
+        window.screen.orientation.lock("landscape");
+      } else {
+        window.screen.orientation.unlock();
+      }
+    } catch (error) {}
   });
 
   onDestroy(() => (menu.style.display = "flex"));

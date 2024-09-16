@@ -82,10 +82,6 @@ const downloadImg = async (url, page, name = "", isCover) => {
           try {
             let viewSource = await page.goto(url.trim());
             buff = await viewSource.buffer();
-
-            if (buff.length === 0) {
-              return { badImg: true };
-            }
           } catch (error) {
             console.log(error);
             if (!error.toString().includes("net::ERR_CONNECTION_CLOSED")) {
@@ -107,8 +103,8 @@ const downloadImg = async (url, page, name = "", isCover) => {
         const img = await sharp(buff, { failOnError: false });
         const meta = await img.metadata();
 
-        if (!isCover && meta.width < 300) {
-          return { badImg: true };
+        if (!isCover && meta.width < 200) {
+          return { badImg: true, width: meta.width };
         }
 
         if (meta.width > 1024) {
@@ -117,6 +113,7 @@ const downloadImg = async (url, page, name = "", isCover) => {
 
         return img;
       } catch (error) {
+        console.log(error);
         sendMessage({ text: `${name} ResizeImage-Error: ${url}`, color: "red", error, url });
       }
     } else {
@@ -193,7 +190,7 @@ export const downloadAllIMages = async (page, links, state, imgPath, folder, des
 
     if (skip > 1) {
       sendMessage({ text: `Error Skip: ${links[i]}` });
-      return result;
+      // return result;
     }
 
     process.stdout.write(`IMG: ${(i + 1).toString().padStart(padding, "0")} / ${length}\r`);
@@ -204,6 +201,7 @@ export const downloadAllIMages = async (page, links, state, imgPath, folder, des
       length--;
       thumb++;
       skip++;
+      console.log(links[i]);
       continue;
     }
 
@@ -223,6 +221,7 @@ export const downloadAllIMages = async (page, links, state, imgPath, folder, des
       result.count++;
     }
   }
+  console.log(result.count, length);
 
   result.valid = result.count >= length - 1 && result.count > 0;
 

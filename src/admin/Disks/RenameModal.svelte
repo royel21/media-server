@@ -25,7 +25,7 @@
   };
 
   if (item.Name) {
-    const parts = item.Name.match(/\.(mp4|mkv|avi|ogg)/i);
+    const parts = item.Name.match(/\.(mp4|mkv|avi|ogg|zip)/i);
     if (parts) {
       extension = parts[0];
       item.Name = item.Name.replace(extension, "");
