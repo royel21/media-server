@@ -62,8 +62,9 @@
           <Input key="Cover" item={server} />
           <Input key="Desc" item={server} />
           <Input key="Genres" item={server} />
-          <Input label="Home Query" key="HomeQuery" item={server} />
           <Input key="Status" item={server} />
+          <Input key="Delay" item={server} />
+          <Input label="Home Query" key="HomeQuery" item={server} />
           <CheckBox label="Raw" key="Raw" item={server} />
           <CheckBox label="Local Images" key="LocalImages" item={server} />
           <CheckBox label="Is Mobile" key="isMobile" item={server} />
