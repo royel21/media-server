@@ -20,6 +20,9 @@
 </div>
 
 <style>
+  :global(.content) {
+    overflow: hidden;
+  }
   .rows {
     position: relative;
     display: flex;

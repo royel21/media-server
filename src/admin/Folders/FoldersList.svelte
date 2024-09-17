@@ -120,6 +120,9 @@
   const showPath = (e) => {
     if (showImage) {
       fullPathPos.y = e.pageY - 30;
+      if (fullPathPos.y + 100 > window.innerHeight && showImage.Path?.length > 80) {
+        fullPathPos.y = e.pageY - 50;
+      }
     }
   };
 
