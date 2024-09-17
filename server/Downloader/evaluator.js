@@ -449,7 +449,6 @@ export const evaleLinks = async (query) => {
 
   for (let img of imgs) {
     img?.scrollIntoView();
-    await delay(query.Delay);
     const { src, dataset } = img;
     let nSrc = (dataset.lazySrc || dataset.src || dataset.lzlSrc || src)?.trim();
 
