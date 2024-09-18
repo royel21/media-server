@@ -75,6 +75,10 @@
     socket.emit("download-server", { server: +dataset.id, action: "Check-Server" });
   };
 
+  const getServName = ({ Name }) => {
+    return Name.replace(/manga|manhua|manhwa|scans/gi, "");
+  };
+
   onMount(() => {
     socket.on("update-download", onUpdate);
     return () => {
@@ -119,7 +123,7 @@
         {#if servers}
           <span class="col-serv">
             <span on:click={editServer} on:keydown title="Show Site Config"><Icons name="cog" /></span>
-            <span data-id={link.ServerId} on:click={downloadServer} on:keydown>{link.Server?.Name}</span>
+            <span data-id={link.ServerId} on:click={downloadServer} on:keydown>{getServName(link.Server)}</span>
           </span>
         {/if}
         <span class="col-chapt">
