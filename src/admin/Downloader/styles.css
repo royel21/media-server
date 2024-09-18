@@ -124,7 +124,7 @@
 
 .d-table div>.col-serv {
     display: flex;
-    width: 170px;
+    width: 120px;
     cursor: pointer;
     overflow: hidden;
 }
