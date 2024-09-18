@@ -36,6 +36,7 @@
       tags = data.tags;
     }
     transfer = false;
+    hasChanges = false;
   };
 
   const onChange = ({ target: { name, value, type, checked } }) => {
