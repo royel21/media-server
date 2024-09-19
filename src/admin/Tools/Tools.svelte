@@ -5,13 +5,10 @@
   const socket = getContext("socket");
   //clean-images
   let backups = [];
+  let isMounted = true;
 
   const onBackup = () => {
     socket.emit("backup-db", { event: "backup" });
-  };
-
-  const onCleanImages = () => {
-    socket.emit("clean-images");
   };
 
   const restoreBackup = ({ target }) => {
@@ -28,7 +25,7 @@
 
   const reload = async () => {
     const result = await apiUtils.get(["admin", "directories", "backups"]);
-    if (result) {
+    if (result && isMounted) {
       backups = result.sort().reverse();
     }
   };
@@ -44,6 +41,7 @@
     reload();
     socket.on("reload-backups", reload);
     return () => {
+      isMounted = false;
       socket.off("reload-backups", reload);
     };
   });

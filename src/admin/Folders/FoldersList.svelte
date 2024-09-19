@@ -35,11 +35,13 @@
   let showGenres = false;
   let showReplace = false;
 
+  let isMounted = true;
+
   const newFolder = () => (createFolder = true);
 
   const loadDir = async () => {
     const data = await apiUtils.admin(["folders", "dirs"]);
-    if (data?.length) {
+    if (data?.length && isMounted) {
       dirs = data;
     }
   };
@@ -48,7 +50,7 @@
     let flt = filter?.replace(/|:|\?|\^|"|\*|<|>|\t|\n/gi, "") || "";
     let data = await apiUtils.admin(["folders", dir || currentDir || "all", pg, calRows(), flt]);
 
-    if (data.items) {
+    if (data.items && isMounted) {
       let tmp = data.items[0];
       folderId = tmp?.Id;
       items = data.items.map((d) => ({ ...d, Name: d.Path.split(/\/|\\/g).pop() }));
@@ -203,6 +205,7 @@
     loadDir();
     socketEvents.forEach((e) => socket.on(e.name, e.handler));
     return () => {
+      isMounted = false;
       socketEvents.forEach((e) => socket.off(e.name, e.handler));
     };
   });

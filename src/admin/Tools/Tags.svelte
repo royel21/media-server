@@ -9,6 +9,7 @@
   let filter = "";
   let filtered = [];
   let editing = "";
+  let isMounted = true;
 
   const filterTags = (tag) => {
     return tag.toLocaleLowerCase().includes(filter.toLocaleLowerCase());
@@ -61,9 +62,19 @@
     }
   };
 
+  const load = async () => {
+    const result = await apiUtils.get(["admin", "folders", "tags"]);
+    if (isMounted) {
+      items = await apiUtils.get(["admin", "folders", "tags"]);
+      filtered = items.sort();
+    }
+  };
+
   onMount(async () => {
-    items = await apiUtils.get(["admin", "folders", "tags"]);
-    filtered = items.sort();
+    load();
+    return () => {
+      isMounted = false;
+    };
   });
   $: filter, (filtered = items.filter(filterTags));
 </script>

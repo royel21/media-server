@@ -20,6 +20,7 @@
   let showModal = false;
   let modalType = {};
   let rows;
+  let isMounted = true;
 
   const calRows = () => {
     let container = document.querySelector(".list-container") || {};
@@ -31,7 +32,7 @@
     rows = calRows();
     const data = await apiUtils.admin(["files", pg, rows, filter]);
 
-    if (data.files) {
+    if (data.files && isMounted) {
       items = data.files;
       totalPages = data.totalPages || 0;
       totalItems = data.totalItems || 0;
@@ -40,27 +41,32 @@
     }
   };
 
+  const onFileRename = (data) => {
+    if (data.success) {
+      file.Name = data.Name;
+      items = items;
+      hideModal();
+    }
+  };
+
+  const onFileRemoved = (data) => {
+    if (data.success) {
+      loadFiles(currentPage);
+      hideModal();
+    }
+  };
+
   onMount(async () => {
     loadFiles(1);
-    socket.on("file-renamed", (data) => {
-      if (data.success) {
-        file.Name = data.Name;
-        items = items;
-        hideModal();
-      }
-    });
+    socket.on("file-renamed", onFileRename);
 
-    socket.on("file-removed", (data) => {
-      if (data.success) {
-        loadFiles(currentPage);
-        hideModal();
-      }
-    });
+    socket.on("file-removed", onFileRemoved);
   });
 
   onDestroy(() => {
-    delete socket._callbacks["$file-renamed"];
-    delete socket._callbacks["$file-removed"];
+    isMounted = false;
+    delete socket.off("file-renamed", onFileRename);
+    delete socket.off("file-removed", onFileRemoved);
   });
 
   const onFilter = (event) => {

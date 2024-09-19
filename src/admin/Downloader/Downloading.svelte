@@ -8,10 +8,10 @@
   import LinkPager from "./LinkPager.svelte";
   import LinkTable from "./LinkTable.svelte";
 
-  let start = 0;
   let running = false;
   let showDownList = false;
   let servers = [];
+  let isMounted = true;
 
   const socket = getContext("socket");
 
@@ -40,7 +40,7 @@
       first: true,
     });
 
-    if (result.links) {
+    if (result.links && isMounted) {
       servers = result.servers;
       datas.links = result.links;
       datas.totalPages = result.totalPages;
@@ -96,6 +96,7 @@
     socket.on("reload-downloads", loadItems);
     socket.emit("download-server", { action: "is-running" });
     return () => {
+      isMounted = false;
       socket.off("update-download", onUpdate);
       socket.off("is-running", updateRunning);
     };

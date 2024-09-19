@@ -20,6 +20,7 @@
   let serverId = localStorage.getItem("server");
   let server = { Id: serverId };
   let servers = [];
+  let isMounted = true;
 
   const datas = {
     links: [],
@@ -40,14 +41,16 @@
       first,
     });
 
-    if (result.servers) {
-      servers = result.servers;
-      server = servers.find((sv) => sv.Id.toString() === serverId) || servers[0] || {};
-    }
-    if (result.links) {
-      datas.links = result.links;
-      datas.totalPages = result.totalPages;
-      datas.totalItems = result.totalItems;
+    if (isMounted) {
+      if (result.servers) {
+        servers = result.servers;
+        server = servers.find((sv) => sv.Id.toString() === serverId) || servers[0] || {};
+      }
+      if (result.links) {
+        datas.links = result.links;
+        datas.totalPages = result.totalPages;
+        datas.totalItems = result.totalItems;
+      }
     }
     loading = false;
   };
@@ -134,6 +137,7 @@
     socket.emit("download-server", { action: "is-running" });
     socket.on("is-running", updateRunning);
     return () => {
+      isMounted = false;
       socket.off("is-running", updateRunning);
     };
   });

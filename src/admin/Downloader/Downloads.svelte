@@ -19,6 +19,7 @@
   let showExcludeChapModal;
   let running = false;
   let showServerList = false;
+  let isMounted = true;
 
   const socket = getContext("socket");
 
@@ -46,12 +47,14 @@
       first,
     });
 
-    if (result.servers) servers = result.servers;
+    if (isMounted) {
+      if (result.servers) servers = result.servers;
 
-    if (result.links) {
-      datas.links = result.links;
-      datas.totalPages = result.totalPages;
-      datas.totalItems = result.totalItems;
+      if (result.links) {
+        datas.links = result.links;
+        datas.totalPages = result.totalPages;
+        datas.totalItems = result.totalItems;
+      }
     }
   };
 
@@ -100,6 +103,7 @@
     socket.emit("download-server", { action: "is-running" });
     socket.on("is-running", updateRunning);
     return () => {
+      isMounted = false;
       socket.off("is-running", updateRunning);
     };
   });
