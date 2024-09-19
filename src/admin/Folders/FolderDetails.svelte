@@ -77,7 +77,9 @@
   };
 
   const copyName = async () => {
-    await navigator.clipboard?.writeText(folder.Name);
+    if (folder.Name) {
+      await navigator.clipboard?.writeText(folder.Name);
+    }
   };
 
   const onUrl = ({ target: { value } }) => {
