@@ -104,6 +104,7 @@
     socket.on("is-running", updateRunning);
     return () => {
       isMounted = false;
+      apiUtils.cancelQuery();
       socket.off("is-running", updateRunning);
     };
   });

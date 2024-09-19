@@ -42,6 +42,7 @@
     socket.on("reload-backups", reload);
     return () => {
       isMounted = false;
+      apiUtils.cancelQuery();
       socket.off("reload-backups", reload);
     };
   });

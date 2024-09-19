@@ -97,6 +97,7 @@
     socket.emit("download-server", { action: "is-running" });
     return () => {
       isMounted = false;
+      apiUtils.cancelQuery();
       socket.off("update-download", onUpdate);
       socket.off("is-running", updateRunning);
     };

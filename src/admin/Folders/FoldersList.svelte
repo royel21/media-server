@@ -1,5 +1,5 @@
 <script>
-  import { onMount, getContext, createEventDispatcher } from "svelte";
+  import { onMount, getContext, createEventDispatcher, onDestroy } from "svelte";
   import { navigate } from "svelte-routing";
 
   import ItemList from "./ItemList.svelte";
@@ -200,14 +200,16 @@
     { name: "reload", handler: scanFinish },
   ];
 
-  onMount(() => {
-    loadFolders(page);
-    loadDir();
+  onMount(async () => {
+    await loadFolders(page);
+    await loadDir();
     socketEvents.forEach((e) => socket.on(e.name, e.handler));
-    return () => {
-      isMounted = false;
-      socketEvents.forEach((e) => socket.off(e.name, e.handler));
-    };
+  });
+
+  onDestroy(() => {
+    isMounted = false;
+    apiUtils.cancelQuery();
+    socketEvents.forEach((e) => socket.off(e.name, e.handler));
   });
 
   $: document.title = `Folders/${dirs.find((d) => d.Id === currentDir)?.FullPath || "All"}/${page}/${filter || ""}`;

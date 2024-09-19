@@ -65,6 +65,7 @@
 
   onDestroy(() => {
     isMounted = false;
+    apiUtils.cancelQuery();
     delete socket.off("file-renamed", onFileRename);
     delete socket.off("file-removed", onFileRemoved);
   });

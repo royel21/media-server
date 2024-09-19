@@ -1,4 +1,8 @@
+let postController;
+
 export const post = async (route, params) => {
+  postController?.abort();
+  postController = new AbortController();
   try {
     return await fetch(`/api/${route}`, {
       method: "POST",
@@ -6,6 +10,7 @@ export const post = async (route, params) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(params),
+      signal: postController.signal,
     }).then((res) => res.json());
   } catch (error) {
     return { error, valid: false };
@@ -22,10 +27,13 @@ export const postFile = async (route, data) => {
   return await fetch(`/api/${route}`, { method: "POST", body }).then((res) => res.json());
 };
 
+let getController;
 export const get = async (route) => {
+  getController?.abort();
+  getController = new AbortController();
   const url = ["/api", ...route].filter((p) => p).join("/");
   try {
-    return await fetch(url).then((res) => res.json());
+    return await fetch(url, { signal: getController.signal }).then((res) => res.json());
   } catch (error) {
     return { error, valid: false };
   }
@@ -37,7 +45,6 @@ const admin = async (path) => get(["admin", ...path]);
 const files = async (path) => get(["files", ...path]);
 
 let controller;
-
 export const getItemsList = async (url) => {
   try {
     controller?.abort();
@@ -49,6 +56,10 @@ export const getItemsList = async (url) => {
   }
 };
 
+export const cancelQuery = () => {
+  controller?.abort();
+};
+
 export default {
   get,
   post,
@@ -56,4 +67,5 @@ export default {
   files,
   postFav,
   postFile,
+  cancelQuery,
 };
