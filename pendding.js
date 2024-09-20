@@ -1,0 +1,27 @@
+[
+  "Boruto Naruto Next Generations",
+  "Castervania TV S1",
+  "Castervania TV S2",
+  "Detective Conan",
+  "Fruits Basket S1",
+  "God Eater",
+  "Hack Roots",
+  "JoJo no Kimyou Diamond wa Kudakenai",
+  "Koi Kaze",
+  "One Room S1",
+  "One Room S2",
+  "One Room S3",
+  "Orange",
+  "Revenger",
+  "RPG Fudousan",
+  "Samurai X Rurouni Kenshin Live Action",
+  "Soul Buster",
+  "The Fate Of Arad",
+  "The Law Of Ueki",
+];
+[
+  "Henshucho Motto Kaikan wo Oshiete Kudasai jukuren Teku de Himitsu no Sex Shinan",
+  "My XL Size Boss Is Giving Me Pleasure With Toys Again Today",
+  "Provocative Woman",
+  "The Imprisoned Saint Goes Wild at Night",
+];

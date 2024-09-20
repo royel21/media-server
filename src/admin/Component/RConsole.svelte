@@ -54,7 +54,9 @@
 
   const loadEvents = async (pg = 1) => {
     const result = await apiUtils.get(["admin", "downloader", "events", pg]);
-    setConsoleData(result);
+    if (!result.error) {
+      setConsoleData(result);
+    }
   };
 
   const onMouseDown = (e) => {
