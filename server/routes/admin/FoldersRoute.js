@@ -64,7 +64,8 @@ const getData = async ({ params }, res) => {
 
 routes.get("/dirs", async (req, res) => {
   const dirs = await db.directory.findAll({ order: [literal(`LOWER(FullPath)`)] });
-  res.send([...dirs.map((d) => d.dataValues)]);
+  const tags = fs.readJSONSync(tagsPath);
+  res.send({ tags, dirs: [...dirs.map((d) => d.dataValues)] });
 });
 
 routes.get("/folder-raw/:Id", async (req, res) => {
@@ -112,16 +113,16 @@ routes.post("/folder-create", async (req, res) => {
   try {
     const dir = await db.directory.findOne({ where: { Id: req.body.DirectoryId } });
     const file = {
+      Status: 0,
       ...req.body,
       CreatedAt: new Date(),
       Path: path.join(dir.FullPath, req.body.Name),
-      Status: 0,
       Type: "Folder",
     };
 
     const folder = await db.folder.create(file);
     const exist = fs.existsSync(folder.Path);
-    return res.send({ valid: true, Id: exist ? folder.Id : "" });
+    return res.send({ valid: true, Id: folder.Id, exist });
   } catch (error) {
     console.log(error);
     return res.send({ error: "Error Creating Folder" });

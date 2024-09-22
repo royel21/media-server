@@ -333,6 +333,16 @@ input[type="range"]::-moz-range-track {
 
   .file {
     width: 190px;
+    margin: 10px 1px;
+  }
+
+  .file-info {
+    height: 340px;
+    min-height: 340px;
+  }
+
+  .file-cover {
+    height: 250px;
   }
 
   .file-info {

@@ -6,6 +6,7 @@
   import Select from "../Component/Select.svelte";
   import TextAreaInput from "../Component/TextAreaInput.svelte";
   import { validGenres } from "../Utils";
+  import Input from "../Component/Input.svelte";
 
   export let error = "";
   export let ref = null;
@@ -13,13 +14,14 @@
   export let socket;
 
   let message = "";
+  let tags = [];
 
   const types = [
     { Id: "mangas", Name: "Mangas" },
     { Id: "videos", Name: "Videos" },
   ];
 
-  let file = { FilesType: "mangas", DirectoryId: "Select Directory" };
+  let file = { FilesType: "mangas", DirectoryId: "Select Directory", Genres: "" };
 
   let options = [];
 
@@ -33,11 +35,21 @@
       return (error = "Select A Directory");
     }
 
+    if (file.Status) {
+      file.Genres = validGenres(file.Genres + ", Completed", tags);
+    }
+
     const result = await apiUtils.post("admin/folders/folder-create", file);
     error = result.error;
     if (result.valid) {
+      if (/^http/.test(file.Cover)) {
+        socket.emit("download-server", {
+          action: "Create-Cover",
+          datas: { Id: result.Id, imgUrl: file.Cover },
+        });
+      }
       message = `Folder: ${file.Name} Create Succefully`;
-      if (result.Id) {
+      if (result.exist) {
         socket.emit("scan-dir", { Id: result.Id, isFolder: true });
       }
     }
@@ -45,13 +57,16 @@
 
   const onChange = ({ target: { name, value, checked, type } }) => {
     if (type === "checkbox") value = checked;
-    if (name === "Genres") value = validGenres(value);
+    if (name === "Genres") value = validGenres(value, tags);
     file[name] = value;
   };
 
   onMount(async () => {
     const data = await apiUtils.admin(["folders", "dirs"]);
-    options = [{ Name: "Select Directory" }, ...data.map((d) => ({ Id: d.Id, Name: d.FullPath }))];
+    if (data.dirs) {
+      tags = data.tags || [];
+      options = [{ Name: "Select Directory" }, ...data.dirs.map((d) => ({ Id: d.Id, Name: d.FullPath }))];
+    }
   });
 
   const onKeyDown = (e) => {
@@ -70,6 +85,9 @@
         <TextAreaInput {file} key="AltName" style="margin-bottom: 5px" rows="3" {onChange} />
         <TextAreaInput {file} key="Genres" style="margin-bottom: 5px" rows="2" {onChange} />
         <TextAreaInput {file} key="Description" rows="4" {onChange} />
+        <Input key="Author" item={file} {onChange} sept=", " />
+        <Input key="Server" item={file} {onChange} />
+        <Input key="Cover" item={file} {onChange} />
         <CheckBox label="Completed" key="Status" item={file} />
         <CheckBox label="Is Adult" key="IsAdult" item={file} />
         <Select label="Files Type" key="FilesType" options={types} item={file} {onChange} />
@@ -107,6 +125,17 @@
   @media screen and (max-width: 450px) {
     .modal {
       width: 390px;
+    }
+  }
+
+  @media screen and (max-height: 700px) {
+    .modal-container {
+      overflow-y: auto;
+      padding-top: 10px;
+    }
+    .modal {
+      margin-top: auto;
+      margin-bottom: 20px;
     }
   }
 </style>

@@ -13,7 +13,7 @@
 </script>
 
 <div class="input-control">
-  <span style={`width: ${width};`}>
+  <span style={width ? `width: ${width};` : ""}>
     {#if label}
       {label || name}
     {:else}

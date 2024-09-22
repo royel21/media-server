@@ -8,7 +8,7 @@ export const validGenres = (g, tags) => {
   const parts = g.match(regex) || [];
 
   const gens = new Set([...parts, ...g.replace(regex, "").split(/,|\/|\n| /g)].sort());
-  return [...gens].filter((g) => g).join(", ");
+  return [...gens].filter((g) => g.trim()).join(", ");
 };
 
 export const validateAuthor = (auth) => {

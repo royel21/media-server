@@ -1,21 +1,11 @@
 const getImage = async () => {
   const item_list = await navigator.clipboard?.read();
-  let image_type; // we will feed this later
-  const item = item_list.find(
-    (
-      item // choose the one item holding our image
-    ) =>
-      item.types.some((type) => {
-        // does this item have our type
-        if (type.startsWith("image/")) {
-          image_type = type; // store which kind of image type it is
-          return true;
-        }
-      })
-  );
-  const file = item && (await item.getType(image_type));
-
-  return file;
+  for (const item of item_list || []) {
+    const image_type = item.types.some((type) => /image\//.test(type));
+    if (image_type) {
+      return item.getType(image_type);
+    }
+  }
 };
 
 export const handlerPaste = async (item, key, sept, ref) => {

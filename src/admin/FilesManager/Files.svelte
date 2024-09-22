@@ -166,8 +166,9 @@
 
 <style>
   .list-container {
-    height: calc(100% - 80px);
-    overflow: auto;
+    height: calc(100% - 70px);
+    margin-bottom: 5px;
+    overflow-x: auto;
   }
   .list-container :global(.input-control) {
     margin: 0;
