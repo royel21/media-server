@@ -1,8 +1,8 @@
-let postController;
+let controller = {};
 
-export const post = async (route, params) => {
-  postController?.abort();
-  postController = new AbortController();
+export const post = async (route, params, key = "post") => {
+  controller[key]?.abort();
+  controller[key] = new AbortController();
   try {
     return await fetch(`/api/${route}`, {
       method: "POST",
@@ -10,7 +10,7 @@ export const post = async (route, params) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(params),
-      signal: postController.signal,
+      signal: controller[key].signal,
     }).then((res) => res.json());
   } catch (error) {
     return { error, valid: false };
@@ -27,13 +27,12 @@ export const postFile = async (route, data) => {
   return await fetch(`/api/${route}`, { method: "POST", body }).then((res) => res.json());
 };
 
-let getController;
-export const get = async (route) => {
-  getController?.abort();
-  getController = new AbortController();
+export const get = async (route, key = "get") => {
+  controller[key]?.abort();
+  controller[key] = new AbortController();
   const url = ["/api", ...route].filter((p) => p).join("/");
   try {
-    return await fetch(url, { signal: getController.signal }).then((res) => res.json());
+    return await fetch(url, { signal: controller[key].signal }).then((res) => res.json());
   } catch (error) {
     return { error, valid: false };
   }
@@ -41,23 +40,22 @@ export const get = async (route) => {
 
 export const postFav = async (route, params) => post("files/favorites/" + route, params);
 
-const admin = async (path) => get(["admin", ...path]);
-const files = async (path) => get(["files", ...path]);
+const admin = async (path, key = "get") => get(["admin", ...path], key);
+const files = async (path, key = "get") => get(["files", ...path], key);
 
-let controller;
-export const getItemsList = async (url) => {
+export const getItemsList = async (url, key = "item-list") => {
   try {
-    controller?.abort();
-    controller = new AbortController();
+    controller[key]?.abort();
+    controller[key] = new AbortController();
 
-    return await fetch(url, { signal: controller.signal }).then((res) => res.json());
+    return await fetch(url, { signal: controller[key].signal }).then((res) => res.json());
   } catch (error) {
     return { valid: false, error };
   }
 };
 
-export const cancelQuery = () => {
-  controller?.abort();
+export const cancelQuery = (key) => {
+  controller[key]?.abort();
 };
 
 export default {

@@ -153,6 +153,18 @@
     {#each pageData.files as { Id, Name, Type, CurrentPos, Duration, isFav, FilesType, FileCount, LastChapter, Status, CreatedAt, Size, isRaw }}
       <div class="file" id={Id} data-type={Type} tabIndex="0" in:fade>
         <div class="file-info">
+          <div class="file-cover usn" on:dblclick|stopPropagation={openFile}>
+            <LazyImage cover={getCover(Type, Name, FilesType) + `?v=${ver}`} />
+            {#if Type.includes("Folder")}
+              <span class="f-status" class:completed={Status}>{Status ? "Completed" : "OnGoing"}</span>
+              <span class="f-raw" class:hidden={!isRaw}>Raw</span>
+            {:else}
+              <span class="file-date">
+                <span>{(Size / 1025 / 1024).toFixed(2)}mb</span>
+                <span>{new Date(CreatedAt)?.toLocaleDateString("en-us", dateFormat)}</span>
+              </span>
+            {/if}
+          </div>
           <div class="file-btns usn">
             <span class="file-btn-left" on:click|stopPropagation={openFile} on:keydown>
               <Icons name={FileTypes[Type].class} height="22px" color={FileTypes[Type].color} />
@@ -170,18 +182,6 @@
               {:else}
                 <FavoriteList {isFav} {type} {favClicked} favId={id} on:removeFile={removeFile} />
               {/if}
-            {/if}
-          </div>
-          <div class="file-cover usn" on:dblclick|stopPropagation={openFile}>
-            <LazyImage cover={getCover(Type, Name, FilesType) + `?v=${ver}`} />
-            {#if Type.includes("Folder")}
-              <span class="f-status" class:completed={Status}>{Status ? "Completed" : "OnGoing"}</span>
-              <span class="f-raw" class:hidden={!isRaw}>Raw</span>
-            {:else}
-              <span class="file-date">
-                <span>{(Size / 1025 / 1024).toFixed(2)}mb</span>
-                <span>{new Date(CreatedAt)?.toLocaleDateString("en-us", dateFormat)}</span>
-              </span>
             {/if}
           </div>
           <div class="file-name" title={Type !== "Folder" ? Name : ""}>{Name}</div>

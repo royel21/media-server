@@ -52,7 +52,7 @@
 
   ul {
     position: absolute;
-    top: 2px;
+    bottom: 0px;
     right: 32px;
     z-index: 1;
     background: rgb(3, 162, 236);
@@ -63,7 +63,7 @@
     display: inline-block;
     content: " ";
     position: absolute;
-    top: 8px;
+    bottom: 8px;
     right: -5px;
     width: 10px;
     height: 10px;

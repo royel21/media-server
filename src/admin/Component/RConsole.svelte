@@ -7,12 +7,13 @@
   let ref;
   let items = [];
   let toggle = true;
-  let canShow = /configs|downloads/.test(location.pathname);
   let update = false;
   let dragger;
   let rconsole;
   let expanded = false;
   const state = { height: 180 };
+  const tabRex = /configs|downloads|content-manager/gi;
+  let canShow = tabRex.test(location.pathname);
 
   const socket = getContext("socket");
 
@@ -93,7 +94,7 @@
   });
 
   $: if (update) {
-    canShow = /configs|downloads/i.test(location.pathname);
+    canShow = tabRex.test(location.pathname);
   }
 </script>
 

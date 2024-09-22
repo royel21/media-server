@@ -1,5 +1,5 @@
 <script>
-  import { afterUpdate } from "svelte";
+  import { afterUpdate, onDestroy } from "svelte";
   import { navigate } from "svelte-routing";
   import { getFilesPerPage, ProcessFile } from "./filesUtils";
 
@@ -20,14 +20,15 @@
 
   let title = "Home";
   let reload = true;
+  let isMounted = true;
 
   let pageData = { items: [], page: page || 1, totalPages: 0, totalFiles: 0 };
 
   const loadContent = async (pg, flt = "") => {
     if (reload) {
       const items = $ConfigStore.Home.items || getFilesPerPage(3);
-      const data = await api.files(["recents", items, pg, encodeURIComponent(flt)]);
-      if (data.valid) {
+      const data = await api.files(["recents", items, pg, encodeURIComponent(flt)], "home");
+      if (data.valid && isMounted) {
         pageData = data;
         if (+pg !== +data.page) {
           reload = false;
@@ -57,7 +58,7 @@
       if (document.querySelectorAll(".file").length === 1) {
         page = clamp(page - 1, 1, pageData.totalPages);
       }
-      loadContent(page, filter);
+      await loadContent(page, filter);
     }
   };
 
@@ -68,6 +69,11 @@
   ToggleMenu.set(false);
 
   $: $ConfigStore, loadContent(page, filter);
+
+  onDestroy(() => {
+    isMounted = false;
+    api.cancelQuery("home");
+  });
 
   afterUpdate(() => selectByTitle(title));
 
@@ -86,6 +92,11 @@
     {#each pageData.items as { Id, Name, Type, LastChapter, FileCount, FilesType, Status, isRaw }, i}
       <div class="file" id={Id} data-type={Type} data-types={FilesType} tabIndex="0" on:click={handleClick} on:keydown>
         <div class="file-info">
+          <div class="file-cover" on:dblclick|stopPropagation={openFolder}>
+            <LazyImage cover={encodeURI(`/${Type}/${FilesType}/${Name}.jpg`)} />
+            <span class="f-status" class:completed={Status}>{Status ? "Completed" : "OnGoing"}</span>
+            <span class="f-raw" class:hidden={!isRaw}>Raw</span>
+          </div>
           <div class="file-btns">
             <span class="file-btn-left" on:click|stopPropagation={openFolder} on:keydown>
               <Icons {...folderIcon} />
@@ -94,11 +105,6 @@
             <span class="remove" on:click|stopPropagation={removeRecent} on:keydown>
               <Icons name="trash" color="rgba(252, 1, 1, 0.856)" />
             </span>
-          </div>
-          <div class="file-cover" on:dblclick|stopPropagation={openFolder}>
-            <LazyImage cover={encodeURI(`/${Type}/${FilesType}/${Name}.jpg`)} />
-            <span class="f-status" class:completed={Status}>{Status ? "Completed" : "OnGoing"}</span>
-            <span class="f-raw" class:hidden={!isRaw}>Raw</span>
           </div>
           <div class="file-name">{Name}</div>
         </div>
