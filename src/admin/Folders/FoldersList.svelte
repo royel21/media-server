@@ -41,8 +41,8 @@
 
   const loadDir = async () => {
     const data = await apiUtils.admin(["folders", "dirs"]);
-    if (data?.length && isMounted) {
-      dirs = data;
+    if (data?.dirs && isMounted) {
+      dirs = data.dirs;
     }
   };
 
