@@ -120,7 +120,7 @@ const download = async (link, page, server, state) => {
   data.name = nameFormat(data.name.split("|")[0].trim());
   let filePath = path.join(curDir, data.name);
 
-  const Name = { [db.Op.like]: `%${data.name.replace(" [Digital]", "")}%` };
+  const Name = { [db.Op.like]: `%${data.name.replace(" [Digital]", "").replace(/\[.*.\] /, "")}%` };
   let found = (await db.file.findOne({ where: { Name } })) && fs.existsSync(filePath + ".zip");
 
   if (!found) {
@@ -184,11 +184,10 @@ const download = async (link, page, server, state) => {
         await link.update({ Name, IsDowloanding: false });
       }
     }
-  }
-
-  if (found) {
+  } else {
     await link.destroy();
     process.send({ event: "link-update", data: { Id: link.Id, ServerId: server.Id } });
+    sendMessage({ text: `Exist: ${data.name}\n` });
   }
 };
 

@@ -23,8 +23,7 @@
   };
   ConsoleStore.subscribe((value) => (items = value));
 
-  socket.off("info", updateConsole);
-  socket.on("info", (data) => {
+  const onData = (data) => {
     if (data.text) {
       updateConsole(data);
     }
@@ -32,13 +31,9 @@
     if (data.error) {
       console.log(data.error);
     }
-  });
+  };
 
   const toggleConsole = () => {};
-
-  onDestroy(() => {
-    socket.off("info", updateConsole);
-  });
 
   const onNavigate = ({ currentTarget: { currentEntry } }) => {
     update = currentEntry.url;
@@ -64,6 +59,7 @@
   };
 
   onMount(() => {
+    socket.on("info", onData);
     loadEvents();
     const onMouseMove = (e) => {
       if (state.dragge) {
@@ -79,6 +75,7 @@
     document.addEventListener("mouseleave", resetState);
     navigation.addEventListener("navigate", onNavigate);
     return () => {
+      socket.off("info", onData);
       window.removeEventListener("mousemove", onMouseMove);
       document.removeEventListener("mouseup", resetState);
       document.removeEventListener("mouseleave", resetState);
