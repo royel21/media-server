@@ -148,7 +148,7 @@ const download = async (link, page, server, state) => {
         const url = initalUrl.replace(`/1.${ex}`, `/${i}.${newEX}`);
 
         if (f > 2) {
-          sendMessage({ text: `Error ${url} was no properly downloaded` + error.toString(), color: "red", error });
+          sendMessage({ text: `FormatError: ${f} unkown`, color: "red" });
           break;
         }
 
@@ -180,6 +180,8 @@ const download = async (link, page, server, state) => {
         await link.destroy();
         sendMessage({ text: `Save: ${data.name}\n` });
         await folder.update({ FileCount: folder.FileCount + 1 });
+      } else {
+        await link.update({ Name, IsDowloanding: false });
       }
     }
   }

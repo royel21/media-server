@@ -12,7 +12,7 @@
   let rconsole;
   let expanded = false;
   const state = { height: 180 };
-  const tabRex = /configs|downloads|content-manager/gi;
+  const tabRex = /configs|downloads|content-manager/;
   let canShow = tabRex.test(location.pathname);
 
   const socket = getContext("socket");
@@ -23,6 +23,7 @@
   };
   ConsoleStore.subscribe((value) => (items = value));
 
+  socket.off("info", updateConsole);
   socket.on("info", (data) => {
     if (data.text) {
       updateConsole(data);
@@ -39,12 +40,8 @@
     socket.off("info", updateConsole);
   });
 
-  afterUpdate(() => {
-    ref?.querySelector("div:last-child")?.scrollIntoView();
-  });
-
   const onNavigate = ({ currentTarget: { currentEntry } }) => {
-    update = currentEntry.id;
+    update = currentEntry.url;
   };
 
   const onExpand = () => {
@@ -76,7 +73,8 @@
 
     const resetState = (e) => (state.dragge = false);
 
-    window.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("touchmove", onMouseMove);
     document.addEventListener("mouseup", resetState);
     document.addEventListener("mouseleave", resetState);
     navigation.addEventListener("navigate", onNavigate);
@@ -89,12 +87,13 @@
   }, []);
 
   afterUpdate(() => {
+    ref?.querySelector("div:last-child")?.scrollIntoView();
     dragger?.removeEventListener("mousedown", onMouseDown);
     dragger?.addEventListener("mousedown", onMouseDown);
   });
 
   $: if (update) {
-    canShow = tabRex.test(location.pathname);
+    canShow = tabRex.test(update);
   }
 </script>
 
@@ -104,7 +103,7 @@
     <Icons name={toggle ? "eyeslash" : "eye"} box="0 0 564 512" width="30px" height="20px" />
   </label>
   <div class="cls-container" bind:this={rconsole} class:hide-dragg={items.length === 0 || !toggle}>
-    <div class="dragger" bind:this={dragger} />
+    <div class="dragger" bind:this={dragger} on:touchstart={onExpand} />
     {#if toggle && items.length}
       <div class="r-console" on:dblclick={onExpand}>
         <span class="clean" on:keydown on:click={onClear}><Icons name="trash" /></span>
