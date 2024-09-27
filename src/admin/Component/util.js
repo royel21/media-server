@@ -1,7 +1,7 @@
 const getImage = async () => {
   const item_list = await navigator.clipboard?.read();
   for (const item of item_list || []) {
-    const image_type = item.types.some((type) => /image\//.test(type));
+    const image_type = item.types.find((type) => /image\//.test(type));
     if (image_type) {
       return item.getType(image_type);
     }
