@@ -5,8 +5,9 @@
   import { navigate } from "svelte-routing";
   export let dirs;
   export let item;
+  export let title = "";
 
-  let data = { items: { others: [], adults: [] }, current: "" };
+  let data = { items: { others: [], adults: [] }, current: "all" };
 
   const select = ({ target }) => {
     const id = target.closest("li").id || target.id;
@@ -15,9 +16,10 @@
   };
 
   $: if (dirs.Mangas.length) {
-    const others = dirs[item.title].filter((i) => !i.IsAdult);
-    const adults = dirs[item.title].filter((i) => i.IsAdult);
-    let current = others[0]?.Id || "";
+    const others = [...dirs[item.title].filter((i) => !i.IsAdult && i.Id !== "all")];
+    const adults = [...dirs[item.title].filter((i) => i.IsAdult && i.Id !== "all")];
+
+    const current = location.pathname.split("/").pop() || data.current;
 
     data = {
       items: {
@@ -29,18 +31,33 @@
   }
 </script>
 
-<li class="nav-item" on:click={select} id={data.items.others[0]?.Id}>
+<li class="nav-item" on:click={select} id="all">
   <Link to={`${item.path}/${data.current}`} {getProps}>
     <Icons name={item.class} height="22px" color={item.color} />
     <span class="nav-title">{item.title}</span>
     {#if data.items}
       <ul class="down-list">
-        {#each data.items.others as { Id, Name }}
-          <li class="list-item" id={Id} class:selected={Id === data.current}>
-            <span>{Name}</span>
+        <li class="list-item" id="all" class:selected={"all" === data.current}>
+          <span>All</span>
+        </li>
+        {#if data.items.adults.length === 0}
+          {#each data.items.others as { Id, Name }}
+            <li class="list-item" id={Id} class:selected={Id === data.current}>
+              <span>{Name}</span>
+            </li>
+          {/each}
+        {:else}
+          <li class="list-item s-list" id={data.items.others[0]?.Id}>
+            {title}
+            <span>&gt;</span>
+            <ul class="sub-list">
+              {#each data.items.others as { Id, Name }}
+                <li class="list-item" id={Id} class:selected={Id === data.current}>
+                  <span>{Name}</span>
+                </li>
+              {/each}
+            </ul>
           </li>
-        {/each}
-        {#if data.items.adults.length > 0}
           <li class="list-item s-list adult" id={data.items.adults[0]?.Id}>
             R18
             {#if data.items.adults.length > 1}

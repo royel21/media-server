@@ -18,7 +18,7 @@
   <ul class="navbar-nav">
     {#each navItems as item}
       {#if filters.includes(item.title)}
-        <NavItem {dirs} {item} slot="nav-item" />
+        <NavItem {dirs} {item} slot="nav-item" title={item.title} />
       {:else}
         <li class="nav-item">
           <Link to={item.path} {getProps}>
