@@ -435,7 +435,7 @@ export const evaleLinks = async (query) => {
 
   if (query.Name.includes("mangas.in")) {
     for (let img of imgs) {
-      while (img.src.includes("loading.gif")) {
+      while (/aHR0cHMl|loading.gif/.test(img.src)) {
         img?.scrollIntoView();
         await delay(100);
       }
@@ -452,14 +452,14 @@ export const evaleLinks = async (query) => {
     const { src, dataset } = img;
     let nSrc = (dataset.lazySrc || dataset.src || dataset.lzlSrc || src)?.trim();
 
-    // if (img.width < 100) continue;
-
     if (/\.(ico|svg|com$)/.test(nSrc)) continue;
 
     if (location.href.includes("mangaclash")) {
       if (nSrc.includes("mangaclash")) {
         data.push(nSrc);
       }
+    } else if (location.href.includes("mangas.in")) {
+      data.push(src);
     } else {
       data.push(nSrc);
     }
