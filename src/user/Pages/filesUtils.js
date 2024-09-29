@@ -69,6 +69,7 @@ export const ProcessFile = (file, type, title) => {
   const folderId = file.id;
   const { pathname } = location;
 
+  saveId(title, folderId);
   switch (file.dataset.type) {
     case "Manga":
     case "Video": {
@@ -81,7 +82,6 @@ export const ProcessFile = (file, type, title) => {
       break;
     }
     default: {
-      saveId(title, folderId);
       saveReturnPath("to-menu", pathname);
       type = type || pathname.split("/")[1];
       navigate(`/${type}/content/${folderId}/`);
