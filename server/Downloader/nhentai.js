@@ -73,6 +73,8 @@ const download = async (link, page, server, state) => {
         }
       }
 
+      name = name.replace(/\//g, "-");
+
       let showMore = document.querySelector("#show-all-images-button");
       const tagsDatas = document.querySelectorAll(".tags .tag > span:first-child");
 
