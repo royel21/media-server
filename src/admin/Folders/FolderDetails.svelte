@@ -26,7 +26,7 @@
   const loadDetails = async (Id) => {
     folder = { Id };
     imageData = { Id, Url: "", file: "" };
-    const data = await apiUtils.admin(["folders", "folder", Id]);
+    const data = await apiUtils.admin(["folders", "folder", Id], "fd");
     if (data.dirs) {
       imageData.Id = Id;
       options = data.dirs.map((d) => ({ Id: d.Id, Name: d.FullPath }));

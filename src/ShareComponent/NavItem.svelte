@@ -92,7 +92,7 @@
     position: absolute;
     top: 100.5%;
     left: 0;
-    min-width: 100%;
+    min-width: 75px;
     text-align: left;
     background-color: #343a40;
     border-radius: 0 0 0.25rem 0.25rem;
