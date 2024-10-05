@@ -73,7 +73,7 @@ const download = async (link, page, server, state) => {
         }
       }
 
-      name = name.replace(/\//g, "-");
+      name = name.replace(/\//g, "-").trim();
 
       let showMore = document.querySelector("#show-all-images-button");
       const tagsDatas = document.querySelectorAll(".tags .tag > span:first-child");
@@ -107,7 +107,6 @@ const download = async (link, page, server, state) => {
     }
   }, server.dataValues);
 
-  console.log("name: ", data.name, "total-pages: ", data.total, data.error);
   sendMessage({ text: `pages: ${data.total} - Name: ${data.name}` });
 
   if (!data.name) return;
@@ -119,10 +118,11 @@ const download = async (link, page, server, state) => {
     where: { Path: { [db.Op.like]: `%${curDir}%` } },
   });
 
-  data.name = nameFormat(data.name.split("|")[0].trim());
+  data.name = nameFormat(data.name);
   let filePath = path.join(curDir, data.name);
 
   const Name = { [db.Op.like]: `%${data.name.replace(" [Digital]", "").replace(/\[.*.\] /, "")}%` };
+  console.log("name: ", data.name, "total-pages: ", data.total, Name);
   let found = (await db.file.findOne({ where: { Name } })) && fs.existsSync(filePath + ".zip");
 
   if (!found) {

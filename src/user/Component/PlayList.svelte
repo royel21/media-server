@@ -72,7 +72,7 @@
   <div id="v-filter">
     <input name="clear-filters" type="text" bind:value={filter} placeholder="Filter" class="form-control" />
     <span class="clear-filter" on:click={() => (filter = "")}>
-      <Icons name="timescircle" />
+      <Icons name="timescircle" color="black" />
     </span>
   </div>
   <div id="p-list" bind:this={playList}>
