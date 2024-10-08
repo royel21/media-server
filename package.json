@@ -40,7 +40,6 @@
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "sequelize": "^6.23.2",
-    "sharp": "0.30.1",
     "socket.io": "^4.5.2",
     "sqlite3": "^5.1.1",
     "svelte": "^4.2.15",
@@ -55,7 +54,9 @@
     "puppeteer": "22.7.0",
     "puppeteer-core": "^22.13.0",
     "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-adblocker": "^2.13.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "sharp": "^0.33.5",
     "socket.io-client": "^4.5.2",
     "svelte-routing": "file:modules/svelte-routing",
     "zip-local": "^0.3.5"
