@@ -189,7 +189,7 @@ button:active {
   border-top-left-radius: 20%;
 }
 
-.file-cover .f-raw.hidden {
+.file-cover .hidden {
   display: none;
 }
 

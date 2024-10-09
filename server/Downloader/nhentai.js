@@ -145,8 +145,9 @@ const download = async (link, page, server, state) => {
       const cover = path.join(imageBasePath, data.name + ".zip.jpg");
       for (let i = 1; i < data.total + 1; ) {
         if (state.stopped) return;
-        const newImg = `${i.toString().padStart("3", "0")}.${newEX}`;
-        process.stdout.write(`\t\t\t\th: IMG: ${i} / ${data.total}\r`);
+        const padded = i.toString().padStart("3", "0");
+        const newImg = `${padded}.${newEX}`;
+        process.stdout.write(`\t\t\t\th: IMG: ${padded} / ${data.total}\r`);
         const url = initalUrl.replace(`/1.${ex}`, `/${i}.${newEX}`);
 
         if (f > 2) {

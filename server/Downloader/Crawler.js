@@ -6,8 +6,8 @@ import { sendMessage } from "./utils.js";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 puppeteer.use(StealthPlugin());
 
-// const addBlocker from "puppeteer-extra-plugin-adblocker");
-// puppeteer.use(addBlocker());
+import addBlocker from "puppeteer-extra-plugin-adblocker";
+puppeteer.use(addBlocker());
 
 export const delay = (ms) => {
   return new Promise((resolve) => {
@@ -52,15 +52,15 @@ export const createPage = async (browser, timeout = 180000) => {
 let pupeteer;
 
 export const startBrowser = async (config) => {
-    config.args = ["--no-sandbox", "--disable-gpu"];
-    config.headless = "new";
-    if (process.env.USE_DEV && os.platform() === "win32") {
-      config.headless = false;
-      config.executablePath = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
-      pupeteer = await puppeteerCore.launch(config);
-    } else {
-      pupeteer = await puppeteer.launch(config);
-    }
+  config.args = ["--no-sandbox", "--disable-gpu"];
+  config.headless = "new";
+  if (process.env.USE_DEV && os.platform() === "win32") {
+    config.headless = false;
+    config.executablePath = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
+    pupeteer = await puppeteerCore.launch(config);
+  } else {
+    pupeteer = await puppeteer.launch(config);
+  }
 
   return pupeteer;
 };
