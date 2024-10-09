@@ -327,9 +327,7 @@ export const adultEvalPage = async (query) => {
       if (fnum) {
         fileName = fnum[0] + " " + fileName;
       }
-    }
-
-    if (!/^\d+/i.test(fileName)) {
+    } else if (!/^\d+/i.test(fileName)) {
       // if name is extra and don't start with number
       fileName = `${extraCount++} ${fileName}`;
     }
@@ -396,18 +394,18 @@ export const adultEvalPage = async (query) => {
       }
     });
 
-    data = data
-      .reverse()
-      .map((d, i) => {
-        const num = d.name.match(/^\d+/);
-        let nextN = `${i + 1}`.padStart(3, "0");
+    // data = data
+    //   .reverse()
+    //   .map((d, i) => {
+    //     const num = d.name.match(/^\d+/);
+    //     let nextN = `${i + 1}`.padStart(3, "0");
 
-        if (!num || !d.name.includes(nextN)) {
-          d.name = nextN + " " + d.name;
-        }
-        return d;
-      })
-      .reverse();
+    //     if (!num || !d.name.includes(nextN)) {
+    //       d.name = nextN + " " + d.name;
+    //     }
+    //     return d;
+    //   })
+    //   .reverse();
   }
 
   let Status = /\nEnd\n|End\n/gi.test(title) || data.find((d) => / \[end\]$| end$| fin$/i.test(d.name)) ? 1 : 0;
