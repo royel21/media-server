@@ -322,6 +322,13 @@ export const adultEvalPage = async (query) => {
       fileName = fileName + " " + season[0];
     }
 
+    if (location.href.includes("mangas.in") && !/^\d+/i.test(fileName)) {
+      const fnum = a.closest("li")?.textContent.match(/\d+(.\d+|)/);
+      if (fnum) {
+        fileName = fnum[0] + " " + fileName;
+      }
+    }
+
     if (!/^\d+/i.test(fileName)) {
       // if name is extra and don't start with number
       fileName = `${extraCount++} ${fileName}`;
