@@ -163,7 +163,7 @@
     {#if transfer}
       <Select label="Directories" key="DirectoryId" {options} item={folder} {onChange} />
     {/if}
-    <Input key="Cover" item={imageData} onChange={onUrl} />
+    <Input key="Url" item={imageData} onChange={onUrl} />
   </div>
 </div>
 {#if isModified}
