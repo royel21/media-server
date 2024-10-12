@@ -424,15 +424,16 @@ export const evaleLinks = async (query) => {
   };
 
   if (query.Name.includes("kaliscan")) {
+    await delay(3000);
     let divs = document.querySelectorAll(".chapter-image");
     for (let div of divs) {
       div?.scrollIntoView();
-      let timeOut = 5;
-      while (!div.classList.contains("loaded"))
-        if (!timeOut--) {
-          await delay(100);
-          break;
-        }
+      await delay(query.Delay);
+    }
+  } else {
+    for (let img of imgs) {
+      img?.scrollIntoView();
+      await delay(query.Delay);
     }
   }
 
