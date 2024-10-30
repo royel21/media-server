@@ -40,7 +40,7 @@ const nameFormat = (name) => {
 const BASEPATH = defaultConfig.DownloadDir;
 
 const dirs = {
-  yaoi: path.join(BASEPATH, "R18", "Manga-Hentai", "Yaoi"),
+  yaoi: path.join(BASEPATH, "R18", "Yaoi"),
   anthology: path.join(BASEPATH, "R18", "Manga-Hentai", "Anthology"),
   nHentai: path.join(BASEPATH, "R18", "Manga-Hentai", "Tankoubon"),
 };
@@ -121,7 +121,7 @@ const download = async (link, page, server, state) => {
   data.name = nameFormat(data.name);
   let filePath = path.join(curDir, data.name);
 
-  const Name = { [db.Op.like]: `%${data.name.replace(" [Digital]", "").replace(/\[.*.\] /, "")}%` };
+  const Name = { [db.Op.like]: `%${data.name.replace(" [Digital]", "").replace(/^\[.*.\] /, "")}%` };
   console.log("name: ", data.name, "total-pages: ", data.total, Name);
   let found = (await db.file.findOne({ where: { Name } })) && fs.existsSync(filePath + ".zip");
 
@@ -139,7 +139,7 @@ const download = async (link, page, server, state) => {
 
       var zip = new AdmZip();
 
-      const imageBasePath = path.join(defaultConfig.ImagesDir, "Manga", folder.Name);
+      const imageBasePath = path.join(defaultConfig.ImagesDir, "Manga", data.name);
       createDir(imageBasePath);
 
       const cover = path.join(imageBasePath, data.name + ".zip.jpg");
@@ -179,10 +179,12 @@ const download = async (link, page, server, state) => {
 
       if (count >= data.total - 1 && data.name) {
         zip.writeZip(filePath + ".zip");
-        await createFile(filePath + ".zip", folder.Id, count);
+        if (folder) {
+          await createFile(filePath + ".zip", folder.Id, count);
+          await folder.update({ FileCount: folder.FileCount + 1 });
+        }
         await link.destroy();
         sendMessage({ text: `Save: ${data.name}\n` });
-        await folder.update({ FileCount: folder.FileCount + 1 });
       } else {
         await link.update({ Name, IsDowloanding: false });
       }

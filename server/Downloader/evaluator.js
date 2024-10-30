@@ -8,7 +8,7 @@ export const evaluetePage = (query) => {
   };
 
   const cleanNameRegx =
-    /18\+|\nEND| Webtoon|ONGOING|NEW|HOT\n|manga|\nNew shoujo Manhwa| – Mangagreat| - mangagreat| Manga| Comics$|\[HOT\] BY ISEKAISCAN/g;
+    /18\+|\nEND| Webtoon|ONGOING|NEW|HOT\n|manga|\nNew shoujo Manhwa| – Mangagreat| - mangagreat| Manga| Comics$|^Hot /g;
 
   let originalName = document.querySelector(query.Title).textContent.replace(cleanNameRegx, "").trim();
 
@@ -431,6 +431,7 @@ export const evaleLinks = async (query) => {
       await delay(query.Delay);
     }
   } else {
+    let imgs = document.querySelectorAll(query.Imgs);
     for (let img of imgs) {
       img?.scrollIntoView();
       await delay(query.Delay);

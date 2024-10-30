@@ -14,7 +14,7 @@ export default (sequelize) => {
       defaultValue: "",
     },
     AltName: {
-      type: STRING(150),
+      type: STRING,
       defaultValue: "",
     },
   });
