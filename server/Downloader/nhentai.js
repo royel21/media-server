@@ -143,6 +143,7 @@ const download = async (link, page, server, state) => {
       createDir(imageBasePath);
 
       const cover = path.join(imageBasePath, data.name + ".zip.jpg");
+      let creatCover = true;
       for (let i = 1; i < data.total + 1; ) {
         if (state.stopped) return;
         const padded = i.toString().padStart("3", "0");
@@ -164,7 +165,8 @@ const download = async (link, page, server, state) => {
             const buff = await img.toFormat("jpg").toBuffer();
             zip.addFile(newImg, buff);
             count++;
-            if (i === 1 && !fs.existsSync(cover)) {
+            if (creatCover && !fs.existsSync(cover)) {
+              creatCover = false;
               await saveThumbnail(buff, cover);
             }
             f = 0;
