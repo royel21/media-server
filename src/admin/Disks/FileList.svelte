@@ -86,9 +86,16 @@
     socket.off("files-info", onFileInfo);
   });
 
+  const getSize = () => {
+    let sum = 0;
+    filtered.forEach((f) => (sum += f.Size));
+    return (sum / 1024 / 1024 / 1024).toFixed(2) + "GB";
+  };
+
   $: isChecked = filtered.length && removeList.length === filtered.length;
   $: {
     filtered = files.filter((f) => f.Name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()));
+    getSize();
   }
 </script>
 
@@ -125,6 +132,7 @@
           {/if}
         </span>
         <Filter id="file-filter" bind:filter />
+        <span class="f-size">{getSize()}</span>
       </div>
     </div>
     <ul>
@@ -193,6 +201,11 @@
     border-bottom: 1px solid;
     overflow-x: hidden;
   }
+  .f-size {
+    position: absolute;
+    right: 4px;
+    top: 6px;
+  }
   .tree-files :global(#check-all) {
     top: 2px;
     left: -15px;
@@ -212,6 +225,9 @@
   }
   .filter :global(#filter-control) {
     margin: 0 5px;
+  }
+  .filter :global(#file-filter) {
+    max-width: 300px;
   }
   .filter span {
     display: flex;
