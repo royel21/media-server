@@ -163,10 +163,11 @@
     padding: 0 5px;
   }
   .tree-files ul {
-    height: 100%;
+    height: calc(100% - 81px);
     width: 100%;
     overflow: auto;
     margin: 0;
+    padding-bottom: 5px;
   }
   .tree-files li {
     padding: 3px 8px;
