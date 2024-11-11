@@ -227,7 +227,7 @@
     margin: 0 5px;
   }
   .filter :global(#file-filter) {
-    max-width: 300px;
+    max-width: 250px;
   }
   .filter span {
     display: flex;
