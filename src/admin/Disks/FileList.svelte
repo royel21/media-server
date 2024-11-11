@@ -159,6 +159,7 @@
   }
 
   .tree-files {
+    height: 100%;
     padding: 0 5px;
   }
   .tree-files ul {
