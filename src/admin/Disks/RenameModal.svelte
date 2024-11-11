@@ -1,5 +1,6 @@
 <script>
   import Input from "../Component/Input.svelte";
+  import TextAreaInput from "../Component/TextAreaInput.svelte";
   import Dialog from "./Dialog.svelte";
   export let hide;
   export let acept;
@@ -35,7 +36,7 @@
 
 <Dialog cancel={hide} confirm={onConfirm} {errors}>
   <h4 slot="modal-header">Rename {title}</h4>
-  <span id="f-rename" slot="modal-body"><Input label="New Name" key="Name" {item} focus={true} /></span>
+  <span id="f-rename" slot="modal-body"><TextAreaInput label="New Name" key="Name" {item} focus={true} /></span>
 </Dialog>
 
 <style>

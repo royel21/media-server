@@ -1,7 +1,7 @@
 <script>
-  import Input from "../Component/Input.svelte";
   import CheckBox from "../Component/CheckBox.svelte";
   import Dialog from "./Dialog.svelte";
+  import TextAreaInput from "../Component/TextAreaInput.svelte";
   export let hide;
   export let files;
   export let acept;
@@ -33,7 +33,7 @@
 <Dialog cancel={hide} confirm={onConfirm} {errors}>
   <h4 slot="modal-header">Move <span>{files.length}</span> {files.length > 1 ? "Files" : "File"} to Path</h4>
   <span class="dir-list" slot="modal-body">
-    <Input focus={true} label="Path" key="Path" {item} />
+    <TextAreaInput focus={true} label="Path" key="Path" {item} />
     <CheckBox key="Override" {item} />
   </span>
 </Dialog>

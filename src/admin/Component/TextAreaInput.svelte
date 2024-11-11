@@ -3,6 +3,7 @@
   import { handlerPaste } from "./util";
 
   export let file;
+  export let item = "";
   export let key;
   export let label = "";
   export let style = "";
@@ -17,6 +18,7 @@
   });
 
   const handler = async () => handlerPaste(file, key, sept, ref);
+  $: if (item) file = item;
 </script>
 
 <div class="input-control" {style}>
