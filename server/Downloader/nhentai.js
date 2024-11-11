@@ -45,7 +45,13 @@ const dirs = {
   nHentai: path.join(BASEPATH, "R18", "Manga-Hentai", "Tankoubon"),
 };
 
-const formats = ["jpg", "png", "gif"];
+const types = {
+  yaoi: "Yaoi",
+  anthology: "Anthology",
+  nHentai: "Tankoubon",
+};
+
+const formats = ["jpg", "png", "webp", "gif"];
 
 const download = async (link, page, server, state) => {
   const db = getDb();
@@ -54,6 +60,8 @@ const download = async (link, page, server, state) => {
     await page.waitForSelector(server.Title);
   } catch (error) {
     console.log(error);
+    await link.update({ IsDowloanding: false });
+    return;
   }
 
   let data = await page.evaluate((server) => {
@@ -122,7 +130,7 @@ const download = async (link, page, server, state) => {
   let filePath = path.join(curDir, data.name);
 
   const Name = { [db.Op.like]: `%${data.name.replace(" [Digital]", "").replace(/^\[.*.\] /, "")}%` };
-  console.log("name: ", data.name, "total-pages: ", data.total, Name);
+  console.log("name: ", data.name, "total-pages: ", data.total);
   let found = (await db.file.findOne({ where: { Name } })) && fs.existsSync(filePath + ".zip");
 
   if (!found) {
@@ -139,10 +147,11 @@ const download = async (link, page, server, state) => {
 
       var zip = new AdmZip();
 
-      const imageBasePath = path.join(defaultConfig.ImagesDir, "Manga", data.name);
+      const imageBasePath = path.join(defaultConfig.ImagesDir, "Manga", types[data.type]);
       createDir(imageBasePath);
 
       const cover = path.join(imageBasePath, data.name + ".zip.jpg");
+      console.log("cover: ", cover);
       let creatCover = true;
       for (let i = 1; i < data.total + 1; ) {
         if (state.stopped) return;
@@ -151,8 +160,8 @@ const download = async (link, page, server, state) => {
         process.stdout.write(`\t\t\t\th: IMG: ${padded} / ${data.total}\r`);
         const url = initalUrl.replace(`/1.${ex}`, `/${i}.${newEX}`);
 
-        if (f > 2) {
-          sendMessage({ text: `FormatError: ${f} unkown`, color: "red" });
+        if (f > 3) {
+          sendMessage({ text: `FormatError: ${f} unkown: ${url}`, color: "red" });
           break;
         }
 
@@ -188,7 +197,7 @@ const download = async (link, page, server, state) => {
         await link.destroy();
         sendMessage({ text: `Save: ${data.name}\n` });
       } else {
-        await link.update({ Name, IsDowloanding: false });
+        await link.update({ Name: data.name, IsDowloanding: false });
       }
     }
   } else {

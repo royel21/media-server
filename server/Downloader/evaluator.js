@@ -149,7 +149,7 @@ export const adultEvalPage = async (query) => {
   const paras = document.querySelectorAll(query.Desc);
   let Description = (paras[2] || paras[1] || paras[0] || "").innerText?.replace(/You are reading .*\\n\\n\\n/g, "");
 
-  if (query.Name.includes("mangas.in")) {
+  if (query.Name.includes("m440.in")) {
     while (document.querySelector("ul .caret")) {
       document.querySelector("ul .caret")?.parentElement?.onclick();
     }
@@ -312,6 +312,8 @@ export const adultEvalPage = async (query) => {
       .replace(/^-( |)/, "")
       .trim();
 
+    if (location.href.includes("bato.to") && /R15/.test(fileName)) return;
+
     if (/^Tales Of Demons/i.test(Name)) {
       fileName = fileName.replace("-6", "-5");
       fileName = fileName.replace("-1", "");
@@ -322,7 +324,7 @@ export const adultEvalPage = async (query) => {
       fileName = fileName + " " + season[0];
     }
 
-    if (location.href.includes("mangas.in") && !/^\d+/i.test(fileName)) {
+    if (!/^\d+/i.test(fileName) && a.closest("li")?.textContent.match(/\d+(.\d+|)/)) {
       const fnum = a.closest("li")?.textContent.match(/\d+(.\d+|)/);
       if (fnum) {
         fileName = fnum[0] + " " + fileName;
@@ -375,7 +377,7 @@ export const adultEvalPage = async (query) => {
     return false;
   });
 
-  if (location.href.includes("mangas.in")) {
+  if (location.href.includes("m440.in")) {
     [...document.querySelectorAll(".dl-horizontal dt")].forEach((el) => {
       let content = el.nextElementSibling;
       let tag = el.textContent?.trim();
@@ -441,7 +443,7 @@ export const evaleLinks = async (query) => {
   let data = [];
   let imgs = document.querySelectorAll(query.Imgs);
 
-  if (query.Name.includes("mangas.in")) {
+  if (query.Name.includes("m440.in")) {
     for (let img of imgs) {
       while (/aHR0cHMl|loading.gif/.test(img.src)) {
         img?.scrollIntoView();
@@ -466,7 +468,7 @@ export const evaleLinks = async (query) => {
       if (nSrc.includes("mangaclash")) {
         data.push(nSrc);
       }
-    } else if (location.href.includes("mangas.in")) {
+    } else if (location.href.includes("m440.in")) {
       data.push(src);
     } else {
       data.push(nSrc);

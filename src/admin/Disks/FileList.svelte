@@ -132,6 +132,7 @@
         <li id={file.Id} title={file.Name}>
           <CCheckbox on:change={onCheck} isChecked={removeList.includes(file.Id)} />
           <span on:click={() => (showRename = file)}><Icons name="edit" /></span>
+          {(file.Size / 1024 / 1024).toFixed(2)}mb -
           <span on:click={onCheck}>{file.Name}</span>
         </li>
       {/each}
@@ -158,11 +159,12 @@
   }
 
   .tree-files {
-    height: 100%;
-    overflow-y: auto;
     padding: 0 5px;
   }
   .tree-files ul {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
     margin: 0;
   }
   .tree-files li {
@@ -170,8 +172,6 @@
   }
   .tree-files li {
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
   .ftree-control {
     position: sticky;
