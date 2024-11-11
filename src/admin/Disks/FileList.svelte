@@ -140,7 +140,7 @@
         <li id={file.Id} title={file.Name}>
           <CCheckbox on:change={onCheck} isChecked={removeList.includes(file.Id)} />
           <span on:click={() => (showRename = file)}><Icons name="edit" /></span>
-          {(file.Size / 1024 / 1024).toFixed(2)}mb -
+          {(file.Size / 1024 / 1024 / 1024).toFixed(2)}GB -
           <span on:click={onCheck}>{file.Name}</span>
         </li>
       {/each}
