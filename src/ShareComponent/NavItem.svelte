@@ -37,9 +37,6 @@
     <span class="nav-title">{item.title}</span>
     {#if data.items}
       <ul class="down-list">
-        <li class="list-item" id="all" class:selected={"all" === data.current}>
-          <span>All</span>
-        </li>
         {#if data.items.adults.length === 0}
           {#each data.items.others as { Id, Name }}
             <li class="list-item" id={Id} class:selected={Id === data.current}>
@@ -72,6 +69,9 @@
             {/if}
           </li>
         {/if}
+        <li class="list-item" id="all" class:selected={"all" === data.current}>
+          <span>All</span>
+        </li>
       </ul>
     {/if}
   </Link>
