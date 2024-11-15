@@ -65,7 +65,7 @@
   <div class="dir-list" slot="modal-body">
     <CheckBox key="Override" {item} />
     <Select {item} label="Root" key="Path" options={content.map((d) => ({ Name: d.Path }))} {onChange} />
-    <TextAreaInput focus={true} label="Path" key="Path" {item} disabled={true}>
+    <TextAreaInput focus={true} label="Path" key="Path" {item} disabled={true} paste={false}>
       <span class="pre-paste" slot="btn-left" on:click={goBack} title="Copy Name">
         <Icons name="reply" color="#045cba" />
       </span>

@@ -12,13 +12,14 @@
   export let focus = false;
   export let sept = "";
   export let disabled = false;
+  export let paste = true;
   export let onChange = () => {};
 
   onMount(() => {
     if (ref && focus) ref.focus();
   });
 
-  const handler = async () => handlerPaste(file, key, sept, ref);
+  const handler = async () => paste && handlerPaste(file, key, sept, ref);
   $: if (item) file = item;
 </script>
 
