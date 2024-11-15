@@ -15,6 +15,7 @@
   let item = { Path: "/mnt/", overwrite: false };
   let errors = [];
   let dirs = [];
+  let ditem = {};
 
   const onConfirm = () => {
     errors = [];
@@ -42,7 +43,10 @@
     }
   };
 
-  const onChange = ({ target: { value } }) => loadDirs(value);
+  const onChange = ({ target: { value } }) => {
+    ditem.Path = value;
+    loadDirs(value);
+  };
 
   const loadPath = ({ target }) => {
     const next = target.textContent;
@@ -52,6 +56,7 @@
   const goBack = () => loadDirs(item.Path, "", true);
 
   onMount(() => {
+    ditem.Path = content[0].Path;
     loadDirs(content[0].Path);
   });
 </script>
@@ -60,7 +65,7 @@
   <h4 slot="modal-header">Move <span>{files.length}</span> {files.length > 1 ? "Files" : "File"} to Path</h4>
   <div class="dir-list" slot="modal-body">
     <CheckBox key="Override" {item} />
-    <Select {item} label="Root" key="Path" options={content.map((d) => ({ ...d, Id: d.Path }))} {onChange} />
+    <Select item={ditem} label="Root" key="Path" options={content.map((d) => ({ ...d, Id: d.Path }))} {onChange} />
     <TextAreaInput focus={true} label="Path" key="Path" {item} disabled={true} paste={false}>
       <span class="pre-paste" slot="btn-left" on:click={goBack} title="Copy Name">
         <Icons name="reply" color="#045cba" />
