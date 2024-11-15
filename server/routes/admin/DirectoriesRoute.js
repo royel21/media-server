@@ -122,14 +122,15 @@ routes.post("/get-dirs", (req, res) => {
     const dirs = ListFiles(Path)
       .filter((d) => d.isDirectory)
       .map((d) => d.Name);
+
+    if (Path.includes(homeDir)) {
+      Path = Path.replace("homedir", homeDir);
+    }
+
     return res.send({ dirs, Path });
   }
 
-  if (Path.includes(homeDir)) {
-    Path = Path.replace(homeDir, "homedir");
-  }
-
-  return res.send({ dirs: [], Path });
+  return res.send({ Path });
 });
 
 routes.get("/", async (req, res) => {
