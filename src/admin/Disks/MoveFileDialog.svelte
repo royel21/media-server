@@ -39,7 +39,7 @@
 
   const loadDirs = async (dir, next, back) => {
     const result = await apiUtils.post("admin/directories/get-dirs", { dir, next, back });
-    console.log(result, content);
+
     if (result.dirs) {
       item.Path = result.Path;
       dirs = result.dirs;
