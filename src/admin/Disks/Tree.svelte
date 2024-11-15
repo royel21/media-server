@@ -99,7 +99,7 @@
         </div>
       </div>
       {#if files.length}
-        <FileList {files} {socket} Name={current?.Name} />
+        <FileList {files} {socket} Name={current?.Name} {content} />
       {/if}
       {#if files.length}
         <span class="scroll-top" on:click={scrollToTop}>

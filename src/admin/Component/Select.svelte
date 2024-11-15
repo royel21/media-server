@@ -4,6 +4,7 @@
   export let key = "";
   export let options = [];
   export let onChange = () => {};
+  $: console.log(options);
 </script>
 
 <div class={"input-control " + key}>

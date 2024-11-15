@@ -105,6 +105,23 @@ routes.post("/rm-backup", async ({ body }, res) => {
   }
 });
 
+routes.post("/get-dirs", (req, res) => {
+  const { dir, next, back } = req.body;
+  let Path = dir || "";
+  if (next && Path) Path = path.join(dir, next);
+
+  if (back) Path = path.dirname(Path);
+
+  if (fs.existsSync(Path)) {
+    const dirs = ListFiles(Path)
+      .filter((d) => d.isDirectory)
+      .map((d) => d.Name);
+    return res.send({ dirs, Path });
+  }
+
+  return res.send({ dirs: [], Path });
+});
+
 routes.get("/", async (req, res) => {
   const data = await db.directory.findAll({
     attributes: {

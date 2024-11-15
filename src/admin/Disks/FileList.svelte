@@ -13,6 +13,7 @@
 
   export let files = [];
   export let socket;
+  export let content = [];
   export let Name = "";
   let filtered = files;
 
@@ -100,7 +101,7 @@
 </script>
 
 {#if showMoveDialog}
-  <MoveFileDialog files={showMoveDialog.files} hide={() => (showMoveDialog = false)} {acept} />
+  <MoveFileDialog files={showMoveDialog.files} hide={() => (showMoveDialog = false)} {acept} {content} />
 {/if}
 
 {#if showConfirm}
@@ -215,6 +216,7 @@
   li:hover span:last-child {
     cursor: pointer;
     text-decoration: underline;
+    background-color: rgba(0, 0, 0, 0.1);
   }
   .filter {
     position: relative;

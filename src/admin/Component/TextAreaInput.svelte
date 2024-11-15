@@ -11,6 +11,7 @@
   export let ref = null;
   export let focus = false;
   export let sept = "";
+  export let disabled = false;
   export let onChange = () => {};
 
   onMount(() => {
@@ -32,6 +33,7 @@
     bind:value={file[key]}
     on:change={onChange}
     on:blur={onChange}
+    {disabled}
   />
 </div>
 
