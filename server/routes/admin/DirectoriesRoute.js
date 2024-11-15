@@ -124,7 +124,7 @@ routes.post("/get-dirs", (req, res) => {
       .map((d) => d.Name);
 
     if (Path.includes(homeDir)) {
-      Path = Path.replace("homedir", homeDir);
+      Path = Path.replace(homeDir, "homedir");
     }
 
     return res.send({ dirs, Path });
