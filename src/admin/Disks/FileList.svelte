@@ -223,9 +223,6 @@
   .filter :global(#filter-control) {
     margin: 0 5px;
   }
-  .filter :global(#file-filter) {
-    max-width: 500px;
-  }
   .filter span {
     display: flex;
     flex-direction: raw;
