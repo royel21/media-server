@@ -26,10 +26,6 @@
       return errors.push("Path must be a valid Path");
     }
 
-    if (!/(\\|\/)$/.test(item.Path)) {
-      return errors.push('Path must end with "\\" or "/"');
-    }
-
     if (!/^\/(mnt|media)\/.*\/|^[d-z]\:\\|\/home\/.*\/|^c:\\Users\\.*\\/i.test(item.Path)) {
       return errors.push("Path must be on User Space");
     }
