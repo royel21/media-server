@@ -101,9 +101,8 @@
     width: 100%;
   }
   li {
+    font-size: 0.9rem;
     padding: 3px 8px;
-  }
-  li {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;

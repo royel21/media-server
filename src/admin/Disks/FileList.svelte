@@ -179,9 +179,8 @@
     padding-bottom: 5px;
   }
   .tree-files li {
+    font-size: 0.9rem;
     padding: 3px 8px;
-  }
-  .tree-files li {
     white-space: nowrap;
   }
   .ftree-control {
@@ -201,6 +200,7 @@
     user-select: text;
     border-bottom: 1px solid;
     overflow-x: hidden;
+    font-size: 1.12rem;
   }
   .tree-files :global(#check-all) {
     top: 2px;
