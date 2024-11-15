@@ -124,7 +124,7 @@
       <Loading text="Transfer In Process - Please Wait" />
     {/if}
     <div class="ftree-control">
-      <h4>{files.length} - {Name}</h4>
+      <h4>{files.length}/{TotalSize} - {Name}</h4>
       <div class="filter">
         <span>
           <CCheckbox id="check-all" on:change={onCheckAll} {isChecked} title="Select All Files" />
@@ -134,7 +134,6 @@
           {/if}
         </span>
         <Filter id="file-filter" bind:filter />
-        <span class="f-size">{TotalSize}</span>
       </div>
     </div>
     <ul>
@@ -196,17 +195,12 @@
     position: relative;
     cursor: pointer;
     display: inline-block;
-    width: calc(100% - 50px);
+    width: calc(100% - 25px);
     white-space: nowrap;
     text-overflow: ellipsis;
     user-select: text;
     border-bottom: 1px solid;
     overflow-x: hidden;
-  }
-  .f-size {
-    position: absolute;
-    right: 4px;
-    top: 6px;
   }
   .tree-files :global(#check-all) {
     top: 2px;
@@ -230,7 +224,7 @@
     margin: 0 5px;
   }
   .filter :global(#file-filter) {
-    max-width: 250px;
+    max-width: 500px;
   }
   .filter span {
     display: flex;
