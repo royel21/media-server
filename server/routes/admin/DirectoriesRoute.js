@@ -114,7 +114,7 @@ routes.post("/get-dirs", (req, res) => {
     Path = Path.replace("homedir", homeDir);
   }
 
-  if (next && Path) Path = path.join(dir, next);
+  if (next && Path) Path = path.join(Path, next);
 
   if (back) Path = path.dirname(Path);
 
