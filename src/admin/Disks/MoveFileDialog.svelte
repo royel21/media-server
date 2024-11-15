@@ -64,7 +64,7 @@
   <h4 slot="modal-header">Move <span>{files.length}</span> {files.length > 1 ? "Files" : "File"} to Path</h4>
   <div class="dir-list" slot="modal-body">
     <CheckBox key="Override" {item} />
-    <Select {item} label="Root" key="Path" options={content.map((d) => ({ Id: d.Path, ...d }))} {onChange} />
+    <Select {item} label="Root" key="Path" options={content.map((d) => ({ ...d, Id: d.Path }))} {onChange} />
     <TextAreaInput focus={true} label="Path" key="Path" {item} disabled={true} paste={false}>
       <span class="pre-paste" slot="btn-left" on:click={goBack} title="Copy Name">
         <Icons name="reply" color="#045cba" />
