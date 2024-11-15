@@ -16,6 +16,7 @@
   export let content = [];
   export let Name = "";
   let filtered = files;
+  let TotalSize = 0;
 
   let removeList = [];
   let isChecked = false;
@@ -96,7 +97,7 @@
   $: isChecked = filtered.length && removeList.length === filtered.length;
   $: {
     filtered = files.filter((f) => f.Name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()));
-    getSize();
+    TotalSize = getSize();
   }
 </script>
 
@@ -133,7 +134,7 @@
           {/if}
         </span>
         <Filter id="file-filter" bind:filter />
-        <span class="f-size">{getSize()}</span>
+        <span class="f-size">{TotalSize}</span>
       </div>
     </div>
     <ul>
