@@ -127,6 +127,7 @@ const download = async (link, page, server, state) => {
   });
 
   data.name = nameFormat(data.name);
+  await link.update({ Name: data.name, LastChapter: data.total });
   let filePath = path.join(curDir, data.name);
 
   const Name = { [db.Op.like]: `%${data.name.replace(" [Digital]", "").replace(/^\[.*.\] /, "")}%` };
