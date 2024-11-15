@@ -39,7 +39,7 @@
 
   const loadDirs = async (dir, next, back) => {
     const result = await apiUtils.post("admin/directories/get-dirs", { dir, next, back });
-    console.log(result);
+    console.log(result, content);
     if (result.dirs) {
       item.Path = result.Path;
       dirs = result.dirs;
@@ -56,7 +56,7 @@
   const goBack = () => loadDirs(item.Path, "", true);
 
   onMount(() => {
-    loadDirs(content[0].Name);
+    loadDirs(content[0].Path);
   });
 </script>
 
@@ -64,7 +64,7 @@
   <h4 slot="modal-header">Move <span>{files.length}</span> {files.length > 1 ? "Files" : "File"} to Path</h4>
   <div class="dir-list" slot="modal-body">
     <CheckBox key="Override" {item} />
-    <Select {item} label="Root" key="Path" options={content.map((d) => ({ Name: d.Name }))} {onChange} />
+    <Select {item} label="Root" key="Path" options={content.map((d) => ({ Name: d.Path }))} {onChange} />
     <TextAreaInput focus={true} label="Path" key="Path" {item} disabled={true}>
       <span class="pre-paste" slot="btn-left" on:click={goBack} title="Copy Name">
         <Icons name="reply" color="#045cba" />

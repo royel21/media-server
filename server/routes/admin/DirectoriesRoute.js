@@ -107,7 +107,13 @@ routes.post("/rm-backup", async ({ body }, res) => {
 
 routes.post("/get-dirs", (req, res) => {
   const { dir, next, back } = req.body;
+
   let Path = dir || "";
+
+  if (Path.includes("homedir")) {
+    Path = Path.replace("homedir", homeDir);
+  }
+
   if (next && Path) Path = path.join(dir, next);
 
   if (back) Path = path.dirname(Path);
