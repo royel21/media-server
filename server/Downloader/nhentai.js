@@ -131,7 +131,7 @@ const download = async (link, page, server, state) => {
   let filePath = path.join(curDir, data.name);
 
   const Name = { [db.Op.like]: `%${data.name.replace(" [Digital]", "").replace(/^\[.*.\] /, "")}%` };
-  console.log("name: ", data.name, "total-pages: ", data.total);
+
   let found = (await db.file.findOne({ where: { Name } })) && fs.existsSync(filePath + ".zip");
 
   if (!found) {
