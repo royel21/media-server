@@ -132,7 +132,7 @@ const download = async (link, page, server, state) => {
 
   const Name = { [db.Op.like]: `%${data.name.replace(" [Digital]", "").replace(/^\[.*.\] /, "")}%` };
 
-  let found = (await db.file.findOne({ where: { Name } })) && fs.existsSync(filePath + ".zip");
+  let found = await db.file.findOne({ where: { Name }, include: { model: db.folder } });
 
   if (!found) {
     await page.goto(data.url, { waitUntil: "domcontentloaded" });
