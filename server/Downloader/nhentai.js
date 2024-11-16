@@ -161,7 +161,7 @@ const download = async (link, page, server, state) => {
         process.stdout.write(`\t\t\t\th: IMG: ${padded} / ${data.total}\r`);
         const url = initalUrl.replace(`/1.${ex}`, `/${i}.${newEX}`);
 
-        if (f > 3) {
+        if (f > 4) {
           sendMessage({ text: `FormatError: ${f} unkown: ${url}`, color: "red" });
           break;
         }
