@@ -177,7 +177,7 @@ const download = async (link, page, server, state) => {
             count++;
             if (creatCover && !fs.existsSync(cover)) {
               creatCover = false;
-              await saveThumbnail(buff, cover);
+              await saveThumbnail(buff, cover, true);
             }
             f = 0;
             i++;

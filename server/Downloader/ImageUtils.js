@@ -158,22 +158,35 @@ export const createFolderCover = async (mangaDir, data, page, update) => {
   return { files: files.filter((f) => f.includes(".zip")), result };
 };
 
-export const saveThumbnail = async (buff, thumbPath) => {
+export const saveThumbnail = async (buff, thumbPath, half) => {
   let img = sharp(buff, { failOnError: false });
   const meta = await img.metadata();
+  try {
+    if (meta.height > 300) {
+      if (meta.height > 1650) {
+        img = await img.extract({
+          height: 1200,
+          width: meta.width,
+          top: 0,
+          left: 0,
+        });
+      }
 
-  if (meta.height > 500) {
-    if (meta.height > 1650) {
-      img = await img.extract({
-        height: 1200,
-        width: meta.width,
-        top: 0,
-        left: 0,
-      });
+      if (meta.width / meta.height > 2 && half) {
+        img = await img.extract({
+          height: meta.height,
+          width: meta.width / 2,
+          top: 0,
+          left: 0,
+        });
+      }
+
+      await img.toFormat("jpg").resize({ width: 340 }).toFile(thumbPath);
+      await img.destroy();
+      return true;
     }
-    await img.toFormat("jpg").resize({ width: 340 }).toFile(thumbPath);
-    await img.destroy();
-    return true;
+  } catch (error) {
+    console.log(error);
   }
 };
 
