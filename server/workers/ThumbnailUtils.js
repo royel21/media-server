@@ -44,15 +44,6 @@ export const ZipCover = async (file, coverP, exist) => {
             });
           }
 
-          if (meta.width / meta.height > 2 && half) {
-            img = await img.extract({
-              height: meta.height,
-              width: meta.width / 2,
-              top: 0,
-              left: 0,
-            });
-          }
-
           await img.toFormat("jpg").resize({ width: 340 }).toFile(coverP);
           await img.destroy();
           break;
