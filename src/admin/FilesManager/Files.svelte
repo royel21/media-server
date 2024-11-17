@@ -91,7 +91,7 @@
         modalType = { title: "Edit File", Del: false, isFile: true };
         showModal = true;
       } else {
-        socket.emit("file-work", { action: "renameFile", data: { Id: file.Id, Del: true } });
+        socket.emit("file-work", { action: "removeFile", data: { Id: file.Id, Del: true } });
       }
     }
   };
@@ -99,7 +99,7 @@
   const handleSubmit = ({ detail: { target } }) => {
     if (modalType.Del) {
       let Del = target.querySelector("input").checked;
-      socket.emit("file-work", { action: "renameFile", data: { Id: file.Id, Del } });
+      socket.emit("file-work", { action: "removeFile", data: { Id: file.Id, Del } });
     } else {
       let Name = target.querySelector("textarea").value;
       if (!Name) {
@@ -118,7 +118,7 @@
 </script>
 
 {#if showModal}
-  <Modal {file} {modalType} on:submit={handleSubmit} on:click={hideModal} />
+  <Modal {file} {modalType} on:submit={handleSubmit} hide={hideModal} />
 {/if}
 
 <div class="file-list col-6">
