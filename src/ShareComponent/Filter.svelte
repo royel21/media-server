@@ -10,11 +10,15 @@
 
   const send = (text = "") => {
     curFilter = text;
-    let ftl = text
-      .replace("’", "'")
-      .replace(/:|\?|\"| Raw$/gi, "")
-      .trim();
-    dispatch("filter", encodeURIComponent(ftl.replace(/ (\[|\(|)official(\]|\)|)$/i, "")));
+    let ftl = encodeURIComponent(
+      text
+        .replace("’", "'")
+        .replace(/:|\?|\"| Raw$/gi, "")
+        .replace(/ (\[|\(|)official(\]|\)|)$/i, "")
+        .trim()
+    );
+    dispatch("filter", ftl);
+    dispatch("change", ftl);
   };
 
   const ClearFilter = () => send("");
@@ -30,6 +34,8 @@
     }
     send(text);
   };
+
+  const onChanges = () => send(curFilter);
 
   $: filter = curFilter;
   const box = "0 0 512 512";
@@ -51,6 +57,7 @@
     autocomplete="off"
     bind:value={curFilter}
     on:keydown={submitFilter}
+    on:input={onChanges}
   />
   <span id="clear-filter" on:click={ClearFilter}>
     <Icons name="timescircle" height="22px" color="black" />

@@ -5,6 +5,7 @@
   import apiUtils from "src/apiUtils";
   import Icons from "src/icons/Icons.svelte";
   import Filter from "src/ShareComponent/Filter.svelte";
+  import Pagination from "src/ShareComponent/Pagination.svelte";
 
   export let hide;
   let nameList = [];
@@ -13,6 +14,8 @@
   let ref;
   let filter = "";
   let newNames = 0;
+  let page = 1;
+  let totalPages = 0;
 
   const addRename = () => {
     if (!nameList.find((f) => !f.Name || !f.AltName)) {
@@ -62,18 +65,31 @@
     if (e.keyCode === 27) hide();
   };
 
+  const gotopage = ({ detail }) => {
+    page = detail;
+  };
+
+  const handler = ({ target, currentTarget }) => {
+    if (currentTarget === target) hide();
+  };
+
   onMount(async () => {
     ref?.focus();
     loadItems();
   });
 
-  $: filteredList = nameList.filter((f) => f.AltName.includes(filter) || f.Name.includes(filter));
+  $: {
+    const start = (page - 1) * 100;
+    const end = start + 100;
+    totalPages = Math.ceil(nameList.length / 100);
+    filteredList = nameList.filter((f) => f.AltName.includes(filter) || f.Name.includes(filter)).slice(start, end);
+  }
 </script>
 
-<div bind:this={ref} class="modal-container r-names" on:keydown={onKeyDown} tabindex="-1">
+<div bind:this={ref} class="modal-container r-names" on:keydown={onKeyDown} tabindex="-1" on:click={handler}>
   <div class="modal card" transition:fade={{ duration: 200 }}>
     <div class="modal-header">
-      <Filter on:filter={onFilter} {filter}>
+      <Filter on:change={onFilter} {filter}>
         <span class="btn-add" slot="pre-btn" on:click={addRename} on:keydown>
           <Icons name="squareplus" />
         </span>
@@ -93,8 +109,10 @@
       </div>
       <div class="error">{error || ""}</div>
       <div class="modal-footer">
+        <span class="count">{nameList.length}</span>
         <button type="submit" class="btn">Save</button>
         <button type="button" class="btn" on:click={hide}>Cancel</button>
+        <Pagination {page} {totalPages} on:gotopage={gotopage} />
       </div>
     </form>
   </div>
@@ -160,10 +178,28 @@
     justify-content: space-between;
     align-items: center;
   }
-
+  .count {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    font-size: 1.25rem;
+  }
   .name-item span:first-child {
     flex-grow: 1;
     margin-right: 3px;
     padding: 2px;
+  }
+  .modal :global(#pager li svg) {
+    height: 22px;
+  }
+
+  @media screen and (max-width: 600px) {
+    .count {
+      position: initial;
+      font-size: 1.25rem;
+    }
+    .modal-footer .btn {
+      margin: 0 8px;
+    }
   }
 </style>

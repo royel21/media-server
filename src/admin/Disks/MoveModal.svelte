@@ -1,7 +1,7 @@
 <script>
   import apiUtils from "src/apiUtils";
   import { onMount } from "svelte";
-  import Dialog from "./Dialog.svelte";
+  import Dialog from "../Component/Dialog.svelte";
   export let hide;
   export let acept;
   export let data = "";
@@ -13,8 +13,8 @@
 
   onMount(async () => {
     const data = await apiUtils.admin(["folders", "dirs"]);
-    if (data?.length) {
-      Directories = data.filter((d) => d.Type === "Videos");
+    if (data.dirs?.length) {
+      Directories = data.dirs.filter((d) => d.Type === "Videos");
       current = Directories[0];
     }
   });
@@ -30,12 +30,11 @@
 </script>
 
 <Dialog cancel={hide} confirm={onConfirm} {errors}>
-  <h4 slot="modal-header">
+  <h5 slot="modal-header">
     <p>Move Folder <span>"{data.Name}"</span></p>
-    <p>to Directory <span>"{current.Name}"</span></p>
-  </h4>
+  </h5>
   <span slot="modal-body" class="dir-list">
-    <div><span>Select Directory </span></div>
+    <div><span>Select Directory</span></div>
     <select class="form-control" bind:value={current}>
       {#each Directories as dir}
         <option value={dir}>{dir.FullPath}</option>
@@ -49,7 +48,10 @@
     text-align: center;
     font-weight: 600;
   }
-  h4 span {
+  h5 {
+    font-size: 1.1rem;
+  }
+  h5 span {
     color: firebrick;
   }
 </style>

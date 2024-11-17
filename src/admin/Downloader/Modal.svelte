@@ -6,100 +6,76 @@
   import CheckBox from "src/admin/Component/CheckBox.svelte";
   import TextAreaInput from "src/admin/Component/TextAreaInput.svelte";
   import apiUtils from "src/apiUtils";
+  import Dialog from "../Component/Dialog.svelte";
 
   export let server = "";
   export let link = "";
-  export let error = "";
+  export let errors = "";
   export let hide;
-  let ref;
 
   const submit = async (e) => {
     const body = server ? server : link;
     body.table = server ? "Server" : "Link";
     const result = await apiUtils.post("admin/downloader/item-update", body);
-    error = result.error;
+    errors = result.error;
     if (result.valid) hide();
   };
 
   const onChange = ({ target: { value } }) => {
     server.Type = value;
   };
-
-  const onKeyDown = (e) => {
-    if (e.keyCode === 13 && e.ctrlKey) {
-      submit(e);
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    if (e.keyCode === 27) hide();
-  };
-
-  onMount(() => {
-    ref?.focus();
-  });
 </script>
 
-<div bind:this={ref} class="modal-container" class:server on:keydown={onKeyDown} tabindex="-1">
-  <div class="modal card" transition:fade={{ duration: 200 }}>
-    <div class="modal-header">
-      <h4>{server ? `Editing ${server.Name} Configurations` : "Edit Link"}</h4>
-    </div>
-    <form action="#" on:submit|preventDefault={submit}>
-      <div class="modal-body">
-        {#if link}
-          <TextAreaInput key="Name" file={link} />
-          <TextAreaInput key="Url" file={link} />
-          <TextAreaInput key="AltName" file={link} />
-          <CheckBox label="Is Adult" key="IsAdult" item={link} />
-          <CheckBox label="Is Raw" key="Raw" item={link} />
-        {:else}
-          <CheckBox label="Enable" key="Enable" item={server} />
-          <Select key="Type" options={[{ Id: "Manga" }, { Id: "Adult" }]} item={server} {onChange} />
-          <Input key="Title" item={server} />
-          <Input key="AltTitle" item={server} />
-          <Input key="Chapters" item={server} />
-          <Input key="Imgs" item={server} />
-          <Input key="Cover" item={server} />
-          <Input key="Desc" item={server} />
-          <Input key="Genres" item={server} />
-          <Input key="Status" item={server} />
-          <Input key="Delay" item={server} />
-          <Input label="Home Query" key="HomeQuery" item={server} />
-          <CheckBox label="Raw" key="Raw" item={server} />
-          <CheckBox label="Local Images" key="LocalImages" item={server} />
-          <CheckBox label="Is Mobile" key="isMobile" item={server} />
-        {/if}
-      </div>
-      <div class="error">{error || ""}</div>
-      <div class="modal-footer">
-        <button type="submit" class="btn">Update</button>
-        <button type="button" class="btn" on:click={hide}>Cancel</button>
-      </div>
-    </form>
-  </div>
-</div>
+<Dialog cancel={hide} confirm={submit} {errors} btnOk="Update" class="server">
+  <h4 slot="modal-header">{server ? `Editing ${server.Name} Configurations` : "Edit Link"}</h4>
+  <svelte:fragment slot="modal-body">
+    {#if link}
+      <TextAreaInput key="Name" file={link} />
+      <TextAreaInput key="Url" file={link} />
+      <TextAreaInput key="AltName" file={link} />
+      <CheckBox label="Is Adult" key="IsAdult" item={link} />
+      <CheckBox label="Is Raw" key="Raw" item={link} />
+    {:else}
+      <CheckBox label="Enable" key="Enable" item={server} />
+      <Select key="Type" options={[{ Id: "Manga" }, { Id: "Adult" }]} item={server} {onChange} />
+      <Input key="Title" item={server} />
+      <Input key="AltTitle" item={server} />
+      <Input key="Chapters" item={server} />
+      <Input key="Imgs" item={server} />
+      <Input key="Cover" item={server} />
+      <Input key="Desc" item={server} />
+      <Input key="Genres" item={server} />
+      <Input key="Status" item={server} />
+      <Input key="Delay" item={server} />
+      <Input label="Home Query" key="HomeQuery" item={server} />
+      <CheckBox label="Raw" key="Raw" item={server} />
+      <CheckBox label="Local Images" key="LocalImages" item={server} />
+      <CheckBox label="Is Mobile" key="isMobile" item={server} />
+    {/if}
+  </svelte:fragment>
+</Dialog>
 
 <style>
-  .modal {
+  :global(.server) {
     width: 540px;
     outline: none;
   }
-  .modal-container :global(.input-control) {
+  :global(.server .input-control) {
     margin-bottom: 5px;
   }
-  .modal-container :global(.input-label) {
+  :global(.server .input-label) {
     padding-left: 0.35rem;
     text-align: left;
     width: 145px;
   }
   @media screen and (max-width: 450px) {
-    .modal {
+    :global(.server) {
       width: 390px;
     }
   }
 
   @media screen and (max-height: 600px) {
-    .server {
+    :global(.server) {
       overflow: auto;
     }
   }

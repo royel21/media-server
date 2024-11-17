@@ -1,9 +1,9 @@
 <script>
   import { onMount } from "svelte";
-  import { fade } from "svelte/transition";
   import CheckBox from "src/admin/Component/CheckBox.svelte";
   import TextAreaInput from "src/admin/Component/TextAreaInput.svelte";
   import apiUtils from "src/apiUtils";
+  import Dialog from "../Component/Dialog.svelte";
 
   export let hide;
   export let servers = [];
@@ -50,44 +50,13 @@
   });
 </script>
 
-<div bind:this={ref} class="modal-container" on:keydown={onKeyDown} tabindex="-1">
-  <div class="modal card" transition:fade={{ duration: 200 }}>
-    <div class="modal-header">
-      <h4>New Link</h4>
-    </div>
-    <form action="#" on:submit|preventDefault={submit}>
-      <div class="modal-body">
-        <TextAreaInput key="Name" file={link} onChange={handle} />
-        <TextAreaInput key="Url" file={link} onChange={handle} />
-        <TextAreaInput key="AltName" sept="; " file={link} onChange={handle} />
-        <CheckBox label="Is Adult" key="IsAdult" item={link} />
-        <CheckBox label="Is Raw" key="Raw" item={link} />
-      </div>
-      <div class="error">{error || ""}</div>
-      <div class="modal-footer">
-        <button type="submit" class="btn">Create</button>
-        <button type="button" class="btn" on:click={hide}>Cancel</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<style>
-  .modal {
-    width: 540px;
-    outline: none;
-  }
-  .modal-container :global(.input-control) {
-    margin-bottom: 5px;
-  }
-  .modal-container :global(.input-label) {
-    padding-left: 0.35rem;
-    text-align: left;
-    width: 145px;
-  }
-  @media screen and (max-width: 450px) {
-    .modal {
-      width: 390px;
-    }
-  }
-</style>
+<Dialog cancel={hide} confirm={submit}>
+  <h4 slot="modal-header">New Link</h4>
+  <svelte:fragment slot="modal-body">
+    <TextAreaInput key="Name" file={link} onChange={handle} />
+    <TextAreaInput key="Url" file={link} onChange={handle} />
+    <TextAreaInput key="AltName" sept="; " file={link} onChange={handle} />
+    <CheckBox label="Is Adult" key="IsAdult" item={link} />
+    <CheckBox label="Is Raw" key="Raw" item={link} />
+  </svelte:fragment>
+</Dialog>

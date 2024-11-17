@@ -99,7 +99,8 @@
       <tr>
         <th class="d-action">Actions</th>
         <th class="d-type">Type</th>
-        <th class="d-path">Path</th>
+        <th class="f-name">Name</th>
+        <th class="f-path">Path</th>
         <th class="d-adult">Is Adult</th>
         <th class="d-cont">Folder {count}</th>
         <th class="d-total">Total Files {allFiles}</th>
@@ -160,7 +161,7 @@
     width: 90px;
     cursor: pointer;
   }
-  .d-path {
+  .f-path {
     white-space: nowrap;
   }
   .d-cont {
@@ -191,15 +192,11 @@
     text-align: left;
   }
   .f-name {
-    display: none;
     width: 155px;
     min-width: 155px;
   }
 
-  @media screen and (max-width: 500px) {
-    .f-name {
-      display: table-cell;
-    }
+  @media screen and (max-width: 700px) {
     .f-path {
       display: none;
     }

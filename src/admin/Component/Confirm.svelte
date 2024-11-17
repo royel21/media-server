@@ -1,5 +1,5 @@
 <script>
-  import Dialog from "../Disks/Dialog.svelte";
+  import Dialog from "./Dialog.svelte";
   export let text = "";
   export let cancel;
   export let acept;

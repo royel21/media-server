@@ -4,6 +4,7 @@
   import Input from "src/admin/Component/Input.svelte";
   import apiUtils from "src/apiUtils";
   import Icons from "src/icons/Icons.svelte";
+  import Dialog from "../Component/Dialog.svelte";
 
   export let hide;
   export let linkId = "";
@@ -57,31 +58,22 @@
   });
 </script>
 
-<div bind:this={ref} class="modal-container r-names" on:keydown={onKeyDown} tabindex="-1">
-  <div class="modal card" transition:fade={{ duration: 200 }}>
-    <div class="modal-header">
-      <span class="btn-add" on:click={addRename} on:keydown>
-        <Icons name="squareplus" />
-      </span>
-      <span class="title">Chapter Exclude From Download</span>
-    </div>
-    <form action="#" on:submit|preventDefault={submit}>
-      <div class="modal-body">
-        {#each nameList as name}
-          <div class="name-item" id={name.Id}>
-            <Input key="Name" item={name} />
-            <span on:click={onRemove} on:keydown><Icons name="trash" /></span>
-          </div>
-        {/each}
+<Dialog id="modal-ex" cancel={hide} confirm={submit}>
+  <h4 slot="modal-header">
+    <span class="btn-add" on:click={addRename} on:keydown>
+      <Icons name="squareplus" />
+    </span>
+    <span class="title">Chapter Exclude From Download</span>
+  </h4>
+  <span slot="modal-body">
+    {#each nameList as name}
+      <div class="name-item" id={name.Id}>
+        <Input key="Name" item={name} />
+        <span on:click={onRemove} on:keydown><Icons name="trash" /></span>
       </div>
-      <div class="error">{error || ""}</div>
-      <div class="modal-footer">
-        <button type="submit" class="btn">Save</button>
-        <button type="button" class="btn" on:click={hide}>Cancel</button>
-      </div>
-    </form>
-  </div>
-</div>
+    {/each}
+  </span>
+</Dialog>
 
 <style>
   .title {
@@ -92,36 +84,26 @@
     text-align: center;
     top: -11px;
   }
-  .modal {
-    height: calc(100% - 100px);
-    max-height: 350px;
-    width: 370px;
-    outline: none;
-  }
-  .modal-header {
-    border-bottom: 1px solid;
-    margin-bottom: 5px;
-  }
-  .r-names :global(.icon-squareplus) {
+  :global(#modal-ex .icon-squareplus) {
     height: 35px;
     width: 45px;
     top: -1px;
   }
-  .r-names :global(.input-label) {
+  :global(#modal-ex .input-label) {
     padding-left: 0.35rem;
     text-align: left;
     width: 110px;
   }
-  .r-names :global(.input-control) {
+  :global(#modal-ex .input-control) {
     margin-bottom: 2px;
   }
-  .r-names :global(input) {
+  :global(#modal-ex input) {
     margin: 0;
   }
-  .r-names form {
+  :global(#modal-ex form) {
     height: calc(100% - 85px);
   }
-  .r-names .modal-body {
+  :global(.modal-body) {
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
@@ -141,7 +123,7 @@
   }
 
   @media screen and (max-width: 450px) {
-    .modal {
+    :global(#modal-ex) {
       width: 390px;
     }
   }
