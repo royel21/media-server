@@ -134,7 +134,13 @@ const download = async (link, page, server, state) => {
 
   let found = await db.file.findOne({ where: { Name }, include: { model: db.folder } });
 
-  if (!found) {
+  let download = true;
+
+  if (found && found.Name === data.Name) {
+    download = false;
+  }
+
+  if (download) {
     await page.goto(data.url, { waitUntil: "domcontentloaded" });
     let initalUrl = await page.evaluate(() => {
       return document.querySelector("#image-container img")?.src;
