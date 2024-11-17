@@ -84,9 +84,9 @@
             <span class="duration">
               {Type.includes("Manga") ? `${CurrentPos + 1}/${Duration}` : formatTime(Duration)}
             </span>
+            <span class="f-index duration">#{(start + i + 1).toString().padStart(3, "0")}</span>
           </span>
           <span class="l-name">{Name}</span>
-          <span class="f-index">#{(start + i + 1).toString().padStart(3, "0")}</span>
         </li>
       {/each}
     </ul>
@@ -227,10 +227,10 @@
   #play-list .duration {
     position: absolute;
     display: inline-block;
-    top: 1px;
-    right: calc(50% - 20px);
+    bottom: 0px;
+    right: 0px;
     padding: 0 4px;
-    background-color: #283841d4;
+    background-color: rgba(0, 0, 0, 0.801);
     border-radius: 0.25rem;
     font-size: 14px;
     font-family: monospace;
@@ -238,7 +238,7 @@
 
   #play-list :global(img) {
     max-height: 100%;
-    max-width: 100%;
+    min-width: 100%;
   }
 
   #play-list #v-filter {
@@ -273,12 +273,10 @@
     bottom: 0px;
     width: 100%;
   }
-  .f-index {
+  #play-list .f-index {
     position: absolute;
     left: 2px;
-    padding: 2px 4px;
-    border-radius: 0.25rem;
-    background-color: rgba(0, 0, 0, 0.801);
+    right: inherit;
   }
   @media screen and (max-width: 600px) {
     #play-list.move {
