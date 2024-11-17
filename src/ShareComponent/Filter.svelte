@@ -8,7 +8,7 @@
 
   let curFilter = /%/.test(filter) ? decodeURIComponent(filter) : filter;
 
-  const send = (text = "") => {
+  const send = (text = "", type = "filter") => {
     curFilter = text;
     let ftl = encodeURIComponent(
       text
@@ -17,8 +17,7 @@
         .replace(/ (\[|\(|)official(\]|\)|)$/i, "")
         .trim()
     );
-    dispatch("filter", ftl);
-    dispatch("change", ftl);
+    dispatch(type, ftl);
   };
 
   const ClearFilter = () => send("");
@@ -35,7 +34,7 @@
     send(text);
   };
 
-  const onChanges = () => send(curFilter);
+  const onChanges = () => send(curFilter, "change");
 
   $: filter = curFilter;
   const box = "0 0 512 512";
