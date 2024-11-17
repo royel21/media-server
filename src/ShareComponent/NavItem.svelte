@@ -21,12 +21,14 @@
     const others = [...dirs[item.title].filter((i) => !i.IsAdult && i.Id !== "all")];
     const adults = [...dirs[item.title].filter((i) => i.IsAdult && i.Id !== "all")];
 
+    const current = location.pathname.split("/").pop() || data.current;
+
     data = {
       items: {
         others,
         adults,
       },
-      current: "all",
+      current,
     };
   }
 
