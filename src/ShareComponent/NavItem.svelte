@@ -3,6 +3,8 @@
   import { getProps } from "src/ShareComponent/DataUtils";
   import Icons from "src/icons/Icons.svelte";
   import { navigate } from "svelte-routing";
+  import ListItems from "./ListItems.svelte";
+  import { afterUpdate } from "svelte";
   export let dirs;
   export let item;
   export let title = "";
@@ -19,59 +21,37 @@
     const others = [...dirs[item.title].filter((i) => !i.IsAdult && i.Id !== "all")];
     const adults = [...dirs[item.title].filter((i) => i.IsAdult && i.Id !== "all")];
 
-    const current = location.pathname.split("/").pop() || data.current;
-
     data = {
       items: {
         others,
         adults,
       },
-      current,
+      current: "all",
     };
   }
+
+  afterUpdate(() => {
+    const li = document.querySelector(`.${item.title} .s-list .selected`);
+    if (li) {
+      [...document.querySelectorAll(".s-list:not(#all)")].forEach((it) => {
+        it.classList.remove("selected");
+      });
+      li.parentElement.closest("li").classList.add("selected");
+    }
+  });
 </script>
 
-<li class="nav-item" on:click={select} id="all">
+<li class={`nav-item ${item.title}`} on:click={select} id={data.current}>
   <Link to={`${item.path}/${data.current}`} {getProps}>
     <Icons name={item.class} height="22px" color={item.color} />
     <span class="nav-title">{item.title}</span>
     {#if data.items}
       <ul class="down-list">
-        {#if data.items.adults.length === 0}
-          {#each data.items.others as { Id, Name }}
-            <li class="list-item" id={Id} class:selected={Id === data.current}>
-              <span>{Name}</span>
-            </li>
-          {/each}
-        {:else}
-          <li class="list-item s-list" id={data.items.others[0]?.Id}>
-            {title}
-            <span>&gt;</span>
-            <ul class="sub-list">
-              {#each data.items.others as { Id, Name }}
-                <li class="list-item" id={Id} class:selected={Id === data.current}>
-                  <span>{Name}</span>
-                </li>
-              {/each}
-            </ul>
-          </li>
-          <li class="list-item s-list adult" id={data.items.adults[0]?.Id}>
-            R18
-            {#if data.items.adults.length > 1}
-              <span>&gt;</span>
-              <ul class="sub-list">
-                {#each data.items.adults as { Id, Name }}
-                  <li class="list-item adult" id={Id} class:selected={Id === data.current}>
-                    <span>{Name}</span>
-                  </li>
-                {/each}
-              </ul>
-            {/if}
-          </li>
+        <ListItems {title} items={data.items.others} current={data.current} />
+        {#if data.items.adults.length > 0}
+          <ListItems title="R18" class="adult" items={data.items.adults} current={data.current} />
         {/if}
-        <li class="list-item" id="all" class:selected={"all" === data.current}>
-          <span>All</span>
-        </li>
+        <li class="list-item s-list" id="all" class:selected={"all" === data.current}>All</li>
       </ul>
     {/if}
   </Link>
@@ -80,12 +60,6 @@
 <style>
   .nav-item:hover .down-list {
     display: initial;
-  }
-  .nav-item ul .list-item:hover {
-    background-color: #8e5e00;
-  }
-  .list-item span {
-    pointer-events: none;
   }
   .down-list {
     display: none;
@@ -121,34 +95,12 @@
     background-color: firebrick;
   }
   .nav-item:hover,
-  .down-list li:hover {
+  .down-list :global(li:hover) {
     background-color: rgb(2 177 242);
   }
 
   .down-list li:last-child {
     border-radius: 0 0 0.25rem 0.25rem;
-  }
-  .down-list .s-list {
-    position: relative;
-    overflow: visible;
-  }
-  .s-list > span {
-    position: absolute;
-    top: -3px;
-    right: 5px;
-    font-size: 1.3rem;
-  }
-  .sub-list {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 100%;
-    background-color: #343a40;
-    border-radius: 0 0 0.25rem 0.25rem;
-  }
-
-  .down-list .s-list:hover .sub-list {
-    display: initial;
   }
 
   .selected {
