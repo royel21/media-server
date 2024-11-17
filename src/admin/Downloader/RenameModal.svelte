@@ -82,7 +82,7 @@
     const start = (page - 1) * 100;
     const end = start + 100;
     totalPages = Math.ceil(nameList.length / 100);
-    const regx = RegExp(filter, "i");
+    const regx = RegExp(filter, "ig");
     filteredList = nameList.filter((f) => regx.test(f.AltName) || regx.test(f.Name)).slice(start, end);
   }
 </script>
