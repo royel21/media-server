@@ -8,19 +8,9 @@
 
   let clazz = "";
   export { clazz as class };
-
-  const handler = ({ target, currentTarget }) => {
-    if (currentTarget === target) cancel();
-  };
 </script>
 
-<div
-  class="modal-container"
-  tabindex="-1"
-  on:contextmenu|stopPropagation={() => {}}
-  on:keydown|stopPropagation
-  on:click={handler}
->
+<div class="modal-container" tabindex="-1" on:contextmenu|stopPropagation={() => {}} on:keydown|stopPropagation>
   <div {id} class={`modal card move-to ${clazz}`} transition:fade={{ duration: 200 }}>
     <form on:submit|preventDefault={confirm}>
       <div class="modal-header">
