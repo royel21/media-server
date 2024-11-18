@@ -84,6 +84,9 @@
     text-align: center;
     top: -11px;
   }
+  :global(#modal-ex .modal-body) {
+    min-height: 300px;
+  }
   :global(#modal-ex .icon-squareplus) {
     height: 35px;
     width: 45px;
