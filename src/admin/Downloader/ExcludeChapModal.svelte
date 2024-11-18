@@ -103,7 +103,7 @@
   :global(#modal-ex form) {
     height: calc(100% - 85px);
   }
-  :global(.modal-body) {
+  :global(.modal-ex .modal-body) {
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;

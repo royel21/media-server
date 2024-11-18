@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import Dialog from "./Dialog.svelte";
+  import Dialog from "../Component/Dialog.svelte";
   import Icons from "src/icons/Icons.svelte";
   import Select from "../Component/Select.svelte";
   import CheckBox from "../Component/CheckBox.svelte";
@@ -99,7 +99,6 @@
     overflow: auto;
     margin: 0;
     padding-bottom: 5px;
-    width: 100%;
   }
   li {
     font-size: 0.9rem;
