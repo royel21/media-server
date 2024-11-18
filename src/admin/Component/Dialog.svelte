@@ -48,6 +48,7 @@
     outline: none;
     pointer-events: all;
     max-width: 95%;
+    z-index: 401;
   }
   .modal-body {
     padding: 15px 5px;
