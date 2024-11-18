@@ -59,6 +59,7 @@
     ditem.Path = content[0].Path;
     loadDirs(content[0].Path);
   });
+  $: console.log("render");
 </script>
 
 <Dialog cancel={hide} confirm={onConfirm} {errors}>
