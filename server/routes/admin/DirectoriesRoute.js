@@ -116,7 +116,7 @@ routes.post("/get-dirs", (req, res) => {
 
   if (next && Path) Path = path.join(Path, next);
 
-  if (back) Path = path.dirname(Path);
+  if (back && Path !== homeDir) Path = path.dirname(Path);
 
   if (fs.existsSync(Path)) {
     const dirs = ListFiles(Path)
