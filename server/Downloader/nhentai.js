@@ -140,7 +140,7 @@ const download = async (link, page, server, state) => {
     download = false;
   }
 
-  if (download) {
+  if (download && !fs.existsSync(filePath + ".zip")) {
     await page.goto(data.url, { waitUntil: "domcontentloaded" });
     let initalUrl = await page.evaluate(() => {
       return document.querySelector("#image-container img")?.src;
