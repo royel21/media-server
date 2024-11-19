@@ -18,7 +18,7 @@
   export let Name = "";
   let filtered = files;
   let TotalSize = 0;
-  let sortBy = "name";
+  let sortBy = "date";
 
   let removeList = [];
   let isChecked = false;
@@ -99,7 +99,7 @@
   const sorter = {
     name: sortByName,
     date: (a, b) => b.LastModified - a.LastModified,
-    size: (a, b) => a.Size - b.Size,
+    size: (a, b) => b.Size - a.Size,
   };
 
   $: isChecked = filtered.length && removeList.length === filtered.length;
@@ -149,8 +149,8 @@
           <span class="input-group-text"><Icons name="list" color="black" box="0 0 512 512" /></span>
           <select bind:value={sortBy} class="form-control">
             <option value="date">Date</option>
-            <option value="size">Size</option>
             <option value="name">Name</option>
+            <option value="size">Size</option>
           </select>
         </span>
       </div>
@@ -256,6 +256,10 @@
 
   .filter > span :global(.icon-trash) {
     left: 3px;
+  }
+  .filter :global(.c-filter) {
+    max-width: initial;
+    padding-right: 5px;
   }
   .form-control {
     width: 70px;
