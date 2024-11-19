@@ -10,6 +10,7 @@
   import Loading from "src/ShareComponent/Loading.svelte";
   import RenameModal from "./RenameModal.svelte";
   import { sortByName } from "src/ShareComponent/utils";
+  import { formatDate } from "../Downloader/utils";
 
   export let files = [];
   export let socket;
@@ -17,6 +18,7 @@
   export let Name = "";
   let filtered = files;
   let TotalSize = 0;
+  let sortBy = "name";
 
   let removeList = [];
   let isChecked = false;
@@ -94,9 +96,18 @@
     return (sum / 1024 / 1024 / 1024).toFixed(2) + "GB";
   };
 
+  const sorter = {
+    name: sortByName,
+    date: (a, b) => b.LastModified - a.LastModified,
+    size: (a, b) => a.Size - b.Size,
+  };
+
   $: isChecked = filtered.length && removeList.length === filtered.length;
   $: {
-    filtered = files.filter((f) => f.Name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()));
+    filtered = files
+      .filter((f) => f.Name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()))
+      .map((d) => ({ ...d, LastModified: new Date(d.LastModified) }))
+      .sort(sorter[sortBy]);
     TotalSize = getSize();
   }
 </script>
@@ -134,11 +145,19 @@
           {/if}
         </span>
         <Filter id="file-filter" bind:filter />
+        <span class="input-group">
+          <span class="input-group-text"><Icons name="list" color="black" box="0 0 512 512" /></span>
+          <select bind:value={sortBy} class="form-control">
+            <option value="date">Date</option>
+            <option value="size">Size</option>
+            <option value="name">Name</option>
+          </select>
+        </span>
       </div>
     </div>
     <ul>
       {#each filtered as file}
-        <li id={file.Id} title={file.Name}>
+        <li id={file.Id} title={formatDate(file.LastModified)}>
           <CCheckbox on:change={onCheck} isChecked={removeList.includes(file.Id)} />
           <span on:click={() => (showRename = file)}><Icons name="edit" /></span>
           {(file.Size / 1024 / 1024 / 1024).toFixed(3)}GB -
@@ -225,7 +244,7 @@
   }
   .filter span {
     display: flex;
-    flex-direction: raw;
+    flex-direction: row;
   }
   .filter span > span {
     position: relative;
@@ -237,5 +256,15 @@
 
   .filter > span :global(.icon-trash) {
     left: 3px;
+  }
+  .form-control {
+    width: 70px;
+    padding: 0.1rem 0rem;
+  }
+  .input-group :global(.icon-list) {
+    left: -3px;
+  }
+  .input-group {
+    min-width: 100px;
   }
 </style>
