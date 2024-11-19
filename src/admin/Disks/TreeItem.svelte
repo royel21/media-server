@@ -25,11 +25,13 @@
     if (item.Type !== "file") {
       if (item.Content.length === 0) {
         const data = await apiUtils.post("admin/directories/Content", { Path: item.Path });
-        item.Content = data.data.filter((it) => it.Type !== "file");
-        items = items;
-        const files = data.data.filter((it) => it.Type === "file");
-        hasFiles = files.length;
-        setFiles(files, item);
+        if (data.data) {
+          item.Content = data.data.filter((it) => it.Type !== "file");
+          items = items;
+          const files = data.data.filter((it) => it.Type === "file");
+          hasFiles = files.length;
+          setFiles(files, item);
+        }
       } else {
         item.Content = [];
         items = items;

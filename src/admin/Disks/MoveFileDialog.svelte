@@ -16,6 +16,8 @@
   let errors = [];
   let dirs = [];
   let ditem = {};
+  const dDir = "dDir";
+  const dPath = "dPath";
 
   const onConfirm = () => {
     errors = [];
@@ -30,7 +32,7 @@
     if (!/^\/(mnt|media)\/.*\/|^[d-z]\:\\|\/home\/.*\/|^c:\\Users\\.*\\/i.test(item.Path)) {
       return errors.push("Path must be on User Space");
     }
-
+    console.log(item);
     return acept({ files, ...item });
   };
 
@@ -39,12 +41,13 @@
 
     if (result.dirs) {
       item.Path = result.Path;
+      localStorage.setItem(dPath, result.Path);
       dirs = result.dirs;
     }
   };
 
   const onChange = ({ target: { value } }) => {
-    localStorage.setItem("mmovefile-dir", value);
+    localStorage.setItem(dDir, value);
     ditem.Path = value;
     loadDirs(value);
   };
@@ -57,15 +60,16 @@
   const goBack = () => loadDirs(item.Path, "", true);
 
   onMount(() => {
-    ditem.Path = localStorage.getItem("mmovefile-dir", value) || content[0].Path;
-    loadDirs(content[0].Path);
+    ditem.Path = localStorage.getItem(dDir) || content[0].Path;
+    item.Path = localStorage.getItem(dPath) || ditem.Path;
+    loadDirs(item.Path);
   });
 </script>
 
 <Dialog cancel={hide} confirm={onConfirm} {errors}>
   <h4 slot="modal-header">Move <span>{files.length}</span> {files.length > 1 ? "Files" : "File"} to Path</h4>
   <div class="dir-list" slot="modal-body">
-    <CheckBox key="Override" {item} />
+    <CheckBox label="Overwrite" key="overwrite" {item} />
     <Select item={ditem} label="Root" key="Path" options={content.map((d) => ({ ...d, Id: d.Path }))} {onChange} />
     <TextAreaInput focus={true} label="Path" key="Path" {item} disabled={true} paste={false}>
       <span class="pre-paste" slot="btn-left" on:click={goBack} title="Copy Name">
