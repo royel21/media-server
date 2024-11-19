@@ -9,15 +9,17 @@
   export let servers = [];
 
   let link = { Name: "", AltName: "", Url: "", Raw: false };
-  let error = "";
+  let errors = [];
   let ref;
 
   const submit = async () => {
-    if (!link.Url) return (error = "Url Can't be Empty");
-    if (!/^http/.test(link.Url)) return (error = "Not a valid Url");
+    if (!link.Url) return (errors = ["Url Can't be Empty"]);
+    if (!/^http/.test(link.Url)) return (errors = ["Not a valid Url"]);
 
     const result = await apiUtils.post("admin/downloader/add-link", link);
-    error = result.error;
+    if (errors) {
+      errors = [result.error];
+    }
     if (result.valid) hide(result);
   };
 
@@ -50,7 +52,7 @@
   });
 </script>
 
-<Dialog cancel={hide} confirm={submit}>
+<Dialog cancel={hide} confirm={submit} {errors}>
   <h4 slot="modal-header">New Link</h4>
   <svelte:fragment slot="modal-body">
     <TextAreaInput key="Name" file={link} onChange={handle} />

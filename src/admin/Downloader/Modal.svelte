@@ -17,7 +17,7 @@
     const body = server ? server : link;
     body.table = server ? "Server" : "Link";
     const result = await apiUtils.post("admin/downloader/item-update", body);
-    errors = result.error;
+    if (errors) errors = [result.error];
     if (result.valid) hide();
   };
 

@@ -10,7 +10,7 @@
   export let linkId = "";
 
   let nameList = [];
-  let error = "";
+  let error = [];
   let ref;
   let newNames = 0;
 
@@ -35,7 +35,7 @@
 
   const submit = async (e) => {
     const result = await apiUtils.post("admin/downloader/add-exclude", { nameList });
-    error = result.error;
+    if (errors) errors = [result.error];
     if (result.valid) hide(true);
   };
 
