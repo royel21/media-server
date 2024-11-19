@@ -166,6 +166,7 @@ export const downloadFromPage = async (Id, state) => {
     } catch (error) {
       sendMessage({ text: `Error checking server ${server?.Name}`, color: "red", error });
     }
+    sendMessage({ text: `Server finish ${server?.Name}` });
     state.checkServer = false;
   }
 };
