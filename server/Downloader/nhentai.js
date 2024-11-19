@@ -181,10 +181,10 @@ const download = async (link, page, server, state) => {
             const buff = await img.toFormat("jpg").toBuffer();
             zip.addFile(newImg, buff);
             count++;
-            if (creatCover && !fs.existsSync(cover)) {
-              creatCover = false;
-              await saveThumbnail(buff, cover);
-            }
+            // if (creatCover && !fs.existsSync(cover)) {
+            //   creatCover = false;
+            //   await saveThumbnail(buff, cover);
+            // }
             f = 0;
             i++;
           }
