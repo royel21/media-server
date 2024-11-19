@@ -18,8 +18,8 @@
   };
 
   $: if (dirs.Mangas.length) {
-    const others = [...dirs[item.title].filter((i) => !i.IsAdult && i.Id !== "all")];
-    const adults = [...dirs[item.title].filter((i) => i.IsAdult && i.Id !== "all")];
+    const others = [...dirs[item.title].filter((i) => !i.IsAdult)];
+    const adults = [...dirs[item.title].filter((i) => i.IsAdult)];
 
     const current = location.pathname.split("/").pop() || data.current;
 

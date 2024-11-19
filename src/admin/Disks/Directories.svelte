@@ -195,6 +195,9 @@
     width: 155px;
     min-width: 155px;
   }
+  td {
+    white-space: nowrap;
+  }
 
   @media screen and (max-width: 700px) {
     .f-path {
