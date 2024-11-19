@@ -165,7 +165,7 @@
     position: absolute;
     left: 10px;
     bottom: 6px;
-    z-index: 999;
+    z-index: 301;
   }
 
   .scroll-top :global(.icon-arrowcircleup) {
