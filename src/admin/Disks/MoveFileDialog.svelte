@@ -44,6 +44,7 @@
   };
 
   const onChange = ({ target: { value } }) => {
+    localStorage.setItem("mmovefile-dir", value);
     ditem.Path = value;
     loadDirs(value);
   };
@@ -56,10 +57,9 @@
   const goBack = () => loadDirs(item.Path, "", true);
 
   onMount(() => {
-    ditem.Path = content[0].Path;
+    ditem.Path = localStorage.getItem("mmovefile-dir", value) || content[0].Path;
     loadDirs(content[0].Path);
   });
-  $: console.log("render");
 </script>
 
 <Dialog cancel={hide} confirm={onConfirm} {errors}>
