@@ -135,7 +135,7 @@
       <Loading text="Transfer In Process - Please Wait" />
     {/if}
     <div class="ftree-control">
-      <h4>{files.length}/{TotalSize} - {Name}</h4>
+      <h4>{filtered.length}/{TotalSize} - {Name}</h4>
       <div class="filter">
         <span>
           <CCheckbox id="check-all" on:change={onCheckAll} {isChecked} title="Select All Files" />
