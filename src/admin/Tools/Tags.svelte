@@ -84,7 +84,7 @@
   <div class="controls">
     <span class="create-folder" on:click={addTag}><Icons name="squareplus" box="0 0 512 512" /></span>
     <Filter bind:filter />
-    <slot name="btn-ctr-last" />
+    <span class="bagde">{filtered.length}</span>
   </div>
   <div class="list-container">
     <ul class="list-group text-dark">
@@ -155,7 +155,8 @@
     margin-right: 8px;
   }
   #tag-list :global(#filter-control) {
-    min-width: calc(100% - 50px);
+    flex-grow: 1;
+    max-width: initial;
   }
 
   #tag-list li .icon {
@@ -164,5 +165,11 @@
   }
   #tag-list li > span {
     padding: 5px;
+  }
+  #tag-list .bagde {
+    margin-left: 5px;
+    padding: 5px;
+    border-radius: 0.25rem;
+    background-color: #2196f3;
   }
 </style>
