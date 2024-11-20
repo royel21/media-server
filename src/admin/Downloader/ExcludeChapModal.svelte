@@ -10,7 +10,7 @@
   export let linkId = "";
 
   let nameList = [];
-  let error = [];
+  let errors = [];
   let ref;
   let newNames = 0;
 
