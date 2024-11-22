@@ -17,30 +17,23 @@
     if (!/^http/.test(link.Url)) return (errors = ["Not a valid Url"]);
 
     const result = await apiUtils.post("admin/downloader/add-link", link);
-    if (errors) {
-      errors = [result.error];
+    if (result.error) {
+      errors = result.error;
     }
     if (result.valid) hide(result);
-  };
-
-  const onKeyDown = (e) => {
-    if (e.keyCode === 13 && e.ctrlKey) {
-      submit(e);
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    if (e.keyCode === 27) hide();
   };
 
   const handle = ({ target: { name } }) => {
     if (name === "Url") {
       if (!link.IsAdult && servers) {
         const linkParts = link.Url.split("/");
-        let serv = linkParts[2].replace(/www\.|\.html/i, "");
-        for (const id in servers) {
-          if (servers[id].Name === serv) {
-            link.IsAdult = servers[id].Type === "Adult";
-            break;
+        if (linkParts.length > 1) {
+          let serv = linkParts[2].replace(/www\.|\.html/i, "");
+          for (const id in servers) {
+            if (servers[id].Name === serv) {
+              link.IsAdult = servers[id].Type === "Adult";
+              break;
+            }
           }
         }
       }
@@ -56,7 +49,7 @@
   <h4 slot="modal-header">New Link</h4>
   <svelte:fragment slot="modal-body">
     <TextAreaInput key="Name" file={link} onChange={handle} />
-    <TextAreaInput key="Url" file={link} onChange={handle} />
+    <TextAreaInput key="Url" file={link} onChange={handle} sept={"\n"} />
     <TextAreaInput key="AltName" sept="; " file={link} onChange={handle} />
     <CheckBox label="Is Adult" key="IsAdult" item={link} />
     <CheckBox label="Is Raw" key="Raw" item={link} />

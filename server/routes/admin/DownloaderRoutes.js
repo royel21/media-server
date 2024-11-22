@@ -114,11 +114,10 @@ routes.post("/item-update", async ({ body }, res) => {
 const validRegex =
   /\/\/(aquamanga.com|bato.to)|\/(manga|manga-hentai|hentai|manhua|comic|manhwa(-raw|)|webtoon|bato|\/series\/\d+\/)\//;
 
-routes.post("/add-link", async ({ body }, res) => {
-  const { IsAdult, Url, Name, AltName, Raw } = body;
-  const result = { valid: false };
+const createLink = async (Url, body, result) => {
+  const { IsAdult, Name, AltName, Raw } = body;
   if (validRegex.test(Url) || !/=/.test(Url)) {
-    const { url, serverName } = formatLink(body.Url);
+    const { url, serverName } = formatLink(Url);
 
     let [server, isNew] = await db.Server.findOrCreate({ where: { Name: serverName } });
     let adult = IsAdult !== undefined ? IsAdult : server.Type === "Adult";
@@ -138,12 +137,22 @@ routes.post("/add-link", async ({ body }, res) => {
       result.server = isNew ? server.dataValues : null;
     } catch (error) {
       if (error.toString().includes("SequelizeUniqueConstraintError")) {
-        result.error = `Can't Add Duplicate Link`;
+        if (!result.error.includes("Can't Add Duplicate Link")) {
+          result.error.push("Can't Add Duplicate Link");
+        }
+        result.error.push(url);
       }
       console.log(error.toString());
     }
   }
+};
 
+routes.post("/add-link", async ({ body }, res) => {
+  const result = { valid: false, error: [] };
+  const urls = body.Url.split("\n");
+  for (const url of urls) {
+    await createLink(url, body, result);
+  }
   res.send(result);
 });
 
