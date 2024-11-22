@@ -45,7 +45,7 @@
     let text = await navigator.clipboard?.readText();
     if (!link.Url.includes(text) && /http/.test(text)) {
       if (link.Url) {
-        link.Url += "\n" + text;
+        link.Url = text + "\n" + link.Url;
       } else {
         link.Url = text;
       }
