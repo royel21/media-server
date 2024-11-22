@@ -6,6 +6,7 @@
   import CheckBox from "../Component/CheckBox.svelte";
   import TextAreaInput from "../Component/TextAreaInput.svelte";
   import apiUtils from "src/apiUtils";
+  import Input from "../Component/Input.svelte";
 
   export let hide;
   export let files;
@@ -15,7 +16,8 @@
   let item = { Path: "/mnt/", overwrite: false };
   let errors = [];
   let dirs = [];
-  let ditem = {};
+  let ditem = { Filter: "" };
+  let filtered = [];
   const dDir = "dDir";
   const dPath = "dPath";
 
@@ -43,6 +45,7 @@
       item.Path = result.Path;
       localStorage.setItem(dPath, result.Path);
       dirs = result.dirs;
+      onFilter();
     }
   };
 
@@ -59,6 +62,19 @@
 
   const goBack = () => loadDirs(item.Path, "", true);
 
+  const onKeydown = (e) => {
+    if (e.keyCode === 13) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  };
+
+  const onFilter = (e) => {
+    const value = e?.target.value || "";
+    const regx = RegExp(value, "i");
+    filtered = dirs.filter((f) => regx.test(f));
+  };
+
   onMount(() => {
     ditem.Path = localStorage.getItem(dDir) || content[0].Path;
     item.Path = localStorage.getItem(dPath) || ditem.Path;
@@ -71,6 +87,7 @@
   <div class="dir-list" slot="modal-body">
     <CheckBox label="Overwrite" key="overwrite" {item} />
     <Select item={ditem} label="Root" key="Path" options={content.map((d) => ({ ...d, Id: d.Path }))} {onChange} />
+    <Input key="Filter" item={ditem} on:keydown={onKeydown} on:input={onFilter} onChange={onFilter} />
     <TextAreaInput focus={true} label="Path" key="Path" {item} disabled={true} paste={false}>
       <span class="pre-paste" slot="btn-left" on:click={goBack} title="Copy Name">
         <Icons name="reply" color="#045cba" />
@@ -78,7 +95,7 @@
     </TextAreaInput>
     <div class="folder-list">
       <ul class="list" on:click={loadPath}>
-        {#each dirs as dir}
+        {#each filtered as dir}
           <li class="list-item">{dir}</li>
         {/each}
       </ul>
