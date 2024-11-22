@@ -43,10 +43,12 @@
 
   const joinPaste = async () => {
     let text = await navigator.clipboard?.readText();
-    if (link.Url) {
-      link.Url += "\n" + text;
-    } else {
-      link.Url = text;
+    if (!link.Url.includes(text) && /http/.test(text)) {
+      if (link.Url) {
+        link.Url += "\n" + text;
+      } else {
+        link.Url = text;
+      }
     }
   };
 
