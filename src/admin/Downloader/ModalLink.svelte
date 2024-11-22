@@ -69,3 +69,10 @@
     <CheckBox label="Is Raw" key="Raw" item={link} />
   </svelte:fragment>
 </Dialog>
+
+<style>
+  .pre-paste {
+    position: absolute;
+    left: 5px;
+  }
+</style>
