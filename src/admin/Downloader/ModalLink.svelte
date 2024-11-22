@@ -76,5 +76,6 @@
   .pre-paste {
     position: absolute;
     left: 5px;
+    padding: 0 6px;
   }
 </style>
