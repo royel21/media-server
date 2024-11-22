@@ -4,6 +4,7 @@
   import TextAreaInput from "src/admin/Component/TextAreaInput.svelte";
   import apiUtils from "src/apiUtils";
   import Dialog from "../Component/Dialog.svelte";
+  import Icons from "src/icons/Icons.svelte";
 
   export let hide;
   export let servers = [];
@@ -40,6 +41,15 @@
     }
   };
 
+  const joinPaste = async () => {
+    let text = await navigator.clipboard?.readText();
+    if (link.Url) {
+      link.Url += "\n" + text;
+    } else {
+      link.Url = text;
+    }
+  };
+
   onMount(() => {
     ref?.focus();
   });
@@ -49,7 +59,11 @@
   <h4 slot="modal-header">New Link</h4>
   <svelte:fragment slot="modal-body">
     <TextAreaInput key="Name" file={link} onChange={handle} />
-    <TextAreaInput key="Url" file={link} onChange={handle} sept={"\n"} />
+    <TextAreaInput key="Url" file={link} onChange={handle}>
+      <span class="pre-paste" slot="btn-left" on:click={joinPaste} title="Paste To The Right">
+        <Icons name="paste" color="black" />
+      </span>
+    </TextAreaInput>
     <TextAreaInput key="AltName" sept="; " file={link} onChange={handle} />
     <CheckBox label="Is Adult" key="IsAdult" item={link} />
     <CheckBox label="Is Raw" key="Raw" item={link} />
