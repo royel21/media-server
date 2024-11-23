@@ -294,7 +294,7 @@ process.on("message", async ({ action, datas, remove, bypass, server }) => {
       state.browser = await startBrowser({ headless: false, userDataDir: "./user-data/puppeteer" });
       sendMessage({ IsRunning: state.browser !== undefined }, "is-running");
     } catch (error) {
-      sendMessage({ text: "Error trying to start scraper", error: error.toString() }, "error");
+      console.log(error);
     }
   }
 
