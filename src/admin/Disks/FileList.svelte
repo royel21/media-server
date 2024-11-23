@@ -110,6 +110,10 @@
       .sort(sorter[sortBy]);
     TotalSize = getSize();
   }
+
+  $: if (files.length) {
+    removeList = [];
+  }
 </script>
 
 {#if showMoveDialog}
@@ -270,5 +274,8 @@
   }
   .input-group {
     min-width: 100px;
+  }
+  .rm-all {
+    margin-right: 5px;
   }
 </style>
