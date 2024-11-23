@@ -135,8 +135,7 @@ const download = async (link, page, server, state) => {
   let found = await db.file.findOne({ where: { Name }, include: { model: db.folder } });
 
   let download = true;
-
-  if (found && found.Name === data.Name) {
+  if (found && found.Name === data.name + ".zip") {
     download = false;
   }
 
@@ -181,10 +180,10 @@ const download = async (link, page, server, state) => {
             const buff = await img.toFormat("jpg").toBuffer();
             zip.addFile(newImg, buff);
             count++;
-            // if (creatCover && !fs.existsSync(cover)) {
-            //   creatCover = false;
-            //   await saveThumbnail(buff, cover);
-            // }
+            if (creatCover && !fs.existsSync(cover) && data.type === "anthology") {
+              creatCover = false;
+              await saveThumbnail(buff, cover);
+            }
             f = 0;
             i++;
           }
