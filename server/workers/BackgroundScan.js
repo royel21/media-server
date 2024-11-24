@@ -103,12 +103,13 @@ const createFolderThumbnail = async (folder, files, isFolder) => {
 const createFolder = async ({ Name, Path, LastModified }, files) => {
   const FilesType = /rar|zip/gi.test(files[0].Extension) ? "mangas" : "videos";
   const FileCount = files.length;
-
+  const dir = await db.directory.findOne({ where: { Id } });
   return db.folder.create({
     Name,
     Path,
     FileCount,
     DirectoryId,
+    IsAdult: dir.IsAdult,
     FilesType,
     CreatedAt: LastModified,
   });
