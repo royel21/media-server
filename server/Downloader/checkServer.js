@@ -172,5 +172,6 @@ export const downloadFromPage = async (Id, state) => {
     }
     sendMessage({ text: `Server finish ${server?.Name}` });
     state.checkServer = false;
+    state.links = [];
   }
 };

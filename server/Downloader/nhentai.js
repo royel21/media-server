@@ -246,5 +246,6 @@ export const downloadNHentais = async (state) => {
   sendMessage({ text: "nhentai finish", link: link, remove: true }, "link-update");
   state.hrunning = false;
   state.hsize = 0;
+  state.hentai = [];
   await page.close();
 };
