@@ -326,6 +326,13 @@ body .c-filter {
   position: relative;
 }
 
+body .navbar .icon-download,
+body .navbar .icon-file,
+body .navbar .icon-signout,
+body .navbar .icon-folder {
+  right: -4px;
+}
+
 /*************************Scrollbar Style********************************/
 
 ::-webkit-scrollbar {
