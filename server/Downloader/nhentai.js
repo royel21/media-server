@@ -242,9 +242,8 @@ export const downloadNHentais = async (state) => {
     } catch (error) {
       sendMessage({ text: `Error ${link.Url} was no properly downloaded`, color: "red", error });
     }
-
-    sendMessage({ text: "nhentai finish", link: link, remove: true }, "link-update");
   }
+  sendMessage({ text: "nhentai finish", link: link, remove: true }, "link-update");
   state.hrunning = false;
   state.hsize = 0;
   await page.close();

@@ -129,6 +129,14 @@
     showLinkModal = false;
   };
 
+  const onUpdate = ({ link }) => {
+    if (link.remove === true || link.IsDownloading === false) {
+      datas.links = datas.links.filter((f) => f.Id !== link?.Id);
+    } else {
+      datas.links = updateLink(link, datas, true);
+    }
+  };
+
   const updateLinkList = (links) => (datas.links = [...links]);
 
   onMount(() => {
@@ -136,9 +144,11 @@
     loadItems(true);
     socket.emit("download-server", { action: "is-running" });
     socket.on("is-running", updateRunning);
+    socket.on("update-download", onUpdate);
     return () => {
       isMounted = false;
       apiUtils.cancelQuery();
+      socket.off("update-download", onUpdate);
       socket.off("is-running", updateRunning);
     };
   });
