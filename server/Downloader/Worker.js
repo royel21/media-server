@@ -207,7 +207,6 @@ const onDownload = async (bypass) => {
       sendMessage({ text: `Link ${link.Name} was checked recently`, color: "red" });
     }
   }
-  sendMessage({ text: "Worker finish", link: link, remove: true });
 
   state.running = false;
 };
