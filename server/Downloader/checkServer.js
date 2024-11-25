@@ -94,10 +94,14 @@ export const downloadFromPage = async (Id, state) => {
       for (let { Name, chaps } of data) {
         let tname = await db.NameList.findOne({ where: { Name } });
 
-        const link = await db.Link.findOne({
+        const query = {
           where: { Name: tname?.AltName || Name, ServerId: Id },
           include: ["Server"],
-        });
+        };
+
+        if (/raw/i.test(Name)) query.where.url = { [db.Op.like]: `%-raw%` };
+
+        const link = await db.Link.findOne(query);
 
         if (link) {
           linkData.push({ link, chaps });
