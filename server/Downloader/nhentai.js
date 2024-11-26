@@ -71,7 +71,7 @@ const download = async (link, page, server, state) => {
       let name =
         document.querySelector(".title .before").textContent + document.querySelector(server.Title)?.textContent;
 
-      const splitP = / (\||⎮)/;
+      const splitP = / ⎮|\| /g;
 
       if (splitP.test(name)) {
         let parts = name.split(splitP);
