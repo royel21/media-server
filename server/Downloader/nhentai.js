@@ -68,8 +68,7 @@ const download = async (link, page, server, state) => {
     try {
       let url = document.querySelector(".gallerythumb").href;
 
-      let textContent =
-        document.querySelector(".title .before").textContent + document.querySelector(server.Title)?.textContent;
+      let textContent = document.querySelector(".title").textContent;
 
       const formatName = (val) => {
         const splitP = / ⎮|\| /g;
