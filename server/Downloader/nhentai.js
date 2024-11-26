@@ -77,7 +77,7 @@ const download = async (link, page, server, state) => {
         let parts = name.split(splitP);
         name = parts[0];
         if (parts.length > 1) {
-          const vol = parts[1].match(/(vol\. |)\d+/i);
+          const vol = parts[1].match(/(vol\.( |))\d+/i);
           if (vol && !name.includes(vol[0])) {
             name = name + " " + vol[0].replaceAll(" ", "");
           }
