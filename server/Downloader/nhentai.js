@@ -202,14 +202,15 @@ const download = async (link, page, server, state) => {
         }
         await link.destroy();
         sendMessage({ text: `Save: ${data.name}\n` });
+        return true;
       } else {
         await link.update({ Name: data.name, IsDowloanding: false });
       }
     }
   } else {
     await link.destroy();
-    process.send({ event: "link-update", data: { Id: link.Id, ServerId: server.Id } });
     sendMessage({ text: `Exist: ${data.name}\n` });
+    return true;
   }
 };
 
@@ -238,11 +239,12 @@ export const downloadNHentais = async (state) => {
       url: link.Url,
     });
     try {
-      await download(link, page, link.Server, state);
+      if (await download(link, page, link.Server, state)) {
+        sendMessage({ text: "nhentai finish", link: link, remove: true }, "update-download");
+      }
     } catch (error) {
       sendMessage({ text: `Error ${link.Url} was no properly downloaded`, color: "red", error });
     }
-    sendMessage({ text: "nhentai finish", link: link, remove: true }, "link-update");
   }
   state.hrunning = false;
   state.hsize = 0;

@@ -130,6 +130,7 @@
   };
 
   const onUpdate = ({ link }) => {
+    console.log("update", link);
     if (link.remove === true || link.IsDownloading === false) {
       datas.links = datas.links.filter((f) => f.Id !== link?.Id);
     } else {
