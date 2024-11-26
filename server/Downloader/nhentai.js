@@ -71,20 +71,24 @@ const download = async (link, page, server, state) => {
       let name =
         document.querySelector(".title .before").textContent + document.querySelector(server.Title)?.textContent;
 
-      const splitP = / ⎮|\| /g;
+      const formatName = (val) => {
+        const splitP = / ⎮|\| /g;
 
-      if (splitP.test(name)) {
-        let parts = name.split(splitP);
-        name = parts[0];
-        if (parts.length > 1) {
-          const vol = parts[1].match(/(vol\.( |))\d+/i);
-          if (vol && !name.includes(vol[0])) {
-            name = name + " " + vol[0].replaceAll(" ", "");
+        if (splitP.test(val)) {
+          let parts = val.split(splitP);
+          val = parts[0];
+          if (parts.length > 1) {
+            const vol = parts[1].match(/(vol\.( |))\d+/i);
+            if (vol && !val.includes(vol[0])) {
+              val = val + " " + vol[0].replaceAll(" ", "");
+            }
           }
         }
-      }
 
-      name = name.replace(/\//g, "-").trim();
+        return val;
+      };
+
+      name = formatName(name.replace(/\//g, "-").trim());
 
       let showMore = document.querySelector("#show-all-images-button");
       const tagsDatas = document.querySelectorAll(".tags .tag > span:first-child");
