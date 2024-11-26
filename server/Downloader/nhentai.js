@@ -70,13 +70,16 @@ const download = async (link, page, server, state) => {
 
       let name =
         document.querySelector(".title .before").textContent + document.querySelector(server.Title)?.textContent;
-      if (name.includes(" | ")) {
-        let parts = name.split(" | ");
+
+      const splitP = / (\||⎮)/;
+
+      if (splitP.test(name)) {
+        let parts = name.split(splitP);
         name = parts[0];
         if (parts.length > 1) {
-          let n = parts[1].match(/\d+/);
-          if (n && !name.includes(n[0])) {
-            name = name + " " + n[0];
+          const vol = parts[1].match(/(vol\. |)\d+/i);
+          if (vol && !name.includes(vol[0])) {
+            name = name + " " + vol[0].replaceAll(" ", "");
           }
         }
       }
