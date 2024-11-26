@@ -122,7 +122,6 @@ const download = async (link, page, server, state) => {
   }, server.dataValues);
 
   sendMessage({ text: `pages: ${data.total} - Name: ${data.name}` });
-  console.log(data.name2);
 
   if (!data.name) return;
 
