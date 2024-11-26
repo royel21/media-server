@@ -27,7 +27,7 @@ const capitalize = (val) => {
 
 const nameFormat = (name) => {
   name = capitalize(name);
-  name = name.replace(/vol. /gi, "Vol.");
+  name = name.replace(/vol./gi, "Vol.");
   if (/Comic /gi.test(name)) {
     let num = name.match(/\d+/);
     if (num) {
