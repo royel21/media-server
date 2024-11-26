@@ -10,6 +10,7 @@
   import Confirm from "../Component/Confirm.svelte";
   import ModalLink from "./ModalLink.svelte";
   import { sortByName } from "src/ShareComponent/utils";
+  import { updateLink } from "./utils";
 
   const socket = getContext("socket");
 
@@ -130,7 +131,6 @@
   };
 
   const onUpdate = ({ link }) => {
-    console.log("update", link);
     if (link.remove === true || link.IsDownloading === false) {
       datas.links = datas.links.filter((f) => f.Id !== link?.Id);
     } else {
