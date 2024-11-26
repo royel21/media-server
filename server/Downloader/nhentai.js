@@ -207,7 +207,7 @@ const download = async (link, page, server, state) => {
           await folder.update({ FileCount: folder.FileCount + 1 });
         }
         await link.destroy();
-        sendMessage({ text: `Save: ${data.name}\n` });
+        sendMessage({ text: `Save: ${data.name}\n`, link: link, remove: true }, "link-update");
         return true;
       } else {
         await link.update({ Name: data.name, IsDowloanding: false });
