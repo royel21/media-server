@@ -68,7 +68,7 @@ const download = async (link, page, server, state) => {
     try {
       let url = document.querySelector(".gallerythumb").href;
 
-      let name =
+      let textContent =
         document.querySelector(".title .before").textContent + document.querySelector(server.Title)?.textContent;
 
       const formatName = (val) => {
@@ -88,7 +88,7 @@ const download = async (link, page, server, state) => {
         return val;
       };
 
-      name = formatName(name.replace(/\//g, "-").trim());
+      let name = formatName(textContent.replace(/\//g, "-").trim());
 
       let showMore = document.querySelector("#show-all-images-button");
       const tagsDatas = document.querySelectorAll(".tags .tag > span:first-child");
@@ -116,13 +116,14 @@ const download = async (link, page, server, state) => {
         .replace(/( )+/, " ")
         .replace(/\\|\//, "-")
         .replace(/"|\.$/gi, "");
-      return { name, url, total, type, tags };
+      return { name, url, total, type, tags, name2: textContent };
     } catch (error) {
       return { name: "", error: error.toString() };
     }
   }, server.dataValues);
 
   sendMessage({ text: `pages: ${data.total} - Name: ${data.name}` });
+  console.log(data.name2);
 
   if (!data.name) return;
 
