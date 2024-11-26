@@ -84,7 +84,7 @@ const download = async (link, page, server, state) => {
           }
         }
 
-        return val;
+        return val.replace(/( )+/, " ");
       };
 
       let name = formatName(textContent.replace(/\//g, "-").trim());
