@@ -41,8 +41,8 @@ const BASEPATH = defaultConfig.DownloadDir2;
 
 const dirs = {
   yaoi: path.join(BASEPATH, "R18", "Yaoi"),
-  anthology: path.join(BASEPATH, "R18", "Manga-Hentai", "Anthology"),
-  nHentai: path.join(BASEPATH, "R18", "Manga-Hentai", "Tankoubon"),
+  anthology: path.join(BASEPATH, "R18", "Anthology"),
+  nHentai: path.join(BASEPATH, "R18", "Tankoubon"),
 };
 
 const types = {
