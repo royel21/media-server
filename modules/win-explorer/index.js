@@ -32,8 +32,12 @@ if (os.platform().includes("win32")) {
     let i = 0;
     for (let f of foundFiles) {
       if (["$"].includes(f[0]) || f.includes("System Volume Information")) continue;
-      tempFiles[i] = fileInfo(path.join(dir, f), f);
-      i++;
+      try {
+        tempFiles[i] = fileInfo(path.join(dir, f), f);
+        i++;
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     return tempFiles;
