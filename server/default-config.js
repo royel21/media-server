@@ -5,7 +5,7 @@ import { createDir } from "./Downloader/utils.js";
 import { config } from "dotenv";
 config();
 
-const { DOWNLOAD_DIR, IMAGES_DIR, BACKUP_DIR } = process.env;
+const { DOWNLOAD_DIR, DOWNLOAD_DIR2, IMAGES_DIR, BACKUP_DIR } = process.env;
 const { SESSION_NAME, SESSION_SECRET } = process.env;
 const { DB_HOST, DEV_DB_HOST, DB_USER, DB_PASSWORD, USE_DEV, DB_NAME, CONNECTOR } = process.env;
 const dbName = DB_NAME || "mediaserverdb";
@@ -24,6 +24,7 @@ const defaultConfig = {
   dbPassword: DB_PASSWORD || "",
   dbHost: (USE_DEV ? DB_HOST : DEV_DB_HOST) || "localhost",
   DownloadDir: DOWNLOAD_DIR || path.join(os.homedir(), "rcstudio", "downloads"),
+  DownloadDir2: DOWNLOAD_DIR2 || path.join(os.homedir(), "rcstudio", "downloads"),
   ImagesDir: IMAGES_DIR || path.join(os.homedir(), "rcstudio", "images"),
   BackupDir: BACKUP_DIR || path.join(os.homedir(), "rcstudio", "backups"),
   sessionName: SESSION_NAME || "rcmediaserver",

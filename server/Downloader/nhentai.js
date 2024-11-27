@@ -37,7 +37,7 @@ const nameFormat = (name) => {
   return name;
 };
 
-const BASEPATH = defaultConfig.DownloadDir;
+const BASEPATH = defaultConfig.DownloadDir2;
 
 const dirs = {
   yaoi: path.join(BASEPATH, "R18", "Yaoi"),
@@ -135,6 +135,8 @@ const download = async (link, page, server, state) => {
   data.name = nameFormat(data.name);
   await link.update({ Name: data.name, LastChapter: data.total });
   let filePath = path.join(curDir, data.name);
+
+  createDir(curDir);
 
   const Name = { [db.Op.like]: `%${data.name.replace(" [Digital]", "").replace(/^\[.*.\] /, "")}%` };
 
