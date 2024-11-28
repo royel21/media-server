@@ -8,7 +8,7 @@
   import PlayList from "../Component/PlayList.svelte";
   import MangaViewer from "./Manga/MangaViewer.svelte";
   import VideoPLayer from "./Video/VideoPlayer.svelte";
-  import { KeyMap, handleKeyboard, isMobile, isVideo, isManga, showFileName } from "./pagesUtils";
+  import { KeyMap, handleKeyboard, isVideo, showFileName } from "./pagesUtils";
   import Icons from "src/icons/Icons.svelte";
   import { getReturnPath } from "./filesUtils";
 
@@ -144,7 +144,9 @@
       folderName = data.Name;
       isManhwa = data.isManhwa;
       playList = files = data.files;
-      window.title = playList[0]?.Cover?.split("/")[2] || "";
+      if (playList.length) {
+        window.title = playList[0]?.Cover?.split("/")[2] || "";
+      }
     }
 
     socket.on("file-removed", onFileRemove);

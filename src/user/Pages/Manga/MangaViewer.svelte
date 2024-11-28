@@ -235,6 +235,7 @@
       on:mousedown={onTouchStart}
       on:mouseup={onTouchEnd}
       on:touchmove|passive={onTouchMove}
+      tabindex="-1"
     >
       {#if !webtoon}
         <img
