@@ -255,7 +255,7 @@
             id={i}
             style="object-fit: {config.imgAbjust}"
             src={images[i] ? "data:img/jpeg;base64, " + images[i] : ""}
-            alt="Loading... Please Wait"
+            alt={`Loading... Please Wait ${i + 1}`}
           />
         {/each}
       {/if}
