@@ -68,7 +68,7 @@ export const getFilesPerPage = (i) => {
 export const ProcessFile = (file, type, title) => {
   const folderId = file.id;
   const { pathname } = location;
-
+  const types = file.dataset.types;
   saveId(title, folderId);
   switch (file.dataset.type) {
     case "Manga":
@@ -83,7 +83,8 @@ export const ProcessFile = (file, type, title) => {
     }
     default: {
       saveReturnPath("to-menu", pathname);
-      type = type || pathname.split("/")[1];
+      console.log(type, file.dataset);
+      type = type || types || pathname.split("/")[1];
       navigate(`/${type}/content/${folderId}/`);
     }
   }

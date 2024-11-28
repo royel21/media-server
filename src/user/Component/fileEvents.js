@@ -98,7 +98,7 @@ const selectByTitle = (title) => {
   }
 };
 
-const fileKeypress = (e, page, goToPage, title) => {
+const fileKeypress = (e, page, goToPage, title, type) => {
   let file = document.querySelector(".file");
   let selected = 0;
 
@@ -110,7 +110,7 @@ const fileKeypress = (e, page, goToPage, title) => {
 
     switch (e.keyCode) {
       case ENTER: {
-        ProcessFile(e.target);
+        ProcessFile(e.target, type);
         break;
       }
       case LEFT: {

@@ -126,7 +126,7 @@
     <button class="btn btn-secondary" on:click={scanfiles}>Update</button>
     <span><SortBy label="Sort By:" {showConfig} toggleConfig={handleClick} /></span>
   </div>
-  <FilesList title={"Content"} {type} {filter} {page} {id} {setFolderInfo} {handleClick}>
+  <FilesList title={"Content"} {type} {filter} {page} {id} {setFolderInfo} {handleClick} {exitFolder}>
     <div class="first-controls" slot="controls" on:click={exitFolder} on:keydown>
       <Icons name="reply" />
     </div>

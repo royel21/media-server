@@ -26,6 +26,7 @@
   export let useSlot = false;
   export let onOpen = null;
   export let setFolderInfo = null;
+  export let exitFolder;
 
   const config = { ...$ConfigStore[title] };
 
@@ -74,7 +75,13 @@
 
   const fileFilter = ({ detail }) => navigate(`/${type}/${1}/${detail || ""}`);
 
-  const handleKeydown = (event) => fileKeypress(event, page, goToPage, title);
+  const handleKeydown = (event) => {
+    if (event.keyCode === 88 && exitFolder) {
+      exitFolder();
+    } else {
+      fileKeypress(event, page, goToPage, title);
+    }
+  };
 
   const openFile = (e) => {
     if (onOpen) onOpen(e);
