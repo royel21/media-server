@@ -74,7 +74,7 @@
   NextFile.isctrl = true;
   PrevFile.action = () => changeFile(-1);
   PrevFile.isctrl = true;
-  CloseViewer.action = returnBack();
+  CloseViewer.action = returnBack;
 
   let runningClock;
   window.addEventListener("fullscreenchange", (e) => {
