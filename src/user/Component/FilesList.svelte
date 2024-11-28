@@ -28,6 +28,8 @@
   export let setFolderInfo = null;
   export let exitFolder;
 
+  const KeyCodeX = 88;
+
   const config = { ...$ConfigStore[title] };
 
   const dateFormat = { year: "numeric", month: "short", day: "numeric" };
@@ -76,7 +78,7 @@
   const fileFilter = ({ detail }) => navigate(`/${type}/${1}/${detail || ""}`);
 
   const handleKeydown = (event) => {
-    if (event.keyCode === 88 && exitFolder) {
+    if (event.keyCode === KeyCodeX && exitFolder) {
       exitFolder();
     } else {
       fileKeypress(event, page, goToPage, title);
