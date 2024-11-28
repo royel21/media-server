@@ -27,8 +27,10 @@
   export let onOpen = null;
   export let setFolderInfo = null;
   export let exitFolder;
+  export let continueReading;
 
   const KeyCodeX = 88;
+  const KeyCodeContinue = 65;
 
   const config = { ...$ConfigStore[title] };
 
@@ -80,6 +82,8 @@
   const handleKeydown = (event) => {
     if (event.keyCode === KeyCodeX && exitFolder) {
       exitFolder();
+    } else if (event.keyCode === KeyCodeContinue && continueReading) {
+      continueReading();
     } else {
       fileKeypress(event, page, goToPage, title);
     }

@@ -80,7 +80,7 @@
   }
   .c-filter > input {
     height: 30px;
-    padding-right: 10px;
+    padding-right: 27px;
   }
   .filter-file {
     padding: 2px 5px;
