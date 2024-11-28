@@ -217,6 +217,10 @@
     ref.addEventListener("touchmove", onShow);
     ref.addEventListener("mousemove", onShow);
   });
+
+  afterUpdate(() => {
+    imgContainer?.focus();
+  });
 </script>
 
 <div bind:this={ref} id="manga-viewer" tabIndex="0" class:hide={$ToggleMenu}>
