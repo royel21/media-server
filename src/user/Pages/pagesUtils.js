@@ -132,6 +132,12 @@ export const KeyMap = {
     isctrl: false,
     action: null,
   },
+  CloseViewer: {
+    name: "X",
+    keyCode: 30,
+    isctrl: false,
+    action: null,
+  },
 };
 
 export const handleKeyboard = (e) => {
