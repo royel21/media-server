@@ -134,7 +134,7 @@ export const KeyMap = {
   },
   CloseViewer: {
     name: "X",
-    keyCode: 30,
+    keyCode: 88,
     isctrl: false,
     action: null,
   },
