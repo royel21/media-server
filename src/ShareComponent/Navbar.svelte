@@ -1,4 +1,5 @@
 <script>
+  import { onMount, onDestroy } from "svelte";
   import { Link } from "svelte-routing";
   import { ToggleMenu } from "./ToggleMenu";
   import { getProps } from "./DataUtils";
@@ -12,10 +13,37 @@
   let menuToggle = false;
 
   ToggleMenu.subscribe((value) => (menuToggle = value));
+
+  const onChangeTab = (e) => {
+    const found = document.querySelector("#menu:not(.hide) .tabs a.active");
+    console.log(e.keyCode);
+    if (e.ctrlKey && found) {
+      const tab = found.parentElement;
+      let item;
+      if (e.keyCode === 90) {
+        item = tab.previousElementSibling;
+      }
+
+      if (e.keyCode === 88) {
+        item = tab.nextElementSibling;
+      }
+
+      if (item) item.querySelector("a")?.click();
+      e.preventDefault();
+    }
+  };
+
+  onMount(() => {
+    document.addEventListener("keydown", onChangeTab);
+  });
+
+  onDestroy(() => {
+    document.removeEventListener("keydown", onChangeTab);
+  });
 </script>
 
 <nav id="menu" class="navbar usn" class:hide={menuToggle}>
-  <ul class="navbar-nav">
+  <ul class="navbar-nav tabs">
     {#each navItems as item}
       {#if filters.includes(item.title)}
         <NavItem {dirs} {item} slot="nav-item" title={item.title} />

@@ -26,8 +26,8 @@
   export let useSlot = false;
   export let onOpen = null;
   export let setFolderInfo = null;
-  export let exitFolder;
-  export let continueReading;
+  export let exitFolder = null;
+  export let continueReading = null;
 
   const KeyCodeX = 88;
   const KeyCodeContinue = 65;
