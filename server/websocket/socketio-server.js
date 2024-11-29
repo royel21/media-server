@@ -18,7 +18,7 @@ export default async (server, sessionMeddle) => {
     if (isAuth) {
       const user = await db.user.findOne({
         where: { Name: isAuth.user },
-        include: [{ model: db.userConfig }],
+        // include: [{ model: db.userConfig }],
       });
 
       if (!user) return;
@@ -61,7 +61,6 @@ export default async (server, sessionMeddle) => {
       } else {
         socket.on("file-update-pos", (data) => userUpdate.updateFilePos(data, user));
         socket.on("recent-folder", (data) => userUpdate.recentFolder(data, user));
-        socket.on("video-config", (data) => userUpdate.updateConfig(data, user));
         socket.on("reset-recent", (data) => FileManager.resetRecent(data, user));
         socket.on("loadzip-image", (data) => mloader.loadZipImages(data, socket, user.dataValues));
       }

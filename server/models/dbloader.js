@@ -86,7 +86,6 @@ export default (DB, CONNECTOR = "mariadb") => {
   db.folder.hasMany(db.file);
 
   db.user.hasMany(db.favorite, { onDelete: "cascade" });
-  db.user.hasOne(db.userConfig, { onDelete: "cascade" });
 
   db.Server.hasMany(db.Link, { onDelete: "CASCADE" });
   db.Link.belongsTo(db.Server, { foreignKey: "ServerId" });
@@ -131,7 +130,7 @@ export default (DB, CONNECTOR = "mariadb") => {
             },
           },
           {
-            include: [db.favorite, db.userConfig],
+            include: [db.favorite],
             encript: true,
           }
         );

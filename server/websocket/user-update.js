@@ -26,25 +26,7 @@ const updateFilePos = async (data, user) => {
   }
 };
 
-const updateConfig = async (data, user) => {
-  try {
-    let Config = JSON.parse(user.UserConfig.Config);
-
-    let { volume, mute, pause } = data.config;
-    if (Config.video) {
-      Config.video.volume = volume;
-      Config.video.mute = mute;
-      Config.video.pause = pause;
-
-      await db.userConfig.update({ Config: JSON.stringify(Config) }, { where: { UserId: user.Id } });
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 export default {
-  updateConfig,
   updateFilePos,
   recentFolder,
 };

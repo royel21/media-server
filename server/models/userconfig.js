@@ -17,10 +17,6 @@ export default (sequelize) => {
         unique: true,
         allowNull: false,
       },
-      Config: {
-        type: TEXT,
-        allowNull: true,
-      },
     },
     {
       timestamps: false,

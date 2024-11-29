@@ -3,11 +3,13 @@
   import Icons from "src/icons/Icons.svelte";
   import Tools from "./Tools.svelte";
   import Tags from "./Tags.svelte";
+  import Hotkeys from "./Hotkeys/Hotkeys.svelte";
   export let tab = "tab-1";
 
   const components = {
     "tab-1": Tools,
     "tab-2": Tags,
+    "tab-3": Hotkeys,
   };
 
   $: {
@@ -30,7 +32,14 @@
         <input type="radio" bind:group={tab} value="tab-2" id="tab2" />
         <label class="nav-link" for="tab2">
           <Icons name="tags" />
-          <span id="dirs">Tags</span>
+          <span id="tags">Tags</span>
+        </label>
+      </div>
+      <div class="nav-item">
+        <input type="radio" bind:group={tab} value="tab-3" id="tab3" />
+        <label class="nav-link" for="tab3">
+          <Icons name="keyboard" box="0 0 576 512" />
+          <span id="hotkeys">Hotkeys</span>
         </label>
       </div>
     </div>
