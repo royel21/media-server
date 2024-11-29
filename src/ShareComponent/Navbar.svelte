@@ -16,7 +16,6 @@
 
   const onChangeTab = (e) => {
     const found = document.querySelector("#menu:not(.hide) .tabs a.active");
-    console.log(e.keyCode);
     if (e.ctrlKey && found) {
       const tab = found.parentElement;
       let item;
