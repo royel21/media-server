@@ -1,29 +1,28 @@
-#u-config {
+#hotkey-config {
   color: white;
   height: 100%;
   overflow: auto;
 }
 
-#u-config fieldset {
-  max-width: 300px;
+#hotkey-config fieldset {
   height: max-content;
   border-radius: 0.4rem;
   background-color: rgb(36, 35, 35);
   margin: 0 auto;
 }
 
-#u-config .btn-bar {
+#hotkey-config .btn-bar {
   text-align: right;
   padding-bottom: 5px;
   padding-right: 5px;
 }
 
-#u-config .controls button {
+#hotkey-config .controls button {
   margin-left: 5px;
 }
 
 @media screen and (max-width: 500px) {
-  #u-config fieldset {
+  #hotkey-config fieldset {
     margin: 0 20px;
   }
 }

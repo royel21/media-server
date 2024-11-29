@@ -5,7 +5,7 @@
   const keys = Object.keys($HotkeysStore);
 </script>
 
-<div id="u-config">
+<div id="hotkey-config">
   <fieldset>
     <legend>Hotkeys</legend>
     <section>
