@@ -10,6 +10,7 @@
   export let title = "";
 
   let data = { items: { others: [], adults: [] }, current: "all" };
+  let isFav = title === "Favorites";
 
   const select = ({ target }) => {
     const id = target.closest("li").id || target.id;
@@ -21,7 +22,7 @@
     const others = [...dirs[item.title].filter((i) => !i.IsAdult)];
     const adults = [...dirs[item.title].filter((i) => i.IsAdult)];
 
-    const current = location.pathname.split("/").pop() || data.current;
+    const current = location.pathname.split("/").pop() || others[0].Id;
 
     data = {
       items: {
@@ -47,15 +48,22 @@
   <Link to={`${item.path}/${data.current}`} {getProps}>
     <Icons name={item.class} height="22px" color={item.color} />
     <span class="nav-title">{item.title}</span>
-    {#if data.items}
-      <ul class="down-list">
-        <ListItems {title} items={data.items.others} current={data.current} />
-        {#if data.items.adults.length > 0}
-          <ListItems title="R18" class="adult" items={data.items.adults} current={data.current} />
-        {/if}
+    <ul class="down-list">
+      {#if data.items.adults.length}
+        <ListItems {title} items={data.items.others} current={data.current} {isFav} />
+        <ListItems title="R18" class="adult" items={data.items.adults} current={data.current} />
         <li class="list-item s-list" id="all" class:selected={"all" === data.current}>All</li>
-      </ul>
-    {/if}
+      {:else if dirs[title]}
+        {#if !isFav && dirs[title].length > 1}
+          <li class="list-item s-list" id="all" class:selected={"all" === data.current}>All</li>
+        {/if}
+        {#each dirs[title] as { Id, Name }}
+          <li class={`list-item`} id={Id} class:selected={Id === data.current}>
+            <span>{Name}</span>
+          </li>
+        {/each}
+      {/if}
+    </ul>
   </Link>
 </li>
 
@@ -68,7 +76,7 @@
     position: absolute;
     top: 100.5%;
     left: 0;
-    min-width: 75px;
+    min-width: 100%;
     text-align: left;
     background-color: #343a40;
     border-radius: 0 0 0.25rem 0.25rem;

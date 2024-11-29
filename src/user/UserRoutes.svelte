@@ -2,6 +2,7 @@
   import { getContext, onMount } from "svelte";
   import { Router, Route } from "svelte-routing";
   import { FavoritesStores } from "./Stores/FavoritesStores";
+  import { Link } from "svelte-routing";
 
   import Navbar from "../ShareComponent/Navbar.svelte";
   import Home from "./Pages/Home.svelte";
@@ -11,8 +12,11 @@
   import Content from "./Pages/FileBrowser/Content.svelte";
   import Viewer from "./Pages/Viewer.svelte";
   import apiUtils from "../apiUtils";
-  import Config from "./Component/Config.svelte";
+  import UserConfig from "./Pages/Config/UserConfig.svelte";
   import { setConfig } from "./Stores/PageConfigStore";
+  import { navigate } from "svelte-routing";
+  import Icons from "src/icons/Icons.svelte";
+  import { getProps } from "src/ShareComponent/DataUtils";
 
   const navItems = [
     { title: "Home", path: "/", class: "home" },
@@ -22,6 +26,7 @@
   ];
 
   const User = getContext("User");
+  const logout = getContext("logout");
   let dirs = { selected: {}, Mangas: [], Favorites: User.favorites };
 
   FavoritesStores.set(User.favorites);
@@ -40,7 +45,15 @@
 
 <Router>
   <Navbar on:click {navItems} {dirs} filters={["Mangas", "Videos", "Favorites"]}>
-    <Config slot="user" />
+    <span class="icon" id="user-label" slot="user">
+      <span class="sign-out" on:click={logout} title="Sign Out"> <Icons name="signout" /></span>
+      <span title="Open Config">
+        <Link to="/config/tab-1">
+          <Icons name="usercog" height="22px" />
+          <span class="nav-title">{User.username}</span>
+        </Link>
+      </span>
+    </span>
   </Navbar>
 
   <Route path="/:type/content/:id/:page/:filter" component={Content} />
@@ -49,6 +62,38 @@
   <Route path="/videos/:dir/:page/:filter" component={Videos} />
   <Route path="/mangas/:dir/:page/:filter" component={Mangas} />
   <Route path="/favorites/:id/:page/:filter" component={Favorites} />
+  <Route path="/config/:tab" component={UserConfig} />
 
   <Route path="/:page/:filter" component={Home} />
 </Router>
+
+<style>
+  #user-label {
+    cursor: pointer;
+    align-self: center;
+    margin-right: 5px;
+    padding: 0 5px;
+  }
+
+  @media screen and (max-width: 500px) {
+    #user-label {
+      height: initial;
+      text-align: center;
+    }
+
+    #user-label {
+      max-width: 100px;
+    }
+    .icon :global(svg) {
+      height: 26px;
+    }
+    .nav-title {
+      display: inline-block;
+      font-size: 16px;
+      white-space: nowrap;
+      max-width: 90px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+</style>

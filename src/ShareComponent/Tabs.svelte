@@ -1,0 +1,94 @@
+<script>
+  import Icons from "src/icons/Icons.svelte";
+  export let tab;
+  export let tabs;
+
+  let component = tabs[0].component;
+
+  $: component = tabs.find((t) => t.id === tab).component;
+</script>
+
+<div class="card bg-dark text-light tabs">
+  <div class="disk-controls">
+    <div class="usn nav nav-tabs">
+      {#each tabs as t, i}
+        <div class="nav-item">
+          <input type="radio" bind:group={tab} value={t.id} id={t.id + i} />
+          <label class="nav-link" for={t.id + i}>
+            <Icons name={t.icon} />
+            <span id="cogs">{t.name}</span>
+          </label>
+        </div>
+      {/each}
+    </div>
+  </div>
+  <div id="tabs-content">
+    <svelte:component this={component} />
+  </div>
+</div>
+
+<style>
+  .tabs {
+    position: relative;
+    height: 100%;
+    padding: 10px 0 0;
+  }
+  .tabs .disk-controls {
+    border-bottom: 1px solid;
+  }
+  .tabs label span {
+    display: none;
+  }
+  .tabs input:checked label span {
+    display: inline-block;
+  }
+
+  .tabs .disk-controls :global(svg) {
+    top: 0px;
+    width: 32px;
+    height: 24px;
+  }
+
+  .tabs .nav-link {
+    padding: 5px 10px;
+  }
+
+  .tabs input[type="radio"] {
+    display: none;
+  }
+  .tabs .usn.nav label {
+    display: inline-block;
+    margin: 0;
+    cursor: pointer;
+    color: white;
+  }
+  .tabs .nav-link span {
+    position: relative;
+    top: -4px;
+    font-size: 14px;
+  }
+  .tabs .nav input[type="radio"]:not(:checked) label:hover {
+    background-color: #007bff27;
+  }
+  .tabs .nav input[type="radio"]:checked + label:hover,
+  .tabs .nav input[type="radio"]:checked + label {
+    position: relative;
+    font-weight: 600;
+    border: 1px solid;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    border-bottom: transparent;
+  }
+  .tabs .nav input[type="radio"]:checked + label:after {
+    position: absolute;
+    content: " ";
+    bottom: -1px;
+    left: 0;
+    height: 1px;
+    width: 100%;
+    background-color: #343a40 !important;
+  }
+  .tabs input[type="radio"]:checked + label span {
+    display: inline-block;
+  }
+</style>

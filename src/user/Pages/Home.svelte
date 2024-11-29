@@ -79,6 +79,7 @@
 
   $: document.title = page ? `Home - Page - ${pageData.page}` : "Home";
   const folderIcon = { name: "folderopen", color: "rgb(250, 183, 15);" };
+  $: console.log(location.pathname);
 </script>
 
 <div class="scroll-container">
