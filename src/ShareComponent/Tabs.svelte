@@ -94,4 +94,7 @@
   .tabs input[type="radio"]:checked + label span {
     display: inline-block;
   }
+  #tabs-content {
+    height: calc(100% - 50px);
+  }
 </style>

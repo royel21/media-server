@@ -1,11 +1,13 @@
 <script>
+  import { onMount } from "svelte";
   import { excludeLink, updateLink } from "./utils";
   import { formatDate, nameFromurl } from "./utils";
   import ExcludeChapModal from "./ExcludeChapModal.svelte";
   import Modal from "./Modal.svelte";
   import RenameModal from "./RenameModal.svelte";
   import Icons from "src/icons/Icons.svelte";
-  import { onMount } from "svelte";
+
+  import { showConsoleStore } from "../Store/ConsoleStore";
 
   export let datas;
   export let updateLinkList;
@@ -106,7 +108,7 @@
   />
 {/if}
 
-<div class="t-container">
+<div class="t-container" class:hasconsole={$showConsoleStore}>
   <div class="d-table">
     <div>
       <span class="col-count">{datas.totalItems}</span>
@@ -159,3 +161,9 @@
     {/each}
   </div>
 </div>
+
+<style>
+  .hasconsole {
+    height: calc(100% - 170px);
+  }
+</style>

@@ -1,6 +1,6 @@
 <script>
-  import { getContext, onDestroy, afterUpdate, onMount } from "svelte";
-  import { ConsoleStore, setConsoleData, updateConsole } from "../Store/ConsoleStore";
+  import { getContext, afterUpdate, onMount, setContext } from "svelte";
+  import { ConsoleStore, setConsoleData, updateConsole, showConsoleStore } from "../Store/ConsoleStore";
   import Icons from "src/icons/Icons.svelte";
   import apiUtils from "src/apiUtils";
 
@@ -89,9 +89,11 @@
     dragger?.addEventListener("mousedown", onMouseDown);
   });
 
+  showConsoleStore.set(canShow && $ConsoleStore.length);
   $: if (update) {
     canShow = tabRex.test(update);
   }
+  $: showConsoleStore.set(canShow && $ConsoleStore.length && toggle);
 </script>
 
 {#if canShow}
@@ -126,7 +128,7 @@
     left: 10px;
     right: 10px;
     bottom: 9px;
-    height: 180px;
+    height: 120px;
     min-height: 120px;
     max-height: calc(100% - 205px);
     background-color: transparent;
