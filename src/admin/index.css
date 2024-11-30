@@ -67,7 +67,7 @@
   min-height: 100%;
   height: 100%;
   width: 100%;
-  z-index: 400;
+  z-index: 9999;
   background-color: rgba(0, 0, 0, 0.3);
   overflow-y: auto;
 }
@@ -212,6 +212,6 @@ input[type="radio"]:checked+label span {
 
 @media screen and (max-height: 700px) {
   .modal-container {
-    padding-top: 60px;
+    padding-top: 70px;
   }
 }
