@@ -14,9 +14,7 @@
   import apiUtils from "../apiUtils";
   import UserConfig from "./Pages/Config/UserConfig.svelte";
   import { setConfig } from "./Stores/PageConfigStore";
-  import { navigate } from "svelte-routing";
   import Icons from "src/icons/Icons.svelte";
-  import { getProps } from "src/ShareComponent/DataUtils";
 
   const navItems = [
     { title: "Home", path: "/", class: "home" },
@@ -27,9 +25,15 @@
 
   const User = getContext("User");
   const logout = getContext("logout");
+  let showConfig = false;
   let dirs = { selected: {}, Mangas: [], Favorites: User.favorites };
 
   FavoritesStores.set(User.favorites);
+
+  const onShowConfgs = () => {
+    showConfig = !showConfig;
+    console.log("sh", showConfig);
+  };
 
   onMount(async () => {
     const data = await apiUtils.files(["dirs/"]);
@@ -43,15 +47,17 @@
   $: dirs.Favorites = $FavoritesStores;
 </script>
 
+{#if showConfig}
+  <UserConfig />
+{/if}
+
 <Router>
   <Navbar on:click {navItems} {dirs} filters={["Mangas", "Videos", "Favorites"]}>
     <span class="icon" id="user-label" slot="user">
       <span class="sign-out" on:click={logout} title="Sign Out"> <Icons name="signout" /></span>
-      <span title="Open Config">
-        <Link to="/config/tab-1">
-          <Icons name="usercog" height="22px" />
-          <span class="nav-title">{User.username}</span>
-        </Link>
+      <span title="Open Config" class="user-cog" on:click={onShowConfgs}>
+        <Icons name="usercog" height="22px" />
+        <span class="nav-title">{User.username}</span>
       </span>
     </span>
   </Navbar>
@@ -62,7 +68,6 @@
   <Route path="/videos/:dir/:page/:filter" component={Videos} />
   <Route path="/mangas/:dir/:page/:filter" component={Mangas} />
   <Route path="/favorites/:id/:page/:filter" component={Favorites} />
-  <Route path="/config/:tab" component={UserConfig} />
 
   <Route path="/:page/:filter" component={Home} />
 </Router>
@@ -73,6 +78,11 @@
     align-self: center;
     margin-right: 5px;
     padding: 0 5px;
+  }
+
+  .user-cog {
+    margin-left: 10px;
+    padding: 5px;
   }
 
   @media screen and (max-width: 500px) {

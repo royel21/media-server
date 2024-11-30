@@ -1,33 +1,20 @@
 <script>
-  import Input from "src/ShareComponent/Input.svelte";
-
   export let item;
-
-  const handler = ({ target: { name, checked } }) => {
-    item[name] = checked;
-    onChange(key, { ...item });
-  };
-
-  const handleKey = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    item.key = e.keyCode === 46 ? 0 : e.keyCode;
-    onChange(key, item);
-  };
 </script>
 
 <div class="sort-item">
-  <span>{item.name}</span>
-  <div class="input-control" id="sb">
+  <span>{item.Name}</span>
+  <div class="input-control sb">
     <label for="">Sort By</label>
     <select bind:value={item.SortBy}>
+      <option value="na">N/A</option>
       <option value="nu">&darr; Name</option>
       <option value="nd">&uarr; Name</option>
       <option value="du">&darr; Date</option>
       <option value="dd">&uarr; Date</option>
     </select>
   </div>
-  <div class="input-control">
+  <div class="input-control s-items">
     <label for="">Items</label>
     <input bind:value={item.Items} type="number" min="0" max="1000" />
   </div>
@@ -46,9 +33,9 @@
 
   span {
     font-weight: 700;
-    font-size: 1.2rem;
-    height: 30px;
+    font-size: 1.1rem;
     height: 38px;
+    min-width: 80px;
   }
 
   label {
@@ -76,9 +63,14 @@
     border-top-right-radius: 0.25rem;
     border-bottom-right-radius: 0.25rem;
   }
-  #sb {
+  .sb {
     min-width: 180px;
   }
+
+  .s-items label {
+    width: 50px;
+  }
+
   input:focus {
     outline: 0;
     border-color: #80bdff;

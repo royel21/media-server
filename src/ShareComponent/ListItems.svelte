@@ -31,6 +31,7 @@
     padding: 5px;
     font-weight: bold;
     font-size: 12px;
+    min-width: 90px;
     max-width: 210px;
     overflow: hidden;
     white-space: nowrap;

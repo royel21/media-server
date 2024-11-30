@@ -6,7 +6,6 @@
 
   import FilesList from "src/user/Component/FilesList.svelte";
   import { ProcessFile, getReturnPath } from "../filesUtils";
-  import SortBy from "./SortBy.svelte";
   import Icons from "src/icons/Icons.svelte";
 
   export let page = 1;
@@ -124,7 +123,6 @@
     <button id="last" class="btn btn-secondary" on:click={openFirstLast}>Last</button>
     <button class="btn btn-secondary" on:click={onResetFiles}>Reset All</button>
     <button class="btn btn-secondary" on:click={scanfiles}>Update</button>
-    <span><SortBy label="Sort By:" {showConfig} toggleConfig={handleClick} /></span>
   </div>
   <FilesList title={"Content"} {type} {filter} {page} {id} {setFolderInfo} {handleClick} {exitFolder} {continueReading}>
     <div class="first-controls" slot="controls" on:click={exitFolder} on:keydown>

@@ -1,7 +1,6 @@
 import { Router } from "express";
 import db from "../../models/index.js";
-
-import KeysMap from "./KeysMap.js";
+import user from "../../models/user.js";
 
 const routes = Router();
 
@@ -21,25 +20,49 @@ const getUser = async (req) => {
   return { user, admins: users.filter((a) => /^Adm/i.test(a.Role)).length > 1 };
 };
 
-const Config = JSON.stringify({
-  order: "nu",
-  items: 0,
-  recentFolders: [],
-  video: { KeysMap, volume: 0.3, pause: true, mute: false },
-  manga: { KeysMap, scaleX: 0.6, scaleY: 1, aniDuration: 300 },
-});
-
 const createUser = async (req) => {
-  let { Name } = req.body;
   let user = {
     ...req.body,
     Id: null,
     CreatedAt: new Date(),
     Favorites: [{ Name: "Default" }],
-    UserConfig: { Name, Config },
+    SortTabs: [
+      {
+        Name: "Home",
+        SortBy: "dd",
+        Items: 0,
+      },
+      {
+        Name: "Videos",
+        SortBy: "dd",
+        Items: 0,
+      },
+      {
+        Name: "Mangas",
+        SortBy: "dd",
+        Items: 0,
+      },
+      {
+        Name: "Favorites",
+        SortBy: "dd",
+        Items: 0,
+      },
+      {
+        Name: "Content",
+        SortBy: "dd",
+        Items: 0,
+      },
+    ],
+    Hotkeys: [
+      { Name: "Open", Key: 37, CtrlKey: true, ShiftKey: false, AltKey: false },
+      { Name: "Exit", Key: 77, CtrlKey: true, shiftKey: false, AltKey: false },
+      { Name: "Next Tab", Key: 38, CtrlKey: true, ShiftKey: false, AltKey: false },
+      { Name: "Prev Tab", Key: 40, CtrlKey: true, ShiftKey: false, AltKey: false },
+      { Name: "Continue Reading", Key: 39, CtrlKey: true, ShiftKey: false, AltKey: false },
+    ],
   };
 
-  let newUser = await db.user.create(user, { encript: true, include: [db.favorite] });
+  let newUser = await db.user.create(user, { encript: true, include: [db.favorite, db.hotkey, db.sorttab] });
 
   return {
     user: { ...newUser.dataValues, Password: "" },

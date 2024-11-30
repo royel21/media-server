@@ -1,25 +1,27 @@
 <script>
+  import { getContext, onDestroy } from "svelte";
   import InputControl from "./InputControl.svelte";
-  import { HotkeysStore, save, restore, update } from "src/admin/Store/HotkeysStore.js";
+  import apiUtils from "src/apiUtils";
 
-  const keys = Object.keys($HotkeysStore);
+  const User = getContext("User");
+
+  const items = User.hotkeys.sort((a, b) => a.Id - b.Id);
+
+  onDestroy(async () => {
+    await apiUtils.post("users/update-hotkeys", { hotkeys: items });
+  });
 </script>
 
 <div id="hotkey-config">
-  <fieldset>
-    <legend>Hotkeys</legend>
-    <section>
-      {#each keys as key}
-        <InputControl {key} item={$HotkeysStore[key]} onChange={update} />
-      {/each}
-    </section>
-    <div class="btn-bar">
-      <button class="btn" on:click={restore}>Load Default</button>
-      <button class="btn" on:click={save}> Save </button>
-    </div>
-  </fieldset>
+  {#each items as item}
+    <InputControl bind:item />
+  {/each}
 </div>
 
 <style>
-  @import "./config.css";
+  #hotkey-config {
+    color: white;
+    height: 100%;
+    overflow: auto;
+  }
 </style>

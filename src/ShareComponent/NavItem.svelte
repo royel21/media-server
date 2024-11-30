@@ -22,7 +22,13 @@
     const others = [...dirs[item.title].filter((i) => !i.IsAdult)];
     const adults = [...dirs[item.title].filter((i) => i.IsAdult)];
 
-    const current = location.pathname.split("/").pop() || others[0].Id;
+    let id = location.pathname.split("/").pop();
+
+    if (!others.find((o) => o.Id === +id)) {
+      id = null;
+    }
+
+    const current = id || others[0].Id;
 
     data = {
       items: {
@@ -50,7 +56,7 @@
     <span class="nav-title">{item.title}</span>
     <ul class="down-list">
       {#if data.items.adults.length}
-        <ListItems {title} items={data.items.others} current={data.current} {isFav} />
+        <ListItems {title} items={data.items.others} current={data.current} />
         <ListItems title="R18" class="adult" items={data.items.adults} current={data.current} />
         <li class="list-item s-list" id="all" class:selected={"all" === data.current}>All</li>
       {:else if dirs[title]}
@@ -88,6 +94,7 @@
     padding: 5px;
     font-weight: bold;
     font-size: 12px;
+    min-width: 90px;
     max-width: 210px;
     overflow: hidden;
     white-space: nowrap;

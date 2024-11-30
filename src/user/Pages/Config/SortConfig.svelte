@@ -1,13 +1,15 @@
 <script>
+  import { getContext, onDestroy } from "svelte";
   import SortItem from "./SortItem.svelte";
+  import apiUtils from "src/apiUtils";
 
-  const items = [
-    {
-      name: "Home",
-      SortBy: "nu",
-      Items: 0,
-    },
-  ];
+  const User = getContext("User");
+
+  const items = User.sortTabs.sort((a, b) => a.Id - b.Id);
+
+  onDestroy(async () => {
+    await apiUtils.post("users/update-sorttabs", { sorttab: items });
+  });
 </script>
 
 <div class="sort-config">

@@ -3,8 +3,8 @@ import user from "./user.js";
 import file from "./file.js";
 import folder from "./folder.js";
 import favorite from "./favorites.js";
-// import hotkeys from "./hotkey.js";
-// import sortTab from "./sorttab.js";
+import hotkeys from "./hotkey.js";
+import sortTab from "./sorttab.js";
 import directory from "./directories.js";
 import favoriteFolder from "./favorite-folder.js";
 import recentFolder from "./recent-folder.js";
@@ -38,8 +38,8 @@ const db = {
   file: file(sequelize),
   folder: folder(sequelize, isSqlite),
   favorite: favorite(sequelize),
-  // hotkey: hotkeys(sequelize),
-  // sorttab: sortTab(sequelize),
+  hotkey: hotkeys(sequelize),
+  sorttab: sortTab(sequelize),
   directory: directory(sequelize),
   favoriteFolder: favoriteFolder(sequelize),
   recentFolder: recentFolder(sequelize),
@@ -84,8 +84,8 @@ db.folder.hasMany(db.file);
 
 db.user.hasMany(db.favorite, { onDelete: "cascade" });
 
-// db.user.hasMany(db.hotkey, { onDelete: "cascade" });
-// db.user.hasMany(db.sorttab, { onDelete: "cascade" });
+db.user.hasMany(db.hotkey, { onDelete: "cascade" });
+db.user.hasMany(db.sorttab, { onDelete: "cascade" });
 
 db.Server.hasMany(db.Link, { onDelete: "CASCADE" });
 db.Link.belongsTo(db.Server, { foreignKey: "ServerId" });

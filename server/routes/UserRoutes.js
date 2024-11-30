@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import passport from "passport";
+import db from "../models/index.js";
 
 const routes = Router();
 
@@ -11,6 +12,8 @@ const sendUser = (res, user = { UserConfig: { dataValues: {} } }) => {
     username: user.Name || "",
     isAutenticated: user !== undefined,
     favorites: user.Favorites || [],
+    hotkeys: user.Hotkeys,
+    sortTabs: user.SortTabs,
   });
 };
 
@@ -41,6 +44,24 @@ routes.get("/logout", (req, res) => {
 routes.get("/userconfig", (req, res) => {
   if (!req.user) return res.send({});
   return res.send("no found");
+});
+
+routes.post("/update-hotkeys", async (req, res) => {
+  const { body } = req;
+  for (const key of body.hotkeys) {
+    await db.hotkey.update(key, { where: { Id: key.Id, UserId: key.UserId } });
+  }
+
+  return res.send({ valid: true });
+});
+
+routes.post("/update-sorttabs", async (req, res) => {
+  const { body } = req;
+  for (const tab of body.sorttab) {
+    await db.sorttab.update(tab, { where: { Id: tab.Id, UserId: tab.UserId } });
+  }
+
+  return res.send({ valid: true });
 });
 
 routes.get("/", (req, res) => {

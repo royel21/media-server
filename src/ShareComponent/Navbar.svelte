@@ -1,10 +1,11 @@
 <script>
-  import { onMount, onDestroy } from "svelte";
+  import { onMount, onDestroy, getContext } from "svelte";
   import { Link } from "svelte-routing";
   import { ToggleMenu } from "./ToggleMenu";
   import { getProps } from "./DataUtils";
   import Icons from "../icons/Icons.svelte";
   import NavItem from "src/ShareComponent/NavItem.svelte";
+  import { isValidKey } from "./utils.js";
 
   export let navItems;
   export let filters = [];
@@ -12,23 +13,30 @@
 
   let menuToggle = false;
 
+  const hotkeys = getContext("User").hotkeys;
+
+  const prevTab = hotkeys.find((h) => h.Name === "Prev Tab");
+  const nextTab = hotkeys.find((h) => h.Name === "Next Tab");
+
   ToggleMenu.subscribe((value) => (menuToggle = value));
 
   const onChangeTab = (e) => {
     const found = document.querySelector("#menu:not(.hide) .tabs a.active");
-    if (e.ctrlKey && found) {
+    if (found) {
       const tab = found.parentElement;
       let item;
-      if (e.keyCode === 90) {
+      if (isValidKey(e, prevTab)) {
         item = tab.previousElementSibling;
       }
 
-      if (e.keyCode === 88) {
+      if (isValidKey(e, nextTab)) {
         item = tab.nextElementSibling;
       }
 
-      if (item) item.querySelector("a")?.click();
-      e.preventDefault();
+      if (item) {
+        item.querySelector("a")?.click();
+        e.preventDefault();
+      }
     }
   };
 
@@ -57,9 +65,7 @@
     {/each}
   </ul>
   <ul class="navbar-nav">
-    <li id="p-config" class="nav-item">
-      <slot name="user" />
-    </li>
+    <slot name="user" />
   </ul>
 </nav>
 
@@ -83,10 +89,5 @@
   }
   .nav-item:hover {
     background-color: rgb(2 177 242);
-  }
-  #p-config {
-    position: relative;
-    color: white;
-    height: 100%;
   }
 </style>

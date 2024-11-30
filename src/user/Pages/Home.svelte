@@ -1,10 +1,9 @@
 <script>
-  import { afterUpdate, onDestroy } from "svelte";
+  import { afterUpdate, getContext, onDestroy } from "svelte";
   import { navigate } from "svelte-routing";
   import { getFilesPerPage, ProcessFile } from "./filesUtils";
 
   import { clamp } from "src/ShareComponent/utils";
-  import { ConfigStore } from "../Stores/PageConfigStore";
   import { ToggleMenu } from "src/ShareComponent/ToggleMenu";
   import { fileKeypress, selectByTitle, selectElementById } from "../Component/fileEvents";
 
@@ -21,12 +20,15 @@
   let title = "Home";
   let reload = true;
   let isMounted = true;
+  const User = getContext("User");
+
+  const config = User.sortTabs.find((st) => st.Name === "Home");
 
   let pageData = { items: [], page: page || 1, totalPages: 0, totalFiles: 0 };
 
   const loadContent = async (pg, flt = "") => {
     if (reload) {
-      const items = $ConfigStore.Home.items || getFilesPerPage(3);
+      const items = config.Items || getFilesPerPage(3);
       const data = await api.files(["recents", items, pg, encodeURIComponent(flt)], "home");
       if (data.valid && isMounted) {
         pageData = data;
@@ -68,8 +70,6 @@
 
   ToggleMenu.set(false);
 
-  $: $ConfigStore, loadContent(page, filter);
-
   onDestroy(() => {
     isMounted = false;
     api.cancelQuery("home");
@@ -79,7 +79,6 @@
 
   $: document.title = page ? `Home - Page - ${pageData.page}` : "Home";
   const folderIcon = { name: "folderopen", color: "rgb(250, 183, 15);" };
-  $: console.log(location.pathname);
 </script>
 
 <div class="scroll-container">

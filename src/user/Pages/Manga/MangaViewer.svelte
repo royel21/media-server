@@ -501,7 +501,7 @@
   @media screen and (max-width: 600px) {
     #manga-viewer .img-current {
       transform: initial;
-      width: 100%;
+      width: 100% !important;
     }
     #manga-viewer .controls > span {
       padding: 4px 5px;

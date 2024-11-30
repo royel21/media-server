@@ -148,27 +148,6 @@
     .toast {
       max-width: 390px;
     }
-
-    :global(#menu .nav-title) {
-      display: none;
-    }
-
-    :global(#menu a) {
-      width: 48px;
-    }
-
-    :global(#menu a.active) {
-      display: flex;
-      width: fit-content;
-    }
-
-    :global(#menu a.active .nav-title) {
-      display: initial;
-    }
-
-    :global(#menu li svg) {
-      transform: scale(1.2);
-    }
     :global(#menu li .active .icon-users),
     :global(#menu li .active .icon-download),
     :global(#menu li .active .icon-sitemap) {

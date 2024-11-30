@@ -3,15 +3,13 @@
   import { fade } from "svelte/transition";
   import { navigate } from "svelte-routing";
 
-  import { ConfigStore } from "src/user/Stores/PageConfigStore";
-
   import { FileTypes, ProcessFile, getFilesPerPage } from "../Pages/filesUtils";
   import { fileKeypress, selectElementById, selectByTitle } from "./fileEvents";
 
   import Pagination from "src/ShareComponent/Pagination.svelte";
   import Filter from "src/ShareComponent/Filter.svelte";
   import FavoriteList from "./FavoriteList.svelte";
-  import { clamp } from "src/ShareComponent/utils";
+  import { clamp, isValidKey } from "src/ShareComponent/utils";
   import { getItemsList } from "src/apiUtils";
   import Icons from "src/icons/Icons.svelte";
   import LazyImage from "./LazyImage.svelte";
@@ -29,10 +27,11 @@
   export let exitFolder = null;
   export let continueReading = null;
 
-  const KeyCodeX = 88;
-  const KeyCodeContinue = 65;
+  const { sortTabs, hotkeys } = getContext("User");
+  const config = sortTabs.find((st) => st.Name === title);
 
-  const config = { ...$ConfigStore[title] };
+  const KeyExit = hotkeys.find((key) => key.Name === "Exit");
+  const KeyContinue = hotkeys.find((key) => key.Name === "Continue Reading");
 
   const dateFormat = { year: "numeric", month: "short", day: "numeric" };
 
@@ -47,11 +46,11 @@
 
   const loadContent = async (folderId, pg = 1, flt) => {
     if (location.pathname.includes("viewer")) return;
-    const { items, sort } = config;
-    const itemsPerPage = items || getFilesPerPage(3);
+    const { Items, SortBy } = config;
+    const itemsPerPage = Items || getFilesPerPage(3);
     const apiPath = title === "Content" ? `folder-content/${folderId}` : type;
     const search = encodeURIComponent(flt || "");
-    let url = `/api/files/${apiPath}/${sort}/${pg}/${itemsPerPage}/${search}`;
+    let url = `/api/files/${apiPath}/${SortBy}/${pg}/${itemsPerPage}/${search}`;
 
     const data = await getItemsList(url);
 
@@ -79,13 +78,13 @@
 
   const fileFilter = ({ detail }) => navigate(`/${type}/${1}/${detail || ""}`);
 
-  const handleKeydown = (event) => {
-    if (event.keyCode === KeyCodeX && exitFolder) {
+  const handleKeydown = (e) => {
+    if (isValidKey(e, KeyExit) && exitFolder) {
       exitFolder();
-    } else if (event.keyCode === KeyCodeContinue && continueReading) {
+    } else if (isValidKey(e, KeyContinue) && continueReading) {
       continueReading();
     } else {
-      fileKeypress(event, page, goToPage, title);
+      fileKeypress(e, page, goToPage, title);
     }
   };
 
@@ -138,15 +137,6 @@
   };
 
   onMount(() => {
-    ConfigStore.subscribe((value) => {
-      const { items, sort } = value[title];
-      if (items !== config.items || sort !== config.sort) {
-        config.items = items;
-        config.sort = sort;
-        loadContent(id, page, filter);
-      }
-    });
-
     socket.on("reload", reloadDir);
     return () => {
       socket.off("reload", reloadDir);

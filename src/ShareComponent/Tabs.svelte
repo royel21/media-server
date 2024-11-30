@@ -3,12 +3,15 @@
   export let tab;
   export let tabs;
 
+  let clazz = "";
+  export { clazz as class };
+
   let component = tabs[0].component;
 
   $: component = tabs.find((t) => t.id === tab).component;
 </script>
 
-<div class="card bg-dark text-light tabs">
+<div class={`card bg-dark text-light tabs ${clazz}`}>
   <div class="disk-controls">
     <div class="usn nav nav-tabs">
       {#each tabs as t, i}
