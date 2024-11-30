@@ -32,8 +32,9 @@
 
   const onShowConfgs = () => {
     showConfig = !showConfig;
-    console.log("sh", showConfig);
   };
+
+  const hide = () => (showConfig = false);
 
   onMount(async () => {
     const data = await apiUtils.files(["dirs/"]);
@@ -48,7 +49,7 @@
 </script>
 
 {#if showConfig}
-  <UserConfig />
+  <UserConfig {hide} />
 {/if}
 
 <Router>

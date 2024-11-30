@@ -6,6 +6,11 @@
   import { fade } from "svelte/transition";
 
   export let tab = "tab-1";
+  export let hide;
+
+  const hideConfig = ({ currentTarget, target }) => {
+    if (currentTarget === target) hide();
+  };
 
   const tabs = [
     { id: "tab-1", name: "Sorting Config", icon: "filter", component: SortConfig },
@@ -13,8 +18,10 @@
   ];
 </script>
 
-<div class="modal-config" transition:fade={{ duration: 200 }}>
-  <Tabs {tabs} bind:tab />
+<div class="modal-container" on:click={hideConfig}>
+  <div class="modal-config" transition:fade={{ duration: 200 }}>
+    <Tabs {tabs} bind:tab />
+  </div>
 </div>
 
 <style>

@@ -200,7 +200,7 @@ export const mapKeys = (keys) => {
   for (const k of keys) {
     const key = KeyMap[k.Name];
     if (key) {
-      key.keyCode = k.Key;
+      key.Key = k.Key;
       key.CtrlKey = k.CtrlKey;
       key.ShiftKey = k.ShiftKey;
       key.AltKey = k.AltKey;
