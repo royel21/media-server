@@ -353,10 +353,6 @@ export const adultEvalPage = async (query) => {
       fileName = (data.length + 1).toString().padStart(padding, "0");
     }
 
-    if (i === as.length - 1 && endRegex.test(text)) {
-      fileName += " - End";
-    }
-
     data.push({ name: fileName, url: a.href, n });
   });
 
