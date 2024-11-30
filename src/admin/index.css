@@ -69,7 +69,7 @@
   width: 100%;
   z-index: 400;
   background-color: rgba(0, 0, 0, 0.3);
-  overflow-x: auto;
+  overflow-y: auto;
 }
 
 .modal {
@@ -80,6 +80,7 @@
   height: max-content;
   width: 350px;
   background-color: cadetblue;
+  margin-bottom: 50px;
 }
 
 .modal-header>* {
@@ -207,4 +208,10 @@ input[type="radio"]:checked+label span {
   width: 100%;
   height: calc(100% - 84px);
   padding: 5px 8px;
+}
+
+@media screen and (max-height: 700px) {
+  .modal-container {
+    padding-top: 60px;
+  }
 }
