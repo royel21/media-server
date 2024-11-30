@@ -212,6 +212,6 @@ input[type="radio"]:checked+label span {
 
 @media screen and (max-height: 700px) {
   .modal-container {
-    padding-top: 70px;
+    padding-top: 110px;
   }
 }
