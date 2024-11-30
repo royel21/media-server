@@ -56,3 +56,7 @@
     <Login {logIn} {error} />
   </div>
 {/if}
+
+<style>
+  @import "./global.css";
+</style>

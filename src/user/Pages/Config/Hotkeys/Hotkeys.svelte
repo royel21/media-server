@@ -22,6 +22,6 @@
   #hotkey-config {
     color: white;
     height: 100%;
-    overflow: auto;
+    overflow-y: auto;
   }
 </style>

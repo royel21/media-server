@@ -221,7 +221,7 @@
     position: absolute;
     top: 10px;
     right: 1px;
-    z-index: 999;
+    z-index: 401;
     padding: 0px 4px;
     border-radius: 0.25rem;
     background: rgba(0, 0, 0, 0.7);

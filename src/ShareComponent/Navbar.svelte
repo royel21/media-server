@@ -70,19 +70,6 @@
 </nav>
 
 <style>
-  #menu {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    padding: 0;
-    background-color: #343a40;
-    transition: 0.3s all;
-    max-height: 60px;
-    min-height: 35px;
-  }
-  #menu.hide {
-    top: -66px;
-  }
   .navbar-nav {
     display: flex;
     justify-content: left;

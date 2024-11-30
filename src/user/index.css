@@ -225,7 +225,7 @@ img[alt]:after {
 .file-name:hover,
 .file-info:hover .file-name {
   display: inline-block;
-  z-index: 999;
+  z-index: 401;
   line-height: 1.5;
 }
 

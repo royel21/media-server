@@ -113,7 +113,7 @@
     display: flex;
     justify-content: center;
     width: 100%;
-    z-index: 999;
+    z-index: 1001;
   }
   .toast {
     position: absolute;

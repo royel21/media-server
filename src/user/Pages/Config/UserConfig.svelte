@@ -25,7 +25,7 @@
     height: 380px;
     width: 400px;
     background-color: #343a40;
-    z-index: 9999;
+    z-index: 999;
     overflow: hidden;
     border-radius: 0.35rem;
   }

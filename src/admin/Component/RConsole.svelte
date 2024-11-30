@@ -177,7 +177,7 @@
   .r-console .clean {
     position: absolute;
     right: 0;
-    z-index: 99999;
+    z-index: 1000;
   }
   .r-console .clean :global(svg) {
     height: 30px;
