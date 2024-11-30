@@ -172,9 +172,6 @@ span a:hover {
 }
 
 @media screen and (max-width: 450px) {
-    .t-container {
-        height: calc(100% - 36px);
-    }
 
     .d-items {
         display: none;

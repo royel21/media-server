@@ -203,7 +203,7 @@
 
 <style>
   #srv :global(.t-container) {
-    height: calc(100% - 41px);
+    height: calc(100% - 56px);
   }
   #srv {
     height: calc(100% - 30px);
