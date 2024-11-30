@@ -30,8 +30,17 @@ export default (sequelize) => {
         type: BOOLEAN,
         defaultValue: 0,
       },
+      UserId: {
+        type: STRING(10),
+        allowNull: false,
+      },
     },
     {
+      uniqueKeys: {
+        uniq_hotkey: {
+          fields: ["Name", "UserId"],
+        },
+      },
       timestamps: false,
     }
   );

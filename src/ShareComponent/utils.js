@@ -32,5 +32,7 @@ export const clamp = (num, min, max) => {
 export const sortByName = (f1, f2) => f1.Name.localeCompare(f2.Name);
 
 export const isValidKey = (e, k) => {
+  if (!k || !e) return false;
+
   return e.keyCode === k.Key && e.altKey === k.AltKey && e.shiftKey === k.ShiftKey && e.ctrlKey === k.CtrlKey;
 };

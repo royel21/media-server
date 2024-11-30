@@ -1,6 +1,7 @@
 import { Router } from "express";
 import db from "../../models/index.js";
 import user from "../../models/user.js";
+import defaultHotkeys from "../defaultHotkeys.js";
 
 const routes = Router();
 
@@ -53,13 +54,7 @@ const createUser = async (req) => {
         Items: 0,
       },
     ],
-    Hotkeys: [
-      { Name: "Open", Key: 37, CtrlKey: true, ShiftKey: false, AltKey: false },
-      { Name: "Exit", Key: 77, CtrlKey: true, shiftKey: false, AltKey: false },
-      { Name: "Next Tab", Key: 38, CtrlKey: true, ShiftKey: false, AltKey: false },
-      { Name: "Prev Tab", Key: 40, CtrlKey: true, ShiftKey: false, AltKey: false },
-      { Name: "Continue Reading", Key: 39, CtrlKey: true, ShiftKey: false, AltKey: false },
-    ],
+    Hotkeys: defaultHotkeys,
   };
 
   let newUser = await db.user.create(user, { encript: true, include: [db.favorite, db.hotkey, db.sorttab] });

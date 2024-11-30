@@ -1,3 +1,5 @@
+import { isValidKey } from "src/ShareComponent/utils";
+
 export const isMobile = /android|iphone/i.test(navigator.userAgent);
 export const isVideo = (file) => file.Type.includes("Video");
 export const isManga = (file) => file.Type.includes("Manga");
@@ -79,73 +81,129 @@ export const showFileName = () => {
 
 export const KeyMap = {
   PrevFile: {
-    name: "Ins",
-    keyCode: 45,
-    isctrl: true,
+    Key: 45,
+    CtrlKey: true,
+    ShiftKey: false,
+    AltKey: false,
     action: null,
   },
   NextFile: {
-    name: "Del",
-    keyCode: 46,
-    isctrl: true,
+    Key: 46,
+    CtrlKey: false,
+    ShiftKey: false,
+    AltKey: false,
     action: null,
   },
   SkipForward: {
-    name: "ArrowRight",
-    keyCode: 39,
-    isctrl: false,
+    Key: 39,
+    CtrlKey: false,
+    ShiftKey: false,
+    AltKey: false,
     action: null,
   },
   SkipBack: {
-    name: "ArrowLeft",
-    keyCode: 37,
-    isctrl: false,
+    Key: 37,
+    CtrlKey: false,
+    ShiftKey: false,
+    AltKey: false,
+    action: null,
+  },
+  FastForward: {
+    Key: 39,
+    CtrlKey: false,
+    ShiftKey: false,
+    AltKey: false,
+    action: null,
+  },
+  FastBackward: {
+    Key: 37,
+    CtrlKey: false,
+    ShiftKey: false,
+    AltKey: false,
+    action: null,
+  },
+  GotoStart: {
+    Key: 37,
+    CtrlKey: false,
+    ShiftKey: false,
+    AltKey: false,
+    action: null,
+  },
+  GotoEnd: {
+    Key: 37,
+    CtrlKey: false,
+    ShiftKey: false,
+    AltKey: false,
     action: null,
   },
   Fullscreen: {
-    name: "Enter",
-    keyCode: 13,
-    isctrl: false,
-    action: null,
-  },
-  VolumeUp: {
-    name: "ArrowUp",
-    keyCode: 38,
-    isctrl: false,
+    Key: 13,
+    CtrlKey: false,
+    ShiftKey: false,
+    AltKey: false,
     action: null,
   },
   VolumeDown: {
-    name: "ArrowDown",
-    keyCode: 40,
-    isctrl: false,
+    Key: 38,
+    CtrlKey: false,
+    ShiftKey: false,
+    AltKey: false,
+    action: null,
+  },
+  VolumeUp: {
+    Key: 40,
+    CtrlKey: false,
+    ShiftKey: false,
+    AltKey: false,
+    action: null,
+  },
+  Muted: {
+    Key: 77,
+    CtrlKey: false,
+    ShiftKey: false,
+    AltKey: false,
     action: null,
   },
   PlayOrPause: {
-    name: "Space",
-    keyCode: 32,
-    isctrl: false,
+    Key: 32,
+    CtrlKey: false,
+    ShiftKey: false,
+    AltKey: false,
     action: null,
   },
   ShowList: {
-    name: "L",
-    keyCode: 30,
-    isctrl: false,
+    Key: 30,
+    CtrlKey: false,
+    ShiftKey: false,
+    AltKey: false,
     action: null,
   },
-  CloseViewer: {
-    name: "X",
-    keyCode: 88,
-    isctrl: false,
+  Exit: {
+    Key: 88,
+    CtrlKey: false,
+    ShiftKey: false,
+    AltKey: false,
     action: null,
   },
 };
 
 export const handleKeyboard = (e) => {
   for (let key of Object.keys(KeyMap)) {
-    if (KeyMap[key].keyCode === e.keyCode) {
-      let { action, isctrl } = KeyMap[key];
-      if (action && e.ctrlKey === isctrl) action(e.ctrlKey);
+    if (isValidKey(e, KeyMap[key])) {
+      KeyMap[key].action(e);
       break;
+    }
+  }
+};
+
+export const mapKeys = (keys) => {
+  for (const k of keys) {
+    const key = KeyMap[k.Name];
+    if (key) {
+      key.keyCode = k.Key;
+      key.CtrlKey = k.CtrlKey;
+      key.ShiftKey = k.ShiftKey;
+      key.AltKey = k.AltKey;
     }
   }
 };

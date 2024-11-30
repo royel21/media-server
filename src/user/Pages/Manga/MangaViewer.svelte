@@ -18,7 +18,7 @@
   export let removeFile;
   export let isManhwa;
 
-  const { NextFile, PrevFile, Fullscreen, SkipForward, SkipBack } = KeyMap;
+  const { NextFile, PrevFile, Fullscreen, SkipForward, SkipBack, GotoStart, GotoEnd } = KeyMap;
   const socket = getContext("socket");
   const User = getContext("User");
   const dispatch = createEventDispatcher();
@@ -140,6 +140,8 @@
 
   SkipForward.action = nextPage;
   SkipBack.action = prevPage;
+  GotoStart.action = () => jumpTo(0);
+  GotoEnd.action = () => jumpTo(file.Duration);
 
   controls.prevPage = prevPage;
   controls.nextPage = nextPage;

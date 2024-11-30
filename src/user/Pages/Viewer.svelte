@@ -8,12 +8,13 @@
   import PlayList from "../Component/PlayList.svelte";
   import MangaViewer from "./Manga/MangaViewer.svelte";
   import VideoPLayer from "./Video/VideoPlayer.svelte";
-  import { KeyMap, handleKeyboard, isVideo, showFileName } from "./pagesUtils";
+  import { KeyMap, handleKeyboard, isVideo, mapKeys, showFileName } from "./pagesUtils";
   import Icons from "src/icons/Icons.svelte";
   import { getReturnPath } from "./filesUtils";
 
   export let folderId;
   export let fileId;
+  export let type = "";
 
   let lastId = fileId;
   const menu = document.querySelector("#menu");
@@ -25,7 +26,8 @@
     .join("/");
 
   const socket = getContext("socket");
-  const { NextFile, PrevFile, CloseViewer } = KeyMap;
+  const User = getContext("User");
+  const { NextFile, PrevFile, Exit } = KeyMap;
   let files = [];
   let playList = [];
   let file = { Name: "", Type: "", Cover: "" };
@@ -64,17 +66,16 @@
     let path = getReturnPath("open-folder");
     if (!path) {
       const parts = location.pathname.split("/");
-      path = `/${parts[1]}/content/${parts[3]}`;
+      path = `/${type}/content/${parts[3]}`;
     }
 
     navigate(path);
   };
 
+  mapKeys(User.hotkeys);
   NextFile.action = () => changeFile(1);
-  NextFile.isctrl = true;
   PrevFile.action = () => changeFile(-1);
-  PrevFile.isctrl = true;
-  CloseViewer.action = returnBack;
+  Exit.action = returnBack;
 
   let runningClock;
   window.addEventListener("fullscreenchange", (e) => {

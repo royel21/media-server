@@ -8,6 +8,7 @@ export default {
   17: "Control",
   18: "Alt",
   20: "CapsLock",
+  32: "Space",
   33: "PageUp",
   34: "PageDown",
   35: "End",

@@ -11,6 +11,7 @@
   export let page = 1;
   export let filter = "";
   export let id = "";
+  export let type = "";
 
   let showConfig = false;
   let contents = ["File List", "Details"];
@@ -23,7 +24,7 @@
   const socket = getContext("socket");
 
   let segment = window.location.pathname.replace(/(^\/+|\/+$)/g, "").split("/");
-  let type = `${segment[0]}/${segment[1]}/${id}`;
+  let typeUrl = `${type}/${segment[1]}/${id}`;
 
   let pathname = getReturnPath("to-menu");
 
@@ -124,7 +125,17 @@
     <button class="btn btn-secondary" on:click={onResetFiles}>Reset All</button>
     <button class="btn btn-secondary" on:click={scanfiles}>Update</button>
   </div>
-  <FilesList title={"Content"} {type} {filter} {page} {id} {setFolderInfo} {handleClick} {exitFolder} {continueReading}>
+  <FilesList
+    title={"Content"}
+    type={typeUrl}
+    {filter}
+    {page}
+    {id}
+    {setFolderInfo}
+    {handleClick}
+    {exitFolder}
+    {continueReading}
+  >
     <div class="first-controls" slot="controls" on:click={exitFolder} on:keydown>
       <Icons name="reply" />
     </div>

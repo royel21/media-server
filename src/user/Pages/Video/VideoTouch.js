@@ -20,7 +20,7 @@ export const setGesture = (player) => {
         let { pageX, pageY } = e.touches[0];
         touchData = { time, startX: pageX, startY: pageY };
       } else if (e.which === 1) {
-        player.paused ? player.play() : player.pause();
+        player.paused ? player.play().catch(() => {}) : player.pause();
       }
     };
 

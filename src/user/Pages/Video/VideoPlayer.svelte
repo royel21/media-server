@@ -11,7 +11,10 @@
   export let file;
   export let viewer;
 
-  const { NextFile, PrevFile } = KeyMap;
+  const { Fullscreen, SkipForward, SkipBack, VolumeUp, VolumeDown, Muted } = KeyMap;
+
+  const { NextFile, PrevFile, GotoStart, GotoEnd, PlayOrPause, FastForward, FastBackward } = KeyMap;
+
   const dispatch = createEventDispatcher();
   let mConfig = { time: false, volume: 0.5, pause: false, muted: false };
   let player = {};
@@ -67,49 +70,38 @@
   const updateTime = () => {
     file.CurrentPos = player.currentTime;
   };
-  const onPlay = ({ target: { checked } }) => (!checked ? player.play() : player.pause());
+  const onPlay = ({ target: { checked } }) => (!checked ? player.play().catch(() => {}) : player.pause());
 
   const hideControlsOnCLick = () => {
     if (isFullScreen) {
       if (controls.style.bottom == "0px") {
         controls.style.bottom = -controls.offsetHeight + "px";
-        player.play();
+        player.play().catch(() => {});
       } else {
         controls.style.bottom = 0;
         player.pause();
       }
     }
   };
-  const handleKeyboard = ({ keyCode, ctrlKey }) => {
-    switch (keyCode) {
-      case 13: {
-        fullScreen();
-        break;
-      }
-      case 39: {
-        player.currentTime += ctrlKey ? 10 : 5;
-        break;
-      }
-      case 37: {
-        player.currentTime -= ctrlKey ? 10 : 5;
-        break;
-      }
-      case 38: {
-        let newVol = player.volume + 0.05;
-        player.volume = newVol > 1.0 ? 1 : newVol;
-        break;
-      }
-      case 40: {
-        let newVol = player.volume - 0.05;
-        player.volume = newVol < 0 ? 0 : newVol;
-        break;
-      }
-      case 32: {
-        player.paused ? player.play() : player.pause();
-        break;
-      }
-    }
+
+  const changeVol = (val) => {
+    let newVol = player.volume + val;
+    player.volume = newVol < 0 ? 0 : newVol;
   };
+
+  PlayOrPause.action = () => (player.paused ? player.play().catch(() => {}) : player.pause());
+  SkipForward.action = () => (player.currentTime += 5);
+  SkipBack.action = () => (player.currentTime -= 5);
+  FastForward.action = () => (player.currentTime += 10);
+  FastBackward.action = () => (player.currentTime -= 10);
+  GotoStart.action = () => (player.currentTime = 0);
+  GotoEnd.action = () => (player.currentTime = file.Duration - 5);
+  VolumeUp.action = () => changeVol(-0.05);
+  VolumeDown.action = () => changeVol(0.05);
+  Muted.action = () => (player.muted = !player.muted);
+  Fullscreen.action = fullScreen;
+
+  const focus = (el) => el?.focus();
 
   setBatteryMetter((level) => {
     battLevel = 0;
@@ -120,10 +112,10 @@
   <div
     class="player-container"
     class:isFullScreen
+    use:focus
     on:mousemove={hideControls}
-    tabindex="-1"
-    on:keydown={handleKeyboard}
     on:wheel={onWheel}
+    tabindex="-1"
   >
     <div class="player-content">
       <span class="v-state">
@@ -179,7 +171,7 @@
                 id="v-mute"
                 type="checkbox"
                 class="vol-ctrl"
-                checked={mConfig.volume === 0}
+                checked={mConfig.volume === 0 || player.muted}
                 on:change={onMuted}
               />
               <Icons name={player.muted ? "volumemute" : "volume"} />
