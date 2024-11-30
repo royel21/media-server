@@ -4,6 +4,7 @@
   import { getFilesPerPage, ProcessFile } from "./filesUtils";
 
   import { clamp } from "src/ShareComponent/utils";
+  import { ConfigStore } from "../Stores/PageConfigStore";
   import { ToggleMenu } from "src/ShareComponent/ToggleMenu";
   import { fileKeypress, selectByTitle, selectElementById } from "../Component/fileEvents";
 
@@ -22,7 +23,7 @@
   let isMounted = true;
   const User = getContext("User");
 
-  const config = User.sortTabs.find((st) => st.Name === "Home");
+  let config = User.sortTabs.find((st) => st.Name === "Home");
 
   let pageData = { items: [], page: page || 1, totalPages: 0, totalFiles: 0 };
 
@@ -69,6 +70,11 @@
   };
 
   ToggleMenu.set(false);
+
+  $: if (User) {
+    User.sortTabs.find((st) => st.Name === "Home");
+    loadContent(page, filter);
+  }
 
   onDestroy(() => {
     isMounted = false;
