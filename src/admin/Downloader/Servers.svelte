@@ -202,7 +202,7 @@
 </div>
 
 <style>
-  #srv :global(.t-container) {
+  #srv :global(.t-container:not(.hasconsole)) {
     height: calc(100% - 56px);
   }
   #srv {
