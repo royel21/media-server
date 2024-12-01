@@ -71,15 +71,14 @@ button:active {
   width: 265px;
   min-width: 195px;
   transition: .2s all;
-  margin: 15px 8px;
+  margin: 10px 0px;
 }
 
 .file-info {
   position: relative;
   text-align: center;
-  width: calc(100% - 20px);
+  width: calc(100% - 15px);
   height: 390px;
-  min-height: 390px;
   background-color: #343a40fc;
   border-radius: 5px;
   cursor: pointer;
@@ -333,7 +332,6 @@ input[type="range"]::-moz-range-track {
 
   .file {
     width: 190px;
-    margin: 10px 1px;
   }
 
   .file-info {

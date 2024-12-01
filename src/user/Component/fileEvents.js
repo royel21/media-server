@@ -105,6 +105,7 @@ const fileKeypress = (e, page, goToPage, title, type) => {
   if (file) {
     let wasProcesed = false;
     let colNum = calCol();
+    console.log(colNum);
     let totalitem = document.querySelectorAll(".file").length;
     selectedIndex = getElIndex(file.parentElement.querySelector(".active"));
 

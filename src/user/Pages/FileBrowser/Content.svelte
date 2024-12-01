@@ -7,6 +7,7 @@
   import FilesList from "src/user/Component/FilesList.svelte";
   import { ProcessFile, getReturnPath } from "../filesUtils";
   import Icons from "src/icons/Icons.svelte";
+  import { isValidKey } from "src/ShareComponent/utils";
 
   export let page = 1;
   export let filter = "";
@@ -78,81 +79,106 @@
   //Toggle File List Config
   const handleClick = (e) => (showConfig = !e);
 
+  const hotkeys = getContext("User").hotkeys;
+  const prevTab = hotkeys.find((h) => h.Name === "Prev Tab");
+  const nextTab = hotkeys.find((h) => h.Name === "Next Tab");
+
+  const onKeydown = (e) => {
+    if (isValidKey(e, prevTab)) {
+      currentContent = "Details";
+    }
+
+    if (isValidKey(e, nextTab)) {
+      currentContent = "File List";
+    }
+    console.log(currentContent);
+  };
+
+  const focus = () => {
+    document.querySelector("#f-content")?.focus();
+  };
+
   afterUpdate(() => (menu.style.display = "none"));
   onDestroy(() => (menu.style.display = "flex"));
 </script>
 
-<div class="tabs">
-  <div class="return-to" on:click={exitFolder} on:keydown>
-    <Icons name="reply" />
-  </div>
-  {#each contents as content}
-    <input id={content} type="radio" name="contents" bind:group={currentContent} value={content} />
-    <label for={content}>{content}</label>
-  {/each}
-</div>
-{#if currentContent === "Details"}
-  <div id="info">
-    <div id="info-content">
-      <div id="img-info">
-        <span class="d-state" class:completed={folderinfo?.Status}>
-          {folderinfo?.Status ? "Completed" : "On Going"}
-        </span>
-        <span class="img-d">
-          <img src={encodeURI(`/Folder/${folderinfo.FilesType}/${folderinfo?.Name}.jpg`)} alt="Cover Not Found" />
-        </span>
-      </div>
-      <div class="manga-name">Name: <span>{folderinfo?.Name || "Name: Loading Info"}</span></div>
-      <div class="manga-name">Alternative: <span>{folderinfo?.AltName || "Name: Loading Info"}</span></div>
-      <div class="genres-list">
-        <span class="gen-tag">Author(s): </span>
-        {#each folderinfo?.Author?.split(", ") || [] as auth}
-          <span on:click|preventDefault={onGenres} on:keydown> {auth}</span>
-        {/each}
-      </div>
-      <div class="genres-list">
-        <span class="gen-tag">Genres: </span>
-        {#each folderinfo?.Genres?.split(", ") as genre}
-          <span on:click|preventDefault={onGenres} on:keydown> {genre}</span>
-        {/each}
-      </div>
-      <div class="m-desc">
-        <span class="desc-text">
-          <span class="gen-tag">Description: </span>
-          {folderinfo?.Description || "Loading Info"}
-        </span>
-      </div>
-    </div>
-  </div>
-{/if}
-{#if currentContent === "File List"}
-  <div id="btn-bar">
-    {#if folderinfo.currentFile}
-      <button class="btn btn-secondary" on:click={continueReading}>Continue</button>
-    {/if}
-    <button id="first" class="btn btn-secondary" on:click={openFirstLast}>First</button>
-    <button id="last" class="btn btn-secondary" on:click={openFirstLast}>Last</button>
-    <button class="btn btn-secondary" on:click={onResetFiles}>Reset All</button>
-    <button class="btn btn-secondary" on:click={scanfiles}>Update</button>
-  </div>
-  <FilesList
-    title={"Content"}
-    type={typeUrl}
-    {filter}
-    {page}
-    {id}
-    {setFolderInfo}
-    {handleClick}
-    {exitFolder}
-    {continueReading}
-  >
-    <div class="first-controls" slot="controls" on:click={exitFolder} on:keydown>
+<div id="f-content" on:keydown={onKeydown} tabindex="-1">
+  <div class="tabs">
+    <div class="return-to" on:click={exitFolder} on:keydown>
       <Icons name="reply" />
     </div>
-  </FilesList>
-{/if}
+    {#each contents as content}
+      <input id={content} type="radio" name="contents" bind:group={currentContent} value={content} />
+      <label for={content}>{content}</label>
+    {/each}
+  </div>
+  {#if currentContent === "Details"}
+    <div id="info" use:focus>
+      <div id="info-content">
+        <div id="img-info">
+          <span class="d-state" class:completed={folderinfo?.Status}>
+            {folderinfo?.Status ? "Completed" : "On Going"}
+          </span>
+          <span class="img-d">
+            <img src={encodeURI(`/Folder/${folderinfo.FilesType}/${folderinfo?.Name}.jpg`)} alt="Cover Not Found" />
+          </span>
+        </div>
+        <div class="manga-name">Name: <span>{folderinfo?.Name || "Name: Loading Info"}</span></div>
+        <div class="manga-name">Alternative: <span>{folderinfo?.AltName || "Name: Loading Info"}</span></div>
+        <div class="genres-list">
+          <span class="gen-tag">Author(s): </span>
+          {#each folderinfo?.Author?.split(", ") || [] as auth}
+            <span on:click|preventDefault={onGenres} on:keydown> {auth}</span>
+          {/each}
+        </div>
+        <div class="genres-list">
+          <span class="gen-tag">Genres: </span>
+          {#each folderinfo?.Genres?.split(", ") as genre}
+            <span on:click|preventDefault={onGenres} on:keydown> {genre}</span>
+          {/each}
+        </div>
+        <div class="m-desc">
+          <span class="desc-text">
+            <span class="gen-tag">Description: </span>
+            {folderinfo?.Description || "Loading Info"}
+          </span>
+        </div>
+      </div>
+    </div>
+  {/if}
+  {#if currentContent === "File List"}
+    <div id="btn-bar">
+      {#if folderinfo.currentFile}
+        <button class="btn btn-secondary" on:click={continueReading}>Continue</button>
+      {/if}
+      <button id="first" class="btn btn-secondary" on:click={openFirstLast}>First</button>
+      <button id="last" class="btn btn-secondary" on:click={openFirstLast}>Last</button>
+      <button class="btn btn-secondary" on:click={onResetFiles}>Reset All</button>
+      <button class="btn btn-secondary" on:click={scanfiles}>Update</button>
+    </div>
+    <FilesList
+      title={"Content"}
+      type={typeUrl}
+      {filter}
+      {page}
+      {id}
+      {setFolderInfo}
+      {handleClick}
+      {exitFolder}
+      {continueReading}
+    >
+      <div class="first-controls" slot="controls" on:click={exitFolder} on:keydown>
+        <Icons name="reply" />
+      </div>
+    </FilesList>
+  {/if}
+</div>
 
 <style>
+  #f-content {
+    height: 100%;
+    outline: none;
+  }
   input[type="radio"] {
     display: none;
   }
