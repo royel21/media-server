@@ -85,11 +85,11 @@
 
   const onKeydown = (e) => {
     if (isValidKey(e, prevTab)) {
-      currentContent = "Details";
+      currentContent = "File List";
     }
 
     if (isValidKey(e, nextTab)) {
-      currentContent = "File List";
+      currentContent = "Details";
     }
     console.log(currentContent);
   };
