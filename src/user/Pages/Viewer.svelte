@@ -19,11 +19,7 @@
   let lastId = fileId;
   const menu = document.querySelector("#menu");
 
-  const basePath = location.pathname
-    .replace(/(^\/+|\/+$)/g, "")
-    .split("/")
-    .slice(0, 3)
-    .join("/");
+  const basePath = `${type}/viewer/${folderId}`;
 
   const socket = getContext("socket");
   const User = getContext("User");
@@ -65,8 +61,7 @@
     await saveFile();
     let path = getReturnPath("open-folder");
     if (!path) {
-      const parts = location.pathname.split("/");
-      path = `/${type}/content/${parts[3]}`;
+      path = `/${type}/content/${folderId}`;
     }
 
     navigate(path);
@@ -158,8 +153,6 @@
   });
 
   menu.style.display = "none";
-
-  const videoPlayer = location.pathname.includes("videos");
 </script>
 
 <div class="viewer" bind:this={viewer} on:keydown={handleKeyboard} class:video={isVideo(file)}>
@@ -176,7 +169,7 @@
     <div id="clock" />
   </span>
   <PlayList {fileId} files={playList} on:click={selectFile} {onFilter} {folderName} />
-  {#if videoPlayer}
+  {#if isVideo(file)}
     <VideoPLayer {file} {KeyMap} on:returnBack={returnBack} {viewer} />
   {:else}
     <MangaViewer

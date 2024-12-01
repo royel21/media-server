@@ -47,7 +47,7 @@
 
   const openFolder = ({ target }) => {
     const file = target.closest(".file");
-    ProcessFile(file, file.dataset.types, title, "mangas");
+    ProcessFile(file, "home", title, "mangas");
   };
 
   const handleKeydown = (event) => fileKeypress(event, pageData.page, goToPage, title);

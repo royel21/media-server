@@ -28,9 +28,20 @@
 
   let pathname = getReturnPath("to-menu");
 
+  const getReturn = () => {
+    console.log(pathname, segment);
+    if (pathname) return pathname;
+
+    if (segment.includes("home")) return "/";
+
+    return document.querySelector(`#menu a[href^="/${segment[0]}"]`)?.href;
+  };
+
   const openFirstLast = async ({ target: { id } }) => {
     const data = await apiUtils.files(["first-last", id, folderinfo.Id]);
-    ProcessFile({ id: data.Id, dataset: { type: data.Type } });
+    if (data.Id) {
+      ProcessFile({ id: data.Id, dataset: { type: data.Type } });
+    }
   };
 
   const continueReading = async () => {
@@ -39,8 +50,7 @@
   };
 
   const exitFolder = () => {
-    const url = document.querySelector(`#menu a[href^="/${segment[0]}"]`)?.href;
-    navigate(pathname || url, { replace: true, state: "" });
+    navigate(getReturn(), { replace: true, state: "" });
   };
 
   const onGenres = ({ currentTarget }) => {

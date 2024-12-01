@@ -77,13 +77,11 @@ export const ProcessFile = (file, type, title) => {
 
       let segment = pathname.replace("content", "viewer").split("/").slice(0, 4);
       let url = `${segment.join("/")}/${folderId}`;
-
       navigate(url);
       break;
     }
     default: {
       saveReturnPath("to-menu", pathname);
-      console.log(type, file.dataset);
       type = type || types || pathname.split("/")[1];
       navigate(`/${type}/content/${folderId}/`);
     }
