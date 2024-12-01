@@ -23,7 +23,7 @@
 
   const socket = getContext("socket");
   const User = getContext("User");
-  const { NextFile, PrevFile, Exit } = KeyMap;
+  const { NextFile, PrevFile, Exit, ShowList } = KeyMap;
   let files = [];
   let playList = [];
   let file = { Name: "", Type: "", Cover: "" };
@@ -71,6 +71,9 @@
   NextFile.action = () => changeFile(1);
   PrevFile.action = () => changeFile(-1);
   Exit.action = returnBack;
+  ShowList.action = () => {
+    document.querySelector("#btn-playlist")?.click();
+  };
 
   let runningClock;
   window.addEventListener("fullscreenchange", (e) => {
@@ -168,7 +171,7 @@
     </span>
     <div id="clock" />
   </span>
-  <PlayList {fileId} files={playList} on:click={selectFile} {onFilter} {folderName} />
+  <PlayList {fileId} files={playList} on:click={selectFile} {onFilter} {folderName} {viewer} />
   {#if isVideo(file)}
     <VideoPLayer {file} {KeyMap} on:returnBack={returnBack} {viewer} />
   {:else}

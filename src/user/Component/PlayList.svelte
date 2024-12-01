@@ -12,6 +12,7 @@
   export let fileId;
   export let onFilter;
   export let folderName = "";
+  export let viewer;
 
   let filter = "";
 
@@ -47,11 +48,51 @@
     return encodeURI(`/${Type}/${Name}.jpg`);
   };
 
+  const select = (item) => {
+    let found = playList.querySelector(".selected");
+    found.classList.remove("selected");
+    item.classList.add("selected");
+    item.scrollIntoViewIfNeeded();
+  };
+
+  const selectItem = (dir, e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    let item = playList.querySelector(".selected");
+    if (item) {
+      let found = dir ? item.nextElementSibling : item.previousElementSibling;
+      if (found) {
+        select(found);
+      }
+    }
+    e.preventDefault();
+  };
+
+  const handlers = {
+    38: (e) => selectItem(0, e),
+    40: (e) => selectItem(1, e),
+    13: (e) => {
+      e.stopPropagation();
+      hideList = true;
+      playList.querySelector(".selected")?.click();
+    },
+  };
+  const handleKey = (e) => {
+    if (handlers[e.keyCode]) handlers[e.keyCode](e);
+  };
+
   afterUpdate(() => {
     start = pageData.pg * filePerPage;
     list = files.slice(start, start + filePerPage);
     let current = document.getElementById(fileId);
     playList.scroll({ top: Math.max(current?.offsetTop - 250, 0) });
+    if (hideList) {
+      viewer?.focus();
+      console.log("focu vw");
+    } else {
+      select(playList.querySelector(".active"));
+      playList?.focus();
+    }
   });
 </script>
 
@@ -75,10 +116,10 @@
       <Icons name="timescircle" color="black" />
     </span>
   </div>
-  <div id="p-list" bind:this={playList}>
+  <div id="p-list" bind:this={playList} on:click tabindex="-1" on:keydown={handleKey}>
     <ul>
       {#each list as { Id, Name, CurrentPos, Duration, Type }, i}
-        <li id={Id} class={"usn " + (Id === fileId ? "active" : "")} on:click>
+        <li id={Id} class={"usn " + (Id === fileId ? "active selected" : "")} on:click tabindex="-1">
           <span class="cover">
             <LazyImage cover={getCover(Type, Name)} />
             <span class="duration">
@@ -198,11 +239,14 @@
   }
 
   #play-list #p-list li:hover {
-    background-color: rgba(20, 101, 50, 0.5);
+    background-color: rgba(20, 101, 50, 0.336);
   }
 
   .active {
     background-color: darkslategrey;
+  }
+  .selected {
+    background-color: rgba(72, 138, 138, 0.747);
   }
 
   #play-list .cover {
