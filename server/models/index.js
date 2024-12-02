@@ -21,6 +21,7 @@ import Downloading from "./Downloading.js";
 import dbconfig from "./config.js";
 import { config as configEnv } from "dotenv";
 import defaultConfig from "../default-config.js";
+import { defHotkeys, defSortTabs } from "../routes/defaultHotkeys.js";
 configEnv();
 
 const { dbConnector, dbName, dbStorage, dbUser, dbPassword, dbHost } = defaultConfig;
@@ -132,7 +133,17 @@ db.init = async (force) => {
         }
       );
     }
-  } catch (error) {}
+
+    const users = await db.user.findAll({ include: db.sorttab });
+    for (let user of users) {
+      if (!user.SortTabs.length) {
+        await db.sorttab.bulkCreate(defSortTabs.map((d) => ({ ...d, UserId: user.Id })));
+        await db.hotkey.bulkCreate(defHotkeys.map((d) => ({ ...d, UserId: user.Id })));
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const createdb = async () => {

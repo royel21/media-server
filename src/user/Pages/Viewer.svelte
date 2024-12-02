@@ -73,6 +73,7 @@
   Exit.action = returnBack;
   ShowList.action = () => {
     document.querySelector("#btn-playlist")?.click();
+    console.log("Show-List");
   };
 
   let runningClock;
@@ -171,9 +172,9 @@
     </span>
     <div id="clock" />
   </span>
-  <PlayList {fileId} files={playList} on:click={selectFile} {onFilter} {folderName} {viewer} />
+  <PlayList {fileId} files={playList} on:click={selectFile} {onFilter} {folderName} />
   {#if isVideo(file)}
-    <VideoPLayer {file} {KeyMap} on:returnBack={returnBack} {viewer} />
+    <VideoPLayer {file} {KeyMap} on:returnBack={returnBack} />
   {:else}
     <MangaViewer
       {viewer}

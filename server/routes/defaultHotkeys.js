@@ -1,4 +1,4 @@
-export default [
+export const defHotkeys = [
   {
     Key: 13,
     Name: "Open",
@@ -122,3 +122,36 @@ export default [
     AltKey: false,
   },
 ];
+
+export const defSortTabs = [
+  {
+    Name: "Home",
+    SortBy: "dd",
+    Items: 0,
+  },
+  {
+    Name: "Videos",
+    SortBy: "dd",
+    Items: 0,
+  },
+  {
+    Name: "Mangas",
+    SortBy: "dd",
+    Items: 0,
+  },
+  {
+    Name: "Favorites",
+    SortBy: "dd",
+    Items: 0,
+  },
+  {
+    Name: "Content",
+    SortBy: "dd",
+    Items: 0,
+  },
+];
+
+export default {
+  defHotkeys,
+  defSortTabs,
+};

@@ -2,10 +2,11 @@ import { Router } from "express";
 
 import passport from "passport";
 import db from "../models/index.js";
+import { defSortTabs, defHotkeys } from "./defaultHotkeys.js";
 
 const routes = Router();
 
-const sendUser = (res, user = { UserConfig: { dataValues: {} } }) => {
+const sendUser = async (res, user = { UserConfig: { dataValues: {} } }) => {
   return res.json({
     Id: user.Id,
     role: user.Role || "",

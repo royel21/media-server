@@ -189,12 +189,8 @@ export const KeyMap = {
 
 export const handleKeyboard = (e) => {
   for (let key of Object.keys(KeyMap)) {
-    if (isValidKey(e, KeyMap[key])) {
-      try {
-        KeyMap[key].action(e);
-      } catch (error) {
-        console.log(error);
-      }
+    if (isValidKey(e, KeyMap[key]) && KeyMap[key].action) {
+      KeyMap[key].action(e);
       break;
     }
   }

@@ -1,7 +1,6 @@
 import { Router } from "express";
 import db from "../../models/index.js";
-import user from "../../models/user.js";
-import defaultHotkeys from "../defaultHotkeys.js";
+import { defHotkeys, defSortTabs } from "../defaultHotkeys.js";
 
 const routes = Router();
 
@@ -27,34 +26,8 @@ const createUser = async (req) => {
     Id: null,
     CreatedAt: new Date(),
     Favorites: [{ Name: "Default" }],
-    SortTabs: [
-      {
-        Name: "Home",
-        SortBy: "dd",
-        Items: 0,
-      },
-      {
-        Name: "Videos",
-        SortBy: "dd",
-        Items: 0,
-      },
-      {
-        Name: "Mangas",
-        SortBy: "dd",
-        Items: 0,
-      },
-      {
-        Name: "Favorites",
-        SortBy: "dd",
-        Items: 0,
-      },
-      {
-        Name: "Content",
-        SortBy: "dd",
-        Items: 0,
-      },
-    ],
-    Hotkeys: defaultHotkeys,
+    SortTabs: defSortTabs,
+    Hotkeys: defHotkeys,
   };
 
   let newUser = await db.user.create(user, { encript: true, include: [db.favorite, db.hotkey, db.sorttab] });
