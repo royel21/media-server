@@ -149,7 +149,7 @@ export const adultEvalPage = async (query) => {
   const paras = document.querySelectorAll(query.Desc);
   let Description = (paras[2] || paras[1] || paras[0] || "").innerText?.replace(/You are reading .*\\n\\n\\n/g, "");
 
-  if (query.Name.includes("m440.in")) {
+  if (query.Name.includes("mangas.in")) {
     while (document.querySelector("ul .caret")) {
       document.querySelector("ul .caret")?.parentElement?.onclick();
     }
@@ -373,7 +373,7 @@ export const adultEvalPage = async (query) => {
     return false;
   });
 
-  if (location.href.includes("m440.in")) {
+  if (query.Name.includes("mangas.in")) {
     [...document.querySelectorAll(".dl-horizontal dt")].forEach((el) => {
       let content = el.nextElementSibling;
       let tag = el.textContent?.trim();
@@ -439,7 +439,7 @@ export const evaleLinks = async (query) => {
   let data = [];
   let imgs = document.querySelectorAll(query.Imgs);
 
-  if (query.Name.includes("m440.in")) {
+  if (query.Name.includes("mangas.in")) {
     for (let img of imgs) {
       while (/aHR0cHMl|loading.gif/.test(img.src)) {
         img?.scrollIntoView();
@@ -464,7 +464,7 @@ export const evaleLinks = async (query) => {
       if (nSrc.includes("mangaclash")) {
         data.push(nSrc);
       }
-    } else if (location.href.includes("m440.in")) {
+    } else if (query.Name.includes("mangas.in")) {
       data.push(src);
     } else {
       data.push(nSrc);

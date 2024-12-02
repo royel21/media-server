@@ -7,6 +7,7 @@
   import { formatTime } from "../Pages/pagesUtils";
   import Icons from "src/icons/Icons.svelte";
   import LazyImage from "./LazyImage.svelte";
+  import { fly } from "svelte/transition";
 
   export let files = [];
   export let fileId;
@@ -49,22 +50,24 @@
   };
 
   const select = (item) => {
-    let found = playList.querySelector(".selected");
-    found.classList.remove("selected");
-    item.classList.add("selected");
-    item.scrollIntoViewIfNeeded();
+    playList.querySelector(".selected")?.classList.remove("selected");
+
+    item?.classList.add("selected");
+    item?.scrollIntoViewIfNeeded();
+
+    console.log(item);
   };
 
   const selectItem = (dir, e) => {
-    e.stopPropagation();
-    e.preventDefault();
     let item = playList.querySelector(".selected");
     if (item) {
       let found = dir ? item.nextElementSibling : item.previousElementSibling;
+      console.log("n", item.nextElementSibling, item.previousElementSibling);
       if (found) {
         select(found);
       }
     }
+    e.stopPropagation();
     e.preventDefault();
   };
 
@@ -85,13 +88,13 @@
     start = pageData.pg * filePerPage;
     list = files.slice(start, start + filePerPage);
     let current = document.getElementById(fileId);
-    playList.scroll({ top: Math.max(current?.offsetTop - 250, 0) });
-    if (hideList) {
-      viewer?.focus();
-      console.log("focu vw");
+    if (playList) {
+      // playList.scroll({ top: Math.max(current?.offsetTop - 250, 0) });
+      // console.log("focu l");
+      // select(playList.querySelector(".active") || playList.querySelector(".selected"));
+      // playList?.focus();
     } else {
-      select(playList.querySelector(".active"));
-      playList?.focus();
+      viewer?.focus();
     }
   });
 </script>
@@ -109,35 +112,37 @@
 </label>
 <div id="p-bg" class:hidelist={!hideList} on:click|stopPropagation={(e) => (hideList = true)} tabindex="-1" />
 <input name="show-hide-play-list" type="checkbox" id="p-hide" bind:checked={hideList} />
-<div id="play-list" class:move={!$ToggleMenu}>
-  <div id="v-filter">
-    <input name="clear-filters" type="text" bind:value={filter} placeholder="Filter" class="form-control" />
-    <span class="clear-filter" on:click={() => (filter = "")}>
-      <Icons name="timescircle" color="black" />
-    </span>
-  </div>
-  <div id="p-list" bind:this={playList} on:click tabindex="-1" on:keydown={handleKey}>
-    <ul>
-      {#each list as { Id, Name, CurrentPos, Duration, Type }, i}
-        <li id={Id} class={"usn " + (Id === fileId ? "active selected" : "")} on:click tabindex="-1">
-          <span class="cover">
-            <LazyImage cover={getCover(Type, Name)} />
-            <span class="duration">
-              {Type.includes("Manga") ? `${CurrentPos + 1}/${Duration}` : formatTime(Duration)}
-            </span>
-            <span class="f-index duration">#{(start + i + 1).toString().padStart(3, "0")}</span>
-          </span>
-          <span class="l-name">{Name}</span>
-        </li>
-      {/each}
-    </ul>
-  </div>
-  {#if pageData.totalPages > 1}
-    <div class="b-control">
-      <Pagination page={pageData.pg + 1} totalPages={pageData.totalPages} on:gotopage={goToPage} hideFL={true} />
+{#if !hideList}
+  <div id="play-list" transition:fly={{ x: "0" }}>
+    <div id="v-filter">
+      <input name="clear-filters" type="text" bind:value={filter} placeholder="Filter" class="form-control" />
+      <span class="clear-filter" on:click={() => (filter = "")}>
+        <Icons name="timescircle" color="black" />
+      </span>
     </div>
-  {/if}
-</div>
+    <div id="p-list" bind:this={playList} on:click tabindex="-1" on:keydown={handleKey}>
+      <ul>
+        {#each list as { Id, Name, CurrentPos, Duration, Type }, i}
+          <li id={Id} class={"usn " + (Id === fileId ? "active selected" : "")} on:click tabindex="-1">
+            <span class="cover">
+              <LazyImage cover={getCover(Type, Name)} />
+              <span class="duration">
+                {Type.includes("Manga") ? `${CurrentPos + 1}/${Duration}` : formatTime(Duration)}
+              </span>
+              <span class="f-index duration">#{(start + i + 1).toString().padStart(3, "0")}</span>
+            </span>
+            <span class="l-name">{Name}</span>
+          </li>
+        {/each}
+      </ul>
+    </div>
+    {#if pageData.totalPages > 1}
+      <div class="b-control">
+        <Pagination page={pageData.pg + 1} totalPages={pageData.totalPages} on:gotopage={goToPage} hideFL={true} />
+      </div>
+    {/if}
+  </div>
+{/if}
 
 <style>
   #p-bg.hidelist {
@@ -178,7 +183,7 @@
   #play-list {
     position: absolute;
     top: 0px;
-    right: 0;
+    right: -0;
     bottom: 0;
     width: 220px;
     background-color: black;
@@ -192,11 +197,6 @@
     height: calc(100% - 31px);
     overflow-x: hidden;
     padding-bottom: 35px;
-  }
-
-  #p-hide:checked + #play-list {
-    width: 0;
-    border: none;
   }
 
   #p-hide:checked + #play-list .p-controls .form-control {
