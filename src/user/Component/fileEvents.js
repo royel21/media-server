@@ -32,28 +32,34 @@ const getElIndex = (element) => {
   return [...document.querySelectorAll(".file")].indexOf(element);
 };
 
+export const scrollItem = (element, behavior = "smooth") => {
+  if (!element) return;
+
+  let itemContainer = element.parentElement;
+  let scrollElement = itemContainer.parentElement;
+  let scroll = scrollElement.scrollTop,
+    elofft = element.offsetTop;
+
+  if (elofft - scroll + 1 < -1) {
+    scroll = elofft < 60 ? 0 : elofft;
+  }
+
+  let top = elofft + element.offsetHeight;
+  let sctop = scroll + scrollElement.offsetHeight;
+
+  if (top - sctop + 1 > 0) {
+    scroll = top + 31 > itemContainer.offsetHeight ? itemContainer.offsetHeight - 10 : scroll + (top - sctop);
+  }
+
+  scrollElement.scroll({
+    top: scroll,
+    behavior,
+  });
+};
+
 const selectElement = (element) => {
   if (element) {
-    let itemContainer = element.parentElement;
-    let scrollElement = itemContainer.parentElement;
-    let scroll = scrollElement.scrollTop,
-      elofft = element.offsetTop;
-
-    if (elofft - scroll + 1 < -1) {
-      scroll = elofft < 60 ? 0 : elofft;
-    }
-
-    let top = elofft + element.offsetHeight;
-    let sctop = scroll + scrollElement.offsetHeight;
-
-    if (top - sctop + 1 > 0) {
-      scroll = top + 31 > itemContainer.offsetHeight ? itemContainer.offsetHeight - 10 : scroll + (top - sctop);
-    }
-
-    scrollElement.scroll({
-      top: scroll,
-      behavior: "smooth",
-    });
+    scrollItem(element);
 
     let activeEl = document.querySelector(".file.active");
 

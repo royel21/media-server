@@ -14,7 +14,6 @@
   export let id = "";
   export let type = "";
 
-  let showConfig = false;
   let contents = ["File List", "Details"];
   let currentContent = "File List";
 
@@ -30,7 +29,6 @@
   let pathname = getReturnPath("to-menu");
 
   const getReturn = () => {
-    console.log(pathname, segment);
     if (pathname) return pathname;
 
     if (segment.includes("home")) return "/";

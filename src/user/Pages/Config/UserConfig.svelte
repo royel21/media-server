@@ -36,4 +36,9 @@
     overflow: hidden;
     border-radius: 0.35rem;
   }
+
+  .modal-config :global(#tabs-content) {
+    height: calc(100% - 50px);
+    padding: 5px 0;
+  }
 </style>

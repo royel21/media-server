@@ -7,6 +7,7 @@
   import Pagination from "src/ShareComponent/Pagination.svelte";
   import LazyImage from "./LazyImage.svelte";
   import Icons from "src/icons/Icons.svelte";
+  import { scrollItem } from "./fileEvents";
 
   export let onFilter;
   export let folderName = "";
@@ -15,6 +16,7 @@
   export let hideList;
 
   let playList;
+  let scrollable;
   let list = [];
 
   const pageData = {
@@ -40,11 +42,8 @@
 
   const select = (item) => {
     playList.querySelector(".selected")?.classList.remove("selected");
-
     item?.classList.add("selected");
-    item?.scrollIntoViewIfNeeded();
-
-    console.log(item, playList.querySelector(".selected"));
+    scrollItem(item, "auto");
   };
 
   const selectItem = (dir, e) => {
@@ -91,7 +90,8 @@
 
   afterUpdate(() => {
     setTimeout(() => {
-      select(playList.querySelector(".active, #play-list li:first-child"));
+      let current = document.getElementById(fileId) || playList.querySelector("li:first-child");
+      select(current);
     }, 0);
   });
 
@@ -106,11 +106,9 @@
   });
 
   $: onFilter(filter);
-  $: console.log(fileId);
   $: if (pageData.pg > -1) {
     start = pageData.pg * filePerPage;
     list = files.slice(start, start + filePerPage);
-    console.log(files);
   }
 </script>
 
@@ -128,7 +126,7 @@
       <Icons name="timescircle" color="black" />
     </span>
   </div>
-  <div id="p-list" on:click>
+  <div id="p-list" on:click bind:this={scrollable}>
     <ul>
       {#each list as { Id, Name, CurrentPos, Duration, Type }, i}
         <li id={Id} class={"usn " + (Id === fileId ? "active selected" : "")} on:click tabindex="-1">
@@ -271,10 +269,10 @@
   }
 
   #play-list .active {
-    background-color: rgb(119 185 47 / 82%);
+    background-color: #446991db;
   }
   #play-list .selected {
-    background-color: rgba(72, 138, 138, 0.747);
+    background-color: #007bffab;
   }
   .b-control {
     text-align: center;

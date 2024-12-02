@@ -447,7 +447,6 @@
   }
 
   #manga-viewer .empty-img:after {
-    content: "Loading Images";
     position: absolute;
     top: 46%;
     font-size: 30px;
