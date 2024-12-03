@@ -8,7 +8,7 @@
   import PlayList from "../Component/PlayList.svelte";
   import MangaViewer from "./Manga/MangaViewer.svelte";
   import VideoPLayer from "./Video/VideoPlayer.svelte";
-  import { KeyMap, handleKeyboard, isVideo, mapKeys, showFileName } from "./pagesUtils";
+  import { KeyMap, handleKeyboard, isVideo, showFileName } from "./pagesUtils";
   import Icons from "src/icons/Icons.svelte";
   import { getReturnPath } from "./filesUtils";
 
@@ -67,7 +67,6 @@
     navigate(path);
   };
 
-  mapKeys(User.hotkeys);
   NextFile.action = () => changeFile(1);
   PrevFile.action = () => changeFile(-1);
   Exit.action = returnBack;
@@ -152,6 +151,11 @@
     socket.on("file-removed", onFileRemove);
     return () => {
       socket.off("file-removed", onFileRemove);
+
+      NextFile.action = null;
+      PrevFile.action = null;
+      Exit.action = null;
+      ShowList.action = null;
     };
   });
 

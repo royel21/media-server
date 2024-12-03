@@ -27,10 +27,10 @@
   let config = $ConfigStore.Viewer.manga;
   let progress = "";
   let images = [file.Duration];
-  let imgContainer;
   let viewerRef;
   let inputPage;
   let isFullscreen = false;
+  let imgContainer;
   controls.webtoon = webtoon;
 
   let viewerState = {
@@ -162,14 +162,17 @@
       disconnectObvrs(imgContainer);
     }
   }
-  $: webtoon = isManhwa;
+
   //reload on file change
   $: if (file.Id && file.Id !== viewerState.lastfId) {
     disconnectObvrs(imgContainer);
+    controls.file = file;
     viewerState.jumping = webtoon;
     viewerState.loading = false;
     images = [];
-    controls.file = file;
+    webtoon = isManhwa;
+
+    imgContainer = document.querySelector(".viewer");
     loadImages(file.CurrentPos - 2, 8);
   }
 
@@ -184,6 +187,11 @@
       socket.off("connect", onConnect);
       socket.off("image-loaded", onImageData);
       socket.off("disconnect", onDisconnect);
+
+      SkipForward.action = null;
+      SkipBack.action = null;
+      GotoStart.action = null;
+      GotoEnd.action = null;
     };
   });
 
@@ -194,7 +202,7 @@
     }
 
     if (webtoon && !viewerState.loading) {
-      PageObserver(changePages, imgContainer);
+      PageObserver(changePages);
     }
   });
 
@@ -235,7 +243,6 @@
     <div
       class="img-current scrollable"
       class:webtoon-img={webtoon}
-      bind:this={imgContainer}
       style={`width: ${config.width}%;`}
       on:touchstart|passive={onTouchStart}
       on:touchend|passive={onTouchEnd}
@@ -298,7 +305,7 @@
     <span class="config">
       <MangaConfig {ToggleMenu} />
     </span>
-    {#if User.username?.includes("Royel")}
+    {#if User.username === "Royel"}
       <span class="remove" on:click={removeFile}><Icons name="trash" color="red" /></span>
     {/if}
   </div>

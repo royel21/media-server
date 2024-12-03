@@ -2,7 +2,6 @@
   import { getContext, onMount } from "svelte";
   import { Router, Route } from "svelte-routing";
   import { FavoritesStores } from "./Stores/FavoritesStores";
-  import { Link } from "svelte-routing";
 
   import Navbar from "../ShareComponent/Navbar.svelte";
   import Home from "./Pages/Home.svelte";
@@ -15,6 +14,7 @@
   import UserConfig from "./Pages/Config/UserConfig.svelte";
   import { setConfig } from "./Stores/PageConfigStore";
   import Icons from "src/icons/Icons.svelte";
+  import { mapKeys } from "./Pages/pagesUtils";
 
   const navItems = [
     { title: "Home", path: "/", class: "home" },
@@ -35,6 +35,8 @@
   };
 
   const hide = () => (showConfig = false);
+
+  mapKeys(User.hotkeys);
 
   onMount(async () => {
     const data = await apiUtils.files(["dirs/"]);
