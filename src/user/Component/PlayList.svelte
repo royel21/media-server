@@ -9,6 +9,7 @@
 
   let hideList = true;
   let btnList;
+  let filter = "";
 
   const onMousemove = () => {
     btnList.style.opacity = 1;
@@ -36,7 +37,7 @@
     </span>
   </label>
   {#if !hideList}
-    <List {files} {folderName} {onFilter} {fileId} on:click bind:hideList />
+    <List {files} {folderName} {onFilter} {fileId} on:click bind:hideList bind:filter />
   {/if}
 </div>
 

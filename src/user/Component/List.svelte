@@ -14,10 +14,12 @@
   export let fileId;
   export let files = [];
   export let hideList;
+  export let filter;
 
   let playList;
   let scrollable;
   let list = [];
+  let filterRef;
 
   const pageData = {
     pg: 0,
@@ -27,8 +29,6 @@
 
   const filePerPage = 100;
   let start = pageData.pg * filePerPage;
-
-  let filter = "";
 
   const goToPage = (pg) => {
     pageData.pg = clamp(pg.detail - 1, 0, pageData.totalPages - 1);
@@ -89,10 +89,12 @@
   }
 
   afterUpdate(() => {
-    setTimeout(() => {
-      let current = document.getElementById(fileId) || playList.querySelector("li:first-child");
-      select(current);
-    }, 30);
+    if (document.activeElement !== filterRef) {
+      setTimeout(() => {
+        let current = document.getElementById(fileId) || playList.querySelector("li:first-child");
+        select(current);
+      }, 30);
+    }
   });
 
   onMount(() => {
@@ -128,6 +130,7 @@
       placeholder="Filter"
       class="form-control"
       on:keydown|stopPropagation
+      bind:this={filterRef}
     />
     <span class="clear-filter" on:click={() => (filter = "")}>
       <Icons name="timescircle" color="black" />
