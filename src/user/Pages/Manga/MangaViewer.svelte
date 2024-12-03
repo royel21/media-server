@@ -99,7 +99,7 @@
   const returnTo = () => dispatch("returnBack");
 
   let connectObservers = (delay = 0) => {
-    if (webtoon) {
+    if (webtoon && imgContainer) {
       let tout = setTimeout(() => {
         scrollInView(file.CurrentPos);
         PageObserver(changePages, imgContainer);
@@ -198,7 +198,7 @@
       scrollInView(file.CurrentPos);
     }
 
-    if (webtoon && !viewerState.loading) {
+    if (webtoon && !viewerState.loading && viewer) {
       PageObserver(changePages);
     }
   });
