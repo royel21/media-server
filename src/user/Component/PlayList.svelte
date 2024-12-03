@@ -67,6 +67,7 @@
   }
   .move {
     right: 230px;
+    opacity: 1 !important;
   }
 
   #play-list .p-controls .p-sort {

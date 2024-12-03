@@ -220,9 +220,9 @@
     width: calc(100% - 25px);
     white-space: nowrap;
     text-overflow: ellipsis;
+    overflow-x: hidden;
     user-select: text;
     border-bottom: 1px solid;
-    overflow-x: hidden;
     font-size: 1.12rem;
   }
   .tree-files :global(#check-all) {

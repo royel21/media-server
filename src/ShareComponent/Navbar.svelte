@@ -35,8 +35,8 @@
 
       if (item) {
         item.querySelector("a")?.click();
-        e.preventDefault();
       }
+      e.preventDefault();
     }
   };
 

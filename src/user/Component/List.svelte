@@ -19,6 +19,7 @@
   let playList;
   let scrollable;
   let list = [];
+  let filterRef;
 
   const pageData = {
     pg: 0,
@@ -88,16 +89,20 @@
   }
 
   afterUpdate(() => {
-    setTimeout(() => {
-      let current = document.getElementById(fileId) || playList.querySelector("li:first-child");
-      select(current);
-    }, 0);
+    if (document.activeElement !== filterRef) {
+      setTimeout(() => {
+        let current = document.getElementById(fileId) || playList.querySelector("li:first-child");
+        select(current);
+      }, 30);
+    }
   });
 
   onMount(() => {
-    setTimeout(() => {
-      playList.focus();
-    }, 0);
+    if (document.activeElement !== filterRef) {
+      setTimeout(() => {
+        playList.focus();
+      }, 0);
+    }
   });
 
   onDestroy(() => {
@@ -149,7 +154,7 @@
     </ul>
   </div>
   {#if pageData.totalPages > 1}
-    <div class="b-control">
+    <div class="b-control" on:keydown|stopPropagation>
       <Pagination page={pageData.pg + 1} totalPages={pageData.totalPages} on:gotopage={goToPage} hideFL={true} />
     </div>
   {/if}
@@ -275,10 +280,10 @@
   }
 
   #play-list .active {
-    background-color: #446991db;
-  }
-  #play-list .selected {
     background-color: #007bffab;
+  }
+  #play-list .selected:not(.active) {
+    background-color: #4469917b;
   }
   .b-control {
     text-align: center;
