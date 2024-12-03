@@ -67,13 +67,6 @@
     navigate(path);
   };
 
-  NextFile.action = () => changeFile(1);
-  PrevFile.action = () => changeFile(-1);
-  Exit.action = returnBack;
-  ShowList.action = () => {
-    document.querySelector("#btn-playlist")?.click();
-  };
-
   let runningClock;
   window.addEventListener("fullscreenchange", (e) => {
     if (document.fullscreenElement) {
@@ -138,6 +131,13 @@
   };
 
   onMount(async () => {
+    NextFile.action = () => changeFile(1);
+    PrevFile.action = () => changeFile(-1);
+    Exit.action = returnBack;
+    ShowList.action = () => {
+      document.querySelector("#btn-playlist")?.click();
+    };
+
     let data = await apiUtils.post(`viewer/folder`, { id: folderId });
     if (!data.fail) {
       folderName = data.Name;

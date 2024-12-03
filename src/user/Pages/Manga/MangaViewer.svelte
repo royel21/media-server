@@ -137,11 +137,6 @@
     }
   };
 
-  SkipForward.action = nextPage;
-  SkipBack.action = prevPage;
-  GotoStart.action = () => jumpTo(0);
-  GotoEnd.action = () => jumpTo(file.Duration);
-
   controls.prevPage = prevPage;
   controls.nextPage = nextPage;
   controls.jumpTo = jumpTo;
@@ -177,6 +172,11 @@
   const onDisconnect = () => (viewerState.loading = false);
 
   onMount(() => {
+    SkipForward.action = nextPage;
+    SkipBack.action = prevPage;
+    GotoStart.action = () => jumpTo(0);
+    GotoEnd.action = () => jumpTo(file.Duration);
+
     socket.on("connect", onConnect);
     socket.on("image-loaded", onImageData);
     socket.on("disconnect", onDisconnect);
