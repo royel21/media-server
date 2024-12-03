@@ -172,7 +172,6 @@
     images = [];
     webtoon = isManhwa;
 
-    imgContainer = document.querySelector(".viewer");
     loadImages(file.CurrentPos - 2, 8);
   }
 
@@ -196,6 +195,7 @@
   });
 
   afterUpdate(() => {
+    imgContainer = document.querySelector(".viewer");
     if (file.Id !== viewerState.lastfId) {
       viewerState.lastfId = file.Id;
       scrollInView(file.CurrentPos);
