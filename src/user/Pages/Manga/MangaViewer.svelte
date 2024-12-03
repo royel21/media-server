@@ -30,7 +30,7 @@
   let viewerRef;
   let inputPage;
   let isFullscreen = false;
-  let imgContainer = Viewer;
+  let imgContainer = viewer;
   controls.webtoon = webtoon;
 
   let viewerState = {
