@@ -86,6 +86,7 @@
   const onInputFocus = () => {
     inputPage.value = file.CurrentPos + 1;
     inputPage.focus();
+    console.log("focus", inputPage.value);
   };
   //clear Input on focusout and show placeholder
   const onInputBlur = () => (inputPage.value = "");
@@ -221,7 +222,9 @@
   });
 
   afterUpdate(() => {
-    imgContainer?.focus();
+    if (document.activeElement !== inputPage) {
+      imgContainer?.focus();
+    }
   });
 </script>
 
