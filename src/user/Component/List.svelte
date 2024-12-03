@@ -98,9 +98,11 @@
   });
 
   onMount(() => {
-    setTimeout(() => {
-      playList.focus();
-    }, 0);
+    if (document.activeElement !== filterRef) {
+      setTimeout(() => {
+        playList.focus();
+      }, 0);
+    }
   });
 
   onDestroy(() => {
