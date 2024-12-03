@@ -30,7 +30,7 @@
   let viewerRef;
   let inputPage;
   let isFullscreen = false;
-  let imgContainer;
+  let imgContainer = Viewer;
   controls.webtoon = webtoon;
 
   let viewerState = {
@@ -120,8 +120,8 @@
     }
   };
 
-  ConfigStore.subscribe(({ Viewer }) => {
-    config = Viewer.manga;
+  ConfigStore.subscribe(({ v }) => {
+    config = v.manga;
   });
 
   // receive data from server
@@ -195,7 +195,6 @@
   });
 
   afterUpdate(() => {
-    imgContainer = document.querySelector(".viewer");
     if (file.Id !== viewerState.lastfId) {
       viewerState.lastfId = file.Id;
       scrollInView(file.CurrentPos);
@@ -232,6 +231,7 @@
   });
 
   $: if (file.CurrentPos) onShow();
+  $: imgContainer = viewer;
 </script>
 
 <div id="manga-viewer" tabIndex="0" class:hide={$ToggleMenu}>
