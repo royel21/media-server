@@ -120,7 +120,7 @@
     }
   };
 
-  ConfigStore.subscribe(({ viewer: { manga } }) => (config = manga));
+  ConfigStore.subscribe(({ Viewer: { manga } }) => (config = manga));
 
   // receive data from server
   const onImageData = (data) => {
