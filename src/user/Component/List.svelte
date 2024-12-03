@@ -121,7 +121,14 @@
   on:click|stopPropagation|preventDefault={() => {}}
 >
   <div id="v-filter">
-    <input name="clear-filters" type="text" bind:value={filter} placeholder="Filter" class="form-control" />
+    <input
+      name="clear-filters"
+      type="text"
+      bind:value={filter}
+      placeholder="Filter"
+      class="form-control"
+      on:keydown|stopPropagation
+    />
     <span class="clear-filter" on:click={() => (filter = "")}>
       <Icons name="timescircle" color="black" />
     </span>
@@ -143,7 +150,7 @@
     </ul>
   </div>
   {#if pageData.totalPages > 1}
-    <div class="b-control">
+    <div class="b-control" on:keydown|stopPropagation>
       <Pagination page={pageData.pg + 1} totalPages={pageData.totalPages} on:gotopage={goToPage} hideFL={true} />
     </div>
   {/if}
