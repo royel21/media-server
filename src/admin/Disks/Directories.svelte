@@ -7,7 +7,6 @@
   let dirs = [];
   let msg = "";
   let dir;
-  let showInput = false;
   let count = 0;
   let allFiles = 0;
 
@@ -78,7 +77,7 @@
 
   onMount(async () => {
     dirs = await apiUtils.admin(["directories"]);
-    if (dirs) {
+    if (dirs?.length) {
       dirs.forEach((d) => {
         count += d.FolderCount;
         allFiles += d.TotalFiles;

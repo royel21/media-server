@@ -92,7 +92,7 @@
     setTimeout(() => {
       let current = document.getElementById(fileId) || playList.querySelector("li:first-child");
       select(current);
-    }, 0);
+    }, 30);
   });
 
   onMount(() => {
@@ -269,10 +269,10 @@
   }
 
   #play-list .active {
-    background-color: #446991db;
-  }
-  #play-list .selected {
     background-color: #007bffab;
+  }
+  #play-list .selected:not(.active) {
+    background-color: #4469917b;
   }
   .b-control {
     text-align: center;

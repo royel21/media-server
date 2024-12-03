@@ -486,7 +486,7 @@ body .navbar .icon-folder {
 }
 
 @media screen and (max-width: 790px) {
-  #menu .nav-title {
+  #menu .tabs .nav-title {
     display: none;
   }
 

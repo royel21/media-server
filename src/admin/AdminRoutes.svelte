@@ -95,11 +95,15 @@
 
 <style>
   #admin-label {
-    padding: 5px;
+    display: flex;
+    padding: 5px 0;
     cursor: pointer;
-    text-align: center;
-    overflow: hidden;
-    max-height: 66px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+  }
+  #admin-label .nav-title {
+    margin-left: 5px;
   }
   .content {
     width: 100%;
@@ -141,10 +145,6 @@
     transform: scale(1.2);
   }
   @media screen and (max-width: 790px) {
-    #admin-label {
-      max-width: 100px;
-      text-overflow: ellipsis;
-    }
     .toast {
       max-width: 390px;
     }
@@ -161,6 +161,15 @@
   @media (max-width: 600px) and (pointer: none), (pointer: coarse) {
     .content {
       height: calc(100% - 45px);
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    #admin-label .nav-title {
+      display: none;
+    }
+    #admin-label {
+      width: 32px;
     }
   }
 </style>

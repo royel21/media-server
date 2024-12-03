@@ -55,11 +55,11 @@
 <Router>
   <Navbar on:click {navItems} {dirs} filters={["Mangas", "Videos", "Favorites"]}>
     <span class="icon" id="user-label" slot="user">
-      <span class="sign-out" on:click={logout} title="Sign Out"> <Icons name="signout" /></span>
       <span title="Open Config" class="user-cog" on:click={onShowConfgs}>
         <Icons name="usercog" height="22px" />
-        <span class="nav-title">{User.username}</span>
+        <span class="nav-title user-name">{User.username}</span>
       </span>
+      <span class="sign-out" on:click={logout} title="Sign Out"> <Icons name="signout" /></span>
     </span>
   </Navbar>
 
@@ -93,7 +93,7 @@
     }
 
     #user-label {
-      max-width: 100px;
+      max-width: 150px;
     }
     .icon :global(svg) {
       height: 26px;

@@ -73,7 +73,6 @@
   Exit.action = returnBack;
   ShowList.action = () => {
     document.querySelector("#btn-playlist")?.click();
-    console.log("Show-List");
   };
 
   let runningClock;
