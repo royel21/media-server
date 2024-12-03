@@ -206,7 +206,7 @@
   let tout;
   const onShow = () => {
     clearTimeout(tout);
-    const elems = [...document.querySelectorAll(".fullscreen-progress, .info")];
+    const elems = [...document.querySelectorAll("#btn-playlist, .fullscreen-progress, .info")];
     for (let elem of elems) {
       elem.style.opacity = 1;
     }
