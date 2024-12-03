@@ -30,7 +30,6 @@
   let viewerRef;
   let inputPage;
   let isFullscreen = false;
-  let imgContainer = viewer;
   controls.webtoon = webtoon;
 
   let viewerState = {
@@ -99,11 +98,11 @@
   const returnTo = () => dispatch("returnBack");
 
   let connectObservers = (delay = 0) => {
-    if (webtoon && imgContainer) {
+    if (webtoon && viewer) {
       let tout = setTimeout(() => {
         scrollInView(file.CurrentPos);
-        PageObserver(changePages, imgContainer);
-        scrollImageLoader(loadImages, imgContainer);
+        PageObserver(changePages, viewer);
+        scrollImageLoader(loadImages, viewer);
         clearTimeout(tout);
         viewerState.jumping = false;
       }, delay);
@@ -112,7 +111,7 @@
 
   Fullscreen.action = () => {
     if (webtoon) {
-      disconnectObvrs(imgContainer);
+      disconnectObvrs(viewer);
       isFullscreen = setfullscreen(viewer);
       connectObservers(100);
     } else {
@@ -128,8 +127,8 @@
       if (!data.last) {
         images[data.page] = data.img;
       } else {
-        if ((viewerState.jumping, imgContainer)) {
-          scrollImageLoader(loadImages, imgContainer);
+        if ((viewerState.jumping, viewer)) {
+          scrollImageLoader(loadImages, viewer);
           viewerState.jumping = false;
         }
         viewerState.loading = false;
@@ -152,13 +151,13 @@
     if (webtoon) {
       connectObservers(50);
     } else {
-      disconnectObvrs(imgContainer);
+      disconnectObvrs(viewer);
     }
   }
 
   //reload on file change
   $: if (file.Id && file.Id !== viewerState.lastfId) {
-    disconnectObvrs(imgContainer);
+    disconnectObvrs(viewer);
     controls.file = file;
     viewerState.jumping = webtoon;
     viewerState.loading = false;
@@ -189,6 +188,7 @@
       SkipBack.action = null;
       GotoStart.action = null;
       GotoEnd.action = null;
+      console.log("unmount2");
     };
   });
 
@@ -199,7 +199,7 @@
     }
 
     if (webtoon && !viewerState.loading && viewer) {
-      PageObserver(changePages);
+      PageObserver(changePages, viewer);
     }
   });
 
@@ -229,7 +229,6 @@
   });
 
   $: if (file.CurrentPos) onShow();
-  $: imgContainer = viewer;
 </script>
 
 <div id="manga-viewer" tabIndex="0" class:hide={$ToggleMenu}>

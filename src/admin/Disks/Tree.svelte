@@ -112,7 +112,7 @@
 
 <style>
   .d-content {
-    height: 100%;
+    height: 98.5%;
     padding-bottom: 5px;
   }
   .d-content.expanded {

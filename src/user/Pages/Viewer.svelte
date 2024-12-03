@@ -156,6 +156,7 @@
       PrevFile.action = null;
       Exit.action = null;
       ShowList.action = null;
+      console.log("unmount");
     };
   });
 
