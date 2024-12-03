@@ -101,6 +101,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow-x: hidden;
+    width: 135px;
   }
   #admin-label .nav-title {
     margin-left: 5px;
