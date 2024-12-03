@@ -202,6 +202,31 @@
     $ConfigStore.Viewer.manga.webtoon = webtoon;
     updateConfig($ConfigStore);
   }
+
+  let tout;
+  const onShow = () => {
+    clearTimeout(tout);
+    const elems = [...document.querySelectorAll(".fullscreen-progress, .info")];
+    for (let elem of elems) {
+      elem.style.opacity = 1;
+    }
+    tout = setTimeout(() => {
+      for (let elem of elems) {
+        elem.style.opacity = 0;
+      }
+    }, 3000);
+  };
+  let ref;
+  onMount(() => {
+    document.addEventListener("touchmove", onShow);
+    document.addEventListener("mousemove", onShow);
+    return () => {
+      document.removeEventListener("touchmove", onShow);
+      document.removeEventListener("mousemove", onShow);
+    };
+  });
+
+  $: if (file.CurrentPos) onShow();
 </script>
 
 <div id="manga-viewer" tabIndex="0" class:hide={$ToggleMenu}>
@@ -395,8 +420,11 @@
 
   #manga-viewer .scrollable {
     display: flex;
-    flex-direction: column;
     justify-content: initial;
+  }
+
+  #manga-viewer .webtoon-img {
+    flex-direction: column;
   }
 
   #manga-viewer .webtoon-img img {
