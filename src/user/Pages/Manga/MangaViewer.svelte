@@ -203,21 +203,18 @@
     updateConfig($ConfigStore);
   }
 
+  let elements = [];
+  const changeOpacity = (op) => elements.forEach((el) => (el.style.opacity = op));
+
   let tout;
   const onShow = () => {
+    changeOpacity(1);
     clearTimeout(tout);
-    const elems = [...document.querySelectorAll("#btn-playlist, .fullscreen-progress, .info")];
-    for (let elem of elems) {
-      elem.style.opacity = 1;
-    }
-    tout = setTimeout(() => {
-      for (let elem of elems) {
-        elem.style.opacity = 0;
-      }
-    }, 3000);
+    tout = setTimeout(() => changeOpacity(0), 3000);
   };
   let ref;
   onMount(() => {
+    elements = [...document.querySelectorAll("#btn-playlist, .fullscreen-progress, .info")];
     document.addEventListener("touchmove", onShow);
     document.addEventListener("mousemove", onShow);
     return () => {
@@ -239,7 +236,7 @@
       class="img-current scrollable"
       class:webtoon-img={webtoon}
       bind:this={imgContainer}
-      style={`width: ${isMobile ? 100 : config.width}%;`}
+      style={`width: ${config.width}%;`}
       on:touchstart|passive={onTouchStart}
       on:touchend|passive={onTouchEnd}
       on:mousedown={onTouchStart}
