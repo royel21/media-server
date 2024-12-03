@@ -1,32 +1,25 @@
 <script>
   import Icons from "src/icons/Icons.svelte";
   import List from "./List.svelte";
+  import { ToggleMenu } from "src/ShareComponent/ToggleMenu";
 
   export let files = [];
   export let fileId;
   export let onFilter;
   export let folderName = "";
 
+  let filter = "";
+
   let hideList = true;
   let btnList;
-
-  const onMousemove = () => {
-    btnList.style.opacity = 1;
-  };
 </script>
 
-<div
-  id="p-bg"
-  class:hidelist={!hideList}
-  on:click|stopPropagation={(e) => (hideList = true)}
-  tabindex="-1"
-  on:mousemove={onMousemove}
->
+<div id="p-bg" class:hidelist={!hideList} on:click|stopPropagation={(e) => (hideList = true)} tabindex="-1">
   <label
     id="btn-playlist"
     class={"show-list" + (!hideList ? " move" : "")}
+    class:bottom={$ToggleMenu}
     for="p-hide"
-    style="bottom: 35px"
     title="play-list"
     bind:this={btnList}
     on:click|stopPropagation={(e) => (hideList = !hideList)}
@@ -36,7 +29,7 @@
     </span>
   </label>
   {#if !hideList}
-    <List {files} {folderName} {onFilter} {fileId} on:click bind:hideList />
+    <List {files} {folderName} {onFilter} {fileId} on:click bind:hideList bind:filter />
   {/if}
 </div>
 
@@ -46,16 +39,12 @@
   }
   #p-bg {
     display: block;
-    position: absolute;
+    position: fixed;
     top: 0;
     right: 0;
-    bottom: 34px;
+    bottom: 0;
     width: 0;
     z-index: 10;
-  }
-
-  #p-bg:hover #btn-playlist {
-    opacity: 1;
   }
 
   label {
@@ -63,8 +52,8 @@
   }
   .show-list {
     position: fixed;
-    right: 5px;
-    bottom: 40px;
+    right: 10px;
+    bottom: 35px;
     transition: 0.3s all;
     z-index: 11;
     background-color: black;
@@ -72,6 +61,9 @@
     border-radius: 0.25rem;
     cursor: pointer;
     z-index: 99;
+  }
+  .show-list.bottom {
+    bottom: 0px;
   }
   .move {
     right: 230px;

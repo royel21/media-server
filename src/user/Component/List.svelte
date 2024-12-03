@@ -14,6 +14,7 @@
   export let fileId;
   export let files = [];
   export let hideList;
+  export let filter;
 
   let playList;
   let scrollable;
@@ -27,8 +28,6 @@
 
   const filePerPage = 100;
   let start = pageData.pg * filePerPage;
-
-  let filter = "";
 
   const goToPage = (pg) => {
     pageData.pg = clamp(pg.detail - 1, 0, pageData.totalPages - 1);
@@ -121,7 +120,14 @@
   on:click|stopPropagation|preventDefault={() => {}}
 >
   <div id="v-filter">
-    <input name="clear-filters" type="text" bind:value={filter} placeholder="Filter" class="form-control" />
+    <input
+      name="clear-filters"
+      type="text"
+      bind:value={filter}
+      placeholder="Filter"
+      class="form-control"
+      on:keydown|stopPropagation
+    />
     <span class="clear-filter" on:click={() => (filter = "")}>
       <Icons name="timescircle" color="black" />
     </span>

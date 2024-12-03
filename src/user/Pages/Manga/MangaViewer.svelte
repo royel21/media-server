@@ -201,31 +201,9 @@
     $ConfigStore.Viewer.manga.webtoon = webtoon;
     updateConfig($ConfigStore);
   }
-  let tout;
-  const onShow = () => {
-    clearTimeout(tout);
-    const elems = [...document.querySelectorAll("#btn-playlist, .fullscreen-progress, .info")];
-    for (let elem of elems) {
-      elem.style.opacity = 1;
-    }
-    tout = setTimeout(() => {
-      for (let elem of elems) {
-        elem.style.opacity = 0;
-      }
-    }, 3000);
-  };
-  let ref;
-  onMount(() => {
-    ref.addEventListener("touchmove", onShow);
-    ref.addEventListener("mousemove", onShow);
-  });
-
-  afterUpdate(() => {
-    imgContainer?.focus();
-  });
 </script>
 
-<div bind:this={ref} id="manga-viewer" tabIndex="0" class:hide={$ToggleMenu}>
+<div id="manga-viewer" tabIndex="0" class:hide={$ToggleMenu}>
   <span class="fullscreen-progress">
     <Icons name="stickynote" />
     {progress}
@@ -360,10 +338,10 @@
   }
   .fullscreen-progress {
     display: block;
-    position: absolute;
+    position: fixed;
     opacity: 0;
-    bottom: 0;
-    left: 4px;
+    top: 0;
+    left: 0px;
     padding: 2px 8px;
     border-top-right-radius: 0.25rem;
     background-color: rgba(0, 0, 0, 0.8);
@@ -371,6 +349,7 @@
     transition: 0.5s all;
     font-size: 16px;
     z-index: 4;
+    user-select: none;
   }
   #manga-viewer .webtoon-img img[alt] {
     position: relative;
@@ -413,12 +392,10 @@
     object-fit: cover;
   }
 
-  #manga-viewer .webtoon-img {
+  #manga-viewer .scrollable {
     display: flex;
     flex-direction: column;
     justify-content: initial;
-    overflow-y: auto;
-    overflow-x: hidden;
   }
 
   #manga-viewer .webtoon-img img {
@@ -431,7 +408,7 @@
     position: relative;
     color: black;
     min-height: 100%;
-    min-width: 600px;
+    min-width: 400px;
   }
 
   #manga-viewer .empty-img:before {
@@ -499,7 +476,7 @@
     margin-bottom: 80px;
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 700px) {
     #manga-viewer .img-current {
       transform: initial;
       width: 100% !important;

@@ -73,7 +73,6 @@
   Exit.action = returnBack;
   ShowList.action = () => {
     document.querySelector("#btn-playlist")?.click();
-    console.log("Show-List");
   };
 
   let runningClock;
@@ -193,6 +192,8 @@
   .viewer {
     position: relative;
     height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
   .f-name {
     display: flex;
@@ -219,12 +220,13 @@
     display: inline-block;
     position: fixed;
     right: 0px;
-    bottom: 0px;
+    top: 0px;
     pointer-events: none;
     border-radius: 0.25rem 0 0 0;
     z-index: 4;
     padding: 2px 5px;
     background-color: rgba(0, 0, 0, 0.8);
+    user-select: none;
   }
   :fullscreen .top {
     font-size: 12px;
