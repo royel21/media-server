@@ -1,6 +1,6 @@
 import { Router } from "express";
 import db from "../../models/index.js";
-import { defHotkeys, defSortTabs } from "../defaultHotkeys.js";
+import { defHotkeys, defSortTabs } from "../../defaultHotkeys.js";
 
 const routes = Router();
 
@@ -74,6 +74,19 @@ routes.post("/remove", async (req, res) => {
 
   await valid.user.destroy();
   return res.send({ removed: true });
+});
+
+routes.get("/user/:Id", async ({ params }, res) => {
+  if (params.Id) {
+    const user = await db.user.findOne({ where: { Id: params.Id }, include: [db.sorttab, db.hotkey] });
+    return res.send(user.Hotkeys);
+  }
+
+  return res.send([]);
+});
+
+routes.get("/user-cfg-def", (_, res) => {
+  return { defHotkeys, defSortTabs };
 });
 
 export default routes;

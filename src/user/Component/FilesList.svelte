@@ -14,6 +14,7 @@
   import Icons from "src/icons/Icons.svelte";
   import LazyImage from "./LazyImage.svelte";
   import { getLastChap } from "./fileUtils";
+  import UserStore from "../Stores/UserStore";
 
   export let id = "";
   export let page = 1;
@@ -28,7 +29,7 @@
   export let continueReading = null;
 
   const { sortTabs, hotkeys } = getContext("User");
-  const config = sortTabs.find((st) => st.Name === title);
+  let config = sortTabs.find((st) => st.Name === title);
 
   const KeyExit = hotkeys.find((key) => key.Name === "Exit");
   const KeyContinue = hotkeys.find((key) => key.Name === "Continue Reading");
@@ -145,8 +146,10 @@
 
   $: document.title = `${title} Page ${page || ""}`;
 
-  $: loadContent(id, page, filter || "");
-
+  $: {
+    config = $UserStore.sortTabs.find((st) => st.Name === title);
+    loadContent(id, page, filter || "");
+  }
   let isContent = location.pathname.includes("content");
 </script>
 

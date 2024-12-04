@@ -2,7 +2,7 @@
   import { getContext } from "svelte";
   import { Router, Route } from "svelte-routing";
   import Navbar from "../ShareComponent/Navbar.svelte";
-  import User from "./User.svelte";
+  import User from "./Users/User.svelte";
   import Folders from "./Folders/Folders.svelte";
   import DiskManager from "./Disks/DiskManager.svelte";
   import Files from "./FilesManager/Files.svelte";

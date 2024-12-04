@@ -185,13 +185,20 @@ export const KeyMap = {
     AltKey: false,
     action: null,
   },
+  ToggleControlBar: {
+    Key: 65,
+    CtrlKey: false,
+    ShiftKey: false,
+    AltKey: false,
+    action: null,
+  },
 };
 
 export const handleKeyboard = (e) => {
   for (let key of Object.keys(KeyMap)) {
-    if (isValidKey(e, KeyMap[key]) && KeyMap[key].action) {
-      KeyMap[key].action(e);
-      break;
+    console.log(key, e.keyCode, isValidKey(e, KeyMap[key]), KeyMap[key]);
+    if (isValidKey(e, KeyMap[key])) {
+      return KeyMap[key] && KeyMap[key].action();
     }
   }
 };

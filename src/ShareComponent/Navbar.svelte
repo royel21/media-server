@@ -22,7 +22,8 @@
 
   const onChangeTab = (e) => {
     const found = document.querySelector("#menu:not(.hide) .tabs a.active");
-    if (found) {
+    console.log(found);
+    if (found && [nextTab.Key, prevTab.Key].includes(e.keyCode)) {
       const tab = found.parentElement;
       let item;
       if (isValidKey(e, prevTab)) {
@@ -35,8 +36,8 @@
 
       if (item) {
         item.querySelector("a")?.click();
-        e.preventDefault();
       }
+      e.preventDefault();
     }
   };
 
@@ -70,6 +71,20 @@
 </nav>
 
 <style>
+  #menu {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 0;
+    background-color: #343a40;
+    transition: 0.3s all;
+    max-height: 60px;
+    min-height: 35px;
+  }
+
+  #menu.hide {
+    top: -66px;
+  }
   .navbar-nav {
     display: flex;
     justify-content: left;

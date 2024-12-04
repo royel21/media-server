@@ -1,19 +1,19 @@
 <script>
-  import { afterUpdate, getContext, onDestroy } from "svelte";
+  import { afterUpdate, onDestroy } from "svelte";
   import { navigate } from "svelte-routing";
   import { getFilesPerPage, ProcessFile } from "./filesUtils";
 
   import { clamp } from "src/ShareComponent/utils";
-  import { ConfigStore } from "../Stores/PageConfigStore";
-  import { ToggleMenu } from "src/ShareComponent/ToggleMenu";
   import { fileKeypress, selectByTitle, selectElementById } from "../Component/fileEvents";
+  import { ToggleMenu } from "src/ShareComponent/ToggleMenu";
+  import { getLastChap } from "../Component/fileUtils";
 
   import api from "src/apiUtils";
-  import Filter from "src/ShareComponent/Filter.svelte";
-  import Pagination from "src/ShareComponent/Pagination.svelte";
   import Icons from "src/icons/Icons.svelte";
+  import UserStore from "src/user/Stores/UserStore";
+  import Filter from "src/ShareComponent/Filter.svelte";
   import LazyImage from "../Component/LazyImage.svelte";
-  import { getLastChap } from "../Component/fileUtils";
+  import Pagination from "src/ShareComponent/Pagination.svelte";
 
   export let page = 1;
   export let filter = "";
@@ -21,9 +21,8 @@
   let title = "Home";
   let reload = true;
   let isMounted = true;
-  const User = getContext("User");
 
-  let config = User.sortTabs.find((st) => st.Name === "Home");
+  let config = $UserStore.sortTabs.find((st) => st.Name === "Home");
 
   let pageData = { items: [], page: page || 1, totalPages: 0, totalFiles: 0 };
 
@@ -71,11 +70,6 @@
 
   ToggleMenu.set(false);
 
-  $: if (User) {
-    User.sortTabs.find((st) => st.Name === "Home");
-    loadContent(page, filter);
-  }
-
   onDestroy(() => {
     isMounted = false;
     api.cancelQuery("home");
@@ -83,8 +77,12 @@
 
   afterUpdate(() => selectByTitle(title));
 
-  $: document.title = page ? `Home - Page - ${pageData.page}` : "Home";
   const folderIcon = { name: "folderopen", color: "rgb(250, 183, 15);" };
+  $: document.title = page ? `Home - Page - ${pageData.page}` : "Home";
+  $: {
+    config = $UserStore.sortTabs.find((st) => st.Name === "Home");
+    loadContent(page, filter);
+  }
 </script>
 
 <div class="scroll-container">

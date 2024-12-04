@@ -121,6 +121,13 @@ export const defHotkeys = [
     ShiftKey: false,
     AltKey: false,
   },
+  {
+    Key: 65,
+    Name: "ToggleControlBar",
+    CtrlKey: false,
+    ShiftKey: false,
+    AltKey: false,
+  },
 ];
 
 export const defSortTabs = [

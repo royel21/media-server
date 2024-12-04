@@ -47,6 +47,7 @@
     border: 1px solid #ced4da;
     border-top-left-radius: 0.25rem;
     border-bottom-left-radius: 0.25rem;
+    user-select: none;
   }
 
   select,

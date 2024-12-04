@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import passport from "passport";
 import db from "../models/index.js";
-import { defSortTabs, defHotkeys } from "./defaultHotkeys.js";
+import { defSortTabs, defHotkeys } from "../defaultHotkeys.js";
 
 const routes = Router();
 

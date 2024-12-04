@@ -6,7 +6,7 @@
   import { PageObserver, disconnectObvrs, scrollImageLoader } from "./Observers";
   import { onTouchStart, onTouchEnd, onTouchMove, default as controls } from "./MangaTouch";
 
-  import { ToggleMenu } from "src/ShareComponent/ToggleMenu";
+  import { ToggleMenu, updateToggleMenu } from "src/ShareComponent/ToggleMenu";
   import { ConfigStore, updateConfig } from "src/user/Stores/PageConfigStore";
   import MangaConfig from "./MangaConfig.svelte";
   import Icons from "src/icons/Icons.svelte";
@@ -18,7 +18,7 @@
   export let removeFile;
   export let isManhwa;
 
-  const { NextFile, PrevFile, Fullscreen, SkipForward, SkipBack, GotoStart, GotoEnd } = KeyMap;
+  const { NextFile, PrevFile, Fullscreen, SkipForward, SkipBack, GotoStart, GotoEnd, ToggleControlBar } = KeyMap;
   const socket = getContext("socket");
   const User = getContext("User");
   const dispatch = createEventDispatcher();
@@ -175,7 +175,7 @@
     SkipBack.action = prevPage;
     GotoStart.action = () => jumpTo(0);
     GotoEnd.action = () => jumpTo(file.Duration);
-
+    ToggleControlBar.action = updateToggleMenu;
     socket.on("connect", onConnect);
     socket.on("image-loaded", onImageData);
     socket.on("disconnect", onDisconnect);
@@ -188,7 +188,7 @@
       SkipBack.action = null;
       GotoStart.action = null;
       GotoEnd.action = null;
-      console.log("unmount2");
+      ToggleControlBar.action = null;
     };
   });
 

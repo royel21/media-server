@@ -1,13 +1,15 @@
 <script>
-  import { sortByName } from "../ShareComponent/utils";
+  import { sortByName } from "src/ShareComponent/utils";
   import { onMount } from "svelte";
-  import apiUtils from "../apiUtils";
-  import ModalUser from "./Component/ModalUser.svelte";
-  import Icons from "../icons/Icons.svelte";
+  import apiUtils from "src/apiUtils";
+  import ModalUser from "./ModalUser.svelte";
+  import Icons from "src/icons/Icons.svelte";
+  import ModalUserConfig from "./ModalUserConfig.svelte";
 
   let users = [];
   let foundUser;
   let error = "";
+  let showConfig = false;
 
   const hideModal = () => (foundUser = false);
 
@@ -33,6 +35,10 @@
     hideModal();
   };
 
+  const onShowConfig = ({ target }) => {
+    showConfig = users.find((u) => u.Id === target.closest("tr")?.id);
+  };
+
   onMount(async () => {
     const data = await apiUtils.admin(["users"]);
     if (data.users) {
@@ -45,11 +51,17 @@
       error = "";
     }, 5000);
   }
+
+  const hideCfg = () => (showConfig = false);
   document.title = "Users";
 </script>
 
 {#if foundUser}
   <ModalUser {foundUser} on:closeModal={hideModal} on:updateusers={updateUsers} />
+{/if}
+
+{#if showConfig}
+  <ModalUserConfig {hideCfg} user={showConfig} />
 {/if}
 <div id="u-manager" class="card bg-dark manager">
   <div class="remove-error" on:click={() => (error = "")}>{error}</div>
@@ -75,6 +87,9 @@
           <td>
             <span class="u-edit" on:click={saveEdit}>
               <Icons name="edit" color="rgb(37, 140, 209)" />
+            </span>
+            <span class="u-remove ml-2" on:click={onShowConfig}>
+              <Icons name="cog" color="lightgray" />
             </span>
             <span class="u-remove ml-2" on:click={removeUser}>
               <Icons name="trash" color="rgba(252, 1, 1, 0.856)" />
@@ -132,7 +147,7 @@
   }
   .table td:first-child,
   .table th:first-child {
-    width: 100px;
+    min-width: 120px;
     padding: 0.4rem 0.8rem;
     vertical-align: middle;
     text-align: center;

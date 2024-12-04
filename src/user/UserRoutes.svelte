@@ -15,6 +15,7 @@
   import { setConfig } from "./Stores/PageConfigStore";
   import Icons from "src/icons/Icons.svelte";
   import { mapKeys } from "./Pages/pagesUtils";
+  import UserStore from "./Stores/UserStore";
 
   const navItems = [
     { title: "Home", path: "/", class: "home" },
@@ -25,6 +26,8 @@
 
   const User = getContext("User");
   const logout = getContext("logout");
+  UserStore.set(User);
+
   let showConfig = false;
   let dirs = { selected: {}, Mangas: [], Favorites: User.favorites };
 

@@ -21,7 +21,7 @@ import Downloading from "./Downloading.js";
 import dbconfig from "./config.js";
 import { config as configEnv } from "dotenv";
 import defaultConfig from "../default-config.js";
-import { defHotkeys, defSortTabs } from "../routes/defaultHotkeys.js";
+import { defHotkeys, defSortTabs } from "../defaultHotkeys.js";
 configEnv();
 
 const { dbConnector, dbName, dbStorage, dbUser, dbPassword, dbHost } = defaultConfig;
@@ -95,6 +95,9 @@ db.DownloadingList.hasMany(db.Downloading, { onDelete: "CASCADE" });
 db.Downloading.belongsTo(db.Link, { foreignKey: "LinkId", onDelete: "CASCADE" });
 
 db.init = async (force) => {
+  try {
+    await db.sqlze.query("ALTER TABLE Hotkeys ADD Type INT(11) NULL DEFAULT '1';");
+  } catch (error) {}
   await sequelize.sync({ force });
 
   try {
@@ -138,7 +141,11 @@ db.init = async (force) => {
     for (let user of users) {
       if (!user.SortTabs.length) {
         await db.sorttab.bulkCreate(defSortTabs.map((d) => ({ ...d, UserId: user.Id })));
-        await db.hotkey.bulkCreate(defHotkeys.map((d) => ({ ...d, UserId: user.Id })));
+      }
+      for (const key of defHotkeys) {
+        if (!(await db.hotkey.findOne({ where: { Name: key.Name, UserId: user.Id } }))) {
+          await db.hotkey.create({ ...key, UserId: user.Id });
+        }
       }
     }
   } catch (error) {
