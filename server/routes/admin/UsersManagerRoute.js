@@ -76,6 +76,15 @@ routes.post("/remove", async (req, res) => {
   return res.send({ removed: true });
 });
 
+routes.post("/update-hotkeys", async ({ body }, res) => {
+  for (const key of body.keys || []) {
+    const found = await db.hotkey.findOne({ where: { Id: key.Id } });
+    if (found) found.update(key);
+  }
+
+  return res.send([]);
+});
+
 routes.get("/user/:Id", async ({ params }, res) => {
   if (params.Id) {
     const user = await db.user.findOne({ where: { Id: params.Id }, include: [db.sorttab, db.hotkey] });

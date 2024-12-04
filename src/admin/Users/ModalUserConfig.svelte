@@ -1,13 +1,14 @@
 <script>
+  import apiUtils from "src/apiUtils";
   import { onMount } from "svelte";
   import Dialog from "../Component/Dialog.svelte";
   import InputControl from "./InputControl.svelte";
-  import apiUtils from "src/apiUtils";
   export let hideCfg;
   export let user;
   let keys = [];
 
   const save = () => {
+    apiUtils.post("admin/users/update-hotkeys", { keys });
     hideCfg();
   };
 
