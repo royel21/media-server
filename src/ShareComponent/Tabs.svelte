@@ -1,4 +1,5 @@
 <script>
+  import { onMount, getContext } from "svelte";
   import Icons from "src/icons/Icons.svelte";
   export let tab;
   export let tabs;
@@ -6,13 +7,45 @@
   let clazz = "";
   export { clazz as class };
 
+  let tabControl;
+
   let component = tabs[0].component;
 
   $: component = tabs.find((t) => t.id === tab).component;
+
+  const hotkeys = getContext("User").hotkeys;
+  const prevTab = hotkeys.find((h) => h.Name === "Prev Tab");
+  const nextTab = hotkeys.find((h) => h.Name === "Next Tab");
+
+  const onkeydown = (e) => {
+    const found = tabControl.querySelector(`input[type="radio"]:checked`);
+    console.log(found);
+    if (found && [nextTab.Key, prevTab.Key].includes(e.keyCode)) {
+      const tab = found.parentElement;
+      let item;
+      if (isValidKey(e, { ...prevTab, Altkey: true })) {
+        item = tab.previousElementSibling;
+      }
+
+      if (isValidKey(e, { ...nextTab, Altkey: true })) {
+        item = tab.nextElementSibling;
+      }
+
+      if (item) {
+        item.querySelector("a")?.click();
+      }
+      e.preventDefault();
+    }
+  };
+  onMount(() => {
+    document.addEventListener("keydown", onkeydown);
+
+    return () => {};
+  });
 </script>
 
 <div class={`card bg-dark text-light tabs ${clazz}`}>
-  <div class="disk-controls">
+  <div class="disk-controls" bind:this={tabControl}>
     <div class="usn nav nav-tabs">
       {#each tabs as t, i}
         <div class="nav-item">

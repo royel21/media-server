@@ -13,7 +13,7 @@
   let error = "";
   let loading = true;
 
-  const getUrl = ({ role }) => `/${/admin/gi.test(role) ? "admin" : ""}`;
+  const getUrl = ({ role }) => `/${/admin/gi.test(role) ? "admin/" : ""}`;
 
   onMount(async () => {
     let data = await apiUtils.get(["users"]);
