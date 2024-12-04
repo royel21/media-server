@@ -11,7 +11,6 @@
   let filter = "";
 
   let hideList = true;
-  let btnList;
 </script>
 
 <div id="p-bg" class:hidelist={!hideList} on:click|stopPropagation={(e) => (hideList = true)} tabindex="-1">
@@ -21,7 +20,6 @@
     class:bottom={$ToggleMenu}
     for="p-hide"
     title="play-list"
-    bind:this={btnList}
     on:click|stopPropagation={(e) => (hideList = !hideList)}
   >
     <span class="p-sort">

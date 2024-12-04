@@ -74,9 +74,6 @@
     folderinfo = data;
   };
 
-  //Toggle File List Config
-  const handleClick = (e) => (showConfig = !e);
-
   const hotkeys = getContext("User").hotkeys;
   const prevTab = hotkeys.find((h) => h.Name === "Prev Tab");
   const nextTab = hotkeys.find((h) => h.Name === "Next Tab");
@@ -154,17 +151,7 @@
       <button class="btn btn-secondary" on:click={onResetFiles}>Reset All</button>
       <button class="btn btn-secondary" on:click={scanfiles}>Update</button>
     </div>
-    <FilesList
-      title={"Content"}
-      type={typeUrl}
-      {filter}
-      {page}
-      {id}
-      {setFolderInfo}
-      {handleClick}
-      {exitFolder}
-      {continueReading}
-    >
+    <FilesList title={"Content"} type={typeUrl} {filter} {page} {id} {setFolderInfo} {exitFolder} {continueReading}>
       <div class="first-controls" slot="controls" on:click={exitFolder} on:keydown>
         <Icons name="reply" />
       </div>

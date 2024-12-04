@@ -324,6 +324,7 @@ input[type="range"]::-moz-range-track {
   top: 0;
 }
 
+
 @media screen and (max-width: 640px) {
   .scroll-container {
     height: calc(100% - 67px);
@@ -345,5 +346,9 @@ input[type="range"]::-moz-range-track {
 
   .file-info {
     width: 185px;
+  }
+
+  .show-list {
+    right: 0;
   }
 }

@@ -211,13 +211,18 @@
   let elements = [];
   const changeOpacity = (op) => elements.forEach((el) => (el.style.opacity = op));
 
+  const focus = (el) => {
+    console.log(el);
+    el.focus();
+  };
+
   let tout;
   const onShow = () => {
     changeOpacity(1);
     clearTimeout(tout);
     tout = setTimeout(() => changeOpacity(0), 3000);
   };
-  let ref;
+
   onMount(() => {
     elements = [...document.querySelectorAll("#btn-playlist, .fullscreen-progress, .info")];
     document.addEventListener("touchmove", onShow);
@@ -231,7 +236,7 @@
   $: if (file.CurrentPos) onShow();
 </script>
 
-<div id="manga-viewer" tabIndex="0" class:hide={$ToggleMenu}>
+<div id="manga-viewer" tabIndex="0" class:hide={$ToggleMenu} use:focus>
   <span class="fullscreen-progress">
     <Icons name="stickynote" />
     {progress}
