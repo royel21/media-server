@@ -25,7 +25,7 @@
 
   const reload = async () => {
     const result = await apiUtils.get(["admin", "directories", "backups"]);
-    if (result && isMounted) {
+    if (result.length && isMounted) {
       backups = result.sort().reverse();
     }
   };

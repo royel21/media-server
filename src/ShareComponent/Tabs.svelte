@@ -1,6 +1,7 @@
 <script>
   import { onMount, getContext } from "svelte";
   import Icons from "src/icons/Icons.svelte";
+  import { isValidKey } from "./utils";
   export let tab;
   export let tabs;
 
@@ -11,28 +12,27 @@
 
   let component = tabs[0].component;
 
-  $: component = tabs.find((t) => t.id === tab).component;
+  $: component = (tabs.find((t) => t.id === tab) || tabs[0]).component;
 
   const hotkeys = getContext("User").hotkeys;
   const prevTab = hotkeys.find((h) => h.Name === "Prev Tab");
   const nextTab = hotkeys.find((h) => h.Name === "Next Tab");
 
   const onkeydown = (e) => {
-    const found = tabControl.querySelector(`input[type="radio"]:checked`);
-    console.log(found);
+    const found = document.querySelector(`.disk-controls .checked`);
+
     if (found && [nextTab.Key, prevTab.Key].includes(e.keyCode)) {
-      const tab = found.parentElement;
       let item;
-      if (isValidKey(e, { ...prevTab, Altkey: true })) {
-        item = tab.previousElementSibling;
+      if (isValidKey(e, { ...prevTab, AltKey: true })) {
+        item = found.previousElementSibling;
       }
 
-      if (isValidKey(e, { ...nextTab, Altkey: true })) {
-        item = tab.nextElementSibling;
+      if (isValidKey(e, { ...nextTab, AltKey: true })) {
+        item = found.nextElementSibling;
       }
 
       if (item) {
-        item.querySelector("a")?.click();
+        item.querySelector("label")?.click();
       }
       e.preventDefault();
     }
@@ -40,7 +40,9 @@
   onMount(() => {
     document.addEventListener("keydown", onkeydown);
 
-    return () => {};
+    return () => {
+      document.removeEventListener("keydown", onkeydown);
+    };
   });
 </script>
 
@@ -48,7 +50,7 @@
   <div class="disk-controls" bind:this={tabControl}>
     <div class="usn nav nav-tabs">
       {#each tabs as t, i}
-        <div class="nav-item">
+        <div class="nav-item" class:checked={tab === t.id}>
           <input type="radio" bind:group={tab} value={t.id} id={t.id + i} />
           <label class="nav-link" for={t.id + i}>
             <Icons name={t.icon} />

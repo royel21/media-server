@@ -22,7 +22,6 @@
 
   const onChangeTab = (e) => {
     const found = document.querySelector("#menu:not(.hide) .tabs a.active");
-    console.log(found);
     if (found && [nextTab.Key, prevTab.Key].includes(e.keyCode)) {
       const tab = found.parentElement;
       let item;

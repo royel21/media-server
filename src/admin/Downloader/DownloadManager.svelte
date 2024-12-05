@@ -22,7 +22,7 @@
   $: {
     navigate(`/admin/downloads/${tab || "downloads"}`, { replace: true });
   }
-  document.title = "Manager";
+  document.title = "Download Manager";
 </script>
 
 <Tabs class="d-manager" {tabs} {tab} />
