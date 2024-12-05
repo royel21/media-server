@@ -5,6 +5,7 @@ export const defHotkeys = [
     CtrlKey: false,
     ShiftKey: false,
     AltKey: false,
+    Type: 1,
   },
   {
     Key: 88,
@@ -12,6 +13,7 @@ export const defHotkeys = [
     CtrlKey: false,
     ShiftKey: false,
     AltKey: false,
+    Type: 1,
   },
   {
     Key: 33,
@@ -19,6 +21,7 @@ export const defHotkeys = [
     CtrlKey: false,
     ShiftKey: false,
     AltKey: false,
+    Type: 1,
   },
   {
     Key: 34,
@@ -26,6 +29,7 @@ export const defHotkeys = [
     CtrlKey: false,
     ShiftKey: false,
     AltKey: false,
+    Type: 1,
   },
   {
     Key: 67,
@@ -33,6 +37,7 @@ export const defHotkeys = [
     CtrlKey: false,
     ShiftKey: false,
     AltKey: false,
+    Type: 2,
   },
   {
     Key: 37,
@@ -40,6 +45,7 @@ export const defHotkeys = [
     CtrlKey: false,
     ShiftKey: false,
     AltKey: false,
+    Type: 3,
   },
 
   {
@@ -48,6 +54,7 @@ export const defHotkeys = [
     CtrlKey: false,
     ShiftKey: false,
     AltKey: false,
+    Type: 3,
   },
   {
     Name: "FastBackward",
@@ -56,6 +63,7 @@ export const defHotkeys = [
     ShiftKey: false,
     AltKey: false,
     action: null,
+    Type: 5,
   },
   {
     Name: "FastForward",
@@ -64,6 +72,7 @@ export const defHotkeys = [
     ShiftKey: false,
     AltKey: false,
     action: null,
+    Type: 5,
   },
   {
     Key: 37,
@@ -71,6 +80,7 @@ export const defHotkeys = [
     CtrlKey: true,
     ShiftKey: false,
     AltKey: false,
+    Type: 4,
   },
   {
     Key: 39,
@@ -78,6 +88,7 @@ export const defHotkeys = [
     CtrlKey: true,
     ShiftKey: false,
     AltKey: false,
+    Type: 4,
   },
   {
     Key: 45,
@@ -85,6 +96,7 @@ export const defHotkeys = [
     CtrlKey: true,
     ShiftKey: false,
     AltKey: false,
+    Type: 3,
   },
   {
     Key: 46,
@@ -92,6 +104,7 @@ export const defHotkeys = [
     CtrlKey: true,
     ShiftKey: false,
     AltKey: false,
+    Type: 3,
   },
   {
     Key: 13,
@@ -99,6 +112,7 @@ export const defHotkeys = [
     CtrlKey: false,
     ShiftKey: false,
     AltKey: false,
+    Type: 3,
   },
   {
     Name: "Muted",
@@ -106,6 +120,7 @@ export const defHotkeys = [
     CtrlKey: false,
     ShiftKey: false,
     AltKey: false,
+    Type: 5,
   },
   {
     Key: 32,
@@ -113,6 +128,7 @@ export const defHotkeys = [
     CtrlKey: false,
     ShiftKey: false,
     AltKey: false,
+    Type: 5,
   },
   {
     Key: 76,
@@ -120,6 +136,7 @@ export const defHotkeys = [
     CtrlKey: true,
     ShiftKey: false,
     AltKey: false,
+    Type: 3,
   },
   {
     Key: 65,
@@ -127,6 +144,7 @@ export const defHotkeys = [
     CtrlKey: false,
     ShiftKey: false,
     AltKey: false,
+    Type: 4,
   },
 ];
 

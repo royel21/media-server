@@ -28,6 +28,9 @@
 </Dialog>
 
 <style>
+  :global(#mu-config) {
+    width: 530px;
+  }
   :global(#mu-config .modal-body) {
     padding: 4px 0;
   }

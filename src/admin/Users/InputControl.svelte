@@ -4,8 +4,10 @@
 
   const options = [
     { Id: 1, Name: "Global" },
-    { Id: 2, Name: "Manga" },
-    { Id: 3, Name: "Video" },
+    { Id: 2, Name: "Content" },
+    { Id: 3, Name: "Viewer" },
+    { Id: 4, Name: "Manga" },
+    { Id: 5, Name: "Video" },
   ];
 
   const onType = ({ target: { value } }) => (item.Type = +value);
@@ -19,7 +21,7 @@
 
 <div class="input-control2">
   <span>{item.Name}</span>
-  <span id="type" for="ucfg-type">Type:</span>
+  <span id="type" for="ucfg-type">Type</span>
   <select id="ucfg-type" value={item.Type} on:change={onType}>
     {#each options as op}
       <option value={op.Id}>{op.Name}</option>
