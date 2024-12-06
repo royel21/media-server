@@ -157,31 +157,22 @@
     }
   };
 
-  const handlerKeydown = ({ currentTarget, keyCode, ctrlKey }) => {
+  const handlerKeydown = (e) => {
+    const { currentTarget, keyCode } = e;
     if ([40, 38].includes(keyCode)) {
       let element = currentTarget.querySelector(".active");
-      if (keyCode === 40) {
-        element = element.nextElementSibling;
-      }
 
-      if (keyCode === 38) {
-        element = element.previousElementSibling;
-      }
-      if (element) {
-        itemClick({ target: element });
-        element.focus();
+      const el = element[keyCode === 40 ? "nextElementSibling" : "previousElementSibling"];
+      if (el) {
+        itemClick({ target: el });
+        el.focus();
       }
     }
 
     if ([37, 39].includes(keyCode)) {
-      let nextPage;
-      if (keyCode === 37) {
-        nextPage = -1;
-      }
-      if (keyCode === 39) {
-        nextPage = 1;
-      }
+      let nextPage = keyCode === 37 ? -1 : 1;
       gotopage({ detail: +page + nextPage });
+      e.preventDefault();
     }
   };
 
