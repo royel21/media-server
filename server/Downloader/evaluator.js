@@ -181,7 +181,7 @@ export const adultEvalPage = async (query) => {
   } catch (error) {}
 
   const formatGenres = (text, extra = []) => {
-    if (text === "N/A") return text;
+    if (text === "N/A" || !text) return text || "";
     let genres = new Set(extra);
     const raw = / raw/i.test(title) || query.link.Raw ? "Raw" : "";
     let parts = [];
@@ -275,7 +275,7 @@ export const adultEvalPage = async (query) => {
         .map((p) => p.trim())
         .join(", ");
     }
-    text = meta.find((ctext) => genreRegex.test(ctext)).replace(genreRegex, "");
+    text = meta.find((ctext) => genreRegex.test(ctext))?.replace(genreRegex, "");
     Genres = formatGenres(text);
   }
 
