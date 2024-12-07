@@ -15,6 +15,7 @@
   export let servers = false;
   export let removeLink;
   export let IsDownloading = false;
+  export let loadItems;
 
   let start = 0;
   let editor = { show: false };
@@ -81,9 +82,32 @@
     return Name.replace(/manga|manhua|manhwa|scan(s|)|toon/gi, "");
   };
 
+  const changePage = (e) => {
+    if (e.ctrlKey) {
+      e.stopPropagation();
+      e.preventDefault();
+      if ([37, 39].includes(e.keyCode)) {
+        const dir = e.keyCode === 37 ? -1 : 1;
+        if (datas.page + dir > 0 && datas.page + dir <= datas.totalPages) {
+          datas.page += dir;
+          loadItems();
+        }
+      }
+      if ([35, 36].includes(e.keyCode)) {
+        datas.page = e.keyCode === 36 ? 1 : datas.totalPages;
+        loadItems();
+      }
+    }
+  };
+
   onMount(() => {
+    const dmanager = document.querySelector(".d-manager");
+
+    dmanager.addEventListener("keydown", changePage);
+
     socket.on("update-download", onUpdate);
     return () => {
+      dmanager.removeEventListener("keydown", changePage);
       socket.off("update-download", onUpdate);
     };
   });
@@ -108,7 +132,7 @@
   />
 {/if}
 
-<div class="t-container" class:hasconsole={$showConsoleStore}>
+<div class="t-container" class:hasconsole={$showConsoleStore} tabindex="-1">
   <div class="d-table">
     <div>
       <span class="col-count">{datas.totalItems}</span>

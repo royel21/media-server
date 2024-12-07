@@ -153,7 +153,7 @@
     </div>
     <LinkPager {loadItems} {datas} />
   </div>
-  <LinkTable {datas} {socket} {updateLinkList} {removeLink} {servers} />
+  <LinkTable {datas} {socket} {updateLinkList} {removeLink} {servers} {loadItems} />
 </div>
 
 <style>

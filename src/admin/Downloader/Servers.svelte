@@ -198,7 +198,7 @@
     <LinkPager {loadItems} {datas} />
   </div>
 
-  <LinkTable {datas} {socket} {updateLinkList} {removeLink} />
+  <LinkTable {datas} {socket} {updateLinkList} {removeLink} {loadItems} />
 </div>
 
 <style>
