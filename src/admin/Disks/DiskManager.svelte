@@ -23,6 +23,8 @@
 <style>
   :global(.admin-manager #tabs-content) {
     padding: 0;
+    height: calc(100% - 63px);
+    overflow: auto;
   }
   :global(.admin-manager) {
     position: relative;
