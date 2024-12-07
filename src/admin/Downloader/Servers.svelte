@@ -131,10 +131,12 @@
   };
 
   const onUpdate = ({ link }) => {
-    if (link.remove === true || link.IsDownloading === false) {
-      datas.links = datas.links.filter((f) => f.Id !== link?.Id);
-    } else {
-      datas.links = updateLink(link, datas, true);
+    if (link) {
+      if (link.remove === true || link.IsDownloading === false) {
+        datas.links = datas.links.filter((f) => f.Id !== link?.Id);
+      } else {
+        datas.links = updateLink(link, datas, true);
+      }
     }
   };
 

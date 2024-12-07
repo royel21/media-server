@@ -240,12 +240,13 @@ const loadLinks = async (Id, bypass) => {
     console.log("links: ", temps.length, "\n");
     state.running = true;
     onDownload(bypass).catch(cleanUp).then(cleanUp);
-  }
-
-  if (!state.hrunning && htemps.length) {
+  } else if (!state.hrunning && htemps.length) {
     console.log("hentais: ", htemps.length, "\n");
     state.hrunning = true;
     downloadNHentais(state).then(cleanUp).catch(cleanUp);
+  } else {
+    sendMessage({ text: "nhentai finish" }, "update-download");
+    cleanUp();
   }
 };
 
