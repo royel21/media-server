@@ -84,7 +84,6 @@
 
   const changePage = (e) => {
     if (e.altKey) {
-      e.stopPropagation();
       e.preventDefault();
       if ([37, 39].includes(e.keyCode)) {
         const dir = e.keyCode === 37 ? -1 : 1;
