@@ -132,7 +132,7 @@
   />
 {/if}
 
-<div class="t-container" class:hasconsole={$showConsoleStore} tabindex="-1">
+<div class="t-container" class:hasconsole={$showConsoleStore} tabindex="-1" use:focus={(e) => e?.focus()}>
   <div class="d-table">
     <div>
       <span class="col-count">{datas.totalItems}</span>
