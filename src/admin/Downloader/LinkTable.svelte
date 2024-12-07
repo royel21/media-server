@@ -83,7 +83,7 @@
   };
 
   const changePage = (e) => {
-    if (e.ctrlKey) {
+    if (e.altKey) {
       e.stopPropagation();
       e.preventDefault();
       if ([37, 39].includes(e.keyCode)) {
