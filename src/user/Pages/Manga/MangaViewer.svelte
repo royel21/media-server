@@ -1,7 +1,7 @@
 <script>
   import { getContext, createEventDispatcher, afterUpdate, onMount } from "svelte";
   import { clamp } from "src/ShareComponent/utils";
-  import { isMobile, setfullscreen } from "../pagesUtils";
+  import { setfullscreen } from "../pagesUtils";
   import { scrollInView, getEmptyIndex } from "./mangaUtils";
   import { PageObserver, disconnectObvrs, scrollImageLoader } from "./Observers";
   import { onTouchStart, onTouchEnd, onTouchMove, default as controls } from "./MangaTouch";
@@ -85,7 +85,6 @@
   const onInputFocus = () => {
     inputPage.value = file.CurrentPos + 1;
     inputPage.focus();
-    console.log("focus", inputPage.value);
   };
   //clear Input on focusout and show placeholder
   const onInputBlur = () => (inputPage.value = "");
@@ -212,7 +211,6 @@
   const changeOpacity = (op) => elements.forEach((el) => (el.style.opacity = op));
 
   const focus = (el) => {
-    console.log(el);
     el.focus();
   };
 

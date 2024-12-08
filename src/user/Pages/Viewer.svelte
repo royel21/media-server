@@ -11,6 +11,7 @@
   import { KeyMap, handleKeyboard, isVideo, showFileName } from "./pagesUtils";
   import Icons from "src/icons/Icons.svelte";
   import { getReturnPath } from "./filesUtils";
+  import { isMobile } from "src/utils";
 
   export let folderId;
   export let fileId;
@@ -68,7 +69,7 @@
   };
 
   let runningClock;
-  window.addEventListener("fullscreenchange", (e) => {
+  window.addEventListener("fullscreenchange", async (e) => {
     if (document.fullscreenElement) {
       const clock = document.getElementById("clock");
       if (clock) {
@@ -81,13 +82,13 @@
       clearInterval(runningClock);
       clock.innerText = "";
     }
-    try {
+    if (isMobile()) {
       if (isVideo(file) && document.fullscreenElement) {
-        window.screen.orientation.lock("landscape");
+        await window.screen.orientation?.lock("landscape");
       } else {
-        window.screen.orientation.unlock();
+        await window.screen.orientation?.unlock();
       }
-    } catch (error) {}
+    }
   });
 
   onDestroy(() => (menu.style.display = "flex"));
@@ -148,8 +149,11 @@
       }
     }
 
+    document.body.addEventListener("keydown", handleKeyboard);
+
     socket.on("file-removed", onFileRemove);
     return () => {
+      document.body.rmoveEventListener("keydown", handleKeyboard);
       socket.off("file-removed", onFileRemove);
 
       NextFile.action = null;
@@ -163,7 +167,7 @@
   menu.style.display = "none";
 </script>
 
-<div class="viewer" bind:this={viewer} on:keydown={handleKeyboard} class:video={isVideo(file)}>
+<div class="viewer" bind:this={viewer} class:video={isVideo(file)} tabindex="-1">
   <div class="f-name" class:nomenu={$ToggleMenu}>
     <div class="name-c">
       <span>{`${getFolderName()} ${file.Name}`}</span>

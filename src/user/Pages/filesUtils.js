@@ -1,10 +1,10 @@
 import { navigate } from "svelte-routing";
 import { formatTime } from "./pagesUtils";
 import { saveId } from "../Component/fileEvents";
+import { isMobile } from "src/utils";
 
-const isMobile = window.innerWidth < 501;
-const scrollW = isMobile ? 0 : 15;
-const itemW = isMobile ? 204 : 250;
+const scrollW = isMobile() ? 0 : 15;
+const itemW = isMobile() ? 204 : 250;
 
 export const FileTypes = {
   Manga: {

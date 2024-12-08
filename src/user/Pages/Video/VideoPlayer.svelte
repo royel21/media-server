@@ -1,5 +1,5 @@
 <script>
-  import { onMount, createEventDispatcher } from "svelte";
+  import { onMount, createEventDispatcher, onDestroy } from "svelte";
 
   import Slider from "./Slider.svelte";
   import { setfullscreen, formatTime } from "../pagesUtils";
@@ -9,7 +9,7 @@
 
   export let KeyMap;
   export let file;
-  export let viewer;
+  let viewer;
 
   const { Fullscreen, SkipForward, SkipBack, VolumeUp, VolumeDown, Muted } = KeyMap;
 
@@ -101,7 +101,19 @@
   Muted.action = () => (player.muted = !player.muted);
   Fullscreen.action = fullScreen;
 
-  const focus = (el) => el?.focus();
+  onDestroy(() => {
+    PlayOrPause.action = null;
+    SkipForward.action = null;
+    SkipBack.action = null;
+    FastForward.action = null;
+    FastBackward.action = null;
+    GotoStart.action = null;
+    GotoEnd.action = null;
+    VolumeUp.action = null;
+    VolumeDown.action = null;
+    Muted.action = null;
+    Fullscreen.action = null;
+  });
 
   setBatteryMetter((level) => {
     battLevel = 0;
@@ -109,15 +121,8 @@
 </script>
 
 {#if file.Id}
-  <div
-    class="player-container"
-    class:isFullScreen
-    use:focus
-    on:mousemove={hideControls}
-    on:wheel={onWheel}
-    tabindex="-1"
-  >
-    <div class="player-content">
+  <div class="player-container" class:isFullScreen on:mousemove={hideControls} on:wheel={onWheel}>
+    <div class="player-content" bind:this={viewer}>
       <span class="v-state">
         <span class="batt-state">{battLevel ? `${battLevel}` : ""}</span>
         <span id="v-progress" class="v-p">&#128337; {progress}</span>
@@ -148,20 +153,20 @@
           </Slider>
         </div>
         <div class="player-btns">
-          <span on:click={onReturn} on:keydown>
+          <span on:click={onReturn}>
             <Icons name="timescircle" />
           </span>
-          <span class="prev-page" on:click={PrevFile.action} on:keydown>
+          <span class="prev-page" on:click={PrevFile.action}>
             <Icons name="arrowcircleleft" />
           </span>
           <label for="v-play">
             <input name="play-button" type="checkbox" id="v-play" on:change={onPlay} />
             <Icons name={mConfig.pause ? "playcircle" : "pausecircle"} />
           </label>
-          <span class="next-page" on:click={NextFile.action} on:keydown>
+          <span class="next-page" on:click={NextFile.action}>
             <Icons name="arrowcircleright" />
           </span>
-          <span class="btn-screen" on:click={fullScreen} on:keydown>
+          <span class="btn-screen" on:click={fullScreen}>
             <Icons name="expandarrow" />
           </span>
           <span class="v-vol">

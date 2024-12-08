@@ -1,6 +1,5 @@
 import { isValidKey } from "src/ShareComponent/utils";
 
-export const isMobile = /android|iphone/i.test(navigator.userAgent);
 export const isVideo = (file) => file.Type.includes("Video");
 export const isManga = (file) => file.Type.includes("Manga");
 /**
@@ -196,7 +195,6 @@ export const KeyMap = {
 
 export const handleKeyboard = (e) => {
   for (let key of Object.keys(KeyMap)) {
-    console.log(key, e.keyCode, isValidKey(e, KeyMap[key]), KeyMap[key]);
     if (isValidKey(e, KeyMap[key])) {
       return KeyMap[key] && KeyMap[key].action();
     }
