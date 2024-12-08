@@ -79,7 +79,7 @@ button:active {
   position: relative;
   text-align: center;
   width: calc(100% - 15px);
-  height: 390px;
+  min-height: 390px;
   background-color: #343a40fc;
   border-radius: 5px;
   cursor: pointer;
@@ -120,6 +120,7 @@ button:active {
   height: fit-content;
   box-shadow: 0 0 10px;
   z-index: 1;
+  padding-bottom: 5px;
 }
 
 .file-progress {

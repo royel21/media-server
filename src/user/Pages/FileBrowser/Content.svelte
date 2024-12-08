@@ -78,6 +78,7 @@
   const nextTab = hotkeys.find((h) => h.Name === "Next Tab");
   const KeyExit = hotkeys.find((key) => key.Name === "Exit");
   const KeyContinue = hotkeys.find((key) => key.Name === "Continue Reading");
+  const open = hotkeys.find((key) => key.Name === "Open");
 
   const onKeydown = (e) => {
     if (isValidKey(e, prevTab)) {
@@ -93,8 +94,14 @@
     if (isValidKey(e, KeyExit)) {
       document.querySelector(".exit").click();
     }
+
     if (isValidKey(e, KeyContinue)) {
+      console.log(e.keyCode, isValidKey(e, KeyContinue));
       continueReading(e);
+    }
+
+    if (isValidKey(e, open)) {
+      ProcessFile(e.target, "Content");
     }
   };
 

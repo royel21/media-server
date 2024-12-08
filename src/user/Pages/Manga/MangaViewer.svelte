@@ -174,7 +174,7 @@
     SkipBack.action = prevPage;
     GotoStart.action = () => jumpTo(0);
     GotoEnd.action = () => jumpTo(file.Duration);
-    ToggleControlBar.action = updateToggleMenu;
+    ToggleControlBar.action = () => updateToggleMenu();
     socket.on("connect", onConnect);
     socket.on("image-loaded", onImageData);
     socket.on("disconnect", onDisconnect);

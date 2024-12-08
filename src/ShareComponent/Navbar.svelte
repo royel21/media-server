@@ -41,7 +41,7 @@
       e.preventDefault();
     }
 
-    if (isValidKey(e, logoutKey) && !$ToggleMenu) {
+    if (isValidKey(e, logoutKey) && !/content|viewer/i.test(location.pathname)) {
       logout();
     }
   };

@@ -5,7 +5,6 @@
 
   import { clamp } from "src/ShareComponent/utils";
   import { fileKeypress, selectByTitle, selectElementById } from "../Component/fileEvents";
-  import { ToggleMenu } from "src/ShareComponent/ToggleMenu";
   import { getLastChap } from "../Component/fileUtils";
 
   import api from "src/apiUtils";
@@ -67,8 +66,6 @@
   const handleClick = ({ currentTarget }) => {
     selectElementById(currentTarget.id, title);
   };
-
-  ToggleMenu.set(false);
 
   onDestroy(() => {
     isMounted = false;
