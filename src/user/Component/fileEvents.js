@@ -40,18 +40,18 @@ export const scrollItem = (element, behavior = "smooth") => {
   let scroll = scrollElement.scrollTop;
   let el_offsetTop = element.offsetTop;
 
-  if (el_offsetTop - scroll + 1 < -1) {
-    scroll = el_offsetTop < 60 ? 0 : el_offsetTop;
+  if (el_offsetTop - scroll < 0) {
+    scroll = 0;
   }
 
   let top = el_offsetTop + element.offsetHeight;
   let sctop = scroll + scrollElement.offsetHeight;
+  const h = itemContainer.offsetHeight;
 
   if (top - sctop + 1 > 0) {
-    scroll = top > itemContainer.offsetHeight ? itemContainer.offsetHeight : scroll + (top - sctop) + 50;
+    scroll = top > h ? h : scroll + (top - sctop) + 50;
   }
 
-  console.log(scroll, sctop, itemContainer.offsetHeight, top);
   scrollElement.scroll({
     top: scroll,
     behavior,
