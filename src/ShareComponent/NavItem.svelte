@@ -50,7 +50,7 @@
   });
 </script>
 
-<li class={`nav-item ${item.title}`} on:click={select} id={data.current}>
+<li class={`nav-item ${item.title}`} on:click={select} id={data.current} tabindex="-1">
   <Link to={`${item.path}/${data.current}`} {getProps}>
     <Icons name={item.class} height="22px" color={item.color} />
     <span class="nav-title">{item.title}</span>
@@ -58,13 +58,13 @@
       {#if data.items.adults.length}
         <ListItems {title} items={data.items.others} current={data.current} />
         <ListItems title="R18" class="adult" items={data.items.adults} current={data.current} />
-        <li class="list-item s-list" id="all" class:selected={"all" === data.current}>All</li>
+        <li class="list-item s-list" id="all" class:selected={"all" === data.current} tabindex="-1">All</li>
       {:else if dirs[title]}
         {#if !isFav && dirs[title].length > 1}
-          <li class="list-item s-list" id="all" class:selected={"all" === data.current}>All</li>
+          <li class="list-item s-list" id="all" class:selected={"all" === data.current} tabindex="-1">All</li>
         {/if}
         {#each dirs[title] as { Id, Name }}
-          <li class={`list-item`} id={Id} class:selected={Id === data.current}>
+          <li class={`list-item`} id={Id} class:selected={Id === data.current} tabindex="-1">
             <span>{Name}</span>
           </li>
         {/each}
@@ -74,6 +74,7 @@
 </li>
 
 <style>
+  .nav-item a:focus .down-list,
   .nav-item:hover .down-list {
     display: initial;
   }

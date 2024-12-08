@@ -1,5 +1,13 @@
 export const defHotkeys = [
   {
+    Key: 88,
+    Name: "Logout",
+    CtrlKey: true,
+    ShiftKey: false,
+    AltKey: false,
+    Type: 1,
+  },
+  {
     Key: 13,
     Name: "Open",
     CtrlKey: false,

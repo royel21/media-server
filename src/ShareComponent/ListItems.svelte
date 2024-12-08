@@ -6,13 +6,13 @@
   export { clazz as class };
 </script>
 
-<li class="list-item s-list" id={items[0]?.Id} class:selected={items[0]?.Id === current}>
+<li class="list-item s-list" id={items[0]?.Id} class:selected={items[0]?.Id === current} tabindex="-1">
   {title}
   {#if items.length > 1}
     <span>&gt;</span>
     <ul class="sub-list">
       {#each items as { Id, Name }}
-        <li class={`list-item ${clazz}`} id={Id} class:selected={Id === current}>
+        <li class={`list-item ${clazz}`} id={Id} class:selected={Id === current} tabindex="-1">
           <span>{Name}</span>
         </li>
       {/each}

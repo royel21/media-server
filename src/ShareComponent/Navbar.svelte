@@ -14,9 +14,11 @@
   let menuToggle = false;
 
   const hotkeys = getContext("User").hotkeys;
+  const logout = getContext("logout");
 
   const prevTab = hotkeys.find((h) => h.Name === "Prev Tab");
   const nextTab = hotkeys.find((h) => h.Name === "Next Tab");
+  const logoutKey = hotkeys.find((h) => h.Name === "Logout");
 
   ToggleMenu.subscribe((value) => (menuToggle = value));
 
@@ -37,6 +39,10 @@
         item.querySelector("a")?.click();
       }
       e.preventDefault();
+    }
+
+    if (isValidKey(e, logoutKey) && !$ToggleMenu) {
+      logout();
     }
   };
 
