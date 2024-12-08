@@ -106,7 +106,7 @@ const downloadLinks = async (link, page) => {
   data.sort((a, b) => a.name.localeCompare(b.name));
 
   await link.reload();
-  sendMessage({ link }, "update-download");
+  sendMessage({ link }, "link-update");
 
   let count = 0;
   for (let d of data) {
@@ -202,7 +202,7 @@ const onDownload = async (bypass) => {
       await page.close();
       await link.update({ IsDownloading: false });
       await link.reload();
-      sendMessage({ link }, "update-download");
+      sendMessage({ link }, "link-update");
     } else {
       sendMessage({ text: `Link ${link.Name} was checked recently`, color: "red" });
     }
@@ -245,7 +245,7 @@ const loadLinks = async (Id, bypass) => {
     state.hrunning = true;
     downloadNHentais(state).then(cleanUp).catch(cleanUp);
   } else {
-    sendMessage({ text: "nhentai finish" }, "update-download");
+    sendMessage({ text: "nhentai finish" });
     cleanUp();
   }
 };

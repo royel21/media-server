@@ -10,7 +10,6 @@
   import Confirm from "../Component/Confirm.svelte";
   import ModalLink from "./ModalLink.svelte";
   import { sortByName } from "src/ShareComponent/utils";
-  import { updateLink } from "./utils";
 
   const socket = getContext("socket");
 
@@ -81,13 +80,6 @@
     socket.emit("download-server", { action: "Exit" });
   };
 
-  const updateRunning = ({ IsRunning }) => {
-    datas.running = IsRunning;
-    if (!IsRunning && !loading) {
-      loadItems();
-    }
-  };
-
   const removeLink = async ({ target }) => {
     const id = target.closest(".link").id;
     if (id) {
@@ -130,29 +122,17 @@
     showLinkModal = false;
   };
 
-  const onUpdate = ({ link }) => {
-    if (link) {
-      if (link.remove === true || link.IsDownloading === false) {
-        datas.links = datas.links.filter((f) => f.Id !== link?.Id);
-      } else {
-        datas.links = updateLink(link, datas, true);
-      }
-    }
+  const updateDatas = (data, key = "links") => {
+    datas[key] = data;
   };
-
-  const updateLinkList = (links) => (datas.links = [...links]);
 
   onMount(() => {
     loading = true;
     loadItems(true);
     socket.emit("download-server", { action: "is-running" });
-    socket.on("is-running", updateRunning);
-    socket.on("update-download", onUpdate);
     return () => {
       isMounted = false;
       apiUtils.cancelQuery();
-      socket.off("update-download", onUpdate);
-      socket.off("is-running", updateRunning);
     };
   });
 
@@ -200,12 +180,12 @@
     <LinkPager {loadItems} {datas} />
   </div>
 
-  <LinkTable {datas} {socket} {updateLinkList} {removeLink} {loadItems} />
+  <LinkTable {datas} {socket} {updateDatas} {removeLink} {loadItems} />
 </div>
 
 <style>
   #srv :global(.t-container:not(.hasconsole)) {
-    height: calc(100% - 56px);
+    height: calc(100% - 49px);
   }
   #srv {
     height: calc(100% - 30px);

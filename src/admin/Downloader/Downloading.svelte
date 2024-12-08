@@ -3,12 +3,10 @@
   import apiUtils from "src/apiUtils";
   import Filter from "src/ShareComponent/Filter.svelte";
   import Icons from "src/icons/Icons.svelte";
-  import { updateLink } from "./utils";
   import DownloadListModal from "./DownloadListModal.svelte";
   import LinkPager from "./LinkPager.svelte";
   import LinkTable from "./LinkTable.svelte";
 
-  let running = false;
   let showDownList = false;
   let servers = [];
   let isMounted = true;
@@ -61,51 +59,35 @@
     });
   };
 
-  const onUpdate = ({ link }) => {
-    if (link) {
-      if (link.remove === true || link.IsDownloading === false) {
-        datas.links = datas.links.filter((f) => f.Id !== link?.Id);
-      } else {
-        datas.links = updateLink(link, datas, true);
-      }
-    }
-  };
-
   const stopDownloads = () => {
-    running = false;
+    datas.running = false;
     socket.emit("download-server", { action: "Exit" });
-  };
-
-  const updateRunning = ({ IsRunning }) => {
-    running = IsRunning;
-    if (!IsRunning) {
-      loadItems();
-    }
   };
 
   const loadDownloads = (Id) => {
     socket.emit("download-server", { datas: { Id }, action: "Load-Downloads" });
     showDownList = false;
-    running = true;
+    datas.running = true;
   };
 
-  const updateLinkList = (links) => (datas.links = [...links]);
+  const updateDatas = (d, key = "links", link) => {
+    if (key === "links") {
+      datas.links = [...d.filter((f) => (link.remove ? f.Id !== link?.Id : true))];
+    } else {
+      datas[key] = d;
+    }
+  };
 
   onMount(() => {
     loadItems();
-    socket.on("update-download", onUpdate);
-    socket.on("is-running", updateRunning);
     socket.on("reload-downloads", loadItems);
     socket.emit("download-server", { action: "is-running" });
     return () => {
       isMounted = false;
       apiUtils.cancelQuery();
-      socket.off("update-download", onUpdate);
-      socket.off("is-running", updateRunning);
     };
   });
 
-  $: start = (datas.page - 1) * datas.items;
   $: localStorage.setItem("d-items", datas.items);
 </script>
 
@@ -119,7 +101,13 @@
       <span class="d-btn" on:click={() => (showDownList = true)} on:keydown>
         <Icons name="list" />
       </span>
-      <span class="d-btn btn-stop" title="Stop All Download" class:running on:click={stopDownloads} on:keydown>
+      <span
+        class="d-btn btn-stop"
+        title="Stop All Download"
+        class:running={datas.running}
+        on:click={stopDownloads}
+        on:keydown
+      >
         <Icons name="stopcircle" color="firebrick" />
       </span>
       <Filter on:filter={onFilter} filter={datas.filter} />
@@ -127,7 +115,7 @@
     <LinkPager {loadItems} {datas} />
   </div>
 
-  <LinkTable {datas} {socket} {updateLinkList} {removeLink} {servers} IsDownloading={true} {loadItems} />
+  <LinkTable {datas} {socket} {updateDatas} {removeLink} {servers} IsDownloading={true} {loadItems} />
 </div>
 
 <style>

@@ -7,10 +7,10 @@
   import RenameModal from "./RenameModal.svelte";
   import Icons from "src/icons/Icons.svelte";
 
-  import { showConsoleStore } from "../Store/ConsoleStore";
+  import { showConsoleStore, updateConsole } from "../Store/ConsoleStore";
 
   export let datas;
-  export let updateLinkList;
+  export let updateDatas;
   export let socket;
   export let servers = false;
   export let removeLink;
@@ -23,7 +23,7 @@
   let showExcludeChapModal;
   let running = false;
 
-  const onExcludeLink = async (e) => updateLinkList(await excludeLink(e, datas));
+  const onExcludeLink = async (e) => updateDatas(await excludeLink(e, datas));
 
   export const getLink = (target) => {
     const id = target.closest(".link")?.id;
@@ -46,12 +46,9 @@
     }
   };
 
-  const onUpdate = ({ link }) => {
-    if (link.remove) {
-      updateLinkList(datas.links.filter((f) => f.Id !== link?.Id));
-    } else {
-      updateLinkList(updateLink(link, datas));
-    }
+  const onUpdate = (data) => {
+    if (data.link) updateDatas(updateLink(data.link, datas), "links", data.link);
+    if (data.text) updateConsole(data);
   };
 
   const editServer = ({ target }) => {
@@ -70,7 +67,7 @@
 
   const hideModal = () => {
     editor = {};
-    updateLinkList([...datas.links]);
+    updateDatas([...datas.links]);
   };
 
   const downloadServer = ({ target: { dataset } }) => {
@@ -105,19 +102,29 @@
     }, 0);
   };
 
+  const updateRunning = ({ IsRunning }) => {
+    running = IsRunning;
+    if (!IsRunning) {
+      loadItems();
+    }
+  };
+
   onMount(() => {
     const dmanager = document.querySelector(".d-manager");
 
     dmanager.addEventListener("keydown", changePage);
 
-    socket.on("update-download", onUpdate);
+    socket.on("link-update", onUpdate);
+    socket.on("is-running", updateRunning);
     return () => {
       dmanager.removeEventListener("keydown", changePage);
-      socket.off("update-download", onUpdate);
+      socket.off("link-update", onUpdate);
+      socket.off("is-running", updateRunning);
     };
   });
 
   $: start = (datas.page - 1) * datas.items;
+  $: updateDatas(running, "running");
 </script>
 
 {#if editor.show}

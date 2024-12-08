@@ -11,13 +11,11 @@
   import LinkTable from "./LinkTable.svelte";
   import LinkPager from "./LinkPager.svelte";
 
-  let start = 0;
   let editor = { show: false };
   let servers = {};
   let showLinkModal = false;
   let showRenamer = false;
   let showExcludeChapModal;
-  let running = false;
   let showServerList = false;
   let isMounted = true;
 
@@ -75,19 +73,15 @@
     showLinkModal = false;
   };
 
-  const updateLinkList = (links) => (datas.links = [...links]);
+  const updateDatas = (data, key = "links") => {
+    datas[key] = data;
+  };
 
   const stopDownloads = () => {
-    running = false;
+    datas.running = false;
     socket.emit("download-server", { action: "Exit" });
   };
 
-  const updateRunning = ({ IsRunning }) => {
-    running = IsRunning;
-    if (!IsRunning) {
-      loadItems();
-    }
-  };
   const removeLink = async ({ target }) => {
     const id = target.closest(".link").id;
     if (id) {
@@ -101,15 +95,11 @@
   onMount(() => {
     loadItems(true);
     socket.emit("download-server", { action: "is-running" });
-    socket.on("is-running", updateRunning);
     return () => {
       isMounted = false;
       apiUtils.cancelQuery();
-      socket.off("is-running", updateRunning);
     };
   });
-
-  $: start = (datas.page - 1) * datas.items;
 </script>
 
 {#if editor.show}
@@ -143,7 +133,13 @@
       <span class="d-btn btn-add" on:click={() => (showLinkModal = true)} on:keydown>
         <Icons name="squareplus" />
       </span>
-      <span class="d-btn r-list btn-stop" title="Stop All Download" class:running on:click={stopDownloads} on:keydown>
+      <span
+        class="d-btn r-list btn-stop"
+        title="Stop All Download"
+        class:running={datas.running}
+        on:click={stopDownloads}
+        on:keydown
+      >
         <Icons name="stopcircle" color="firebrick" />
       </span>
       <span class="d-btn r-list" title="Show Rename List" on:click={() => (showRenamer = true)} on:keydown>
@@ -153,10 +149,13 @@
     </div>
     <LinkPager {loadItems} {datas} />
   </div>
-  <LinkTable {datas} {socket} {updateLinkList} {removeLink} {servers} {loadItems} />
+  <LinkTable {datas} {socket} {updateDatas} {removeLink} {servers} {loadItems} />
 </div>
 
 <style>
+  #downloads :global(.t-container) {
+    height: calc(100% - 50px);
+  }
   @media screen and (max-width: 540px) {
     .d-controls span:not(.btn-add, .btn-stop) {
       display: none;

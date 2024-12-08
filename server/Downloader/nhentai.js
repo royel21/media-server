@@ -5,7 +5,7 @@ import { getImgNh, saveThumbnail } from "./ImageUtils.js";
 import defaultConfig from "../default-config.js";
 import fs from "fs-extra";
 import AdmZip from "adm-zip";
-import { createPage } from "./Crawler.js";
+import { createPage, delay } from "./Crawler.js";
 
 const isChar = (c) => {
   return c.match(/[a-z]/i);
@@ -146,6 +146,7 @@ const download = async (link, page, server, state) => {
   if (found && found.Name === data.name + ".zip") {
     download = false;
   }
+  sendMessage({ link: { ...link.dataValues } }, "link-update");
 
   if (download && !fs.existsSync(filePath + ".zip")) {
     await page.goto(data.url, { waitUntil: "domcontentloaded" });
@@ -164,9 +165,6 @@ const download = async (link, page, server, state) => {
       const imageBasePath = path.join(defaultConfig.ImagesDir, "Manga", types[data.type]);
       createDir(imageBasePath);
 
-      const cover = path.join(imageBasePath, data.name + ".zip.jpg");
-      console.log("cover: ", cover);
-      let creatCover = true;
       for (let i = 1; i < data.total + 1; ) {
         if (state.stopped) return;
         const padded = i.toString().padStart("3", "0");
@@ -188,10 +186,6 @@ const download = async (link, page, server, state) => {
             const buff = await img.toFormat("jpg").toBuffer();
             zip.addFile(newImg, buff);
             count++;
-            if (creatCover && !fs.existsSync(cover) && data.type === "anthology") {
-              creatCover = false;
-              await saveThumbnail(buff, cover);
-            }
             f = 0;
             i++;
           }
@@ -208,8 +202,8 @@ const download = async (link, page, server, state) => {
           await createFile(filePath + ".zip", folder.Id, count);
           await folder.update({ FileCount: folder.FileCount + 1 });
         }
+        sendMessage({ text: `Save: ${data.name}\n`, link: { ...link.dataValues, remove: true } }, "link-update");
         await link.destroy();
-        sendMessage({ text: `Save: ${data.name}\n`, link: link, remove: true }, "link-update");
         return true;
       } else {
         await link.update({ Name: data.name, IsDowloanding: false });
@@ -217,7 +211,7 @@ const download = async (link, page, server, state) => {
     }
   } else {
     await link.destroy();
-    sendMessage({ text: `Exist: ${data.name}\n` });
+    sendMessage({ text: `Exist: ${data.name}\n`, link: { ...link.dataValues, remove: true } }, "link-update");
     return true;
   }
 };
@@ -234,6 +228,7 @@ export const downloadNHentais = async (state) => {
   while (state.nhentais.length) {
     if (state.stopped) break;
     const link = state.nhentais.shift();
+
     try {
       await link.reload();
     } catch (error) {
@@ -247,9 +242,7 @@ export const downloadNHentais = async (state) => {
       url: link.Url,
     });
     try {
-      if (await download(link, page, link.Server, state)) {
-        sendMessage({ text: "nhentai finish", link: link, remove: true }, "update-download");
-      }
+      await download(link, page, link.Server, state);
     } catch (error) {
       sendMessage({ text: `Error ${link.Url} was no properly downloaded`, color: "red", error });
     }
