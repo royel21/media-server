@@ -23,7 +23,7 @@
   const basePath = `${type}/viewer/${folderId}`;
 
   const socket = getContext("socket");
-  const User = getContext("User");
+
   const { NextFile, PrevFile, Exit, ShowList } = KeyMap;
   let files = [];
   let playList = [];
@@ -64,7 +64,6 @@
     if (!path) {
       path = `/${type}/content/${folderId}`;
     }
-
     navigate(path);
   };
 
@@ -130,7 +129,6 @@
     }
     return folderName + " -";
   };
-
   onMount(async () => {
     NextFile.action = () => changeFile(1);
     PrevFile.action = () => changeFile(-1);
@@ -152,15 +150,11 @@
     document.body.addEventListener("keydown", handleKeyboard);
 
     socket.on("file-removed", onFileRemove);
-    return () => {
-      document.body.rmoveEventListener("keydown", handleKeyboard);
-      socket.off("file-removed", onFileRemove);
+  });
 
-      NextFile.action = null;
-      PrevFile.action = null;
-      Exit.action = null;
-      ShowList.action = null;
-    };
+  onDestroy(() => {
+    document.body.removeEventListener("keydown", handleKeyboard);
+    socket.off("file-removed", onFileRemove);
   });
 
   menu.style.display = "none";

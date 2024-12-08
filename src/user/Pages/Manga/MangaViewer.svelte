@@ -182,12 +182,6 @@
       socket.off("connect", onConnect);
       socket.off("image-loaded", onImageData);
       socket.off("disconnect", onDisconnect);
-
-      SkipForward.action = null;
-      SkipBack.action = null;
-      GotoStart.action = null;
-      GotoEnd.action = null;
-      ToggleControlBar.action = null;
     };
   });
 

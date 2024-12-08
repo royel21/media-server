@@ -9,7 +9,7 @@
   import Pagination from "src/ShareComponent/Pagination.svelte";
   import Filter from "src/ShareComponent/Filter.svelte";
   import FavoriteList from "./FavoriteList.svelte";
-  import { clamp, isValidKey } from "src/ShareComponent/utils";
+  import { clamp } from "src/ShareComponent/utils";
   import { getItemsList } from "src/apiUtils";
   import Icons from "src/icons/Icons.svelte";
   import LazyImage from "./LazyImage.svelte";
@@ -25,14 +25,9 @@
   export let useSlot = false;
   export let onOpen = null;
   export let setFolderInfo = null;
-  export let exitFolder = null;
-  export let continueReading = null;
 
-  const { sortTabs, hotkeys } = getContext("User");
+  const { sortTabs } = getContext("User");
   let config = sortTabs.find((st) => st.Name === title);
-
-  const KeyExit = hotkeys.find((key) => key.Name === "Exit");
-  const KeyContinue = hotkeys.find((key) => key.Name === "Continue Reading");
 
   const dateFormat = { year: "numeric", month: "short", day: "numeric" };
 
@@ -79,15 +74,7 @@
 
   const fileFilter = ({ detail }) => navigate(`/${type}/${1}/${detail || ""}`);
 
-  const handleKeydown = (e) => {
-    if (isValidKey(e, KeyExit) && exitFolder) {
-      exitFolder();
-    } else if (isValidKey(e, KeyContinue) && continueReading) {
-      continueReading();
-    } else {
-      fileKeypress(e, page, goToPage, title);
-    }
-  };
+  const handleKeydown = (e) => fileKeypress(e, page, goToPage, title);
 
   const openFile = (e) => {
     if (onOpen) onOpen(e);

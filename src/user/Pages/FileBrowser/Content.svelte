@@ -32,7 +32,6 @@
     if (pathname) return pathname;
 
     if (segment.includes("home")) return "/";
-
     return document.querySelector(`#menu a[href^="/${segment[0]}"]`)?.href;
   };
 
@@ -77,14 +76,25 @@
   const hotkeys = getContext("User").hotkeys;
   const prevTab = hotkeys.find((h) => h.Name === "Prev Tab");
   const nextTab = hotkeys.find((h) => h.Name === "Next Tab");
+  const KeyExit = hotkeys.find((key) => key.Name === "Exit");
+  const KeyContinue = hotkeys.find((key) => key.Name === "Continue Reading");
 
   const onKeydown = (e) => {
     if (isValidKey(e, prevTab)) {
       currentContent = "File List";
+      e.preventDefault();
     }
 
     if (isValidKey(e, nextTab)) {
       currentContent = "Details";
+      e.preventDefault();
+    }
+
+    if (isValidKey(e, KeyExit)) {
+      document.querySelector(".exit").click();
+    }
+    if (isValidKey(e, KeyContinue)) {
+      continueReading(e);
     }
   };
 
@@ -150,8 +160,8 @@
       <button class="btn btn-secondary" on:click={onResetFiles}>Reset All</button>
       <button class="btn btn-secondary" on:click={scanfiles}>Update</button>
     </div>
-    <FilesList title={"Content"} type={typeUrl} {filter} {page} {id} {setFolderInfo} {exitFolder} {continueReading}>
-      <div class="first-controls" slot="controls" on:click={exitFolder} on:keydown>
+    <FilesList title={"Content"} type={typeUrl} {filter} {page} {id} {setFolderInfo}>
+      <div class="first-controls exit" slot="controls" on:click={exitFolder} on:keydown>
         <Icons name="reply" />
       </div>
     </FilesList>

@@ -1,5 +1,5 @@
 <script>
-  import { onMount, createEventDispatcher, onDestroy } from "svelte";
+  import { onMount, createEventDispatcher } from "svelte";
 
   import Slider from "./Slider.svelte";
   import { setfullscreen, formatTime } from "../pagesUtils";
@@ -92,20 +92,6 @@
   Fullscreen.action = fullScreen;
 
   PlayOrPause.action = onPlay;
-
-  onDestroy(() => {
-    PlayOrPause.action = null;
-    SkipForward.action = null;
-    SkipBack.action = null;
-    FastForward.action = null;
-    FastBackward.action = null;
-    GotoStart.action = null;
-    GotoEnd.action = null;
-    VolumeUp.action = null;
-    VolumeDown.action = null;
-    Muted.action = null;
-    Fullscreen.action = null;
-  });
 
   setBatteryMetter((level) => {
     battLevel = 0;
