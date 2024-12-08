@@ -190,7 +190,7 @@
               {/if}
             {/if}
           </div>
-          <div class="file-name" title={Type !== "Folder" ? Name : ""}>{Name}</div>
+          <div class="file-name"><span>{Name}</span></div>
         </div>
       </div>
     {/each}
@@ -207,7 +207,6 @@
   .scroll-container.r-content {
     height: calc(100% - 96px);
     min-height: calc(100% - 90px);
-    padding-bottom: 90px;
   }
   .file-btn-left {
     cursor: pointer;

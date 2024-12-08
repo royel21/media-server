@@ -68,6 +68,7 @@ button:active {
   justify-content: center;
   outline: none;
   background-color: transparent;
+  height: 390px;
   width: 265px;
   min-width: 195px;
   transition: .2s all;
@@ -106,7 +107,7 @@ button:active {
   cursor: initial;
   width: 100%;
   padding: 0 5px;
-  margin: 5px 0;
+  margin: 6px 0;
 }
 
 .file:hover,
@@ -332,6 +333,7 @@ input[type="range"]::-moz-range-track {
   }
 
   .file {
+    height: 335px;
     width: 190px;
   }
 

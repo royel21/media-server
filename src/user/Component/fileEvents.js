@@ -37,20 +37,21 @@ export const scrollItem = (element, behavior = "smooth") => {
 
   let itemContainer = element.parentElement;
   let scrollElement = itemContainer.parentElement;
-  let scroll = scrollElement.scrollTop,
-    elofft = element.offsetTop;
+  let scroll = scrollElement.scrollTop;
+  let el_offsetTop = element.offsetTop;
 
-  if (elofft - scroll + 1 < -1) {
-    scroll = elofft < 60 ? 0 : elofft;
+  if (el_offsetTop - scroll + 1 < -1) {
+    scroll = el_offsetTop < 60 ? 0 : el_offsetTop;
   }
 
-  let top = elofft + element.offsetHeight;
+  let top = el_offsetTop + element.offsetHeight;
   let sctop = scroll + scrollElement.offsetHeight;
 
   if (top - sctop + 1 > 0) {
-    scroll = top + 31 > itemContainer.offsetHeight ? itemContainer.offsetHeight - 10 : scroll + (top - sctop);
+    scroll = top > itemContainer.offsetHeight ? itemContainer.offsetHeight : scroll + (top - sctop) + 50;
   }
 
+  console.log(scroll, sctop, itemContainer.offsetHeight, top);
   scrollElement.scroll({
     top: scroll,
     behavior,
