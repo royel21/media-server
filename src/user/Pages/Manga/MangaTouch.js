@@ -62,7 +62,6 @@ export const onTouchEnd = (e) => {
     let ww = window.innerWidth;
     let wh = window.innerHeight;
 
-    console.log(point);
     if (elapsed > 70 && point.x - scroller?.offsetLeft < scroller?.offsetWidth - 15) {
       // Top
       if (point.y < wh * 0.33) {

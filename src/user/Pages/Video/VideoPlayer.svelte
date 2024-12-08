@@ -9,9 +9,9 @@
 
   export let KeyMap;
   export let file;
-  let viewer;
+  export let viewer;
 
-  const { Fullscreen, SkipForward, SkipBack, VolumeUp, VolumeDown, Muted } = KeyMap;
+  const { Fullscreen, SkipForward, SkipBack, VolumeUp, VolumeDown, Muted, ShowList } = KeyMap;
 
   const { NextFile, PrevFile, GotoStart, GotoEnd, PlayOrPause, FastForward, FastBackward } = KeyMap;
 
@@ -22,11 +22,6 @@
   let isFullScreen = false;
   let controls;
   let battLevel;
-
-  const onMeta = () => {
-    if (!player.onmousedown) setGesture(player);
-    player.currentTime = file.CurrentPos;
-  };
 
   const onReturn = () => dispatch("returnBack");
 
@@ -46,12 +41,7 @@
   const volChange = ({ target: { value } }) => {
     mConfig.volume = value;
   };
-  const onFullscreen = () => (isFullScreen = document.fullscreenElement !== null);
 
-  onMount(() => {
-    window.addEventListener("fullscreenchange", onFullscreen);
-    return () => window.removeEventListener("fullscreenchange", onFullscreen);
-  });
   let tout;
   const hideControls = () => {
     if (isFullScreen && window.innerWidth > 1000) {
@@ -59,28 +49,29 @@
       clearTimeout(tout);
       tout = setTimeout(() => {
         controls.style.bottom = -controls.offsetHeight + "px";
-      }, 5000);
+      }, 4000);
     }
   };
+
   const onWheel = ({ deltaY }) => {
     let { volume } = mConfig;
     volume += deltaY < 0 ? 0.05 : -0.05;
     mConfig.volume = volume < 0 ? 0 : volume > 1 ? 1 : volume;
   };
+
   const updateTime = () => {
     file.CurrentPos = player.currentTime;
   };
-  const onPlay = ({ target: { checked } }) => (!checked ? player.play().catch(() => {}) : player.pause());
 
-  const hideControlsOnCLick = () => {
-    if (isFullScreen) {
-      if (controls.style.bottom == "0px") {
-        controls.style.bottom = -controls.offsetHeight + "px";
-        player.play().catch(() => {});
-      } else {
+  const onPlay = () => {
+    if (player.paused) {
+      controls.style.bottom = -controls.offsetHeight + "px";
+      player.play().catch(() => {});
+    } else {
+      if (isFullScreen) {
         controls.style.bottom = 0;
-        player.pause();
       }
+      player.pause();
     }
   };
 
@@ -89,7 +80,6 @@
     player.volume = newVol < 0 ? 0 : newVol;
   };
 
-  PlayOrPause.action = () => (player.paused ? player.play().catch(() => {}) : player.pause());
   SkipForward.action = () => (player.currentTime += 5);
   SkipBack.action = () => (player.currentTime -= 5);
   FastForward.action = () => (player.currentTime += 10);
@@ -100,6 +90,8 @@
   VolumeDown.action = () => changeVol(0.05);
   Muted.action = () => (player.muted = !player.muted);
   Fullscreen.action = fullScreen;
+
+  PlayOrPause.action = onPlay;
 
   onDestroy(() => {
     PlayOrPause.action = null;
@@ -118,11 +110,25 @@
   setBatteryMetter((level) => {
     battLevel = 0;
   });
+
+  const onFullscreen = () => (isFullScreen = document.fullscreenElement !== null);
+
+  const onMeta = () => {
+    if (!player.onmousedown) {
+      setGesture(player, onPlay);
+    }
+    player.currentTime = file.CurrentPos;
+  };
+
+  onMount(() => {
+    window.addEventListener("fullscreenchange", onFullscreen);
+    return () => window.removeEventListener("fullscreenchange", onFullscreen);
+  });
 </script>
 
 {#if file.Id}
   <div class="player-container" class:isFullScreen on:mousemove={hideControls} on:wheel={onWheel}>
-    <div class="player-content" bind:this={viewer}>
+    <div class="player-content">
       <span class="v-state">
         <span class="batt-state">{battLevel ? `${battLevel}` : ""}</span>
         <span id="v-progress" class="v-p">&#128337; {progress}</span>
@@ -141,7 +147,6 @@
         loop={false}
         on:loadedmetadata={onMeta}
         on:timeupdate={updateTime}
-        on:click={hideControlsOnCLick}
       >
         <track kind="captions" />
       </video>
@@ -191,7 +196,7 @@
               on:input={volChange}
             />
           </span>
-          <label class="show-list" for="p-hide" title="play-list">
+          <label class="show-list" for="p-hide" title="play-list" on:click={ShowList.action}>
             <span class="p-sort">
               <Icons name="list" width="30px" height="24px" />
             </span>

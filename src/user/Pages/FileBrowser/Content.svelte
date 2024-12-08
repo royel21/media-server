@@ -86,7 +86,6 @@
     if (isValidKey(e, nextTab)) {
       currentContent = "Details";
     }
-    console.log(currentContent);
   };
 
   const focus = () => {

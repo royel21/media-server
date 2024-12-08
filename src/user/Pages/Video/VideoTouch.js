@@ -10,7 +10,7 @@ let touching = false;
 let gestureDir = 0;
 let touchData = { ...initialData };
 let time = 0;
-export const setGesture = (player) => {
+export const setGesture = (player, onPlay) => {
   if (player) {
     player.onmousedown = player.ontouchstart = (e) => {
       touching = true;
@@ -20,7 +20,7 @@ export const setGesture = (player) => {
         let { pageX, pageY } = e.touches[0];
         touchData = { time, startX: pageX, startY: pageY };
       } else if (e.which === 1) {
-        player.paused ? player.play().catch(() => {}) : player.pause();
+        onPlay();
       }
     };
 

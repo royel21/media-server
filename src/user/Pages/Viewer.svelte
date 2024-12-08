@@ -160,7 +160,6 @@
       PrevFile.action = null;
       Exit.action = null;
       ShowList.action = null;
-      console.log("unmount");
     };
   });
 
@@ -182,7 +181,7 @@
   </span>
   <PlayList {fileId} files={playList} on:click={selectFile} {onFilter} {folderName} />
   {#if isVideo(file)}
-    <VideoPLayer {file} {KeyMap} on:returnBack={returnBack} />
+    <VideoPLayer {file} {KeyMap} on:returnBack={returnBack} {viewer} />
   {:else}
     <MangaViewer
       {viewer}
