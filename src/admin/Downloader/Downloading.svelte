@@ -72,7 +72,7 @@
 
   const updateDatas = (d, key = "links", link) => {
     if (key === "links") {
-      datas.links = [...d.filter((f) => (link.remove ? f.Id !== link?.Id : true))];
+      datas.links = [...d.filter((f) => (link?.remove ? f.Id !== link?.Id : true))];
     } else {
       datas[key] = d;
     }

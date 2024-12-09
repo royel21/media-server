@@ -160,34 +160,29 @@
         <span class="col-count">{i + 1 + start}</span>
         {#if servers}
           <span class="col-serv">
-            <span on:click={editServer} on:keydown title="Show Site Config"><Icons name="cog" /></span>
-            <span data-id={link.ServerId} on:click={downloadServer} on:keydown>{getServName(link.Server)}</span>
+            <span on:click={editServer} title="Show Site Config"><Icons name="cog" /></span>
+            <span data-id={link.ServerId} on:click={downloadServer}>{getServName(link.Server)}</span>
           </span>
         {/if}
         <span class="col-chapt">
-          <span
-            class="ex-cfg"
-            on:click={() => (showExcludeChapModal = link.Name)}
-            on:keydown
-            title="Show Exclude Chapt List "
-          >
+          <span class="ex-cfg" on:click={() => (showExcludeChapModal = link.Name)} title="Show Exclude Chapt List ">
             <Icons name="cog" />
           </span>
           <span title={link.LastChapter}>{link.LastChapter}</span>
         </span>
         <span class="col-name" title={link.Name || nameFromurl(link.Url)}>
           {#if !IsDownloading}
-            <span on:click={downloadLink} title="Download This Link" on:keydown>
+            <span on:click={downloadLink} title="Download This Link">
               <Icons name="download" color={link.IsDownloading ? "green" : "lightblue"} />
             </span>
           {/if}
-          <span on:click={editLink} title="Edit Link" on:keydown>
+          <span on:click={editLink} title="Edit Link">
             <Icons name="edit" />
           </span>
-          <span on:click={onExcludeLink} title="Exclude Link From Group Download" on:keydown>
+          <span on:click={onExcludeLink} title="Exclude Link From Group Download">
             <Icons name="files" box="0 0 464 512" color={link.Exclude ? "firebrick" : "#47f046"} />
           </span>
-          <span on:click={removeLink} title="Remove Link" on:keydown>
+          <span on:click={removeLink} title="Remove Link">
             <Icons name="trash" color="firebrick" />
           </span>
           <a href={link.Url} target="_blank">{link.Name || nameFromurl(link.Url)}</a>
