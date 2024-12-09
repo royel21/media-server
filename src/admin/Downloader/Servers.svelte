@@ -126,7 +126,7 @@
   };
 
   const updateDatas = (data, key = "links", link) => {
-    if (link.remove) {
+    if (link?.remove) {
       datas.links = datas.links.filter((lnk) => lnk.Id != link.Id);
     } else {
       datas[key] = data;
