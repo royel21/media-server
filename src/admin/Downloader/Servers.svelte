@@ -125,8 +125,12 @@
     showLinkModal = false;
   };
 
-  const updateDatas = (data, key = "links") => {
-    datas[key] = data;
+  const updateDatas = (data, key = "links", link) => {
+    if (link.remove) {
+      datas.links = datas.links.filter((lnk) => lnk.Id != link.Id);
+    } else {
+      datas[key] = data;
+    }
   };
 
   onMount(async () => {

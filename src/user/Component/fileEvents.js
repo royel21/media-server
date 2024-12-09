@@ -32,7 +32,7 @@ const getElIndex = (element) => {
   return [...document.querySelectorAll(".file")].indexOf(element);
 };
 
-export const scrollItem = (element, behavior = "smooth") => {
+export const scrollItem = (element, behavior = "auto") => {
   if (!element) return;
 
   let itemContainer = element.parentElement;
@@ -40,11 +40,11 @@ export const scrollItem = (element, behavior = "smooth") => {
   let scroll = scrollElement.scrollTop;
   let el_offsetTop = element.offsetTop;
 
-  if (el_offsetTop - scroll < 0) {
+  if (el_offsetTop - scroll < 410) {
     scroll = 0;
   }
 
-  let top = el_offsetTop + element.offsetHeight;
+  let top = el_offsetTop + element.offsetHeight + 20;
   let sctop = scroll + scrollElement.offsetHeight;
   const h = itemContainer.offsetHeight;
 
@@ -61,13 +61,8 @@ export const scrollItem = (element, behavior = "smooth") => {
 const selectElement = (element) => {
   if (element) {
     scrollItem(element);
-
-    let activeEl = document.querySelector(".file.active");
-
-    if (activeEl) activeEl.classList.remove("active");
-
+    document.querySelector(".file.active")?.classList.remove("active");
     element.classList.add("active");
-    element.focus();
   }
   return element;
 };
@@ -103,17 +98,18 @@ const selectByTitle = (title) => {
   } else {
     selectItem(0);
   }
+  document.querySelector(".files-list")?.focus();
 };
 
 const fileKeypress = (e, page, goToPage, title, type) => {
-  let file = document.querySelector(".file");
+  let file = document.querySelector(".file.active");
   let selected = 0;
 
   if (file) {
     let wasProcesed = false;
     let colNum = calCol();
     let totalitem = document.querySelectorAll(".file").length;
-    selectedIndex = getElIndex(file.parentElement.querySelector(".active"));
+    selectedIndex = getElIndex(file);
 
     switch (e.keyCode) {
       case ENTER: {

@@ -20,6 +20,7 @@
   let title = "Home";
   let reload = true;
   let isMounted = true;
+  let fileListRef;
 
   let config = $UserStore.sortTabs.find((st) => st.Name === "Home");
 
@@ -89,7 +90,7 @@
       Reading History
     </span>
   </div>
-  <div class="files-list" on:keydown={handleKeydown}>
+  <div class="files-list" on:keydown={handleKeydown} tabindex="-1">
     {#each pageData.items as { Id, Name, Type, LastChapter, FileCount, FilesType, Status, isRaw }, i}
       <div class="file" id={Id} data-type={Type} data-types={FilesType} tabIndex="0" on:click={handleClick} on:keydown>
         <div class="file-info">
