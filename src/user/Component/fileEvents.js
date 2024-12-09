@@ -113,7 +113,7 @@ const fileKeypress = (e, page, goToPage, title, type) => {
 
     switch (e.keyCode) {
       case ENTER: {
-        if (title !== "Content") ProcessFile(e.target, type);
+        if (title !== "Content") ProcessFile(file, type);
         break;
       }
       case LEFT: {
