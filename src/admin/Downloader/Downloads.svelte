@@ -38,12 +38,16 @@
 
   const loadItems = async (first) => {
     const { items, page, filter } = datas;
-    const result = await apiUtils.post("admin/downloader/links", {
-      items,
-      page,
-      filter: decodeURIComponent(filter),
-      first,
-    });
+    const result = await apiUtils.post(
+      "admin/downloader/links",
+      {
+        items,
+        page,
+        filter: decodeURIComponent(filter),
+        first,
+      },
+      "downloads"
+    );
 
     if (isMounted) {
       if (result.servers) servers = result.servers;

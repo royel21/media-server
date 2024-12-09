@@ -33,13 +33,17 @@
 
   const loadItems = async (first) => {
     const { items, page, filter } = datas;
-    const result = await apiUtils.post("admin/downloader/links", {
-      items,
-      page,
-      filter: decodeURIComponent(filter),
-      ServerId: server.Id || true,
-      first,
-    });
+    const result = await apiUtils.post(
+      "admin/downloader/links",
+      {
+        items,
+        page,
+        filter: decodeURIComponent(filter),
+        ServerId: server.Id || true,
+        first,
+      },
+      "server"
+    );
 
     if (isMounted) {
       if (result.servers) {
@@ -65,7 +69,6 @@
     if (result.valid) {
       servers = servers.filter((ser) => ser.Id.toString() != server.Id);
       server = servers[0];
-      loadItems();
     }
   };
 
@@ -126,13 +129,14 @@
     datas[key] = data;
   };
 
-  onMount(() => {
+  onMount(async () => {
     loading = true;
-    loadItems(true);
+    await loadItems(true);
     socket.emit("download-server", { action: "is-running" });
     return () => {
       isMounted = false;
       apiUtils.cancelQuery();
+      console.log("umount");
     };
   });
 

@@ -34,7 +34,6 @@
       items,
       page,
       filter: decodeURIComponent(filter),
-      IsDownloading: true,
       first: true,
     });
 
@@ -78,8 +77,8 @@
     }
   };
 
-  onMount(() => {
-    loadItems();
+  onMount(async () => {
+    await loadItems();
     socket.on("reload-downloads", loadItems);
     socket.emit("download-server", { action: "is-running" });
     return () => {

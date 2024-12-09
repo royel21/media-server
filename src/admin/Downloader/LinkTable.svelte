@@ -35,7 +35,7 @@
     if (id) {
       const found = datas.links.find((f) => f.Id === +id);
       if (found) {
-        datas.running = true;
+        running = true;
         found.IsDownloading = true;
         socket.emit("download-server", {
           datas: [found.Id],
@@ -103,10 +103,10 @@
   };
 
   const updateRunning = ({ IsRunning }) => {
-    running = IsRunning;
-    if (!IsRunning) {
+    if (!IsRunning && running) {
       loadItems();
     }
+    running = IsRunning;
   };
 
   onMount(() => {
