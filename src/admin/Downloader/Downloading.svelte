@@ -34,6 +34,7 @@
       items,
       page,
       filter: decodeURIComponent(filter),
+      IsDownloading: true,
       first: true,
     });
 

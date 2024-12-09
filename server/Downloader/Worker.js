@@ -241,11 +241,10 @@ const loadLinks = async (Id, bypass) => {
     state.running = true;
     onDownload(bypass).catch(cleanUp).then(cleanUp);
   } else if (!state.hrunning && htemps.length) {
-    console.log("hentais: ", htemps.length, "\n");
     state.hrunning = true;
     downloadNHentais(state).then(cleanUp).catch(cleanUp);
-  } else {
     sendMessage({ text: "nhentai finish" });
+  } else if (!htemps.length && !temps.length) {
     cleanUp();
   }
 };
