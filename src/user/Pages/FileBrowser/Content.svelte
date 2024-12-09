@@ -101,7 +101,7 @@
     }
 
     if (isValidKey(e, open)) {
-      ProcessFile(e.target.querySelector(".file"), "Content");
+      ProcessFile(e.target.querySelector(".active"), "Content");
     }
   };
 
