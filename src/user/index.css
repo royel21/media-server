@@ -115,6 +115,7 @@ button:active {
   z-index: 2;
 }
 
+.file.active .file-info,
 .file-info:hover {
   position: absolute;
   height: fit-content;
