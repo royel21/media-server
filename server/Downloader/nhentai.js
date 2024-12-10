@@ -87,7 +87,7 @@ const download = async (link, page, server, state) => {
         return val.replace(/( )+/g, " ");
       };
 
-      let name = formatName(textContent.replace(/\//g, "-").trim());
+      let name = formatName(textContent.replace(/\//g, "-").replace(/\(([^)]+)\) /i, "")).trim();
 
       let showMore = document.querySelector("#show-all-images-button");
       const tagsDatas = document.querySelectorAll(".tags .tag > span:first-child");
