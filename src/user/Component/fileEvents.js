@@ -40,17 +40,19 @@ export const scrollItem = (element, behavior = "auto") => {
   let scroll = scrollElement.scrollTop;
   let el_offsetTop = element.offsetTop;
 
-  if (el_offsetTop - scroll < 410) {
-    scroll = 0;
+  if (el_offsetTop - scroll < 15) {
+    scroll = el_offsetTop - 15;
   }
 
-  let top = el_offsetTop + element.offsetHeight + 20;
+  let elHeight = element.querySelector(".file-info").offsetHeight + 45;
+  let top = el_offsetTop + elHeight;
   let sctop = scroll + scrollElement.offsetHeight;
-  const h = itemContainer.offsetHeight;
 
   if (top - sctop + 1 > 0) {
-    scroll = top > h ? h : scroll + (top - sctop) + 50;
+    scroll = scroll + (top - sctop);
   }
+
+  console.log(top - sctop, elHeight);
 
   scrollElement.scroll({
     top: scroll,
@@ -60,9 +62,9 @@ export const scrollItem = (element, behavior = "auto") => {
 
 const selectElement = (element) => {
   if (element) {
-    scrollItem(element);
     document.querySelector(".file.active")?.classList.remove("active");
     element.classList.add("active");
+    scrollItem(element);
   }
   return element;
 };

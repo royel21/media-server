@@ -115,7 +115,6 @@ button:active {
   z-index: 2;
 }
 
-.file.active .file-info,
 .file-info:hover {
   position: absolute;
   height: fit-content;
@@ -224,7 +223,6 @@ img[alt]:after {
   padding: 0 5px;
 }
 
-.file.active .file-name,
 .file-info:hover .file-name {
   display: inline-block;
   z-index: 401;
