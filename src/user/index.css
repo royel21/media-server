@@ -223,7 +223,6 @@ img[alt]:after {
   padding: 0 5px;
 }
 
-.file-name:hover,
 .file-info:hover .file-name {
   display: inline-block;
   z-index: 401;
