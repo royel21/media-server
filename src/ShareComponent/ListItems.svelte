@@ -1,15 +1,15 @@
 <script>
-  export let items;
+  export let items = [];
   export let current;
   export let title;
   let clazz = "";
   export { clazz as class };
 </script>
 
-<li class="list-item s-list" id={items[0]?.Id} class:selected={items[0]?.Id === current} tabindex="-1">
+<li class="list-item s-list" class:selected={items[0]?.Id === current} tabindex="-1">
   {title}
   {#if items.length > 1}
-    <span>&gt;</span>
+    <span>&#x25B8;</span>
     <ul class="sub-list">
       {#each items as { Id, Name }}
         <li class={`list-item ${clazz}`} id={Id} class:selected={Id === current} tabindex="-1">
@@ -21,7 +21,7 @@
 </li>
 
 <style>
-  .list-item:hover {
+  .list-item .sub-current {
     background-color: #8e5e00;
   }
   .list-item span {
@@ -44,9 +44,6 @@
   }
   li:not(:last-child) {
     border-bottom: 1px solid;
-  }
-  li:hover {
-    background-color: rgb(2 177 242);
   }
   li:last-child {
     border-radius: 0 0 0.25rem 0.25rem;

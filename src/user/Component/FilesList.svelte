@@ -144,7 +144,7 @@
   <slot name="header" />
   <div class="files-list" on:keydown={handleKeydown} on:click={favClick} tabindex="-1">
     {#each pageData.files as { Id, Name, Type, CurrentPos, Duration, isFav, FilesType, FileCount, LastChapter, Status, CreatedAt, Size, isRaw }}
-      <div class="file" id={Id} data-type={Type} tabIndex="0" in:fade>
+      <div class="file" id={Id} data-type={Type} in:fade>
         <div class="file-info">
           <div class="file-cover usn" on:dblclick|stopPropagation={openFile}>
             <LazyImage cover={getCover(Type, Name, FilesType) + `?v=${ver}`} />

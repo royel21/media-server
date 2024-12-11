@@ -46,17 +46,41 @@
     }
   };
 
+  const handlerNav = (e) => {
+    e.stopPropagation();
+    if ([37, 38, 39, 40].includes(e.keyCode)) {
+      e.preventDefault();
+      const parent = e.target.parentElement;
+      let found;
+      if (e.keyCode === 37 && parent.previousElementSibling) {
+        found = parent.previousElementSibling;
+      }
+
+      if (e.keyCode === 39 && parent.nextElementSibling) {
+        found = parent.nextElementSibling;
+      }
+
+      found?.querySelector("a").focus();
+    }
+  };
+
   onMount(() => {
-    document.addEventListener("keydown", onChangeTab);
+    document.body.addEventListener("keydown", onChangeTab);
+    [...document.querySelectorAll("#menu .tabs > li > a")].forEach((a) => {
+      a.onblur = (e) => {
+        e.target.querySelector(".current")?.classList.remove("current");
+        e.target.querySelector(".sub-current")?.classList.remove("current");
+      };
+    });
   });
 
   onDestroy(() => {
-    document.removeEventListener("keydown", onChangeTab);
+    document.body.removeEventListener("keydown", onChangeTab);
   });
 </script>
 
 <nav id="menu" class="navbar usn" class:hide={menuToggle}>
-  <ul class="navbar-nav tabs">
+  <ul class="navbar-nav tabs" on:keydown={handlerNav}>
     {#each navItems as item}
       {#if filters.includes(item.title)}
         <NavItem {dirs} {item} slot="nav-item" title={item.title} />
@@ -94,7 +118,12 @@
     display: flex;
     justify-content: left;
   }
+  .nav-item :global(a:focus),
   .nav-item:hover {
     background-color: rgb(2 177 242);
+  }
+
+  .nav-item > :global(.current) {
+    background-color: #8e5e00;
   }
 </style>

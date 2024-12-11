@@ -20,7 +20,6 @@
   let title = "Home";
   let reload = true;
   let isMounted = true;
-  let fileListRef;
 
   let config = $UserStore.sortTabs.find((st) => st.Name === "Home");
 
@@ -28,6 +27,7 @@
 
   const loadContent = async (pg, flt = "") => {
     if (reload) {
+      pg = clamp(pg, 0, pageData.totalPages);
       const items = config.Items || getFilesPerPage(3);
       const data = await api.files(["recents", items, pg, encodeURIComponent(flt)], "home");
       if (data.valid && isMounted) {
@@ -92,7 +92,7 @@
   </div>
   <div class="files-list" on:keydown={handleKeydown} tabindex="-1">
     {#each pageData.items as { Id, Name, Type, LastChapter, FileCount, FilesType, Status, isRaw }, i}
-      <div class="file" id={Id} data-type={Type} data-types={FilesType} tabIndex="0" on:click={handleClick} on:keydown>
+      <div class="file" id={Id} data-type={Type} data-types={FilesType} on:click={handleClick} on:keydown>
         <div class="file-info">
           <div class="file-cover" on:dblclick|stopPropagation={openFolder}>
             <LazyImage cover={encodeURI(`/${Type}/${FilesType}/${Name}.jpg`)} />
