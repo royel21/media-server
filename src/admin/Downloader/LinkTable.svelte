@@ -173,8 +173,8 @@
         {#if servers}
           <span class="col-serv">
             <span on:click={editServer} title="Show Site Config"><Icons name="cog" /></span>
-            <a id="serv" href="javascript(0)" on:keydown={handleActon}>
-              <span data-id={link.ServerId} on:click={downloadServer}>{getServName(link.Server)}</span>
+            <a id="serv" href="javascript(0)" on:click|preventDefault={downloadServer} on:keydown={handleActon}>
+              <span data-id={link.ServerId}>{getServName(link.Server)}</span>
             </a>
           </span>
         {/if}
@@ -186,8 +186,8 @@
         </span>
         <span class="col-name" title={link.Name || nameFromurl(link.Url)}>
           {#if !IsDownloading}
-            <a id="dwn" href="javascript(0)" on:keydown={handleActon}>
-              <span on:click={downloadLink} title="Download This Link">
+            <a id="dwn" href="javascript(0)" on:click|preventDefault={downloadLink} on:keydown={handleActon}>
+              <span title="Download This Link">
                 <Icons name="download" color={link.IsDownloading ? "green" : "lightblue"} />
               </span>
             </a>
