@@ -109,6 +109,18 @@
     running = IsRunning;
   };
 
+  const handleActon = (e) => {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      const type = e.target.id;
+      if (type === "dwn") {
+        downloadLink(e);
+      } else {
+        downloadServer(e);
+      }
+    }
+  };
+
   onMount(() => {
     const dmanager = document.querySelector(".d-manager");
 
@@ -161,7 +173,9 @@
         {#if servers}
           <span class="col-serv">
             <span on:click={editServer} title="Show Site Config"><Icons name="cog" /></span>
-            <span data-id={link.ServerId} on:click={downloadServer}>{getServName(link.Server)}</span>
+            <a id="serv" href="javascript(0)" on:keydown={handleActon}>
+              <span data-id={link.ServerId} on:click={downloadServer}>{getServName(link.Server)}</span>
+            </a>
           </span>
         {/if}
         <span class="col-chapt">
@@ -172,9 +186,11 @@
         </span>
         <span class="col-name" title={link.Name || nameFromurl(link.Url)}>
           {#if !IsDownloading}
-            <span on:click={downloadLink} title="Download This Link">
-              <Icons name="download" color={link.IsDownloading ? "green" : "lightblue"} />
-            </span>
+            <a id="dwn" href="javascript(0)" on:keydown={handleActon}>
+              <span on:click={downloadLink} title="Download This Link">
+                <Icons name="download" color={link.IsDownloading ? "green" : "lightblue"} />
+              </span>
+            </a>
           {/if}
           <span on:click={editLink} title="Edit Link">
             <Icons name="edit" />
@@ -185,7 +201,7 @@
           <span on:click={removeLink} title="Remove Link">
             <Icons name="trash" color="firebrick" />
           </span>
-          <a href={link.Url} target="_blank">{link.Name || nameFromurl(link.Url)}</a>
+          <a href={link.Url} target="_blank" tabindex="-1">{link.Name || nameFromurl(link.Url)}</a>
         </span>
         <span class="col-date">{formatDate(new Date(link.Date))}</span>
       </div>
@@ -196,5 +212,12 @@
 <style>
   .hasconsole {
     height: calc(100% - 170px);
+  }
+
+  #serv:focus {
+    text-decoration: underline;
+  }
+  #dwn:focus :global(svg) {
+    filter: drop-shadow(0px 0px 4px rgb(0 255 0 / 0.9));
   }
 </style>
