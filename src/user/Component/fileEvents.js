@@ -44,15 +44,13 @@ export const scrollItem = (element, behavior = "auto") => {
     scroll = el_offsetTop - 15;
   }
 
-  let elHeight = element.querySelector(".file-info").offsetHeight + 45;
+  let elHeight = (element.querySelector(".file-info") || element).offsetHeight + 45;
   let top = el_offsetTop + elHeight;
   let sctop = scroll + scrollElement.offsetHeight;
 
   if (top - sctop + 1 > 0) {
     scroll = scroll + (top - sctop);
   }
-
-  console.log(top - sctop, elHeight);
 
   scrollElement.scroll({
     top: scroll,
