@@ -228,7 +228,7 @@
   $: if (file.CurrentPos) onShow();
 </script>
 
-<div id="manga-viewer" tabIndex="0" class:hide={$ToggleMenu} use:focus>
+<div id="manga-viewer" tabIndex="-1" class:hide={$ToggleMenu} use:focus>
   <span class="fullscreen-progress">
     <Icons name="stickynote" />
     {progress}
