@@ -8,7 +8,7 @@
   export { clazz as class };
 </script>
 
-<li id={current} class="list-item s-list" class:selected={items[0]?.Id === current} on:mouseenter={setAsCurrent}>
+<li id={items[0]?.Id} class="list-item s-list" class:selected={items[0]?.Id === current} on:mouseenter={setAsCurrent}>
   {title}
   {#if items.length > 1}
     <span>&#x25B8;</span>
@@ -52,13 +52,17 @@
     border-radius: 0 0 0.25rem 0.25rem;
   }
 
+  li:first-child {
+    border-radius: 0 0.25rem 0 0;
+  }
+
   .sub-list {
     display: none;
     position: absolute;
     top: 0;
     left: 100%;
     background-color: #343a40;
-    border-radius: 0 0 0.25rem 0.25rem;
+    border-radius: 0 0.25rem 0.25rem 0.25rem;
     z-index: 99;
   }
   .s-list {

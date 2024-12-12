@@ -113,7 +113,7 @@
   onDestroy(() => (menu.style.display = "flex"));
 </script>
 
-<div id="f-content" on:keydown={onKeydown} tabindex="-1">
+<div id="f-content" class="b-content" on:keydown={onKeydown} tabindex="-1">
   <div class="tabs">
     <div class="return-to" on:click={exitFolder} on:keydown>
       <Icons name="reply" />

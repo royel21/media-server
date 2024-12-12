@@ -23,9 +23,9 @@
   ToggleMenu.subscribe((value) => (menuToggle = value));
 
   const onChangeTab = (e) => {
-    const found = document.querySelector("#menu:not(.hide) .tabs a.active");
-    if (found && [nextTab.Key, prevTab.Key].includes(e.keyCode)) {
-      const tab = found.parentElement;
+    const found = document.querySelector(".b-content, .viewer");
+    if (!found && [nextTab.Key, prevTab.Key].includes(e.keyCode)) {
+      const tab = document.querySelector("#menu .tabs a.active").parentElement;
       let item;
       if (isValidKey(e, prevTab)) {
         item = tab.previousElementSibling;

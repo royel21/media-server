@@ -17,6 +17,7 @@
 
   const select = ({ target }) => {
     const id = target.closest("li").id || target.id;
+
     if (id) {
       data.current = id;
       navigate(getPath());

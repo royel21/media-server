@@ -58,7 +58,7 @@
     "puppeteer-extra-plugin-stealth": "^2.11.2",
     "sharp": "^0.33.5",
     "socket.io-client": "^4.5.2",
-    "svelte-routing": "file:modules/svelte-routing",
+    "svelte-routing": "file:./modules/svelte-routing",
     "zip-local": "^0.3.5"
   }
 }
