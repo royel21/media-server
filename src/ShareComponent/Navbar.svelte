@@ -44,12 +44,28 @@
     if (isValidKey(e, logoutKey) && !/content|viewer/i.test(location.pathname)) {
       logout();
     }
+
+    if (e.keyCode === 9 && !found) {
+      e.preventDefault();
+      e.stopPropagation();
+      let i = 0;
+      const elements = [...document.querySelectorAll("a.active, .files-list, input")];
+
+      for (let el of elements) {
+        i++;
+        if (el === document.activeElement) {
+          elements[i % elements.length].focus();
+          i = i % elements.length;
+          break;
+        }
+      }
+    }
   };
 
   const handlerNav = (e) => {
-    e.stopPropagation();
     if ([37, 39].includes(e.keyCode)) {
       e.preventDefault();
+      e.stopPropagation();
       const parent = e.target.parentElement;
       let found;
       if (e.keyCode === 37 && parent.previousElementSibling) {

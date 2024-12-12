@@ -64,7 +64,7 @@
 
     if ([38, 40].includes(e.keyCode)) {
       const nextEl = e.keyCode === 38 ? "previousElementSibling" : "nextElementSibling";
-      if (current.classList.contains("current") && current[nextEl]) {
+      if (current?.classList.contains("current") && current[nextEl]) {
         current.classList.remove("current");
         current[nextEl]?.classList.add("current");
       } else {
