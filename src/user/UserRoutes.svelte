@@ -58,7 +58,7 @@
 {/if}
 
 <Router>
-  <Navbar on:click {navItems} {dirs} filters={["Mangas", "Videos", "Favorites"]}>
+  <Navbar on:click {navItems} {dirs} filters={["Home", "Mangas", "Videos", "Favorites"]}>
     <span class="icon" id="user-label" slot="user">
       <span title="Open Config" class="user-cog" on:click={onShowConfgs}>
         <Icons name="usercog" height="22px" />

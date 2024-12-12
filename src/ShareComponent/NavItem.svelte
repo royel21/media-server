@@ -9,19 +9,21 @@
   export let item;
   export let title = "";
 
-  let data = { items: { others: [], adults: [] }, current: "all" };
+  let data = { items: { others: [], adults: [] }, current: "" };
   let isFav = title === "Favorites";
   let thisLi;
+
+  const getPath = () => `${item.path}${data.current ? "/" + data.current : ""}`;
 
   const select = ({ target }) => {
     const id = target.closest("li").id || target.id;
     if (id) {
       data.current = id;
-      navigate(`${item.path}/${data.current}`);
+      navigate(getPath());
     }
   };
 
-  $: if (dirs.Mangas.length) {
+  $: if (dirs[item.title]?.length) {
     const others = [...dirs[item.title].filter((i) => !i.IsAdult)];
     const adults = [...dirs[item.title].filter((i) => i.IsAdult)];
 
@@ -45,34 +47,50 @@
   const getEl = (q) => thisLi.querySelector(q);
 
   const handlerNav = (e) => {
-    const current = getEl(".sub-current") || getEl(".current") || getEl("li:first-child");
-    const query = current.classList.contains("sub-current") ? "sub-current" : "current";
+    const current = getEl(".current .current") || getEl(".current") || getEl("li:first-child");
 
     if ([37, 39].includes(e.keyCode) && thisLi.querySelector(".current ul")) {
       e.stopPropagation();
-      const { classList } = getEl(".current .sub-current") || getEl(".current li:first-child");
+      const { classList } = getEl(".current .current") || getEl(".current li:first-child");
       if (classList) {
         if (e.keyCode === 39) {
-          classList.add("sub-current");
+          classList.add("current");
         } else {
-          classList.remove("sub-current");
+          classList.remove("current");
         }
       }
     }
 
     if ([38, 40].includes(e.keyCode)) {
       const nextEl = e.keyCode === 38 ? "previousElementSibling" : "nextElementSibling";
-      if (current.classList.contains(query) && current[nextEl]) {
-        current.classList.remove(query);
-        current[nextEl]?.classList.add(query);
+      if (current.classList.contains("current") && current[nextEl]) {
+        current.classList.remove("current");
+        current[nextEl]?.classList.add("current");
       } else {
-        current.classList.add(query);
+        current.classList.add("current");
       }
     }
 
     if (current && e.keyCode === 13) {
       current.click();
     }
+  };
+  const focus = ({ target }) => {
+    target.querySelector("a")?.focus();
+    [...document.querySelectorAll(".current")].forEach((it) => {
+      it.classList.remove("current");
+    });
+    [...document.querySelectorAll(".selected")].forEach((it) => {
+      it.classList.add("current");
+    });
+  };
+
+  const setAsCurrent = ({ target }) => {
+    [...document.querySelectorAll(".current")].forEach((it) => {
+      it.classList.remove("current");
+    });
+    target.classList.add("current");
+    target.parentElement.closest("li").classList.add("current");
   };
 
   afterUpdate(() => {
@@ -86,20 +104,30 @@
   });
 </script>
 
-<li class={`nav-item ${item.title}`} bind:this={thisLi} on:click={select} id={data.current} on:keydown={handlerNav}>
-  <Link to={`${item.path}/${data.current}`} {getProps}>
+<li
+  class={`nav-item ${item.title}`}
+  bind:this={thisLi}
+  on:click={select}
+  id={data.current}
+  on:keydown={handlerNav}
+  on:mouseenter={focus}
+  tabindex="-1"
+>
+  <Link to={getPath()} {getProps}>
     <Icons name={item.class} height="22px" color={item.color} />
     <span class="nav-title">{item.title}</span>
     <ul class="down-list">
       {#if !isFav && dirs[title]?.length > 1}
-        <li class="list-item s-list" id="all" class:selected={"all" === data.current} tabindex="-1">All</li>
+        <li class="list-item s-list" id="all" class:selected={"all" === data.current} on:mouseenter={setAsCurrent}>
+          All
+        </li>
       {/if}
       {#if data.items.adults.length}
-        <ListItems {title} items={data.items.others} current={data.current} />
-        <ListItems title="R18" class="adult" items={data.items.adults} current={data.current} />
+        <ListItems {title} items={data.items.others} current={data.current} {setAsCurrent} />
+        <ListItems title="R18" class="adult" items={data.items.adults} current={data.current} {setAsCurrent} />
       {:else if dirs[title]}
         {#each dirs[title] as { Id, Name }}
-          <li class={`list-item`} id={Id} class:selected={Id === data.current} tabindex="-1">
+          <li class={`list-item`} id={Id} class:selected={Id === data.current}>
             <span>{Name}</span>
           </li>
         {/each}
@@ -118,6 +146,7 @@
     text-align: left;
     background-color: #343a40;
     border-radius: 0 0 0.25rem 0.25rem;
+    z-index: 99;
   }
 
   .down-list li {
@@ -146,11 +175,6 @@
     background-color: rgb(2 177 242);
   }
 
-  .down-list :global(.current),
-  .down-list :global(li:hover) {
-    background-color: #8e5e00;
-  }
-
   .down-list li:last-child {
     border-radius: 0 0 0.25rem 0.25rem;
   }
@@ -159,8 +183,11 @@
     background-color: rgb(11 61 201 / 71%);
   }
 
+  .down-list :global(.current) {
+    background-color: #8e5e00;
+  }
+
   .nav-item > :global(a:focus .down-list),
-  .nav-item:hover .down-list,
   .nav-item :global(.current .sub-list) {
     display: initial !important;
   }

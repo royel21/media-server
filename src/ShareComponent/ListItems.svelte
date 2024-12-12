@@ -2,17 +2,19 @@
   export let items = [];
   export let current;
   export let title;
+  export let setAsCurrent;
+
   let clazz = "";
   export { clazz as class };
 </script>
 
-<li class="list-item s-list" class:selected={items[0]?.Id === current} tabindex="-1">
+<li id={current} class="list-item s-list" class:selected={items[0]?.Id === current} on:mouseenter={setAsCurrent}>
   {title}
   {#if items.length > 1}
     <span>&#x25B8;</span>
     <ul class="sub-list">
       {#each items as { Id, Name }}
-        <li class={`list-item ${clazz}`} id={Id} class:selected={Id === current} tabindex="-1">
+        <li class={`list-item ${clazz}`} id={Id} class:selected={Id === current} on:mouseenter={setAsCurrent}>
           <span>{Name}</span>
         </li>
       {/each}
@@ -41,6 +43,7 @@
     max-width: 100%;
     overflow: hidden;
     display: inline-block;
+    pointer-events: none;
   }
   li:not(:last-child) {
     border-bottom: 1px solid;
@@ -56,6 +59,7 @@
     left: 100%;
     background-color: #343a40;
     border-radius: 0 0 0.25rem 0.25rem;
+    z-index: 99;
   }
   .s-list {
     position: relative;

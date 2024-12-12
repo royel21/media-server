@@ -48,7 +48,7 @@
 
   const handlerNav = (e) => {
     e.stopPropagation();
-    if ([37, 38, 39, 40].includes(e.keyCode)) {
+    if ([37, 39].includes(e.keyCode)) {
       e.preventDefault();
       const parent = e.target.parentElement;
       let found;
@@ -66,11 +66,8 @@
 
   onMount(() => {
     document.body.addEventListener("keydown", onChangeTab);
-    [...document.querySelectorAll("#menu .tabs > li > a")].forEach((a) => {
-      a.onblur = (e) => {
-        e.target.querySelector(".current")?.classList.remove("current");
-        e.target.querySelector(".sub-current")?.classList.remove("current");
-      };
+    [...document.querySelectorAll("tabs a")].forEach((it) => {
+      it.onfocus = () => it.closest("li").focus();
     });
   });
 

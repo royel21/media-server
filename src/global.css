@@ -55,7 +55,12 @@ li {
   padding: 0px 6px;
   cursor: pointer;
   text-align: center;
-  height: calc(100% - 3px);
+  height: 100%;
+}
+
+.nav-item:focus,
+.nav-item:hover {
+  background-color: rgb(2 177 242);
 }
 
 #menu .nav-item {
