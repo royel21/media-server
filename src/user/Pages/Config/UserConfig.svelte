@@ -16,10 +16,19 @@
     { id: "tab-1", name: "Sorting Config", icon: "filter", component: SortConfig },
     { id: "tab-2", name: "Hotkeys", icon: "keyboard", component: Hotkeys },
   ];
+
+  const handleKey = (e) => {
+    if (e.ctrlKey && e.keyCode === 88) {
+      e.stopPropagation();
+      hide();
+    }
+  };
+
+  const focus = (el) => el?.focus();
 </script>
 
 <div class="modal-container" on:click={hideConfig}>
-  <div class="modal-config" transition:fade={{ duration: 200 }}>
+  <div class="modal-config" transition:fade={{ duration: 200 }} use:focus tabindex="-1" on:keydown={handleKey}>
     <Tabs {tabs} bind:tab />
   </div>
 </div>

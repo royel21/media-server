@@ -20,8 +20,8 @@
 
   const onkeydown = (e) => {
     const found = document.querySelector(`.disk-controls .checked`);
-
     if (found && [nextTab.Key, prevTab.Key].includes(e.keyCode)) {
+      console.log(e.keyCode, prevTab, found);
       let item;
       if (isValidKey(e, { ...prevTab, AltKey: true })) {
         item = found.previousElementSibling;
@@ -34,7 +34,9 @@
       if (item) {
         item.querySelector("label")?.click();
       }
+      console.log(item);
       e.preventDefault();
+      e.stopPropagation();
     }
   };
   onMount(() => {
