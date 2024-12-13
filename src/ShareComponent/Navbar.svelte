@@ -45,7 +45,7 @@
       logout();
     }
 
-    if (e.keyCode === 9 && !found) {
+    if (e.keyCode === 9 && !found && !location.pathname.includes("admin")) {
       e.preventDefault();
       e.stopPropagation();
       let i = 0;
