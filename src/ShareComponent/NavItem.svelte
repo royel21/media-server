@@ -189,6 +189,7 @@
   }
 
   .nav-item > :global(a:focus .down-list),
+  .nav-item:hover :global(.down-list),
   .nav-item :global(.current .sub-list) {
     display: initial !important;
   }
