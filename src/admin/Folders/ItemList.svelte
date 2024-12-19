@@ -136,6 +136,7 @@
     position: relative;
     width: 50%;
     padding: 0 10px;
+    height: 99%;
   }
   .list-controls {
     display: flex;

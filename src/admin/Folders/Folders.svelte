@@ -41,17 +41,12 @@
   .card:not(.has-files) :global(#Folders) {
     min-width: 100%;
   }
-  @media screen and (max-width: 600px) {
-    .card,
-    .rows {
-      min-width: 100%;
-    }
-    .card.has-files {
-      min-width: 750px;
-    }
 
-    .card.has-files :global(#Folders) {
-      width: 55%;
+  @media screen and (max-width: 700px) {
+    .card,
+    .card.has-files {
+      width: initial;
+      min-width: 200%;
     }
   }
 </style>
