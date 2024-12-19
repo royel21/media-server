@@ -218,15 +218,6 @@
   <Modal file={folder} {modalType} acept={handleSubmit} hide={hideModal} />
 {/if}
 
-{#if showImage && totalItems}
-  <div class="thumbnail">
-    <img
-      src={`/Folder/${showImage.FilesType}/${encodeURIComponent(showImage?.Name)}.jpg?v=${new Date().getTime()}`}
-      alt="Cover Not Found"
-    />
-  </div>
-{/if}
-
 <ItemList
   title="Folders"
   class="col-6"
@@ -271,6 +262,15 @@
     >
   </span>
 </ItemList>
+
+{#if showImage && totalItems}
+  <div class="thumbnail">
+    <img
+      src={`/Folder/${showImage.FilesType}/${encodeURIComponent(showImage?.Name)}.jpg?v=${new Date().getTime()}`}
+      alt="Cover Not Found"
+    />
+  </div>
+{/if}
 
 <style>
   .create-folder :global(svg) {

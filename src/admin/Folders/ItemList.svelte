@@ -160,14 +160,6 @@
   }
 
   @media screen and (max-width: 600px) {
-    #Folders {
-      border-left: 1px solid;
-      max-width: 60%;
-    }
-    #Files {
-      width: 40%;
-    }
-
     .controls h4 strong {
       display: none;
     }
