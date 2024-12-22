@@ -157,7 +157,7 @@
           <span class="next-page" on:click={NextFile.action}>
             <Icons name="arrowcircleright" />
           </span>
-          <span class="btn-screen" on:click={fullScreen}>
+          <span class="btn-screen" on:click={Fullscreen.action}>
             <Icons name="expandarrow" />
           </span>
           <span class="v-vol">
