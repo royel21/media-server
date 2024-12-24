@@ -149,7 +149,7 @@ export const adultEvalPage = async (query) => {
   const paras = document.querySelectorAll(query.Desc);
   let Description = (paras[2] || paras[1] || paras[0] || "").innerText?.replace(/You are reading .*\\n\\n\\n/g, "");
 
-  if (query.Name.includes("mangas.in")) {
+  if (query.Name.includes("m440.in")) {
     while (document.querySelector("ul .caret")) {
       document.querySelector("ul .caret")?.parentElement?.onclick();
     }

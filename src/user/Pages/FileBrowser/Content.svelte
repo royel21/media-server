@@ -92,7 +92,7 @@
     }
 
     if (isValidKey(e, KeyExit)) {
-      document.querySelector(".exit").click();
+      exitFolder();
     }
 
     if (isValidKey(e, KeyContinue)) {
