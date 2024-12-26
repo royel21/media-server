@@ -81,7 +81,7 @@
   const changeVol = (val) => {
     let newVol = player.volume + val;
     player.volume = newVol < 0 ? 0 : newVol;
-    window.localStorage.setItem("vol", player.volume);
+    mConfig.volume = player.volume;
   };
 
   SkipForward.action = () => (player.currentTime += 5);
@@ -123,8 +123,11 @@
     window.addEventListener("fullscreenchange", onFullscreen);
     const tconfig = window.localStorage.getObject(configTag);
     if (tconfig) {
-      mConfig = tconfig;
+      for (let k of Object.keys(tconfig)) {
+        mConfig[k] = tconfig[k];
+      }
       player.muted = mConfig.muted;
+      player.volume = mConfig.volume;
     }
 
     return () => {
