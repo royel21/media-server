@@ -66,24 +66,26 @@ export const getFilesPerPage = (i) => {
 };
 
 export const ProcessFile = (file, type, title) => {
-  const folderId = file.id;
-  const { pathname } = location;
-  const types = file.dataset.types;
-  saveId(title, folderId);
-  switch (file.dataset.type) {
-    case "Manga":
-    case "Video": {
-      saveReturnPath("open-folder", pathname);
+  if (file?.id) {
+    const folderId = file.id;
+    const { pathname } = location;
+    const types = file.dataset.types;
+    saveId(title, folderId);
+    switch (file.dataset.type) {
+      case "Manga":
+      case "Video": {
+        saveReturnPath("open-folder", pathname);
 
-      let segment = pathname.replace("content", "viewer").split("/").slice(0, 4);
-      let url = `${segment.join("/")}/${folderId}`;
-      navigate(url);
-      break;
-    }
-    default: {
-      saveReturnPath("to-menu", pathname);
-      type = type || types || pathname.split("/")[1];
-      navigate(`/${type}/content/${folderId}/`);
+        let segment = pathname.replace("content", "viewer").split("/").slice(0, 4);
+        let url = `${segment.join("/")}/${folderId}`;
+        navigate(url);
+        break;
+      }
+      default: {
+        saveReturnPath("to-menu", pathname);
+        type = type || types || pathname.split("/")[1];
+        navigate(`/${type}/content/${folderId}/`);
+      }
     }
   }
 };

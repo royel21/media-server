@@ -1,5 +1,5 @@
 <script>
-  import { onMount, createEventDispatcher } from "svelte";
+  import { onMount, createEventDispatcher, getContext } from "svelte";
 
   import Slider from "./Slider.svelte";
   import { setfullscreen, formatTime } from "../pagesUtils";
@@ -16,12 +16,15 @@
   const { NextFile, PrevFile, GotoStart, GotoEnd, PlayOrPause, FastForward, FastBackward } = KeyMap;
 
   const dispatch = createEventDispatcher();
-  let mConfig = { time: false, volume: 0.5, pause: false, muted: false };
+  let mConfig = { volume: 0.5, pause: false, muted: false };
   let player = {};
   let progress;
   let isFullScreen = false;
   let controls;
   let battLevel;
+  let isNextFile = true;
+  const user = getContext("User");
+  const configTag = `${user.username}-playerconfig`;
 
   const onReturn = () => dispatch("returnBack");
 
@@ -78,6 +81,7 @@
   const changeVol = (val) => {
     let newVol = player.volume + val;
     player.volume = newVol < 0 ? 0 : newVol;
+    window.localStorage.setItem("vol", player.volume);
   };
 
   SkipForward.action = () => (player.currentTime += 5);
@@ -104,12 +108,32 @@
       setGesture(player, onPlay);
     }
     player.currentTime = file.CurrentPos;
+    player.onended = () => {
+      clearTimeout(isNextFile);
+      isNextFile = setTimeout(() => {
+        if (player.ended) {
+          NextFile.action();
+        }
+      }, 4000);
+    };
   };
 
   onMount(() => {
+    clearTimeout(isNextFile);
     window.addEventListener("fullscreenchange", onFullscreen);
-    return () => window.removeEventListener("fullscreenchange", onFullscreen);
+    const tconfig = window.localStorage.getObject(configTag);
+    if (tconfig) {
+      mConfig = tconfig;
+      player.muted = mConfig.muted;
+    }
+
+    return () => {
+      window.localStorage.setObject(configTag, mConfig);
+      window.removeEventListener("fullscreenchange", onFullscreen);
+    };
   });
+
+  $: mConfig.muted = player.muted;
 </script>
 
 {#if file.Id}
@@ -352,6 +376,11 @@
 
     .player-btns *:not(.v-volume) {
       margin: 0 5px;
+    }
+  }
+  @media screen and (max-width: 480px) {
+    .v-vol > input {
+      width: 120px;
     }
   }
 </style>
