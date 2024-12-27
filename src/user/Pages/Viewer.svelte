@@ -27,7 +27,7 @@
   const { NextFile, PrevFile, Exit, ShowList } = KeyMap;
   let files = [];
   let playList = [];
-  let file = { Name: "", Type: "", Cover: "" };
+  let file = { Id: fileId, Name: "", Type: "", Cover: "" };
   let viewer;
   let fileIndex = -1;
   let folderName = "";
@@ -51,9 +51,11 @@
     if (playList.length) {
       let temp = playList.findIndex((f) => f.Id === fileId) + dir;
       if (temp > -1 && temp < playList.length) {
-        fileIndex = temp;
         await saveFile();
-        navigate(`/${basePath}/${playList[fileIndex].Id}`);
+        if (playList[temp].Id) {
+          fileIndex = temp;
+          navigate(`/${basePath}/${playList[fileIndex].Id}`);
+        }
       }
     }
   };
@@ -96,17 +98,6 @@
     file.CurrentPos = page;
   };
 
-  $: if (file.Id != lastId) {
-    lastId = file.Id;
-    showFileName();
-    socket?.emit("recent-folder", { CurrentFile: fileId, FolderId: folderId });
-  }
-
-  $: if (playList.length > 0) {
-    file = files.find((f) => f.Id === fileId) || files[0];
-    fileIndex = playList.findIndex((f) => f.Id === fileId);
-  }
-
   const removeFile = async () => {
     socket.emit("file-work", { action: "removeFile", data: { Id: [fileId], Del: true, viewer: true } });
   };
@@ -129,14 +120,14 @@
     }
     return folderName + " -";
   };
-  onMount(async () => {
-    NextFile.action = () => changeFile(1);
-    PrevFile.action = () => changeFile(-1);
-    Exit.action = returnBack;
-    ShowList.action = () => {
-      document.querySelector("#btn-playlist")?.click();
-    };
+  NextFile.action = () => changeFile(1);
+  PrevFile.action = () => changeFile(-1);
+  Exit.action = returnBack;
+  ShowList.action = () => {
+    document.querySelector("#btn-playlist")?.click();
+  };
 
+  onMount(async () => {
     let data = await apiUtils.post(`viewer/folder`, { id: folderId });
     if (!data.fail) {
       folderName = data.Name;
@@ -158,6 +149,19 @@
   });
 
   menu.style.display = "none";
+
+  $: if (file.Id != lastId) {
+    lastId = file.Id;
+    folderId = lastId;
+    showFileName();
+
+    socket?.emit("recent-folder", { CurrentFile: fileId, FolderId: folderId });
+  }
+
+  $: if (playList.length > 0) {
+    file = files.find((f) => f.Id === fileId) || files[0];
+    fileIndex = playList.findIndex((f) => f.Id === fileId);
+  }
 </script>
 
 <div class="viewer" bind:this={viewer} class:video={isVideo(file)} tabindex="-1">
