@@ -1,7 +1,7 @@
 import { isValidKey } from "src/ShareComponent/utils";
 
-export const isVideo = (file) => file.Type.includes("Video");
-export const isManga = (file) => file.Type.includes("Manga");
+export const isVideo = (file) => file?.Type.includes("Video");
+export const isManga = (file) => file?.Type.includes("Manga");
 /**
  * Format a number to a string in the format of HH:MM:SS
  *

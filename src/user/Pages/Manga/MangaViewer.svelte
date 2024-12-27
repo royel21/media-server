@@ -166,29 +166,12 @@
     loadImages(file.CurrentPos - 2, 8);
   }
 
-  const onConnect = () => loadImages(file.CurrentPos - 2, 8);
-  const onDisconnect = () => (viewerState.loading = false);
-
-  onMount(() => {
-    SkipForward.action = nextPage;
-    SkipBack.action = prevPage;
-    GotoStart.action = () => jumpTo(0);
-    GotoEnd.action = () => jumpTo(file.Duration);
-    ToggleControlBar.action = () => updateToggleMenu();
-    socket.on("connect", onConnect);
-    socket.on("image-loaded", onImageData);
-    socket.on("disconnect", onDisconnect);
-    return () => {
-      socket.off("connect", onConnect);
-      socket.off("image-loaded", onImageData);
-      socket.off("disconnect", onDisconnect);
-    };
-  });
-
   afterUpdate(() => {
     if (file.Id !== viewerState.lastfId) {
       viewerState.lastfId = file.Id;
-      scrollInView(file.CurrentPos);
+      setTimeout(() => {
+        scrollInView(file.CurrentPos);
+      }, 50);
     }
 
     if (webtoon && !viewerState.loading && viewer) {
@@ -215,11 +198,25 @@
     tout = setTimeout(() => changeOpacity(0), 3000);
   };
 
+  const onConnect = () => loadImages(file.CurrentPos - 2, 8);
+  const onDisconnect = () => (viewerState.loading = false);
+
   onMount(() => {
+    SkipForward.action = nextPage;
+    SkipBack.action = prevPage;
+    GotoStart.action = () => jumpTo(0);
+    GotoEnd.action = () => jumpTo(file.Duration);
+    ToggleControlBar.action = () => updateToggleMenu();
+    socket.on("connect", onConnect);
+    socket.on("image-loaded", onImageData);
+    socket.on("disconnect", onDisconnect);
     elements = [...document.querySelectorAll("#btn-playlist, .fullscreen-progress, .info")];
     document.addEventListener("touchmove", onShow);
     document.addEventListener("mousemove", onShow);
     return () => {
+      socket.off("connect", onConnect);
+      socket.off("image-loaded", onImageData);
+      socket.off("disconnect", onDisconnect);
       document.removeEventListener("touchmove", onShow);
       document.removeEventListener("mousemove", onShow);
     };

@@ -27,7 +27,7 @@
   const { NextFile, PrevFile, Exit, ShowList } = KeyMap;
   let files = [];
   let playList = [];
-  let file = { Id: fileId, Name: "", Type: "", Cover: "" };
+  let file = { Name: "", Type: "", Cover: "" };
   let viewer;
   let fileIndex = -1;
   let folderName = "";
@@ -128,19 +128,17 @@
   };
 
   onMount(async () => {
-    let data = await apiUtils.post(`viewer/folder`, { id: folderId });
-    if (!data.fail) {
-      folderName = data.Name;
-      isManhwa = data.isManhwa;
-      playList = files = data.files;
-      if (playList.length) {
-        window.title = playList[0]?.Cover?.split("/")[2] || "";
-      }
-    }
-
+    socket.on("file-removed", onFileRemove);
     document.body.addEventListener("keydown", handleKeyboard);
 
-    socket.on("file-removed", onFileRemove);
+    let data = await apiUtils.post(`viewer/folder`, { id: folderId });
+    if (!data.fail) {
+      isManhwa = data.isManhwa;
+      folderName = data.Name;
+      window.title = folderName;
+      playList = files = data.files;
+      fileIndex = data.files.findIndex((f) => f.Id === fileId);
+    }
   });
 
   onDestroy(() => {
@@ -152,16 +150,11 @@
 
   $: if (file.Id != lastId) {
     lastId = file.Id;
-    folderId = lastId;
     showFileName();
 
     socket?.emit("recent-folder", { CurrentFile: fileId, FolderId: folderId });
   }
-
-  $: if (playList.length > 0) {
-    file = files.find((f) => f.Id === fileId) || files[0];
-    fileIndex = playList.findIndex((f) => f.Id === fileId);
-  }
+  $: if (playList.length) file = playList[fileIndex || 0];
 </script>
 
 <div class="viewer" bind:this={viewer} class:video={isVideo(file)} tabindex="-1">
@@ -183,7 +176,7 @@
   {:else}
     <MangaViewer
       {viewer}
-      {file}
+      bind:file
       {isManhwa}
       on:changefile={changeFile}
       on:returnBack={returnBack}
