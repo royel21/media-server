@@ -44,7 +44,6 @@
 
   const selectFile = async ({ target: { id } }) => {
     await saveFile();
-    fileIndex = playList.findIndex((f) => f.Id === id);
     navigate(`/${basePath}/${id}`);
   };
 
@@ -52,9 +51,8 @@
     if (playList.length) {
       let temp = playList.findIndex((f) => f.Id === fileId) + dir;
       if (temp > -1 && temp < playList.length) {
-        await saveFile();
         if (playList[temp].Id) {
-          fileIndex = temp;
+          await saveFile();
           navigate(`/${basePath}/${playList[fileIndex].Id}`);
         }
       }
@@ -110,7 +108,7 @@
         files = files.filter((f) => f.Id !== temp.Id);
         playList = playList.filter((f) => f.Id !== temp.Id);
         if (fileIndex === playList.length && fileIndex > 0) fileIndex--;
-        fileId = playList[fileIndex].Id;
+        navigate(`/${basePath}/${playList[fileIndex].Id}`);
       }
     }
   };
@@ -138,7 +136,6 @@
       folderName = data.Name;
       window.title = folderName;
       playList = files = data.files;
-      fileIndex = data.files.findIndex((f) => f.Id === fileId);
     }
   });
 
@@ -149,13 +146,17 @@
 
   menu.style.display = "none";
 
-  $: if (file.Id != lastId) {
+  $: if (fileId != lastId) {
     lastId = file.Id;
     showFileName();
 
     socket?.emit("recent-folder", { CurrentFile: fileId, FolderId: folderId });
   }
-  $: if (playList.length) file = playList[fileIndex || 0];
+
+  $: if (playList.length) {
+    fileIndex = playList.findIndex((f) => f.Id === fileId);
+    file = playList[fileIndex];
+  }
 </script>
 
 <div class="viewer" bind:this={viewer} class:video={isVideo(file)} tabindex="-1">
