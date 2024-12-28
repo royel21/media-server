@@ -361,7 +361,7 @@
     }
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 700px) {
     .v-vol {
       position: initial;
     }
