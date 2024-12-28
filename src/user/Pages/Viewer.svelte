@@ -49,11 +49,11 @@
 
   const changeFile = async (dir = 0) => {
     if (playList.length) {
-      let temp = playList.findIndex((f) => f.Id === fileId) + dir;
+      let temp = playList.findIndex((f) => f.Id === file.Id) + dir;
       if (temp > -1 && temp < playList.length) {
         if (playList[temp].Id) {
           await saveFile();
-          navigate(`/${basePath}/${playList[fileIndex].Id}`);
+          navigate(`/${basePath}/${playList[temp].Id}`);
         }
       }
     }
