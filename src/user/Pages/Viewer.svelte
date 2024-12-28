@@ -44,6 +44,7 @@
 
   const selectFile = async ({ target: { id } }) => {
     await saveFile();
+    fileIndex = playList.findIndex((f) => f.Id === id);
     navigate(`/${basePath}/${id}`);
   };
 
