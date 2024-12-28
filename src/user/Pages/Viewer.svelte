@@ -146,7 +146,7 @@
 
   menu.style.display = "none";
 
-  $: if (fileId != lastId) {
+  $: if (file.Id != lastId) {
     lastId = file.Id;
     showFileName();
 
