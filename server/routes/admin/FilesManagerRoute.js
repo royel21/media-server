@@ -2,11 +2,18 @@ import { Router } from "express";
 import db from "../../models/index.js";
 
 import { getFilter } from "../utils.js";
-import { Op, where } from "sequelize";
+import { Op } from "sequelize";
 import fs from "fs-extra";
 import path from "node:path";
+import { getWatchedDirs, getWatchFiles, removeWatchedDir, removeWatchedFile } from "./Watcher.js";
 
 const routes = Router();
+
+routes.get("/get-watched-dirs", getWatchedDirs);
+routes.get("/remove-watched-dir/:Id", removeWatchedDir);
+
+routes.get("/remove-watched-file/:Id", removeWatchedFile);
+routes.get("/get-watched-files/:page/:items/:filter?", getWatchFiles);
 
 routes.get("/:page/:items/:filter?", async (req, res) => {
   const { page, items, filter } = req.params;

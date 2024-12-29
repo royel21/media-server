@@ -9,6 +9,7 @@
   export let page = 1;
   export let totalPages = 0;
   export let hideFL = false;
+  export let full = false;
   const color = "#007bff";
 
   let showinput = false;
@@ -69,7 +70,7 @@
 </script>
 
 {#if totalPages > 1}
-  <div id="pager" class="usn" on:click={pagerClick}>
+  <div id="pager" class="usn" on:click={pagerClick} class:full>
     <ul class="pagination">
       <li id="first-page" class="page-link" class:d-none={hideFL}>
         <Icons name="angledoubleleft" {color} />
@@ -183,16 +184,16 @@
     padding: 0 9px;
   }
   @media screen and (max-width: 640px) {
-    #last-page,
-    #first-page {
+    #pager:not(.full) #last-page,
+    #pager:not(.full) #first-page {
       display: none;
     }
-    #prev-page {
+    #pager:not(.full) #prev-page {
       border-top-left-radius: 0.25rem;
       border-bottom-left-radius: 0.25rem;
     }
 
-    #next-page {
+    #pager:not(.full) #next-page {
       border-top-right-radius: 0.25rem;
       border-bottom-right-radius: 0.25rem;
     }

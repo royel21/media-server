@@ -12,6 +12,7 @@
 
   const menuItems1 = [
     { Id: "scanDirectory", Name: "Add to Directories" },
+    { Id: "dirScan", Name: "Add to Watcher" },
     { Id: "createDir", Name: "Create Folder" },
     { Id: "remFolder", Name: "Rename Folder" },
     { Id: "cleanupVideos", Name: "Clean Videos" },
@@ -20,6 +21,7 @@
   ];
   const menuItems2 = [
     { Id: "scanDirectory", Name: "Add to Directories" },
+    { Id: "dirScan", Name: "Add to Watcher" },
     { Id: "createDir", Name: "Create Folder" },
     { Id: "cleanupVideos", Name: "Clean Videos" },
   ];
@@ -37,6 +39,12 @@
       socket.emit("file-work", { action: "workVideos", data });
     }
     showCleanupModal = false;
+  };
+
+  const addToWatcher = (data) => {
+    if (data.Path) {
+      socket.emit("file-work", { action: "dirScan", data });
+    }
   };
 
   const hideRename = () => (showRename = false);
@@ -70,6 +78,7 @@
 
     const actions = {
       scanDirectory: () => scanDir(item),
+      dirScan: () => addToWatcher(item),
       createDir: () => (showCreateDir = item),
       cleanupVideos: () => (showCleanupModal = item),
       removeDFolder: () => (showConfirm = item),

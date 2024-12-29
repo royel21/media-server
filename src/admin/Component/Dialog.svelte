@@ -35,7 +35,9 @@
         </p>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn">{btnOk}</button>
+        {#if btnOk}
+          <button type="submit" class="btn">{btnOk}</button>
+        {/if}
         <button type="button" class="btn" on:click={cancel}>Cancel</button>
       </div>
     </form>

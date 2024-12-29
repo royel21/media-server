@@ -21,6 +21,7 @@ if (os.platform().includes("win32")) {
         isHidden: f[0] == ".",
         Extension: !data.isDirectory() ? f.split(".").pop() : "",
         LastModified: data.mtime,
+        Path: dir,
       };
     };
     if (oneFile) {
@@ -120,6 +121,7 @@ ListFilesRO = (dir) => {
           isDirectory: true,
           Size: 0,
           LastModified: f.LastModified,
+          Path: f.Path,
         };
         files.push(f2);
       } else {

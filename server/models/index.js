@@ -153,6 +153,8 @@ db.init = async (force) => {
   }
 };
 
+db.init();
+
 export const createdb = async () => {
   if (dbConnector === "mariadb") {
     const sequelize = new Sequelize("", dbUser, dbPassword, { dialect: dbConnector, host: dbHost });

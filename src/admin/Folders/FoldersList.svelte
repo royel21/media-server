@@ -245,9 +245,9 @@
       <Icons name={showGenres ? "eyeslash" : "eye"} box="0 0 612 512" />
     </span>
   </span>
-  <div class="path-tag" slot="first-tag">
+  <div class="path-tag" slot="first-tag" style={`top:${fullPathPos.y}px;`}>
     {#if showImage}
-      <span id="f-path" style={`top:${fullPathPos.y}px;`}>
+      <span id="f-path">
         {showImage?.Path}
       </span>
     {/if}
@@ -278,10 +278,6 @@
     width: 43px;
     top: 3px;
   }
-  .path-tag {
-    position: relative;
-    width: 100%;
-  }
   .thumbnail {
     position: absolute;
     right: 18px;
@@ -296,22 +292,6 @@
   .thumbnail img {
     max-width: 200px;
     object-fit: contain;
-  }
-  #f-path {
-    display: inline-block;
-    position: absolute;
-    z-index: 99;
-    background-color: rgb(88, 86, 86);
-    font-size: 14px;
-    font-weight: 600;
-    color: white;
-    padding: 1px 4px;
-    border-radius: 0.25rem;
-    border: 1px solid white;
-    pointer-events: none;
-    left: 2px;
-    width: max-content;
-    max-width: 99%;
   }
 
   .dir-list {

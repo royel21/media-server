@@ -12,5 +12,20 @@
       "type": "image/png",
       "sizes": "256x256"
     }
+  ],
+  "screenshots": [
+    {
+      "src": "home.jpg",
+      "sizes": "1281x720",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "home.jpg",
+      "sizes": "1281x720",
+      "type": "image/png",
+      "purpose": "any",
+      "form_factor": "wide"
+    }
   ]
 }

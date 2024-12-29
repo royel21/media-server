@@ -5,6 +5,7 @@ import { createFolder, moveFiles, removeFiles, renFile } from "./fileHelpers.js"
 import { moveToDir, remFolder, removeDFolder, workVideos } from "./videoHelper.js";
 import { createDir } from "../Downloader/utils.js";
 import defaultConfig from "../default-config.js";
+import { dirScan } from "./FolderWatcher.js";
 
 const sendMessage = (event, message) => {
   process.send({ event, message });
@@ -178,6 +179,7 @@ const actions = {
   createFolder,
   createFolderThumb,
   renFile,
+  dirScan,
 };
 
 const works = {

@@ -35,3 +35,5 @@ export const handlerPaste = async (item, key, sept, ref) => {
     console.log(error);
   }
 };
+
+export const formatSize = (size) => (size / 1024 / 1024 / 1024).toFixed(3);

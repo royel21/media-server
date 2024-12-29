@@ -3,12 +3,14 @@
   import Tools from "./Tools.svelte";
   import Tags from "./Tags.svelte";
   import Tabs from "src/ShareComponent/Tabs.svelte";
+  import Files from "./Files.svelte";
 
   export let tab = "tab-1";
 
   const tabs = [
     { id: "tab-1", name: "Tools", icon: "tools", component: Tools },
     { id: "tab-2", name: "Tags", icon: "tags", component: Tags },
+    { id: "tab-3", name: "Files", icon: "file", component: Files },
   ];
 
   $: {

@@ -196,6 +196,39 @@ input[type="radio"]:checked+label span {
   padding: 5px 8px;
 }
 
+.path-tag {
+  position: absolute;
+  z-index: 99;
+  text-align: center;
+  width: 96%;
+}
+
+#f-path {
+  display: inline-block;
+  background-color: rgb(88, 86, 86);
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  padding: 1px 4px;
+  border-radius: 0.25rem;
+  border: 1px solid white;
+  pointer-events: none;
+  width: max-content;
+  max-width: 99%;
+}
+
+#f-path::after {
+  content: " ";
+  position: absolute;
+  top: -4px;
+  transform: rotate(45deg);
+  width: 10px;
+  height: 10px;
+  background-color: rgb(88, 86, 86);
+  left: calc(50% - 6px);
+  z-index: 0;
+}
+
 @media screen and (max-height: 700px) {
   .modal-container {
     padding-top: 110px;
