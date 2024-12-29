@@ -11,6 +11,7 @@
   let filter = "";
   let showPath = null;
   let showWatchList = false;
+  let ref;
   let pager = { page: 1, totalPages: 0, totalitems: 0, items: window.localStorage.getItem("w-items") || 100 };
 
   const applyFilter = async ({ detail }) => {
@@ -41,6 +42,7 @@
       pager.totalPages = data.totalPages;
       pager.totalItems = data.totalItems;
       items = data.files;
+      ref.scroll(0, 0);
     }
   };
 
@@ -89,7 +91,7 @@
     <Filter {filter} on:filter={applyFilter} />
     <span class="bagde">{pager.totalItems}</span>
   </div>
-  <div class="list-container">
+  <div class="list-container" bind:this={ref}>
     <ul class="list-group text-dark" on:mousemove={onShowPath} on:mouseleave={() => (showPath = null)}>
       {#if items.length < 1}
         <li class="list-group-item empty-list">Not Tags Found</li>
