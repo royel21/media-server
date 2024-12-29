@@ -121,7 +121,6 @@ ListFilesRO = (dir) => {
           isDirectory: true,
           Size: 0,
           LastModified: f.LastModified,
-          Path: f.Path,
         };
         files.push(f2);
       } else {

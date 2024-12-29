@@ -107,8 +107,12 @@
       if (temp) {
         files = files.filter((f) => f.Id !== temp.Id);
         playList = playList.filter((f) => f.Id !== temp.Id);
-        if (fileIndex === playList.length && fileIndex > 0) fileIndex--;
-        navigate(`/${basePath}/${playList[fileIndex].Id}`);
+        if (playList.length) {
+          fileId = playList[fileIndex - 1].Id;
+          navigate(`/${basePath}/${fileId}`, { replace: true });
+        } else {
+          returnBack();
+        }
       }
     }
   };
@@ -146,16 +150,16 @@
 
   menu.style.display = "none";
 
+  $: if (playList.length) {
+    fileIndex = playList.findIndex((f) => f.Id === fileId);
+    file = playList[fileIndex];
+  }
+
   $: if (file.Id != lastId) {
     lastId = file.Id;
     showFileName();
 
     socket?.emit("recent-folder", { CurrentFile: fileId, FolderId: folderId });
-  }
-
-  $: if (playList.length) {
-    fileIndex = playList.findIndex((f) => f.Id === fileId);
-    file = playList[fileIndex];
   }
 </script>
 
