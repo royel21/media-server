@@ -65,6 +65,8 @@
         Path: found.Path,
         y: bb.top - 70,
       };
+    } else {
+      showPath = null;
     }
   };
 
