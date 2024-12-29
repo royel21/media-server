@@ -108,7 +108,7 @@
         files = files.filter((f) => f.Id !== temp.Id);
         playList = playList.filter((f) => f.Id !== temp.Id);
         if (playList.length) {
-          fileId = playList[fileIndex - 1].Id;
+          fileId = playList[fileIndex ? fileIndex - 1 : 0].Id;
           navigate(`/${basePath}/${fileId}`, { replace: true });
         } else {
           returnBack();

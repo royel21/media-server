@@ -8,7 +8,7 @@ const recentFolder = async ({ FolderId, CurrentFile }, user) => {
       });
       await recent[0].update({ LastRead: new Date(), CurrentFile: CurrentFile });
     } catch (error) {
-      console.log("update-recent-error", error);
+      // console.log("update-recent-error", error);
     }
   }
 };
@@ -21,7 +21,7 @@ const updateFilePos = async (data, user) => {
       });
       await recent[0].update({ LastPos: data.CurrentPos || 0 });
     } catch (error) {
-      console.error(error?.Message);
+      // console.error(error?.Message);
     }
   }
 };
