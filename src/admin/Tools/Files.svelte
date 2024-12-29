@@ -16,8 +16,10 @@
 
   const applyFilter = async ({ detail }) => {
     filter = detail;
+    pager.page = 1;
     load();
   };
+
   const onRemove = async ({ currentTarget }) => {
     const id = currentTarget.closest("li").id;
     const found = items.find((d) => d.Id === +id);
