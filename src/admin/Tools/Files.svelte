@@ -44,7 +44,7 @@
     }
   };
 
-  const gotopage = ({ detail }) => {
+  const goToPage = ({ detail }) => {
     pager.page = detail;
     load();
   };
@@ -110,7 +110,7 @@
         <span id="d-items" class="input-group-text"><Icons name="list" color="black" box="0 0 512 512" /></span>
         <input type="number" class="form-control" value={pager.items} on:change={changeItems} />
       </div>
-      <Pagination page={pager.page} totalPages={pager.totalPages} {gotopage} full={true} />
+      <Pagination page={pager.page} totalPages={pager.totalPages} on:gotopage={goToPage} full={true} />
     </div>
   {/if}
 </div>
