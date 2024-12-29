@@ -129,7 +129,7 @@
   }
 
   #tag-list .list-container {
-    overflow-y: auto;
+    overflow: auto;
     background-color: white;
     border-radius: 5px;
     margin-bottom: 8px;
@@ -150,7 +150,6 @@
   #tag-list .list-group-item {
     position: relative;
     white-space: nowrap;
-    overflow-x: hidden;
     text-overflow: ellipsis;
     padding: 4px;
   }
