@@ -25,7 +25,6 @@
     const found = items.find((d) => d.Id === +id);
     if (found) {
       const result = await apiUtils.admin(["files", "remove-watched-file", found.Id]);
-      console.log(result);
       if (result.valid) {
         items = items.filter((d) => d.Id !== found.Id);
       }
