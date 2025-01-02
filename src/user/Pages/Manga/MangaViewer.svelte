@@ -1,6 +1,6 @@
 <script>
   import { getContext, createEventDispatcher, afterUpdate, onMount } from "svelte";
-  import { clamp } from "src/ShareComponent/utils";
+  import { clamp, debounce } from "src/ShareComponent/utils";
   import { setfullscreen } from "../pagesUtils";
   import { scrollInView, getEmptyIndex } from "./mangaUtils";
   import { PageObserver, disconnectObvrs, scrollImageLoader } from "./Observers";
@@ -26,7 +26,7 @@
   let webtoon = $ConfigStore.Viewer.manga.webtoon;
   let config = $ConfigStore.Viewer.manga;
   let progress = "";
-  let images = [file.Duration];
+  let images = [];
   let viewerRef;
   let inputPage;
   let isFullscreen = false;
@@ -38,7 +38,7 @@
     lastId: file?.Id,
   };
   //emptyImage observer
-  const loadImages = (pg, toPage, dir = 1) => {
+  const loadImages = debounce((pg, toPage, dir = 1) => {
     if (file.Id && !viewerState.loading && !isNaN(pg) && !isNaN(toPage)) {
       const indices = getEmptyIndex(images, pg, toPage, dir || 1, file.Duration);
       if (indices.length) {
@@ -46,10 +46,10 @@
         socket.emit("loadzip-image", { Id: file.Id, indices });
       }
     }
-  };
+  }, 100);
 
   const changePage = (dir, action) => {
-    let pg = file.CurrentPos + dir;
+    const pg = file.CurrentPos + dir;
     if (pg > -1 && pg < file.Duration) {
       if (webtoon) {
         scrollInView(pg);
@@ -247,7 +247,7 @@
           alt={`Loading... Image ${file.CurrentPos + 1}`}
         />
       {:else}
-        {#each Array(file.Duration).fill() as _, i}
+        {#each Array(file?.Duration).fill(null) as _, i}
           <img
             class:empty-img={!images[i]}
             id={i}
