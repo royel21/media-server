@@ -26,7 +26,7 @@ export const PageObserver = (setPage, container) => {
           }
         }
       },
-      { threshold: 0.05, root: container }
+      { threshold: 0.1, root: container }
     );
 
     imgs.forEach((lazyImg) => {

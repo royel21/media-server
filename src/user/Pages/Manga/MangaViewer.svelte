@@ -1,6 +1,6 @@
 <script>
   import { getContext, createEventDispatcher, afterUpdate, onMount } from "svelte";
-  import { clamp, debounce } from "src/ShareComponent/utils";
+  import { clamp } from "src/ShareComponent/utils";
   import { setfullscreen } from "../pagesUtils";
   import { scrollInView, getEmptyIndex } from "./mangaUtils";
   import { PageObserver, disconnectObvrs, scrollImageLoader } from "./Observers";
@@ -30,7 +30,6 @@
   let viewerRef;
   let inputPage;
   let isFullscreen = false;
-  controls.webtoon = webtoon;
 
   let viewerState = {
     loading: false,
@@ -38,7 +37,7 @@
     lastId: file?.Id,
   };
   //emptyImage observer
-  const loadImages = debounce((pg, toPage, dir = 1) => {
+  const loadImages = (pg, toPage, dir = 1) => {
     if (file.Id && !viewerState.loading && !isNaN(pg) && !isNaN(toPage)) {
       const indices = getEmptyIndex(images, pg, toPage, dir || 1, file.Duration);
       if (indices.length) {
@@ -46,7 +45,7 @@
         socket.emit("loadzip-image", { Id: file.Id, indices });
       }
     }
-  }, 100);
+  };
 
   const changePage = (dir, action) => {
     const pg = file.CurrentPos + dir;
@@ -144,13 +143,10 @@
 
   $: progress = file.Duration ? `${+file.CurrentPos + 1}/${file.Duration}` : "Loading";
 
-  $: if (controls.webtoon !== webtoon) {
-    controls.webtoon = webtoon;
-    if (webtoon) {
-      connectObservers(50);
-    } else {
-      disconnectObvrs(viewer);
-    }
+  $: if (webtoon) {
+    connectObservers(50);
+  } else {
+    disconnectObvrs(viewer);
   }
 
   //reload on file change
@@ -169,6 +165,7 @@
       viewerState.lastfId = file.Id;
       setTimeout(() => {
         scrollInView(file.CurrentPos);
+        console.log("scrolling", file.CurrentPos);
       }, 50);
     }
 

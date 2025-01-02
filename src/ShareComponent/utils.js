@@ -36,12 +36,3 @@ export const isValidKey = (e, k) => {
 
   return e.keyCode === k.Key && e.altKey === k.AltKey && e.shiftKey === k.ShiftKey && e.ctrlKey === k.CtrlKey;
 };
-
-// Debounce function to limit the rate of function calls
-export const debounce = (func, wait) => {
-  let timeout;
-  return (...args) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, args), wait);
-  };
-};

@@ -46,8 +46,7 @@ export const onTouchEnd = (e) => {
   touching = false;
 
   let {
-    file: { CurrentPos, Duration },
-    webtoon,
+    file: { Duration },
     nextFile,
     nextPage,
     prevFile,
@@ -100,19 +99,11 @@ export const onTouchEnd = (e) => {
         }
       }
     }
-  } else {
-    if (moveX.dis > 100) {
-      if (moveX.dir > 0) {
-        prevPage();
-      } else {
-        nextPage();
-      }
-    } else if (webtoon && moveY.dis > 250) {
-      if (moveY.dir > 0 && CurrentPos === 0) {
-        prevFile();
-      } else if (CurrentPos === Duration - 1) {
-        nextFile();
-      }
+  } else if (moveX.dis > 100) {
+    if (moveX.dir > 0) {
+      prevPage();
+    } else {
+      nextPage();
     }
   }
   drag = false;
