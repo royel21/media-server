@@ -57,7 +57,6 @@
       if (!viewerState.loading && !images[pg + 6 * dir]) {
         loadImages(pg, 11, dir);
       }
-      // file.CurrentPos = pg;
       changePages(pg);
     } else {
       viewerState.jumping = webtoon;
@@ -99,9 +98,9 @@
   let connectObservers = (delay = 0) => {
     if (webtoon && viewer) {
       let tout = setTimeout(() => {
-        // scrollInView(file.CurrentPos);
-        // PageObserver(changePages, viewer);
-        // scrollImageLoader(loadImages, viewer);
+        scrollInView(file.CurrentPos);
+        PageObserver(changePages, viewer);
+        scrollImageLoader(loadImages, viewer);
         clearTimeout(tout);
         viewerState.jumping = false;
       }, delay);
@@ -127,7 +126,7 @@
         images[data.page] = data.img;
       } else {
         if ((viewerState.jumping, viewer)) {
-          // scrollImageLoader(loadImages, viewer);
+          scrollImageLoader(loadImages, viewer);
           viewerState.jumping = false;
         }
         viewerState.loading = false;
@@ -147,11 +146,11 @@
 
   $: if (controls.webtoon !== webtoon) {
     controls.webtoon = webtoon;
-    // if (webtoon) {
-    //   connectObservers(50);
-    // } else {
-    //   disconnectObvrs(viewer);
-    // }
+    if (webtoon) {
+      connectObservers(50);
+    } else {
+      disconnectObvrs(viewer);
+    }
   }
 
   //reload on file change

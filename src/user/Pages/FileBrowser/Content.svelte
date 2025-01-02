@@ -23,8 +23,6 @@
 
   const socket = getContext("socket");
 
-  console.log(type);
-
   let segment = window.location.pathname.replace(/(^\/+|\/+$)/g, "").split("/");
   let typeUrl = `${type}/${segment[1]}/${id}`;
 
