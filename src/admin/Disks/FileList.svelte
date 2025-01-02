@@ -8,9 +8,9 @@
   import { setMessage } from "../Store/MessageStore";
   import Filter from "src/ShareComponent/Filter.svelte";
   import Loading from "src/ShareComponent/Loading.svelte";
-  import RenameModal from "./RenameModal.svelte";
   import { sortByName } from "src/ShareComponent/utils";
   import { formatDate } from "../Downloader/utils";
+  import RenameModal from "../Tools/RenameModal.svelte";
 
   export let files = [];
   export let socket;
@@ -47,6 +47,8 @@
       removeList = [...removeList, ...filtered.filter((item) => !removeList.includes(item.Id)).map((item) => item.Id)];
     }
   };
+
+  const hideRename = () => (showRename = false);
 
   const removeFiles = () => {
     const items = files.filter((f) => removeList.includes(f.Id));

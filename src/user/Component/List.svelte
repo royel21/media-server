@@ -105,10 +105,6 @@
     }
   });
 
-  onDestroy(() => {
-    document.querySelector(".player-container, .scrollable")?.focus();
-  });
-
   $: onFilter(filter);
   $: if (pageData.pg > -1) {
     start = pageData.pg * filePerPage;

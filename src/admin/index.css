@@ -201,6 +201,7 @@ input[type="radio"]:checked+label span {
   z-index: 99;
   text-align: center;
   width: 96%;
+  pointer-events: none;
 }
 
 #f-path {

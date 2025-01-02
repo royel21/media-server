@@ -96,6 +96,7 @@
 <style>
   #admin-label {
     display: flex;
+    align-items: center;
     padding: 5px 0;
     cursor: pointer;
     white-space: nowrap;
@@ -136,6 +137,10 @@
     background-color: firebrick;
     font-weight: 600;
     color: white;
+  }
+
+  :global(#admin-label .icon-signout) {
+    top: 0;
   }
 
   :global(span:active > .icon-download),

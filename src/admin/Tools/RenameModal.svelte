@@ -3,24 +3,25 @@
   import Dialog from "../Component/Dialog.svelte";
   export let hide;
   export let acept;
-  export let data = "";
-  export let title = "Folder";
+  export let file = "";
+  export let title = "File";
   export let errors = [];
-  let item = { ...data };
+  let item = { ...file };
   let extension;
 
   const onConfirm = () => {
     errors = [];
-    if (data.Name === item.Name) {
-      return errors.push("Name Equal");
+    let Name = item.Name + (extension ? extension : "");
+    if (file.Name === Name) {
+      return hide();
     }
 
-    if (/:|\?|\*|<|>|\/|\\"/gi.test(item.Name)) {
-      errors.push("Folder Name should't not have any of those Simbols");
+    if (/:|\?|\*|<|>|\/|\\"/gi.test(Name)) {
+      errors.push("File Name should't not have any of those Simbols");
       return errors.push(':  ?  * < >  / \\ " |');
     }
-    let Name = item.Name + (extension ? extension : "");
-    acept({ folder: data, Name });
+    acept({ ...item, Name, Path: item.Path.replace(file.Name, Name) });
+    hide();
   };
 
   if (item.Name) {

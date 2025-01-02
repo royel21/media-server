@@ -53,6 +53,7 @@
   }
   .input-control .input {
     height: initial;
+    font-weight: 700;
     border-top-right-radius: 0;
     border-bottom-left-radius: 0.25rem;
   }

@@ -69,9 +69,10 @@
   };
 
   let runningClock;
-  window.addEventListener("fullscreenchange", async (e) => {
+
+  const onFullScreen = async (e) => {
+    const clock = document.getElementById("clock");
     if (document.fullscreenElement) {
-      const clock = document.getElementById("clock");
       if (clock) {
         clock.innerText = new Date().toLocaleTimeString("en-US");
         runningClock = setInterval(() => {
@@ -89,9 +90,14 @@
         await window.screen.orientation?.unlock();
       }
     }
-  });
+  };
 
-  onDestroy(() => (menu.style.display = "flex"));
+  window.addEventListener("fullscreenchange", onFullScreen);
+
+  onDestroy(() => {
+    menu.style.display = "flex";
+    window.removeEventListener("fullscreenchange", onFullScreen);
+  });
 
   const changePages = (page) => {
     file.CurrentPos = page;
@@ -130,9 +136,12 @@
     document.querySelector("#btn-playlist")?.click();
   };
 
+  setTimeout(() => {
+    document.body.addEventListener("keydown", handleKeyboard);
+  }, 50);
+
   onMount(async () => {
     socket.on("file-removed", onFileRemove);
-    document.body.addEventListener("keydown", handleKeyboard);
 
     let data = await apiUtils.post(`viewer/folder`, { id: folderId });
     if (!data.fail) {

@@ -108,7 +108,7 @@
     }
   };
 
-  Fullscreen.action = () => {
+  const onFullScreen = () => {
     if (webtoon) {
       disconnectObvrs(viewer);
       isFullscreen = setfullscreen(viewer);
@@ -138,7 +138,7 @@
   controls.prevPage = prevPage;
   controls.nextPage = nextPage;
   controls.jumpTo = jumpTo;
-  controls.fullScreen = Fullscreen.action;
+  controls.fullScreen = onFullScreen;
   controls.nextFile = NextFile.action;
   controls.prevFile = PrevFile.action;
   controls.file = file;
@@ -161,7 +161,6 @@
     viewerState.jumping = webtoon;
     viewerState.loading = false;
     images = [];
-    webtoon = isManhwa;
 
     loadImages(file.CurrentPos - 2, 8);
   }
@@ -187,10 +186,6 @@
   let elements = [];
   const changeOpacity = (op) => elements.forEach((el) => (el.style.opacity = op));
 
-  const focus = (el) => {
-    el.focus();
-  };
-
   let tout;
   const onShow = () => {
     changeOpacity(1);
@@ -206,6 +201,7 @@
     SkipBack.action = prevPage;
     GotoStart.action = () => jumpTo(0);
     GotoEnd.action = () => jumpTo(file.Duration);
+    Fullscreen.action = onFullScreen;
     ToggleControlBar.action = () => updateToggleMenu();
     socket.on("connect", onConnect);
     socket.on("image-loaded", onImageData);
@@ -217,15 +213,18 @@
       socket.off("connect", onConnect);
       socket.off("image-loaded", onImageData);
       socket.off("disconnect", onDisconnect);
+
+      Fullscreen.action = null;
       document.removeEventListener("touchmove", onShow);
       document.removeEventListener("mousemove", onShow);
     };
   });
 
   $: if (file.CurrentPos) onShow();
+  $: webtoon = isManhwa;
 </script>
 
-<div id="manga-viewer" tabIndex="-1" class:hide={$ToggleMenu} use:focus>
+<div id="manga-viewer" tabIndex="-1" class:hide={$ToggleMenu}>
   <span class="fullscreen-progress">
     <Icons name="stickynote" />
     {progress}

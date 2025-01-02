@@ -64,9 +64,9 @@
 
   const load = async () => {
     const result = await apiUtils.get(["admin", "folders", "tags"]);
-    if (isMounted) {
-      items = await apiUtils.get(["admin", "folders", "tags"]);
-      filtered = items.sort();
+    if (isMounted && result.length) {
+      items = result.sort();
+      filtered = items;
     }
   };
 
@@ -137,7 +137,7 @@
     text-overflow: ellipsis;
   }
   #tag-list .empty-list:only-child {
-    text-align: center;
+    justify-content: center;
   }
   #tag-list li span:hover {
     cursor: ponter;

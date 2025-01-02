@@ -1,7 +1,7 @@
 <script>
   import { fade } from "svelte/transition";
   export let cancel;
-  export let confirm;
+  export let confirm = () => {};
   export let errors = [];
   export let id = "";
   export let btnOk = "Ok";

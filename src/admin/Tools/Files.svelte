@@ -6,11 +6,14 @@
   import Pagination from "src/ShareComponent/Pagination.svelte";
   import ModalWatchList from "./ModalWatchList.svelte";
   import { formatSize } from "../Component/util";
+  import RenameModal from "./RenameModal.svelte";
+  import { setMessage } from "../Store/MessageStore";
 
   let items = [];
   let filter = "";
   let showPath = null;
   let showWatchList = false;
+  let showEdit = "";
   let ref;
   let pager = { page: 1, totalPages: 0, totalitems: 0, items: window.localStorage.getItem("w-items") || 100 };
 
@@ -71,10 +74,24 @@
     }
   };
 
+  const renameFile = async (file) => {
+    const result = await apiUtils.post("admin/files/rename-watched-file", file);
+    if (result.Id) {
+      let index = items.findIndex((d) => d.Id === +result.Id);
+      items[index] = result;
+    } else {
+      setMessage({ msg: result.error, error: true });
+    }
+  };
+
   onMount(async () => {
     load();
   });
 </script>
+
+{#if showEdit}
+  <RenameModal file={showEdit} hide={() => (showEdit = false)} acept={renameFile} />
+{/if}
 
 {#if showWatchList}
   <ModalWatchList hide={hideModal} />
@@ -97,11 +114,12 @@
   <div class="list-container" bind:this={ref}>
     <ul class="list-group text-dark" on:mousemove={onShowPath} on:mouseleave={() => (showPath = null)}>
       {#if items.length < 1}
-        <li class="list-group-item empty-list">Not Tags Found</li>
+        <li class="list-group-item empty-list">Not Files Found</li>
       {:else}
         {#each items as item}
-          <li id={item.Id} class="list-group-item" class:f-path={showPath?.id === item.Id}>
+          <li id={item.Id} class="list-group-item">
             <span on:click={onRemove}><Icons name="trash" /></span>
+            <span on:click={() => (showEdit = item)}><Icons name="edit" /></span>
             <strong>{formatSize(item.Size)}GB</strong>
             {item.Name}
           </li>
@@ -128,16 +146,11 @@
   }
 
   #tag-list .list-container {
-    overflow: auto;
+    overflow-y: auto;
     background-color: white;
     border-radius: 5px;
     margin-bottom: 8px;
-  }
-  #tag-list li {
-    position: relative;
-    display: flex;
-    align-items: center;
-    padding: 0;
+    flex-grow: 1;
   }
   #tag-list .controls {
     position: initial;
@@ -146,14 +159,22 @@
     padding: 0px 0 4px 0;
     justify-content: initial;
   }
-  #tag-list .list-group-item {
-    position: relative;
+  .list-group {
+    min-width: 100%;
+  }
+  #tag-list li {
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    padding: 4px;
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    min-width: 100%;
   }
-  #tag-list .empty-list:only-child {
-    text-align: center;
+  #tag-list li:only-child {
+    justify-content: center;
   }
   #tag-list li span:hover {
     cursor: ponter;
@@ -192,5 +213,10 @@
   }
   strong {
     margin-right: 5px;
+  }
+  @media (pointer: none), (pointer: coarse) {
+    #tag-list .list-group {
+      width: fit-content;
+    }
   }
 </style>

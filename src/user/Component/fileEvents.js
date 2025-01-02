@@ -113,7 +113,10 @@ const fileKeypress = (e, page, goToPage, title, type) => {
 
     switch (e.keyCode) {
       case ENTER: {
-        if (title !== "Content") ProcessFile(file, type);
+        if (title !== "Content") {
+          wasProcesed = true;
+          ProcessFile(file, type);
+        }
         break;
       }
       case LEFT: {
@@ -173,6 +176,7 @@ const fileKeypress = (e, page, goToPage, title, type) => {
 
     if (wasProcesed) {
       e.preventDefault();
+      e.stopPropagation();
     }
 
     const active = file.parentElement.querySelector(".active");

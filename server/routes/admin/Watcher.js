@@ -50,3 +50,17 @@ export const removeWatchedFile = async ({ params }, res) => {
   }
   return res.send({ valid: false });
 };
+
+export const renameWatchedFile = async ({ body }, res) => {
+  if (body.Id) {
+    const file = await db.File.findOne({ where: { Id: body.Id } });
+    if (file) {
+      try {
+        fs.moveSync(file.Path, body.Path);
+        await file.update(body);
+        return res.send(body);
+      } catch (error) {}
+    }
+  }
+  return res.send({ error: `File: ${body.Name} Already Exist` });
+};

@@ -133,6 +133,7 @@
     return () => {
       window.localStorage.setObject(configTag, mConfig);
       window.removeEventListener("fullscreenchange", onFullscreen);
+      Fullscreen.action = null;
     };
   });
 

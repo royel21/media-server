@@ -5,13 +5,14 @@ import { getFilter } from "../utils.js";
 import { Op } from "sequelize";
 import fs from "fs-extra";
 import path from "node:path";
-import { getWatchedDirs, getWatchFiles, removeWatchedDir, removeWatchedFile } from "./Watcher.js";
+import { getWatchedDirs, getWatchFiles, removeWatchedDir, removeWatchedFile, renameWatchedFile } from "./Watcher.js";
 
 const routes = Router();
 
 routes.get("/get-watched-dirs", getWatchedDirs);
 routes.get("/remove-watched-dir/:Id", removeWatchedDir);
 
+routes.post("/rename-watched-file", renameWatchedFile);
 routes.get("/remove-watched-file/:Id", removeWatchedFile);
 routes.get("/get-watched-files/:page/:items/:filter?", getWatchFiles);
 
