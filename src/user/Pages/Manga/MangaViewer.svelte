@@ -196,6 +196,10 @@
   const onConnect = () => loadImages(file.CurrentPos - 2, 8);
   const onDisconnect = () => (viewerState.loading = false);
 
+  const focus = (el) => {
+    el.focus();
+  };
+
   onMount(() => {
     SkipForward.action = nextPage;
     SkipBack.action = prevPage;
@@ -240,6 +244,7 @@
       on:mouseup={onTouchEnd}
       on:touchmove|passive={onTouchMove}
       tabindex="-1"
+      use:focus
     >
       {#if !webtoon}
         <img
