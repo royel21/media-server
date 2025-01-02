@@ -8,15 +8,14 @@ const HOME = 36;
 const END = 35;
 let selectedIndex = 0;
 
-Storage.prototype.getObject = function (key) {
-  let value = this.getItem(key);
+//LocalStorage
+Storage.prototype.setObject = function (key, value) {
+  this.setItem(key, JSON.stringify(value));
+};
+//get object fron LocalStorage
 
-  try {
-    value = JSON.parse(value);
-  } catch (err) {
-    console.log(err);
-  }
-  return value || {};
+Storage.prototype.getObject = function (key) {
+  return JSON.parse(this.getItem(key) || "{}");
 };
 
 const calCol = () => {
@@ -72,13 +71,13 @@ const selectItem = (index) => {
   selectElement(getElByIndex(index));
 };
 
-const StoreKey = localStorage.getItem("user") + "-FolderIds";
+const StoreKey = window.localStorage.getItem("user") + "-FolderIds";
 
-const StoreId = localStorage.getObject(StoreKey);
+const StoreId = window.localStorage.getObject(StoreKey);
 export const saveId = (title, id) => {
   if (title && id) {
     StoreId[title] = id;
-    localStorage.setObject(StoreKey, StoreId);
+    window.localStorage.setObject(StoreKey, StoreId);
   }
 };
 

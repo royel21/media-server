@@ -14,7 +14,6 @@
   import UserConfig from "./Pages/Config/UserConfig.svelte";
   import { setConfig } from "./Stores/PageConfigStore";
   import Icons from "src/icons/Icons.svelte";
-  import { mapKeys } from "./Pages/pagesUtils";
   import UserStore from "./Stores/UserStore";
 
   const navItems = [
@@ -38,8 +37,6 @@
   };
 
   const hide = () => (showConfig = false);
-
-  mapKeys(User.hotkeys);
 
   onMount(async () => {
     const data = await apiUtils.files(["dirs/"]);

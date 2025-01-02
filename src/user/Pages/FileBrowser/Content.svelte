@@ -23,16 +23,15 @@
 
   const socket = getContext("socket");
 
+  console.log(type);
+
   let segment = window.location.pathname.replace(/(^\/+|\/+$)/g, "").split("/");
   let typeUrl = `${type}/${segment[1]}/${id}`;
 
   let pathname = getReturnPath("to-menu");
 
-  const getReturn = () => {
-    if (pathname) return pathname;
-
-    if (segment.includes("home")) return "/";
-    return document.querySelector(`#menu a[href^="/${segment[0]}"]`)?.href;
+  const exitFolder = () => {
+    navigate(pathname || "/", { replace: true, state: "" });
   };
 
   const openFirstLast = async ({ target: { id } }) => {
@@ -45,10 +44,6 @@
   const continueReading = async () => {
     const data = await apiUtils.files(["file-data", folderinfo.currentFile]);
     ProcessFile({ id: folderinfo.currentFile, dataset: { type: data.Type } });
-  };
-
-  const exitFolder = () => {
-    navigate(getReturn(), { replace: true, state: "" });
   };
 
   const onGenres = ({ currentTarget }) => {

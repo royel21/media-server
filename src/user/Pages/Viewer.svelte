@@ -8,7 +8,7 @@
   import PlayList from "../Component/PlayList.svelte";
   import MangaViewer from "./Manga/MangaViewer.svelte";
   import VideoPLayer from "./Video/VideoPlayer.svelte";
-  import { KeyMap, handleKeyboard, isVideo, showFileName } from "./pagesUtils";
+  import { KeyMap, mapKeys, handleKeyboard, isVideo, showFileName } from "./pagesUtils";
   import Icons from "src/icons/Icons.svelte";
   import { getReturnPath } from "./filesUtils";
   import { isMobile } from "src/utils";
@@ -23,6 +23,7 @@
   const basePath = `${type}/viewer/${folderId}`;
 
   const socket = getContext("socket");
+  const User = getContext("User");
 
   const { NextFile, PrevFile, Exit, ShowList } = KeyMap;
   let files = [];
@@ -94,6 +95,8 @@
 
   window.addEventListener("fullscreenchange", onFullScreen);
 
+  mapKeys(User.hotkeys);
+
   onDestroy(() => {
     menu.style.display = "flex";
     window.removeEventListener("fullscreenchange", onFullScreen);
@@ -157,6 +160,8 @@
     socket.off("file-removed", onFileRemove);
   });
 
+  const focus = (el) => el.focus();
+
   menu.style.display = "none";
 
   $: if (playList.length) {
@@ -172,7 +177,7 @@
   }
 </script>
 
-<div class="viewer" bind:this={viewer} class:video={isVideo(file)} tabindex="-1">
+<div class="viewer" bind:this={viewer} class:video={isVideo(file)} tabindex="-1" use:focus>
   <div class="f-name" class:nomenu={$ToggleMenu}>
     <div class="name-c">
       <span>{`${getFolderName()} ${file.Name}`}</span>

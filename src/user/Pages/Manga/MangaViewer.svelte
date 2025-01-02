@@ -99,9 +99,9 @@
   let connectObservers = (delay = 0) => {
     if (webtoon && viewer) {
       let tout = setTimeout(() => {
-        scrollInView(file.CurrentPos);
-        PageObserver(changePages, viewer);
-        scrollImageLoader(loadImages, viewer);
+        // scrollInView(file.CurrentPos);
+        // PageObserver(changePages, viewer);
+        // scrollImageLoader(loadImages, viewer);
         clearTimeout(tout);
         viewerState.jumping = false;
       }, delay);
@@ -127,7 +127,7 @@
         images[data.page] = data.img;
       } else {
         if ((viewerState.jumping, viewer)) {
-          scrollImageLoader(loadImages, viewer);
+          // scrollImageLoader(loadImages, viewer);
           viewerState.jumping = false;
         }
         viewerState.loading = false;
@@ -147,11 +147,11 @@
 
   $: if (controls.webtoon !== webtoon) {
     controls.webtoon = webtoon;
-    if (webtoon) {
-      connectObservers(50);
-    } else {
-      disconnectObvrs(viewer);
-    }
+    // if (webtoon) {
+    //   connectObservers(50);
+    // } else {
+    //   disconnectObvrs(viewer);
+    // }
   }
 
   //reload on file change
@@ -196,10 +196,6 @@
   const onConnect = () => loadImages(file.CurrentPos - 2, 8);
   const onDisconnect = () => (viewerState.loading = false);
 
-  const focus = (el) => {
-    el.focus();
-  };
-
   onMount(() => {
     SkipForward.action = nextPage;
     SkipBack.action = prevPage;
@@ -243,8 +239,6 @@
       on:mousedown={onTouchStart}
       on:mouseup={onTouchEnd}
       on:touchmove|passive={onTouchMove}
-      tabindex="-1"
-      use:focus
     >
       {#if !webtoon}
         <img

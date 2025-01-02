@@ -106,7 +106,7 @@
   });
 
   onDestroy(() => {
-    document.querySelector(".player-container, .scrollable")?.focus();
+    document.querySelector(".player-container, .viewer")?.focus();
   });
 
   $: onFilter(filter);
