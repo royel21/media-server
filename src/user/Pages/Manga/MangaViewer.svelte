@@ -30,6 +30,7 @@
   let viewerRef;
   let inputPage;
   let isFullscreen = false;
+  let error;
 
   let viewerState = {
     loading: false,
@@ -179,9 +180,18 @@
   const onConnect = () => loadImages(file.CurrentPos - 2, 8);
   const onDisconnect = () => (viewerState.loading = false);
 
+  const onError = ({ Id, error: err }) => {
+    if (Id === file.Id) {
+      viewerState.loading = false;
+      error = err;
+      console.log(err);
+    }
+  };
+
   socket.on("connect", onConnect);
   socket.on("disconnect", onDisconnect);
   socket.on("image-loaded", onImageData);
+  socket.on("manga-error", onError);
 
   onMount(() => {
     SkipForward.action = nextPage;
@@ -197,6 +207,7 @@
       socket.off("connect", onConnect);
       socket.off("image-loaded", onImageData);
       socket.off("disconnect", onDisconnect);
+      socket.off("manga-error", onError);
 
       Fullscreen.action = null;
       document.removeEventListener("touchmove", onShow);
@@ -218,6 +229,9 @@
     <Icons name="stickynote" />
     {progress}
   </span>
+  {#if error}
+    <div class="error-msg">{error}</div>
+  {/if}
   <div class="viewer" class:isFullscreen bind:this={viewerRef}>
     <div
       class="img-current scrollable"
@@ -485,6 +499,22 @@
 
   .webtoon-img img:last-child {
     margin-bottom: 80px;
+  }
+
+  .error-msg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 43%;
+    left: 16%;
+    z-index: 99;
+    width: 68%;
+    min-height: 60px;
+    padding: 2px 4px;
+    border-radius: 0.25rem;
+    background: firebrick;
+    font-size: 1.3rem;
   }
 
   @media screen and (max-width: 700px) {

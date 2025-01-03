@@ -39,7 +39,7 @@ const loadZipImages = async (data, socket, user) => {
       console.log(error);
     }
   } else {
-    socket.emit("manga-error", { error: "File Not Found" });
+    socket.emit("manga-error", { error: `File ${file.Name} Not Found in server`, Id: file.Id });
   }
 };
 
