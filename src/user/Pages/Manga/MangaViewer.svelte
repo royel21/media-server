@@ -515,6 +515,7 @@
     border-radius: 0.25rem;
     background: firebrick;
     font-size: 1.3rem;
+    pointer-events: none;
   }
 
   @media screen and (max-width: 700px) {
@@ -530,6 +531,12 @@
     }
     #manga-viewer .img-current.webtoon-img img:not(.empty-img) {
       height: auto;
+    }
+
+    .error-msg {
+      left: 0;
+      border-radius: 0;
+      width: 100%;
     }
   }
 </style>
