@@ -5,6 +5,7 @@ let imgObserver;
 let currentPage;
 let scrollDir;
 let oldScroll;
+//memorize scroll direction
 const onScroll = function ({ target: { scrollTop } }) {
   scrollDir = oldScroll < scrollTop ? 1 : -1;
   oldScroll = scrollTop;

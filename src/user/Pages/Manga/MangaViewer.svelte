@@ -93,14 +93,14 @@
   };
 
   const returnTo = () => dispatch("returnBack");
-
+  let tout1;
   let connectObservers = (delay = 0) => {
     if (webtoon && viewer) {
-      let tout = setTimeout(() => {
+      clearTimeout(tout1);
+      tout1 = setTimeout(() => {
         scrollInView(file.CurrentPos);
-        PageObserver(changePages, viewer);
         scrollImageLoader(loadImages, viewer);
-        clearTimeout(tout);
+        PageObserver(changePages, viewer);
         viewerState.jumping = false;
       }, delay);
     }
@@ -124,10 +124,10 @@
       if (!data.last) {
         images[data.page] = data.img;
       } else {
-        if ((viewerState.jumping, viewer)) {
+        if (viewerState.jumping) {
           scrollImageLoader(loadImages, viewer);
-          viewerState.jumping = false;
         }
+        viewerState.jumping = false;
         viewerState.loading = false;
       }
     }
@@ -143,50 +143,39 @@
 
   $: progress = file.Duration ? `${+file.CurrentPos + 1}/${file.Duration}` : "Loading";
 
-  $: if (webtoon) {
-    connectObservers(50);
-  } else {
+  $: if (!webtoon) {
     disconnectObvrs(viewer);
   }
 
   //reload on file change
   $: if (file.Id && file.Id !== viewerState.lastfId) {
-    disconnectObvrs(viewer);
+    console.log("file changed");
     controls.file = file;
     viewerState.jumping = webtoon;
     viewerState.loading = false;
     images = [];
-
     loadImages(file.CurrentPos - 2, 8);
   }
 
   afterUpdate(() => {
     if (file.Id !== viewerState.lastfId) {
       viewerState.lastfId = file.Id;
-      setTimeout(() => {
-        scrollInView(file.CurrentPos);
-        console.log("scrolling", file.CurrentPos);
-      }, 50);
+      scrollInView(file.CurrentPos);
     }
 
-    if (webtoon && !viewerState.loading && viewer) {
+    if (webtoon && !viewerState.loading) {
       PageObserver(changePages, viewer);
     }
   });
 
-  $: {
-    $ConfigStore.Viewer.manga.webtoon = webtoon;
-    updateConfig($ConfigStore);
-  }
-
   let elements = [];
   const changeOpacity = (op) => elements.forEach((el) => (el.style.opacity = op));
 
-  let tout;
+  let tout2;
   const onShow = () => {
     changeOpacity(1);
-    clearTimeout(tout);
-    tout = setTimeout(() => changeOpacity(0), 3000);
+    clearTimeout(tout2);
+    tout2 = setTimeout(() => changeOpacity(0), 3000);
   };
 
   const onConnect = () => loadImages(file.CurrentPos - 2, 8);
@@ -215,6 +204,11 @@
       document.removeEventListener("mousemove", onShow);
     };
   });
+
+  $: {
+    $ConfigStore.Viewer.manga.webtoon = webtoon;
+    updateConfig($ConfigStore);
+  }
 
   $: if (file.CurrentPos) onShow();
   $: webtoon = isManhwa;
