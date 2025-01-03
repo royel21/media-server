@@ -95,15 +95,13 @@
   const returnTo = () => dispatch("returnBack");
   let tout1;
   let connectObservers = (delay = 0) => {
-    if (webtoon && viewer) {
-      clearTimeout(tout1);
-      tout1 = setTimeout(() => {
-        scrollInView(file.CurrentPos);
-        scrollImageLoader(loadImages, viewer);
-        PageObserver(changePages, viewer);
-        viewerState.jumping = false;
-      }, delay);
-    }
+    clearTimeout(tout1);
+    tout1 = setTimeout(() => {
+      scrollInView(file.CurrentPos);
+      scrollImageLoader(loadImages, viewer);
+      PageObserver(changePages, viewer);
+      viewerState.jumping = false;
+    }, delay);
   };
 
   const onFullScreen = () => {
@@ -175,11 +173,15 @@
   const onShow = () => {
     changeOpacity(1);
     clearTimeout(tout2);
-    tout2 = setTimeout(() => changeOpacity(0), 3000);
+    tout2 = setTimeout(() => changeOpacity(0), 1000);
   };
 
   const onConnect = () => loadImages(file.CurrentPos - 2, 8);
   const onDisconnect = () => (viewerState.loading = false);
+
+  socket.on("connect", onConnect);
+  socket.on("disconnect", onDisconnect);
+  socket.on("image-loaded", onImageData);
 
   onMount(() => {
     SkipForward.action = nextPage;
@@ -188,9 +190,6 @@
     GotoEnd.action = () => jumpTo(file.Duration);
     Fullscreen.action = onFullScreen;
     ToggleControlBar.action = () => updateToggleMenu();
-    socket.on("connect", onConnect);
-    socket.on("image-loaded", onImageData);
-    socket.on("disconnect", onDisconnect);
     elements = [...document.querySelectorAll("#btn-playlist, .fullscreen-progress, .info")];
     document.addEventListener("touchmove", onShow);
     document.addEventListener("mousemove", onShow);

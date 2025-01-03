@@ -223,7 +223,6 @@
     pointer-events: none;
     z-index: 99;
     width: 100%;
-    transition: 5s opacity;
   }
   .name-c {
     max-width: 750px;
@@ -267,6 +266,12 @@
 
   .video :global(#btn-playlist) {
     display: none;
+  }
+  :global(#btn-playlist),
+  :global(.fullscreen-progress),
+  .f-name,
+  .info {
+    transition: 1s opacity;
   }
 
   @media screen and (max-width: 600px) {
