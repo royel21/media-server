@@ -121,7 +121,7 @@
   const getStyle = (type, content) => {
     if (type === "hdd") return "";
 
-    if (content.length) return `top: ${offset * 27}px; z-index: ${zIndex--}`;
+    if (content.length) return `top: ${offset * 27 + 1}px; z-index: ${zIndex--}`;
   };
 </script>
 
@@ -223,6 +223,7 @@
   }
   .caret.content {
     transform: rotate(90deg);
+    margin: 0px 2px;
   }
   .caret:last-child {
     transform: rotate(0);

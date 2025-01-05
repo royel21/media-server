@@ -10,7 +10,7 @@
   import Loading from "src/ShareComponent/Loading.svelte";
   import { sortByName } from "src/ShareComponent/utils";
   import { formatDate } from "../Downloader/utils";
-  import RenameModal from "../Tools/RenameModal.svelte";
+  import RenameModal from "./RenameModal.svelte";
 
   export let files = [];
   export let socket;
