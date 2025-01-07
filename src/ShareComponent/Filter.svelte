@@ -20,7 +20,10 @@
     dispatch(type, ftl);
   };
 
-  const ClearFilter = () => send("");
+  const ClearFilter = () => {
+    send("");
+    onChanges({ target: { value: "" } });
+  };
 
   const submitFilter = (e) => {
     if (e.keyCode === 13) send(curFilter);
