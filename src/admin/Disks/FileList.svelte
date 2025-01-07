@@ -85,6 +85,7 @@
 
   const renameFile = (data) => {
     socket.emit("file-work", { action: "renFile", data: { file: data.folder, Name: data.Name } });
+    hideRename();
   };
 
   socket.on("files-info", onFileInfo);
@@ -132,7 +133,7 @@
 {/if}
 
 {#if showRename}
-  <RenameModal data={showRename} acept={renameFile} hide={() => (showRename = false)} />
+  <RenameModal data={showRename} acept={renameFile} hide={hideRename} />
 {/if}
 
 <div class="col">

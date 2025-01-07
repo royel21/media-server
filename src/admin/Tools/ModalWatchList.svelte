@@ -33,7 +33,7 @@
   });
 </script>
 
-<Dialog cancel={hide}>
+<Dialog cancel={hide} btnOk={false} btnCancer="Close">
   <h3 slot="modal-header">Watching Directory List</h3>
   <div slot="modal-body">
     <ul class="list">

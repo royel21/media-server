@@ -18,15 +18,17 @@
   document.title = "Manager";
 </script>
 
-<Tabs class="admin-manager" {tabs} {tab} />
+<div id="admin-manager">
+  <Tabs {tabs} {tab} />
+</div>
 
 <style>
-  :global(.admin-manager #tabs-content) {
+  #admin-manager :global(#tabs-content) {
     padding: 0;
     height: calc(100% - 63px);
     overflow: auto;
   }
-  :global(.admin-manager) {
+  #admin-manager {
     position: relative;
     height: 100%;
     padding: 10px 0 0;

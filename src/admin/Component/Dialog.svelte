@@ -5,6 +5,7 @@
   export let errors = [];
   export let id = "";
   export let btnOk = "Ok";
+  export let btnCancer = "Cancel";
 
   let clazz = "";
   export { clazz as class };
@@ -38,7 +39,7 @@
         {#if btnOk}
           <button type="submit" class="btn">{btnOk}</button>
         {/if}
-        <button type="button" class="btn" on:click={cancel}>Cancel</button>
+        <button type="button" class="btn" on:click={cancel}>{btnCancer}</button>
       </div>
     </form>
   </div>

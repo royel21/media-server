@@ -90,6 +90,9 @@
   <div class="d-content" class:expanded={files.length}>
     <div class="rows">
       <div class="col" class:no-files={files.length === 0}>
+        {#if files.length}
+          <span class="files"><Icons name="list" /></span>
+        {/if}
         <div class="tree" bind:this={treeRef}>
           <Icons name="hdd" color="black" />
           <span class="tree-name">Server</span>
@@ -101,18 +104,13 @@
       {#if files.length}
         <FileList {files} {socket} Name={current?.Name} {content} />
       {/if}
-      {#if files.length}
-        <span class="scroll-top" on:click={scrollToTop}>
-          <Icons name="arrowcircleup" />
-        </span>
-      {/if}
     </div>
   </div>
 {/if}
 
 <style>
   .d-content {
-    height: 98.5%;
+    height: 100%;
     padding-bottom: 5px;
   }
   .d-content.expanded {
@@ -137,6 +135,7 @@
     overflow: hidden;
   }
   .col:first-child {
+    position: relative;
     margin-right: 5px;
   }
   .d-content .no-files {
@@ -161,16 +160,9 @@
   .d-loading {
     height: calc(100% - 150px);
   }
-  .scroll-top {
+  .files {
     position: absolute;
-    left: 10px;
-    bottom: 6px;
-    z-index: 301;
-  }
-
-  .scroll-top :global(.icon-arrowcircleup) {
-    width: 35px;
-    height: 30px;
+    right: 10px;
   }
   @media (pointer: none), (pointer: coarse) and (max-width: 640px) {
     .d-content.expanded {

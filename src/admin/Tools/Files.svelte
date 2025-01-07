@@ -173,7 +173,7 @@
     border-bottom: 1px solid rgba(0, 0, 0, 0.125);
     min-width: 100%;
   }
-  #tag-list li:only-child {
+  #tag-list .empty-list {
     justify-content: center;
   }
   #tag-list li span:hover {

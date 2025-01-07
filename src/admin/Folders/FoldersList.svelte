@@ -5,7 +5,7 @@
   import ItemList from "./ItemList.svelte";
   import { calRows } from "../Utils";
   import apiUtils from "src/apiUtils";
-  import { clamp } from "src/ShareComponent/utils";
+  import { clamp, sortByName } from "src/ShareComponent/utils";
   import Icons from "src/icons/Icons.svelte";
   import CreateFolderModal from "./CreateFolderModal.svelte";
   import ReplaceImage from "./ReplaceImage.svelte";
@@ -42,7 +42,7 @@
   const loadDir = async () => {
     const data = await apiUtils.admin(["folders", "dirs"]);
     if (data?.dirs && isMounted) {
-      dirs = data.dirs;
+      dirs = data.dirs.sort((a, b) => a.FullPath.localeCompare(b.FullPath));
     }
   };
 
@@ -221,7 +221,6 @@
 <ItemList
   title="Folders"
   class="col-6"
-  id="l-folders"
   {folderId}
   {items}
   {page}
@@ -280,8 +279,8 @@
   }
   .thumbnail {
     position: absolute;
-    right: 18px;
-    top: 80px;
+    right: 10px;
+    top: 95px;
     z-index: 99;
     pointer-events: none;
     padding: 0px 1px;

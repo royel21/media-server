@@ -91,6 +91,7 @@
 <style>
   li {
     position: relative;
+    height: 40px;
   }
   .g-list {
     position: absolute;
@@ -113,11 +114,10 @@
   }
 
   .list-container {
-    height: calc(100% - 85px);
+    height: calc(100% - 90px);
     overflow-y: hidden;
     background-color: white;
     border-radius: 5px;
-    margin-bottom: 5px;
   }
   .controls {
     position: initial;
@@ -136,12 +136,13 @@
     position: relative;
     width: 50%;
     padding: 0 10px;
-    height: 99%;
+    height: 100%;
   }
   .list-controls {
     display: flex;
     justify-content: center;
     width: 100%;
+    padding-top: 5px;
   }
   .list-group-item {
     white-space: nowrap;

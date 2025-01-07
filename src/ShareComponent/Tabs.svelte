@@ -68,6 +68,9 @@
 </div>
 
 <style>
+  #tabs-content {
+    height: calc(100% - 50px);
+  }
   .tabs {
     position: relative;
     height: 100%;
@@ -130,8 +133,5 @@
   }
   .tabs input[type="radio"]:checked + label span {
     display: inline-block;
-  }
-  #tabs-content {
-    height: calc(100% - 50px);
   }
 </style>

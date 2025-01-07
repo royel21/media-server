@@ -36,7 +36,7 @@ const db = {
   Op: Sequelize.Op,
   sqlze: sequelize,
   user: user(sequelize),
-  file: file(sequelize),
+  file: file(sequelize, isSqlite),
   folder: folder(sequelize, isSqlite),
   favorite: favorite(sequelize),
   hotkey: hotkeys(sequelize),

@@ -35,17 +35,6 @@
     width: 100%;
   }
   .card.has-files {
-    min-width: 795px;
-  }
-
-  @media screen and (max-width: 700px) {
-    .card,
-    .card.has-files {
-      width: initial;
-      min-width: 170%;
-    }
-    .card :global(.file-list:first-child) {
-      min-width: 59%;
-    }
+    min-width: 840px;
   }
 </style>

@@ -40,7 +40,7 @@
   }
 
   #folder-data :global(.file-list) {
-    height: calc(100% - 43px);
+    height: calc(100% - 45px);
   }
 
   .col-6 {

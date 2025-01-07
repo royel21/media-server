@@ -1,6 +1,7 @@
 export const calRows = (query) => {
   let container = document.querySelector(query || ".list-container") || {};
-  return parseInt(container.offsetHeight / 40);
+  const li = container.querySelector("li");
+  return parseInt(container.offsetHeight / li.offsetHeight);
 };
 
 export const validGenres = (g, tags) => {

@@ -182,7 +182,7 @@
     position: relative;
     cursor: pointer;
     display: inline-block;
-    width: calc(100% - 25px);
+    width: calc(100% - 26px);
     white-space: nowrap;
     text-overflow: ellipsis;
     user-select: text;

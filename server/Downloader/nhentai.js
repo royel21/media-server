@@ -34,7 +34,7 @@ const nameFormat = (name) => {
       name = name.replace(num, num.toString().padStart(3, "0"));
     }
   }
-  return name;
+  return name.trim();
 };
 
 const BASEPATH = defaultConfig.DownloadDir2;
