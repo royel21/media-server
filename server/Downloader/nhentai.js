@@ -5,7 +5,7 @@ import { getImgNh, saveThumbnail } from "./ImageUtils.js";
 import defaultConfig from "../default-config.js";
 import fs from "fs-extra";
 import AdmZip from "adm-zip";
-import { createPage, delay } from "./Crawler.js";
+import { createPage, delay, startBrowser } from "./Crawler.js";
 
 const isChar = (c) => {
   return c.match(/[a-z]/i);
@@ -218,8 +218,10 @@ const download = async (link, page, server, state) => {
 
 export const downloadNHentais = async (state) => {
   let page;
+  let browser;
   try {
-    page = await createPage(state.browser);
+    browser = await startBrowser({ args: ["--incognito"] });
+    page = await createPage(browser);
   } catch (error) {
     console.log(error);
     return;
@@ -250,5 +252,5 @@ export const downloadNHentais = async (state) => {
   state.hrunning = false;
   state.hsize = 0;
   state.hentai = [];
-  await page.close();
+  await browser?.close();
 };

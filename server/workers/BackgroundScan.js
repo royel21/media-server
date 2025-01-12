@@ -257,6 +257,8 @@ const scanDirectory = async ({ id, dir, isFolder }) => {
 const pendingJobs = [];
 
 const processJobs = async () => {
+  await db.init();
+
   while (pendingJobs.length > 0) {
     let data = pendingJobs.pop();
     await scanDirectory(data);

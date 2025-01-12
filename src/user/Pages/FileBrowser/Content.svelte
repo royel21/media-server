@@ -40,8 +40,13 @@
   };
 
   const continueReading = async () => {
-    const data = await apiUtils.files(["file-data", folderinfo.currentFile]);
-    ProcessFile({ id: folderinfo.currentFile, dataset: { type: data.Type } });
+    let data;
+    if (folderinfo.currentFile) {
+      data = await apiUtils.files(["file-data", folderinfo.currentFile]);
+    } else {
+      data = await apiUtils.files(["first-last", "first", folderinfo.Id]);
+    }
+    ProcessFile({ id: data.Id, dataset: { type: data.Type } });
   };
 
   const onGenres = ({ currentTarget }) => {

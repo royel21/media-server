@@ -52,7 +52,7 @@ export const createPage = async (browser, timeout = 180000) => {
 let pupeteer;
 
 export const startBrowser = async (config) => {
-  config.args = ["--no-sandbox", "--disable-gpu"];
+  config.args = [...(config.args || []), "--no-sandbox", "--disable-gpu"];
   config.headless = "new";
   if (process.env.USE_DEV && os.platform() === "win32") {
     config.headless = false;
