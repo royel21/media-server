@@ -25,3 +25,5 @@ db.Directory.hasMany(db.File, { foreignKey: "DirectoryId", onDelete: "CASCADE", 
 db.init = async (force = false) => {
   await sequelize.sync({ force });
 };
+
+await db.init();
