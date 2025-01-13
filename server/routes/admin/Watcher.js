@@ -59,7 +59,9 @@ export const renameWatchedFile = async ({ body }, res) => {
         fs.moveSync(file.Path, body.Path);
         await file.update(body);
         return res.send(body);
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
   return res.send({ error: `File: ${body.Name} Already Exist` });
