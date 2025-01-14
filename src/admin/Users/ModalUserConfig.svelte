@@ -1,7 +1,7 @@
 <script>
   import apiUtils from "src/apiUtils";
   import { onMount } from "svelte";
-  import Dialog from "../Component/Dialog.svelte";
+  import Dialog from "../../ShareComponent/Dialog.svelte";
   import InputControl from "./InputControl.svelte";
   export let hideCfg;
   export let user;

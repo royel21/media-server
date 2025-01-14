@@ -2,10 +2,11 @@
   export let id = "";
   export let isChecked = false;
   export let title = "";
+  export let value = false;
 </script>
 
 <label {id} class="select-file" {title}>
-  <input type="checkbox" on:change />
+  <input type="checkbox" on:change bind:checked={value} />
   <span class="checkmark" class:checked={isChecked}></span>
 </label>
 

@@ -1,6 +1,6 @@
 <script>
   import Input from "../Component/Input.svelte";
-  import Dialog from "../Component/Dialog.svelte";
+  import Dialog from "../../ShareComponent/Dialog.svelte";
   export let hide;
   export let acept;
   export let data = "";

@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import Dialog from "../Component/Dialog.svelte";
+  import Dialog from "../../ShareComponent/Dialog.svelte";
   import Icons from "src/icons/Icons.svelte";
   import Select from "../Component/Select.svelte";
   import CheckBox from "../Component/CheckBox.svelte";

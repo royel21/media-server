@@ -1,7 +1,7 @@
 <script>
   import TextAreaInput from "../Component/TextAreaInput.svelte";
   import Icons from "src/icons/Icons.svelte";
-  import Dialog from "../Component/Dialog.svelte";
+  import Dialog from "../../ShareComponent/Dialog.svelte";
 
   export let file;
   export let modalType;

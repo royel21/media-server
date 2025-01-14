@@ -3,7 +3,7 @@
   import CheckBox from "src/admin/Component/CheckBox.svelte";
   import TextAreaInput from "src/admin/Component/TextAreaInput.svelte";
   import apiUtils from "src/apiUtils";
-  import Dialog from "../Component/Dialog.svelte";
+  import Dialog from "../../ShareComponent/Dialog.svelte";
   import Icons from "src/icons/Icons.svelte";
 
   export let hide;

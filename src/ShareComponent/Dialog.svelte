@@ -20,7 +20,7 @@
   tabindex="-1"
   on:contextmenu|stopPropagation={() => {}}
   on:keydown|stopPropagation
-  on:click={handler}
+  on:click|stopPropagation={handler}
 >
   <div {id} class={`modal card move-to ${clazz}`} transition:fade={{ duration: 200 }}>
     <form on:submit|preventDefault={confirm}>
@@ -39,7 +39,9 @@
         {#if btnOk}
           <button type="submit" class="btn">{btnOk}</button>
         {/if}
-        <button type="button" class="btn" on:click={cancel}>{btnCancer}</button>
+        {#if cancel}
+          <button type="button" class="btn" on:click={cancel}>{btnCancer}</button>
+        {/if}
       </div>
     </form>
   </div>

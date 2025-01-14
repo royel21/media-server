@@ -6,6 +6,7 @@
   import { setGesture } from "./VideoTouch";
   import Icons from "src/icons/Icons.svelte";
   import { setBatteryMetter } from "./videoUtil";
+  import ModalConfig from "./ModalPlayerConfig.svelte";
 
   export let KeyMap;
   export let file;
@@ -16,7 +17,7 @@
   const { NextFile, PrevFile, GotoStart, GotoEnd, PlayOrPause, FastForward, FastBackward } = KeyMap;
 
   const dispatch = createEventDispatcher();
-  let mConfig = { volume: 0.5, pause: false, muted: false };
+  let mConfig = { volume: 0.5, pause: false, muted: false, seekRate: 5, autoPlayList: true };
   let player = {};
   let progress;
   let isFullScreen = false;
@@ -84,10 +85,10 @@
     mConfig.volume = player.volume;
   };
 
-  SkipForward.action = () => (player.currentTime += 5);
-  SkipBack.action = () => (player.currentTime -= 5);
-  FastForward.action = () => (player.currentTime += 10);
-  FastBackward.action = () => (player.currentTime -= 10);
+  SkipForward.action = () => (player.currentTime += +mConfig.seekRate);
+  SkipBack.action = () => (player.currentTime -= +mConfig.seekRate);
+  FastForward.action = () => (player.currentTime += +mConfig.seekRate + 5);
+  FastBackward.action = () => (player.currentTime -= +mConfig.seekRate + 5);
   GotoStart.action = () => (player.currentTime = 0);
   GotoEnd.action = () => (player.currentTime = file.Duration - 5);
   VolumeUp.action = () => changeVol(-0.05);
@@ -111,20 +112,23 @@
     player.onended = () => {
       clearTimeout(isNextFile);
       isNextFile = setTimeout(() => {
-        if (player.ended) {
+        if (player.ended && mConfig.autoPlayList) {
           NextFile.action();
         }
       }, 4000);
     };
   };
 
+  let showConfig = false;
+  const showVConfig = () => (showConfig = !showConfig);
+
   onMount(() => {
     clearTimeout(isNextFile);
     window.addEventListener("fullscreenchange", onFullscreen);
     const tconfig = window.localStorage.getObject(configTag);
     if (tconfig) {
-      for (let k of Object.keys(tconfig)) {
-        mConfig[k] = tconfig[k];
+      for (let k of Object.keys(mConfig)) {
+        mConfig[k] = tconfig[k] || mConfig[k];
       }
       player.muted = mConfig.muted;
       player.volume = mConfig.volume;
@@ -215,6 +219,12 @@
               <Icons name="list" width="30px" height="24px" />
             </span>
           </label>
+          <span class="v-config" title="Player Config" on:click={showVConfig}>
+            {#if showConfig}
+              <ModalConfig hide={showVConfig} playerConfig={mConfig} />
+            {/if}
+            <Icons name="cog" width="30px" height="24px" />
+          </span>
         </div>
       </div>
     </div>
@@ -315,7 +325,7 @@
   }
   input[type="range"] {
     position: relative;
-    top: -1px;
+    top: -3px;
   }
 
   .v-vol {
@@ -348,19 +358,6 @@
   .isFullScreen .v-seeker {
     padding: 5px 0px 15px 0;
   }
-  @media screen and (max-width: 800px) {
-    .show-list {
-      position: absolute;
-      right: -10px;
-      bottom: -3px;
-    }
-  }
-
-  @media screen and (max-height: 600px) {
-    .player-content {
-      height: 100%;
-    }
-  }
 
   @media screen and (max-width: 700px) {
     .v-vol {
@@ -379,12 +376,28 @@
     }
 
     .player-btns *:not(.v-volume) {
-      margin: 0 5px;
+      margin: 0 4px;
     }
   }
+  @media screen and (min-width: 700px) {
+    .v-config {
+      position: relative;
+    }
+  }
+
+  @media screen and (max-height: 600px) {
+    .player-content {
+      height: 100%;
+    }
+  }
+
   @media screen and (max-width: 480px) {
     .v-vol > input {
-      width: 120px;
+      width: 110px;
+    }
+
+    .v-config {
+      display: none;
     }
   }
 </style>
