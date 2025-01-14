@@ -17,7 +17,7 @@
   const { NextFile, PrevFile, GotoStart, GotoEnd, PlayOrPause, FastForward, FastBackward } = KeyMap;
 
   const dispatch = createEventDispatcher();
-  let mConfig = { volume: 0.5, pause: false, muted: false, seekRate: 5, autoPlayList: true };
+  let mConfig = { volume: 0.5, pause: false, muted: false, seekRate: 5, autoPlayList: true, objectFit: "fill" };
   let player = {};
   let progress;
   let isFullScreen = false;
@@ -175,6 +175,7 @@
         loop={false}
         on:loadedmetadata={onMeta}
         on:timeupdate={updateTime}
+        style={`object-fit: ${mConfig.objectFit}`}
       >
         <track kind="captions" />
       </video>
@@ -182,7 +183,7 @@
         <div class="v-seeker">
           <span id="v-progress">{progress}</span>
           <Slider min={0} max={file.Duration} value={file.CurrentPos} onChange={onSeek} preview={true} let:value>
-            {formatTime(value + 2)}
+            {formatTime(value)}
           </Slider>
         </div>
         <div class="player-btns">
@@ -231,7 +232,7 @@
           </label>
           <span class="v-config" title="Player Config" on:click={showVConfig}>
             {#if showConfig}
-              <ModalConfig hide={showVConfig} playerConfig={mConfig} />
+              <ModalConfig hide={showVConfig} bind:playerConfig={mConfig} />
             {/if}
             <Icons name="cog" width="30px" height="24px" />
           </span>

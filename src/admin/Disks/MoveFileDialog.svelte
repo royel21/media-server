@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import Dialog from "../../ShareComponent/Dialog.svelte";
   import Icons from "src/icons/Icons.svelte";
-  import Select from "../Component/Select.svelte";
+  import Select from "src/ShareComponent/Select.svelte";
   import CheckBox from "../Component/CheckBox.svelte";
   import TextAreaInput from "../Component/TextAreaInput.svelte";
   import apiUtils from "src/apiUtils";

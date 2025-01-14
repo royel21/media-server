@@ -8,6 +8,8 @@
   export let max = 100;
   export let onChange;
 
+  $: console.log(max, value);
+
   let uniqId = "rc-" + new Date().getTime();
   let sliderRef;
   let previewRef;
@@ -65,7 +67,7 @@
       let pos = map(newPos - 1, 0, sliderRef.offsetWidth - 2, 0, 100).toFixed(0);
       let tempVal = map(newPos - 1, 0, sliderRef.offsetWidth - 2, min, max).toFixed(2);
       pos = clamp(pos, 0, 100);
-      let value = clamp(tempVal, 0, max);
+      let value = clamp(tempVal, 0, max) + 0.02;
       previewData = { pos, value };
     }
   };
@@ -227,7 +229,7 @@
     font-weight: 600;
   }
 
-  .rc-slider:hover .rc-preview {
+  .rc-track:hover .rc-preview {
     display: inline-block;
   }
 

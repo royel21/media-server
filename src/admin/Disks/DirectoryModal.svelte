@@ -1,7 +1,7 @@
 <script>
   import { fade } from "svelte/transition";
   import CheckBox from "../Component/CheckBox.svelte";
-  import Select from "../Component/Select.svelte";
+  import Select from "src/ShareComponent/Select.svelte";
   export let createDirectory;
   export let hideModal;
   export let Name;

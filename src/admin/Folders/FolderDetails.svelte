@@ -2,7 +2,7 @@
   import { getContext } from "svelte";
   import apiUtils from "src/apiUtils";
   import CheckBox from "../Component/CheckBox.svelte";
-  import Select from "../Component/Select.svelte";
+  import Select from "src/ShareComponent/Select.svelte";
   import TextAreaInput from "../Component/TextAreaInput.svelte";
   import Input from "../Component/Input.svelte";
   import Icons from "src/icons/Icons.svelte";

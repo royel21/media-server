@@ -1,6 +1,6 @@
 <script>
   import { fade } from "svelte/transition";
-  import Select from "../Component/Select.svelte";
+  import Select from "src/ShareComponent/Select.svelte";
   import { onMount } from "svelte";
   import apiUtils from "src/apiUtils";
   import Icons from "src/icons/Icons.svelte";
