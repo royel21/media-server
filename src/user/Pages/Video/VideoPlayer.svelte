@@ -40,7 +40,17 @@
     player.muted = target.checked;
   };
 
-  const fullScreen = () => setfullscreen(viewer);
+  const fullScreen = () => {
+    setfullscreen(viewer);
+
+    setTimeout(() => {
+      if (player.paused) {
+        controls.style.bottom = 0;
+      } else {
+        controls.style.bottom = -controls.offsetHeight + "px";
+      }
+    }, 150);
+  };
 
   const volChange = ({ target: { value } }) => {
     mConfig.volume = value;

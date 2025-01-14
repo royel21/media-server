@@ -159,6 +159,10 @@ input[type="text"]:not(:placeholder-shown)+span {
   width: 100%;
 }
 
+.input-control:not(:last-child) {
+  margin-bottom: 10px;
+}
+
 .input-control>* {
   display: inline-block;
   height: 30px;

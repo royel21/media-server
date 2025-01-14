@@ -30,6 +30,7 @@
     text-align: right;
     padding-right: 5px;
   }
+
   @media screen and (min-width: 700px) {
     :global(.modal-container) {
       position: initial;
@@ -40,7 +41,7 @@
     :global(#player-config) {
       position: absolute;
       right: 0;
-      bottom: -10px;
+      bottom: 41px;
     }
     :global(#player-config::after) {
       content: "";

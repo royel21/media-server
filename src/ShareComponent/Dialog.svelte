@@ -61,5 +61,9 @@
   }
   .modal-footer {
     border-top: 1px solid;
+    text-align: center;
+  }
+  .btn {
+    margin: 5px;
   }
 </style>
