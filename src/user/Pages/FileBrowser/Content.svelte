@@ -309,7 +309,7 @@
     background-color: red;
   }
   #info img {
-    max-height: 440px;
+    max-height: 420px;
     max-width: 100%;
   }
   img[alt]:after {
@@ -370,7 +370,17 @@
   #btn-bar button {
     margin-right: 12px;
   }
-  @media screen and (max-width: 640px) {
+  @media screen and (max-width: 800px) {
+    #info-content img {
+      max-height: 300px;
+    }
+    .img-d {
+      padding: 0;
+      height: fit-content;
+      margin-top: 20px;
+    }
+  }
+  @media screen and (max-width: 480px) {
     #info-content #img-info {
       display: initial;
       padding: 0;
@@ -384,9 +394,9 @@
     }
     .img-d {
       min-width: 0;
+      margin: 0;
       padding: 10px 0;
       border: none;
-      margin: 0;
       border-radius: 0;
       border-bottom: 1px solid;
       background-color: transparent;
