@@ -422,11 +422,13 @@ export const evaleLinks = async (query) => {
   };
 
   if (query.Name.includes("kaliscan")) {
-    await delay(3000);
-    let divs = document.querySelectorAll(".chapter-image");
-    for (let div of divs) {
-      div?.scrollIntoView();
-      await delay(query.Delay);
+    for (let index = 0; index < 3; index++) {
+      await delay(2000);
+      let divs = document.querySelectorAll(".chapter-image");
+      for (let div of divs) {
+        div?.scrollIntoView();
+        await delay(query.Delay);
+      }
     }
   } else {
     let imgs = document.querySelectorAll(query.Imgs);
