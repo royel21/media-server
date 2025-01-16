@@ -155,7 +155,13 @@
         <div class="m-desc">
           <span class="desc-text">
             <span class="gen-tag">Description: </span>
-            {folderinfo?.Description || "Loading Info"}
+            {#if folderinfo?.Description}
+              {#each folderinfo?.Description.split("\n") as desc}
+                <p>{desc}</p>
+              {/each}
+            {:else}
+              Loading Info
+            {/if}
           </span>
         </div>
       </div>
@@ -320,6 +326,9 @@
     text-align: start;
     flex-grow: 1;
     overflow-y: auto;
+  }
+  .m-desc p:not(:first-child) {
+    margin: 15px 0;
   }
   #name-gen-tag {
     display: flex;
