@@ -327,7 +327,7 @@
     flex-grow: 1;
     overflow-y: auto;
   }
-  .m-desc p:not(:first-child) {
+  .m-desc p:not(:nth-child(2)):not(:last-child) {
     margin: 15px 0;
   }
   #name-gen-tag {
@@ -367,8 +367,8 @@
     overflow-y: auto;
   }
   .gen-tag {
-    font-size: 1rem;
-    font-weight: 600;
+    font-size: 1.2rem;
+    font-weight: 700;
   }
   #btn-bar {
     display: flex;
