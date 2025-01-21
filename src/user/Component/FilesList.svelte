@@ -149,7 +149,7 @@
           <div class="file-cover usn" on:dblclick|stopPropagation={openFile}>
             <LazyImage cover={getCover(Type, Name, FilesType) + `?v=${ver}`} />
             {#if Type.includes("Folder")}
-              <span class="f-status completed" class:hidden={!Status}>Completed</span>
+              <span class="f-status" class:completed={Status}>{Status ? "Completed" : "OnGoing"}</span>
               <span class="f-raw" class:hidden={!isRaw}>Raw</span>
             {:else}
               <span class="file-date">
