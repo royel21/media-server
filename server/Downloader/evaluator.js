@@ -373,7 +373,7 @@ export const adultEvalPage = async (query) => {
     return false;
   });
 
-  if (query.Name.includes("mangas.in")) {
+  if (query.Name.includes("m440.in")) {
     [...document.querySelectorAll(".dl-horizontal dt")].forEach((el) => {
       let content = el.nextElementSibling;
       let tag = el.textContent?.trim();
@@ -391,19 +391,6 @@ export const adultEvalPage = async (query) => {
         }
       }
     });
-
-    // data = data
-    //   .reverse()
-    //   .map((d, i) => {
-    //     const num = d.name.match(/^\d+/);
-    //     let nextN = `${i + 1}`.padStart(3, "0");
-
-    //     if (!num || !d.name.includes(nextN)) {
-    //       d.name = nextN + " " + d.name;
-    //     }
-    //     return d;
-    //   })
-    //   .reverse();
   }
 
   let Status = /\nEnd\n|End\n/gi.test(title) || data.find((d) => / \[end\]$| end$| fin$/i.test(d.name)) ? 1 : 0;
@@ -422,11 +409,13 @@ export const evaleLinks = async (query) => {
   };
 
   if (query.Name.includes("kaliscan")) {
-    await delay(3000);
-    let divs = document.querySelectorAll(".chapter-image");
-    for (let div of divs) {
-      div?.scrollIntoView();
-      await delay(query.Delay);
+    for (let index = 0; index < 3; index++) {
+      await delay(2000);
+      let divs = document.querySelectorAll(".chapter-image");
+      for (let div of divs) {
+        div?.scrollIntoView();
+        await delay(query.Delay);
+      }
     }
   } else {
     let imgs = document.querySelectorAll(query.Imgs);

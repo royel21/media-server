@@ -125,31 +125,43 @@
     <div id="info" use:focus>
       <div id="info-content">
         <div id="img-info">
-          <span class="d-state" class:completed={folderinfo?.Status}>
-            {folderinfo?.Status ? "Completed" : "On Going"}
-          </span>
           <span class="img-d">
             <img src={encodeURI(`/Folder/${folderinfo.FilesType}/${folderinfo?.Name}.jpg`)} alt="Cover Not Found" />
+            <span class="d-state" class:completed={folderinfo?.Status}>
+              {folderinfo?.Status ? "Completed" : "On Going"}
+            </span>
           </span>
-        </div>
-        <div class="manga-name">Name: <span>{folderinfo?.Name || "Name: Loading Info"}</span></div>
-        <div class="manga-name">Alternative: <span>{folderinfo?.AltName || "Name: Loading Info"}</span></div>
-        <div class="genres-list">
-          <span class="gen-tag">Author(s): </span>
-          {#each folderinfo?.Author?.split(", ") || [] as auth}
-            <span on:click|preventDefault={onGenres} on:keydown> {auth}</span>
-          {/each}
-        </div>
-        <div class="genres-list">
-          <span class="gen-tag">Genres: </span>
-          {#each folderinfo?.Genres?.split(", ") as genre}
-            <span on:click|preventDefault={onGenres} on:keydown> {genre}</span>
-          {/each}
+          <div id="info-names">
+            <div class="manga-name">
+              <span class="gen-tag">Name: </span><span>{folderinfo?.Name || "Name: Loading Info"}</span>
+            </div>
+            <div class="manga-name">
+              <span class="gen-tag">Alternative: </span><span>{folderinfo?.AltName || "Name: Loading Info"}</span>
+            </div>
+            <div class="genres-list">
+              <span class="gen-tag">Author(s): </span>
+              {#each folderinfo?.Author?.split(", ") || [] as auth}
+                <span on:click|preventDefault={onGenres} on:keydown> {auth}</span>
+              {/each}
+            </div>
+            <div class="genres-list">
+              <span class="gen-tag">Genres: </span>
+              {#each folderinfo?.Genres?.split(", ") as genre}
+                <span on:click|preventDefault={onGenres} on:keydown> {genre}</span>
+              {/each}
+            </div>
+          </div>
         </div>
         <div class="m-desc">
           <span class="desc-text">
             <span class="gen-tag">Description: </span>
-            {folderinfo?.Description || "Loading Info"}
+            {#if folderinfo?.Description}
+              {#each folderinfo?.Description.split("\n") as desc}
+                <p>{desc}</p>
+              {/each}
+            {:else}
+              Loading Info
+            {/if}
           </span>
         </div>
       </div>
@@ -242,7 +254,16 @@
     padding-top: 5px;
     height: calc(100% - 50px);
   }
-
+  #info-names {
+    display: flex;
+    flex-direction: column;
+  }
+  #info-names > div {
+    padding: 5px 0;
+  }
+  #info-names > div:not(:last-child) {
+    border-bottom: 1px solid white;
+  }
   #info-content {
     position: relative;
     display: flex;
@@ -259,22 +280,24 @@
     border-bottom: 1px solid;
   }
   .img-d {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     border: 1px solid;
     border-radius: 0.25rem;
     background-color: #030611;
-    margin: 18px 0px;
     overflow: hidden;
+    margin-right: 10px;
+    min-width: max-content;
   }
-  #img-info {
+  #info-content #img-info {
     position: relative;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    justify-content: left;
     border-bottom: 1px solid;
     min-height: 250px;
+    padding: 10px;
   }
   #img-info .d-state {
     display: inline-block;
@@ -292,16 +315,20 @@
     background-color: red;
   }
   #info img {
-    max-height: 240px;
+    max-height: 420px;
     max-width: 100%;
   }
   img[alt]:after {
     font-size: 16px;
   }
   .m-desc {
+    font-size: 1.1rem;
     text-align: start;
     flex-grow: 1;
     overflow-y: auto;
+  }
+  .m-desc p:not(:nth-child(2)):not(:last-child) {
+    margin: 15px 0;
   }
   #name-gen-tag {
     display: flex;
@@ -330,18 +357,18 @@
     display: inline-block;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     text-align: start;
-    font-size: 1rem;
+    font-size: 1.1rem;
     overflow: auto;
-    min-height: 54px;
   }
 
   .genres-list {
     text-align: start;
-    font-size: 14px;
+    font-size: 1.1rem;
+    overflow-y: auto;
   }
   .gen-tag {
-    font-size: 1rem;
-    font-weight: 600;
+    font-size: 1.2rem;
+    font-weight: 700;
   }
   #btn-bar {
     display: flex;
@@ -352,10 +379,43 @@
   #btn-bar button {
     margin-right: 12px;
   }
-  @media screen and (max-width: 640px) {
+  @media screen and (max-width: 800px) {
+    #info-content img {
+      max-height: 300px;
+    }
+    .img-d {
+      padding: 0;
+      height: fit-content;
+      margin-top: 20px;
+    }
+  }
+  @media screen and (max-width: 480px) {
+    #info-content #img-info {
+      display: initial;
+      padding: 0;
+    }
+    #info-content img {
+      max-height: 320px;
+    }
+    #info-names > div {
+      max-height: 58px;
+      padding: 0 5px;
+    }
+    .img-d {
+      min-width: 0;
+      margin: 0;
+      padding: 10px 0;
+      border: none;
+      border-radius: 0;
+      border-bottom: 1px solid;
+      background-color: transparent;
+    }
     .gen-tag {
-      font-size: 1rem;
+      font-size: 1.2rem;
       font-weight: 600;
+    }
+    .m-desc {
+      height: calc(100% - 580px);
     }
     .m-desc .desc-text:hover {
       width: 100.5%;
