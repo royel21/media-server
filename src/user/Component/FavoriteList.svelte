@@ -13,7 +13,7 @@
   let thisEl = "";
 
   const removeFile = async (FolderId) => {
-    socket.emit("file-work", { action: "renameFolder", data: { id: favId, fid: FolderId } });
+    let data = await apiUtils.postFav("remove-folder", { id: favId, fid: FolderId });
 
     if (data.removed) {
       dispath("removeFile", FolderId);
