@@ -14,8 +14,6 @@ const tagsPath = "./server/data/tags.json";
 
 const getData = async ({ params }, res) => {
   const { page, items, filter, folderId, dirId } = params;
-  let filterTerm = decodeURIComponent(filter || "");
-
   // calculate the start and end of the query check sql limit
   let limit = +items || 10;
   let offset = (page - 1) * limit || 0;
@@ -29,7 +27,7 @@ const getData = async ({ params }, res) => {
   };
 
   let result;
-  let filters = getFilter(filterTerm);
+  let filters = getFilter(filter || "");
 
   // if contain folderId this is a file query we will need the folderId
   if (folderId) {
