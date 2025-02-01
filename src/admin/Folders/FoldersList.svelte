@@ -185,10 +185,25 @@
     loadFolders(1, value);
   };
 
+  const scanDir = (e) => {
+    if (currentDir != "all") {
+      socket.emit("scan-dir", { Id: currentDir });
+      setMessage({ msg: `Scanning Directory: ${dirs.find((d) => d.Id === currentDir)?.FullPath}` });
+    }
+  };
+
+  const scanDirFinish = (data) => {
+    console.log(data);
+    if (data.Id) {
+      setMessage({ msg: `Scanning Finish: ${dirs.find((d) => d.Id === data.Id)?.FullPath}`, textColor: "cyan" });
+    }
+  };
+
   const socketEvents = [
     { name: "folder-renamed", handler: onFolderRename },
     { name: "folder-removed", handler: onFolderRemove },
     { name: "reload", handler: scanFinish },
+    { name: "scan-finish", handler: scanDirFinish },
   ];
 
   onMount(async () => {
@@ -252,6 +267,11 @@
     {/if}
   </div>
   <span class="dir-list" slot="bottom-ctr">
+    {#if currentDir !== "all"}
+      <span class="sync" on:click={scanDir}>
+        <Icons name="sync" box="0 0 512 512" />
+      </span>
+    {/if}
     <span>Dirs: </span>
     <select class="form-control" on:change={changeDir} value={currentDir}>
       <option value="all">All</option>

@@ -55,6 +55,7 @@
     if (data.msg) {
       toastRef.style.top = "80px";
       toastRef.style.opacity = 1;
+      toastRef.style.color = data.textColor;
       clearTimeout(tout);
       tout = setTimeout(hideMessage, 5000);
     }
