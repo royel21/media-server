@@ -193,7 +193,6 @@
   };
 
   const scanDirFinish = (data) => {
-    console.log(data);
     if (data.Id) {
       setMessage({ msg: `Scanning Finish: ${dirs.find((d) => d.Id === data.Id)?.FullPath}`, textColor: "cyan" });
     }
