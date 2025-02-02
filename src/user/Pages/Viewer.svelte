@@ -217,7 +217,7 @@
   .f-name {
     display: flex;
     position: fixed;
-    top: 10px;
+    top: 30px;
     opacity: 0;
     justify-content: center;
     pointer-events: none;
