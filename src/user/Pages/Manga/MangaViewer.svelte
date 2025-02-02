@@ -159,6 +159,7 @@
     if (file.Id !== viewerState.lastfId) {
       viewerState.lastfId = file.Id;
       scrollInView(file.CurrentPos);
+      onShow();
     }
 
     if (webtoon && !viewerState.loading) {
@@ -173,7 +174,7 @@
   const onShow = () => {
     changeOpacity(1);
     clearTimeout(tout2);
-    tout2 = setTimeout(() => changeOpacity(0), 1000);
+    tout2 = setTimeout(() => changeOpacity(0), 2000);
   };
 
   const onConnect = () => loadImages(file.CurrentPos - 2, 8);
