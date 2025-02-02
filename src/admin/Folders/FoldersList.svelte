@@ -5,7 +5,7 @@
   import ItemList from "./ItemList.svelte";
   import { calRows } from "../Utils";
   import apiUtils from "src/apiUtils";
-  import { clamp, sortByName } from "src/ShareComponent/utils";
+  import { clamp } from "src/ShareComponent/utils";
   import Icons from "src/icons/Icons.svelte";
   import CreateFolderModal from "./CreateFolderModal.svelte";
   import ReplaceImage from "./ReplaceImage.svelte";
@@ -186,7 +186,7 @@
   };
 
   const scanDir = (e) => {
-    if (currentDir != "all") {
+    if (currentDir !== "all") {
       socket.emit("scan-dir", { Id: currentDir });
       setMessage({ msg: `Scanning Directory: ${dirs.find((d) => d.Id === currentDir)?.FullPath}` });
     }
