@@ -34,7 +34,6 @@
       if (item) {
         item.querySelector("label")?.click();
       }
-      console.log(item);
       e.preventDefault();
       e.stopPropagation();
     }

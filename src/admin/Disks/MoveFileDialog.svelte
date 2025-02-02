@@ -34,7 +34,6 @@
     if (!/^\/(mnt|media)\/.*\/|^[d-z]\:\\|\/home\/.*\/|^c:\\Users\\.*\\/i.test(item.Path)) {
       return errors.push("Path must be on User Space");
     }
-    console.log(item);
     return acept({ files, ...item });
   };
 

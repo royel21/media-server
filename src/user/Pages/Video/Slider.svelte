@@ -8,8 +8,6 @@
   export let max = 100;
   export let onChange;
 
-  $: console.log(max, value);
-
   let uniqId = "rc-" + new Date().getTime();
   let sliderRef;
   let previewRef;

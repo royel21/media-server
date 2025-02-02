@@ -11,6 +11,7 @@
   export let KeyMap;
   export let file;
   export let viewer;
+  export let removeFile;
 
   const { Fullscreen, SkipForward, SkipBack, VolumeUp, VolumeDown, Muted, ShowList } = KeyMap;
 
@@ -24,8 +25,8 @@
   let controls;
   let battLevel;
   let isNextFile = true;
-  const user = getContext("User");
-  const configTag = `${user.username}-playerconfig`;
+  const User = getContext("User");
+  const configTag = `${User.username}-playerconfig`;
 
   const onReturn = () => dispatch("returnBack");
 
@@ -236,6 +237,10 @@
             {/if}
             <Icons name="cog" width="30px" height="24px" />
           </span>
+
+          {#if User.username.includes("Royel")}
+            <span class="remove" on:click={removeFile}><Icons name="trash" color="red" /></span>
+          {/if}
         </div>
       </div>
     </div>
@@ -407,6 +412,7 @@
       width: 110px;
     }
 
+    .remove,
     .v-config {
       display: none;
     }

@@ -148,7 +148,6 @@
 
   //reload on file change
   $: if (file.Id && file.Id !== viewerState.lastfId) {
-    console.log("file changed");
     controls.file = file;
     viewerState.jumping = webtoon;
     viewerState.loading = false;

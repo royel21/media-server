@@ -17,7 +17,6 @@
   };
 
   const scanDir = (data) => {
-    console.log("scan-dir");
     socket.emit("file-work", { action: "dirScan", data });
   };
 

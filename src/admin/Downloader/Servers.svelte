@@ -140,7 +140,6 @@
     return () => {
       isMounted = false;
       apiUtils.cancelQuery();
-      console.log("umount");
     };
   });
 

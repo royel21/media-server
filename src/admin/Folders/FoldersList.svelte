@@ -194,7 +194,8 @@
 
   const scanDirFinish = (data) => {
     if (data.Id) {
-      setMessage({ msg: `Scanning Finish: ${dirs.find((d) => d.Id === data.Id)?.FullPath}`, textColor: "cyan" });
+      let found = dirs.find((d) => d.Id === data.Id)?.FullPath || items.find((i) => i.Id === data.Id)?.Name;
+      setMessage({ msg: `Scanning Finish: ${found}`, textColor: "cyan" });
     }
   };
 

@@ -13,7 +13,6 @@ const update = (cmd, change) => {
 const save = () => saveKeyMap();
 
 const restore = () => {
-  console.log("restore");
   HotkeysStore.set(getDefaultKeymap());
   save();
 };

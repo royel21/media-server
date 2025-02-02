@@ -192,7 +192,7 @@
   </span>
   <PlayList {fileId} files={playList} on:click={selectFile} {onFilter} {folderName} />
   {#if isVideo(file)}
-    <VideoPLayer {file} {KeyMap} on:returnBack={returnBack} {viewer} />
+    <VideoPLayer {file} {KeyMap} on:returnBack={returnBack} {viewer} {removeFile} />
   {:else}
     <MangaViewer
       {viewer}
