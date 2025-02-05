@@ -357,13 +357,13 @@ export const adultEvalPage = async (query) => {
   });
 
   data = data.reverse().filter((a) => {
-    if (/\d+-/.test(a.name)) {
-      let num = a.name.match(/^\d+/);
-      let regex = new RegExp(`^${num}( |$)`);
-      if (data.find((b) => regex.test(b.name))) {
-        return false;
-      }
-    }
+    // if (/\d+-/.test(a.name)) {
+    //   let num = a.name.match(/^\d+/);
+    //   let regex = new RegExp(`^${num}( |$)`);
+    //   if (data.find((b) => regex.test(b.name))) {
+    //     return false;
+    //   }
+    // }
     if (!/^000(-| |(-| )Prologue|$)/gi.test(a.name)) {
       if (/ raw/i.test(a.name)) {
         return query.Raw;
