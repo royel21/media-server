@@ -312,7 +312,7 @@ export const adultEvalPage = async (query) => {
       .replace(/^-( |)/, "")
       .trim();
 
-    if (location.href.includes("bato.to") && /R15/.test(fileName)) return;
+    if (location.href.includes("bato.to") && /R15|Prologue/i.test(fileName)) return;
 
     if (/^Tales Of Demons/i.test(Name)) {
       fileName = fileName.replace("-6", "-5");
@@ -331,7 +331,7 @@ export const adultEvalPage = async (query) => {
       }
     } else if (!/^\d+/i.test(fileName)) {
       // if name is extra and don't start with number
-      fileName = `${extraCount++} ${fileName}`;
+      fileName = `${i} ${fileName}`;
     }
 
     let n = fileName.match(/\d+/);

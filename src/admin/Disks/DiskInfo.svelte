@@ -1,4 +1,5 @@
 <script>
+  import Icons from "src/icons/Icons.svelte";
   import { getContext, onDestroy } from "svelte";
 
   const socket = getContext("socket");
@@ -17,6 +18,10 @@
     return parseFloat((vval / tval) * 100).toFixed(1) + "%";
   };
 
+  const reload = () => {
+    socket.emit("load-disks");
+  };
+
   socket.on("disk-loaded", onDiskdata);
   socket.emit("load-disks");
 
@@ -26,7 +31,7 @@
 </script>
 
 <div class="d-info" bind:this={ref}>
-  <h4><span>Disk Info</span></h4>
+  <h4><span on:click={reload}><Icons name="sync" /></span><span>Disk Info</span></h4>
   <div class="disk-content">
     <table>
       <thead>
