@@ -117,7 +117,7 @@
 
   const onMeta = () => {
     if (!player.onmousedown) {
-      setGesture(player, onPlay);
+      setGesture(player, onPlay, mConfig);
     }
     player.currentTime = file.CurrentPos;
     player.onended = () => {

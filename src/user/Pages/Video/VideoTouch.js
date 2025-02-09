@@ -10,7 +10,7 @@ let touching = false;
 let gestureDir = 0;
 let touchData = { ...initialData };
 let time = 0;
-export const setGesture = (player, onPlay) => {
+export const setGesture = (player, onPlay, mConfig) => {
   if (player) {
     player.onmousedown = player.ontouchstart = (e) => {
       touching = true;
@@ -40,13 +40,13 @@ export const setGesture = (player, onPlay) => {
         if (gestureDir === 1 && !player.seeking) {
           if (deltaX > 20 || deltaX < -20) {
             let { duration, currentTime } = player;
-            let seek = currentTime + (deltaX > 0 ? 5 : -5);
+            let seek = currentTime + (deltaX > 0 ? +mConfig.seekRate : -mConfig.seekRate);
             player.currentTime = seek < 0 ? 0 : seek > duration ? duration : seek;
             touchData = { time: e.timeStamp, startX: pageX, startY: pageY };
           }
         } else if (gestureDir === 2) {
           if (deltaY > 2 || deltaY < -2) {
-            let vol = player.volume + (deltaY < 0 ? 0.03 : -0.03);
+            let vol = player.volume + (deltaY < 0 ? 0.01 : -0.01);
             player.volume = vol < 0 ? 0 : vol > 1 ? 1 : vol;
             touchData = { time: e.timeStamp, startX: pageX, startY: pageY };
           }
