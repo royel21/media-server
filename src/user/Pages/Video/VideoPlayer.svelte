@@ -139,7 +139,7 @@
     const tconfig = window.localStorage.getObject(configTag);
     if (tconfig) {
       for (let k of Object.keys(mConfig)) {
-        mConfig[k] = tconfig[k] || mConfig[k];
+        mConfig[k] = tconfig[k] ?? mConfig[k];
       }
       player.muted = mConfig.muted;
       player.volume = mConfig.volume;
