@@ -11,7 +11,7 @@
         const entry = entries[0];
 
         if (entry.intersectionRatio > 0 || entry.isIntersecting) {
-          src = cover;
+          src = cover?.replaceAll("#", "%23");
         }
       },
       {

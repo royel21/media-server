@@ -3,7 +3,7 @@
   import { fade } from "svelte/transition";
   import { navigate } from "svelte-routing";
 
-  import { FileTypes, ProcessFile, getFilesPerPage } from "../Pages/filesUtils";
+  import { FileTypes, ProcessFile, getFilesPerPage, getFilesPerRows } from "../Pages/filesUtils";
   import { fileKeypress, selectElementById, selectByTitle } from "./fileEvents";
 
   import Pagination from "src/ShareComponent/Pagination.svelte";
@@ -15,6 +15,7 @@
   import LazyImage from "./LazyImage.svelte";
   import { getLastChap } from "./fileUtils";
   import UserStore from "../Stores/UserStore";
+  import { isMobile } from "src/utils";
 
   export let id = "";
   export let page = 1;
@@ -43,7 +44,9 @@
   const loadContent = async (folderId, pg = 1, flt) => {
     if (location.pathname.includes("viewer")) return;
     const { Items, SortBy } = config;
-    const itemsPerPage = Items || getFilesPerPage(3);
+    const tempIem = Items || getFilesPerPage(3);
+    const itemsPerRows = getFilesPerRows();
+    const itemsPerPage = itemsPerRows * Math.floor(tempIem / itemsPerRows);
     const apiPath = title === "Content" ? `folder-content/${folderId}` : type;
     const search = encodeURIComponent(flt || "");
     let url = `/api/files/${apiPath}/${SortBy}/${pg}/${itemsPerPage}/${search}`;
@@ -124,9 +127,19 @@
     return encodeURI(`/${Type}/${folder}/${Name}.jpg`);
   };
 
+  let timeOut;
+  const onResize = () => {
+    clearTimeout(timeOut);
+    timeOut = setTimeout(async () => {
+      await loadContent(id, page, filter || "");
+    }, 300);
+  };
+
   onMount(() => {
     socket.on("reload", reloadDir);
+    window.addEventListener("resize", onResize);
     return () => {
+      window.removeEventListener("resize", onResize);
       socket.off("reload", reloadDir);
     };
   });

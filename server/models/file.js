@@ -7,7 +7,7 @@ import defaultConfig from "../default-config.js";
 export default (sequelize, isSqlite) => {
   const genImgPath = (type, fname, name) => `${defaultConfig.ImagesDir}/${type}/${fname}/${name}.jpg`;
 
-  const { INTEGER, STRING, DATE, FLOAT, VIRTUAL } = DataTypes;
+  const { BIGINT, STRING, DATE, FLOAT, VIRTUAL } = DataTypes;
   const File = sequelize.define(
     "File",
     {
@@ -42,7 +42,7 @@ export default (sequelize, isSqlite) => {
         allowNull: false,
       },
       Size: {
-        type: INTEGER,
+        type: BIGINT.UNSIGNED,
         allowNull: true,
       },
       CreatedAt: {

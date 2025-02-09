@@ -59,10 +59,14 @@ export const saveReturnPath = (name, path) => getPathStore(name, path);
 
 export const getReturnPath = (name) => getPathStore(name);
 
-export const getFilesPerPage = (i) => {
+export const getFilesPerRows = () => {
   let fwidth = document.body.offsetWidth;
   let items = Math.floor((fwidth - scrollW) / itemW);
-  return items * i || 0;
+  return items || 1;
+};
+
+export const getFilesPerPage = (i) => {
+  return getFilesPerRows() * i || 0;
 };
 
 export const ProcessFile = (file, type, title) => {

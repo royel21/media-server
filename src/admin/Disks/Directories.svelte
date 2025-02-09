@@ -118,7 +118,7 @@
             </span>
           </td>
           <td>{Type}</td>
-          <td class="f-name" title={FullPath}>{Name}</td>
+          <td class="f-name" title={FullPath} id="Name" on:click={onShowInput}>{Name}</td>
           <td class="f-path order" id="FullPath" on:click={onShowInput}>{FullPath}</td>
           <td data-name="IsAdult" on:click={updateDir}>{IsAdult}</td>
           <td>{FolderCount}</td>

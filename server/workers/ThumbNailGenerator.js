@@ -14,7 +14,7 @@ export const genFileThumbnails = async (folders, sendMessage) => {
   for (let folder of folders) {
     if (!folder.FilesType) continue;
 
-    sendMessage(`${parseFloat((i / total) * 100).toFixed(2)}% - ${folder.Name}`);
+    sendMessage(`${parseFloat((i / total) * 100).toFixed(2)}% - ${folder.Name}: ${folder.Files.length} files`);
 
     if (existsSync(folder.Path)) {
       let files = [];

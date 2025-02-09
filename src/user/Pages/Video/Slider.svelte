@@ -2,6 +2,7 @@
   import { onDestroy } from "svelte";
 
   import { map, clamp } from "src/ShareComponent/utils";
+  import { isMobile } from "src/utils";
   export let value;
   export let preview = false;
   export let min = 0;
@@ -105,12 +106,14 @@
     <div class="rc-t">
       <div class="rc-progress" style={`width: ${progress?.toFixed(2) || 0}%`} />
     </div>
-    <span
-      class="rc-thumb"
-      style={`left: calc(${progress}% - 11px)`}
-      on:touchstart|stopPropagation={handleThumb}
-      on:mousedown|stopPropagation={handleThumb}
-    />
+    {#if !isMobile()}
+      <span
+        class="rc-thumb"
+        style={`left: calc(${progress}% - 11px)`}
+        on:touchstart|stopPropagation={handleThumb}
+        on:mousedown|stopPropagation={handleThumb}
+      />
+    {/if}
     {#if preview}
       <span
         class="rc-preview"

@@ -55,12 +55,14 @@ const rmOrphanFiles = async (folder) => {
     const imgs = folder.Files.map((f) => f.Name + ".jpg");
     const imageDir = path.join(defaultConfig.ImagesDir, getFileType(folder), folder.Name);
 
-    const founds = fs.readdirSync(imageDir).filter((f) => /jpg/.test(f));
-    for (let img of founds) {
-      if (!imgs.includes(img)) {
-        try {
-          fs.removeSync(path.join(imageDir, img));
-        } catch (error) {}
+    if (fs.existsSync(imageDir)) {
+      const founds = fs.readdirSync(imageDir).filter((f) => /jpg/.test(f));
+      for (let img of founds) {
+        if (!imgs.includes(img)) {
+          try {
+            fs.removeSync(path.join(imageDir, img));
+          } catch (error) {}
+        }
       }
     }
   } else {
@@ -164,7 +166,7 @@ const scanFolder = async (curfolder, files, isFolder) => {
           Name: f.Name,
           Type,
           FolderId: folder.Id,
-          Size: f.Size,
+          Size: f.Size || 0,
           CreatedAt: f.LastModified,
         });
       } else if (found && found.Size !== f.Size) {
