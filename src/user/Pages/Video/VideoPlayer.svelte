@@ -303,7 +303,7 @@
     margin-right: 5px;
   }
   .player-btns *:not(.v-volume) {
-    margin: 0 15px;
+    margin: 0 5px;
   }
   .player-btns .btn-screen {
     margin-right: 0px;
@@ -346,7 +346,7 @@
   }
   input[type="range"] {
     position: relative;
-    top: -3px;
+    top: -2px;
   }
 
   .v-vol {

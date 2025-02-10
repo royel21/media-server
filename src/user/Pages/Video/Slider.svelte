@@ -62,11 +62,11 @@
 
   const onPreview = (e) => {
     if (preview) {
+      const left = sliderRef.getBoundingClientRect();
       let newPos = Math.floor(e.pageX - getLeft(sliderRef));
-      let pos = map(newPos - 1, 0, sliderRef.offsetWidth - 2, 0, 100).toFixed(0);
       let tempVal = map(newPos - 1, 0, sliderRef.offsetWidth - 2, min, max).toFixed(2);
-      pos = clamp(pos, 0, 100);
       let value = clamp(tempVal, 0, max) + 0.02;
+      const pos = 4 + e.clientX - left.x - (previewRef?.offsetWidth || 0) / 2;
       previewData = { pos, value };
     }
   };
@@ -95,37 +95,34 @@
 </script>
 
 <div class="rc-slider usn">
-  <div
-    id={uniqId}
-    class="rc-track"
-    on:mousedown|stopPropagation={onMDown}
-    on:touchstart|stopPropagation={onMDown}
-    bind:this={sliderRef}
-    on:mousemove={onPreview}
-  >
-    <div class="rc-t">
-      <div class="rc-progress" style={`width: ${progress?.toFixed(2) || 0}%`} />
-    </div>
-    {#if !isMobile()}
-      <span
-        class="rc-thumb"
-        style={`left: calc(${progress}% - 11px)`}
-        on:touchstart|stopPropagation={handleThumb}
-        on:mousedown|stopPropagation={handleThumb}
-      />
-    {/if}
-    {#if preview}
-      <span
-        class="rc-preview"
-        data-title="00:00"
-        bind:this={previewRef}
-        style={`left: calc(${previewData.pos}% - ${(previewRef?.offsetWidth || 0) / 2}px)`}
-      >
-        <span class="rc-preview-content">
-          <slot value={previewData.value} />
+  <div id="track-container">
+    <div
+      id={uniqId}
+      class="rc-track"
+      on:mousedown|stopPropagation={onMDown}
+      on:touchstart|stopPropagation={onMDown}
+      bind:this={sliderRef}
+      on:mousemove={onPreview}
+    >
+      <div class="rc-t">
+        <div class="rc-progress" style={`width: ${progress?.toFixed(2) || 0}%`} />
+      </div>
+      {#if !isMobile()}
+        <span
+          class="rc-thumb"
+          style={`left: calc(${progress}% - 11px)`}
+          on:touchstart|stopPropagation={handleThumb}
+          on:mousedown|stopPropagation={handleThumb}
+        />
+      {/if}
+      {#if preview}
+        <span class="rc-preview" data-title="00:00" bind:this={previewRef} style={`left: ${previewData.pos}px`}>
+          <span class="rc-preview-content">
+            <slot value={previewData.value} />
+          </span>
         </span>
-      </span>
-    {/if}
+      {/if}
+    </div>
   </div>
 </div>
 
@@ -134,14 +131,18 @@
   span {
     user-select: none;
   }
+  #track-container {
+    width: 100%;
+    padding: 0 20px;
+  }
   .rc-slider {
+    position: relative;
     display: flex;
     align-items: center;
     width: 100%;
     margin: auto;
     height: 10px;
     cursor: pointer;
-    padding: 0 20px;
   }
   .rc-slider .rc-track,
   .rc-slider .rc-progress {
