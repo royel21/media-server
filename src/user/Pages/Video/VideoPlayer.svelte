@@ -135,6 +135,7 @@
 
   onMount(() => {
     clearTimeout(isNextFile);
+    document.querySelector(".info").style.opacity = 1;
     window.addEventListener("fullscreenchange", onFullscreen);
     const tconfig = window.localStorage.getObject(configTag);
     if (tconfig) {
@@ -151,8 +152,12 @@
       Fullscreen.action = null;
     };
   });
-
   $: mConfig.muted = player.muted;
+  $: if (mConfig.pause) {
+    document.querySelector(".f-name").style.opacity = 1;
+  } else {
+    document.querySelector(".f-name").style.opacity = 0;
+  }
 </script>
 
 {#if file.Id}
@@ -238,7 +243,7 @@
             <Icons name="cog" width="30px" height="24px" />
           </span>
 
-          {#if User.username.includes("Royel")}
+          {#if User.role.includes("Manager")}
             <span class="remove" on:click={removeFile}><Icons name="trash" color="red" /></span>
           {/if}
         </div>
@@ -415,6 +420,15 @@
     .remove,
     .v-config {
       display: none;
+    }
+  }
+
+  @media (pointer: none), (pointer: coarse) and (max-width: 640px) {
+    .v-seeker {
+      padding-bottom: 10px;
+    }
+    .player-controls {
+      padding: 10px 0;
     }
   }
 </style>

@@ -12,6 +12,7 @@
   import Icons from "src/icons/Icons.svelte";
   import { getReturnPath } from "./filesUtils";
   import { isMobile } from "src/utils";
+  import { formatSize } from "src/admin/Utils";
 
   export let folderId;
   export let fileId;
@@ -127,6 +128,7 @@
   };
 
   const getFolderName = () => {
+    console.log(file);
     if (file.Name.includes(folderName)) {
       return "";
     }
@@ -180,7 +182,7 @@
 <div class="viewer" bind:this={viewer} class:video={isVideo(file)} tabindex="-1" use:focus>
   <div class="f-name" class:nomenu={$ToggleMenu}>
     <div class="name-c">
-      <span>{`${getFolderName()} ${file.Name}`}</span>
+      <span>{`${formatSize(file.Size)} - ${getFolderName()} ${file.Name}`}</span>
     </div>
   </div>
   <span class="info" class:top={isVideo(file)}>

@@ -297,7 +297,7 @@
     <span class="config">
       <MangaConfig {ToggleMenu} />
     </span>
-    {#if User.username.includes("Royel")}
+    {#if User.role.includes("Manager")}
       <span class="remove" on:click={removeFile}><Icons name="trash" color="red" /></span>
     {/if}
   </div>

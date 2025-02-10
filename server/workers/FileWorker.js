@@ -80,7 +80,7 @@ const renameFolder = async (datas) => {
     let data;
 
     try {
-      const Path = folder.Path.replace(folder.Name, Name);
+      const Path = path.join(path.dirname(folder.Path), Name);
 
       data = { Name, Path, Description, Genres, Status, IsAdult: IsAdult || 0, AltName, Author, Server };
 

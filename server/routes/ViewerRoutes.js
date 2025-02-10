@@ -19,7 +19,7 @@ const getFiles = async ({ user, body }, res, type) => {
       where: { Id: body.id },
       include: {
         model: db.file,
-        attributes: ["Id", "Name", "Type", "Duration", "FolderId", qryCurrentPos(user, "Files")],
+        attributes: ["Id", "Name", "Type", "Duration", "FolderId", qryCurrentPos(user, "Files"), "Size"],
       },
     });
     return res.send({

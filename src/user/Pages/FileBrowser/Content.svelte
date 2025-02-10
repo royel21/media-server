@@ -175,8 +175,8 @@
       {/if}
       <button id="first" class="btn btn-secondary" on:click={openFirstLast}>First</button>
       <button id="last" class="btn btn-secondary" on:click={openFirstLast}>Last</button>
-      {#if User.username.includes("Royel")}
-        <button class="btn btn-secondary" on:click={onResetFiles}>Reset All</button>
+      <button class="btn btn-secondary" on:click={onResetFiles}>Reset All</button>
+      {#if User.role.includes("Manager")}
         <button class="btn btn-secondary" on:click={scanfiles}>Update</button>
       {/if}
     </div>

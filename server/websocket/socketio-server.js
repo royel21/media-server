@@ -18,22 +18,24 @@ export default async (server, sessionMeddle) => {
     if (isAuth) {
       const user = await db.user.findOne({
         where: { Name: isAuth.user },
-        // include: [{ model: db.userConfig }],
       });
 
       if (!user) return;
 
       FileManager.setSocket(io);
 
-      socket.on("scan-dir", (data) => FileManager.scanDir(data, user));
       socket.on("user-info", (data) => console.log(data));
       console.log("User: ", user.Name, socket.id);
 
-      socket.on("file-work", (data) => {
-        if (data?.action === "removeFile") {
-          FileManager.fileWork(data);
-        }
-      });
+      if (/Administrator|Manager/.test(user.Role)) {
+        socket.on("scan-dir", (data) => FileManager.scanDir(data, user));
+        socket.on("file-work", (data) => {
+          if (data?.action === "removeFile") {
+            FileManager.fileWork(data);
+          }
+        });
+      }
+
       if (user.Role.includes("Administrator")) {
         socket.on("load-disks", FileManager.diskLoader);
 

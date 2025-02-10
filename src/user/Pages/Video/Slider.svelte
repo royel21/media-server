@@ -250,4 +250,9 @@
     border-right: 1px solid black;
     transform: rotateZ(45deg);
   }
+  @media (pointer: none), (pointer: coarse) and (max-width: 640px) {
+    .rc-slider {
+      padding: 0 10px;
+    }
+  }
 </style>
