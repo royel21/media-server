@@ -11,8 +11,7 @@
   import { KeyMap, mapKeys, handleKeyboard, isVideo, showFileName } from "./pagesUtils";
   import Icons from "src/icons/Icons.svelte";
   import { getReturnPath } from "./filesUtils";
-  import { isMobile } from "src/utils";
-  import { formatSize } from "src/admin/Utils";
+  import { isMobile, formatSize } from "src/utils";
 
   export let folderId;
   export let fileId;

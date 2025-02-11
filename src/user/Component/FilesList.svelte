@@ -15,7 +15,7 @@
   import LazyImage from "./LazyImage.svelte";
   import { getLastChap } from "./fileUtils";
   import UserStore from "../Stores/UserStore";
-  import { isMobile } from "src/utils";
+  import { isMobile, formatSize } from "src/utils";
 
   export let id = "";
   export let page = 1;
@@ -166,7 +166,7 @@
               <span class="f-raw" class:hidden={!isRaw}>Raw</span>
             {:else}
               <span class="file-date">
-                <span>{(Size / 1025 / 1024).toFixed(2)}mb</span>
+                <span>{formatSize(Size)}</span>
                 <span>{new Date(CreatedAt)?.toLocaleDateString("en-us", dateFormat)}</span>
               </span>
             {/if}
