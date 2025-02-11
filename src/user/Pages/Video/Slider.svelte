@@ -24,6 +24,8 @@
     tempVal = tempVal < 0 ? 0 : tempVal > max ? max : tempVal;
     if (tempVal > -0.01) {
       onChange(tempVal);
+
+      console.log(previewData, tempVal);
     }
   };
 

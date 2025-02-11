@@ -246,6 +246,7 @@
           {#if User.role.includes("Manager")}
             <span class="remove" on:click={removeFile}><Icons name="trash" color="red" /></span>
           {/if}
+          <slot />
         </div>
       </div>
     </div>
@@ -270,9 +271,6 @@
     max-height: 98%;
     min-width: 95%;
     margin: 10px;
-    padding: 5px;
-    border: 1px solid;
-    border-radius: 0.5rem;
     background-color: black;
   }
   .v-state {
