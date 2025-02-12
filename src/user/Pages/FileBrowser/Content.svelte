@@ -8,6 +8,7 @@
   import { ProcessFile, getReturnPath } from "../filesUtils";
   import Icons from "src/icons/Icons.svelte";
   import { isValidKey } from "src/ShareComponent/utils";
+  import Condition from "./ConditionNF.svelte";
 
   export let page = 1;
   export let filter = "";
@@ -134,35 +135,25 @@
           </span>
           <div id="info-names">
             <div class="manga-name">
-              <span class="gen-tag">Name: </span><span>{folderinfo?.Name || "Name: Loading Info"}</span>
+              <span class="gen-tag">Name: </span><span>{folderinfo?.Name || "Loading Info"}</span>
             </div>
             <div class="manga-name">
-              <span class="gen-tag">Alternative: </span><span>{folderinfo?.AltName || "Name: Loading Info"}</span>
+              <span class="gen-tag">Alternative: </span><span>{folderinfo?.AltName || "N/F"}</span>
             </div>
             <div class="genres-list">
               <span class="gen-tag">Author(s): </span>
-              {#each folderinfo?.Author?.split(", ") || [] as auth}
-                <span on:click|preventDefault={onGenres} on:keydown> {auth}</span>
-              {/each}
+              <Condition data={folderinfo?.Author} split=", " on:click={onGenres} />
             </div>
             <div class="genres-list">
               <span class="gen-tag">Genres: </span>
-              {#each folderinfo?.Genres?.split(", ") as genre}
-                <span on:click|preventDefault={onGenres} on:keydown> {genre}</span>
-              {/each}
+              <Condition data={folderinfo?.Genres} split=", " on:click={onGenres} />
             </div>
           </div>
         </div>
         <div class="m-desc">
           <span class="desc-text">
             <span class="gen-tag">Description: </span>
-            {#if folderinfo?.Description}
-              {#each folderinfo?.Description.split("\n") as desc}
-                <p>{desc}</p>
-              {/each}
-            {:else}
-              Loading Info
-            {/if}
+            <Condition data={folderinfo?.Description} split="\n" />
           </span>
         </div>
       </div>
@@ -330,7 +321,7 @@
     flex-grow: 1;
     overflow-y: auto;
   }
-  .m-desc p:not(:nth-child(2)):not(:last-child) {
+  .m-desc :global(:not(:nth-child(2)):not(:last-child)) {
     margin: 15px 0;
   }
   #name-gen-tag {
@@ -342,7 +333,7 @@
   .genres-list span {
     cursor: pointer;
   }
-  .genres-list span:not(:first-child):not(:last-child)::after {
+  .genres-list :global(span:not(:first-child):not(:last-child)::after) {
     content: ", ";
   }
   .genres-list span:hover {
