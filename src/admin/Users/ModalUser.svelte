@@ -96,6 +96,7 @@
   label {
     color: black;
     font-weight: 600;
+    max-height: 32px;
   }
   .input-grouping {
     display: flex;
@@ -111,7 +112,14 @@
     text-align: center;
     cursor: pointer;
   }
+  .checkadult :global(svg) {
+    top: 0;
+  }
   .input-grouping .second-ctrl {
     margin-left: 5px;
+  }
+  input,
+  select {
+    max-height: 32px;
   }
 </style>

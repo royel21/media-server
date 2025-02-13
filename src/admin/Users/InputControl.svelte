@@ -71,12 +71,15 @@
     user-select: none;
   }
   input[type="text"] {
+    width: 95px;
+    border: none;
     border-radius: 0.25rem;
     padding: 0.15rem 0.35rem;
-    width: 95px;
   }
   select {
     margin: 0 5px;
+    border: none;
+    border-radius: 0.25rem;
     padding: 0.15rem 0.1rem;
   }
   #alt {

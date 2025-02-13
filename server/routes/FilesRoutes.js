@@ -64,12 +64,15 @@ routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
 
   p = clamp(p, 1, totalPages);
 
-  query.include.attributes.push([
-    literal(
-      `(Select Name from Files where FolderId=RecentFolders.FolderId ORDER BY REPLACE(REPLACE(Files.Name, "-", "0"), "[","0") DESC LIMIT 1)`
-    ),
-    "LastFile",
-  ]);
+  query.include.attributes.push(
+    [
+      literal(
+        `(Select Name from Files where FolderId=RecentFolders.FolderId ORDER BY REPLACE(REPLACE(Files.Name, "-", "0"), "[","0") DESC LIMIT 1)`
+      ),
+      "LastFile",
+    ],
+    [literal(`(Select SUM(Size) from Files where FolderId = RecentFolders.FolderId)`), "Size"]
+  );
 
   const recents = await req.user.getRecentFolders({
     ...query,

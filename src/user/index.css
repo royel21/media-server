@@ -173,6 +173,15 @@ button:active {
   left: 0;
   border-top-right-radius: 0.25rem;
   background-color: #05a100;
+  font-size: .85rem;
+}
+
+.file-cover .f-size {
+  right: 0;
+  left: initial;
+  width: initial;
+  border-top-left-radius: 0.25rem;
+  font-size: .85rem;
 }
 
 .file-cover .completed {
@@ -183,11 +192,13 @@ button:active {
   display: inline-block;
   position: absolute;
   width: inherit;
-  right: 0;
+  left: 45%;
   left: initial;
   bottom: 0px;
   background-color: red;
-  border-top-left-radius: 20%;
+  border-top-left-radius: .25rem;
+  border-top-right-radius: .25rem;
+  font-size: .85rem;
 }
 
 .file-cover .hidden {

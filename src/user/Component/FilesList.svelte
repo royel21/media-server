@@ -15,7 +15,7 @@
   import LazyImage from "./LazyImage.svelte";
   import { getLastChap } from "./fileUtils";
   import UserStore from "../Stores/UserStore";
-  import { isMobile, formatSize } from "src/utils";
+  import { formatSize } from "src/utils";
 
   export let id = "";
   export let page = 1;
@@ -162,8 +162,9 @@
           <div class="file-cover usn" on:dblclick|stopPropagation={openFile}>
             <LazyImage cover={getCover(Type, Name, FilesType) + `?v=${ver}`} />
             {#if Type.includes("Folder")}
-              <span class="f-status" class:completed={Status}>{Status ? "Completed" : "OnGoing"}</span>
+              <span class="f-status" class:completed={Status}>{Status ? "Completed" : "Ongoing"}</span>
               <span class="f-raw" class:hidden={!isRaw}>Raw</span>
+              <span class="f-size">{formatSize(Size)}</span>
             {:else}
               <span class="file-date">
                 <span>{formatSize(Size)}</span>

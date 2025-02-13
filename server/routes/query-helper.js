@@ -120,6 +120,8 @@ export const getFolders = async (req, res) => {
 
   let filters = getFilter(search);
 
+  const Size = `(Select SUM(Size) from Files where FolderId = Folders.Id)`;
+
   let query = {
     attributes: ["Id", "Name", "Type", "Genres", "FilesType", "CreatedAt", "Status", "FileCount", "Author"],
     where: {
@@ -147,12 +149,15 @@ export const getFolders = async (req, res) => {
       const totalPages = Math.ceil(result.count / limit);
 
       if (p > totalPages) p = totalPages;
-      query.attributes.push([
-        literal(
-          `(Select Name from Files where FolderId=Folders.Id ORDER BY REPLACE(REPLACE(Name, "-", "0"), "[","0") DESC LIMIT 1)`
-        ),
-        "LastChapter",
-      ]);
+      query.attributes.push(
+        [literal(Size), "Size"],
+        [
+          literal(
+            `(Select Name from Files where FolderId=Folders.Id ORDER BY REPLACE(REPLACE(Name, "-", "0"), "[","0") DESC LIMIT 1)`
+          ),
+          "LastChapter",
+        ]
+      );
 
       result.rows = await db.folder.findAll({
         ...query,

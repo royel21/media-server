@@ -13,6 +13,7 @@
   import Filter from "src/ShareComponent/Filter.svelte";
   import LazyImage from "../Component/LazyImage.svelte";
   import Pagination from "src/ShareComponent/Pagination.svelte";
+  import { formatSize } from "src/utils";
 
   export let page = 1;
   export let filter = "";
@@ -91,13 +92,14 @@
     </span>
   </div>
   <div class="files-list" on:keydown={handleKeydown} tabindex="-1">
-    {#each pageData.items as { Id, Name, Type, LastChapter, FileCount, FilesType, Status, isRaw }, i}
+    {#each pageData.items as { Id, Name, Type, LastChapter, FileCount, FilesType, Status, isRaw, Size }, i}
       <div class="file" id={Id} data-type={Type} data-types={FilesType} on:click={handleClick} on:keydown>
         <div class="file-info">
           <div class="file-cover" on:dblclick|stopPropagation={openFolder}>
             <LazyImage cover={encodeURI(`/${Type}/${FilesType}/${Name}.jpg`)} />
-            <span class="f-status" class:completed={Status}>{Status ? "Completed" : "OnGoing"}</span>
+            <span class="f-status" class:completed={Status}>{Status ? "Completed" : "Ongoing"}</span>
             <span class="f-raw" class:hidden={!isRaw}>Raw</span>
+            <span class="f-size">{formatSize(Size)}</span>
           </div>
           <div class="file-btns">
             <span class="file-btn-left" on:click|stopPropagation={openFolder} on:keydown>
