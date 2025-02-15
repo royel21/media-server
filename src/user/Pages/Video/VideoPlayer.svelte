@@ -102,8 +102,8 @@
   FastBackward.action = () => (player.currentTime -= +mConfig.seekRate + 5);
   GotoStart.action = () => (player.currentTime = 0);
   GotoEnd.action = () => (player.currentTime = file.Duration - 5);
-  VolumeUp.action = () => changeVol(-0.05);
-  VolumeDown.action = () => changeVol(0.05);
+  VolumeUp.action = (e) => changeVol(e.ctrlKey ? -0.05 : -0.01);
+  VolumeDown.action = (e) => changeVol(e.ctrlKey ? 0.05 : 0.01);
   Muted.action = () => (player.muted = !player.muted);
   Fullscreen.action = fullScreen;
 
