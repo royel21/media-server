@@ -4,7 +4,7 @@ import { db } from "../watch-models/index.js";
 
 let fileTypes = ["mp4", "ogg", "zip", "mkv", "avi"];
 
-const sendMessage = (message, event = "info") => {
+export const sendMessageConsole = (message, event = "info") => {
   process.send({ event, message });
 };
 
@@ -43,11 +43,11 @@ export const dirScan = async ({ Path }) => {
     await db.init();
     let dir = await db.Directory.findOrCreate({ where: { Name: path.basename(Path), Path } });
     if (dir[0]) {
-      sendMessage({ text: `Scanning: ${dir[0].Path}` });
+      sendMessageConsole({ text: `Scanning: ${dir[0].Path}` });
       await db.File.destroy({ where: { DirectoryId: dir[0].Id } });
       const files = winex.ListFiles(dir[0].Path);
       await AddFiles(files, dir[0].Id);
-      sendMessage({ text: `Finish Scanning: ${dir[0].Path}` });
+      sendMessageConsole({ text: `Finish Scanning: ${dir[0].Path}` });
     }
   } catch (error) {
     console.log(error);

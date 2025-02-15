@@ -1,7 +1,7 @@
 import path from "path";
 import Sharp from "sharp";
 import db from "../models/index.js";
-import { createFolder, moveFiles, removeFiles, renFile } from "./fileHelpers.js";
+import { createFolder, moveFiles, removeFiles, renFile, transferFiles } from "./fileHelpers.js";
 import { moveToDir, remFolder, removeDFolder, workVideos } from "./videoHelper.js";
 import { createDir } from "../Downloader/utils.js";
 import defaultConfig from "../default-config.js";
@@ -90,15 +90,16 @@ const renameFolder = async (datas) => {
           const newPath = folder.Path.replace(folder.Directory.FullPath, dir.FullPath);
           data.DirectoryId = DirectoryId;
           data.Path = newPath;
-          msg = `Folder: ${Name} was moved from ${folder.Directory.FullPath} to ${dir.FullPath}`;
         }
         sendMessage("folder-renamed", {
           Id,
           success: true,
-          msg: `Transfering: ${folder.Name} this may take time please wait until completed message`,
+          msg: `Transfering: ${folder.Name} this may take some time please wait until completed message`,
           folder: { ...folder.dataValues },
           Transfer,
         });
+        await transferFiles(folder, Name, data.Path);
+        msg = `Folder: ${Name} was moved from ${folder.Directory.FullPath} to ${dir.FullPath}`;
       } else {
         msg = `Folder: ${Name} data was Updated`;
       }
@@ -110,7 +111,7 @@ const renameFolder = async (datas) => {
       }
       data.Genres = gens.join(", ");
 
-      await folder.update(data, { Name: folder.Name });
+      await folder.update(data);
       await folder.reload();
       success = true;
     } catch (error) {

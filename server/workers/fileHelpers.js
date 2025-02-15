@@ -1,5 +1,6 @@
 import fs from "fs-extra";
 import path from "path";
+import defaultConfig from "../default-config.js";
 
 const sendMessage = (data, event = "files-info") => {
   console.log(data.msg || "", data.error || "");
@@ -13,14 +14,16 @@ export const moveFiles = ({ files, Path, overwrite }) => {
     return sendMessage({ error: `The specified path does not exist: ${Path}` });
   }
 
-  for (const file of files) {
+  for (const [i, file] of files.entries()) {
     try {
       fs.moveSync(file.Path, path.join(Path, file.Name), { overwrite });
+      console.log(`${i + 1}/${files.length} Moving:`, file.Path, "->", Path);
+      console.log();
     } catch (error) {
       sendMessage({ msg: `Error moving: ${file.Name}`, error });
     }
   }
-  sendMessage({ msg: `Finish Moving Files to: ${Path}`, items: files.map((f) => f.Id) });
+  sendMessage({ msg: `Finish Moving Files to: ${Path}`, folders: files.map((f) => f.Id) });
 };
 
 export const removeFiles = ({ files }) => {
@@ -34,7 +37,7 @@ export const removeFiles = ({ files }) => {
       sendMessage({ error: `Error Removing: ${file.Name}`, err: error });
     }
   }
-  sendMessage({ msg: "Finish Removing Files", items: files.map((f) => f.Id) });
+  sendMessage({ msg: "Finish Removing Files", folders: files.map((f) => f.Id) });
 };
 
 const getNewId = () => {
@@ -81,6 +84,35 @@ export const renFile = ({ file, Name }) => {
       data.msg = `Some Error Happen when trying to Rename File: ${file.Name}`;
       data.error = error;
       sendMessage(data);
+    }
+  }
+};
+
+const getFileType = ({ FilesType }) => (FilesType === "mangas" ? "Manga" : "Video");
+const getCoverPath = (name, type) => path.join(defaultConfig.ImagesDir, "Folder", type, name + ".jpg");
+
+export const transferFiles = async (folder, Name, Path) => {
+  console.log(folder.Path, Path);
+  fs.moveSync(folder.Path, Path, { overwrite: true });
+
+  const type = folder.FilesType;
+
+  const oldCover = getCoverPath(folder.Name, type);
+  const Cover = getCoverPath(Name, type);
+  //rename cover name
+  if (fs.existsSync(oldCover) && Cover !== oldCover) {
+    fs.moveSync(oldCover, Cover, { overwrite: true });
+  }
+  //Rename Folder for thumbnail
+  if (Name !== folder.Name) {
+    const thumbsPath = `${defaultConfig.ImagesDir}/${getFileType(folder)}/${Name}`;
+    if (fs.existsSync(thumbsPath)) {
+      const newthumbsPath = thumbsPath.replace(Name, folder.Name);
+      try {
+        fs.moveSync(thumbsPath, newthumbsPath);
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 };
