@@ -7,6 +7,8 @@
   let diskData = [];
 
   let ref;
+  let totalFree;
+  let totalUsed;
 
   const onDiskdata = (data) => {
     diskData = data;
@@ -28,10 +30,15 @@
   onDestroy(() => {
     socket.off("disk-loaded", onDiskdata);
   });
+
+  const reducer = (att) => (accumulator, d) => accumulator + +d[att].replace("GB", "");
+
+  $: totalFree = (diskData.reduce(reducer("Used"), 0) / 1024).toFixed(2);
+  $: totalUsed = (diskData.reduce(reducer("Size"), 0) / 1024).toFixed(2);
 </script>
 
 <div class="d-info" bind:this={ref}>
-  <h4><span on:click={reload}><Icons name="sync" /></span><span>Disk Info</span></h4>
+  <h4><span on:click={reload}><Icons name="sync" /></span><span>Disk Info {totalFree}TB/{totalUsed}TB</span></h4>
   <div class="disk-content">
     <table>
       <thead>
