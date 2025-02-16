@@ -174,20 +174,20 @@
         <span id="v-progress" class="v-p">&#128337; {progress}</span>
       </span>
       <video
-        class="player"
-        src={`/api/viewer/video/${file.Id}`}
         bind:this={player}
         bind:paused={mConfig.pause}
         bind:volume={mConfig.volume}
-        preload="metadata"
-        controls={false}
         on:contextmenu|preventDefault
-        autoplay={true}
-        poster={file.Cover}
-        loop={false}
         on:loadedmetadata={onMeta}
         on:timeupdate={updateTime}
+        class="player"
+        preload="metadata"
+        src={`/api/viewer/video/${file.Id}`}
         style={`object-fit: ${mConfig.objectFit}`}
+        loop={false}
+        controls={false}
+        autoplay={true}
+        poster={file.Cover}
       >
         <track kind="captions" />
       </video>
