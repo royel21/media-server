@@ -30,6 +30,9 @@
   .sort-item > *:not(:last-child) {
     padding-right: 5px;
   }
+  .sort-item .input-control {
+    margin-bottom: 0;
+  }
 
   span {
     font-weight: 700;

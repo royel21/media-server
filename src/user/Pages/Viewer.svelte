@@ -128,7 +128,6 @@
   };
 
   const getFolderName = () => {
-    console.log(file);
     if (file.Name.includes(folderName)) {
       return "";
     }
@@ -168,7 +167,7 @@
 
   $: if (playList.length) {
     fileIndex = playList.findIndex((f) => f.Id === fileId);
-    file = playList[fileIndex];
+    file = playList[fileIndex < 0 ? 0 : fileIndex];
   }
 
   $: if (file.Id != lastId) {
