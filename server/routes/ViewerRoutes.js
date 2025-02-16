@@ -42,10 +42,14 @@ routes.post("/favorites/", (req, res) => {
 
 routes.get("/video/:id", async (req, res) => {
   const file = await db.file.findOne({
-    attributes: ["Id", "Name", "Size"],
+    attributes: ["Name", "Size"],
     where: { Id: req.params.id },
-    include: { model: db.folder, where: { IsAdult: { [Op.lte]: req.user.AdultPass } }, required: true },
+    include: { attributes: ["Path", "IsAdult"], model: db.folder },
   });
+
+  if (file.Folder.IsAdult < req.user.AdultPass) {
+    return res.status(400).send("User don't have access to this file");
+  }
 
   if (file && req.headers.range) {
     const range = req.headers.range;
