@@ -96,10 +96,16 @@
     mConfig.volume = player.volume;
   };
 
-  SkipForward.action = () => (player.currentTime += +mConfig.seekRate);
-  SkipBack.action = () => (player.currentTime -= +mConfig.seekRate);
-  FastForward.action = () => (player.currentTime += +mConfig.seekRate + 5);
-  FastBackward.action = () => (player.currentTime -= +mConfig.seekRate + 5);
+  const onSkip = (seekRate) => {
+    if (!player.seeking) {
+      player.currentTime = seekRate;
+    }
+  };
+
+  SkipForward.action = () => onSkip(+mConfig.seekRate);
+  SkipBack.action = () => onSkip(-+mConfig.seekRate);
+  FastForward.action = () => onSkip(+mConfig.seekRate + 5);
+  FastBackward.action = () => onSkip(-(+mConfig.seekRate + 5));
   GotoStart.action = () => (player.currentTime = 0);
   GotoEnd.action = () => (player.currentTime = file.Duration - 5);
   VolumeUp.action = (e) => changeVol(e.ctrlKey ? -0.05 : -0.01);
