@@ -176,11 +176,10 @@ const fileKeypress = (e, page, goToPage, title, type) => {
     if (wasProcesed) {
       e.preventDefault();
       e.stopPropagation();
-    }
-
-    const active = file.parentElement.querySelector(".active");
-    if (active && title) {
-      saveId(title, active.id);
+      const active = file.parentElement.querySelector(".active");
+      if (active && title) {
+        saveId(title, active.id);
+      }
     }
   }
 };
