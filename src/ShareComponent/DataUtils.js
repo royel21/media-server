@@ -6,10 +6,14 @@ export const getProps = ({ location, href }) => {
     return { class: "active" };
   }
 
-  for (let i = 0; i < hrefParts.length; i++) {
-    if (locPart[i] !== hrefParts[i]) {
-      return {};
+  if (locPart.includes("admin")) {
+    for (let i = 0; i < hrefParts.length; i++) {
+      if (locPart[i] !== hrefParts[i]) {
+        return {};
+      }
     }
+    return { class: "active" };
   }
-  return { class: "active" };
+
+  return locPart[1] === hrefParts[1] ? { class: "active" } : {};
 };

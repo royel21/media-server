@@ -49,7 +49,7 @@
       e.preventDefault();
       e.stopPropagation();
       let i = 0;
-      const elements = [...document.querySelectorAll("a.active, .files-list, input")];
+      const elements = [...document.querySelectorAll("a.active, .files-list, #filter-input")];
 
       for (let el of elements) {
         i++;
