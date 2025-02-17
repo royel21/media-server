@@ -15,7 +15,7 @@
   import LazyImage from "./LazyImage.svelte";
   import { getLastChap } from "./fileUtils";
   import UserStore from "../Stores/UserStore";
-  import { formatSize } from "src/utils";
+  import { formatSize, isMobile } from "src/utils";
 
   export let id = "";
   export let page = 1;
@@ -129,10 +129,12 @@
 
   let timeOut;
   const onResize = () => {
-    clearTimeout(timeOut);
-    timeOut = setTimeout(async () => {
-      await loadContent(id, page, filter || "");
-    }, 300);
+    if (!isMobile()) {
+      clearTimeout(timeOut);
+      timeOut = setTimeout(async () => {
+        await loadContent(id, page, filter || "");
+      }, 300);
+    }
   };
 
   onMount(() => {
