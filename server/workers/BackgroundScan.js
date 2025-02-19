@@ -37,43 +37,41 @@ const sendMessage = (text, event = "info") => {
 };
 
 const rmOrphanFiles = async (folder) => {
-  if (folder) {
-    const tfiles = fs.readdirSync(folder.Path);
-    const removed = [];
-    for (const file of folder.Files) {
-      if (folder.Path && file.Name) {
-        if (!tfiles.includes(file.Name)) {
-          try {
-            await file.destroy({ Del: true });
-            removed.push(file.Id);
-          } catch (error) {
-            console.log(folder.Path, file.Name, error.toString());
-          }
-        }
-      }
-    }
-    folder.Files = folder.Files.filter((f) => !removed.includes(f.Id));
-    const imgs = folder.Files.map((f) => f.Name + ".jpg");
-    const imageDir = path.join(defaultConfig.ImagesDir, getFileType(folder), folder.Name);
-
-    if (fs.existsSync(imageDir)) {
-      const founds = fs.readdirSync(imageDir).filter((f) => /jpg/.test(f));
-      for (let img of founds) {
-        if (!imgs.includes(img)) {
-          try {
-            fs.removeSync(path.join(imageDir, img));
-          } catch (error) {}
-        }
-      }
-    }
-  } else {
+  if (!folder) {
     for (const f of folders) {
       try {
-        if (f.IsNoEmpty) {
-          await rmOrphanFiles(f);
-        }
+        return await rmOrphanFiles(f);
       } catch (error) {
         console.log(f.Name, error.toString());
+      }
+    }
+  }
+
+  const tfiles = fs.readdirSync(folder.Path);
+  const removed = [];
+  for (const file of folder.Files) {
+    if (folder.Path && file.Name) {
+      if (!tfiles.includes(file.Name)) {
+        try {
+          await file.destroy({ Del: true });
+          removed.push(file.Id);
+        } catch (error) {
+          console.log(folder.Path, file.Name, error.toString());
+        }
+      }
+    }
+  }
+  folder.Files = folder.Files.filter((f) => !removed.includes(f.Id));
+  const imgs = folder.Files.map((f) => f.Name + ".jpg");
+  const imageDir = path.join(defaultConfig.ImagesDir, getFileType(folder), folder.Name);
+
+  if (fs.existsSync(imageDir)) {
+    const founds = fs.readdirSync(imageDir).filter((f) => /jpg/.test(f));
+    for (let img of founds) {
+      if (!imgs.includes(img)) {
+        try {
+          fs.removeSync(path.join(imageDir, img));
+        } catch (error) {}
       }
     }
   }
@@ -208,6 +206,12 @@ const scanDirectory = async ({ id, dir, isFolder }) => {
 
       folders = await getFolders(id, isFolder);
 
+      console.timeEnd("list-files");
+
+      sendMessage("Cleanning Orpan File");
+      console.time("Cleanning Orpan File");
+      await rmOrphanFiles();
+      console.timeEnd("Cleanning Orpan File");
       if (isFolder && folders[0]) {
         await folders[0].update({ Scanning: true });
 
@@ -216,13 +220,6 @@ const scanDirectory = async ({ id, dir, isFolder }) => {
           // return sendMessage("Folder is Empty");
         }
       }
-
-      console.timeEnd("list-files");
-
-      sendMessage("Cleanning Orpan File");
-      console.time("Cleanning Orpan File");
-      await rmOrphanFiles();
-      console.timeEnd("Cleanning Orpan File");
 
       sendMessage("Scanning directory");
       console.time("Scanning directory");

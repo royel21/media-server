@@ -14,7 +14,7 @@ export const genFileThumbnails = async (folders, sendMessage) => {
   for (let folder of folders) {
     if (!folder.FilesType) continue;
 
-    sendMessage(`${parseFloat((i / total) * 100).toFixed(2)}% - ${folder.Name}: ${folder.Files.length} files`);
+    sendMessage(`${parseFloat((i / (total || 1)) * 100).toFixed(2)}% - ${folder.Name}: ${folder.Files.length} files`);
 
     if (existsSync(folder.Path)) {
       let files = [];
@@ -61,7 +61,7 @@ export const genFileThumbnails = async (folders, sendMessage) => {
       await db.file.bulkCreate(toUpdate, { updateOnDuplicate: ["Duration"] });
     }
   }
-  sendMessage("-----100%-----");
+  sendMessage("100% - Finish");
 };
 
 //Generate Thumbnail for folders

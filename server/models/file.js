@@ -103,7 +103,6 @@ export default (sequelize, isSqlite) => {
           if (opt.Del) {
             try {
               const folder = await item.getFolder();
-              console.log("folder: ", folder?.Name);
               if (folder) {
                 //Delete File
                 const fPath = `${folder.Path}/${item.Name}`;
