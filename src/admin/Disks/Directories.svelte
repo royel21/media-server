@@ -2,6 +2,7 @@
   import { onMount, getContext } from "svelte";
   import apiUtils from "src/apiUtils";
   import Icons from "src/icons/Icons.svelte";
+  import { MessageStore, setMessage } from "../Store/MessageStore";
 
   const socket = getContext("socket");
   let dirs = [];
@@ -52,12 +53,18 @@
     dirs = dirs;
   };
 
-  const hideInput = ({ target }) => {
+  const hideInput = async ({ target }) => {
     const { name, value } = target;
     if (value !== dir[name].toString()) {
-      apiUtils.post("admin/directories/update", { id: dir.Id, [name]: value });
+      const result = await apiUtils.post("admin/directories/update", { id: dir.Id, [name]: value });
+
+      if (result.error) {
+        target.parentElement.innerHTML = dir[name];
+        return setMessage({ msg: result.error, ...result });
+      }
+      dir[name] = value;
+      target.parentElement.innerHTML = value;
     }
-    target.parentElement.innerHTML = value;
   };
 
   const onShowInput = ({ target }) => {
@@ -118,7 +125,7 @@
             </span>
           </td>
           <td>{Type}</td>
-          <td class="f-name" title={FullPath} id="Name" on:click={onShowInput}>{Name}</td>
+          <td class="f-name order" title={FullPath} id="Name" on:click={onShowInput}>{Name}</td>
           <td class="f-path order" id="FullPath" on:click={onShowInput}>{FullPath}</td>
           <td data-name="IsAdult" on:click={updateDir}>{IsAdult}</td>
           <td>{FolderCount}</td>
@@ -185,6 +192,7 @@
     outline: none;
     text-align: center;
   }
+  .f-name.order :global(input),
   .f-path.order :global(input) {
     padding: 0 8px;
     text-align: left;

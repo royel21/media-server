@@ -80,11 +80,25 @@ routes.post("/update", async (req, res) => {
   const { body } = req;
   const dir = await db.directory.findOne({ where: { Id: body.id } });
   let success = false;
+  let error;
   if (dir) {
-    await dir.update(body);
-    success = true;
+    try {
+      if (body.FullPath) {
+        if (fs.existsSync(body.FullPath)) {
+          return res.send({ error: `Directory ${body.FullPath} don't exist` });
+        }
+
+        await db.sqlze.query(`Update Folders set Path=REPLACE(Path, ?, ?) WHERE DirectoryId='${dir.Id}'`, {
+          replacements: [dir.FullPath, body.FullPath],
+        });
+      }
+      await dir.update(body);
+    } catch (err) {
+      error = `Path Can't be duplicate`;
+      console.log(error, body, err);
+    }
   }
-  res.send({ success });
+  res.send({ success, error });
 });
 
 routes.get("/backups", async (_, res) => {

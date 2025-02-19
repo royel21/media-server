@@ -37,6 +37,10 @@ export const genFileThumbnails = async (folders, sendMessage) => {
           try {
             let filePath = join(folder.Path, file.Name);
 
+            if (!existsSync(filePath)) {
+              continue;
+            }
+
             let coverPath = join(thumbPath, file.Name + ".jpg");
 
             if (file.Type.includes("Manga")) {
@@ -64,10 +68,12 @@ export const genFileThumbnails = async (folders, sendMessage) => {
 export const genFolderThumbnails = async (folders) => {
   for (let { filePath, CoverPath } of folders) {
     try {
-      if (/zip/gi.test(filePath)) {
-        await ZipCover(filePath, CoverPath);
-      } else {
-        await getVideoThumnail(filePath, CoverPath);
+      if (fs.existsSync(filePath)) {
+        if (/zip/gi.test(filePath)) {
+          await ZipCover(filePath, CoverPath);
+        } else {
+          await getVideoThumnail(filePath, CoverPath);
+        }
       }
     } catch (err) {
       console.log(err);

@@ -32,6 +32,7 @@ createDir(path.join(defaultConfig.ImagesDir, "Manga"));
 createDir(path.join(defaultConfig.ImagesDir, "Video"));
 
 const sendMessage = (text, event = "info") => {
+  console.log(text);
   process.send({ event, text });
 };
 
@@ -70,8 +71,6 @@ const rmOrphanFiles = async (folder) => {
       try {
         if (f.IsNoEmpty) {
           await rmOrphanFiles(f);
-        } else {
-          // await f.destroy({ Del: true });
         }
       } catch (error) {
         console.log(f.Name, error.toString());
@@ -195,60 +194,56 @@ const getFolders = async (id, isFolder) => {
   });
 };
 
-const cleanFolder = (folder) => {
-  const folders = fs.readdirSync(folder.Path).filter((f) => !/\.[a-zA-Z0-9]{3,4}$/.test(f));
-  for (let fol of folders) {
-    try {
-      fs.removeSync(path.join(folder.Path, fol));
-    } catch (error) {
-      console.log(error);
-    }
-  }
-};
-
 const scanDirectory = async ({ id, dir, isFolder }) => {
   DirectoryId = id;
-  console.log(dir);
   try {
     if (fs.existsSync(dir)) {
-      console.time("list-files");
-      sendMessage("list-files");
+      sendMessage("Listing files");
+
+      console.log("list-files");
       const fis = WinDrive.ListFilesRO(dir);
 
-      let folder = WinDrive.ListFiles(dir, { oneFile: true });
+      const folder = WinDrive.ListFiles(dir, { oneFile: true });
       folder.Path = dir;
 
       folders = await getFolders(id, isFolder);
 
       if (isFolder && folders[0]) {
         await folders[0].update({ Scanning: true });
-        cleanFolder(folders[0]);
+
+        if (!fis.length) {
+          await folders[0].update({ Scanning: false });
+          // return sendMessage("Folder is Empty");
+        }
       }
+
       console.timeEnd("list-files");
 
-      sendMessage("cleaning direcory");
+      sendMessage("Cleanning Orpan File");
+      console.time("Cleanning Orpan File");
       await rmOrphanFiles();
+      console.timeEnd("Cleanning Orpan File");
 
-      sendMessage("scanning directory");
-      console.time("scanning directory");
+      sendMessage("Scanning directory");
+      console.time("Scanning directory");
       await scanFolder(folder, fis, isFolder);
-      console.timeEnd("scanning directory");
+      console.timeEnd("Scanning directory");
 
-      sendMessage("creating folder thumbnails");
+      sendMessage("Creating folder thumbnails");
       await genFolderThumbnails(foldersPendingCover);
 
-      sendMessage("creating files thumbnails");
-      console.time("creating files thumbnails");
+      sendMessage("Creating files thumbnails");
+      console.time("Creating files thumbnails");
 
       await genFileThumbnails(folders, sendMessage);
-      console.timeEnd("creating files thumbnails");
+      console.timeEnd("Creating files thumbnails");
       console.log("Job Finish");
 
       if (isFolder && folders[0]) {
         await folders[0].update({ Scanning: false });
       }
     } else {
-      sendMessage("Not found:", dir);
+      sendMessage("Not Exist: " + dir);
     }
   } catch (error) {
     console.log(error);
