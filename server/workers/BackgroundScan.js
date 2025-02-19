@@ -71,7 +71,7 @@ const rmOrphanFiles = async (folder) => {
         if (f.IsNoEmpty) {
           await rmOrphanFiles(f);
         } else {
-          await f.destroy({ Del: true });
+          // await f.destroy({ Del: true });
         }
       } catch (error) {
         console.log(f.Name, error.toString());
