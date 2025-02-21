@@ -11,17 +11,18 @@
   export let scanDir;
 
   const menuItems1 = [
-    { Id: "scanDirectory", Name: "Add to Directories" },
-    { Id: "dirScan", Name: "Add to Watcher" },
+    { Id: "scanDir", Name: "Add to Directories" },
+    { Id: "addToWatcher", Name: "Add to Watcher" },
     { Id: "createDir", Name: "Create Folder" },
-    { Id: "remFolder", Name: "Rename Folder" },
+    { Id: "onCalculateSize", Name: "Calculate Size" },
     { Id: "cleanupVideos", Name: "Clean Videos" },
+    { Id: "remFolder", Name: "Rename Folder" },
     { Id: "moveToDir", Name: "Move To Directory" },
     { Id: "removeDFolder", Name: "Delete Folder" },
   ];
   const menuItems2 = [
-    { Id: "scanDirectory", Name: "Add to Directories" },
-    { Id: "dirScan", Name: "Add to Watcher" },
+    { Id: "scanDir", Name: "Add to Directories" },
+    { Id: "addToWatcher", Name: "Add to Watcher" },
     { Id: "createDir", Name: "Create Folder" },
     { Id: "cleanupVideos", Name: "Clean Videos" },
   ];
@@ -73,19 +74,22 @@
     showCreateDir = false;
   };
 
+  const onCalculateSize = (item) => socket.emit("file-work", { action: "folderSize", data: item });
+
   const menuActions = (event, id) => {
     const item = showMenu.file;
 
     const actions = {
-      scanDirectory: () => scanDir(item),
-      dirScan: () => addToWatcher(item),
+      scanDir,
+      addToWatcher,
+      onCalculateSize,
       createDir: () => (showCreateDir = item),
       cleanupVideos: () => (showCleanupModal = item),
       removeDFolder: () => (showConfirm = item),
       moveToDir: () => (showMoveTo = item),
       remFolder: () => (showRename = item),
     };
-    return actions[id] && actions[id]();
+    return actions[id] && actions[id](item);
   };
 
   let menuItems = [];

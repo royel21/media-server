@@ -6,6 +6,7 @@ import { moveToDir, remFolder, removeDFolder, workVideos } from "./videoHelper.j
 import { createDir } from "../Downloader/utils.js";
 import defaultConfig from "../default-config.js";
 import { dirScan } from "./FolderWatcher.js";
+import winExplorer from "win-explorer";
 
 const sendMessage = (event, message) => {
   process.send({ event, message });
@@ -165,6 +166,24 @@ const createFolderThumb = async ({ folderId, file }) => {
     console.log(error);
   }
 };
+const getFilesSize = (files) => {
+  let size = 0;
+  for (let file of files) {
+    if (file.isDirectory) {
+      size += getFilesSize(file.Files);
+    } else {
+      size += file.Size;
+    }
+  }
+
+  return size;
+};
+
+const folderSize = ({ Name, Path }) => {
+  const files = winExplorer.ListFilesRO(Path);
+  let Size = (getFilesSize(files) / 1024 / 1024 / 1024).toFixed(2) + "GB";
+  sendMessage("folder-size", { Name, Path, Size });
+};
 
 const actions = {
   renameFile,
@@ -181,6 +200,7 @@ const actions = {
   createFolderThumb,
   renFile,
   dirScan,
+  folderSize,
 };
 
 const works = {
@@ -196,7 +216,6 @@ const startToWork = async () => {
       await actions[work.action](work.data);
     }
   }
-  console.log("Process exit");
   process.exit();
 };
 

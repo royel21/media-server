@@ -46,21 +46,18 @@
 
   const onCleanupMessage = (message) => setMessage({ error: message.error, msg: message });
 
-  const scrollToTop = () => {
-    treeRef.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth",
-    });
-  };
-
   const onMenu = (e, file) => {
     showMenu = { e, file };
   };
   const hideMenu = () => (showMenu = false);
 
+  const onFolderSize = ({ Name, Size }) => {
+    setMessage({ msg: `${Size} - ${Name}` });
+  };
+
   socket.on("finish-cleaning", onCleanupMessage);
   socket.on("disk-loaded", onDiskdata);
+  socket.on("folder-size", onFolderSize);
 
   onMount(() => {
     document.body.addEventListener("click", hideMenu);
@@ -73,6 +70,7 @@
     document.body.removeEventListener("click", hideMenu);
     socket.off("finish-cleaning", onCleanupMessage);
     socket.off("disk-loaded", onDiskdata);
+    socket.off("folder-size", onFolderSize);
   });
 </script>
 
