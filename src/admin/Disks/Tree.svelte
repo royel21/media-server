@@ -88,9 +88,6 @@
   <div class="d-content" class:expanded={files.length}>
     <div class="rows">
       <div class="col" class:no-files={files.length === 0}>
-        {#if files.length}
-          <span class="files"><Icons name="list" /></span>
-        {/if}
         <div class="tree" bind:this={treeRef}>
           <Icons name="hdd" color="black" />
           <span class="tree-name">Server</span>
@@ -157,10 +154,6 @@
   }
   .d-loading {
     height: calc(100% - 150px);
-  }
-  .files {
-    position: absolute;
-    right: 10px;
   }
   @media (pointer: none), (pointer: coarse) and (max-width: 640px) {
     .d-content.expanded {
