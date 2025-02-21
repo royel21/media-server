@@ -2,7 +2,7 @@ import path from "path";
 import Sharp from "sharp";
 import db from "../models/index.js";
 import { createFolder, moveFiles, removeFiles, renFile, transferFiles } from "./fileHelpers.js";
-import { moveToDir, remFolder, removeDFolder, workVideos } from "./videoHelper.js";
+import { remFolder, removeDFolder, workVideos } from "./videoHelper.js";
 import { createDir } from "../Downloader/utils.js";
 import defaultConfig from "../default-config.js";
 import { dirScan } from "./FolderWatcher.js";
@@ -192,7 +192,7 @@ const actions = {
   removeFolder,
   workVideos,
   removeDFolder,
-  moveToDir,
+  // moveToDir,
   remFolder,
   moveFiles,
   removeFiles,
@@ -216,6 +216,7 @@ const startToWork = async () => {
       await actions[work.action](work.data);
     }
   }
+  console.log("Finish File Work");
   process.exit();
 };
 

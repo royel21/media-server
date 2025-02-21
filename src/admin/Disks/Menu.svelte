@@ -30,7 +30,7 @@
 
 <div bind:this={ref} id="c-menu" style={`left: ${left}px; top:${top}px`} on:click={onMenuClick}>
   {#each menuItems as mItem}
-    <div id={mItem.Id}>{mItem.Name}</div>
+    <div id={mItem.Id} class:b-border={mItem.BBorder}>{mItem.Name}</div>
   {/each}
 </div>
 
@@ -44,9 +44,10 @@
     border-radius: 0.25rem;
   }
   #c-menu div {
-    padding: 2px 5px;
+    padding: 8px;
+    user-select: none;
   }
-  #c-menu div:not(:last-child) {
+  #c-menu .b-border {
     border-bottom: 1px solid;
   }
   #c-menu div:hover {

@@ -6,41 +6,30 @@
   import ModalPassword from "./ModalPassword.svelte";
   import MoveModal from "./MoveModal.svelte";
   import RenameModal from "./RenameModal.svelte";
+  import { setMessage } from "../Store/MessageStore";
 
   export let showMenu = false;
   export let scanDir;
 
   const menuItems1 = [
-    { Id: "scanDir", Name: "Add to Directories" },
     { Id: "addToWatcher", Name: "Add to Watcher" },
+    { Id: "scanDir", Name: "Add to Directories" },
+    { Id: "onCalculateSize", Name: "Directory Size", BBorder: true },
     { Id: "createDir", Name: "Create Folder" },
-    { Id: "onCalculateSize", Name: "Calculate Size" },
-    { Id: "cleanupVideos", Name: "Clean Videos" },
     { Id: "remFolder", Name: "Rename Folder" },
-    { Id: "moveToDir", Name: "Move To Directory" },
     { Id: "removeDFolder", Name: "Delete Folder" },
   ];
   const menuItems2 = [
     { Id: "scanDir", Name: "Add to Directories" },
     { Id: "addToWatcher", Name: "Add to Watcher" },
     { Id: "createDir", Name: "Create Folder" },
-    { Id: "cleanupVideos", Name: "Clean Videos" },
   ];
 
   const socket = getContext("socket");
 
   let showConfirm;
-  let showMoveTo = false;
   let showRename = false;
-  let showCleanupModal = false;
   let showCreateDir = false;
-
-  const cleanDir = (data) => {
-    if (data.folder.Path) {
-      socket.emit("file-work", { action: "workVideos", data });
-    }
-    showCleanupModal = false;
-  };
 
   const addToWatcher = (data) => {
     if (data.Path) {
@@ -64,17 +53,17 @@
       socket.emit("file-work", { action: "removeDFolder", data });
     }
   };
-  const hideMoveTo = () => (showMoveTo = false);
-  const confirmMove = (data) => {
-    socket.emit("file-work", { action: "moveToDir", data });
-  };
+
   const onCreateDir = (data) => {
     data.file = showCreateDir;
     socket.emit("file-work", { action: "createFolder", data });
     showCreateDir = false;
   };
 
-  const onCalculateSize = (item) => socket.emit("file-work", { action: "folderSize", data: item });
+  const onCalculateSize = (item) => {
+    setMessage({ msg: `Calculating "${item.Name}" Size Please Wait...` });
+    socket.emit("file-work", { action: "folderSize", data: item });
+  };
 
   const menuActions = (event, id) => {
     const item = showMenu.file;
@@ -84,9 +73,7 @@
       addToWatcher,
       onCalculateSize,
       createDir: () => (showCreateDir = item),
-      cleanupVideos: () => (showCleanupModal = item),
       removeDFolder: () => (showConfirm = item),
-      moveToDir: () => (showMoveTo = item),
       remFolder: () => (showRename = item),
     };
     return actions[id] && actions[id](item);
@@ -100,16 +87,8 @@
   <Confirm text={`this folder: ${showConfirm.Name}`} acept={onRemove} {cancel} data={showConfirm} />
 {/if}
 
-{#if showMoveTo}
-  <MoveModal data={showMoveTo} hide={hideMoveTo} acept={confirmMove} />
-{/if}
-
 {#if showRename}
   <RenameModal data={showRename} hide={hideRename} acept={onRename} />
-{/if}
-
-{#if showCleanupModal}
-  <ModalPassword data={showCleanupModal} acept={cleanDir} hide={() => (showCleanupModal = false)} />
 {/if}
 
 {#if showCreateDir}

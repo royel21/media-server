@@ -13,27 +13,22 @@ const filterFile = (f) => {
 };
 
 const AddFiles = async (files, DirectoryId) => {
-  console.log("files: ", files.length);
-  const mapFile = (file) => {
-    file.Dir = path.dirname(file.Path);
-    return { ...file, DirectoryId };
-  };
+  // console.log("files: ", files.length);
 
   if (files.length) {
-    const Files = files.filter(filterFile).map(mapFile);
+    const Files = files.filter(filterFile).map((f) => ({ ...f, DirectoryId }));
 
-    try {
-      //if folder contain require file create folder and file in the db
-      if (Files.length) {
+    if (Files.length) {
+      try {
+        //if folder contain require file create folder and file in the db
         await db.File.bulkCreate(Files);
+      } catch (error) {
+        console.log(error, Files);
       }
-    } catch (error) {
-      console.log(error);
     }
     // if folder contain folders scan recursive
     for (const folder of files.filter((f) => f.isDirectory)) {
-      const fileList = winex.ListFiles(folder.Path);
-      await AddFiles(fileList, DirectoryId);
+      await AddFiles(folder.Files, DirectoryId);
     }
   }
 };
@@ -45,7 +40,7 @@ export const dirScan = async ({ Path }) => {
     if (dir[0]) {
       sendMessageConsole({ text: `Scanning: ${dir[0].Path}` });
       await db.File.destroy({ where: { DirectoryId: dir[0].Id } });
-      const files = winex.ListFiles(dir[0].Path);
+      const files = winex.ListFilesRO(dir[0].Path);
       await AddFiles(files, dir[0].Id);
       sendMessageConsole({ text: `Finish Scanning: ${dir[0].Path}` });
     }
