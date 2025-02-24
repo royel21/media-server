@@ -1,16 +1,16 @@
 <script>
-  import MoveFileDialog from "./MoveFileDialog.svelte";
+  import { onDestroy } from "svelte";
+  import { validateCheck } from "../Utils";
   import Icons from "src/icons/Icons.svelte";
   import CCheckbox from "../Component/CCheckbox.svelte";
-  import { validateCheck } from "../Utils";
-  import { onDestroy } from "svelte";
   import Confirm from "../Component/Confirm.svelte";
-  import { setMessage } from "../Store/MessageStore";
   import Filter from "src/ShareComponent/Filter.svelte";
-  import Loading from "src/ShareComponent/Loading.svelte";
+  import MoveFileDialog from "./MoveFileDialog.svelte";
+  import RenameModal from "./RenameModal.svelte";
+
+  import { setMessage } from "../Store/MessageStore";
   import { sortByName } from "src/ShareComponent/utils";
   import { formatDate } from "../Downloader/utils";
-  import RenameModal from "./RenameModal.svelte";
 
   export let files = [];
   export let socket;
@@ -63,23 +63,26 @@
   const acept = (data) => {
     showMoveDialog = false;
     socket.emit("file-work", { action: "moveFiles", data });
-    transfer = true;
   };
 
   const onFileInfo = ({ msg, items, error, ren, file }) => {
-    setMessage({ error, msg });
-    if (items || error) {
-      transfer = false;
+    if (msg || error) {
+      setMessage({ error, msg });
     }
+
     if (ren) {
       const index = files.findIndex((f) => f.Id === file.Id);
       if (index > -1) {
         files[index] = file;
         files = files.sort(sortByName);
       }
-    } else if (items) {
-      files = files.filter((f) => !items.includes(f.Id));
-      removeList = [];
+    }
+  };
+
+  const fileUpdate = ({ move }) => {
+    if (move) {
+      removeList = removeList.filter((f) => f.Id !== move.Id);
+      files = files.filter((f) => f.Id !== move.Id);
     }
   };
 
@@ -89,7 +92,9 @@
   };
 
   socket.on("files-info", onFileInfo);
+  socket.on("info", fileUpdate);
   onDestroy(() => {
+    socket.off("info", fileUpdate);
     socket.off("files-info", onFileInfo);
   });
 
@@ -106,6 +111,7 @@
   };
 
   $: isChecked = filtered.length && removeList.length === filtered.length;
+
   $: {
     filtered = files
       .filter((f) => f.Name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()))
@@ -138,9 +144,6 @@
 
 <div class="col">
   <div class="tree-files">
-    {#if transfer}
-      <Loading text="Transfer In Process - Please Wait" />
-    {/if}
     <div class="ftree-control">
       <h4>{filtered.length}/{TotalSize} - {Name}</h4>
       <div class="filter">

@@ -8,7 +8,7 @@ const sendMessage = (data, event = "files-info") => {
 };
 
 export const moveFiles = ({ files, Path, overwrite }) => {
-  sendMessage({ msg: `Moving Files to: ${Path} Please Wait` });
+  sendMessage({ text: `Moving Files to: ${Path} Please Wait` }, "info");
 
   if (!fs.existsSync(Path)) {
     return sendMessage({ error: `The specified path does not exist: ${Path}` });
@@ -19,11 +19,12 @@ export const moveFiles = ({ files, Path, overwrite }) => {
       fs.moveSync(file.Path, path.join(Path, file.Name), { overwrite });
       console.log(`${i + 1}/${files.length} Moving:`, file.Path, "->", Path);
       console.log();
+      sendMessage({ text: `File: ${i + 1}/${files.length}`, move: file }, "info");
     } catch (error) {
       sendMessage({ msg: `Error moving: ${file.Name}`, error });
     }
   }
-  sendMessage({ msg: `Finish Moving Files to: ${Path}`, folders: files.map((f) => f.Id) });
+  sendMessage({ text: `Finish Moving Files to: ${Path}` }, "info");
 };
 
 export const removeFiles = ({ files }) => {
