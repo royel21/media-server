@@ -14,13 +14,7 @@
     "----": "",
     "build-win": "git pull&&vite build&&move.bat",
     "build-linux": "git pull&&vite build&&./move.sh",
-    "build": "vite build&&./move.sh",
-    "updateDb": "set CDB=mediaserverdb&&node dbutils/db.js updateDb",
-    "updateDb-linux": "export CDB=mediaserverdb&&node dbutils/db.js updateDb",
-    "updateAd_Db": "set CDB=mediaserver_adultdb&&node dbutils/db.js updateDb",
-    "saveDb": "node dbutils/db.js saveDb",
-    "testDb": "node db.js test",
-    "test": "node others/test"
+    "build": "vite build&&./move.sh"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.1.0",

@@ -1,5 +1,5 @@
-rsync -avu --del --exclude='[0-9]*.jpg' --prune-empty-dirs "/mnt/5TBHDD/mangas/" "/mnt/8TBHDD/mangas"
-rsync -avu --del --exclude='[0-9]*.jpg' --prune-empty-dirs "/mnt/5TBHDD/R18/" "/mnt/8TBHDD/R18"
+rsync -avu --del --exclude='[0-9]*.jpg' --prune-empty-dirs "/<src>" "/<dest>"
+rsync -avu --del --exclude='[0-9]*.jpg' --prune-empty-dirs "/<src>" "/<dest>"
 
     -a archive mode; equals -rlptgoD (no -H, -A, -X)
     -v run verbosely
