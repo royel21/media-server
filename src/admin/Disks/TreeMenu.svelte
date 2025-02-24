@@ -3,8 +3,6 @@
   import Confirm from "../Component/Confirm.svelte";
   import CreateDirDialog from "./CreateDirDialog.svelte";
   import Menu from "./Menu.svelte";
-  import ModalPassword from "./ModalPassword.svelte";
-  import MoveModal from "./MoveModal.svelte";
   import RenameModal from "./RenameModal.svelte";
   import { setMessage } from "../Store/MessageStore";
 
