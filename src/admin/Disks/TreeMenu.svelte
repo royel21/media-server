@@ -84,7 +84,7 @@
 </script>
 
 {#if showConfirm}
-  <Confirm text={`this folder: ${showConfirm.Name}`} acept={onRemove} {cancel} data={showConfirm} />
+  <Confirm text={`${showConfirm.Name}`} acept={onRemove} {cancel} data={showConfirm} />
 {/if}
 
 {#if showRename}
