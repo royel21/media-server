@@ -19,12 +19,12 @@ export const moveFiles = ({ files, Path, overwrite }) => {
       fs.moveSync(file.Path, path.join(Path, file.Name), { overwrite });
       console.log(`${i + 1}/${files.length} Moving:`, file.Path, "->", Path);
       console.log();
-      sendMessage({ text: `File: ${i + 1}/${files.length} - ${file.Name}`, move: file }, "info");
+      sendMessage({ text: `${i + 1}/${files.length} - ${file.Name}`, move: file }, "info");
     } catch (error) {
       sendMessage({ msg: `Error moving: ${file.Name}`, error });
     }
   }
-  sendMessage({ text: `Finish Moving Files to: ${Path}` }, "info");
+  sendMessage({ text: `Finish Moving Files to: ${files.length}-${Path}` }, "info");
 };
 
 export const removeFiles = ({ files }) => {
