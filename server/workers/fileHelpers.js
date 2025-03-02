@@ -89,31 +89,23 @@ export const renFile = ({ file, Name }) => {
   }
 };
 
-const getFileType = ({ FilesType }) => (FilesType === "mangas" ? "Manga" : "Video");
-const getCoverPath = (name, type) => path.join(defaultConfig.ImagesDir, "Folder", type, name + ".jpg");
+export const transferFiles = async (folder, Path) => {
+  const files = fs.readdirSync(folder.Path);
 
-export const transferFiles = async (folder, Name, Path) => {
-  console.log(folder.Path, Path);
-  fs.moveSync(folder.Path, Path, { overwrite: true });
-
-  const type = folder.FilesType;
-
-  const oldCover = getCoverPath(folder.Name, type);
-  const Cover = getCoverPath(Name, type);
-  //rename cover name
-  if (fs.existsSync(oldCover) && Cover !== oldCover) {
-    fs.moveSync(oldCover, Cover, { overwrite: true });
-  }
-  //Rename Folder for thumbnail
-  if (Name !== folder.Name) {
-    const thumbsPath = `${defaultConfig.ImagesDir}/${getFileType(folder)}/${Name}`;
-    if (fs.existsSync(thumbsPath)) {
-      const newthumbsPath = thumbsPath.replace(Name, folder.Name);
-      try {
-        fs.moveSync(thumbsPath, newthumbsPath);
-      } catch (error) {
-        console.log(error);
-      }
+  try {
+    if (!fs.existsSync(Path)) {
+      fs.mkdirsSync(Path);
     }
+
+    if (fs.existsSync(folder.Path)) {
+      for (const file of files) {
+        const from = path.join(folder.Path, file);
+        sendMessage({ text: `Moving: ${from}` }, "info");
+        fs.moveSync(from, path.join(Path, file), { overwrite: true });
+      }
+      fs.removeSync(folder.Path);
+    }
+  } catch (error) {
+    console.log(error);
   }
 };

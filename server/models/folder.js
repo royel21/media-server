@@ -105,15 +105,19 @@ export default (sequelize, isSqlite) => {
           }
         },
         beforeUpdate: async function (item, opt) {
-          let old = item._previousDataValues.Path;
-          if (opt.Name && old !== item.Path && fs.existsSync(old)) {
-            //move or rename folder
-            fs.moveSync(old, item.Path, { overwrite: true });
+          let { Path, Name } = item._previousDataValues;
+          if (Path !== item.Path && fs.existsSync(Path)) {
+            if (!opt.Transfer) {
+              //rename folder
+              fs.moveSync(Path, item.Path, { overwrite: true });
+            }
 
             const type = item._previousDataValues.FilesType;
 
-            let oldCover = getCoverPath(opt.Name, type);
+            let oldCover = getCoverPath(Name, type);
             const Cover = getCoverPath(item.Name, type);
+            console.log(oldCover);
+            console.log(Cover);
             //rename cover name
             if (fs.existsSync(oldCover) && Cover !== oldCover) {
               fs.moveSync(oldCover, Cover, { overwrite: true });

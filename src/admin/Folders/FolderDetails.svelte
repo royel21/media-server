@@ -27,9 +27,16 @@
     folder = { Id };
     imageData = { Id, Url: "", file: "" };
     const data = await apiUtils.admin(["folders", "folder", Id], "fd");
+
+    if (data.dirs && !options.length) {
+      options = data.dirs
+        .sort((a, b) => a.FullPath.localeCompare(b.FullPath))
+        .map((d) => ({ Id: d.Id, Name: d.FullPath }));
+    }
+
     if (data.dirs) {
       imageData.Id = Id;
-      options = data.dirs.map((d) => ({ Id: d.Id, Name: d.FullPath }));
+
       delete data.dirs;
       folder = { ...folder, ...data };
       old = { ...folder };

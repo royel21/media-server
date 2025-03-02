@@ -76,13 +76,24 @@ const evalServer = async (query) => {
   });
 };
 
+const formatAMPM = (date) => {
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  let ampm = hours >= 12 ? "pm" : "am";
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  minutes = minutes.toString().padStart(2, "0");
+  let strTime = date.toUTCString().replace(/\d+:\d+:\d+ GMT/i, "") + hours + ":" + minutes + " " + ampm;
+  return strTime;
+};
+
 export const downloadFromPage = async (Id, state) => {
   const db = getDb();
 
   const server = await db.Server.findOne({ where: { Id: Id } });
   if (server && server?.HomeQuery) {
     try {
-      sendMessage({ text: `*** checking server ${server.Name} ***`, important: true });
+      sendMessage({ text: `*** ${formatAMPM(new Date())} checking server ${server.Name} ***`, important: true });
 
       const page = await createPage(state.browser);
       await page.goto(`https:\\${server.Name}`, { waitUntil: "domcontentloaded" });
