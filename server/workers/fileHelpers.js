@@ -3,7 +3,7 @@ import path from "path";
 import defaultConfig from "../default-config.js";
 
 const sendMessage = (data, event = "files-info") => {
-  console.log(data.msg || "", data.error || "");
+  console.log(data.msg || data.text || "", data.error || "");
   process.send({ event, message: data });
 };
 
@@ -89,23 +89,29 @@ export const renFile = ({ file, Name }) => {
   }
 };
 
-export const transferFiles = async (folder, Path) => {
-  const files = fs.readdirSync(folder.Path);
-
+export const transferFiles = async (src, dest) => {
+  const files = fs.readdirSync(src);
   try {
-    if (!fs.existsSync(Path)) {
-      fs.mkdirsSync(Path);
+    if (!fs.existsSync(dest)) {
+      fs.mkdirsSync(dest);
     }
 
-    if (fs.existsSync(folder.Path)) {
-      for (const file of files) {
-        const from = path.join(folder.Path, file);
-        sendMessage({ text: `Moving: ${from}` }, "info");
-        fs.moveSync(from, path.join(Path, file), { overwrite: true });
+    if (fs.existsSync(src)) {
+      sendMessage({ text: `Moving: ${src}  =>  ${dest}` }, "info");
+
+      for (const [i, file] of files.entries()) {
+        sendMessage({ text: `${i + 1}/${files.length}: ${file}` }, "info");
+
+        fs.moveSync(path.join(src, file), path.join(dest, file), { overwrite: true });
       }
-      fs.removeSync(folder.Path);
+      //Remove folder if empty
+      if (fs.readdirSync(src).length === 0) {
+        fs.removeSync(src);
+      }
+      return { success: true };
     }
   } catch (error) {
     console.log(error);
   }
+  return { success: false };
 };

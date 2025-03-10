@@ -6,7 +6,7 @@
   import TextAreaInput from "../Component/TextAreaInput.svelte";
   import Input from "../Component/Input.svelte";
   import Icons from "src/icons/Icons.svelte";
-  import { isDiff, validGenres, validateAuthor, validAltName } from "../Utils";
+  import { isDiff, validGenres, validateAuthor, validAltName, formatSize } from "../Utils";
   import { setMessage } from "../Store/MessageStore";
 
   export let folderId;
@@ -147,8 +147,10 @@
 <div class="detail" class:change={isModified}>
   <div class="error">{error || ""}</div>
   <div class="f-count">
-    <span class="ccount">Total: {folder.Total || 0}</span><span>Last Chapter: {folder.Last || "N/A"}</span>
+    <span class="ccount">Total: {folder.Total || 0}</span>
+    <span class="ccount">Size: {formatSize(folder.Size || 0)}</span>
   </div>
+  <div class="last-file"><strong>Last Chapter: </strong><span> {folder.Last || "N/A"}</span></div>
   <div class="d-content">
     <TextAreaInput file={folder} key="Name" style="margin-bottom: 5px" rows="3" {onChange}>
       <span class="pre-paste" slot="btn-left" on:click={copyName} title="Copy Name">
@@ -198,13 +200,9 @@
     color: black;
     font-weight: 600;
   }
+
   .f-count span {
-    display: inline-block;
-    padding: 2px 4px;
-  }
-  .f-count span:last-child {
-    padding-left: 10px;
-    width: 100%;
+    width: 50%;
   }
   .detail :global(.input-label) {
     width: 145px;

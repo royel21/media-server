@@ -128,7 +128,13 @@ routes.post("/folder-create", async (req, res) => {
 });
 
 routes.get("/folder/:folderId?", async (req, res) => {
-  const folder = await db.folder.findOne({ where: { Id: req.params.folderId || "" } });
+  const folder = await db.folder.findOne({
+    attributes: {
+      include: [[literal(`(Select SUM(Size) from Files where FolderId = Folders.Id)`), "Size"]],
+    },
+    where: { Id: req.params.folderId || "" },
+  });
+
   if (!folder) return res.send({});
 
   const dirs = await db.directory.findAll({ order: ["Name"] });
@@ -153,6 +159,7 @@ routes.get("/folder/:folderId?", async (req, res) => {
     Author: folder.Author,
     Status: folder.Status,
     Server: folder.Server,
+    Size: folder.dataValues.Size || 0,
     Last: files.length > 0 ? files[files.length - 1] : "N/A",
     Total: files.length > 0 ? files.length : 0,
     dirs,

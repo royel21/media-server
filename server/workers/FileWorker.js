@@ -99,7 +99,10 @@ const renameFolder = async (datas) => {
           folder: { ...folder.dataValues },
           Transfer,
         });
-        await transferFiles(folder, data.Path);
+        const result = await transferFiles(folder.Path, data.Path);
+        if (!result.success) {
+          return sendMessage("folder-renamed", { Id, success: false, msg: "Transfer folder fail" });
+        }
         msg = `Folder: ${Name} was moved from ${folder.Directory.FullPath} to ${dir.FullPath}`;
       } else {
         msg = `Folder: ${Name} data was Updated`;
