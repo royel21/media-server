@@ -68,7 +68,7 @@ export const genFileThumbnails = async (folders, sendMessage) => {
 export const genFolderThumbnails = async (folders) => {
   for (let { filePath, CoverPath } of folders) {
     try {
-      if (fs.existsSync(filePath)) {
+      if (existsSync(filePath)) {
         if (/zip/gi.test(filePath)) {
           await ZipCover(filePath, CoverPath);
         } else {

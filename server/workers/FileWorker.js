@@ -99,7 +99,10 @@ const renameFolder = async (datas) => {
           folder: { ...folder.dataValues },
           Transfer,
         });
-        await transferFiles(folder, Name, data.Path);
+        const result = await transferFiles(folder.Path, data.Path);
+        if (!result.success) {
+          return sendMessage("folder-renamed", { Id, success: false, msg: "Transfer folder fail" });
+        }
         msg = `Folder: ${Name} was moved from ${folder.Directory.FullPath} to ${dir.FullPath}`;
       } else {
         msg = `Folder: ${Name} data was Updated`;
@@ -112,7 +115,7 @@ const renameFolder = async (datas) => {
       }
       data.Genres = gens.join(", ");
 
-      await folder.update(data);
+      await folder.update(data, { Transfer, Name });
       await folder.reload();
       success = true;
     } catch (error) {

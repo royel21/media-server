@@ -153,7 +153,7 @@ db.init = async (force) => {
   }
 };
 
-db.init();
+await db.init();
 
 export const createdb = async () => {
   if (dbConnector === "mariadb") {

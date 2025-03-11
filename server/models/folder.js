@@ -105,21 +105,24 @@ export default (sequelize, isSqlite) => {
           }
         },
         beforeUpdate: async function (item, opt) {
-          let old = item._previousDataValues.Path;
-          if (opt.Name && old !== item.Path && fs.existsSync(old)) {
-            //move or rename folder
-            fs.moveSync(old, item.Path, { overwrite: true });
-
-            const type = item._previousDataValues.FilesType;
-
-            let oldCover = getCoverPath(opt.Name, type);
-            const Cover = getCoverPath(item.Name, type);
-            //rename cover name
-            if (fs.existsSync(oldCover) && Cover !== oldCover) {
-              fs.moveSync(oldCover, Cover, { overwrite: true });
+          let { Path, Name } = item._previousDataValues;
+          if (Path !== item.Path && fs.existsSync(Path)) {
+            if (!opt.Transfer) {
+              //rename folder
+              fs.moveSync(Path, item.Path, { overwrite: true });
             }
             //Rename Folder for thumbnail
             if (opt.Name !== item.Name) {
+              const type = item._previousDataValues.FilesType;
+
+              let oldCover = getCoverPath(Name, type);
+              const Cover = getCoverPath(item.Name, type);
+              //rename cover name
+              if (fs.existsSync(oldCover) && Cover !== oldCover) {
+                console.log(oldCover);
+                console.log(Cover);
+                fs.moveSync(oldCover, Cover, { overwrite: true });
+              }
               const thumbsPath = `${defaultConfig.ImagesDir}/${getFileType(item)}/${opt.Name}`;
               if (fs.existsSync(thumbsPath)) {
                 const newthumbsPath = thumbsPath.replace(opt.Name, item.Name);

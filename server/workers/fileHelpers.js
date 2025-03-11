@@ -3,7 +3,7 @@ import path from "path";
 import defaultConfig from "../default-config.js";
 
 const sendMessage = (data, event = "files-info") => {
-  console.log(data.msg || "", data.error || "");
+  console.log(data.msg || data.text || "", data.error || "");
   process.send({ event, message: data });
 };
 
@@ -89,31 +89,29 @@ export const renFile = ({ file, Name }) => {
   }
 };
 
-const getFileType = ({ FilesType }) => (FilesType === "mangas" ? "Manga" : "Video");
-const getCoverPath = (name, type) => path.join(defaultConfig.ImagesDir, "Folder", type, name + ".jpg");
-
-export const transferFiles = async (folder, Name, Path) => {
-  console.log(folder.Path, Path);
-  fs.moveSync(folder.Path, Path, { overwrite: true });
-
-  const type = folder.FilesType;
-
-  const oldCover = getCoverPath(folder.Name, type);
-  const Cover = getCoverPath(Name, type);
-  //rename cover name
-  if (fs.existsSync(oldCover) && Cover !== oldCover) {
-    fs.moveSync(oldCover, Cover, { overwrite: true });
-  }
-  //Rename Folder for thumbnail
-  if (Name !== folder.Name) {
-    const thumbsPath = `${defaultConfig.ImagesDir}/${getFileType(folder)}/${Name}`;
-    if (fs.existsSync(thumbsPath)) {
-      const newthumbsPath = thumbsPath.replace(Name, folder.Name);
-      try {
-        fs.moveSync(thumbsPath, newthumbsPath);
-      } catch (error) {
-        console.log(error);
-      }
+export const transferFiles = async (src, dest) => {
+  const files = fs.readdirSync(src);
+  try {
+    if (!fs.existsSync(dest)) {
+      fs.mkdirsSync(dest);
     }
+
+    if (fs.existsSync(src)) {
+      sendMessage({ text: `Moving: ${src}  =>  ${dest}` }, "info");
+
+      for (const [i, file] of files.entries()) {
+        sendMessage({ text: `${i + 1}/${files.length}: ${file}` }, "info");
+
+        fs.moveSync(path.join(src, file), path.join(dest, file), { overwrite: true });
+      }
+      //Remove folder if empty
+      if (fs.readdirSync(src).length === 0) {
+        fs.removeSync(src);
+      }
+      return { success: true };
+    }
+  } catch (error) {
+    console.log(error);
   }
+  return { success: false };
 };
