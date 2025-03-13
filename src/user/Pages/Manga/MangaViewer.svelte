@@ -212,6 +212,7 @@
       socket.off("disconnect", onDisconnect);
       socket.off("manga-error", onError);
 
+      ToggleControlBar.action = null;
       Fullscreen.action = null;
       document.removeEventListener("touchmove", onShow);
       document.removeEventListener("mousemove", onShow);
