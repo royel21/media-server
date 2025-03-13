@@ -7,3 +7,6 @@ rsync -avu --del --exclude='[0-9]*.jpg' --prune-empty-dirs "/<src>" "/<dest>"
     --del delete the files in target folder that do not exist in the source
     --exclude='[0-9]*.jpg' exclude all file that start with number and have extension .jpg
     --prube-empty-dir don't copy empty dir or full of exclude files
+
+
+    sudo sdparm --flexible -6 -l --save --set SCT=288000 /dev/disk/by-id/scsi-SSABRENT__DB98765432123
