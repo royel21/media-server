@@ -199,7 +199,10 @@
     GotoStart.action = () => jumpTo(0);
     GotoEnd.action = () => jumpTo(file.Duration);
     Fullscreen.action = onFullScreen;
-    ToggleControlBar.action = () => updateToggleMenu();
+    ToggleControlBar.action = (e) => {
+      e.preventDefault();
+      updateToggleMenu();
+    };
     elements = [...document.querySelectorAll("#btn-playlist, .fullscreen-progress, .info")];
     document.addEventListener("touchmove", onShow);
     document.addEventListener("mousemove", onShow);
