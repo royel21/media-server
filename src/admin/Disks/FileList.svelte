@@ -233,7 +233,6 @@
   }
   h4 {
     position: relative;
-    cursor: pointer;
     display: inline-block;
     width: calc(100% - 25px);
     white-space: nowrap;
