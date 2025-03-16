@@ -84,7 +84,7 @@ routes.post("/update", async (req, res) => {
   if (dir) {
     try {
       if (body.FullPath) {
-        if (fs.existsSync(body.FullPath)) {
+        if (!fs.existsSync(body.FullPath)) {
           return res.send({ error: `Directory ${body.FullPath} don't exist` });
         }
 

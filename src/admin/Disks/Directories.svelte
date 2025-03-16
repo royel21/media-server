@@ -63,8 +63,8 @@
         return setMessage({ msg: result.error, ...result });
       }
       dir[name] = value;
-      target.parentElement.innerHTML = value;
     }
+    target.parentElement.innerHTML = value;
   };
 
   const onShowInput = ({ target }) => {

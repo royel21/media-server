@@ -97,7 +97,7 @@
         </div>
       </div>
       {#if files.length}
-        <FileList {files} {socket} Name={current?.Name} {content} />
+        <FileList {files} {socket} Name={current?.Name} {content} {current} />
       {/if}
     </div>
   </div>

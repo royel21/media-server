@@ -11,18 +11,20 @@
   import { setMessage } from "../Store/MessageStore";
   import { sortByName } from "src/ShareComponent/utils";
   import { formatDate } from "../Downloader/utils";
+  import apiUtils from "src/apiUtils";
 
   export let files = [];
   export let socket;
   export let content = [];
   export let Name = "";
+  export let current;
+
   let filtered = files;
   let TotalSize = 0;
   let sortBy = "date";
 
   let removeList = [];
   let isChecked = false;
-  let transfer = false;
   let filter = "";
 
   let showMoveDialog;
@@ -91,6 +93,15 @@
     hideRename();
   };
 
+  const reload = async () => {
+    if (current) {
+      const data = await apiUtils.post("admin/directories/Content", { Path: current.Path });
+      if (data.data) {
+        files = data.data.filter((it) => it.Type === "file");
+      }
+    }
+  };
+
   socket.on("files-info", onFileInfo);
   socket.on("info", fileUpdate);
   onDestroy(() => {
@@ -149,6 +160,7 @@
       <div class="filter">
         <span>
           <CCheckbox id="check-all" on:change={onCheckAll} {isChecked} title="Select All Files" />
+          <span class="btn-sync" on:click={reload}><Icons name="sync" /></span>
           {#if removeList.length}
             <span on:click={onTransfer}><Icons name="right-left" /></span>
             <span class="rm-all" on:click={() => (showConfirm = true)}><Icons name="trash" /></span>
@@ -283,5 +295,9 @@
   }
   .rm-all {
     margin-right: 5px;
+  }
+  .tree-files .btn-sync {
+    display: inline-block;
+    width: 35px;
   }
 </style>

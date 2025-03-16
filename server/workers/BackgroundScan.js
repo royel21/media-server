@@ -201,6 +201,10 @@ const scanDirectory = async ({ id, dir, isFolder }) => {
       console.log("list-files");
       const fis = WinDrive.ListFilesRO(dir);
 
+      if (fis.length === 0) {
+        return sendMessage("Folder is Empty");
+      }
+
       const folder = WinDrive.ListFiles(dir, { oneFile: true });
       folder.Path = dir;
 
