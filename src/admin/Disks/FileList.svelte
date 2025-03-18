@@ -21,7 +21,7 @@
 
   let filtered = files;
   let TotalSize = 0;
-  let sortBy = "date";
+  let sortBy = "name";
 
   let removeList = [];
   let isChecked = false;
