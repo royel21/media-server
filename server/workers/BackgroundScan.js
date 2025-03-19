@@ -201,15 +201,9 @@ const scanDirectory = async ({ id, dir, isFolder }) => {
       console.log("list-files");
 
       console.time("list-files");
-      let files = [];
+      const fis = WinDrive.ListFilesRO(dir);
 
-      try {
-        files = WinDrive.ListFilesRO(dir);
-      } catch (error) {
-        console.log("listing-error: ", error.toString());
-      }
-
-      if (files.length === 0) {
+      if (fis.length === 0) {
         return sendMessage("Folder is Empty");
       }
 
@@ -227,7 +221,7 @@ const scanDirectory = async ({ id, dir, isFolder }) => {
       if (isFolder && folders[0]) {
         await folders[0].update({ Scanning: true });
 
-        if (!files.length) {
+        if (!fis.length) {
           await folders[0].update({ Scanning: false });
           // return sendMessage("Folder is Empty");
         }
@@ -235,7 +229,7 @@ const scanDirectory = async ({ id, dir, isFolder }) => {
 
       sendMessage("Scanning directory");
       console.time("Scanning directory");
-      await scanFolder(folder, files, isFolder);
+      await scanFolder(folder, fis, isFolder);
       console.timeEnd("Scanning directory");
 
       sendMessage("Creating folder thumbnails");

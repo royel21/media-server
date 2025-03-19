@@ -34,10 +34,11 @@ if (os.platform().includes("win32")) {
     for (let f of foundFiles) {
       if (["$"].includes(f[0]) || f.includes("System Volume Information")) continue;
       try {
-        tempFiles[i] = fileInfo(path.join(dir, f), f);
+        const file = path.join(dir, f);
+        tempFiles[i] = fileInfo(file, f);
         i++;
       } catch (error) {
-        console.log(error);
+        console.log("error oppening file", file);
       }
     }
 
