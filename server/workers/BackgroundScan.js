@@ -199,6 +199,8 @@ const scanDirectory = async ({ id, dir, isFolder }) => {
       sendMessage("Listing files");
 
       console.log("list-files");
+
+      console.time("list-files");
       const fis = WinDrive.ListFilesRO(dir);
 
       if (fis.length === 0) {
