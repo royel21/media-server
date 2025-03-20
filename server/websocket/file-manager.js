@@ -102,9 +102,9 @@ const diskLoader = async () => {
       Name: "MSIDownloads",
       Path: "/mnt/MSIDownloads",
       Content: [],
-      Free: "N/A",
-      Used: "N/A",
-      Size: "N/A",
+      Free: "0GB",
+      Used: "0GB",
+      Size: "0GB",
     },
   ];
   for (const drive of drives) {
