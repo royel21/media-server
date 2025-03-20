@@ -99,8 +99,8 @@ const diskLoader = async () => {
   const disks = [
     {
       Id: nanoid(5),
-      Name: "MSIDownload",
-      Path: "/mnt/MSIDownload",
+      Name: "MSIDownloads",
+      Path: "/mnt/MSIDownloads",
       Content: [],
       Free: "N/A",
       Used: "N/A",
