@@ -96,7 +96,17 @@ const sizeInGB = (size) => (size / 1024 / 1024 / 1024).toFixed(1) + "GB";
 // List all hdd
 const diskLoader = async () => {
   const drives = await drivelist.list();
-  const disks = [];
+  const disks = [
+    {
+      Id: nanoid(5),
+      Name: "MSIDownload",
+      Path: "/mnt/MSIDownload",
+      Content: [],
+      Free: "N/A",
+      Used: "N/A",
+      Size: "N/A",
+    },
+  ];
   for (const drive of drives) {
     if (drive.mountpoints.length > 0) {
       let mp = drive.mountpoints[0];
