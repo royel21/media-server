@@ -33,8 +33,8 @@ if (os.platform().includes("win32")) {
     let i = 0;
     for (let f of foundFiles) {
       if (["$"].includes(f[0]) || f.includes("System Volume Information")) continue;
+      const file = path.join(dir, f);
       try {
-        const file = path.join(dir, f);
         tempFiles[i] = fileInfo(file, f);
         i++;
       } catch (error) {
