@@ -159,6 +159,7 @@ routes.get("/folder/:folderId?", async (req, res) => {
     Author: folder.Author,
     Status: folder.Status,
     Server: folder.Server,
+    EmissionDate: folder.EmissionDate,
     Size: folder.dataValues.Size || 0,
     Last: files.length > 0 ? files[files.length - 1] : "N/A",
     Total: files.length > 0 ? files.length : 0,

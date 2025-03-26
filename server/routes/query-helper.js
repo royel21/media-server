@@ -123,7 +123,18 @@ export const getFolders = async (req, res) => {
   const Size = `(Select SUM(Size) from Files where FolderId = Folders.Id)`;
 
   let query = {
-    attributes: ["Id", "Name", "Type", "Genres", "FilesType", "CreatedAt", "Status", "FileCount", "Author"],
+    attributes: [
+      "Id",
+      "Name",
+      "Type",
+      "Genres",
+      "FilesType",
+      "CreatedAt",
+      "Status",
+      "FileCount",
+      "Author",
+      "EmissionDate",
+    ],
     where: {
       [Op.or]: {
         Name: filters,

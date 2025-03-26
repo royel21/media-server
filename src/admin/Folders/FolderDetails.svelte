@@ -166,6 +166,7 @@
     <TextAreaInput file={folder} key="Description" rows="4" {onChange} />
     <Input key="Author" item={folder} {onChange} sept=", " />
     <Input key="Server" item={folder} {onChange} />
+    <Input label="Emission Date" type="date" key="EmissionDate" item={folder} {onChange} />
     <CheckBox label="Completed" key="Status" item={folder} {onChange} />
     <CheckBox label="Is Adult" key="IsAdult" item={folder} {onChange} />
     <CheckBox key="transfer" item={{ transfer }} onChange={() => (transfer = !transfer)} />

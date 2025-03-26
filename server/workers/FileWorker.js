@@ -68,7 +68,20 @@ const removeFile = async ({ Id, Del, viewer }) => {
 };
 
 const renameFolder = async (datas) => {
-  const { Id, Name, Description, Genres, Status, IsAdult, AltName, Transfer, DirectoryId, Author, Server } = datas;
+  const {
+    Id,
+    Name,
+    Description,
+    Genres,
+    Status,
+    IsAdult,
+    AltName,
+    Transfer,
+    DirectoryId,
+    Author,
+    Server,
+    EmissionDate,
+  } = datas;
   let folder = await db.folder.findOne({
     where: { Id },
     include: { model: db.directory },
@@ -83,7 +96,7 @@ const renameFolder = async (datas) => {
     try {
       const Path = path.join(path.dirname(folder.Path), Name);
 
-      data = { Name, Path, Description, Genres, Status, IsAdult: IsAdult || 0, AltName, Author, Server };
+      data = { Name, Path, Description, Genres, Status, IsAdult: IsAdult || 0, AltName, Author, Server, EmissionDate };
 
       if (Transfer) {
         const dir = await db.directory.findOne({ where: { Id: DirectoryId } });

@@ -49,7 +49,7 @@ routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
     where: { UserId: req.user.Id },
     include: {
       model: db.folder,
-      attributes: ["Id", "Name", "FileCount", "FilesType", "Type", "Status", "Genres", "Author"],
+      attributes: ["Id", "Name", "FileCount", "FilesType", "Type", "Status", "Genres", "Author", "EmissionDate"],
       where: {
         [Op.or]: { Name: filters, AltName: filters, Genres: filters, Author: filters },
         IsAdult: { [Op.lte]: req.user.AdultPass },
