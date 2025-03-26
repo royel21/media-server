@@ -3,6 +3,7 @@ import path from "path";
 import { nanoid } from "nanoid";
 import { DataTypes } from "sequelize";
 import defaultConfig from "../default-config.js";
+import { type } from "os";
 
 export default (sequelize, isSqlite) => {
   const getFileType = ({ FilesType }) => (FilesType === "mangas" ? "Manga" : "Video");
@@ -91,6 +92,9 @@ export default (sequelize, isSqlite) => {
       },
       Author: {
         type: STRING(100),
+      },
+      EmissionDate: {
+        type: DATE,
       },
     },
     {
