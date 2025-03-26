@@ -23,7 +23,6 @@
   export let type = "";
   export let title = "";
   export let handleClick = null;
-  export let useSlot = false;
   export let onOpen = null;
   export let setFolderInfo = null;
 
@@ -127,6 +126,17 @@
     return encodeURI(`/${Type}/${folder}/${Name}.jpg`);
   };
 
+  const getDate = (d) => {
+    const curDate = d.Type === "Folder" ? d.EmissionDate : d.CreatedAt;
+    const nDate = new Date(curDate || "");
+    console.log(nDate);
+    if (nDate.toString() !== "Invalid Date") {
+      return nDate.toLocaleDateString("en-us", dateFormat);
+    }
+
+    return "";
+  };
+
   let timeOut;
   const onResize = () => {
     if (!isMobile()) {
@@ -163,19 +173,12 @@
         <div class="file-info">
           <div class="file-cover usn" on:dblclick|stopPropagation={openFile}>
             <LazyImage cover={getCover(Type, Name, FilesType) + `?v=${ver}`} />
-            {#if Type.includes("Folder")}
+            {#if Type === "Folder"}
               <span class="f-status" class:completed={Status}>{Status ? "Completed" : "Ongoing"}</span>
               <span class="f-raw" class:hidden={!isRaw}>Raw</span>
-              <span class="f-size">{formatSize(Size)}</span>
-              {#if EmissionDate}
-                <span class="f-date">{new Date(EmissionDate)?.toLocaleDateString("en-us", dateFormat)}</span>
-              {/if}
-            {:else}
-              <span class="file-date">
-                <span>{formatSize(Size)}</span>
-                <span>{new Date(CreatedAt)?.toLocaleDateString("en-us", dateFormat)}</span>
-              </span>
             {/if}
+            <span class="f-size">{formatSize(Size)}</span>
+            <span class="f-date">{getDate({ Type, EmissionDate, CreatedAt })}</span>
           </div>
           <div class="file-btns usn">
             <span class="file-btn-left" on:click|stopPropagation={openFile} on:keydown>
@@ -189,11 +192,7 @@
               {/if}
             </span>
             {#if Type === "Folder"}
-              {#if useSlot}
-                <slot name="file-action" file={{ Id, Name, Type }} />
-              {:else}
-                <FavoriteList {isFav} {type} {favClicked} favId={id} on:removeFile={removeFile} />
-              {/if}
+              <FavoriteList {isFav} {type} {favClicked} favId={id} on:removeFile={removeFile} />
             {/if}
           </div>
           <div class="file-name"><span>{Name}</span></div>

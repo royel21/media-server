@@ -27,15 +27,13 @@
   }
 </script>
 
-<span class="fav-icon">
-  {#if type.startsWith("favorites")}
-    <span class="trash" bind:this={thisEl}>
-      <Icons name="trash" height="22px" color="rgba(252, 1, 1, 0.856)" />
-    </span>
-  {:else}
-    <FavoriteAction {favClicked} {isFav} />
-  {/if}
-</span>
+{#if type.startsWith("favorites")}
+  <span class="trash" bind:this={thisEl}>
+    <Icons name="trash" height="22px" color="rgba(252, 1, 1, 0.856)" />
+  </span>
+{:else}
+  <FavoriteAction {favClicked} {isFav} />
+{/if}
 
 <style>
   .trash :global(svg:active) {

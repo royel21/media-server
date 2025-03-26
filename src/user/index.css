@@ -170,15 +170,17 @@ button:active {
 .file-cover .f-status {
   display: inline-block;
   width: auto;
-  left: 0;
-  border-top-right-radius: 0.25rem;
+  right: 0;
+  top: 0;
+  bottom: initial;
+  border-radius: 0.25rem 0 0 .25rem;
   background-color: #05a100;
   font-size: .85rem;
 }
 
+.file-cover .f-date,
 .file-cover .f-size {
-  right: 0;
-  left: initial;
+  left: 0;
   width: initial;
   border-top-left-radius: 0.25rem;
   font-size: .85rem;
@@ -192,17 +194,24 @@ button:active {
   display: inline-block;
   position: absolute;
   width: inherit;
-  left: 45%;
-  left: initial;
-  bottom: 0px;
+  left: 0;
+  top: 0;
+  bottom: initial;
   background-color: red;
-  border-top-left-radius: .25rem;
-  border-top-right-radius: .25rem;
+  border-bottom-right-radius: .25rem;
   font-size: .85rem;
 }
 
-.file-cover .hidden {
+.file .file-cover .hidden {
   display: none;
+}
+
+.file .f-date {
+  width: max-content;
+  right: 0;
+  left: initial;
+  border-radius: 0 0 0 .25rem;
+  font-size: .85rem;
 }
 
 img {
