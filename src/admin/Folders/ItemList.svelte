@@ -4,7 +4,7 @@
   import Filter from "src/ShareComponent/Filter.svelte";
   import Pagination from "src/ShareComponent/Pagination.svelte";
   import CCheckbox from "../Component/CCheckbox.svelte";
-  export let id;
+  export let id = "";
   export let filter;
   export let title;
   export let items;
@@ -55,6 +55,9 @@
             tabindex="-1"
           >
             {#if Type.includes("Folder")}
+              <span class="fol-type">
+                <Icons name={FilesType === "videos" ? "film" : "book"} box="0 0 512 512" />
+              </span>
               <span class="sync" on:click={iconClick}>
                 <Icons name="sync" box="0 0 512 512" class={scanning.includes(Id) || Scanning ? "icon-spin" : ""} />
               </span>
@@ -92,6 +95,19 @@
   li {
     position: relative;
     height: 40px;
+  }
+  .fol-type {
+    position: absolute;
+    top: 7px;
+    right: 1px;
+  }
+
+  .fol-type :global(svg) {
+    height: 14px;
+    width: 14px;
+  }
+  .fol-type :global(.icon-film) {
+    fill: rgb(255, 0, 0);
   }
   .g-list {
     position: absolute;
