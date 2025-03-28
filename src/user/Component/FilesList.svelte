@@ -38,7 +38,6 @@
   const user = getContext("User");
   const baseData = { files: [], totalPages: 0, totalFiles: 0 };
   let pageData = baseData;
-  let favClicked = null;
 
   const loadContent = async (folderId, pg = 1, flt) => {
     if (location.pathname.includes("viewer")) return;
@@ -88,11 +87,6 @@
   const favClick = (event) => {
     if (handleClick) handleClick(event);
     let { target } = event;
-    if (target.closest(".fav-icon")) {
-      favClicked = target;
-    } else {
-      favClicked = false;
-    }
 
     const file = target.closest(".file");
     if (file) {
@@ -129,7 +123,6 @@
   const getDate = (d) => {
     const curDate = d.Type === "Folder" ? d.EmissionDate : d.CreatedAt;
     const nDate = new Date(curDate || "");
-    console.log(nDate);
     if (nDate.toString() !== "Invalid Date") {
       return nDate.toLocaleDateString("en-us", dateFormat);
     }
@@ -147,10 +140,20 @@
     }
   };
 
+  const hideFavList = (e) => {
+    if (e.target.classList.contains("fav-star")) return;
+
+    document.querySelectorAll(".fav-list").forEach((el) => {
+      el.style.display = "none";
+    });
+  };
+
   onMount(() => {
     socket.on("reload", reloadDir);
     window.addEventListener("resize", onResize);
+    document.body.addEventListener("click", hideFavList);
     return () => {
+      document.body.removeEventListener("click", hideFavList);
       window.removeEventListener("resize", onResize);
       socket.off("reload", reloadDir);
     };
@@ -192,7 +195,7 @@
               {/if}
             </span>
             {#if Type === "Folder"}
-              <FavoriteList {isFav} {type} {favClicked} favId={id} on:removeFile={removeFile} />
+              <FavoriteList {isFav} {type} favId={id} on:removeFile={removeFile} />
             {/if}
           </div>
           <div class="file-name"><span>{Name}</span></div>

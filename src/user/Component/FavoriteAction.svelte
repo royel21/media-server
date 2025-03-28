@@ -2,8 +2,9 @@
   import Icons from "src/icons/Icons.svelte";
   import apiUtils from "src/apiUtils";
   import { FavoritesStores } from "src/user/Stores/FavoritesStores";
+  import { onMount } from "svelte";
   export let isFav = [];
-  export let favClicked;
+  let favClicked;
 
   let thisEl = "";
 
@@ -11,14 +12,24 @@
   let star = { name: "star" };
   let icon = isFav?.length ? starFill : star;
 
-  const addToFav = async (event) => {
-    let FolderId = event.target.closest(".file").id;
-    let FavoriteId = event.target.id;
+  const addToFav = async ({ target }) => {
+    let FolderId = target.closest(".file").id;
+    let FavoriteId = target.id;
     const data = await apiUtils.postFav("add-folder", { FolderId, FavoriteId });
 
     if (data.success) {
       icon = starFill;
     }
+    target.closest(".fav-list").style.display = "none";
+    console.log("clicked", FavoriteId, FolderId);
+  };
+
+  const clicked = ({ target }) => {
+    document.querySelectorAll(".fav-list").forEach((el) => {
+      el.style.display = "none";
+    });
+
+    target.querySelector(".fav-list").style.display = "block";
   };
 
   const getFavs = () => {
@@ -29,18 +40,20 @@
   $: icon = isFav?.length ? starFill : star;
 </script>
 
-<span class="fav-star" bind:this={thisEl}>
+<span class="fav-star" bind:this={thisEl} on:click={clicked}>
   <Icons name={icon.name} color={icon.color} />
-  {#if thisEl === favClicked}
-    <ul>
-      {#each getFavs() as fav}
-        <li id={fav.Id} on:click={addToFav} on:keydown>{fav.Name}</li>
-      {/each}
-    </ul>
-  {/if}
+
+  <ul class="fav-list">
+    {#each getFavs() as fav}
+      <li id={fav.Id} on:click|stopPropagation={addToFav} on:keydown>{fav.Name}</li>
+    {/each}
+  </ul>
 </span>
 
 <style>
+  .fav-list {
+    display: none;
+  }
   span {
     position: relative;
     cursor: pointer;
@@ -59,6 +72,7 @@
     border-radius: 0.25rem;
     width: max-content;
   }
+
   ul:after {
     display: inline-block;
     content: " ";
