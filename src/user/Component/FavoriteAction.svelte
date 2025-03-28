@@ -21,7 +21,6 @@
       icon = starFill;
     }
     target.closest(".fav-list").style.display = "none";
-    console.log("clicked", FavoriteId, FolderId);
   };
 
   const clicked = ({ target }) => {
