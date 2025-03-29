@@ -2,3 +2,5 @@ Young Master, Please don't show off - mangas.in
 Take A Good Look At Me Now
 
 UPDATE RecentFiles set LastPos=coalesce((SELECT Duration-1 FROM Files WHERE Id=RecentFiles.FileId AND RecentFiles.LastPos>=Duration AND Duration > 0), LastPos)
+
+ffmpeg -i TEND-022.mp4 -c:v h264_qsv -r 20 -movflags +faststart ../TEND-022.mp4 -y

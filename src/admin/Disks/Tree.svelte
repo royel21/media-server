@@ -7,6 +7,7 @@
   import { setMessage } from "../Store/MessageStore";
   import FileList from "./FileList.svelte";
   import TreeMenu from "./TreeMenu.svelte";
+  import { showConsoleStore } from "../Store/ConsoleStore";
 
   const socket = getContext("socket");
   let content = [];
@@ -85,7 +86,7 @@
     <Loading />
   </div>
 {:else}
-  <div class="d-content" class:expanded={files.length}>
+  <div class="d-content" class:expanded={files.length} class:hasconsole={$showConsoleStore}>
     <div class="rows">
       <div class="col" class:no-files={files.length === 0}>
         <div class="tree" bind:this={treeRef}>
@@ -107,6 +108,9 @@
   .d-content {
     height: 100%;
     padding-bottom: 5px;
+  }
+  .hasconsole {
+    height: calc(100% - 118px);
   }
   .d-content.expanded {
     min-width: 760px;

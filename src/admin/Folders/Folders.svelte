@@ -35,6 +35,6 @@
     width: 100%;
   }
   .card.has-files {
-    min-width: 840px;
+    min-width: 790px;
   }
 </style>

@@ -56,7 +56,7 @@
           >
             {#if Type.includes("Folder")}
               <span class="fol-type">
-                <Icons name={FilesType === "videos" ? "film" : "book"} box="0 0 512 512" />
+                <Icons name={FilesType === "videos" ? "playcircle" : "book"} box="0 0 512 512" />
               </span>
               <span class="sync" on:click={iconClick}>
                 <Icons name="sync" box="0 0 512 512" class={scanning.includes(Id) || Scanning ? "icon-spin" : ""} />
@@ -99,15 +99,18 @@
   .fol-type {
     position: absolute;
     top: 7px;
-    right: 1px;
+    right: 2px;
   }
 
   .fol-type :global(svg) {
-    height: 14px;
-    width: 14px;
+    height: 18px;
+    width: 18px;
   }
-  .fol-type :global(.icon-film) {
-    fill: rgb(255, 0, 0);
+  .fol-type :global(.icon-playcircle) {
+    fill: rgb(0, 0, 255);
+  }
+  .active .fol-type :global(.icon-playcircle) {
+    fill: rgb(0, 255, 0);
   }
   .g-list {
     position: absolute;

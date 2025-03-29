@@ -111,7 +111,7 @@
   .content {
     width: 100%;
     height: calc(100% - 37px);
-    padding: 10px;
+    padding: 5px;
     overflow-x: auto;
   }
   .toast-container {
@@ -167,7 +167,7 @@
 
   @media (max-width: 600px) and (pointer: none), (pointer: coarse) {
     .content {
-      height: calc(100% - 45px);
+      height: calc(100% - 40px);
     }
   }
 

@@ -50,13 +50,20 @@ export const createPage = async (browser, timeout = 180000) => {
 let pupeteer;
 
 export const startBrowser = async (config) => {
-  config.args = [...(config.args || []), "--no-sandbox", "--disable-gpu"];
-  config.headless = "new";
+  console.log(process.env.DISPLAY);
+  config.args = [
+    ...(config.args || []),
+    "--no-sandbox",
+    "--disable-gpu",
+    `--display=${":10.0"}`, // fix for LXDE desktops
+  ];
   if (process.env.USE_DEV && os.platform() === "win32") {
     config.headless = false;
     config.executablePath = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
     pupeteer = await puppeteerCore.launch(config);
   } else {
+    config.headless = false;
+    // config.Dsplay;
     pupeteer = await puppeteer.launch(config);
   }
 

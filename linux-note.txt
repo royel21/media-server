@@ -10,3 +10,7 @@ rsync -avu --del --exclude='[0-9]*.jpg' --prune-empty-dirs "/<src>" "/<dest>"
 
 
     sudo sdparm --flexible -6 -l --save --set SCT=288000 /dev/disk/by-id/scsi-SSABRENT__DB98765432123
+
+    sudo sdparm -s SCT=288000 --save /dev/disk/by-id/scsi-SSABRENT__DB98765432123
+
+    sudo sdparm --get SCT /dev/disk/by-id/scsi-SSABRENT__DB98765432123
