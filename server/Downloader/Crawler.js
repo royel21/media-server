@@ -57,13 +57,14 @@ export const startBrowser = async (config) => {
     "--disable-gpu",
     `--display=${":10.0"}`, // fix for LXDE desktops
   ];
+
   if (process.env.USE_DEV && os.platform() === "win32") {
     config.headless = false;
     config.executablePath = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
     pupeteer = await puppeteerCore.launch(config);
   } else {
     config.headless = false;
-    // config.Dsplay;
+    config.executablePath = "/usr/bin/google-chrome-stable";
     pupeteer = await puppeteer.launch(config);
   }
 
