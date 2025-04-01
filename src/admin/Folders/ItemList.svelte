@@ -100,6 +100,7 @@
     position: absolute;
     top: 7px;
     right: 2px;
+    pointer-events: none;
   }
 
   .fol-type :global(svg) {
