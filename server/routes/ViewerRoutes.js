@@ -47,7 +47,7 @@ routes.get("/video/:id", async (req, res) => {
     include: { attributes: ["Path", "IsAdult"], model: db.folder },
   });
 
-  if (file.Folder.IsAdult < req.user.AdultPass) {
+  if (req.user.AdultPass < file.Folder.IsAdult) {
     return res.status(400).send("User don't have access to this file");
   }
 
