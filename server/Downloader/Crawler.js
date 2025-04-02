@@ -1,7 +1,5 @@
 import puppeteer from "puppeteer-extra";
-import puppeteerCore from "puppeteer-core";
 import os from "node:os";
-import { sendMessage } from "./utils.js";
 
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 puppeteer.use(StealthPlugin());
@@ -15,9 +13,6 @@ export const delay = (ms) => {
   });
 };
 
-//Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36
-const userAgent =
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0";
 export const createPage = async (browser, timeout = 180000) => {
   const page = await browser.newPage();
   await page.setViewport({ width: 1200, height: 800 });
@@ -37,13 +32,9 @@ export const createPage = async (browser, timeout = 180000) => {
       window.alert = () => {
         throw new Error("Parameter is not a number!");
       };
-    } else {
-      // window.confirm = () => true;
-      // window.alert = () => true;
     }
   });
-  await page.setUserAgent(userAgent);
-  // await page.goto("http:\\www.google.com");
+  console.log(await browser.userAgent());
   return page;
 };
 
