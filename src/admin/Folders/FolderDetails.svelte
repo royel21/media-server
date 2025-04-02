@@ -206,7 +206,7 @@
     width: 50%;
   }
   .detail :global(.input-label) {
-    width: 145px;
+    width: 165px;
   }
   .d-buttons {
     position: absolute;
