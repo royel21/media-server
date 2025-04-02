@@ -24,16 +24,7 @@ export const createPage = async (browser, timeout = 180000) => {
     maxTotalBufferSize: 1024 * 1204 * 400,
   });
 
-  await page.evaluateOnNewDocument(() => {
-    if (location.href.includes("mangas.in")) {
-      window.confirm = () => {
-        throw new Error("Parameter is not a number!");
-      };
-      window.alert = () => {
-        throw new Error("Parameter is not a number!");
-      };
-    }
-  });
+  // await page.evaluateOnNewDocument(() => { });
   console.log(await browser.userAgent());
   return page;
 };
