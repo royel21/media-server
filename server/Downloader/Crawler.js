@@ -59,14 +59,12 @@ export const startBrowser = async (config) => {
   ];
 
   if (process.env.USE_DEV && os.platform() === "win32") {
-    config.headless = false;
     config.executablePath = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
-    pupeteer = await puppeteerCore.launch(config);
   } else {
-    config.headless = false;
-    config.executablePath = "/usr/bin/google-chrome-stable";
-    pupeteer = await puppeteer.launch(config);
+    config.executablePath = "/usr/bin/microsoft-edge";
   }
+  config.headless = false;
+  pupeteer = await puppeteer.launch(config);
 
   return pupeteer;
 };
