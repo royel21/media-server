@@ -1,20 +1,12 @@
-import drivelist from "drivelist";
-import diskusage from "diskusage";
-import os from "node:os";
-
-const sizeInGB = (size) => (size / 1024 / 1024 / 1024).toFixed(1) + "GB";
+import fs from "fs-extra";
 
 const list = async () => {
-  const drives = await drivelist.list();
-  for (const drive of drives) {
-    console.log(drive);
-    // console.time("size");
-    // const data = await diskusage.check(drive.mountpoints[0].path);
-    // console.log(data);
-    // console.log(sizeInGB(data.free), "/", sizeInGB(data.total));
-    // console.timeEnd("size");
+  const folders = fs.readdirSync("/mnt/5TB/").filter((f) => !/Anime|R18/i.test(f));
+
+  for (let folder of folders) {
+    console.log("Moving", folder);
+    const path = `/mnt/5TB/${folder}`;
+    fs.moveSync(path, `/mnt/5TB/Anime/${folder}`, { overwrite: true });
   }
-  const hdata = await diskusage.check(os.platform() ? "/" : "C:\\");
-  console.log(os.platform(), hdata);
 };
 list();
