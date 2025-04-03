@@ -139,21 +139,20 @@
   }
   #pager li:not(.current-page) {
     line-height: 2;
-    padding: 0 0;
+    padding: 0 4px;
   }
   #pager .current-page {
     min-width: 60px;
     width: max-content;
     text-align: center;
     font-size: 14px;
-    padding: 0 6px;
+    padding: 0 4px;
     line-height: 2.2;
     font-weight: 700;
   }
   .page-link {
     position: relative;
     display: block;
-    padding: 0.5rem 0.75rem;
     margin-left: -1px;
     line-height: 1.25;
     color: #007bff;
