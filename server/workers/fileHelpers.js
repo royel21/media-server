@@ -100,6 +100,7 @@ export const transferFiles = async (src, dest) => {
       sendMessage({ text: `Moving: ${src}  =>  ${dest}` }, "info");
 
       for (const [i, file] of files.entries()) {
+        if (file.startsWith(".")) continue;
         sendMessage({ text: `${i + 1}/${files.length}: ${file}` }, "info");
 
         fs.moveSync(path.join(src, file), path.join(dest, file), { overwrite: true });
