@@ -19,7 +19,7 @@ export const findFolder = async (Name) => {
   return db.folder.findOne({ where: { Name, FilesType } });
 };
 
-export const findOrCreateFolder = async (manga, IsAdult) => {
+export const findOrCreateFolder = async (manga, IsAdult, isRaw) => {
   let { Name, Description, Genres, AltName, Status, Server, Author } = manga;
   Genres = Genres?.replace(/(, |)Webtoon(, |)/gi, "");
 

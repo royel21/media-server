@@ -15,9 +15,11 @@
   };
 
   const getPercent = (total, val) => {
+    if (val === "N/A") return "";
+
     const tval = total.replace("GB", "");
     const vval = val.replace("GB", "");
-    return parseFloat((vval / tval) * 100).toFixed(1) + "%";
+    return `(${parseFloat((vval / tval) * 100).toFixed(1)}%)`;
   };
 
   const reload = () => {
@@ -31,7 +33,7 @@
     socket.off("disk-loaded", onDiskdata);
   });
 
-  const reducer = (att) => (accumulator, d) => accumulator + +d[att].replace("GB", "");
+  const reducer = (att) => (accumulator, d) => accumulator + (+d[att].replace("GB", "") || 0);
 
   $: totalFree = (diskData.reduce(reducer("Used"), 0) / 1024).toFixed(2);
   $: totalUsed = (diskData.reduce(reducer("Size"), 0) / 1024).toFixed(2);
@@ -54,8 +56,8 @@
           <tr>
             <td class="skip">{Name}</td>
             <td>{Size}</td>
-            <td>{Free}({getPercent(Size, Free)})</td>
-            <td>{Used}({getPercent(Size, Used)})</td>
+            <td>{Free}{getPercent(Size, Free)}</td>
+            <td>{Used}{getPercent(Size, Used)}</td>
           </tr>
         {/each}
       </tbody>

@@ -6,6 +6,7 @@ import { nanoid } from "nanoid";
 import db from "../models/index.js";
 import diskusage from "diskusage";
 import os from "node:os";
+import fs from "fs-extra";
 
 let io;
 
@@ -96,17 +97,7 @@ const sizeInGB = (size) => (size / 1024 / 1024 / 1024).toFixed(1) + "GB";
 // List all hdd
 const diskLoader = async () => {
   const drives = await drivelist.list();
-  const disks = [
-    {
-      Id: nanoid(5),
-      Name: "MSIDownloads",
-      Path: "/mnt/MSIDownloads",
-      Content: [],
-      Free: "0GB",
-      Used: "0GB",
-      Size: "0GB",
-    },
-  ];
+  const disks = [];
   for (const drive of drives) {
     if (drive.mountpoints.length > 0) {
       let mp = drive.mountpoints[0];
@@ -126,6 +117,24 @@ const diskLoader = async () => {
       });
     }
   }
+
+  let founds = fs.readdirSync("/mnt");
+
+  for (let Name of founds) {
+    const Path = path.join("/mnt", Name);
+    if (!disks.find((d) => d.Name === Name) && fs.readdirSync(Path).length > 0) {
+      disks.push({
+        Id: nanoid(5),
+        Name,
+        Path,
+        Content: [],
+        Free: "N/A",
+        Used: "N/A",
+        Size: "N/A",
+      });
+    }
+  }
+
   disks.sort((a, b) => a.Name.localeCompare(b.Name));
 
   if (os.platform() === "linux") {

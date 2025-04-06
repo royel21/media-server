@@ -80,7 +80,7 @@ const downloadLinks = async (link, page) => {
 
   manga.Server = link.Url;
 
-  let folder = await findOrCreateFolder(manga, isAdult);
+  let folder = await findOrCreateFolder(manga, isAdult, link.Raw);
   createDir(folder.Path);
 
   const exclude = await db.Exclude.findAll({ where: { LinkName: folder.Name } });
