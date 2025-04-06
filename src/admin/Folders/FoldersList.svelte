@@ -158,10 +158,11 @@
   };
 
   const handlerKeydown = (e) => {
-    const { currentTarget, keyCode } = e;
-    if ([40, 38].includes(keyCode)) {
-      let element = currentTarget.querySelector(".active");
+    const { currentTarget, target, keyCode } = e;
+    if (!(target.closest(".folder-list") || target).classList.contains("folder-list")) return;
 
+    if ([40, 38].includes(keyCode)) {
+      let element = currentTarget.querySelector(".folder-list .active");
       const el = element[keyCode === 40 ? "nextElementSibling" : "previousElementSibling"];
       if (el) {
         itemClick({ target: el });
@@ -207,6 +208,7 @@
   ];
 
   onMount(async () => {
+    document.body.addEventListener("keydown", handlerKeydown);
     await loadFolders(page);
     await loadDir();
     socketEvents.forEach((e) => socket.on(e.name, e.handler));
@@ -215,6 +217,7 @@
   onDestroy(() => {
     isMounted = false;
     apiUtils.cancelQuery();
+    document.body.removeEventListener("keydown", handlerKeydown);
     socketEvents.forEach((e) => socket.off(e.name, e.handler));
   });
 
@@ -235,7 +238,7 @@
 
 <ItemList
   title="Folders"
-  class="col-6"
+  class="col-6 folder-list"
   {folderId}
   {items}
   {page}
@@ -251,7 +254,6 @@
   on:mouseenter={onShowImage}
   on:mouseleave={onShowImage}
   on:mousemove={showPath}
-  on:keydown={handlerKeydown}
 >
   <span class="create-folder" slot="btn-controls" on:keydown on:click={newFolder}><Icons name="squareplus" /></span>
   <span class="show-files" slot="btn-ctr-last">

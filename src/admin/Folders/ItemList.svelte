@@ -29,7 +29,7 @@
   };
 </script>
 
-<div class={"file-list " + clazz}>
+<div class={"file-list " + clazz} tabindex="-1">
   <slot name="first-tag" />
   <div class="controls">
     <slot name="btn-controls" />

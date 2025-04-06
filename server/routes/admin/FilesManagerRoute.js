@@ -3,8 +3,6 @@ import db from "../../models/index.js";
 
 import { getFilter } from "../utils.js";
 import { Op } from "sequelize";
-import fs from "fs-extra";
-import path from "node:path";
 import { getWatchedDirs, getWatchFiles, removeWatchedDir, removeWatchedFile, renameWatchedFile } from "./Watcher.js";
 
 const routes = Router();
@@ -43,12 +41,7 @@ routes.get("/:page/:items/:filter?", async (req, res) => {
 
   let data = {
     files: files.rows.map((f) => {
-      let Size = 0;
-      const file = path.join(f.dataValues.Path, f.Name);
-      if (fs.existsSync(file)) {
-        Size = fs.statSync(file).size;
-      }
-      return { ...f.dataValues, ...f, Size };
+      return { ...f.dataValues, ...f, Size: "N/A" };
     }),
     totalPages: Math.ceil(files.count / limit),
     totalItems: files.count,

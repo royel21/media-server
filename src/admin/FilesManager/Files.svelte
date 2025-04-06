@@ -134,7 +134,6 @@
           <th>Actions</th>
           <th>Name</th>
           <th>Path</th>
-          <th>Size</th>
         </tr>
       </thead>
       <tbody>
@@ -152,7 +151,6 @@
               </td>
               <td>{Name}</td>
               <td>{Path}</td>
-              <td>{(Size / 1024 / 1024).toFixed(2)}mb</td>
             </tr>
           {/each}
         {/if}
