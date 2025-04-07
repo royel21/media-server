@@ -48,9 +48,11 @@ routes.get("/:page/:items/:filter?", async (req, res) => {
     files: files.rows.map((f) => {
       let Size = 0;
       const file = path.join(f.dataValues.Path, f.Name);
-      if (fs.existsSync(file)) {
-        Size = fs.statSync(file).size;
-      }
+      try {
+        if (fs.existsSync(file)) {
+          Size = fs.statSync(file).size;
+        }
+      } catch (error) {}
       return { ...f.dataValues, ...f, Size };
     }),
     totalPages: Math.ceil(files.count / limit),
