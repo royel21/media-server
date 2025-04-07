@@ -33,16 +33,12 @@ let pupeteer;
 
 export const startBrowser = async (config) => {
   console.log(process.env.DISPLAY);
-  config.args = [
-    ...(config.args || []),
-    "--no-sandbox",
-    "--disable-gpu",
-    `--display=${":10.0"}`, // fix for LXDE desktops
-  ];
+  config.args = [...(config.args || []), "--no-sandbox", "--disable-gpu"];
 
-  if (process.env.USE_DEV && os.platform() === "win32") {
+  if (os.platform() === "win32") {
     config.executablePath = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
   } else {
+    config.args.push(`--display=${":10.0"}`); // fix for LXDE desktops)
     config.executablePath = "/usr/bin/microsoft-edge";
   }
   config.headless = false;

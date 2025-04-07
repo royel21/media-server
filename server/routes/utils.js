@@ -3,7 +3,7 @@ import { Op } from "sequelize";
 export const mapFilter = (f) => ({ [Op.like]: `%${f || ""}%` });
 
 export const getFilter = (data) => {
-  const filter = data?.replace(/’/g, "'") || "";
+  const filter = data?.replace(/’/g, "'").replace("\\", "\\\\") || "";
   const isOr = filter.includes("&");
 
   return {

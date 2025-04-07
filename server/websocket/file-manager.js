@@ -118,20 +118,22 @@ const diskLoader = async () => {
     }
   }
 
-  let founds = fs.readdirSync("/mnt");
+  if (os.platform() === "linux") {
+    let founds = fs.readdirSync("/mnt");
 
-  for (let Name of founds) {
-    const Path = path.join("/mnt", Name);
-    if (!disks.find((d) => d.Name === Name) && fs.readdirSync(Path).length > 0) {
-      disks.push({
-        Id: nanoid(5),
-        Name,
-        Path,
-        Content: [],
-        Free: "N/A",
-        Used: "N/A",
-        Size: "N/A",
-      });
+    for (let Name of founds) {
+      const Path = path.join("/mnt", Name);
+      if (!disks.find((d) => d.Name === Name) && fs.readdirSync(Path).length > 0) {
+        disks.push({
+          Id: nanoid(5),
+          Name,
+          Path,
+          Content: [],
+          Free: "N/A",
+          Used: "N/A",
+          Size: "N/A",
+        });
+      }
     }
   }
 
