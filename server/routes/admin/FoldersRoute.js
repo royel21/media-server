@@ -108,6 +108,10 @@ routes.get("/changes-genres/:Id/:genre", async (req, res) => {
 });
 
 routes.post("/folder-create", async (req, res) => {
+  const found = await db.folder.findOne({ where: { Name: req.body.Name, FilesType: req.body.FilesType } });
+  if (found) {
+    return res.send({ error: `Error: ${req.body.Name} already Exist.` });
+  }
   try {
     const dir = await db.directory.findOne({ where: { Id: req.body.DirectoryId } });
     const file = {

@@ -113,7 +113,7 @@ export const evaluetePage = (query) => {
       );
     }
     if (authorRegex.test(text) && !/updating|Desconocido/i.test(text)) {
-      Author = text.replace(authorRegex, "").trim();
+      Author = text.replace(authorRegex, "").replace("Type ", "").trim();
     }
   }
   data = data.filter((d) => d);
