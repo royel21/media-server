@@ -96,17 +96,11 @@
     }
   };
 
-  const handleSubmit = ({ detail: { target } }) => {
+  const handleSubmit = (file, Del) => {
     if (modalType.Del) {
-      let Del = target.querySelector("input").checked;
       socket.emit("file-work", { action: "removeFile", data: { Id: file.Id, Del } });
     } else {
-      let Name = target.querySelector("textarea").value;
-      if (!Name) {
-        modalType.error = "Name Can't be empty";
-      } else {
-        socket.emit("file-work", { action: "renameFile", data: { Id: file.Id, Name } });
-      }
+      socket.emit("file-work", { action: "renameFile", data: { Id: file.Id, Name: file.Name } });
     }
   };
 
@@ -118,7 +112,7 @@
 </script>
 
 {#if showModal}
-  <Modal {file} {modalType} on:submit={handleSubmit} hide={hideModal} />
+  <Modal {file} {modalType} acept={handleSubmit} hide={hideModal} />
 {/if}
 
 <div class="file-list col-6">
