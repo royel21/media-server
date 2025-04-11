@@ -22,7 +22,7 @@ routes.get("/:page/:items/:filter?", async (req, res) => {
   const limit = +items || 12;
 
   const query = {
-    order: ["Size"],
+    order: ["Name"],
     attributes: [
       "Id",
       "Name",

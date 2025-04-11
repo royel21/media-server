@@ -55,5 +55,5 @@ export const validateCheck = (list, items) => {
 };
 
 export const formatSize = (size) => {
-  return (size / 1024 / 1024 / 1024).toFixed(3) + "GB";
+  return (size / 1024 / 1024).toFixed(3) + "GB";
 };

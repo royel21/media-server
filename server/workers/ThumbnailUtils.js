@@ -2,16 +2,6 @@ import StreamZip from "node-stream-zip";
 import { exec, execFileSync } from "child_process";
 import sharp from "sharp";
 
-import db from "../models/index.js";
-import path from "path";
-import { createDir } from "../Downloader/utils.js";
-import defaultConfig from "../default-config.js";
-
-const sendMessage = (event, message) => {
-  process.send({ event, message });
-  console.log(event, message);
-};
-
 const IMGTYPES = /\.(jpg|jpeg|png|gif|webp)$/i;
 
 const ffmpeg = "ffmpeg";

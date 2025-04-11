@@ -210,7 +210,7 @@
   </span>
   <div slot="item-slot" class="f-info" let:item>
     {#if file?.Id === item && showFileinfo}
-      <span>{(file.Size / 1024 / 1024).toFixed(2)}mb</span> -
+      <span>{(file.Size / 1024).toFixed(2)}mb</span> -
       <span>{new Date(file.CreatedAt)?.toLocaleDateString("en-us", dateFormat)}</span>
     {/if}
   </div>

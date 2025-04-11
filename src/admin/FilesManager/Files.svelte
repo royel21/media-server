@@ -7,6 +7,7 @@
   import Pagination from "src/ShareComponent/Pagination.svelte";
   import apiUtils from "src/apiUtils";
   import Icons from "src/icons/Icons.svelte";
+  import { formatSize } from "src/utils";
 
   const socket = getContext("socket");
   export let page = 1;
@@ -146,7 +147,7 @@
               </td>
               <td>{Name}</td>
               <td>{Path}</td>
-              <td>{(Size / 1024).toFixed(2)}mb</td>
+              <td>{formatSize(Size / 1024)}</td>
             </tr>
           {/each}
         {/if}

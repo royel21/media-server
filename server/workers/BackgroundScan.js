@@ -40,19 +40,25 @@ const rmOrphanFiles = async (folder) => {
   if (!folder) {
     for (const f of folders) {
       try {
-        return await rmOrphanFiles(f);
+        await rmOrphanFiles(f);
       } catch (error) {
         console.log(f.Name, error.toString());
       }
     }
+    return;
   }
 
-  const tfiles = fs.readdirSync(folder.Path);
   const removed = [];
-  for (const file of folder.Files) {
-    if (folder.Path && file.Name) {
-      if (!tfiles.includes(file.Name)) {
+
+  if (fs.existsSync(folder?.Path)) {
+    const tfiles = fs.readdirSync(folder.Path);
+
+    const files = folder.Files.filter((f) => !tfiles.includes(f.Name));
+    if (files.length) {
+      console.log(folder.Name, files.length);
+      for (const file of files) {
         try {
+          console.log("Removing orphan file", file.Name);
           await file.destroy({ Del: true });
           removed.push(file.Id);
         } catch (error) {
@@ -61,6 +67,7 @@ const rmOrphanFiles = async (folder) => {
       }
     }
   }
+
   folder.Files = folder.Files.filter((f) => !removed.includes(f.Id));
   const imgs = folder.Files.map((f) => f.Name + ".jpg");
   const imageDir = path.join(defaultConfig.ImagesDir, getFileType(folder), folder.Name);
@@ -151,6 +158,7 @@ const scanFolder = async (curfolder, files, isFolder) => {
 
   let tempFiles = [];
   for (const f of files) {
+    const Size = f.Size / 1024 || 0;
     if (f.isDirectory) {
       await scanFolder(f, f.Files);
       //Check if file is in folder
@@ -163,11 +171,11 @@ const scanFolder = async (curfolder, files, isFolder) => {
           Name: f.Name,
           Type,
           FolderId: folder.Id,
-          Size: f.Size || 0,
+          Size,
           CreatedAt: f.LastModified,
         });
-      } else if (found && found.Size !== f.Size) {
-        await found.update({ Size: f.Size });
+      } else if (found && found.Size !== Size) {
+        await found.update({ Size });
       }
     }
   }
