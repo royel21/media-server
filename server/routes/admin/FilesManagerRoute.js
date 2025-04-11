@@ -3,8 +3,6 @@ import db from "../../models/index.js";
 
 import { getFilter } from "../utils.js";
 import { Op } from "sequelize";
-import fs from "fs-extra";
-import path from "node:path";
 import { getWatchedDirs, getWatchFiles, removeWatchedDir, removeWatchedFile, renameWatchedFile } from "./Watcher.js";
 
 const routes = Router();
@@ -22,12 +20,13 @@ routes.get("/:page/:items/:filter?", async (req, res) => {
   const limit = +items || 12;
 
   const query = {
-    order: ["Name"],
+    order: [["Name"]],
     attributes: [
       "Id",
       "Name",
       "FolderId",
       [db.sqlze.literal("(Select Path from Folders where Id=`File`.`FolderId`)"), "Path"],
+      [db.sqlze.literal("(Select Size from Files where Id=`File`.`Id`)"), "Size"],
     ],
     offset: ((+page || 1) - 1) * limit,
     limit,
@@ -45,16 +44,7 @@ routes.get("/:page/:items/:filter?", async (req, res) => {
   let files = await db.file.findAndCountAll(query);
 
   let data = {
-    files: files.rows.map((f) => {
-      let Size = 0;
-      const file = path.join(f.dataValues.Path, f.Name);
-      try {
-        if (fs.existsSync(file)) {
-          Size = fs.statSync(file).size;
-        }
-      } catch (error) {}
-      return { ...f.dataValues, ...f, Size };
-    }),
+    files: files.rows.map((f) => ({ ...f.dataValues, ...f })),
     totalPages: Math.ceil(files.count / limit),
     totalItems: files.count,
   };

@@ -147,7 +147,7 @@
               </td>
               <td>{Name}</td>
               <td>{Path}</td>
-              <td>{formatSize(Size / 1024)}</td>
+              <td>{formatSize(Size)}</td>
             </tr>
           {/each}
         {/if}
