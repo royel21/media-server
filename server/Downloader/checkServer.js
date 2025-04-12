@@ -83,7 +83,7 @@ const formatAMPM = (date) => {
   hours = hours % 12;
   hours = hours ? hours : 12;
   minutes = minutes.toString().padStart(2, "0");
-  let strTime = date.toUTCString().replace(/\d+:\d+:\d+ GMT/i, "") + hours + ":" + minutes + " " + ampm;
+  let strTime = `${date.toDateString()}, ${hours}:${minutes} ${ampm}`;
   return strTime;
 };
 
@@ -93,7 +93,7 @@ export const downloadFromPage = async (Id, state) => {
   const server = await db.Server.findOne({ where: { Id: Id } });
   if (server && server?.HomeQuery) {
     try {
-      sendMessage({ text: `*** ${new Date().toLocaleString()} checking server ${server.Name} ***`, important: true });
+      sendMessage({ text: `** ${formatAMPM(new Date())} ${server.Name} **`, important: true });
 
       const page = await createPage(state.browser);
       await page.goto(`https:\\${server.Name}`, { waitUntil: "domcontentloaded" });
