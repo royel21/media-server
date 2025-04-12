@@ -169,7 +169,7 @@
     background: #0847ef;
     z-index: 99;
     right: 20px;
-    top: 60px;
+    top: 54px;
     padding: 0 5px;
     border-radius: 50%;
   }
@@ -217,10 +217,7 @@
     .cls-container {
       max-height: calc(100% - 230px);
     }
-    label {
-      top: 54px;
-      right: 20px;
-    }
+    
     .text-list .important {
       font-size: 1.1rem;
     }
