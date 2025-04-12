@@ -93,7 +93,7 @@ export const downloadFromPage = async (Id, state) => {
   const server = await db.Server.findOne({ where: { Id: Id } });
   if (server && server?.HomeQuery) {
     try {
-      sendMessage({ text: `*** ${formatAMPM(new Date())} checking server ${server.Name} ***`, important: true });
+      sendMessage({ text: `*** ${new Date().toLocaleString()} checking server ${server.Name} ***`, important: true });
 
       const page = await createPage(state.browser);
       await page.goto(`https:\\${server.Name}`, { waitUntil: "domcontentloaded" });

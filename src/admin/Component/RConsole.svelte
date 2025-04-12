@@ -205,7 +205,7 @@
     position: sticky;
     top: -5px;
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: bold;
     pointer-events: none;
   }
