@@ -1,7 +1,7 @@
 <script>
   import { afterUpdate, onDestroy } from "svelte";
   import { navigate } from "svelte-routing";
-  import { getFilesPerPage, ProcessFile } from "./filesUtils";
+  import { getFilesPerPage, getFilesPerRows, ProcessFile } from "./filesUtils";
 
   import { clamp } from "src/ShareComponent/utils";
   import { fileKeypress, selectByTitle, selectElementById } from "../Component/fileEvents";
@@ -30,7 +30,9 @@
     if (reload) {
       pg = clamp(pg, 0, pageData.totalPages);
       const items = config.Items || getFilesPerPage(3);
-      const data = await api.files(["recents", items, pg, encodeURIComponent(flt)], "home");
+      const itemsPerRows = getFilesPerRows();
+      const itemsPerPage = itemsPerRows * Math.floor(items / itemsPerRows);
+      const data = await api.files(["recents", itemsPerPage, pg, encodeURIComponent(flt)], "home");
       if (data.valid && isMounted) {
         pageData = data;
         if (+pg !== +data.page) {

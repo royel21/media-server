@@ -21,9 +21,12 @@
   padding: 5px 2px 80px;
 }
 
+.file:hover .file-info,
 .file.active .file-info {
-  background-color: rgba(0, 15, 150) !important;
+  height: fit-content;
+  padding-bottom: 5px;
   box-shadow: 0 0 10px;
+  background-color: rgba(0, 15, 150);
 }
 
 .controls {
@@ -110,18 +113,14 @@ button:active {
   margin: 6px 0;
 }
 
-.file:hover,
 .file.active {
   z-index: 2;
 }
 
-.file-info:hover {
-  position: absolute;
-  height: fit-content;
-  box-shadow: 0 0 10px;
-  z-index: 1;
-  padding-bottom: 5px;
+.file:hover {
+  z-index: 3;
 }
+
 
 .file-progress {
   font-size: 14px;
