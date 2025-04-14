@@ -13,7 +13,7 @@
   import { getItemsList } from "src/apiUtils";
   import Icons from "src/icons/Icons.svelte";
   import LazyImage from "./LazyImage.svelte";
-  import { getLastChap } from "./fileUtils";
+  import { getDate, getLastChap } from "./fileUtils";
   import UserStore from "../Stores/UserStore";
   import { formatSize, isMobile } from "src/utils";
 
@@ -28,8 +28,6 @@
 
   const { sortTabs } = getContext("User");
   let config = sortTabs.find((st) => st.Name === title);
-
-  const dateFormat = { year: "numeric", month: "short", day: "numeric" };
 
   let ver = 1;
   let folder;
@@ -118,16 +116,6 @@
     }
 
     return encodeURI(`/${Type}/${folder}/${Name}.jpg`);
-  };
-
-  const getDate = (d) => {
-    const curDate = d.Type === "Folder" ? d.EmissionDate : d.CreatedAt;
-    const nDate = new Date(curDate || "");
-    if (nDate.toString() !== "Invalid Date") {
-      return nDate.toLocaleDateString("en-us", dateFormat);
-    }
-
-    return "";
   };
 
   let timeOut;

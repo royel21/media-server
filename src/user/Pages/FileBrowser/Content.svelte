@@ -137,7 +137,7 @@
             <div class="manga-name">
               <span class="gen-tag">Name: </span><span>{folderinfo?.Name || "Loading Info"}</span>
             </div>
-            <div class="manga-name">
+            <div class="manga-name alt-content">
               <span class="gen-tag">Alternative: </span><span>{folderinfo?.AltName || "N/F"}</span>
             </div>
             <div class="genres-list">
@@ -197,6 +197,9 @@
     top: 1px;
     height: 31px;
     width: 42px;
+  }
+  .alt-content {
+    max-height: 94px;
   }
   .tabs {
     position: relative;
@@ -330,15 +333,10 @@
     align-items: flex-start;
     flex-grow: 1;
   }
-  .genres-list span {
-    cursor: pointer;
-  }
   .genres-list :global(span:not(:first-child):not(:last-child)::after) {
     content: ", ";
   }
-  .genres-list span:hover {
-    text-decoration: underline;
-  }
+
   .m-desc .desc-text {
     display: inline-block;
     overflow: hidden;

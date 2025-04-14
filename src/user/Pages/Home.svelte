@@ -5,7 +5,7 @@
 
   import { clamp } from "src/ShareComponent/utils";
   import { fileKeypress, selectByTitle, selectElementById } from "../Component/fileEvents";
-  import { getLastChap } from "../Component/fileUtils";
+  import { getDate, getLastChap } from "../Component/fileUtils";
 
   import api from "src/apiUtils";
   import Icons from "src/icons/Icons.svelte";
@@ -94,7 +94,7 @@
     </span>
   </div>
   <div class="files-list" on:keydown={handleKeydown} tabindex="-1">
-    {#each pageData.items as { Id, Name, Type, LastChapter, FileCount, FilesType, Status, isRaw, Size }, i}
+    {#each pageData.items as { Id, Name, Type, LastChapter, FileCount, FilesType, Status, isRaw, Size, EmissionDate, CreatedAt }, i}
       <div class="file" id={Id} data-type={Type} data-types={FilesType} on:click={handleClick} on:keydown>
         <div class="file-info">
           <div class="file-cover" on:dblclick|stopPropagation={openFolder}>
@@ -102,6 +102,7 @@
             <span class="f-status" class:completed={Status}>{Status ? "Completed" : "Ongoing"}</span>
             <span class="f-raw" class:hidden={!isRaw}>Raw</span>
             <span class="f-size">{formatSize(Size)}</span>
+            <span class="f-date">{getDate({ Type, EmissionDate, CreatedAt })}</span>
           </div>
           <div class="file-btns">
             <span class="file-btn-left" on:click|stopPropagation={openFolder} on:keydown>

@@ -34,6 +34,8 @@ const getFolder = async (Id, user) => {
       "FilesType",
       "Author",
       "Server",
+      "EmissionDate",
+      "CreatedAt",
       [literal(currentFile), "currentFile"],
     ],
     where: { Id, IsAdult: { [Op.lte]: user.AdultPass } },
