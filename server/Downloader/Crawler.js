@@ -40,7 +40,7 @@ export const startBrowser = async (config) => {
   } else {
     console.log(process.env.DISPLAY);
     config.args.push(`--display=${":10.0"}`); // fix for LXDE desktops)
-    config.executablePath = "/usr/bin/microsoft-edge";
+    // config.executablePath = "/usr/bin/microsoft-edge";
   }
   config.headless = false; //"new";
   pupeteer = await puppeteer.launch(config);
