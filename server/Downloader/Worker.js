@@ -291,7 +291,7 @@ process.on("message", async ({ action, datas, remove, bypass, server }) => {
   if (!state.browser && !["Exit", "Remove"].includes(action)) {
     try {
       state.stopped = false;
-      state.browser = await startBrowser({ headless: false, userDataDir: "./user-data/puppeteer" });
+      state.browser = await startBrowser({ headless: false });
       sendMessage({ IsRunning: state.browser !== undefined }, "is-running");
     } catch (error) {
       console.log(error);
