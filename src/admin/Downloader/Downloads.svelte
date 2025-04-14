@@ -157,8 +157,8 @@
 </div>
 
 <style>
-  #downloads :global(.t-container) {
-    height: calc(100% - 50px);
+  #downloads {
+    padding-bottom: 5px;
   }
   @media screen and (max-width: 540px) {
     .d-controls span:not(.btn-add, .btn-stop) {
