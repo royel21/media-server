@@ -2,7 +2,8 @@
   import { onMount, getContext } from "svelte";
   import apiUtils from "src/apiUtils";
   import Icons from "src/icons/Icons.svelte";
-  import { MessageStore, setMessage } from "../Store/MessageStore";
+  import { setMessage } from "../Store/MessageStore";
+  import { showConsoleStore } from "../Store/ConsoleStore";
 
   const socket = getContext("socket");
   let dirs = [];
@@ -96,10 +97,11 @@
       socket.off("reload", reloadDir);
     };
   });
+  $: console.log($showConsoleStore);
 </script>
 
 <div class="message">{msg}</div>
-<div class="table-container">
+<div class="table-container" class:hasconsole={$showConsoleStore}>
   <table id="dir-list" class="table table-dark table-hover table-bordered">
     <thead>
       <tr>
@@ -143,6 +145,10 @@
 </div>
 
 <style>
+  .hasconsole {
+    height: calc(100% - 118px);
+    overflow: auto;
+  }
   .table-container {
     padding: 0px 8px;
   }

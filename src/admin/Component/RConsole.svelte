@@ -217,7 +217,7 @@
     .cls-container {
       max-height: calc(100% - 230px);
     }
-    
+
     .text-list .important {
       font-size: 1.1rem;
     }
