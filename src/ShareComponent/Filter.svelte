@@ -59,7 +59,7 @@
     autocomplete="off"
     bind:value={curFilter}
     on:keydown={submitFilter}
-    on:input={onChanges}
+    on:input|stopPropagation={onChanges}
   />
   <span id="clear-filter" on:click={ClearFilter}>
     <Icons name="timescircle" height="22px" color="black" />
