@@ -19,11 +19,8 @@ export const findFolder = async (Name) => {
   return db.folder.findOne({ where: { Name, FilesType } });
 };
 
-export const findOrCreateFolder = async (manga, IsAdult) => {
+export const findOrCreateFolder = async (manga, IsAdult, isRaw) => {
   let { Name, Description, Genres, AltName, Status, Server, Author } = manga;
-  Genres = Genres?.replace(/(, |)Webtoon(, |)/gi, "");
-
-  const Path = path.join(defaultConfig.DownloadDir, IsAdult ? "R18/Webtoons" : "Mangas", Name);
 
   try {
     let folder = await db.folder.findOne({
@@ -31,13 +28,19 @@ export const findOrCreateFolder = async (manga, IsAdult) => {
     });
 
     if (!folder) {
-      let directory = await db.directory.findOne({
+      const query = {
         where: { Name: IsAdult ? "Webtoons" : "Mangas" },
-      });
+      };
+
+      if (isRaw) {
+        query.where.Name = "Webtoon Raw";
+      }
+
+      let directory = await db.directory.findOne();
 
       folder = await db.folder.create({
         Name,
-        Path,
+        Path: path.join(directory.FullPath, Name),
         Type: "Folder",
         FilesType,
         CreatedAt: new Date(),
