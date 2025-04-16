@@ -1,7 +1,6 @@
 import winex from "win-explorer";
 import db from "../models/index.js";
 import path from "node:path";
-import defaultConfig from "../default-config.js";
 
 export const getDb = () => db;
 
@@ -22,6 +21,15 @@ export const findFolder = async (Name) => {
 export const findOrCreateFolder = async (manga, IsAdult, isRaw) => {
   let { Name, Description, Genres, AltName, Status, Server, Author } = manga;
 
+  if (Genres.includes("Manhwa")) {
+    Genres = Genres?.replace(/(, |)Webtoon(, |)/gi, "");
+  }
+
+  if (AltName.includes(Name)) {
+    const regx = new RegExp(`(; |)${Name}( ;|)`, "i");
+    AltName = AltName.replace(regx, "");
+  }
+
   try {
     let folder = await db.folder.findOne({
       where: { Name, FilesType },
@@ -36,7 +44,7 @@ export const findOrCreateFolder = async (manga, IsAdult, isRaw) => {
         query.where.Name = "Webtoon Raw";
       }
 
-      let directory = await db.directory.findOne();
+      let directory = await db.directory.findOne(query);
 
       folder = await db.folder.create({
         Name,
