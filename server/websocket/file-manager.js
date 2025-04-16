@@ -108,7 +108,7 @@ const diskLoader = async () => {
 
       disks.push({
         Id: nanoid(5),
-        Name: `${mp.label ? mp.label : mp.path}`,
+        Name: `${mp.label ? mp.label : path.basename(mp.path)}`,
         Path: mp.path,
         Content: [],
         Free: sizeInGB(data.free),
