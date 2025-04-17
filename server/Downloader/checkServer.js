@@ -15,7 +15,7 @@ const evalServer = async (query) => {
   await delay(1000);
 
   return [...document.querySelectorAll(query.HomeQuery)].map((e) => {
-    const Name = e
+    let Name = e
       .querySelector(".post-title, .bigor-manga h3")
       .textContent.replace("( Renta black and white comic Version)", "")
       .replace(/:|\?|\*|<|>|"| Webtoon| \(Acera\)\n|\n|\t|“|^,/gi, "")
@@ -54,6 +54,7 @@ const evalServer = async (query) => {
 
           if (/ raw$/i.test(Name)) {
             name = name + " raw";
+            Name = Name.replace(/ raw$/i, "");
           }
         } else {
           return { name: "" };
@@ -63,9 +64,6 @@ const evalServer = async (query) => {
       })
       .filter((a) => {
         if (!/^000(-| |(-| )Prologue|$)/gi.test(a.name)) {
-          if (/ raw/i.test(a.name)) {
-            return query.Raw;
-          }
           return true;
         }
         return false;

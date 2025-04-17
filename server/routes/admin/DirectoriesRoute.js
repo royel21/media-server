@@ -46,6 +46,8 @@ routes.post("/content", (req, res) => {
       let dirs = ListFiles(Path, { hidden: true });
       let tdata = [];
       for (let d of dirs) {
+        if (d.Name === "lost+found") continue;
+
         if (d.isDirectory || !/^\./.test(d.Extension)) {
           tdata.push({
             Id: getNewId(),
