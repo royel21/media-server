@@ -15,7 +15,7 @@ const evalServer = async (query) => {
   await delay(1000);
 
   return [...document.querySelectorAll(query.HomeQuery)].map((e) => {
-    let Name = e
+    const Name = e
       .querySelector(".post-title, .bigor-manga h3")
       .textContent.replace("( Renta black and white comic Version)", "")
       .replace(/:|\?|\*|<|>|"| Webtoon| \(Acera\)\n|\n|\t|“|^,/gi, "")
@@ -54,7 +54,6 @@ const evalServer = async (query) => {
 
           if (/ raw$/i.test(Name)) {
             name = name + " raw";
-            Name = Name.replace(/ raw$/i, "");
           }
         } else {
           return { name: "" };
@@ -64,14 +63,25 @@ const evalServer = async (query) => {
       })
       .filter((a) => {
         if (!/^000(-| |(-| )Prologue|$)/gi.test(a.name)) {
+          if (/ raw/i.test(a.name)) {
+            return query.Raw;
+          }
           return true;
         }
         return false;
       })
       .reverse();
 
-    return { Name, chaps };
+    return { Name: Name.replace(/ raw$/i, ""), chaps };
   });
+};
+
+const checkIfRaw = (file, folder) => {
+  if (file.name.includes("raw")) {
+    return folder.Path.includes("Webtoons Raw");
+  }
+
+  return true;
 };
 
 const formatAMPM = (date) => {
@@ -136,7 +146,7 @@ export const downloadFromPage = async (Id, state) => {
 
             let chaptCount = 1;
             for (let chap of d.chaps) {
-              if (chap.name && !excludes.find((ex) => chap.name.includes(ex.Name))) {
+              if (chap.name && checkIfRaw(chap, folder) && !excludes.find((ex) => chap.name.includes(ex.Name))) {
                 try {
                   if (
                     await downloadLink(
