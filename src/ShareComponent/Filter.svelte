@@ -26,6 +26,7 @@
   };
 
   const submitFilter = (e) => {
+    console.log("submitFilter");
     if (e.keyCode === 13) send(curFilter);
   };
 
@@ -37,7 +38,9 @@
     send(text);
   };
 
-  const onChanges = () => send(curFilter, "change");
+  const onChanges = () => {
+    send(curFilter, "change");
+  };
 
   $: filter = curFilter;
   const box = "0 0 512 512";
@@ -58,8 +61,8 @@
     enterkeyhint="done"
     autocomplete="off"
     bind:value={curFilter}
-    on:keydown={submitFilter}
-    on:input|stopPropagation={onChanges}
+    on:keydown|stopPropagation={submitFilter}
+    on:input={onChanges}
   />
   <span id="clear-filter" on:click={ClearFilter}>
     <Icons name="timescircle" height="22px" color="black" />
