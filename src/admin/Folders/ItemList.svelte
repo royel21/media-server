@@ -33,7 +33,9 @@
   <slot name="first-tag" />
   <div class="controls">
     <slot name="btn-controls" />
-    <Filter on:filter {filter} />
+    <div on:keydown|stopPropagation class="filter">
+      <Filter on:filter {filter} />
+    </div>
     <h4 class="text-center usn">{totalItems} <strong>- {title}</strong></h4>
     <slot name="btn-ctr-last" />
   </div>
@@ -92,6 +94,10 @@
 </div>
 
 <style>
+  .filter {
+    width: 100%;
+    flex-shrink: 1;
+  }
   li {
     position: relative;
     height: 40px;
