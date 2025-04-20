@@ -26,7 +26,6 @@
   };
 
   const submitFilter = (e) => {
-    console.log("submitFilter");
     if (e.keyCode === 13) send(curFilter);
   };
 
@@ -61,7 +60,7 @@
     enterkeyhint="done"
     autocomplete="off"
     bind:value={curFilter}
-    on:keydown{submitFilter}
+    on:keydown={submitFilter}
     on:input={onChanges}
   />
   <span id="clear-filter" on:click={ClearFilter}>
