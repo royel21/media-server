@@ -6,8 +6,9 @@
   import TextAreaInput from "../../ShareComponent/TextAreaInput.svelte";
   import Input from "../Component/Input.svelte";
   import Icons from "src/icons/Icons.svelte";
-  import { isDiff, validGenres, validateAuthor, validAltName, formatSize } from "../Utils";
+  import { isDiff, formatSize } from "../Utils";
   import { setMessage } from "../Store/MessageStore";
+  import { validAltName, validateAuthor, validGenres } from "src/ShareComponent/utils";
 
   export let folderId;
   let hasChanges = false;

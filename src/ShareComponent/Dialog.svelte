@@ -64,6 +64,7 @@
     text-align: center;
   }
   .btn {
+    min-width: 75px;
     margin: 5px;
   }
 </style>

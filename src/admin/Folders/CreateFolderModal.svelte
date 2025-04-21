@@ -5,8 +5,8 @@
   import CheckBox from "../Component/CheckBox.svelte";
   import Select from "src/ShareComponent/Select.svelte";
   import TextAreaInput from "../../ShareComponent/TextAreaInput.svelte";
-  import { validGenres } from "../Utils";
   import Input from "../Component/Input.svelte";
+  import { validGenres } from "src/ShareComponent/utils";
 
   export let error = "";
   export let ref = null;
