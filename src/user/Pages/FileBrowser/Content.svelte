@@ -446,7 +446,7 @@
       padding: 0;
     }
     #info-content img {
-      max-height: 320px;
+      max-height: 260px;
     }
     #info-names > div {
       max-height: 58px;
