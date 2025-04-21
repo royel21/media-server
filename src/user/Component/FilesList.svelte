@@ -196,7 +196,7 @@
   <slot name="controls" />
   <Filter {filter} on:filter={fileFilter} />
   <Pagination page={parseInt(page || 1)} totalPages={pageData.totalPages} on:gotopage={goToPage} />
-  <span class="items">{pageData.totalFiles}</span>
+  <span class="badge">{pageData.totalFiles}</span>
 </div>
 
 <style>

@@ -9,6 +9,7 @@
   import Icons from "src/icons/Icons.svelte";
   import { isValidKey } from "src/ShareComponent/utils";
   import Condition from "./ConditionNF.svelte";
+  import DetailEditor from "./DetailEditor.svelte";
 
   export let page = 1;
   export let filter = "";
@@ -19,6 +20,7 @@
 
   let contents = ["File List", "Details"];
   let currentContent = "File List";
+  let showEditor = false;
 
   const menu = document.querySelector("#menu");
 
@@ -109,9 +111,19 @@
     document.querySelector("#f-content")?.focus();
   };
 
+  const onShowGenresEdit = (e) => {
+    showEditor = e?.target.id;
+  };
+
+  const update = (data) => (folderinfo = data);
+
   afterUpdate(() => (menu.style.display = "none"));
   onDestroy(() => (menu.style.display = "flex"));
 </script>
+
+{#if showEditor}
+  <DetailEditor title={showEditor} hide={onShowGenresEdit} item={folderinfo} {update} />
+{/if}
 
 <div id="f-content" class="b-content" on:keydown={onKeydown} tabindex="-1">
   <div class="tabs">
@@ -139,22 +151,44 @@
             </div>
             <div class="manga-name alt-content">
               <span class="gen-tag">Alternative: </span><span>{folderinfo?.AltName || "N/F"}</span>
+              {#if User.role.includes("Manager")}
+                <span id="AltName" class="btn primary" on:click={onShowGenresEdit}>...</span>
+              {/if}
             </div>
             <div class="genres-list">
-              <span class="gen-tag">Author(s): </span>
-              <Condition data={folderinfo?.Author} split=", " on:click={onGenres} />
+              <div>
+                <span class="gen-tag">Author(s): </span>
+                <Condition data={folderinfo?.Author} split=", " on:click={onGenres} />
+              </div>
+              {#if User.role.includes("Manager")}
+                <span id="Author" class="btn primary" on:click={onShowGenresEdit}>...</span>
+              {/if}
             </div>
             <div class="genres-list">
-              <span class="gen-tag">Genres: </span>
-              <Condition data={folderinfo?.Genres} split=", " on:click={onGenres} />
+              <div>
+                <span class="gen-tag">Genres: </span>
+                <Condition data={folderinfo?.Genres} split=", " on:click={onGenres} />
+              </div>
+              {#if User.role.includes("Manager")}
+                <span id="Genres" class="btn primary" on:click={onShowGenresEdit}>...</span>
+              {/if}
             </div>
           </div>
         </div>
         <div class="m-desc">
           <span class="desc-text">
             <span class="gen-tag">Description: </span>
-            <Condition data={folderinfo?.Description} split="\n" />
+            {#if folderinfo?.Description}
+              {#each folderinfo?.Description.split("\n") as desc}
+                <p>{desc}</p>
+              {/each}
+            {:else}
+              Loading Info
+            {/if}
           </span>
+          {#if User.role.includes("Manager")}
+            <span id="Description" class="btn primary" on:click={onShowGenresEdit}>...</span>
+          {/if}
         </div>
       </div>
     </div>
@@ -254,6 +288,7 @@
   #info-names {
     display: flex;
     flex-direction: column;
+    width: 100%;
   }
   #info-names > div {
     padding: 5px 0;
@@ -295,6 +330,7 @@
     border-bottom: 1px solid;
     min-height: 250px;
     padding: 10px;
+    padding-right: 0;
   }
   #img-info .d-state {
     display: inline-block;
@@ -318,15 +354,19 @@
   img[alt]:after {
     font-size: 16px;
   }
+
   .m-desc {
+    position: relative;
     font-size: 1.1rem;
     text-align: start;
     flex-grow: 1;
     overflow-y: auto;
   }
-  .m-desc :global(:not(:nth-child(2)):not(:last-child)) {
+
+  .m-desc .desc-text p:global(:not(:nth-child(2)):not(:last-child)) {
     margin: 15px 0;
   }
+
   #name-gen-tag {
     display: flex;
     flex-direction: column;
@@ -345,7 +385,13 @@
     cursor: pointer;
   }
 
+  .desc-text :global(.g-item:hover) {
+    cursor: initial;
+    text-decoration: initial;
+  }
+
   .manga-name {
+    position: relative;
     display: inline-block;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     text-align: start;
@@ -354,6 +400,7 @@
   }
 
   .genres-list {
+    position: relative;
     text-align: start;
     font-size: 1.1rem;
     overflow-y: auto;
@@ -362,6 +409,12 @@
     font-size: 1.2rem;
     font-weight: 700;
   }
+
+  .manga-name,
+  .genres-list {
+    width: 100%;
+  }
+
   #btn-bar {
     display: flex;
     justify-content: center;
@@ -371,14 +424,20 @@
   #btn-bar button {
     margin-right: 12px;
   }
+  .primary {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    height: 24px;
+    color: black;
+    line-height: 0.8;
+    background-color: rgb(37, 140, 209);
+    background-image: linear-gradient(-120deg, #3072ec, #06d7e6, #0dedfd);
+  }
+
   @media screen and (max-width: 800px) {
     #info-content img {
       max-height: 300px;
-    }
-    .img-d {
-      padding: 0;
-      height: fit-content;
-      margin-top: 20px;
     }
   }
   @media screen and (max-width: 480px) {
@@ -395,6 +454,7 @@
     }
     .img-d {
       min-width: 0;
+      min-height: 160px;
       margin: 0;
       padding: 10px 0;
       border: none;

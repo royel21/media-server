@@ -150,6 +150,21 @@ routes.get("/first-last/:isfirst/:folderid", async (req, res) => {
 
 routes.get("/folders/:order/:page?/:items?/:search?", getFolders);
 
+routes.post("/folder/update", async ({ body, user }, res) => {
+  if (user.Role.includes("Manager") && body.Id) {
+    const { Id, ...data } = body;
+    const folder = await db.folder.findOne({ where: { Id } });
+    if (folder) {
+      await folder.update(data);
+      return res.send({ valid: true });
+    } else {
+      return res.send({ valid: false });
+    }
+  }
+
+  return res.send({ valid: false, errors: ["Not Authorized"] });
+});
+
 routes.get("/:filetype/:dirid/:order/:page?/:items?/:search?", getFolders);
 
 export default routes;

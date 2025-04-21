@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { handlerPaste } from "./util";
+  import { handlerPaste } from "../admin/Component/util";
 
   export let file;
   export let item = "";

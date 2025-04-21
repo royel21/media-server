@@ -4,7 +4,7 @@
   import apiUtils from "src/apiUtils";
   import CheckBox from "../Component/CheckBox.svelte";
   import Select from "src/ShareComponent/Select.svelte";
-  import TextAreaInput from "../Component/TextAreaInput.svelte";
+  import TextAreaInput from "../../ShareComponent/TextAreaInput.svelte";
   import { validGenres } from "../Utils";
   import Input from "../Component/Input.svelte";
 

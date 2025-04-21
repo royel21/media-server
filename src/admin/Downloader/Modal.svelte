@@ -4,7 +4,7 @@
   import Input from "src/admin/Component/Input.svelte";
   import Select from "src/ShareComponent/Select.svelte";
   import CheckBox from "src/admin/Component/CheckBox.svelte";
-  import TextAreaInput from "src/admin/Component/TextAreaInput.svelte";
+  import TextAreaInput from "src/ShareComponent/TextAreaInput.svelte";
   import apiUtils from "src/apiUtils";
   import Dialog from "../../ShareComponent/Dialog.svelte";
 

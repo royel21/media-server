@@ -351,6 +351,10 @@ svg,
   user-select: none;
 }
 
+.btn:active {
+  transform: scale(1.08);
+}
+
 svg path {
   pointer-events: none;
 }
