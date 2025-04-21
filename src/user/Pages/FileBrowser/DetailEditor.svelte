@@ -61,7 +61,6 @@
 
   onMount(async () => {
     tags = await apiUtils.get(["files", "folder", "tags"]);
-    console.log(tags);
   });
 </script>
 
