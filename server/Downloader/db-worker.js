@@ -37,11 +37,11 @@ export const findOrCreateFolder = async (manga, IsAdult, isRaw) => {
 
     if (!folder) {
       const query = {
-        where: { Name: IsAdult ? "Webtoons" : "Mangas" },
+        where: { Name: Genres.includes("Manga") ? "Mangas" : "Webtoons", IsAdult },
       };
 
-      if (isRaw) {
-        query.where.Name = "Webtoon Raw";
+      if (Genres.includes("Raw") || isRaw) {
+        query.where.Name = query.where.Name + " Raw";
       }
 
       let directory = await db.directory.findOne(query);
