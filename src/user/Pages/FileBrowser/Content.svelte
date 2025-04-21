@@ -176,8 +176,8 @@
           </div>
         </div>
         <div class="m-desc">
+          <span class="gen-tag">Description: </span>
           <span class="desc-text">
-            <span class="gen-tag">Description: </span>
             {#if folderinfo?.Description}
               {#each folderinfo?.Description.split("\n") as desc}
                 <p>{desc}</p>
@@ -366,9 +366,12 @@
   .m-desc .desc-text p:global(:not(:nth-child(2)):not(:last-child)) {
     margin: 15px 0;
   }
-  .desc-text .gen-tag {
+  .m-desc .gen-tag {
     position: sticky;
     top: 0;
+    background-color: #000000c7;
+    padding: 1px 4px;
+    border-radius: 0.25rem;
   }
 
   #name-gen-tag {
