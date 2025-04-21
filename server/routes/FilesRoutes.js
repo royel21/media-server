@@ -5,8 +5,11 @@ import { getFiles, getFolders } from "./query-helper.js";
 
 import { clamp, getFilter } from "./utils.js";
 import { Op, literal } from "sequelize";
+import fs from "fs-extra";
 
 const routes = Router();
+
+const tagsPath = "./server/data/tags.json";
 
 routes.get("/folder-content/:id/:order/:page?/:items?/:search?", async (req, res) => {
   getFiles(req.user, req.params).then((data) => res.send(data));
@@ -149,6 +152,16 @@ routes.get("/first-last/:isfirst/:folderid", async (req, res) => {
 });
 
 routes.get("/folders/:order/:page?/:items?/:search?", getFolders);
+
+routes.get("/folder/tags", (_, res) => {
+  let tags = [];
+
+  if (fs.existsSync(tagsPath)) {
+    tags = fs.readJSONSync(tagsPath);
+  }
+
+  return res.send(tags);
+});
 
 routes.post("/folder/update", async ({ body, user }, res) => {
   if (user.Role.includes("Manager") && body.Id) {

@@ -4,19 +4,20 @@
   import Dialog from "src/ShareComponent/Dialog.svelte";
   import TextAreaInput from "src/ShareComponent/TextAreaInput.svelte";
   import { validAltName, validateAuthor, validGenres } from "src/ShareComponent/utils";
+  import { onMount } from "svelte";
   export let hide;
   export let item;
   export let title;
   export let update;
   let errors = [];
+  let tags = [];
   let data = { Id: item.Id, [title]: item[title] };
 
   const validate = () => {
     if (!data[title]) return;
 
-    console.log("validate", data);
     if (title === "Genres") {
-      data.Genres = validGenres(data.Genres);
+      data.Genres = validGenres(data.Genres, tags);
     }
 
     if (title === "AltName") {
@@ -57,6 +58,11 @@
 
     errors = result.errors;
   };
+
+  onMount(async () => {
+    tags = await apiUtils.get(["files", "folder", "tags"]);
+    console.log(tags);
+  });
 </script>
 
 <Dialog cancel={hide} confirm={onSave} {errors}>
