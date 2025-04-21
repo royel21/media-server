@@ -366,6 +366,10 @@
   .m-desc .desc-text p:global(:not(:nth-child(2)):not(:last-child)) {
     margin: 15px 0;
   }
+  .desc-text .gen-tag {
+    position: sticky;
+    top: 0;
+  }
 
   #name-gen-tag {
     display: flex;
