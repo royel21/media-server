@@ -48,7 +48,6 @@ export const startBrowser = async (config) => {
   config.headless = false; //"new";
   pupeteer = await puppeteer.launch(config);
 
-  await pupeteer.setUserAgent(userAgent);
   return pupeteer;
 };
 
