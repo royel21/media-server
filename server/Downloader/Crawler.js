@@ -36,6 +36,7 @@ let pupeteer;
 export const startBrowser = async (config) => {
   console.log(process.env.DISPLAY);
   config.args = [...(config.args || []), "--no-sandbox", "--disable-gpu"];
+  config.userDataDir = "./user-data/puppeteer";
 
   if (os.platform() === "win32") {
     config.executablePath = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
