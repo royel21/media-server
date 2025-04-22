@@ -1,5 +1,6 @@
 import puppeteer from "puppeteer-extra";
 import os from "node:os";
+import UserAgent from "user-agents";
 
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 puppeteer.use(StealthPlugin());
