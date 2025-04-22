@@ -13,9 +13,6 @@ export const delay = (ms) => {
   });
 };
 
-const userAgent =
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0";
-
 export const createPage = async (browser, timeout = 180000) => {
   const page = await browser.newPage();
   await page.setViewport({ width: 1200, height: 800 });
@@ -26,10 +23,10 @@ export const createPage = async (browser, timeout = 180000) => {
     maxResourceBufferSize: 1024 * 1024 * 400,
     maxTotalBufferSize: 1024 * 1204 * 400,
   });
-
+  const userAgent = new UserAgent().random().toString();
   // await page.evaluateOnNewDocument(() => { });
   await page.setUserAgent(userAgent);
-  console.log(await browser.userAgent());
+  console.log(await browser.userAgent(), userAgent);
   return page;
 };
 
@@ -44,10 +41,14 @@ export const startBrowser = async (config) => {
   } else {
     config.args.push(`--display=${":10.0"}`); // fix for LXDE desktops)
     config.executablePath = "/usr/bin/microsoft-edge";
+    //microsoft-edge
+    //google-chrome
+    //google-chrome-stable
   }
   config.headless = false; //"new";
   pupeteer = await puppeteer.launch(config);
 
+  await pupeteer.setUserAgent(userAgent);
   return pupeteer;
 };
 
