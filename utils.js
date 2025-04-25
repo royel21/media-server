@@ -11,7 +11,7 @@ async function validateMetadata(filePath) {
         console.log("Error parsing JSON:", error);
       } else {
         try {
-          JSON.parse(stdout);
+          console.log(JSON.parse(stdout));
           resolve(true);
         } catch (e) {
           console.log("Error parsing JSON:", e);
