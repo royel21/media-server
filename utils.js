@@ -33,6 +33,7 @@ const list = async () => {
         console.log(file.Name, "Invalid Metadata");
       }
     }
+    i++;
   }
 };
 list();
