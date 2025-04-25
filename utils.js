@@ -11,7 +11,7 @@ async function validateMetadata(filePath) {
         console.log("Error parsing JSON:", error);
       } else {
         try {
-          console.log(JSON.parse(stdout));
+          // console.log(JSON.parse(stdout));
           resolve(true);
         } catch (e) {
           console.log("Error parsing JSON:", e);
@@ -30,12 +30,9 @@ const list = async () => {
     for (const file of folder.Files) {
       const result = await validateMetadata(file.Path);
       if (!result) {
-        break;
+        console.log(file.Name, "Invalid Metadata");
       }
-      console.log(file.Name, result);
-      break;
     }
-    break;
   }
 };
 list();
