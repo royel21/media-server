@@ -5,7 +5,7 @@ import winExplorer from "win-explorer";
 
 async function validateMetadata(filePath) {
   return new Promise((resolve, reject) => {
-    exec(`ffprobe -v error -show_format -show_streams -print_format json '${filePath}'`, (error, stdout, stderr) => {
+    exec(`ffprobe -v error -show_format -show_streams -print_format json "${filePath}"`, (error, stdout, stderr) => {
       if (error) {
         resolve(false);
       } else {
