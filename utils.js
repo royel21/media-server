@@ -24,9 +24,9 @@ async function validateMetadata(filePath) {
 
 const list = async () => {
   const folders = winExplorer.ListFilesRO("/mnt/5TBHDD/Anime", { oneFile: false });
-
+  let i = 0;
   for (let folder of folders) {
-    console.log(folder.Name);
+    console.log(`${i + 1}/${folders.size}`, folder.Name);
     for (const file of folder.Files) {
       const result = await validateMetadata(file.Path);
       if (!result) {
