@@ -30,7 +30,7 @@ const list = async () => {
     for (const file of folder.Files) {
       const result = await validateMetadata(file.Path);
       if (!result) {
-        if (invalidFiles[folder.Name]) invalidFiles[folder.Name] = [];
+        if (!invalidFiles[folder.Name]) invalidFiles[folder.Name] = [];
 
         invalidFiles[folder.Name].push(file.Name);
         console.log(file.Name, "Invalid Metadata");
