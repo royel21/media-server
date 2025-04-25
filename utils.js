@@ -33,7 +33,7 @@ const list = async () => {
         if (!invalidFiles[folder.Name]) invalidFiles[folder.Name] = [];
 
         invalidFiles[folder.Name].push(file.Name);
-        console.log(file.Name, "Invalid Metadata");
+        console.log(file.Name, " Invalid Metadata");
       }
     }
     i++;
