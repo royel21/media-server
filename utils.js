@@ -23,7 +23,7 @@ async function validateMetadata(filePath) {
 }
 
 const list = async () => {
-  const folders = winExplorer.ListFilesRO("/mnt/5TB/Anime", { oneFile: false });
+  const folders = winExplorer.ListFilesRO("/mnt/5TBHDD/Anime", { oneFile: false });
 
   for (let folder of folders) {
     console.log(folder.Name);
