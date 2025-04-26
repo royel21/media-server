@@ -14,6 +14,28 @@ export const delay = (ms) => {
   });
 };
 
+let pupeteer;
+
+export const startBrowser = async (config) => {
+  console.log(process.env.DISPLAY);
+  config.args = [...(config.args || []), "--no-sandbox", "--disable-gpu"];
+  config.userDataDir = "./user-data/puppeteer";
+
+  if (os.platform() === "win32") {
+    config.executablePath = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
+  } else {
+    config.args.push(`--display=${":1"}`); // fix for LXDE desktops)
+    config.executablePath = "/usr/bin/microsoft-edge";
+    //microsoft-edge
+    //google-chrome
+    //google-chrome-stable
+  }
+  config.headless = false; //"new";
+  pupeteer = await puppeteer.launch(config);
+
+  return pupeteer;
+};
+
 export const createPage = async (browser, timeout = 180000) => {
   const page = await browser.newPage();
   await page.setViewport({ width: 1200, height: 800 });
@@ -29,28 +51,6 @@ export const createPage = async (browser, timeout = 180000) => {
   await page.setUserAgent(userAgent);
   console.log(await browser.userAgent(), userAgent);
   return page;
-};
-
-let pupeteer;
-
-export const startBrowser = async (config) => {
-  console.log(process.env.DISPLAY);
-  config.args = [...(config.args || []), "--no-sandbox", "--disable-gpu"];
-  config.userDataDir = "./user-data/puppeteer";
-
-  if (os.platform() === "win32") {
-    config.executablePath = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
-  } else {
-    config.args.push(`--display=${":10.0"}`); // fix for LXDE desktops)
-    config.executablePath = "/usr/bin/microsoft-edge";
-    //microsoft-edge
-    //google-chrome
-    //google-chrome-stable
-  }
-  config.headless = "new";
-  pupeteer = await puppeteer.launch(config);
-
-  return pupeteer;
 };
 
 export const getPages = async () => {
