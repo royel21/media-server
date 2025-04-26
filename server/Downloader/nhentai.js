@@ -217,15 +217,7 @@ const download = async (link, page, server, state) => {
 };
 
 export const downloadNHentais = async (state) => {
-  let page;
-  let browser;
-  try {
-    browser = await startBrowser({ args: ["--incognito"] });
-    page = await createPage(browser);
-  } catch (error) {
-    console.log(error);
-    return;
-  }
+  let page = await createPage(state.browser);
 
   while (state.nhentais.length) {
     if (state.stopped) break;
@@ -252,5 +244,4 @@ export const downloadNHentais = async (state) => {
   state.hrunning = false;
   state.hsize = 0;
   state.hentai = [];
-  await browser?.close();
 };

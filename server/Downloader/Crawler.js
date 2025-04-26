@@ -31,6 +31,7 @@ export const startBrowser = async (config) => {
     //google-chrome-stable
   }
   config.headless = false; //"new";
+  console.trace(config);
   pupeteer = await puppeteer.launch(config);
 
   return pupeteer;
