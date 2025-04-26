@@ -5,7 +5,7 @@ import { getImgNh, saveThumbnail } from "./ImageUtils.js";
 import defaultConfig from "../default-config.js";
 import fs from "fs-extra";
 import AdmZip from "adm-zip";
-import { createPage, delay, startBrowser } from "./Crawler.js";
+import { createPage } from "./Crawler.js";
 
 const isChar = (c) => {
   return c.match(/[a-z]/i);
