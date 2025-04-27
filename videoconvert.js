@@ -25,7 +25,7 @@ const convertVideo = async (dir) => {
         .inputOptions(["-c:v h264_qsv"])
         .outputOptions([
           "-movflags +faststart",
-          `-filter:v "scale='min(1280,iw)':min'(720,ih)':force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2"`,
+          "-filter:v scale='min(1280,iw)':min'(720,ih)':force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2",
         ])
         .on("start", (cmd) => console.log(cmd))
         .on("codecData", function (data) {
