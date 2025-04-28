@@ -44,13 +44,13 @@ const convertVideo = async (vPath, isAnime) => {
 
       Ffmpeg(filePath)
         .audioBitrate("128k")
-        .videoBitrate(isAnime ? "768k" : "1152K")
+        .videoBitrate(isAnime ? "768k" : "1024K")
         .inputOptions(["-c:v h264_qsv"])
         .outputOptions(["-movflags +faststart", resize ? "-vf scale=1280:-1" : ""])
         .on("start", (cmd) => console.log(cmd))
         .on("codecData", function (data) {
           const str = meta?.streams[0];
-          console.log(`${data.duration} ~ ${str ? `${str.width}x${str.heigth} ~ ` : ""}${file}`);
+          console.log(`${data.duration} ~ ${str ? `${str.width}x${str.height} ~ ` : ""}${file}`);
         })
         .on("progress", (p) => {
           process.stdout.write(`\r${current} ~ ${p.timemark} ~ ${p.percent.toFixed(2)}%  `);
