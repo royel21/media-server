@@ -49,7 +49,8 @@ const convertVideo = async (vPath, isAnime) => {
         .outputOptions(["-movflags +faststart", resize ? "-vf scale=1280:-1" : ""])
         .on("start", (cmd) => console.log(cmd))
         .on("codecData", function (data) {
-          console.log(`${data.duration} ~ ${file}`);
+          const str = meta?.streams[0];
+          console.log(`${data.duration} ~ ${str ? `${str.width}x${str.heigth} ~ ` : ""}${file}`);
         })
         .on("progress", (p) => {
           process.stdout.write(`\r${current} ~ ${p.timemark} ~ ${p.percent.toFixed(2)}%  `);
