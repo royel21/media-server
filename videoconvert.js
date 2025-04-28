@@ -21,6 +21,8 @@ async function getMetadata(filePath) {
   });
 }
 
+const getime = () => new Date().toLocaleTimeString();
+
 const convertVideo = async (vPath, isAnime) => {
   if (!fs.existsSync(vPath || "/nothing")) return;
 
@@ -50,7 +52,7 @@ const convertVideo = async (vPath, isAnime) => {
         .on("start", (cmd) => console.log(cmd))
         .on("codecData", function (data) {
           const str = meta?.streams[0];
-          console.log(`${data.duration} ~ ${str ? `${str.width}x${str.height} ~ ` : ""}${file}`);
+          console.log(`${getime()} ${data.duration} ~ ${str ? `${str.width}x${str.height} ~ ` : ""}${file}`);
         })
         .on("progress", (p) => {
           process.stdout.write(`\r${current} ~ ${p.timemark} ~ ${p.percent.toFixed(2)}%  `);
