@@ -114,10 +114,11 @@ ListFilesRO = (dir) => {
     let fs1 = WinExplore.ListFiles(d);
     let files = [];
     for (f of fs1) {
+      const Path = path.join(d, f.Name);
       if (f.isDirectory) {
         let f2 = {
           Name: f.Name,
-          Path: path.join(d, f.Name),
+          Path,
           Files: listAll(path.join(d, f.Name)),
           isDirectory: true,
           Size: 0,
@@ -125,6 +126,7 @@ ListFilesRO = (dir) => {
         };
         files.push(f2);
       } else {
+        f.Path = Path;
         files.push(f);
       }
     }
