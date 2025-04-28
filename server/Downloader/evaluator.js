@@ -45,9 +45,9 @@ export const evaluetePage = (query) => {
 
   let data = as
     .map((a) => {
-      let val = (a.querySelector("strong,b,span,p") || a).textContent?.trim().replace(/\n.*$|\nNEW/gi, "");
+      let fileName = (a.querySelector("strong,b,span,p") || a).textContent?.trim().replace(/\n.*$|\nNEW/gi, "");
 
-      val = val
+      fileName = fileName
         .trim()
         .replace(nameRegex, "")
         .replace(/\||\/|:|\?|\^|"|\*|<|>|\t|\n|\(|\)|\[|\]|\n/gi, "")
@@ -59,18 +59,18 @@ export const evaluetePage = (query) => {
         .replace(".", "-")
         .replace(/(\.)+$/, "")
         .replace(/-6|-7/, "-5");
-      let n = val.match(/\d+/);
+      let n = fileName.match(/\d+/);
       if (n) {
         n = n[0];
-        val = val.replace(n, n.padStart(padding, "0"));
+        fileName = fileName.replace(n, n.padStart(padding, "0"));
       }
 
       if (/^Tales Of Demons/i.test(Name)) {
-        val = val.replace("-6", "-5");
-        val = val.replace("-1", "");
+        fileName = fileName.replace("-6", "-5");
+        fileName = fileName.replace("-1", "");
       }
 
-      return { name: val, url: a.href.replace(/-page-\d+/gi, "") };
+      return { name: fileName.trim(), url: a.href.replace(/-page-\d+/gi, "") };
     })
     .filter((a) => {
       let noAllowed =
@@ -353,7 +353,7 @@ export const adultEvalPage = async (query) => {
       fileName = (data.length + 1).toString().padStart(padding, "0");
     }
 
-    data.push({ name: fileName, url: a.href, n });
+    data.push({ name: fileName.trim(), url: a.href, n });
   });
 
   data = data.reverse().filter((a) => {
