@@ -32,7 +32,7 @@
   const loadFiles = async (pg) => {
     if (folderId) {
       let rows = calRows("#l-files");
-      let data = await apiUtils.admin(["folders", "files", folderId, pg, rows, encodeURIComponent(filter)]);
+      let data = await apiUtils.admin(["folders", "files", folderId, pg, rows, filter]);
 
       if (data.items) {
         items = data.items;

@@ -80,20 +80,20 @@ export default (sequelize, isSqlite) => {
             item.Id = nanoid(10);
           }
         },
-        beforeUpdate: async function (item) {
+        afterUpdate: async function (item) {
           const oldName = item._previousDataValues.Name;
           if (item.Name !== oldName) {
             const folder = await item.getFolder();
             if (folder) {
               const fromFile = path.join(folder.Path, oldName);
-              if (fs.existsSync(fromFile)) {
-                const toFile = path.join(folder.Path, item.Name);
+              const toFile = path.join(folder.Path, item.Name);
+              if (fs.existsSync(fromFile) && !fs.existsSync(toFile)) {
                 fs.moveSync(fromFile, toFile);
               }
 
               const oldCover = genImgPath(item.Type, folder.Name, oldName);
-              if (fs.existsSync(oldCover)) {
-                const cover = genImgPath(item.Type, folder.Name, item.Name);
+              const cover = genImgPath(item.Type, folder.Name, item.Name);
+              if (fs.existsSync(oldCover) && !fs.existsSync(cover)) {
                 fs.moveSync(oldCover, cover);
               }
             }
@@ -106,11 +106,16 @@ export default (sequelize, isSqlite) => {
               if (folder) {
                 //Delete File
                 const fPath = `${folder.Path}/${item.Name}`;
-                if (fs.existsSync(fPath)) fs.removeSync(fPath);
+
+                if (fs.existsSync(fPath)) {
+                  fs.removeSync(fPath);
+                }
                 //Delete Cover
                 const cover = genImgPath(item.Type, folder.Name, item.Name);
-                console.log("remove", cover);
-                if (fs.existsSync(cover)) fs.removeSync(cover);
+                if (fs.existsSync(cover)) {
+                  console.log("remove", cover);
+                  fs.removeSync(cover);
+                }
               }
             } catch (error) {
               console.log(error);
