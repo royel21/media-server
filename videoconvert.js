@@ -44,7 +44,7 @@ const convertVideo = async (vPath, isAnime) => {
 
       Ffmpeg(filePath)
         .audioBitrate("128k")
-        .videoBitrate(isAnime ? "768k" : "1024k")
+        .videoBitrate(isAnime ? "768k" : "1152k")
         .inputOptions(["-c:v h264_qsv"])
         .outputOptions(["-movflags +faststart", resize ? "-vf scale=1280:-1" : ""])
         .on("start", (cmd) => console.log(cmd))
