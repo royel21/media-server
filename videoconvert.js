@@ -72,7 +72,7 @@ const convertVideo = async (vPath, isAnime) => {
         })
         .saveToFile(toFile)
         .on("end", () => {
-          console.log(`${getime()} Save to:  ${toFile}\n`);
+          console.log(`\n${getime()} Save to:  ${toFile}\n`);
           resolve(true);
           // fs.removeSync(toFile);
         })
