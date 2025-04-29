@@ -29,14 +29,18 @@ export const moveFiles = ({ files, Path, overwrite }) => {
 
 export const removeFiles = ({ files }) => {
   sendMessage({ msg: `Removing ${files.length} Files Please Wait` });
+  let i = 0;
   for (const file of files) {
     try {
       if (fs.existsSync(file.Path)) {
         fs.removeSync(file.Path);
+        sendMessage({ text: `Removing: ${i + 1}/${files.length} - ${file.Name}`, move: file }, "info");
       }
     } catch (error) {
+      console.log(error);
       sendMessage({ error: `Error Removing: ${file.Name}`, err: error });
     }
+    i++;
   }
   sendMessage({ msg: "Finish Removing Files", folders: files.map((f) => f.Id) });
 };
