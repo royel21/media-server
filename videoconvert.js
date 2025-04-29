@@ -38,14 +38,14 @@ const convertVideo = async (vPath, isAnime) => {
   const files = fs.readdirSync(vPath).filter((f) => /\.(mp4|mkv)/i.test(f));
   let i = 0;
 
-  if (!fs.existsSync(path.join("../", "Videos"))) {
-    fs.mkdirsSync(path.join("../", "Videos"));
+  if (!fs.existsSync(path.join(vPath, "Videos"))) {
+    fs.mkdirsSync(path.join(vPath, "Videos"));
   }
   const padding = files.length.toString().length;
 
   for (let file of files) {
     await new Promise(async (resolve) => {
-      const toFile = path.resolve("../", "Videos", file.replace(/mkv|webm/i, "mp4"));
+      const toFile = path.resolve(vPath, "Videos", file.replace(/mkv|webm/i, "mp4"));
       const current = `${(i + 1).toString().padStart(padding, "0")}/${files.length}`;
 
       const filePath = path.join(vPath, file);
