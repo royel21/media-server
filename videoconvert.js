@@ -55,11 +55,15 @@ const convertVideo = async (vPath, isAnime) => {
 
       const start = new Date().getTime();
 
+      const outOptions = ["-movflags +faststart"];
+      if (resize) {
+        outOptions.push("-vf scale=1280:-1");
+      }
       Ffmpeg(filePath)
         .audioBitrate("128k")
         .videoBitrate(isAnime ? "768k" : "1152k")
         .inputOptions(["-c:v h264_qsv"])
-        .outputOptions(["-movflags +faststart", resize ? "-vf scale=1280:-1" : ""])
+        .outputOptions(outOptions)
         .on("start", (cmd) => console.log(cmd))
         .on("codecData", function (data) {
           const str = meta?.streams[0];
