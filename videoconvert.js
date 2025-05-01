@@ -55,14 +55,15 @@ const convertVideo = async (vPath, isAnime) => {
 
       const start = new Date().getTime();
 
-      const outOptions = ["-movflags +faststart", "-vf hwdownload,format=nv12"];
+      const outOptions = ["-movflags +faststart"];
       if (resize) {
         outOptions.push("-vf scale=1280:-1");
       }
+
       Ffmpeg(filePath)
         .audioBitrate("128k")
         .videoBitrate(isAnime ? "768k" : "1152k")
-        .inputOptions(["-hwaccel_output_format qsv", "-c:v h264_qsv"])
+        .inputOptions(["-c:v h264_qsv"])
         .outputOptions(outOptions)
         .on("start", (cmd) => console.log(cmd))
         .on("codecData", function (data) {
