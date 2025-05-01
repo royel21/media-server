@@ -55,14 +55,13 @@ const convertVideo = async (vPath, isAnime) => {
 
       const start = new Date().getTime();
 
-      const inputOptions = [`-init_hw_device vaapi=/dev/dri/renderD128`, "-hwaccel_output_format qsv", "-c:v h264_qsv"];
-      const outOptions = ["-movflags +faststart"];
+      const inputOptions = [`-init_hw_device vaapi=/dev/dri/renderD128`, "-hwaccel_output_format qsv"];
+      const outOptions = ["-c:v h264_qsv", "-c:a acc", "-b:a 128k", "-movflags +faststart"];
       if (resize) {
         outOptions.push("-vf scale=1280:-1");
       }
 
       Ffmpeg(filePath)
-        .audioBitrate("128k")
         .videoBitrate(isAnime ? "768k" : "1152k")
         .inputOptions(inputOptions)
         .outputOptions(outOptions)
