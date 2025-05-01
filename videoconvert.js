@@ -59,7 +59,7 @@ const convertVideo = async (vPath, isAnime) => {
       const outOptions = [
         "-c:v h264_qsv",
         `-b:v ${isAnime ? "768k" : "1152k"}`,
-        "-c:a acc",
+        "-c:a aac",
         "-b:a 128k",
         "-movflags +faststart",
       ];
