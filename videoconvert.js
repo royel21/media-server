@@ -55,7 +55,7 @@ const convertVideo = async (vPath, isAnime) => {
 
       const start = new Date().getTime();
 
-      const outOptions = ["-movflags +faststart"];
+      const outOptions = ["-movflags +faststart", "-vf hwdownload,format=nv12"];
       if (resize) {
         outOptions.push("-vf scale=1280:-1");
       }

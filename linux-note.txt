@@ -14,3 +14,19 @@ rsync -avu --del --exclude='[0-9]*.jpg' --prune-empty-dirs "/<src>" "/<dest>"
     sudo sdparm -s SCT=288000 --save /dev/disk/by-id/scsi-SSABRENT__DB98765432123
 
     sudo sdparm --get SCT /dev/disk/by-id/scsi-SSABRENT__DB98765432123
+
+    #config ffmpeg
+    sudo apt-get install libva-dev libmfx-dev intel-media-va-driver-non-free
+    
+    export LIBVA_DRIVER_NAME=iHD
+
+    git clone https://github.com/ffmpeg/ffmpeg
+    cd ffmpeg
+
+    ./configure --arch=x86_64 --disable-yasm --enable-vaapi --enable-libmfx
+    make
+
+    make install
+
+    #Sample cmd for ffmpeg
+    ffmpeg -hwaccel qsv -c:v h264_qsv -i input_video output_video 
