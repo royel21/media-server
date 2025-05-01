@@ -55,11 +55,7 @@ const convertVideo = async (vPath, isAnime) => {
 
       const start = new Date().getTime();
 
-      const inputOptions = [
-        `-init_hw_device vaapi=intel:/dev/dri/renderD128`,
-        "-hwaccel_output_format qsv",
-        "-c:v h264_qsv",
-      ];
+      const inputOptions = [`-init_hw_device vaapi=/dev/dri/renderD128`, "-hwaccel_output_format qsv", "-c:v h264_qsv"];
       const outOptions = ["-movflags +faststart"];
       if (resize) {
         outOptions.push("-vf scale=1280:-1");
