@@ -63,7 +63,7 @@ const convertVideo = async (vPath, isAnime) => {
       Ffmpeg(filePath)
         .audioBitrate("128k")
         .videoBitrate(isAnime ? "768k" : "1152k")
-        .inputOptions(["-c:v h264_qsv"])
+        .inputOptions(["-init_hw_device vaapi:intel=/dev/dri/renderD128", "-hwaccel qsv", "-c:v h264_qsv"])
         .outputOptions(outOptions)
         .on("start", (cmd) => console.log(cmd))
         .on("codecData", function (data) {
