@@ -55,6 +55,11 @@ const convertVideo = async (vPath, isAnime) => {
 
       const start = new Date().getTime();
 
+      const inputOptions = [
+        `-init_hw_device vaapi=intel:/dev/dri/renderD128`,
+        "-hwaccel_output_format qsv",
+        "-c:v h264_qsv",
+      ];
       const outOptions = ["-movflags +faststart"];
       if (resize) {
         outOptions.push("-vf scale=1280:-1");
@@ -63,7 +68,7 @@ const convertVideo = async (vPath, isAnime) => {
       Ffmpeg(filePath)
         .audioBitrate("128k")
         .videoBitrate(isAnime ? "768k" : "1152k")
-        .inputOptions([`-init_hw_device vaapi=/dev/dri/renderD128`, "-hwaccel_output_format qsv", "-c:v h264_qsv"])
+        .inputOptions(inputOptions)
         .outputOptions(outOptions)
         .on("start", (cmd) => console.log(cmd))
         .on("codecData", function (data) {
@@ -73,7 +78,8 @@ const convertVideo = async (vPath, isAnime) => {
         .on("progress", (p) => {
           const elapse = (new Date().getTime() - start) / 1000;
           const percent = p.percent.toFixed(2);
-          process.stdout.write(`\r${current} ~ ${p.timemark} ~ ${percent}% ~ Elapse: ${formatTime(elapse)}`);
+          const text = `\r${current} ~ ${p.timemark} ~ ${percent}% ~ Elapse: ${formatTime(elapse)}`;
+          process.stdout.write(text);
         })
         .saveToFile(toFile)
         .on("end", () => {
