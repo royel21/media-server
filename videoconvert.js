@@ -58,7 +58,7 @@ const convertVideo = async (vPath, isAnime) => {
       const inputOptions = [`-init_hw_device vaapi=/dev/dri/renderD128`, "-hwaccel_output_format qsv"];
       const outOptions = [
         "-c:v h264_qsv",
-        `-b:v ${isAnime ? "768k" : "1152k"}`,
+        `-b:v ${isAnime ? "1024k" : "1152k"}`,
         "-c:a aac",
         "-b:a 128k",
         "-movflags +faststart",
