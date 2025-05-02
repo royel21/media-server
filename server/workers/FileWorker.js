@@ -101,22 +101,23 @@ const renameFolder = async (datas) => {
       if (Transfer) {
         const dir = await db.directory.findOne({ where: { Id: DirectoryId } });
         if (dir) {
-          const newPath = folder.Path.replace(folder.Directory.FullPath, dir.FullPath);
+          const newPath = Path.replace(folder.Directory.FullPath, dir.FullPath);
           data.DirectoryId = DirectoryId;
           data.Path = newPath;
+
+          sendMessage("folder-renamed", {
+            Id,
+            success: true,
+            msg: `Transfering: ${folder.Name} this may take some time please wait until completed message`,
+            folder: { ...folder.dataValues },
+            Transfer,
+          });
+          const result = await transferFiles(folder.Path, data.Path);
+          if (!result.success) {
+            return sendMessage("folder-renamed", { Id, success: false, msg: "Transfer folder fail" });
+          }
+          msg = `Folder: ${Name} was moved from ${folder.Directory.FullPath} to ${dir.FullPath}`;
         }
-        sendMessage("folder-renamed", {
-          Id,
-          success: true,
-          msg: `Transfering: ${folder.Name} this may take some time please wait until completed message`,
-          folder: { ...folder.dataValues },
-          Transfer,
-        });
-        const result = await transferFiles(folder.Path, data.Path);
-        if (!result.success) {
-          return sendMessage("folder-renamed", { Id, success: false, msg: "Transfer folder fail" });
-        }
-        msg = `Folder: ${Name} was moved from ${folder.Directory.FullPath} to ${dir.FullPath}`;
       } else {
         msg = `Folder: ${Name} data was Updated`;
       }
