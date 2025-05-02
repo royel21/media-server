@@ -17,7 +17,6 @@ export const delay = (ms) => {
 let pupeteer;
 
 export const startBrowser = async (config) => {
-  console.log(process.env.DISPLAY);
   config.args = [...(config.args || []), "--no-sandbox", "--disable-gpu"];
   config.userDataDir = "./user-data/puppeteer";
 
@@ -31,7 +30,6 @@ export const startBrowser = async (config) => {
     //google-chrome-stable
   }
   config.headless = false; //"new";
-  console.trace(config);
   pupeteer = await puppeteer.launch(config);
 
   return pupeteer;
