@@ -106,13 +106,12 @@
     <thead>
       <tr>
         <th class="d-action">Actions</th>
-        <th class="d-type">Type</th>
         <th class="f-name">Name</th>
         <th class="f-path">Path</th>
-        <th class="d-adult">Is Adult</th>
-        <th class="d-cont">Folder {count}</th>
-        <th class="d-total">Total Files {allFiles}</th>
-        <th class="d-order">Order In Menu</th>
+        <th class="d-adult">Adult</th>
+        <th class="d-cont"><Icons name="folder" /> {count}</th>
+        <th class="d-total"><Icons name="file" /> {allFiles}</th>
+        <th class="d-order">Menu Order</th>
       </tr>
     </thead>
     <tbody>
@@ -126,13 +125,14 @@
               <Icons name="trash" />
             </span>
           </td>
-          <td>{Type}</td>
-          <td class="f-name order" title={FullPath} id="Name" on:click={onShowInput}>{Name}</td>
+          <td class="f-name order" title={FullPath} id="Name" on:click={onShowInput}
+            ><Icons name={Type.includes("Manga") ? "book" : "film"} /> {Name}</td
+          >
           <td class="f-path order" id="FullPath" on:click={onShowInput}>{FullPath}</td>
           <td data-name="IsAdult" on:click={updateDir}>{IsAdult}</td>
           <td>{FolderCount}</td>
           <td>{TotalFiles}</td>
-          <td class="order" id="FirstInList" on:click={onShowInput}>
+          <td class="d-order order" id="FirstInList" on:click={onShowInput}>
             {FirstInList}
           </td>
         </tr>
@@ -163,31 +163,27 @@
     width: 90px;
     min-width: 90px;
   }
-  .d-type {
-    min-width: 80px;
-    width: 80px;
-  }
   .d-adult {
-    min-width: 90px;
-    width: 90px;
+    min-width: 70px;
+    width: 70px;
     cursor: pointer;
   }
   .f-path {
     white-space: nowrap;
   }
   .d-cont {
-    min-width: 120px;
-    width: 120px;
+    min-width: 90px;
+    width: 90px;
   }
   .d-total {
-    min-width: 155px;
-    width: 155px;
+    min-width: 110px;
+    width: 110px;
   }
   td:last-child {
     text-align: center;
     cursor: pointer;
-    width: 155px;
-    min-width: 155px;
+    width: 110px;
+    min-width: 110px;
   }
   .order:has(input) {
     padding: 0;
