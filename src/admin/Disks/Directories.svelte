@@ -105,26 +105,18 @@
   <table id="dir-list" class="table table-dark table-hover table-bordered">
     <thead>
       <tr>
-        <th class="d-action">Actions</th>
         <th class="f-name">Name</th>
         <th class="f-path">Path</th>
         <th class="d-adult">Adult</th>
         <th class="d-cont"><Icons name="folder" /> {count}</th>
         <th class="d-total"><Icons name="file" /> {allFiles}</th>
         <th class="d-order">Menu Order</th>
+        <th class="d-action">Actions</th>
       </tr>
     </thead>
     <tbody>
       {#each dirs as { Id, IsLoading, Name, FullPath, Type, FolderCount, TotalFiles, IsAdult, FirstInList }}
         <tr id={Id} key={Id}>
-          <td>
-            <span class="dir-sync" on:click={rescan}>
-              <Icons name="sync" class={IsLoading ? "icon-spin" : ""} box="0 0 512 512" />
-            </span>
-            <span class="dir-remove ml-2" on:click={removeDir}>
-              <Icons name="trash" />
-            </span>
-          </td>
           <td class="f-name order" title={FullPath} id="Name" on:click={onShowInput}
             ><Icons name={Type.includes("Manga") ? "book" : "film"} /> {Name}</td
           >
@@ -134,6 +126,14 @@
           <td>{TotalFiles}</td>
           <td class="d-order order" id="FirstInList" on:click={onShowInput}>
             {FirstInList}
+          </td>
+          <td>
+            <span class="dir-sync" on:click={rescan}>
+              <Icons name="sync" class={IsLoading ? "icon-spin" : ""} box="0 0 512 512" />
+            </span>
+            <span class="dir-remove ml-2" on:click={removeDir}>
+              <Icons name="trash" />
+            </span>
           </td>
         </tr>
       {/each}
@@ -179,7 +179,7 @@
     min-width: 110px;
     width: 110px;
   }
-  td:last-child {
+  .d-order {
     text-align: center;
     cursor: pointer;
     width: 110px;
@@ -199,9 +199,10 @@
     padding: 0 8px;
     text-align: left;
   }
-  .f-name {
+  .table .f-name {
     width: 155px;
     min-width: 155px;
+    text-align: left;
   }
   td {
     white-space: nowrap;
