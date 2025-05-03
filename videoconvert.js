@@ -58,11 +58,22 @@ const convertVideo = async (vPath, isAnime) => {
       const inputOptions = [`-init_hw_device vaapi=/dev/dri/renderD128`, "-hwaccel_output_format qsv"];
       const outOptions = [
         "-c:v h264_qsv",
-        `-b:v ${isAnime ? "1024k" : "1152k"}`,
+        `-b:v ${isAnime ? "832k" : "1088k"}`,
         "-c:a aac",
         "-b:a 128k",
         "-movflags +faststart",
+        "-map_chapters -1"
       ];
+
+      if(meta.streams.find(st=> st.codec_long_name?.includes("subtitle"))){
+        outOptions.push("-c:a aac");
+        outOptions.push("-b:a 128k");
+        outOptions.push("-map 0:v");
+        outOptions.push("-map 0:a");
+        outOptions.push("-map 0:s");
+        outOptions.push("-c:s mov_text");
+      }
+
       if (resize) {
         outOptions.push("-vf scale=1280:-1");
       }
