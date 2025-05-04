@@ -29,6 +29,12 @@
     }
   };
 
+  const addGengres = ({ target }) => {
+    const genres = target.id;
+    data.Genres = `${data.Genres.replace(/Manga|Manhwa|Webtoon/g, "")}, ${genres}`;
+    validate();
+  };
+
   const prePaste = async () => {
     let text = await navigator.clipboard?.readText();
 
@@ -65,7 +71,16 @@
 </script>
 
 <Dialog cancel={hide} confirm={onSave} {errors}>
-  <h4 slot="modal-header">Edit {title}</h4>
+  <h4 slot="modal-header">
+    Edit {title}
+    {#if title === "Genres"}
+      <span class="grn">
+        <span id="Manga" class="badge" on:click={addGengres}>MAN</span>
+        <span id="Manhwa" class="badge" on:click={addGengres}>MHW</span>
+        <span id="Webtoon" class="badge" on:click={addGengres}>WBT</span></span
+      >
+    {/if}
+  </h4>
   <span slot="modal-body">
     <TextAreaInput
       key={title}
@@ -83,6 +98,16 @@
 </Dialog>
 
 <style>
+  .grn {
+    position: absolute;
+    top: -1px;
+    right: 5px;
+  }
+  .grn span {
+    padding: 2px 4px;
+    font-size: 14px;
+  }
+
   .pre-paste {
     position: absolute;
     left: 5px;
