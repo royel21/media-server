@@ -118,7 +118,7 @@
       {#each dirs as { Id, IsLoading, Name, FullPath, Type, FolderCount, TotalFiles, IsAdult, FirstInList }}
         <tr id={Id} key={Id}>
           <td class="f-name order" title={FullPath} id="Name" on:click={onShowInput}
-            ><Icons name={Type.includes("Manga") ? "book" : "film"} /> {Name}</td
+            ><Icons class={IsAdult ? "red" : "blue"} name={Type.includes("Manga") ? "book" : "film"} /> {Name}</td
           >
           <td class="f-path order" id="FullPath" on:click={onShowInput}>{FullPath}</td>
           <td data-name="IsAdult" on:click={updateDir}>{IsAdult}</td>
@@ -203,6 +203,12 @@
     width: 155px;
     min-width: 155px;
     text-align: left;
+  }
+  .table .f-name :global(.ico-red) {
+    fill: rgb(202, 48, 48);
+  }
+  .table .f-name :global(.ico-blue) {
+    fill: rgb(37, 140, 209);
   }
   td {
     white-space: nowrap;
