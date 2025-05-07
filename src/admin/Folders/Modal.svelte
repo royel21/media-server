@@ -41,7 +41,7 @@
   if (file?.Name && !modalType.Del) loadTemp(file);
 </script>
 
-<Dialog on:keydown={onKeyDown} confirm={submit} cancel={hide}>
+<Dialog class="del-modal" on:keydown={onKeyDown} confirm={submit} cancel={hide}>
   <h4 slot="modal-header">{modalType.title}</h4>
   <div id="fol-diag" slot="modal-body">
     {#if modalType.Del}
@@ -62,19 +62,26 @@
 </Dialog>
 
 <style>
+  :global(.modal.del-modal) {
+    width: 400px;
+  }
   .del-label {
+    height: 32px;
     width: fit-content;
   }
   .check-del {
+    display: inline-block;
+    height: 32px;
     cursor: pointer;
+    text-align: center;
+  }
+  .check-del :global(svg) {
+    top: 0;
   }
   strong {
-    color: red;
+    color: rgb(255, 166, 0);
   }
   input[type="checkbox"] {
     display: none;
-  }
-  label {
-    text-align: center;
   }
 </style>

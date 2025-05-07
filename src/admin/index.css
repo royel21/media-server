@@ -57,7 +57,6 @@
 
 /*************Modal*************************/
 
-
 .modal {
   display: block;
   z-index: 99;
@@ -69,7 +68,7 @@
   margin-bottom: 50px;
 }
 
-.modal-header>* {
+.modal-header > * {
   text-align: center;
 }
 
@@ -80,7 +79,6 @@
 .modal label,
 .modal .form-control {
   padding: 5px;
-  margin: 4px 0;
 }
 
 .modal label {
@@ -113,8 +111,6 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
-
 
 .admin-manager {
   position: relative;
@@ -164,8 +160,8 @@ input[type="radio"] {
   background-color: #007bff27;
 }
 
-.nav input[type="radio"]:checked+label:hover,
-.nav input[type="radio"]:checked+label {
+.nav input[type="radio"]:checked + label:hover,
+.nav input[type="radio"]:checked + label {
   position: relative;
   font-weight: 600;
   border: 1px solid;
@@ -174,7 +170,7 @@ input[type="radio"] {
   border-bottom: transparent;
 }
 
-.nav input[type="radio"]:checked+label:after {
+.nav input[type="radio"]:checked + label:after {
   position: absolute;
   content: " ";
   bottom: -1px;
@@ -184,7 +180,7 @@ input[type="radio"] {
   background-color: #343a40 !important;
 }
 
-input[type="radio"]:checked+label span {
+input[type="radio"]:checked + label span {
   display: inline-block;
 }
 

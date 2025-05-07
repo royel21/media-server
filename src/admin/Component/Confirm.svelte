@@ -18,6 +18,6 @@
 
 <style>
   strong {
-    color: red;
+    color: rgb(255, 166, 0);
   }
 </style>

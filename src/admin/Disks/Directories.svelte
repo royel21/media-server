@@ -4,6 +4,7 @@
   import Icons from "src/icons/Icons.svelte";
   import { setMessage } from "../Store/MessageStore";
   import { showConsoleStore } from "../Store/ConsoleStore";
+  import Confirm from "../Component/Confirm.svelte";
 
   const socket = getContext("socket");
   let dirs = [];
@@ -11,6 +12,7 @@
   let dir;
   let count = 0;
   let allFiles = 0;
+  let confirm = false;
 
   const reloadDir = ({ Id }) => {
     let dir = dirs.find((d) => d.Id === Id);
@@ -33,10 +35,17 @@
     }
   };
 
-  const removeDir = async (e) => {
-    let tr = e.target.closest("tr");
-    if (tr) {
-      const result = await apiUtils.post("admin/directories/remove", { Id: tr.id });
+  const showConfirm = ({ target }) => {
+    let tr = target.closest("tr");
+    const found = dirs.find((d) => d.Id === tr?.id);
+    if (found) {
+      confirm = found;
+    }
+  };
+
+  const removeDir = async (dir) => {
+    if (dir.Id) {
+      const result = await apiUtils.post("admin/directories/remove", { Id: dir.Id });
       if (result.removed) {
         dirs = dirs.filter((d) => d.Id !== tr.id);
         dirs = dirs;
@@ -100,6 +109,10 @@
   $: console.log($showConsoleStore);
 </script>
 
+{#if confirm}
+  <Confirm acept={removeDir} data={confirm} cancel={() => (confirm = false)} text={confirm.FullPath} />
+{/if}
+
 <div class="message">{msg}</div>
 <div class="table-container" class:hasconsole={$showConsoleStore}>
   <table id="dir-list" class="table table-dark table-hover table-bordered">
@@ -131,7 +144,7 @@
             <span class="dir-sync" on:click={rescan}>
               <Icons name="sync" class={IsLoading ? "icon-spin" : ""} box="0 0 512 512" />
             </span>
-            <span class="dir-remove ml-2" on:click={removeDir}>
+            <span class="dir-remove ml-2" on:click={showConfirm}>
               <Icons name="trash" />
             </span>
           </td>
