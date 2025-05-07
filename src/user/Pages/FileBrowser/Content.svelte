@@ -206,7 +206,7 @@
       {/if}
     </div>
     <FilesList title={"Content"} type={typeUrl} {filter} {page} {id} {setFolderInfo}>
-      <div class="first-controls exit" slot="controls" on:click={exitFolder} on:keydown>
+      <div class="first-controls exit" slot="controls" on:click={exitFolder}>
         <Icons name="reply" />
       </div>
     </FilesList>

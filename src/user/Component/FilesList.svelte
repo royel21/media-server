@@ -158,7 +158,7 @@
 
 <div class="scroll-container" class:r-content={isContent}>
   <slot name="header" />
-  <div class="files-list" on:keydown={handleKeydown} on:click={favClick} tabindex="-1">
+  <div class="files-list" on:keydown={handleKeydown} on:click={favClick} tabindex="0">
     {#each pageData.files as { Id, Name, Type, CurrentPos, Duration, isFav, FilesType, FileCount, LastChapter, Status, CreatedAt, Size, isRaw, EmissionDate }}
       <div class="file" id={Id} data-type={Type} in:fade>
         <div class="file-info">
