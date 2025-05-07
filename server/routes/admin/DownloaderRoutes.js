@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { Op, literal } from "sequelize";
-import { formatLink } from "../utils.js";
+import { formatLink, getFilter } from "../utils.js";
 import RenameRoutes from "./RenameRoutes.js";
 import ExcludeChapRoutes from "./ExcludeChapRoutes.js";
 import EventLogsRoutes from "./EventLogsRoutes.js";
@@ -47,7 +47,7 @@ routes.post("/links", async ({ body }, res) => {
   let limit = +items || 10;
   let offset = (page - 1) * limit || 0;
 
-  const qfilter = { [Op.like]: `%${filter}%` };
+  const qfilter = getFilter(filter);
   const order = "Date";
 
   const query = {
@@ -74,7 +74,6 @@ routes.post("/links", async ({ body }, res) => {
       servers = await db.Server.findAll({ order: ["Name"] });
       const srv = servers.find((sv) => sv.Id === +ServerId) || servers[0];
       query.where.ServerId = srv.Id;
-      console.log("Server", srv.Id, ServerId);
     } else {
       servers = await getServers();
     }

@@ -205,7 +205,6 @@ export const downloadAllIMages = async (page, links, state, imgPath, folder, des
       length--;
       thumb++;
       skip++;
-      console.log(links[i]);
       continue;
     }
 
@@ -225,7 +224,6 @@ export const downloadAllIMages = async (page, links, state, imgPath, folder, des
       result.count++;
     }
   }
-  console.log(result.count, length);
 
   result.valid = result.count >= length - 1 && result.count > 0;
 

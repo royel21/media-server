@@ -200,4 +200,16 @@
     width: 85px;
     min-width: 85px;
   }
+  .table tr > *:nth-child(3) {
+    min-width: 150px;
+    white-space: nowrap;
+  }
+
+  @media screen and (max-width: 700px) {
+    .table tr > *:nth-child(3) {
+      max-width: 200px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
 </style>

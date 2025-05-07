@@ -50,8 +50,8 @@
   document.title = "Tools";
 </script>
 
-<div>
-  <div>
+<div class="t-container">
+  <div class="button-bar">
     <button class="btn" on:click={onBackup}>Backup</button>
     <button class="btn" on:click={onUpdateServer}>Build App</button>
     <button class="btn" on:click={rebuildAndReload}>Reload Server</button>
@@ -82,8 +82,20 @@
 </div>
 
 <style>
+  .t-container {
+    height: calc(100% - 6px);
+    overflow: hidden;
+  }
+  .button-bar {
+    margin-bottom: 10px;
+  }
   .data-table {
-    margin-top: 10px;
+    height: calc(100% - 40px);
+    overflow: auto;
+  }
+
+  .data-table .table {
+    margin-bottom: 0;
   }
 
   tr td:first-child,
@@ -94,11 +106,12 @@
 
   tr td:last-child {
     font-size: 0.8rem;
+    white-space: nowrap;
   }
 
   .action {
+    min-width: 90px;
     width: 90px;
-    max-width: 90px;
     text-align: center;
   }
 </style>

@@ -38,7 +38,7 @@
       {
         items,
         page,
-        filter: decodeURIComponent(filter),
+        filter: decodeURIComponent(filter).replace(/http(s|)\/\//i, ""),
         ServerId: server.Id || true,
         first,
       },
@@ -166,13 +166,13 @@
     <span class="d-btn btn-add" on:click={() => (showLinkModal = true)}>
       <Icons name="squareplus" />
     </span>
-    <span class="d-btn" on:click={downloadAll} title="Download All Link from This Server">
+    <span class="d-btn" on:click={downloadAll} title={`Download All Link from ${server.Name}`}>
       <Icons name="download" color="lightblue" />
     </span>
-    <span class="d-btn op-ser-page" title="Open Web Page">
+    <span class="d-btn op-ser-page" title={`Open ${server.Name} Home Page`}>
       <a href={`https://${server.Name}`} target="_blank"><Icons name="wolrd" color="forestgreen" /></a>
     </span>
-    <span class="d-btn" title="Open Server Config" on:click={onShowServerEdit}><Icons name="cog" /></span>
+    <span class="d-btn" title={`Open ${server.Name} Config`} on:click={onShowServerEdit}><Icons name="cog" /></span>
     <Select2 label="Servers" bind:item={server} options={servers} {onChange} />
     <span id="trash" on:click={() => (showRemoveConfirm = true)}><Icons name="trash" box="0 0 495 500" /></span>
   </div>

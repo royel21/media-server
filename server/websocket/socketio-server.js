@@ -25,7 +25,6 @@ export default async (server, sessionMeddle) => {
       FileManager.setSocket(io);
 
       socket.on("user-info", (data) => console.log(data));
-      console.log("User: ", user.Name, socket.id);
 
       if (/Administrator|Manager/.test(user.Role)) {
         socket.on("scan-dir", (data) => FileManager.scanDir(data, user));
@@ -47,17 +46,14 @@ export default async (server, sessionMeddle) => {
         socket.on("update-server", ({ reload }) => {
           socket.emit("rebuild-message", "Rebuilding App - Please Wait");
           exec("yarn build-linux", (err, stdout) => {
-            console.log("build", reload);
             if (err) {
-              console.log("error-build", err);
               return;
             }
+            socket.emit("rebuild-message", "Finish Building App - Reload");
             if (reload) {
               console.log("reloadig server");
               exec("pm2 restart all");
             }
-            console.log(`stdout: ${stdout}`);
-            socket.emit("rebuild-message", "Finish Building App - Reload");
           });
         });
       } else {

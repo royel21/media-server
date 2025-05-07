@@ -113,7 +113,7 @@
   }
 
   #tag-list .list-container {
-    height: calc(100% - 45px);
+    height: calc(100% - 60px);
     overflow-y: auto;
     background-color: white;
     border-radius: 5px;

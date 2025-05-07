@@ -105,10 +105,9 @@ const diskLoader = async () => {
 
       const data = await diskusage.check(mp.path);
       mp = mp === "/" ? "/home" : mp;
-
       disks.push({
         Id: nanoid(5),
-        Name: `${mp.label ? mp.label : path.basename(mp.path)}`,
+        Name: `${mp.label || path.basename(mp.path) || mp.path}`,
         Path: mp.path,
         Content: [],
         Free: sizeInGB(data.free),

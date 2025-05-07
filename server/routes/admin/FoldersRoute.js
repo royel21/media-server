@@ -191,7 +191,6 @@ routes.post("/cover", async (req, res) => {
         createDir(path.join(defaultConfig.ImagesDir, "Folder", folder.FilesType));
 
         await img.toFormat("jpg").resize({ width: 340 }).toFile(Cover);
-        console.log(Cover);
       }
       res.send({ valid: true });
     } catch (error) {

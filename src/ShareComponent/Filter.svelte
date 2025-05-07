@@ -35,6 +35,7 @@
       text = curFilter;
     }
     send(text);
+    send(text, "change");
   };
 
   const onChanges = () => {

@@ -1,6 +1,7 @@
 import { literal, Op } from "sequelize";
 import { db } from "../../watch-models/index.js";
 import fs from "fs-extra";
+import { getFilter } from "../utils.js";
 
 export const getWatchedDirs = async (req, res) => {
   const dirs = await db.Directory.findAll({ order: ["Name"] });
@@ -17,7 +18,7 @@ export const getWatchFiles = async (req, res) => {
     order: [[literal(`REPLACE(REPLACE(Name, "-", "0"), '[','0')`)]], // used for natural ordering
     limit,
     offset,
-    where: { Path: { [Op.like]: `%${filter || ""}%` } },
+    where: { Path: getFilter(filter) },
   };
 
   const data = await db.File.findAndCountAll(query);

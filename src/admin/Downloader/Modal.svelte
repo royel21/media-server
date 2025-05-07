@@ -1,6 +1,4 @@
 <script>
-  import { onMount } from "svelte";
-  import { fade } from "svelte/transition";
   import Input from "src/admin/Component/Input.svelte";
   import Select from "src/ShareComponent/Select.svelte";
   import CheckBox from "src/admin/Component/CheckBox.svelte";
@@ -12,6 +10,10 @@
   export let link = "";
   export let errors = "";
   export let hide;
+
+  const title = server
+    ? `Editing <span class="svr-name">${server.Name.split(".")[0]}</span> Configurations`
+    : "Editing Link";
 
   const submit = async (e) => {
     const body = server ? server : link;
@@ -27,7 +29,7 @@
 </script>
 
 <Dialog cancel={hide} confirm={submit} {errors} btnOk="Update" class="server">
-  <h4 slot="modal-header">{server ? `Editing ${server.Name} Configurations` : "Edit Link"}</h4>
+  <h4 slot="modal-header">{@html title}</h4>
   <svelte:fragment slot="modal-body">
     {#if link}
       <TextAreaInput key="Name" file={link} />
@@ -59,6 +61,10 @@
   :global(.server) {
     width: 540px;
     outline: none;
+  }
+  :global(.server .svr-name) {
+    color: rgb(245, 124, 44);
+    text-transform: capitalize;
   }
   :global(.server .input-control) {
     margin-bottom: 5px;

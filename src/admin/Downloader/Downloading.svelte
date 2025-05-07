@@ -33,7 +33,7 @@
     const result = await apiUtils.post("admin/downloader/links", {
       items,
       page,
-      filter: decodeURIComponent(filter),
+      filter: decodeURIComponent(filter).replace(/http(s|)\/\//i, ""),
       IsDownloading: true,
       first: true,
     });

@@ -90,7 +90,7 @@
 <div bind:this={ref} class="modal-container r-names" on:keydown={onKeyDown} tabindex="-1" on:click={handler}>
   <div class="modal card" transition:fade={{ duration: 200 }}>
     <div class="modal-header">
-      <Filter on:change={onFilter} {filter}>
+      <Filter on:change={onFilter}>
         <span class="btn-add" slot="pre-btn" on:click={addRename} on:keydown>
           <Icons name="squareplus" />
         </span>
@@ -110,7 +110,7 @@
       </div>
       <div class="error">{error || ""}</div>
       <div class="modal-footer">
-        <span class="count">{nameList.length}</span>
+        <span class="badge count">{filteredList.length}</span>
         <button type="submit" class="btn">Save</button>
         <button type="button" class="btn" on:click={hide}>Cancel</button>
         <Pagination {page} {totalPages} on:gotopage={gotopage} />
@@ -124,7 +124,7 @@
     height: calc(100% - 80px);
     max-height: 550px;
     max-width: calc(100% - 30px);
-    width: 650px;
+    width: 750px;
     outline: none;
   }
   .modal-header {
@@ -149,9 +149,6 @@
   .r-names :global(.icon-times) {
     width: 20px;
     right: -3px;
-  }
-  .r-names :global(.input-control .input) {
-    padding-right: 18px;
   }
   .r-names :global(.input-label) {
     padding-left: 0.35rem;
@@ -184,6 +181,7 @@
     left: 10px;
     bottom: 10px;
     font-size: 1.25rem;
+    padding: 1px 10px;
   }
   .name-item span:first-child {
     flex-grow: 1;

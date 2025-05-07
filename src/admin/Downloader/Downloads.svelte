@@ -43,7 +43,7 @@
       {
         items,
         page,
-        filter: decodeURIComponent(filter),
+        filter: decodeURIComponent(filter).replace(/http(s|)\/\//i, ""),
         first,
       },
       "downloads"

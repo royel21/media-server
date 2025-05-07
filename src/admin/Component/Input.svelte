@@ -70,4 +70,7 @@
   input:not(:placeholder-shown) + .clear {
     display: initial;
   }
+  input {
+    padding: 0.2rem 1.2rem 0.2rem 0.2rem;
+  }
 </style>
