@@ -1,13 +1,12 @@
 <script>
   import { onMount } from "svelte";
-  import { fade } from "svelte/transition";
   import Input from "src/admin/Component/Input.svelte";
   import apiUtils from "src/apiUtils";
   import Icons from "src/icons/Icons.svelte";
   import Dialog from "../../ShareComponent/Dialog.svelte";
 
   export let hide;
-  export let linkId = "";
+  export let link;
 
   let nameList = [];
   let errors = [];
@@ -16,7 +15,7 @@
 
   const addRename = () => {
     if (!nameList.find((f) => !f.Name)) {
-      nameList = [{ Id: "new-" + newNames++, Name: "", LinkName: linkId }, ...nameList];
+      nameList = [{ Id: "new-" + newNames++, Name: "", LinkName: link.Name }, ...nameList];
     }
   };
 
@@ -40,16 +39,11 @@
   };
 
   const loadItems = async () => {
-    nameList = await apiUtils.get(["admin", "downloader", "exclude-list", linkId]);
-  };
-
-  const onKeyDown = (e) => {
-    if (e.keyCode === 13 && e.ctrlKey) {
-      submit(e);
-      e.preventDefault();
-      e.stopPropagation();
+    const result = await apiUtils.get(["admin", "downloader", "exclude-list", link.Id]);
+    console.log(result);
+    if (result?.length) {
+      nameList = result;
     }
-    if (e.keyCode === 27) hide();
   };
 
   onMount(async () => {
@@ -116,13 +110,14 @@
     border: 1px solid;
     border-radius: 0.25rem;
     justify-content: space-between;
-    align-items: center;
+    margin-bottom: 5px;
+    height: 32px;
+    background-color: white;
   }
 
-  .name-item span:first-child {
+  .name-item :global(div:first-child) {
     flex-grow: 1;
-    margin-right: 3px;
-    padding: 2px;
+    margin-right: 5px;
   }
 
   @media screen and (max-width: 450px) {

@@ -1,9 +1,11 @@
 import db from "../../models/index.js";
 
 export const excludeChapList = async (req, res) => {
-  const { LinkName } = req.params;
-  if (LinkName) {
-    const names = await db.Exclude.findAll({ where: { LinkName } });
+  const { Id } = req.params;
+  const link = await db.Link.findOne({ where: { Id } });
+  console.log("linkName", link.Name);
+  if (link?.Name) {
+    const names = await db.Exclude.findAll({ where: { LinkName: link?.Name } });
     return res.send(names.map((n) => n.dataValues));
   }
   res.send([]);

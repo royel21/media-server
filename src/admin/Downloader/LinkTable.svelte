@@ -149,7 +149,7 @@
 
 {#if showExcludeChapModal}
   <ExcludeChapModal
-    linkId={showExcludeChapModal}
+    link={showExcludeChapModal}
     hide={() => {
       showExcludeChapModal = false;
     }}
@@ -179,7 +179,7 @@
           </span>
         {/if}
         <span class="col-chapt">
-          <span class="ex-cfg" on:click={() => (showExcludeChapModal = link.Name)} title="Show Exclude Chapt List ">
+          <span class="ex-cfg" on:click={() => (showExcludeChapModal = link)} title="Show Exclude Chapt List ">
             <Icons name="cog" />
           </span>
           <span title={link.LastChapter}>{link.LastChapter}</span>

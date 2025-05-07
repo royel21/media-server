@@ -238,7 +238,7 @@ routes.get("/rename-list", RenameRoutes.renameList);
 routes.post("/add-altname", RenameRoutes.addAltname);
 routes.get("/remove-altname/:Id", RenameRoutes.removeAltname);
 
-routes.get("/exclude-list/:LinkName", ExcludeChapRoutes.excludeChapList);
+routes.get("/exclude-list/:Id", ExcludeChapRoutes.excludeChapList);
 routes.post("/add-exclude", ExcludeChapRoutes.addExcludeChap);
 routes.get("/remove-exclude/:Id", ExcludeChapRoutes.removeExcludeChap);
 
