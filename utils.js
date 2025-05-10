@@ -43,4 +43,34 @@ const list = async () => {
 
   process.exit();
 };
-list();
+// list();
+
+const isChar = (c) => {
+  return c.match(/[a-z]/i);
+};
+
+const capitalize = (val) => {
+  let words = val.split(" ");
+  for (let i = 0; i < words.length; i++) {
+    let word = words[i].toLowerCase();
+
+    if (i === 0 && words[i].length > 1 && !isChar(words[i][0])) {
+      words[i] = words[i].substring(0, 2).toUpperCase() + word.slice(2);
+    } else {
+      words[i] = word.charAt(0).toUpperCase() + word.slice(1);
+    }
+  }
+  return words.join(" ");
+};
+
+const nameFormat = (name) => {
+  name = capitalize(name);
+  name = name.replace(/vol.( |)+/gi, "Vol.");
+  if (/Comic /gi.test(name)) {
+    let num = name.match(/\d+/);
+    if (num) {
+      name = name.replace(num, num.toString().padStart(3, "0"));
+    }
+  }
+  return name.trim();
+};

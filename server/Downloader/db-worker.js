@@ -21,7 +21,7 @@ export const findFolder = async (Name) => {
 export const findOrCreateFolder = async (manga, IsAdult, isRaw) => {
   let { Name, Description, Genres, AltName, Status, Server, Author } = manga;
 
-  if (Genres.includes("Manhwa")) {
+  if (/Manhwa|Manhua/i.test(Genres)) {
     Genres = Genres?.replace(/(, |)Webtoon(, |)/gi, "");
   }
 

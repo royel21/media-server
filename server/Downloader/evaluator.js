@@ -90,8 +90,6 @@ export const evaluetePage = (query) => {
       .join(", ") || "";
 
   const genres = Genres.split(",").map((d) => d.trim());
-  genres.sort();
-  Genres = genres.join(", ");
 
   //Statuc check
   let Status = [...document.querySelectorAll(query.Status)].find((t) => /completed|finished/gi.test(t?.textContent))
@@ -115,7 +113,15 @@ export const evaluetePage = (query) => {
     if (authorRegex.test(text) && !/updating|Desconocido/i.test(text)) {
       Author = text.replace(authorRegex, "").replace("Type ", "").trim();
     }
+
+    if (/manhwa|manhua/i.test(text)) {
+      genres.push("Manhwa");
+    }
   }
+
+  genres.sort();
+  Genres = genres.join(", ");
+
   data = data.filter((d) => d);
 
   return { Name, data, poster, AltName, Description, Genres, Status, Author, maxNum };
@@ -235,6 +241,10 @@ export const adultEvalPage = async (query) => {
         }
         if (genreRegex.test(text)) {
           Genres = formatGenres(text.replace(genreRegex, "").trim());
+        }
+
+        if (/manhwa|manhua/i.test(text)) {
+          Genres = formatGenres(Genres, ["Manhwa"]);
         }
       }
     }
