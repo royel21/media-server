@@ -82,7 +82,7 @@ const convertVideo = async (vPath, isAnime) => {
         .inputOptions(inputOptions)
         .outputOptions(outOptions)
         .on("start", (cmd) => {
-          if (process.args.find((a) => /debug/i.test(a))) {
+          if (process.args.find((a) => / -d| --debug/i.test(a))) {
             console.log(cmd);
           }
         })
@@ -102,7 +102,9 @@ const convertVideo = async (vPath, isAnime) => {
         .on("end", () => {
           console.log(`\nEnd: ${getime()} ~ Save to: ${toFile}\n`);
           resolve(true);
-          // fs.removeSync(toFile);
+          if (process.args.find((a) => / -rm| --remove/i.test(a))) {
+            fs.removeSync(toFile);
+          }
         })
         .on("error", (err) => console.log(err));
     });
