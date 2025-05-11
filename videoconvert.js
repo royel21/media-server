@@ -32,7 +32,24 @@ async function getMetadata(filePath) {
 
 const getime = () => new Date().toLocaleTimeString();
 
+const getOptions = () => {
+  const options = {
+    remove: ["-r", "--remove"],
+    debub: ["-d", "--debug"],
+  };
+
+  for (let op of Object.keys(options)) {
+    options[op] = process.argv.find((a) => options[op].includes(a.trim()));
+  }
+  return options;
+};
+
 const convertVideo = async (vPath, isAnime) => {
+  const options = getOptions();
+
+  console.log("****Options****");
+  console.log(`Remove: ${options.remove ? true : false} ~ Debug: ${options.debug ? true : false}`);
+
   if (!fs.existsSync(vPath || "/nothing")) return;
 
   const files = fs.readdirSync(vPath).filter((f) => /\.(mp4|mkv)/i.test(f));
@@ -76,33 +93,33 @@ const convertVideo = async (vPath, isAnime) => {
         outOptions.push("-vf scale=1280:-1");
       }
 
-      console.log(`${current} ~ ${file}`);
+      const str = meta?.streams[0];
+      console.log(`--- ${current} ~ ${getime()} ~ ${str ? `${str.width}x${str.height}` : ""} ~ ${file} `);
+
+      let duration = 0;
 
       Ffmpeg(filePath)
         .inputOptions(inputOptions)
         .outputOptions(outOptions)
         .on("start", (cmd) => {
-          if (process.args.find((a) => / -d| --debug/i.test(a))) {
+          if (options.debug) {
             console.log(cmd);
           }
         })
         .on("codecData", function (data) {
-          const str = meta?.streams[0];
-          console.log(
-            `Start: ${getime()} ~ Duration: ${data.duration} ~ Resolution: ${str ? `${str.width}x${str.height}` : ""}`
-          );
+          duration = data.duration;
         })
         .on("progress", (p) => {
           const elapse = (new Date().getTime() - start) / 1000;
           const percent = p.percent.toFixed(2);
-          const text = `\r${current} ~ ${p.timemark} ~ ${percent}% ~ Elapse: ${formatTime(elapse)}`;
+          const text = `\r${percent}% ~ ${p.timemark}/${duration} ~ Elapse: ${formatTime(elapse)}`;
           process.stdout.write(text);
         })
         .saveToFile(toFile)
         .on("end", () => {
           console.log(`\nEnd: ${getime()} ~ Save to: ${toFile}\n`);
           resolve(true);
-          if (process.args.find((a) => / -rm| --remove/i.test(a))) {
+          if (options.remove) {
             fs.removeSync(toFile);
           }
         })
@@ -113,11 +130,11 @@ const convertVideo = async (vPath, isAnime) => {
   }
 };
 
-if (/Anime|Javs/.test(process.argv[2])) {
-  const dir = process.argv[2];
+const dir = process.argv.find((a) => /Anime|Javs/.test(a));
+if (dir) {
   const vPath = `/mnt/Downloads/${dir}`;
   const isAnime = dir === "Anime";
   convertVideo(vPath, isAnime);
 } else {
-  convertVideo(process.argv[2]);
+  convertVideo(process.argv.find((a) => /^\//.test(a)));
 }
