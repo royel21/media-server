@@ -338,7 +338,8 @@ process.on("message", async ({ action, datas, remove, bypass, server }) => {
     }
   }
 });
-const errorToSkip = /frame|Parent frame|Target closed|Session closed|Page.addScriptToEvaluateOnNewDocument/gi;
+const errorToSkip =
+  /frame|Parent frame|main frame|Target closed|Session closed|Page.addScriptToEvaluateOnNewDocument/gi;
 
 process.on("uncaughtException", async (error, source) => {
   if (!errorToSkip.test(error.toString())) {
