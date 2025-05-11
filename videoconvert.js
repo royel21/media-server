@@ -46,10 +46,6 @@ const getOptions = () => {
 
 const convertVideo = async (vPath, isAnime) => {
   const options = getOptions();
-
-  console.log("****Options****");
-  console.log(`Remove: ${options.remove ? true : false} ~ Debug: ${options.debug ? true : false}`);
-
   if (!fs.existsSync(vPath || "/nothing")) return;
 
   const files = fs.readdirSync(vPath).filter((f) => /\.(mp4|mkv)/i.test(f));
@@ -94,7 +90,7 @@ const convertVideo = async (vPath, isAnime) => {
       }
 
       const str = meta?.streams[0];
-      console.log(`--- ${current} ~ ${getime()} ~ ${str ? `${str.width}x${str.height}` : ""} ~ ${file} `);
+      console.log(`--- ${current} ~ ${getime()} ~ ${str ? `${str.width}x${str.height}` : ""} ~ ${file}`);
 
       let duration = 0;
 
@@ -112,7 +108,7 @@ const convertVideo = async (vPath, isAnime) => {
         .on("progress", (p) => {
           const elapse = (new Date().getTime() - start) / 1000;
           const percent = p.percent.toFixed(2);
-          const text = ` ${percent}% ~ ${p.timemark}/${duration} ~ Elapse: ${formatTime(elapse)}\r`;
+          const text = `\t\t${percent}% ~ ${p.timemark}/${duration} ~ Elapse: ${formatTime(elapse)}\r`;
           process.stdout.write(text);
         })
         .saveToFile(toFile)
