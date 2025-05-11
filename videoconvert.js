@@ -112,7 +112,7 @@ const convertVideo = async (vPath, isAnime) => {
         .on("progress", (p) => {
           const elapse = (new Date().getTime() - start) / 1000;
           const percent = p.percent.toFixed(2);
-          const text = `\r${percent}% ~ ${p.timemark}/${duration} ~ Elapse: ${formatTime(elapse)}`;
+          const text = ` ${percent}% ~ ${p.timemark}/${duration} ~ Elapse: ${formatTime(elapse)}\r`;
           process.stdout.write(text);
         })
         .saveToFile(toFile)
