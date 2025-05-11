@@ -62,10 +62,10 @@ const convertVideo = async (vPath, isAnime) => {
         "-c:a aac",
         "-b:a 128k",
         "-movflags +faststart",
-        "-map_chapters -1"
+        "-map_chapters -1",
       ];
 
-      if(meta.streams.find(st=> st.codec_long_name?.includes("subtitle"))){
+      if (meta.streams.find((st) => st.codec_long_name?.includes("subtitle"))) {
         outOptions.push("-map 0:v");
         outOptions.push("-map 0:a");
         outOptions.push("-map 0:s");
@@ -76,13 +76,21 @@ const convertVideo = async (vPath, isAnime) => {
         outOptions.push("-vf scale=1280:-1");
       }
 
+      console.log(`${current} ~ ${file}`);
+
       Ffmpeg(filePath)
         .inputOptions(inputOptions)
         .outputOptions(outOptions)
-        .on("start", (cmd) => console.log(cmd))
+        .on("start", (cmd) => {
+          if (process.args.find((a) => /debug/i.test(a))) {
+            console.log(cmd);
+          }
+        })
         .on("codecData", function (data) {
           const str = meta?.streams[0];
-          console.log(`${getime()} ~ ${data.duration} ~ ${str ? `${str.width}x${str.height} ~   ` : ""}${file}`);
+          console.log(
+            `Start: ${getime()} ~ Duration: ${data.duration} ~ Resolution: ${str ? `${str.width}x${str.height}` : ""}`
+          );
         })
         .on("progress", (p) => {
           const elapse = (new Date().getTime() - start) / 1000;
@@ -92,7 +100,7 @@ const convertVideo = async (vPath, isAnime) => {
         })
         .saveToFile(toFile)
         .on("end", () => {
-          console.log(`\n${getime()} Save to:  ${toFile}\n`);
+          console.log(`\nEnd: ${getime()} ~ Save to: ${toFile}\n`);
           resolve(true);
           // fs.removeSync(toFile);
         })
