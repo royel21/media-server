@@ -343,6 +343,7 @@ const errorToSkip =
 
 process.on("uncaughtException", async (error, source) => {
   if (!errorToSkip.test(error.toString())) {
-    sendMessage({ text: "uncaughtException Process Stopped - Internal Error", color: "red", error });
+    console.log(error.toString());
+    sendMessage({ text: "uncaughtException Process Stopped - Internal Error", color: "red" });
   }
 });
