@@ -1,8 +1,9 @@
+import path from "node:path";
+import os from "node:os";
 import fs from "fs-extra";
-import path from "path";
 
 import Ffmpeg from "fluent-ffmpeg";
-import { exec } from "child_process";
+import { exec } from "node:child_process";
 
 export function formatTime(time) {
   if (time === 0) return "00:00";
@@ -35,7 +36,7 @@ const getime = () => new Date().toLocaleTimeString();
 const getOptions = () => {
   const options = {
     remove: ["-r", "--remove"],
-    debub: ["-d", "--debug"],
+    debug: ["-d", "--debug"],
   };
 
   for (let op of Object.keys(options)) {
@@ -48,7 +49,7 @@ const convertVideo = async (vPath, isAnime) => {
   const options = getOptions();
   if (!fs.existsSync(vPath || "/nothing")) return;
 
-  const files = fs.readdirSync(vPath).filter((f) => /\.(mp4|mkv)/i.test(f));
+  const files = fs.readdirSync(vPath).filter((f) => /\.(mp4|mkv|webm)/i.test(f));
   let i = 0;
 
   if (!fs.existsSync(path.join(vPath, "Videos"))) {
@@ -58,25 +59,34 @@ const convertVideo = async (vPath, isAnime) => {
 
   for (let file of files) {
     await new Promise(async (resolve) => {
-      const toFile = path.resolve(vPath, "Videos", file.replace(/mkv|webm/i, "mp4"));
+      const toFile = path.resolve(vPath, "Videos", file.replace(/mp4|webm/i, "mp4"));
       const current = `${(i + 1).toString().padStart(padding, "0")}/${files.length}`;
 
       const filePath = path.join(vPath, file);
 
       const meta = await getMetadata(filePath);
+
       let resize = meta?.streams[0]?.width > 1280;
 
       const start = new Date().getTime();
 
-      const inputOptions = [`-init_hw_device vaapi=/dev/dri/renderD128`, "-hwaccel_output_format qsv"];
+      const inputOptions = [];
+
       const outOptions = [
-        "-c:v h264_qsv",
+        "-c:v h264",
         `-b:v ${isAnime ? "832k" : "1088k"}`,
         "-c:a aac",
         "-b:a 128k",
         "-movflags +faststart",
         "-map_chapters -1",
+        "-filter:v fps=29.97",
       ];
+
+      if (os.platform === "linux") {
+        inputOptions.unshift(`-init_hw_device vaapi=/dev/dri/renderD128`);
+        inputOptions.unshift("-hwaccel_output_format qsv");
+        outOptions[0] = "-c:v h264_qsv";
+      }
 
       if (meta.streams.find((st) => st.codec_long_name?.includes("subtitle"))) {
         outOptions.push("-map 0:v");
@@ -90,7 +100,7 @@ const convertVideo = async (vPath, isAnime) => {
       }
 
       const str = meta?.streams[0];
-      console.log(`--- ${current} ~ ${getime()} ~ ${str ? `${str.width}x${str.height}` : ""} ~ ${file}`);
+      console.log(`[${current} ~ ${getime()} ~ ${str ? `${str.width}x${str.height}` : ""} ~ ${file}]`);
 
       let duration = 0;
 
@@ -99,7 +109,7 @@ const convertVideo = async (vPath, isAnime) => {
         .outputOptions(outOptions)
         .on("start", (cmd) => {
           if (options.debug) {
-            console.log(cmd);
+            console.log(`\n${cmd}\n`);
           }
         })
         .on("codecData", function (data) {
@@ -108,7 +118,7 @@ const convertVideo = async (vPath, isAnime) => {
         .on("progress", (p) => {
           const elapse = (new Date().getTime() - start) / 1000;
           const percent = p.percent.toFixed(2);
-          const text = `\t\t${percent}% ~ ${p.timemark}/${duration} ~ Elapse: ${formatTime(elapse)}\r`;
+          const text = ` ${percent}% ~ ${p.timemark}/${duration} ~ Elapse: ${formatTime(elapse)}\r`;
           process.stdout.write(text);
         })
         .saveToFile(toFile)
@@ -127,10 +137,14 @@ const convertVideo = async (vPath, isAnime) => {
 };
 
 const dir = process.argv.find((a) => /Anime|Javs/.test(a));
+const customPath = process.argv.slice(2).find((a) => /^(\/|[B-Z])(\/|:\\)/i.test(a));
+
+console.log(customPath);
+
 if (dir) {
   const vPath = `/mnt/Downloads/${dir}`;
   const isAnime = dir === "Anime";
   convertVideo(vPath, isAnime);
-} else {
-  convertVideo(process.argv.find((a) => /^\//.test(a)));
+} else if (customPath) {
+  convertVideo(customPath);
 }
