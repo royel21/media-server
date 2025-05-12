@@ -55,14 +55,15 @@ const convertVideo = async (vPath, isAnime) => {
   if (!fs.existsSync(path.join(vPath, "Videos"))) {
     fs.mkdirsSync(path.join(vPath, "Videos"));
   }
+
   const padding = files.length.toString().length;
 
   for (let file of files) {
+    const filePath = path.join(vPath, file);
+
     await new Promise(async (resolve) => {
       const toFile = path.resolve(vPath, "Videos", file.replace(/mp4|webm/i, "mp4"));
       const current = `${(i + 1).toString().padStart(padding, "0")}/${files.length}`;
-
-      const filePath = path.join(vPath, file);
 
       const meta = await getMetadata(filePath);
 
@@ -79,7 +80,7 @@ const convertVideo = async (vPath, isAnime) => {
         "-b:a 128k",
         "-movflags +faststart",
         "-map_chapters -1",
-        "-filter:v fps=29.97",
+        // "-filter:v fps=23.976",
       ];
 
       if (os.platform === "linux") {
