@@ -25,6 +25,7 @@
   let controls;
   let battLevel;
   let isNextFile = true;
+  let volRef;
   const User = getContext("User");
   const configTag = `${User.username}-playerconfig`;
 
@@ -164,6 +165,15 @@
   } else {
     document.querySelector(".f-name").style.opacity = 0;
   }
+
+  let volTiout;
+  $: if (mConfig.volume && isFullScreen) {
+    volRef.style.opacity = 1;
+    clearTimeout(volTiout);
+    volTiout = setTimeout(() => {
+      volRef.style.opacity = 0;
+    }, 2000);
+  }
 </script>
 
 {#if file.Id}
@@ -248,7 +258,6 @@
             {/if}
             <Icons name="cog" width="30px" height="24px" />
           </span>
-
           {#if User.role.includes("Manager")}
             <span class="remove" on:click={removeFile}><Icons name="trash" color="red" /></span>
           {/if}
@@ -256,6 +265,10 @@
         </div>
       </div>
     </div>
+    <span class="vol-fullscreen" bind:this={volRef}>
+      <Icons name={player.muted ? "volumemute" : "volume"} />
+      <span>{parseInt(mConfig.volume * 100)}%</span>
+    </span>
   </div>
 {/if}
 
@@ -382,6 +395,22 @@
 
   .isFullScreen .v-seeker {
     padding: 5px 0px 15px 0;
+  }
+
+  .vol-fullscreen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 45px;
+    padding: 2px;
+    border-radius: 0.25rem;
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    color: white;
+    background-color: rgba(31, 31, 31, 0.661);
+    pointer-events: 0;
+    opacity: 1;
   }
 
   @media screen and (max-width: 700px) {
