@@ -148,12 +148,11 @@ const convertVideo = async (vPath, isAnime) => {
 const dir = process.argv.find((a) => /Anime|Javs/.test(a));
 const customPath = process.argv.slice(2).find((a) => /^(\/|[B-Z])(\/|:\\)/i.test(a));
 
-console.log(customPath);
-
 if (dir) {
   const vPath = `/mnt/Downloads/${dir}`;
   const isAnime = dir === "Anime";
   convertVideo(vPath, isAnime);
 } else if (customPath) {
+  console.log(customPath);
   convertVideo(customPath);
 }
