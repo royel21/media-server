@@ -66,7 +66,6 @@ const convertVideo = async (vPath, isAnime) => {
       const current = `${(i + 1).toString().padStart(padding, "0")}/${files.length}`;
 
       const meta = await getMetadata(filePath);
-      console.log(meta);
 
       let resize = meta?.streams[0]?.width > 1280;
 
