@@ -229,6 +229,9 @@
 </script>
 
 <div id="manga-viewer" tabIndex="-1" class:hide={$ToggleMenu}>
+  <span class="m-loading" class:show-loading={viewerState.loading}>
+    <Icons name="sync" box="0 0 512 512" />
+  </span>
   <span class="fullscreen-progress">
     <Icons name="stickynote" />
     {progress}
@@ -520,6 +523,42 @@
     background: firebrick;
     font-size: 1.3rem;
     pointer-events: none;
+  }
+
+  .m-loading {
+    display: none;
+    position: fixed;
+    left: 4px;
+    bottom: 36px;
+    z-index: 99;
+    background-color: rgba(0, 0, 0, 0.582);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+  }
+
+  .m-loading :global(svg) {
+    top: 3px;
+    left: 6px;
+    width: 18px;
+    height: 24px;
+    fill: hwb(165 2% 0%);
+    animation: rotate 3s linear infinite;
+    transition: all 0.3s;
+  }
+
+  .m-loading.show-loading {
+    display: inline-block;
+  }
+
+  #manga-viewer.hide .m-loading {
+    bottom: 2px;
+  }
+
+  @keyframes rotate {
+    100% {
+      transform: rotate(360deg);
+    }
   }
 
   @media screen and (max-width: 700px) {
