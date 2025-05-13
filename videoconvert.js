@@ -66,6 +66,7 @@ const convertVideo = async (vPath, isAnime) => {
       const current = `${(i + 1).toString().padStart(padding, "0")}/${files.length}`;
 
       const meta = await getMetadata(filePath);
+      console.log(meta);
 
       let resize = meta?.streams[0]?.width > 1280;
 
@@ -83,7 +84,7 @@ const convertVideo = async (vPath, isAnime) => {
         // "-filter:v fps=23.976",
       ];
 
-      if (os.platform === "linux") {
+      if (os.platform() === "linux") {
         inputOptions.unshift(`-init_hw_device vaapi=/dev/dri/renderD128`);
         inputOptions.unshift("-hwaccel_output_format qsv");
         outOptions[0] = "-c:v h264_qsv";
