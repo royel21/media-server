@@ -14,6 +14,7 @@ const warings = [
   "a11y-click-events-have-key-events",
   "a11y-no-noninteractive-element-interactions",
   "a11y-no-static-element-interactions",
+  "a11y-no-noninteractive-tabindex",
 ];
 
 // https://vitejs.dev/config/
