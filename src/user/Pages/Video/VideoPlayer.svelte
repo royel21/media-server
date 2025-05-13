@@ -413,7 +413,7 @@
     color: white;
     background-color: rgba(31, 31, 31, 0.661);
     pointer-events: 0;
-    opacity: 1;
+    opacity: 0;
   }
 
   @media screen and (max-width: 700px) {
