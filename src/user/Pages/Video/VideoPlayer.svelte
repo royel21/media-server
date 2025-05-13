@@ -69,6 +69,17 @@
     }
   };
 
+  let volTiout;
+  const showFullScrVol = () => {
+    if (isFullScreen) {
+      volRef.style.opacity = 1;
+      clearTimeout(volTiout);
+      volTiout = setTimeout(() => {
+        volRef.style.opacity = 0;
+      }, 2000);
+    }
+  };
+
   const onWheel = ({ deltaY }) => {
     let { volume } = mConfig;
     volume += deltaY < 0 ? 0.05 : -0.05;
@@ -95,6 +106,7 @@
     let newVol = player.volume + val;
     player.volume = newVol < 0 ? 0 : newVol;
     mConfig.volume = player.volume;
+    showFullScrVol();
   };
 
   const onSkip = (seekRate) => {
@@ -164,15 +176,6 @@
     document.querySelector(".f-name").style.opacity = 1;
   } else {
     document.querySelector(".f-name").style.opacity = 0;
-  }
-
-  let volTiout;
-  $: if (mConfig.volume && isFullScreen) {
-    volRef.style.opacity = 1;
-    clearTimeout(volTiout);
-    volTiout = setTimeout(() => {
-      volRef.style.opacity = 0;
-    }, 2000);
   }
 </script>
 
