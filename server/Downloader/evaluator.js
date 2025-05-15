@@ -355,8 +355,9 @@ export const adultEvalPage = async (query) => {
     }
 
     const endRegex = / (- |-|)(\[|)end(\]|)/gi;
-    if ((i < as.length - 1 && endRegex.test(fileName)) || /volume \d+/i.test(text)) {
-      fileName = fileName.replace(endRegex, "");
+
+    if (i === as.length - 1 && endRegex.test(text)) {
+      fileName = fileName.replace(endRegex, "") + " - End";
     }
 
     if (data.find((f) => f.name === fileName) && /volume \d+/i.test(text)) {
