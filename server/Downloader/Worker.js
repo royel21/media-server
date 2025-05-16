@@ -160,7 +160,7 @@ const cleanUp = async (error) => {
     } catch (error) {}
 
     while (state.running || state.hrunning || state.checkServer) {
-      await delay(500);
+      await delay(100);
     }
   }
 
