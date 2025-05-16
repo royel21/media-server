@@ -132,6 +132,8 @@ export const downloadFromPage = async (Id, state) => {
       if (linkData.length) {
         let count = 1;
         for (const d of linkData.reverse()) {
+          if (state.stopped) break;
+
           const folder = await findFolder(d.link.Name);
           if (folder) {
             sendMessage({
@@ -148,6 +150,8 @@ export const downloadFromPage = async (Id, state) => {
 
             let chaptCount = 1;
             for (let chap of d.chaps) {
+              if (state.stopped) break;
+
               if (chap.name && checkIfRaw(chap, folder) && !excludes.find((ex) => chap.name.includes(ex.Name))) {
                 try {
                   if (
