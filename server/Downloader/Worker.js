@@ -154,10 +154,11 @@ const cleanUp = async (error) => {
   }
 
   if (state.stopped) {
-    try {
-      await stopCheckServer.abort();
-    } catch (error) {
-      console.log("stopServer: ", error);
+    const pages = await state.browser?.pages();
+    for (let page of pages) {
+      try {
+        await page.close();
+      } catch (error) {}
     }
 
     sendMessage({ text: "Process Stopped", color: "red" });
@@ -367,7 +368,7 @@ process.on("message", async ({ action, datas, remove, bypass, server }) => {
 });
 
 const errorToSkip =
-  /frame|Parent frame|main frame|Target closed|Session closed|Page.addScriptToEvaluateOnNewDocument/gi;
+  /frame|Parent frame|main frame|Target closed|Session closed|Page.addScriptToEvaluateOnNewDocument|TargetCloseError/gi;
 
 process.on("uncaughtException", async (error) => {
   if (!errorToSkip.test(error.toString())) {
