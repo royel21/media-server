@@ -336,8 +336,7 @@ process.on("message", async ({ action, datas, remove, bypass, server }) => {
         state.checkServer = true;
         console.log("start-server");
         downloadFromPage(server, state).then(async () => {
-          state.checkServer = false;
-          cleanUp();
+          await cleanUp();
         });
       }
       break;
