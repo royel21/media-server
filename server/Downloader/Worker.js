@@ -368,7 +368,7 @@ process.on("message", async ({ action, datas, remove, bypass, server }) => {
 });
 
 const errorToSkip =
-  /frame|Parent frame|main frame|Target closed|Session closed|Page.addScriptToEvaluateOnNewDocument|TargetCloseError/gi;
+  /frame|Parent frame|main frame|Target closed|Session closed|Page.addScriptToEvaluateOnNewDocument|TargetCloseError|Protocol error/gi;
 
 process.on("uncaughtException", async (error) => {
   if (!errorToSkip.test(error.toString())) {
