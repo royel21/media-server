@@ -182,7 +182,6 @@ const cleanUp = async (error) => {
     state.running = false;
     state.hrunning = false;
     state.checkServer = false;
-    console.log("info:", info);
     sendMessage(info);
     process.exit();
   }
