@@ -237,6 +237,12 @@ const onDownload = async (bypass) => {
   state.size = 0;
 };
 
+const onCleanup = async () => {
+  if (!state.stopped) {
+    await cleanUp;
+  }
+};
+
 const loadLinks = async (Id, bypass) => {
   const temps = [];
   const htemps = [];
@@ -265,12 +271,12 @@ const loadLinks = async (Id, bypass) => {
 
   if (!state.running && temps.length) {
     state.running = true;
-    onDownload(bypass).then(cleanUp).catch(cleanUp);
+    onDownload(bypass).then(onCleanup).catch(onCleanup);
   }
 
   if (!state.hrunning && htemps.length) {
     state.hrunning = true;
-    downloadNHentais(state).then(cleanUp).catch(cleanUp);
+    downloadNHentais(state).then(onCleanup).catch(onCleanup);
   }
 };
 
@@ -291,6 +297,7 @@ const onCreateCover = async ({ Id, imgUrl }) => {
     }
   }
   await page.close();
+
   await cleanUp();
 };
 
@@ -342,9 +349,7 @@ process.on("message", async ({ action, datas, remove, bypass, server }) => {
       if (!state.checkServer) {
         state.checkServer = true;
         console.log("start-server");
-        downloadFromPage(server, state).then(async () => {
-          await cleanUp();
-        });
+        downloadFromPage(server, state).then(onCleanup);
       }
       break;
     }
@@ -369,7 +374,7 @@ process.on("message", async ({ action, datas, remove, bypass, server }) => {
 const errorToSkip =
   /frame|Parent frame|main frame|Target closed|Session closed|Page.addScriptToEvaluateOnNewDocument/gi;
 
-process.on("uncaughtException", async (error, source) => {
+process.on("uncaughtException", async (error) => {
   if (!errorToSkip.test(error.toString())) {
     console.log(error.toString());
     sendMessage({ text: "uncaughtException Process Stopped - Internal Error", color: "red" });
