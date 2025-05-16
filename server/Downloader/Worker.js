@@ -156,7 +156,9 @@ const cleanUp = async (error) => {
   if (state.stopped) {
     try {
       stopCheckServer();
-    } catch (error) {}
+    } catch (error) {
+      console.log("stopServer: ", error);
+    }
 
     sendMessage({ text: "Process Stopped", color: "red" });
     while (state.running || state.hrunning || state.checkServer) {
