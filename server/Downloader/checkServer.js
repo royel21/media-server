@@ -111,6 +111,12 @@ export const downloadFromPage = async (Id, state) => {
 
       await page.goto(`https:\\${server.Name}`, { waitUntil: "domcontentloaded" });
       await page.waitForSelector(server.HomeQuery, { signal });
+
+      if (state.stopped) {
+        state.checkServer = false;
+        return await page?.close();
+      }
+
       const data = await page.evaluate(evalServer, server.dataValues);
 
       const linkData = [];
