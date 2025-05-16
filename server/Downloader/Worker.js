@@ -170,6 +170,7 @@ const cleanUp = async (error) => {
     if (state.browser) {
       await state.browser.close();
     }
+    const info = state.stopped ? { text: "All Job Stopped", color: "red" } : { text: "All Job Finished" };
 
     await stopDownloads();
     state.links = [];
@@ -181,7 +182,6 @@ const cleanUp = async (error) => {
     state.running = false;
     state.hrunning = false;
     state.checkServer = false;
-    const info = state.stopped ? { text: "All Job Stopped", color: "red" } : { test: "All Job Finished" };
     console.log("info:", info);
     sendMessage(info);
     process.exit();
