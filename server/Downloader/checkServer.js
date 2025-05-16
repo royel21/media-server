@@ -124,6 +124,7 @@ export const downloadFromPage = async (Id, state) => {
         const link = await db.Link.findOne(query);
 
         if (link) {
+          await link.update({ IsDownloading: true });
           linkData.push({ link, chaps });
         }
       }
@@ -183,6 +184,7 @@ export const downloadFromPage = async (Id, state) => {
             sendMessage({ link: d.link.dataValues }, "update-download");
             await db.Link.update({ Date: new Date() }, { where: { Name: folder.Name } });
           }
+          await d.link.update({ IsDownloading: false });
         }
       }
     } catch (error) {
