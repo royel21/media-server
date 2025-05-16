@@ -110,7 +110,7 @@ export const downloadFromPage = async (Id, state) => {
       sendMessage({ text: `** ${formatAMPM(new Date())} ${server.Name} **`, important: true });
 
       await page.goto(`https:\\${server.Name}`, { waitUntil: "domcontentloaded" });
-      await page.waitForSelector(server.HomeQuery, { signal: abortController });
+      await page.waitForSelector(server.HomeQuery, { signal: abortController.signal });
 
       if (state.stopped) {
         state.checkServer = false;
