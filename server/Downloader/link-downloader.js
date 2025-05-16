@@ -1,6 +1,5 @@
 import fs from "fs-extra";
 import path from "path";
-import zipper from "zip-local";
 
 import { createFile, destroy } from "./db-worker.js";
 

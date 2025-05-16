@@ -36,20 +36,24 @@ export const startBrowser = async (config) => {
 };
 
 export const createPage = async (browser, timeout = 180000) => {
-  const page = await browser.newPage();
-  await page.setViewport({ width: 1200, height: 800 });
-  await page.setDefaultNavigationTimeout(timeout);
+  try {
+    const page = await browser.newPage();
+    await page.setViewport({ width: 1200, height: 800 });
+    await page.setDefaultNavigationTimeout(timeout);
 
-  await page._client().send("Page.setLifecycleEventsEnabled", { enabled: true });
-  await page._client().send("Network.enable", {
-    maxResourceBufferSize: 1024 * 1024 * 400,
-    maxTotalBufferSize: 1024 * 1204 * 400,
-  });
-  const userAgent = new UserAgent().random().toString();
-  // await page.evaluateOnNewDocument(() => { });
-  await page.setUserAgent(userAgent);
-  console.log(await browser.userAgent(), userAgent);
-  return page;
+    await page._client().send("Page.setLifecycleEventsEnabled", { enabled: true });
+    await page._client().send("Network.enable", {
+      maxResourceBufferSize: 1024 * 1024 * 400,
+      maxTotalBufferSize: 1024 * 1204 * 400,
+    });
+    const userAgent = new UserAgent().random().toString();
+    // await page.evaluateOnNewDocument(() => { });
+    await page.setUserAgent(userAgent);
+    console.log(await browser.userAgent(), userAgent);
+    return page;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const getPages = async () => {

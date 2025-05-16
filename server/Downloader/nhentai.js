@@ -219,27 +219,32 @@ const download = async (link, page, server, state) => {
 export const downloadNHentais = async (state) => {
   let page = await createPage(state.browser);
 
-  while (state.nhentais.length) {
-    if (state.stopped) break;
-    const link = state.nhentais.shift();
+  if (page) {
+    while (state.nhentais.length) {
+      if (state.stopped) break;
 
-    try {
-      await link.reload();
-    } catch (error) {
-      console.log(error);
-      continue;
+      const link = state.nhentais.shift();
+
+      try {
+        await link.reload();
+      } catch (error) {
+        console.log(error);
+        continue;
+      }
+
+      const count = state.hsize - state.nhentais.length;
+      sendMessage({
+        text: `\u001b[1;31m ${count}/${state.hsize} - ${link.Name || link.Url} \u001b[0m`,
+        url: link.Url,
+      });
+      try {
+        await download(link, page, link.Server, state);
+      } catch (error) {
+        sendMessage({ text: `Error ${link.Url} was no properly downloaded`, color: "red", error });
+      }
     }
 
-    const count = state.hsize - state.nhentais.length;
-    sendMessage({
-      text: `\u001b[1;31m ${count}/${state.hsize} - ${link.Name || link.Url} \u001b[0m`,
-      url: link.Url,
-    });
-    try {
-      await download(link, page, link.Server, state);
-    } catch (error) {
-      sendMessage({ text: `Error ${link.Url} was no properly downloaded`, color: "red", error });
-    }
+    await page.close();
   }
   state.hrunning = false;
   state.hsize = 0;

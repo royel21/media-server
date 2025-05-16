@@ -110,10 +110,14 @@ const downloadLinks = async (link, page) => {
 
   let count = 0;
   for (let d of data) {
+    if (state.stopped) {
+      break;
+    }
+
     if (link.Raw && !/ raw$/i.test(d.name)) {
       d.name = d.name + " raw";
     }
-    if (state.stopped) break;
+
     try {
       ++count;
       await downloadLink(d, page, Server, folder, `${count}/${data.length}`, state);
@@ -148,67 +152,82 @@ const cleanUp = async (error) => {
   if (error) {
     sendMessage({ text: "Process Stopped - Internal Error", color: "red", error });
   }
-  const pcount = await getPages();
-  if (pcount === 1 || state.stopped) {
+
+  if (state.stopped) {
+    while (!state.running && !state.hrunning && !state.checkServer) {
+      await delay(500);
+    }
+  }
+
+  if (!state.running && !state.hrunning && !state.checkServer) {
+    if (state.browser) {
+      await state.browser.close();
+    }
+
     await stopDownloads();
     state.links = [];
     state.hentai = [];
-    state.running = false;
     state.size = 0;
     state.hsize = 0;
     state.stopped = false;
     state.browser = null;
+    state.running = false;
+    state.hrunning = false;
     state.checkServer = false;
-    if (state.browser) {
-      await state.browser.close();
-    }
-    console.log("pages", pcount);
     sendMessage({ text: "Finish - All Job" });
     process.exit();
   }
 };
 
 const onDownload = async (bypass) => {
-  while (state.links.length) {
-    if (state.stopped) break;
-    const link = state.links.shift();
-    try {
-      await link.reload();
-    } catch (error) {
-      console.log(error);
-      continue;
-    }
+  const page = await createPage(state.browser);
 
-    state.current = link;
+  if (page) {
+    while (state.links.length) {
+      if (state.stopped) break;
 
-    //Exclude link from download
-    if (link.Exclude) {
-      sendMessage({ text: `Link ${link.AltName} Is Exclude From Download`, color: "red" });
-      continue;
-    }
+      const link = state.links.shift();
 
-    if (bypass || !link.Date || dateDiff(new Date(), link.Date) > 3) {
-      sendMessage({
-        text: `\u001b[1;31m ${state.size - state.links.length}/${state.size} - ${link.Name || link.Url} \u001b[0m`,
-        url: link.Url,
-      });
-      const page = await createPage(state.browser);
       try {
-        await downloadLinks(link, page, link.Server, link.IsAdult);
+        await link.reload();
       } catch (error) {
-        sendMessage({ text: `Error ${link.Url} was no properly downloaded`, color: "red", error });
+        console.log(error);
+        continue;
       }
 
-      await page.close();
-      await link.update({ IsDownloading: false });
-      await link.reload();
-      sendMessage({ link }, "link-update");
-    } else {
-      sendMessage({ text: `Link ${link.Name} was checked recently`, color: "red" });
+      state.current = link;
+
+      //Exclude link from download
+      if (link.Exclude) {
+        sendMessage({ text: `Link ${link.AltName} Is Exclude From Download`, color: "red" });
+        continue;
+      }
+
+      if (bypass || !link.Date || dateDiff(new Date(), link.Date) > 3) {
+        sendMessage({
+          text: `\u001b[1;31m ${state.size - state.links.length}/${state.size} - ${link.Name || link.Url} \u001b[0m`,
+          url: link.Url,
+        });
+        try {
+          await downloadLinks(link, page, link.Server, link.IsAdult);
+        } catch (error) {
+          sendMessage({ text: `Error ${link.Url} was no properly downloaded`, color: "red", error });
+        }
+
+        await link.update({ IsDownloading: false });
+        await link.reload();
+        sendMessage({ link }, "link-update");
+      } else {
+        sendMessage({ text: `Link ${link.Name} was checked recently`, color: "red" });
+      }
     }
+
+    await page.close();
   }
 
   state.running = false;
+  state.links = [];
+  state.size = 0;
 };
 
 const loadLinks = async (Id, bypass) => {
@@ -221,15 +240,16 @@ const loadLinks = async (Id, bypass) => {
   });
 
   for (const found of founds) {
-    if (![...state.links, ...state.nhentais].find((l) => l.Url === found.Url)) {
+    if (state.nhentais.find((l) => l.Url === found.Url)) {
+      htemps.push(found);
+      state.hsize++;
       await found.update({ IsDownloading: true });
-      if (found.Url.includes("nhentai")) {
-        htemps.push(found);
-        state.hsize++;
-      } else {
-        temps.push(found);
-        state.size++;
-      }
+    }
+
+    if (state.links.find((l) => l.Url === found.Url)) {
+      temps.push(found);
+      state.size++;
+      await found.update({ IsDownloading: true });
     }
   }
 
@@ -237,15 +257,13 @@ const loadLinks = async (Id, bypass) => {
   state.nhentais = [...state.nhentais, ...htemps];
 
   if (!state.running && temps.length) {
-    console.log("links: ", temps.length, "\n");
     state.running = true;
-    onDownload(bypass).catch(cleanUp).then(cleanUp);
-  } else if (!state.hrunning && htemps.length) {
+    onDownload(bypass).then(cleanUp).catch(cleanUp);
+  }
+
+  if (!state.hrunning && htemps.length) {
     state.hrunning = true;
     downloadNHentais(state).then(cleanUp).catch(cleanUp);
-    sendMessage({ text: "nhentai finish" });
-  } else if (!htemps.length && !temps.length) {
-    cleanUp();
   }
 };
 
@@ -317,7 +335,10 @@ process.on("message", async ({ action, datas, remove, bypass, server }) => {
       if (!state.checkServer) {
         state.checkServer = true;
         console.log("start-server");
-        downloadFromPage(server, state).then(cleanUp).catch(cleanUp);
+        downloadFromPage(server, state).then(async () => {
+          state.checkServer = false;
+          cleanUp();
+        });
       }
       break;
     }
@@ -338,6 +359,7 @@ process.on("message", async ({ action, datas, remove, bypass, server }) => {
     }
   }
 });
+
 const errorToSkip =
   /frame|Parent frame|main frame|Target closed|Session closed|Page.addScriptToEvaluateOnNewDocument/gi;
 

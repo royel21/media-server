@@ -96,14 +96,15 @@ const formatAMPM = (date) => {
 };
 
 export const downloadFromPage = async (Id, state) => {
+  const page = await createPage(state.browser);
+
   const db = getDb();
 
   const server = await db.Server.findOne({ where: { Id: Id } });
-  if (server && server?.HomeQuery) {
+  if (server && server?.HomeQuery && page) {
     try {
       sendMessage({ text: `** ${formatAMPM(new Date())} ${server.Name} **`, important: true });
 
-      const page = await createPage(state.browser);
       await page.goto(`https:\\${server.Name}`, { waitUntil: "domcontentloaded" });
       await page.waitForSelector(server.HomeQuery);
       const data = await page.evaluate(evalServer, server.dataValues);
@@ -183,14 +184,11 @@ export const downloadFromPage = async (Id, state) => {
             await db.Link.update({ Date: new Date() }, { where: { Name: folder.Name } });
           }
         }
-
-        await page.close();
       }
     } catch (error) {
       sendMessage({ text: `Error checking server ${server?.Name}`, color: "red", error });
     }
     sendMessage({ text: `Server finish ${server?.Name}` });
-    state.checkServer = false;
-    state.links = [];
   }
+  await page?.close();
 };
