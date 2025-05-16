@@ -155,8 +155,7 @@ const cleanUp = async (error) => {
 
   if (state.stopped) {
     try {
-      stopCheckServer.signal?.abort();
-      console.log(stopCheckServer.signal);
+      await stopCheckServer.abort();
     } catch (error) {
       console.log("stopServer: ", error);
     }

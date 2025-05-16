@@ -95,7 +95,9 @@ const formatAMPM = (date) => {
   return strTime;
 };
 
-export let stopCheckServer = {};
+export let stopCheckServer = {
+  abort: () => {},
+};
 
 export const downloadFromPage = async (Id, state) => {
   const page = await createPage(state.browser);
@@ -107,12 +109,12 @@ export const downloadFromPage = async (Id, state) => {
     try {
       sendMessage({ text: `** ${formatAMPM(new Date())} ${server.Name} **`, important: true });
 
-      const abortController = new AbortController();
-
-      stopCheckServer.signal = abortController;
+      stopCheckServer.abort = async () => {
+        await page.close();
+      };
 
       page.goto(`https:\\${server.Name}`, { waitUntil: "domcontentloaded" });
-      await page.waitForSelector(server.HomeQuery, abortController);
+      await page.waitForSelector(server.HomeQuery);
 
       if (state.stopped) {
         state.checkServer = false;
