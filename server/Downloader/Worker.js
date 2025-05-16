@@ -181,7 +181,8 @@ const cleanUp = async (error) => {
     state.running = false;
     state.hrunning = false;
     state.checkServer = false;
-    sendMessage(state.stopped ? { text: "All Job Stopped", color: "red" } : { test: "All Job Finished" });
+    const info = state.stopped ? { text: "All Job Stopped", color: "red" } : { test: "All Job Finished" };
+    sendMessage(info);
     process.exit();
   }
 };
