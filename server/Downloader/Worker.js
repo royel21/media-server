@@ -182,6 +182,7 @@ const cleanUp = async (error) => {
     state.hrunning = false;
     state.checkServer = false;
     const info = state.stopped ? { text: "All Job Stopped", color: "red" } : { test: "All Job Finished" };
+    console.log("info:", info);
     sendMessage(info);
     process.exit();
   }
