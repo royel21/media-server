@@ -155,7 +155,9 @@ const cleanUp = async (error) => {
 
   if (state.stopped) {
     sendMessage({ text: "Process Stopped", color: "red" });
-    stopCheckServer();
+    try {
+      stopCheckServer();
+    } catch (error) {}
 
     while (state.running || state.hrunning || state.checkServer) {
       await delay(500);
@@ -363,7 +365,7 @@ process.on("message", async ({ action, datas, remove, bypass, server }) => {
 });
 
 const errorToSkip =
-  /frame|Parent frame|main frame|Target closed|Session closed|Page.addScriptToEvaluateOnNewDocument/gi;
+  /frame|Parent frame|main frame|Target closed|Session closed|Page.addScriptToEvaluateOnNewDocument|TypeError/gi;
 
 process.on("uncaughtException", async (error, source) => {
   if (!errorToSkip.test(error.toString())) {
