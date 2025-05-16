@@ -95,7 +95,7 @@ const formatAMPM = (date) => {
   return strTime;
 };
 
-export const stopCheckServer = {};
+export const stopCheckServer = null;
 
 export const downloadFromPage = async (Id, state) => {
   const page = await createPage(state.browser);
@@ -114,6 +114,7 @@ export const downloadFromPage = async (Id, state) => {
 
       if (state.stopped) {
         state.checkServer = false;
+        stopCheckServer = null;
         return await page?.close();
       }
 
@@ -206,6 +207,8 @@ export const downloadFromPage = async (Id, state) => {
     }
     sendMessage({ text: `Server finish ${server?.Name}` });
   }
+
+  stopCheckServer = null;
   state.checkServer = false;
   await page?.close();
 };
