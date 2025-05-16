@@ -78,15 +78,14 @@ export const scrollImageLoader = (loadImages, container) => {
           for (let entry of entries) {
             if (entry.isIntersecting) {
               pg = +entry.target.id;
-
-              if (imgs[pg] && !imgs[pg].src.includes("data:img")) {
+              if (!imgs[pg + 2 * scrollDir].src.includes("data:img")) {
                 load = true;
               }
             }
           }
           if (load) {
             load = false;
-            loadImages(currentPage, 8, scrollDir);
+            loadImages(pg, 8, scrollDir);
           }
         }
       }

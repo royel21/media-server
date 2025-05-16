@@ -4,7 +4,6 @@ import { Op } from "sequelize";
 
 const loadZipImages = async (data, socket, user) => {
   let { Id, indices } = data;
-
   let file = await db.file.findOne({
     attributes: ["Id", "Name"],
     where: { Id },

@@ -40,9 +40,10 @@
   };
   //emptyImage observer
   const loadImages = (pg, toPage, dir = 1) => {
-    if (!viewerState.loading && file.Id && !isNaN(pg) && !isNaN(toPage)) {
+    if (file.Id && !viewerState.loading && !isNaN(pg) && !isNaN(toPage)) {
       const founds = getEmptyIndex(images, pg, toPage, dir || 1, file.Duration).filter((fi) => !indices.includes(fi));
       if (founds.length) {
+        indices.push(...founds);
         viewerState.loading = true;
         socket.emit("loadzip-image", { Id: file.Id, indices: founds });
       }
@@ -55,8 +56,8 @@
       if (webtoon) {
         scrollInView(pg);
       }
-      if (!viewerState.loading && !images[pg + 6 * dir]) {
-        loadImages(pg, 11, dir);
+      if (!viewerState.loading && !images[pg + 5 * dir]) {
+        loadImages(pg, 10, dir);
       }
       changePages(pg);
     } else {
@@ -129,7 +130,6 @@
         }
         viewerState.jumping = false;
         viewerState.loading = false;
-        indices = [];
       }
     }
   };

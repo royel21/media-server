@@ -89,8 +89,10 @@ export const evaluetePage = (query) => {
       .filter((d) => d !== "" && d !== ",")
       .join(", ") || "";
 
-  const genres = Genres.split(",").map((d) => d.trim());
-
+  const genres = Genres.replace("Live Action", "")
+    .split(",")
+    .filter((g) => g)
+    .map((d) => d.trim());
   //Statuc check
   let Status = [...document.querySelectorAll(query.Status)].find((t) => /completed|finished/gi.test(t?.textContent))
     ? 1

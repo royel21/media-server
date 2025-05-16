@@ -49,7 +49,6 @@ export const createPage = async (browser, timeout = 180000) => {
     const userAgent = new UserAgent().random().toString();
     // await page.evaluateOnNewDocument(() => { });
     await page.setUserAgent(userAgent);
-    console.log(await browser.userAgent(), userAgent);
     return page;
   } catch (error) {
     console.log(error);

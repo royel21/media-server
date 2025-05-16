@@ -189,7 +189,6 @@ const cleanUp = async (error) => {
 
 const onDownload = async (bypass) => {
   const page = await createPage(state.browser);
-
   if (page) {
     while (state.links.length) {
       if (state.stopped) break;
@@ -246,13 +245,13 @@ const loadLinks = async (Id, bypass) => {
   });
 
   for (const found of founds) {
-    if (state.nhentais.find((l) => l.Url === found.Url)) {
+    const { Url } = found;
+
+    if (Url.includes("nhentai") && !state.nhentais.find((l) => l.Url === Url)) {
       htemps.push(found);
       state.hsize++;
       await found.update({ IsDownloading: true });
-    }
-
-    if (state.links.find((l) => l.Url === found.Url)) {
+    } else if (!state.links.find((l) => l.Url === Url)) {
       temps.push(found);
       state.size++;
       await found.update({ IsDownloading: true });
@@ -309,7 +308,8 @@ const removeDownloading = async (Id) => {
 };
 
 process.on("message", async ({ action, datas, remove, bypass, server }) => {
-  console.log("server", `Action: ${action} ~ checking-server: ${state.checkServer} ~ other-running: ${state.running}`);
+  console.log("*************** Server ******************");
+  console.log(`Action: ${action} ~ checking-server: ${state.checkServer} ~ other-running: ${state.running}`);
   if (!state.running) {
     await delay(500);
   }
