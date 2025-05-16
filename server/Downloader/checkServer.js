@@ -193,9 +193,13 @@ export const downloadFromPage = async (Id, state) => {
         }
       }
     } catch (error) {
-      sendMessage({ text: `Error checking server ${server?.Name}: Can't access page`, color: "red" });
+      if (!state.stopped) {
+        sendMessage({ text: `Error checking server ${server?.Name}: Can't access page`, color: "red" });
+      }
     }
-    sendMessage({ text: `Server finish ${server?.Name}` });
+    if (!state.stopped) {
+      sendMessage({ text: `Server finish ${server?.Name}` });
+    }
   }
 
   state.checkServer = false;
