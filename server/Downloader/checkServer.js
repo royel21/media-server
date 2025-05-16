@@ -111,7 +111,7 @@ export const downloadFromPage = async (Id, state) => {
 
       stopCheckServer.signal = abortController;
 
-      await page.goto(`https:\\${server.Name}`, { waitUntil: "domcontentloaded" });
+      page.goto(`https:\\${server.Name}`, { waitUntil: "domcontentloaded" });
       await page.waitForSelector(server.HomeQuery, abortController);
 
       if (state.stopped) {
