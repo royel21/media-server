@@ -154,15 +154,15 @@ const cleanUp = async (error) => {
   }
 
   if (state.stopped) {
-    sendMessage({ text: "Process Stopped", color: "red" });
     try {
       stopCheckServer();
     } catch (error) {}
 
+    sendMessage({ text: "Process Stopped", color: "red" });
     while (state.running || state.hrunning || state.checkServer) {
       await delay(100);
     }
-    console.trace("finish wating for cleanup");
+    console.log("finish wating for cleanup");
   }
 
   if (!state.running && !state.hrunning && !state.checkServer) {
