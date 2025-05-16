@@ -31,6 +31,7 @@
   let inputPage;
   let isFullscreen = false;
   let error;
+  let indices = [];
 
   let viewerState = {
     loading: false,
@@ -39,11 +40,11 @@
   };
   //emptyImage observer
   const loadImages = (pg, toPage, dir = 1) => {
-    if (file.Id && !viewerState.loading && !isNaN(pg) && !isNaN(toPage)) {
-      const indices = getEmptyIndex(images, pg, toPage, dir || 1, file.Duration);
-      if (indices.length) {
+    if (!viewerState.loading && file.Id && !isNaN(pg) && !isNaN(toPage)) {
+      const founds = getEmptyIndex(images, pg, toPage, dir || 1, file.Duration).filter((fi) => !indices.includes(fi));
+      if (founds.length) {
         viewerState.loading = true;
-        socket.emit("loadzip-image", { Id: file.Id, indices });
+        socket.emit("loadzip-image", { Id: file.Id, indices: founds });
       }
     }
   };
@@ -128,6 +129,7 @@
         }
         viewerState.jumping = false;
         viewerState.loading = false;
+        indices = [];
       }
     }
   };
@@ -152,6 +154,7 @@
     viewerState.jumping = webtoon;
     viewerState.loading = false;
     images = [];
+    indices = [];
     loadImages(file.CurrentPos - 2, 8);
   }
 

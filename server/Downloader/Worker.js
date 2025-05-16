@@ -174,7 +174,7 @@ const cleanUp = async (error) => {
 
     await stopDownloads();
     state.links = [];
-    state.hentai = [];
+    state.nhentais = [];
     state.size = 0;
     state.hsize = 0;
     state.stopped = false;
@@ -202,8 +202,6 @@ const onDownload = async (bypass) => {
         console.log(error);
         continue;
       }
-
-      state.current = link;
 
       //Exclude link from download
       if (link.Exclude) {

@@ -248,5 +248,5 @@ export const downloadNHentais = async (state) => {
   }
   state.hrunning = false;
   state.hsize = 0;
-  state.hentai = [];
+  state.nhentais = [];
 };
