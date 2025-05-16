@@ -150,7 +150,7 @@ const stopDownloads = async () => {
 
 const cleanUp = async (error) => {
   if (error) {
-    sendMessage({ text: "Process Stopped - Internal Error", color: "red", error });
+    sendMessage({ text: "Process Stopped - Internal Error:" + error.toString(), color: "red", error });
   }
 
   if (state.stopped) {
@@ -161,17 +161,14 @@ const cleanUp = async (error) => {
       } catch (error) {}
     }
 
-    sendMessage({ text: "Process Stopped", color: "red" });
     while (state.running || state.hrunning || state.checkServer) {
       await delay(100);
     }
-    console.log("finish wating for cleanup");
   }
 
   if (!state.running && !state.hrunning && !state.checkServer) {
     if (state.browser) {
       await state.browser.close();
-      console.log("browser stopped");
     }
 
     await stopDownloads();
@@ -184,7 +181,7 @@ const cleanUp = async (error) => {
     state.running = false;
     state.hrunning = false;
     state.checkServer = false;
-    sendMessage({ text: "Finish - All Job" });
+    sendMessage({ text: state.stopped ? "All Job Stopped" : "All Job Finished" });
     process.exit();
   }
 };
