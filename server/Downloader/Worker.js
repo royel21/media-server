@@ -237,12 +237,6 @@ const onDownload = async (bypass) => {
   state.size = 0;
 };
 
-const onCleanup = async () => {
-  if (!state.stopped) {
-    await cleanUp;
-  }
-};
-
 const loadLinks = async (Id, bypass) => {
   const temps = [];
   const htemps = [];
@@ -271,12 +265,12 @@ const loadLinks = async (Id, bypass) => {
 
   if (!state.running && temps.length) {
     state.running = true;
-    onDownload(bypass).then(onCleanup).catch(onCleanup);
+    onDownload(bypass).then(cleanUp).catch(cleanUp);
   }
 
   if (!state.hrunning && htemps.length) {
     state.hrunning = true;
-    downloadNHentais(state).then(onCleanup).catch(onCleanup);
+    downloadNHentais(state).then(cleanUp).catch(cleanUp);
   }
 };
 
@@ -349,7 +343,7 @@ process.on("message", async ({ action, datas, remove, bypass, server }) => {
       if (!state.checkServer) {
         state.checkServer = true;
         console.log("start-server");
-        downloadFromPage(server, state).then(onCleanup);
+        downloadFromPage(server, state).then(cleanUp);
       }
       break;
     }
