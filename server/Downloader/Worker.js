@@ -156,6 +156,7 @@ const cleanUp = async (error) => {
   if (state.stopped) {
     try {
       stopCheckServer.signal?.abort();
+      console.log(stopCheckServer.signal);
     } catch (error) {
       console.log("stopServer: ", error);
     }
@@ -312,7 +313,7 @@ const removeDownloading = async (Id) => {
 };
 
 process.on("message", async ({ action, datas, remove, bypass, server }) => {
-  console.log("server", `Action: ${action} ~ check-server: ${state.checkServer} ~ other-running: ${state.running}`);
+  console.log("server", `Action: ${action} ~ checking-server: ${state.checkServer} ~ other-running: ${state.running}`);
   if (!state.running) {
     await delay(500);
   }
