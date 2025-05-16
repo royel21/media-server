@@ -162,7 +162,7 @@ const cleanUp = async (error) => {
     while (state.running || state.hrunning || state.checkServer) {
       await delay(100);
     }
-    console.log("finish wating for cleanup");
+    console.trace("finish wating for cleanup");
   }
 
   if (!state.running && !state.hrunning && !state.checkServer) {
