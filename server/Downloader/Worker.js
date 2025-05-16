@@ -9,7 +9,7 @@ import { filterManga, dateDiff, removeRaw, sendMessage, createDir } from "./util
 import { startBrowser, createPage, delay } from "./Crawler.js";
 
 import { downloadLink } from "./link-downloader.js";
-import { downloadFromPage, stopCheckServer } from "./checkServer.js";
+import { downloadFromPage } from "./checkServer.js";
 import { downloadNHentais } from "./nhentai.js";
 
 // add stealth plugin and use defaults (all evasion techniques)
