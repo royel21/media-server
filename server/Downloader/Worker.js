@@ -6,10 +6,10 @@ import { evaluetePage, adultEvalPage } from "./evaluator.js";
 
 import { createFolderCover } from "./ImageUtils.js";
 import { filterManga, dateDiff, removeRaw, sendMessage, createDir } from "./utils.js";
-import { startBrowser, createPage, getPages, delay } from "./Crawler.js";
+import { startBrowser, createPage, delay } from "./Crawler.js";
 
 import { downloadLink } from "./link-downloader.js";
-import { downloadFromPage } from "./checkServer.js";
+import { downloadFromPage, stopCheckServer } from "./checkServer.js";
 import { downloadNHentais } from "./nhentai.js";
 
 // add stealth plugin and use defaults (all evasion techniques)
@@ -155,6 +155,7 @@ const cleanUp = async (error) => {
 
   if (state.stopped) {
     sendMessage({ text: "Process Stopped", color: "red" });
+    stopCheckServer();
 
     while (state.running || state.hrunning || state.checkServer) {
       await delay(500);
