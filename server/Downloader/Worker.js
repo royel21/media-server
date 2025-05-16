@@ -312,7 +312,7 @@ const removeDownloading = async (Id) => {
 };
 
 process.on("message", async ({ action, datas, remove, bypass, server }) => {
-  console.log("server", action, state.checkServer, state.running);
+  console.log("server", `Action: ${action} ~ check-server: ${state.checkServer} ~ other-running: ${state.running}`);
   if (!state.running) {
     await delay(500);
   }
@@ -328,7 +328,6 @@ process.on("message", async ({ action, datas, remove, bypass, server }) => {
 
   switch (action) {
     case "Exit": {
-      stopDownloads();
       state.stopped = true;
       await cleanUp();
       break;

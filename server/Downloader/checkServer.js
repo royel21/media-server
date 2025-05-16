@@ -114,6 +114,8 @@ export const downloadFromPage = async (Id, state) => {
       await page.goto(`https:\\${server.Name}`, { waitUntil: "domcontentloaded" });
       await page.waitForSelector(server.HomeQuery, abortController);
 
+      console.log("stopped: ", state.stopped);
+
       if (state.stopped) {
         state.checkServer = false;
         return await page?.close();
