@@ -30,3 +30,14 @@ rsync -avu --del --exclude='[0-9]*.jpg' --prune-empty-dirs "/<src>" "/<dest>"
 
     #Sample cmd for ffmpeg
     ffmpeg -hwaccel qsv -c:v h264_qsv -i input_video output_video 
+
+    
+
+ #ffmpeg copy file from position
+ ffmpeg -i 'HBAD-314.mp4' -ss 00:02:50 -c copy HBAD-314C.mp4'
+
+ 
+ #ffmpeg copy file from position to position
+ ffmpeg -i 'HBAD-329.mp4' -ss 00:02:13 -to 02:19:56 -c copy HBAD-329A.mp4
+
+ ffmpeg -f concat -safe 0 -i files.txt -c copy ZMEN-071.mp4
