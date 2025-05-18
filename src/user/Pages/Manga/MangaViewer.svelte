@@ -3,7 +3,7 @@
   import { clamp } from "src/ShareComponent/utils";
   import { setfullscreen } from "../pagesUtils";
   import { scrollInView, getEmptyIndex } from "./mangaUtils";
-  import { disconnectObvrs, scrollImageLoader } from "./Observers";
+  import { disconnectObvrs, PageObserver, scrollImageLoader } from "./Observers";
   import { onTouchStart, onTouchEnd, onTouchMove, default as controls } from "./MangaTouch";
 
   import { ToggleMenu, updateToggleMenu } from "src/ShareComponent/ToggleMenu";
@@ -95,12 +95,13 @@
   };
 
   const returnTo = () => dispatch("returnBack");
+
   let tout1;
   let connectObservers = (delay = 0) => {
     clearTimeout(tout1);
     tout1 = setTimeout(() => {
       scrollInView(file.CurrentPos);
-      scrollImageLoader(loadImages, viewer, changePages);
+      scrollImageLoader(loadImages, viewer);
       viewerState.jumping = false;
     }, delay);
   };
@@ -124,7 +125,8 @@
         images[data.page] = data.img;
       } else {
         if (viewerState.jumping) {
-          scrollImageLoader(loadImages, viewer, changePages);
+          scrollImageLoader(loadImages, viewer);
+          PageObserver(changePages, viewer);
         }
 
         viewerState.jumping = false;

@@ -1,5 +1,6 @@
 import { scrollInView } from "./mangaUtils";
 
+let pageObserver;
 let imgObserver;
 let currentPage;
 let scrollDir;
@@ -8,6 +9,34 @@ let oldScroll;
 const onScroll = function ({ target: { scrollTop } }) {
   scrollDir = oldScroll < scrollTop ? 1 : -1;
   oldScroll = scrollTop;
+};
+
+const margin = window.innerHeight * 2;
+
+export const PageObserver = (setPage, container) => {
+  const imgs = container.querySelectorAll("img");
+  container.onscroll = onScroll;
+
+  pageObserver = new IntersectionObserver(
+    (entries) => {
+      if (imgs.length) {
+        for (let entry of entries) {
+          let img = entry.target;
+          if (entry.isIntersecting && img?.src.startsWith("data:img")) {
+            currentPage = +img.id;
+            setPage(currentPage);
+          }
+        }
+      }
+    },
+    { root: container, threshold: 0.01 }
+  );
+
+  imgs.forEach((lazyImg) => {
+    pageObserver.observe(lazyImg);
+  });
+
+  return pageObserver;
 };
 
 let mDown = false;
@@ -34,16 +63,11 @@ const onmouseup = (e) => {
 
 let tout;
 let load = false;
-export const scrollImageLoader = (loadImages, container, setPage) => {
+export const scrollImageLoader = (loadImages, container) => {
   const imgs = container.querySelectorAll("img");
   container.onmouseup = onmouseup;
   container.onmousedown = onmousedown;
-
   disconnectObvrs(container);
-
-  container.onscroll = onScroll;
-
-  const margin = window.innerHeight * 2;
 
   imgObserver = new IntersectionObserver(
     (entries) => {
@@ -53,9 +77,7 @@ export const scrollImageLoader = (loadImages, container, setPage) => {
           for (let entry of entries) {
             if (entry.isIntersecting) {
               pg = +entry.target.id;
-              setPage(pg);
-              const nextToCheck = pg + 2 * scrollDir;
-              if (pg < imgs.length && !imgs[nextToCheck]?.src.includes("data:img")) {
+              if (!imgs[pg + 2 * scrollDir]?.src.includes("data:img")) {
                 load = true;
               }
             }
@@ -84,7 +106,9 @@ export const disconnectObvrs = (container) => {
     container.onmousedown = null;
     container.onmouseup = null;
   }
+  pageObserver?.disconnect();
   imgObserver?.disconnect();
+  pageObserver = null;
   imgObserver = null;
   currentPage = null;
 };
