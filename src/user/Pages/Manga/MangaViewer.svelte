@@ -3,7 +3,7 @@
   import { clamp } from "src/ShareComponent/utils";
   import { setfullscreen } from "../pagesUtils";
   import { scrollInView, getEmptyIndex } from "./mangaUtils";
-  import { PageObserver, disconnectObvrs, scrollImageLoader } from "./Observers";
+  import { disconnectObvrs, scrollImageLoader } from "./Observers";
   import { onTouchStart, onTouchEnd, onTouchMove, default as controls } from "./MangaTouch";
 
   import { ToggleMenu, updateToggleMenu } from "src/ShareComponent/ToggleMenu";
@@ -27,7 +27,6 @@
   let config = $ConfigStore.Viewer.manga;
   let progress = "";
   let images = [];
-  let viewerRef;
   let inputPage;
   let isFullscreen = false;
   let error;
@@ -101,8 +100,7 @@
     clearTimeout(tout1);
     tout1 = setTimeout(() => {
       scrollInView(file.CurrentPos);
-      scrollImageLoader(loadImages, viewer);
-      PageObserver(changePages, viewer);
+      scrollImageLoader(loadImages, viewer, changePages);
       viewerState.jumping = false;
     }, delay);
   };
@@ -126,8 +124,9 @@
         images[data.page] = data.img;
       } else {
         if (viewerState.jumping) {
-          scrollImageLoader(loadImages, viewer);
+          scrollImageLoader(loadImages, viewer, changePages);
         }
+
         viewerState.jumping = false;
         viewerState.loading = false;
       }
@@ -163,10 +162,6 @@
       viewerState.lastfId = file.Id;
       scrollInView(file.CurrentPos);
       onShow();
-    }
-
-    if (webtoon && !viewerState.loading) {
-      PageObserver(changePages, viewer);
     }
   });
 
@@ -242,7 +237,7 @@
   {#if error}
     <div class="error-msg">{error}</div>
   {/if}
-  <div class="viewer" class:isFullscreen bind:this={viewerRef}>
+  <div class="viewer" class:isFullscreen>
     <div
       class="img-current scrollable"
       class:webtoon-img={webtoon}

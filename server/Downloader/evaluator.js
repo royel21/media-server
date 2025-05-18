@@ -13,7 +13,7 @@ export const evaluetePage = (query) => {
   let originalName = document.querySelector(query.Title).textContent.replace(cleanNameRegx, "").trim();
 
   let Name = originalName
-    .replace(/(\.)+$| \$|\//, "")
+    .replace(/(\.)+$| \$|\/|\|/, "")
     .replace(/:|\?|\*|<|>|"|^,|#/gi, "")
     .replace(/’/g, "'")
     .replace("–", "-")

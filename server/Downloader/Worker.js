@@ -149,10 +149,6 @@ const stopDownloads = async () => {
 };
 
 const cleanUp = async (error) => {
-  if (error) {
-    sendMessage({ text: "Process Stopped - Internal Error:" + error.toString(), color: "red", error });
-  }
-
   if (state.stopped) {
     const pages = await state.browser?.pages();
     for (let page of pages) {
@@ -160,10 +156,11 @@ const cleanUp = async (error) => {
         await page.close();
       } catch (error) {}
     }
-
-    while (state.running || state.hrunning || state.checkServer) {
-      await delay(100);
-    }
+    state.running = false;
+    state.hrunning = false;
+    state.checkServer = false;
+  } else if (error) {
+    sendMessage({ text: "Process Stopped - Internal Error:" + error.toString(), color: "red", error });
   }
 
   if (!state.running && !state.hrunning && !state.checkServer) {
@@ -364,7 +361,7 @@ process.on("message", async ({ action, datas, remove, bypass, server }) => {
 });
 
 const errorToSkip =
-  /frame|Parent frame|main frame|Target closed|Session closed|Page.addScriptToEvaluateOnNewDocument|TargetCloseError|Protocol error/gi;
+  /frame|Parent frame|main frame|Target closed|Session closed|Page.addScriptToEvaluateOnNewDocument|TargetCloseError|Protocol error|navigation error/gi;
 
 process.on("uncaughtException", async (error) => {
   if (!errorToSkip.test(error.toString())) {

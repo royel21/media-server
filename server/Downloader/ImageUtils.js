@@ -184,6 +184,8 @@ export const saveThumbnail = async (buff, thumbPath) => {
 export const downloadAllIMages = async (page, links, state, imgPath, folder, destZip) => {
   var zip = new AdmZip();
 
+  links = links.filter((link) => link?.startsWith("http"));
+
   let length = links.length;
   let padding = getPadding(length);
   const result = { valid: false, count: 0 };
@@ -200,7 +202,6 @@ export const downloadAllIMages = async (page, links, state, imgPath, folder, des
     process.stdout.write(`IMG: ${(i + 1).toString().padStart(padding, "0")} / ${length}\r`);
 
     const img = await downloadImg(links[i], page, folder);
-
     if (img.badImg) {
       length--;
       thumb++;
