@@ -3,7 +3,7 @@
   import { clamp } from "src/ShareComponent/utils";
   import { setfullscreen } from "../pagesUtils";
   import { scrollInView, getEmptyIndex } from "./mangaUtils";
-  import { disconnectObvrs, getTime, PageObserver, scrollImageLoader } from "./Observers";
+  import { disconnectObvrs, PageObserver, scrollImageLoader } from "./Observers";
   import { onTouchStart, onTouchEnd, onTouchMove, default as controls } from "./MangaTouch";
 
   import { ToggleMenu, updateToggleMenu } from "src/ShareComponent/ToggleMenu";
