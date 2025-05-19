@@ -4,6 +4,7 @@
   import Tags from "./Tags.svelte";
   import Tabs from "src/ShareComponent/Tabs.svelte";
   import Files from "./Files.svelte";
+  import { showConsoleStore } from "../Store/ConsoleStore";
 
   export let tab = "tab-1";
 
@@ -19,12 +20,15 @@
   document.title = "Configs";
 </script>
 
-<div>
+<div class:hasconsole={$showConsoleStore}>
   <Tabs {tabs} bind:tab />
 </div>
 
 <style>
   div {
     height: 100%;
+  }
+  .hasconsole {
+    height: calc(100% - 135px);
   }
 </style>

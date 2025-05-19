@@ -148,7 +148,7 @@ input[type="text"]:not(:placeholder-shown) + span {
 .input-group .form-control {
   position: relative;
   flex: 1 1 auto;
-  height: 32px;
+  height: 30px;
   width: 1%;
   margin: 0;
   border-top-left-radius: 0;

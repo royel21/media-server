@@ -121,7 +121,7 @@
             <span on:click={onRemove}><Icons name="trash" /></span>
             <span on:click={() => (showEdit = item)}><Icons name="edit" /></span>
             <strong>{formatSize(item.Size)}GB</strong>
-            {item.Name}
+            <span>{item.Name}</span>
           </li>
         {/each}
       {/if}
@@ -146,12 +146,19 @@
   }
 
   #tag-list .list-container {
-    overflow-y: auto;
-    background-color: white;
-    border-radius: 5px;
+    border-radius: 0.25rem;
     margin-bottom: 8px;
     flex-grow: 1;
+    height: calc(100% - 80px);
+    overflow: hidden;
   }
+
+  #tag-list ul {
+    height: 100%;
+    overflow-y: auto;
+    background-color: white;
+  }
+
   #tag-list .controls {
     position: initial;
     display: flex;
@@ -159,19 +166,20 @@
     padding: 0px 0 4px 0;
     justify-content: initial;
   }
-  .list-group {
-    min-width: 100%;
-  }
   #tag-list li {
     display: flex;
     align-items: center;
     padding: 4px;
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    min-height: 36px;
+  }
+  #tag-list li span:last-child {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    border: none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
-    min-width: 100%;
+    width: calc(100% - 113px);
+    pointer-events: none;
   }
   #tag-list .empty-list {
     justify-content: center;
