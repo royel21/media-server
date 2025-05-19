@@ -18,6 +18,7 @@ export const getTime = () => new Date().getTime();
 export const PageObserver = (setPage, container) => {
   const imgs = container.querySelectorAll("img");
   container.onscroll = onScroll;
+  pageObserver?.disconnect();
 
   pageObserver = new IntersectionObserver(
     (entries) => {
@@ -33,7 +34,6 @@ export const PageObserver = (setPage, container) => {
     },
     { root: container, threshold: 0.01 }
   );
-
   imgs.forEach((lazyImg) => {
     pageObserver.observe(lazyImg);
   });
@@ -69,7 +69,7 @@ export const scrollImageLoader = (loadImages, container) => {
   const imgs = container.querySelectorAll("img");
   container.onmouseup = onmouseup;
   container.onmousedown = onmousedown;
-  disconnectObvrs(container);
+  imgObserver?.disconnect();
 
   imgObserver = new IntersectionObserver(
     (entries) => {
