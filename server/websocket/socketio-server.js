@@ -14,6 +14,7 @@ export default async (server, sessionMeddle) => {
 
   io.on("connection", async (socket) => {
     let isAuth = socket.request.session.passport;
+    console.log("connected: ", socket.id);
 
     if (isAuth) {
       const user = await db.user.findOne({
