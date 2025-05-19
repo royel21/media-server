@@ -78,24 +78,20 @@ export const scrollImageLoader = (loadImages, container) => {
           let pg;
           for (let entry of entries) {
             if (entry.isIntersecting) {
-              pg = +entry.target.id;
-              if (!imgs[pg + 2 * scrollDir]?.src.includes("data:img")) {
+              pg = +entry.target.id + 4 * scrollDir;
+              if (!imgs[pg]?.src.includes("data:img")) {
                 load = true;
               }
             }
           }
           if (load) {
             load = false;
-            loadImages(pg, 8, scrollDir);
+            loadImages(pg, 4, scrollDir);
           }
         }
       }
     },
-    {
-      root: container,
-      rootMargin: `${margin}px 0px ${margin}px 0px`,
-      threshold: 0,
-    }
+    { root: container, threshold: 0.01 }
   );
 
   imgs.forEach((lazyImg) => {
