@@ -13,6 +13,8 @@ const onScroll = function ({ target: { scrollTop } }) {
 
 const margin = window.innerHeight * 2;
 
+export const getTime = () => new Date().getTime();
+
 export const PageObserver = (setPage, container) => {
   const imgs = container.querySelectorAll("img");
   container.onscroll = onScroll;

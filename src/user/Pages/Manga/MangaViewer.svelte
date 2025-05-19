@@ -3,7 +3,7 @@
   import { clamp } from "src/ShareComponent/utils";
   import { setfullscreen } from "../pagesUtils";
   import { scrollInView, getEmptyIndex } from "./mangaUtils";
-  import { disconnectObvrs, PageObserver, scrollImageLoader } from "./Observers";
+  import { disconnectObvrs, getTime, PageObserver, scrollImageLoader } from "./Observers";
   import { onTouchStart, onTouchEnd, onTouchMove, default as controls } from "./MangaTouch";
 
   import { ToggleMenu, updateToggleMenu } from "src/ShareComponent/ToggleMenu";
@@ -31,6 +31,7 @@
   let isFullscreen = false;
   let error;
   let indices = [];
+  let timeOut = getTime();
 
   let viewerState = {
     loading: false,
@@ -39,7 +40,8 @@
   };
   //emptyImage observer
   const loadImages = (pg, toPage, dir = 1) => {
-    if (file.Id && !viewerState.loading && !isNaN(pg) && !isNaN(toPage)) {
+    if ((!timeOut || getTime() - timeout > 200) && file.Id && !isNaN(pg) && !isNaN(toPage)) {
+      timeOut = getTime();
       const founds = getEmptyIndex(images, pg, toPage, dir || 1, file.Duration).filter((fi) => !indices.includes(fi));
       if (founds.length) {
         indices.push(...founds);
@@ -126,7 +128,6 @@
       } else {
         if (viewerState.jumping) {
           scrollImageLoader(loadImages, viewer);
-          PageObserver(changePages, viewer);
         }
 
         viewerState.jumping = false;
@@ -163,6 +164,7 @@
     if (file.Id !== viewerState.lastfId) {
       viewerState.lastfId = file.Id;
       scrollInView(file.CurrentPos);
+      PageObserver(changePages, viewer);
       onShow();
     }
   });
