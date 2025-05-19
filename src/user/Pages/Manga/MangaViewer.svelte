@@ -257,7 +257,7 @@
           class:empty-img={!images[file.CurrentPos]}
           style="object-fit: {config.imgAbjust}"
           src={images[file.CurrentPos] && "data:img/jpeg;base64, " + images[file.CurrentPos]}
-          alt={`Loading... Image ${file.CurrentPos + 1}`}
+          alt={`Loading... Image ${file.CurrentPos ? file.CurrentPos + 1 : ""}`}
         />
       {:else}
         {#each Array(file?.Duration).fill(null) as _, i}
