@@ -222,9 +222,4 @@
   strong {
     margin-right: 5px;
   }
-  @media (pointer: none), (pointer: coarse) {
-    #tag-list .list-group {
-      width: fit-content;
-    }
-  }
 </style>
