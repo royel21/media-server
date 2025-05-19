@@ -44,7 +44,6 @@
       if (founds.length) {
         viewerState.loading = true;
         socket.emit("loadzip-image", { Id: file.Id, indices: founds });
-        socket.emit("user-info", `Load-indices: [${founds.join(",")}]`);
       }
     }
   };
@@ -121,7 +120,6 @@
   // receive data from server
   const onImageData = (data) => {
     if (data.id === file.Id) {
-      socket.emit("user-info", `received: ${data.id}:${data.page} - last: ${data.last}`);
       if (!data.last) {
         indices.push(data.page);
         images[data.page] = data.img;
@@ -130,6 +128,7 @@
           scrollImageLoader(loadImages, viewer);
         }
 
+        socket.emit("user-info", `Last: loaded: ${indices[indices.length - 1]}`);
         viewerState.jumping = false;
         viewerState.loading = false;
       }
