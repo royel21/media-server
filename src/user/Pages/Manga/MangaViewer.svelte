@@ -127,8 +127,6 @@
         if (viewerState.jumping) {
           scrollImageLoader(loadImages, viewer);
         }
-
-        socket.emit("user-info", `Last: loaded: ${indices[indices.length - 1]}`);
         viewerState.jumping = false;
         viewerState.loading = false;
       }
@@ -156,7 +154,7 @@
     viewerState.loading = false;
     images = [];
     indices = [];
-    loadImages(file.CurrentPos, 8);
+    loadImages(file.CurrentPos - 1, 8);
   }
 
   afterUpdate(() => {
@@ -178,15 +176,13 @@
     tout2 = setTimeout(() => changeOpacity(0), 2000);
   };
 
-  const onConnect = () => loadImages(file.CurrentPos, 8);
+  const onConnect = () => loadImages(file.CurrentPos - 1, 8);
   const onDisconnect = () => (viewerState.loading = false);
 
   const onError = ({ Id, error: err }) => {
     if (Id === file.Id) {
       viewerState.loading = false;
       error = err;
-      socket.emit("user-info", err);
-      console.log(err);
     }
   };
 
