@@ -122,6 +122,7 @@
   // receive data from server
   const onImageData = (data) => {
     if (data.id === file.Id) {
+      socket.emit("user-info", `received: ${data.id} - last: ${data.last}`);
       if (!data.last) {
         images[data.page] = data.img;
       } else {
