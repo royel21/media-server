@@ -31,7 +31,6 @@
   let isFullscreen = false;
   let error;
   let indices = [];
-  let timeOut = 0;
 
   let viewerState = {
     loading: false,
@@ -40,8 +39,7 @@
   };
   //emptyImage observer
   const loadImages = (pg, toPage, dir = 1) => {
-    if ((!timeOut || getTime() - timeOut > 300) && file.Id && !isNaN(pg) && !isNaN(toPage)) {
-      timeOut = getTime();
+    if (!viewerState.loading && file.Id && !isNaN(pg) && !isNaN(toPage)) {
       const founds = getEmptyIndex(images, pg, toPage, dir || 1, file.Duration).filter((fi) => !indices.includes(fi));
       if (founds.length) {
         indices.push(...founds);
