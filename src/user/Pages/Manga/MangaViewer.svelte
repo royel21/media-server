@@ -42,7 +42,6 @@
     if (!viewerState.loading && file.Id && !isNaN(pg) && !isNaN(toPage)) {
       const founds = getEmptyIndex(images, pg, toPage, dir || 1, file.Duration).filter((fi) => !indices.includes(fi));
       if (founds.length) {
-        indices.push(...founds);
         viewerState.loading = true;
         socket.emit("loadzip-image", { Id: file.Id, indices: founds });
         socket.emit("user-info", `Load-indices: [${founds.join(",")}]`);
@@ -124,6 +123,7 @@
     if (data.id === file.Id) {
       socket.emit("user-info", `received: ${data.id}:${data.page} - last: ${data.last}`);
       if (!data.last) {
+        indices.push(data.page);
         images[data.page] = data.img;
       } else {
         if (viewerState.jumping) {
@@ -157,7 +157,7 @@
     viewerState.loading = false;
     images = [];
     indices = [];
-    loadImages(file.CurrentPos - 2, 8);
+    loadImages(file.CurrentPos - 1, 8);
   }
 
   afterUpdate(() => {
@@ -179,7 +179,7 @@
     tout2 = setTimeout(() => changeOpacity(0), 2000);
   };
 
-  const onConnect = () => loadImages(file.CurrentPos - 2, 8);
+  const onConnect = () => loadImages(file.CurrentPos - 1, 8);
   const onDisconnect = () => (viewerState.loading = false);
 
   const onError = ({ Id, error: err }) => {
