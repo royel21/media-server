@@ -4,6 +4,7 @@ import { Op } from "sequelize";
 
 const loadZipImages = async (data, socket, user) => {
   let { Id, indices } = data;
+  console.log(indices);
   let file = await db.file.findOne({
     attributes: ["Id", "Name"],
     where: { Id },
@@ -28,6 +29,7 @@ const loadZipImages = async (data, socket, user) => {
             img: img.toString("base64"),
             id: file.Id,
           });
+          console.log("img-zip:", i);
         }
       }
       await zip?.close();

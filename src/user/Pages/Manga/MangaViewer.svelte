@@ -45,6 +45,7 @@
         indices.push(...founds);
         viewerState.loading = true;
         socket.emit("loadzip-image", { Id: file.Id, indices: founds });
+        socket.emit("user-info", `Load-indices: `, found.join(","));
       }
     }
   };
@@ -184,6 +185,7 @@
     if (Id === file.Id) {
       viewerState.loading = false;
       error = err;
+      socket.emit("user-info", err);
       console.log(err);
     }
   };
