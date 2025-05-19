@@ -156,7 +156,7 @@
     viewerState.loading = false;
     images = [];
     indices = [];
-    loadImages(file.CurrentPos - 1, 8);
+    loadImages(file.CurrentPos, 8);
   }
 
   afterUpdate(() => {
@@ -178,7 +178,7 @@
     tout2 = setTimeout(() => changeOpacity(0), 2000);
   };
 
-  const onConnect = () => loadImages(file.CurrentPos - 1, 8);
+  const onConnect = () => loadImages(file.CurrentPos, 8);
   const onDisconnect = () => (viewerState.loading = false);
 
   const onError = ({ Id, error: err }) => {
