@@ -74,7 +74,7 @@ export const showFileName = () => {
     tagName.style.opacity = 1;
     tout = setTimeout(() => {
       tagName.style.opacity = 0;
-    }, 5000);
+    }, 2000);
   }
 };
 
