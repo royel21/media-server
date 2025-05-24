@@ -13,13 +13,17 @@
   const handler = ({ target, currentTarget }) => {
     if (currentTarget === target) cancel();
   };
+
+  const onKeydown = ({ keyCode }) => {
+    if (keyCode === 27) cancel();
+  };
 </script>
 
 <div
   class="modal-container"
   tabindex="-1"
   on:contextmenu|stopPropagation={() => {}}
-  on:keydown|stopPropagation
+  on:keydown|stopPropagation={onKeydown}
   on:click|stopPropagation={handler}
 >
   <div {id} class={`modal card move-to ${clazz}`} transition:fade={{ duration: 200 }}>

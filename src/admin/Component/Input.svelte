@@ -11,6 +11,8 @@
   export let focus = false;
   export let type = "text";
   export let onChange = (e) => {};
+  export let min = Number.MIN_SAFE_INTEGER;
+  export let max = Number.MAX_SAFE_INTEGER;
   let ref;
   const handler = async () => {
     handlerPaste(item, key, sept, ref);
@@ -23,6 +25,8 @@
   onMount(() => {
     if (focus) ref.focus();
   });
+
+  console.log(type);
 </script>
 
 <div class={"input-control " + key}>
@@ -39,7 +43,23 @@
       {placeholder}
       on:keydown
     />
-  {:else}
+  {/if}
+  {#if type === "number"}
+    <input
+      bind:this={ref}
+      name={key}
+      type="number"
+      {min}
+      {max}
+      class="input"
+      bind:value={item[key]}
+      on:change={onChange}
+      on:input
+      {placeholder}
+      on:keydown
+    />
+  {/if}
+  {#if type === "text"}
     <input
       bind:this={ref}
       name={key}

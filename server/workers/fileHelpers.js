@@ -120,3 +120,37 @@ export const transferFiles = async (src, dest) => {
   }
   return { success: false };
 };
+
+export const bulkRename = ({ files, ZeroPad, Regex, Replace, With }) => {
+  for (const [i, file] of files.entries()) {
+    const ex = path.extname(file.Name);
+    let name = file.Name.replace("." + ex, "");
+
+    if (Replace) {
+      name = name.replaceAll(Replace, With);
+    }
+
+    if (Regex) {
+      const regx = new RegExp(Regex, "gi");
+      name = name.replace(regx, "");
+    }
+
+    const num = name.match(/\d+/);
+    if (num[0] && ZeroPad) {
+      name = name.replace(num[0], num[0].toString().padStart(ZeroPad, "0"));
+    }
+
+    try {
+      const src = file.Path;
+      const dest = file.Path.replace(file.Name, name);
+      fs.moveSync(src, dest);
+      file.Name = name;
+      file.Path = dest;
+      files[i] = file;
+    } catch (error) {
+      sendMessage({ text: `Can't Rename: ${file.Name}, ${error.toString()}` }, "info");
+    }
+  }
+
+  sendMessage({ items: files, bulk: true }, "files-info");
+};

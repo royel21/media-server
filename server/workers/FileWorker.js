@@ -1,7 +1,7 @@
 import path from "path";
 import Sharp from "sharp";
 import db from "../models/index.js";
-import { createFolder, moveFiles, removeFiles, renFile, transferFiles } from "./fileHelpers.js";
+import { createFolder, moveFiles, removeFiles, renFile, transferFiles, bulkRename } from "./fileHelpers.js";
 import { remFolder, removeDFolder, workVideos } from "./videoHelper.js";
 import { createDir } from "../Downloader/utils.js";
 import defaultConfig from "../default-config.js";
@@ -209,7 +209,7 @@ const actions = {
   removeFolder,
   workVideos,
   removeDFolder,
-  // moveToDir,
+  bulkRename,
   remFolder,
   moveFiles,
   removeFiles,

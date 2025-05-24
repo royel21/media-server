@@ -12,6 +12,7 @@
   import { sortByName } from "src/ShareComponent/utils";
   import { formatDate } from "../Downloader/utils";
   import apiUtils from "src/apiUtils";
+  import BulkEdit from "./BulkEdit.svelte";
 
   export let files = [];
   export let socket;
@@ -30,6 +31,7 @@
   let showMoveDialog;
   let showConfirm = false;
   let showRename = false;
+  let showBulkRename = false;
 
   const onCheck = ({ target }) => {
     const id = target.closest("li").id;
@@ -52,6 +54,14 @@
 
   const hideRename = () => (showRename = false);
 
+  const hideBulkRename = () => (showBulkRename = false);
+
+  const onBulkRename = (item) => {
+    const items = files.filter((f) => removeList.includes(f.Id));
+    socket.emit("file-work", { action: "bulkRename", data: { ...item, files: items } });
+    hideBulkRename();
+  };
+
   const removeFiles = () => {
     const items = files.filter((f) => removeList.includes(f.Id));
     socket.emit("file-work", { action: "removeFiles", data: { files: items } });
@@ -67,9 +77,19 @@
     socket.emit("file-work", { action: "moveFiles", data });
   };
 
-  const onFileInfo = ({ msg, items, error, ren, file }) => {
+  const onFileInfo = ({ msg, items, bulk, error, ren, file }) => {
     if (msg || error) {
       setMessage({ error, msg });
+    }
+
+    if (bulk) {
+      for (let item of items) {
+        const index = files.findIndex((f) => f.Id === item.Id);
+        if (files[index]) {
+          files[index] = item;
+        }
+      }
+      files = files.sort(sortByName);
     }
 
     if (ren) {
@@ -149,6 +169,10 @@
   />
 {/if}
 
+{#if showBulkRename}
+  <BulkEdit files={removeList} hide={hideBulkRename} acept={onBulkRename} />
+{/if}
+
 {#if showRename}
   <RenameModal data={showRename} acept={renameFile} hide={hideRename} />
 {/if}
@@ -160,10 +184,12 @@
       <div class="filter">
         <span>
           <CCheckbox id="check-all" on:change={onCheckAll} {isChecked} title="Select All Files" />
-          <span class="btn-sync" on:click={reload}><Icons name="sync" /></span>
           {#if removeList.length}
+            <span on:click={() => (showBulkRename = true)}><Icons name="edit" /></span>
             <span on:click={onTransfer}><Icons name="right-left" /></span>
             <span class="rm-all" on:click={() => (showConfirm = true)}><Icons name="trash" /></span>
+          {:else}
+            <span class="btn-sync" on:click={reload}><Icons name="sync" /></span>
           {/if}
         </span>
         <Filter id="file-filter" bind:filter />
