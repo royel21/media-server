@@ -3,12 +3,11 @@ import path from "path";
 import sharp from "sharp";
 import AdmZip from "adm-zip";
 
-var deleteFolderRecursive = function (path) {
-  if (fs.existsSync(path)) {
-    fs.readdirSync(path).forEach(function (file, index) {
-      fs.removeSync(path.join(curPath, file));
+var deleteFolderRecursive = function (basePath) {
+  if (fs.existsSync(basePath)) {
+    fs.readdirSync(basePath).forEach(function (file, index) {
+      fs.removeSync(path.join(basePath, file));
     });
-    fs.rmdirSync(path);
   }
 };
 
@@ -21,23 +20,31 @@ const checkImg = async () => {
     var zip = new AdmZip();
     let count = 0;
     console.log(fpath);
-    for (const file of fs.readdirSync(fpath)) {
+
+    const files = fs.readdirSync(fpath);
+    if (!files.length) continue;
+
+    for (const file of files) {
       if (/png|jpg|webp/.test(file)) {
         let img = await sharp(path.join(fpath, file));
         const meta = await img.metadata();
 
-        if (meta.width > 1024) {
-          await img.resize({ width: 1024 });
+        if (meta.width > 960) {
+          await img.resize({ width: 960 });
         }
-        const buff = await img.jpeg({ quality: 85 }).toBuffer();
+        const buff = await img.toFormat("jpg").toBuffer();
         await zip.addFile((count++).toString().padStart(3, "0") + ".jpg", buff);
       }
     }
     await zip.writeZip(fpath + ".zip");
-    try {
-      deleteFolderRecursive(fpath);
-    } catch (error) {
-      console.log(error);
+    deleteFolderRecursive(fpath);
+  }
+
+  const dirs = fs.readdirSync(rdir);
+  for (let dir of dirs) {
+    const curPath = path.join(rdir, dir);
+    if (fs.statSync(curPath).isDirectory() && fs.readdirSync(curPath).length === 0) {
+      fs.removeSync(curPath);
     }
   }
 };

@@ -183,7 +183,7 @@ const download = async (link, page, server, state) => {
           if (img.badImage) {
             newEX = formats[f++];
           } else {
-            const buff = await img.jpeg({ quality: 85 }).toBuffer();
+            const buff = await img.toFormat("jpg").toBuffer();
             zip.addFile(newImg, buff);
             count++;
             f = 0;
