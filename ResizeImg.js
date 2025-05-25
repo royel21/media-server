@@ -2,6 +2,23 @@ import fs from "fs-extra";
 import path from "path";
 import sharp from "sharp";
 import AdmZip from "adm-zip";
+import { delay } from "./server/Downloader/utils.js";
+
+var deleteFolderRecursive = function (path) {
+  if (fs.existsSync(path)) {
+    fs.readdirSync(path).forEach(function (file, index) {
+      var curPath = path + "/" + file;
+      if (fs.lstatSync(curPath).isDirectory()) {
+        // recurse
+        deleteFolderRecursive(curPath);
+      } else {
+        // delete file
+        fs.unlinkSync(curPath);
+      }
+    });
+    fs.rmdirSync(path);
+  }
+};
 
 const checkImg = async () => {
   const rdir = path.join("/mnt/Downloads/R18/temps");
@@ -26,9 +43,9 @@ const checkImg = async () => {
     }
     await zip.writeZip(fpath + ".zip");
     try {
-      fs.removeSync(fpath);
+      deleteFolderRecursive(fpath);
     } catch (error) {
-      console.log(error.toString());
+      console.log(error);
     }
   }
 };

@@ -6,17 +6,21 @@ export const isChar = (c) => {
 };
 
 export const capitalize = (val) => {
-  let words = val.split(" ");
+  let words = val.replace(/( )+/g, " ").split(" ");
   for (let i = 0; i < words.length; i++) {
-    let word = words[i].toLowerCase();
+    if (words[i].length > 2) {
+      let word = words[i].toLowerCase();
 
-    const index = word.split("").findIndex((c) => /[a-z]/i.test(c));
-    if (index > -1) {
-      words[i] = word.slice(0, index + 1).toUpperCase() + word.slice(index + 1).toLowerCase();
+      const index = word.split("").findIndex((c) => /[a-z]/i.test(c));
+      if (index > -1) {
+        words[i] = word.slice(0, index + 1).toUpperCase() + word.slice(index + 1).toLowerCase();
+      }
+    } else {
+      words[i] = words[i].toLowerCase();
     }
   }
 
-  return words.join(" ");
+  return words.join(" ").trim();
 };
 
 export const nameFormat = (name) => {
@@ -120,3 +124,9 @@ export const createDir = (dir) => {
 
 const types = { mangas: "Manga", videos: "Video" };
 export const getFileType = ({ FilesType }) => types[FilesType];
+
+export const delay = (ms) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+};

@@ -146,6 +146,8 @@ export const bulkRename = ({ files, ZeroPad, Regex, Replace, With, Case }) => {
       name = capitalize(name);
     }
 
+    name = name.trim();
+
     if (Case === "Upper") {
       name = name.toLocaleUpperCase();
     }
