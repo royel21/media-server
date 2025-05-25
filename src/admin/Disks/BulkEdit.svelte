@@ -12,7 +12,7 @@
     Regex: "",
     Replace: "",
     With: "",
-    ZeroPad: 2,
+    ZeroPad: 3,
     Case: "None",
   };
 
