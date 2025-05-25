@@ -23,11 +23,9 @@
 <Dialog cancel={hide} confirm={onConfirm} {errors}>
   <h4 slot="modal-header">Edit Name for: <span>{files.length}</span> {files.length > 1 ? "Files" : "File"}</h4>
   <div class="dir-list" slot="modal-body">
-    <div class={"input-control"}>
-      <span class="input-label">Replace</span>
-      <input class="input" bind:value={item.Replace} />
-      <span class="input-label label2">Width</span>
-      <input class="input" bind:value={item.With} />
+    <div class="input-control-group">
+      <Input key="Replace" {item} on:keydown={onKeydown} />
+      <Input key="With" {item} on:keydown={onKeydown} />
     </div>
     <Input label="Zero Pad" key="ZeroPad" type="number" min="0" {item} on:keydown={onKeydown} />
     <TextAreaInput focus={true} label="Regex" key="Regex" {item} />
@@ -41,10 +39,17 @@
   h4 span {
     color: firebrick;
   }
-  .input-label {
-    padding: 0 5px;
+  .input-control-group {
+    display: flex;
+    flex-direction: row;
   }
-  .label2 {
-    margin-left: 5px;
+  .input-control-group :global(.input-control) {
+    width: initial;
+  }
+  .input-control-group :global(.input-control:first-child) {
+    margin-right: 5px;
+  }
+  .input-control-group :global(.input-label) {
+    min-width: 81px;
   }
 </style>

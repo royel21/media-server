@@ -25,8 +25,6 @@
   onMount(() => {
     if (focus) ref.focus();
   });
-
-  console.log(type);
 </script>
 
 <div class={"input-control " + key}>

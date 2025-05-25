@@ -143,10 +143,12 @@ export const bulkRename = ({ files, ZeroPad, Regex, Replace, With }) => {
     try {
       const src = file.Path;
       const dest = file.Path.replace(file.Name, name);
-      fs.moveSync(src, dest);
-      file.Name = name;
-      file.Path = dest;
-      files[i] = file;
+      if (src !== dest) {
+        fs.moveSync(src, dest);
+        file.Name = name;
+        file.Path = dest;
+        files[i] = file;
+      }
     } catch (error) {
       sendMessage({ text: `Can't Rename: ${file.Name}, ${error.toString()}` }, "info");
     }

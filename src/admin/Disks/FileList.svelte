@@ -91,6 +91,7 @@
         }
       }
       files = files.sort(sortByName);
+      setMessage({ error, msg: "Finish Bulk Rename" });
     }
 
     if (ren) {
