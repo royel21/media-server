@@ -19,6 +19,7 @@
   export let content = [];
   export let Name = "";
   export let current;
+  export let showHidden = false;
 
   let filtered = files;
   let TotalSize = 0;
@@ -145,7 +146,12 @@
 
   $: {
     filtered = files
-      .filter((f) => f.Name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()))
+      .filter((f) => {
+        if (!showHidden && /^(\.|$)/.test(f.Name)) {
+          return false;
+        }
+        return f.Name.toLocaleLowerCase().includes(filter.toLocaleLowerCase());
+      })
       .map((d) => ({ ...d, LastModified: new Date(d.LastModified) }))
       .sort(sorter[sortBy]);
     TotalSize = getSize();

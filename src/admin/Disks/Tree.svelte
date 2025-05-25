@@ -20,6 +20,7 @@
   let files = [];
   let current = {};
   let showMenu = false;
+  let showHidden = false;
 
   const scanDir = (data) => {
     item = data;
@@ -86,6 +87,9 @@
     <Loading />
   </div>
 {:else}
+  <span class="show-hidden" on:click|stopPropagation={() => (showHidden = !showHidden)}>
+    Hidden <Icons name={showHidden ? "eye" : "eyeslash"} />
+  </span>
   <div class="d-content" class:expanded={files.length} class:hasconsole={$showConsoleStore}>
     <div class="rows">
       <div class="col" class:no-files={files.length === 0}>
@@ -93,12 +97,12 @@
           <Icons name="hdd" color="black" />
           <span class="tree-name">Server</span>
           <ul class="tree-view usn">
-            <TreeItem type="hdd" items={content} {offset} {zIndex} {setFiles} {current} {onMenu} />
+            <TreeItem type="hdd" items={content} {offset} {zIndex} {setFiles} {current} {onMenu} {showHidden} />
           </ul>
         </div>
       </div>
       {#if files.length}
-        <FileList {files} {socket} Name={current?.Name} {content} {current} />
+        <FileList {files} {socket} Name={current?.Name} {content} {current} {showHidden} />
       {/if}
     </div>
   </div>
@@ -114,6 +118,26 @@
   }
   .d-content.expanded {
     min-width: 760px;
+  }
+  .show-hidden {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 65px;
+    left: 10px;
+    font-size: 13px;
+    background-color: #202020bf;
+    padding: 2px 3px;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    user-select: none;
+    z-index: 999;
+  }
+  .show-hidden :global(svg) {
+    top: 0px;
+    right: -2px;
+    width: 15px;
   }
   .d-content .rows {
     position: relative;
