@@ -157,8 +157,9 @@ export const bulkRename = ({ files, ZeroPad, Regex, Replace, With, Case }) => {
     }
 
     const num = name.match(/\d+/);
-    if (num && num[0] && ZeroPad) {
-      name = name.replace(num[0], num[0].toString().padStart(ZeroPad, "0"));
+    if (num && num[0]) {
+      const number = +num[0];
+      name = name.replace(num[0], number.toString().padStart(2, "0"));
     }
 
     try {
