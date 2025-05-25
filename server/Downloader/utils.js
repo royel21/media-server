@@ -10,12 +10,12 @@ export const capitalize = (val) => {
   for (let i = 0; i < words.length; i++) {
     let word = words[i].toLowerCase();
 
-    if (i === 0 && words[i].length > 1 && !isChar(words[i][0])) {
-      words[i] = words[i].substring(0, 2).toUpperCase() + word.slice(2);
-    } else {
-      words[i] = word.charAt(0).toUpperCase() + word.slice(1);
+    const index = word.split("").findIndex((c) => /[a-z]/i.test(c));
+    if (index > -1) {
+      words[i] = word.slice(0, index + 1).toUpperCase() + word.slice(index + 1).toLowerCase();
     }
   }
+
   return words.join(" ");
 };
 

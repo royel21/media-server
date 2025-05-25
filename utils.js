@@ -45,7 +45,7 @@ const list = async () => {
 };
 // list();
 
-const isChar = (c) => {
+export const isChar = (c) => {
   return c.match(/[a-z]/i);
 };
 
@@ -54,23 +54,24 @@ const capitalize = (val) => {
   for (let i = 0; i < words.length; i++) {
     let word = words[i].toLowerCase();
 
-    if (i === 0 && words[i].length > 1 && !isChar(words[i][0])) {
-      words[i] = words[i].substring(0, 2).toUpperCase() + word.slice(2);
-    } else {
-      words[i] = word.charAt(0).toUpperCase() + word.slice(1);
+    const index = word.split("").findIndex((c) => /[a-z]/i.test(c));
+    if (index > -1) {
+      words[i] = word.slice(index, index + 1).toUpperCase() + word.slice(index + 1).toLowerCase();
     }
   }
   return words.join(" ");
 };
 
-const nameFormat = (name) => {
-  name = capitalize(name);
-  name = name.replace(/vol.( |)+/gi, "Vol.");
-  if (/Comic /gi.test(name)) {
-    let num = name.match(/\d+/);
-    if (num) {
-      name = name.replace(num, num.toString().padStart(3, "0"));
-    }
-  }
-  return name.trim();
-};
+// const nameFormat = (name) => {
+//   name = capitalize(name);
+//   name = name.replace(/vol.( |)+/gi, "Vol.");
+//   if (/Comic /gi.test(name)) {
+//     let num = name.match(/\d+/);
+//     if (num) {
+//       name = name.replace(num, num.toString().padStart(3, "0"));
+//     }
+//   }
+//   return name.trim();
+// };
+
+console.log(capitalize("COMIC BAVEL 2021-09"));

@@ -1,6 +1,6 @@
 import fs from "fs-extra";
 import path from "path";
-import defaultConfig from "../default-config.js";
+import { capitalize } from "../Downloader/utils.js";
 
 const sendMessage = (data, event = "files-info") => {
   console.log(data.msg || data.text || "", data.error || "");
@@ -121,22 +121,41 @@ export const transferFiles = async (src, dest) => {
   return { success: false };
 };
 
-export const bulkRename = ({ files, ZeroPad, Regex, Replace, With }) => {
+export const bulkRename = ({ files, ZeroPad, Regex, Replace, With, Case }) => {
+  let regex;
+
+  try {
+    regex = new RegExp(Regex, "gi");
+  } catch (error) {
+    return sendMessage({ error: `Regex: ${error.toString()}` }, "info");
+  }
+
   for (const [i, file] of files.entries()) {
     const ex = path.extname(file.Name);
-    let name = file.Name.replace("." + ex, "");
+    let name = file.Name.replace(ex, "");
 
     if (Replace) {
       name = name.replaceAll(Replace, With);
     }
 
     if (Regex) {
-      const regx = new RegExp(Regex, "gi");
-      name = name.replace(regx, "");
+      name = name.replace(regex, "");
+    }
+
+    if (Case === "Camel") {
+      name = capitalize(name);
+    }
+
+    if (Case === "Upper") {
+      name = name.toLocaleUpperCase();
+    }
+
+    if (Case === "Lower") {
+      name = name.toLocaleLowerCase();
     }
 
     const num = name.match(/\d+/);
-    if (num[0] && ZeroPad) {
+    if (num && num[0] && ZeroPad) {
       name = name.replace(num[0], num[0].toString().padStart(ZeroPad, "0"));
     }
 
