@@ -36,7 +36,7 @@
 
 <style>
   #c-menu {
-    z-index: 300;
+    z-index: 99999;
     position: fixed;
     width: max-content;
     background-color: rgb(35 33 33);

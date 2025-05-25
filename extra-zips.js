@@ -12,6 +12,7 @@ const extra = async () => {
     const zipFile = AdmZip(path.join(baseDir, zip));
     await zipFile.extractAllTo(path.join(baseDir, zip.replace(".zip", "")), true);
     console.log(`finish: ${zip}`);
+    await zipFile.close();
     fs.removeSync(path.join(baseDir, zip));
   }
 };

@@ -131,8 +131,8 @@ export const bulkRename = ({ files, ZeroPad, Regex, Replace, With, Case }) => {
   }
 
   for (const [i, file] of files.entries()) {
-    const ex = path.extname(file.Name);
-    let name = file.Name.replace(ex, "");
+    const ext = path.extname(file.Name);
+    let name = file.Name.replace(ext, "");
 
     if (Replace) {
       name = name.replaceAll(Replace, With);
@@ -160,6 +160,7 @@ export const bulkRename = ({ files, ZeroPad, Regex, Replace, With, Case }) => {
     }
 
     try {
+      name += ext;
       const src = file.Path;
       const dest = file.Path.replace(file.Name, name);
       if (src !== dest) {
