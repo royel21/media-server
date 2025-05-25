@@ -2,19 +2,11 @@ import fs from "fs-extra";
 import path from "path";
 import sharp from "sharp";
 import AdmZip from "adm-zip";
-import { delay } from "./server/Downloader/utils.js";
 
 var deleteFolderRecursive = function (path) {
   if (fs.existsSync(path)) {
     fs.readdirSync(path).forEach(function (file, index) {
-      var curPath = path + "/" + file;
-      if (fs.lstatSync(curPath).isDirectory()) {
-        // recurse
-        deleteFolderRecursive(curPath);
-      } else {
-        // delete file
-        fs.unlinkSync(curPath);
-      }
+      fs.removeSync(path.join(curPath, file));
     });
     fs.rmdirSync(path);
   }
