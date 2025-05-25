@@ -84,15 +84,20 @@
     user-select: none;
   }
   .input {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
     height: initial;
-    text-align: center;
     font-weight: 700;
     border-top-right-radius: 0;
     border-bottom-left-radius: 0.25rem;
   }
   .input input,
   .input label {
-    display: initial;
+    display: inline-flex;
     cursor: pointer;
+  }
+  .input input {
+    margin-right: 5px;
   }
 </style>
