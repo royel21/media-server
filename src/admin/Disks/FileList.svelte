@@ -144,11 +144,11 @@
   };
 
   const getSize2 = (file) => {
-    let size = file.Size / 1024 / 1024 / 1024;
-    let type = "GB";
-    if (file.Size < 1000000000) {
-      size = file.Size / 1024 / 1024;
-      type = "MB";
+    let size = file.Size / 1024 / 1024;
+    let type = "MB";
+    if (size > 1000) {
+      size = file.Size / 1024 / 1024 / 1024;
+      type = "GB";
     }
 
     if (size < 10) {
@@ -214,7 +214,7 @@
 <div class="col">
   <div class="tree-files">
     <div class="ftree-control">
-      <h4>{filtered.length} ~ {TotalSize} ~ {Name}</h4>
+      <h4 title={Name}>{filtered.length} ~ {TotalSize} ~ {Name}</h4>
       <div class="filter">
         <span>
           <CCheckbox id="check-all" on:change={onCheckAll} {isChecked} title="Select All Files" />
