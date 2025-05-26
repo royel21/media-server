@@ -7,6 +7,7 @@ import { createDir } from "../Downloader/utils.js";
 import defaultConfig from "../default-config.js";
 import { dirScan } from "./FolderWatcher.js";
 import winExplorer from "win-explorer";
+import { zipImgFolder, unZip } from "./zipHelper.js";
 
 const sendMessage = (event, message) => {
   process.send({ event, message });
@@ -218,6 +219,8 @@ const actions = {
   renFile,
   dirScan,
   folderSize,
+  unZip,
+  zipImgFolder,
 };
 
 const works = {

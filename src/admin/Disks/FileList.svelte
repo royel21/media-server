@@ -1,6 +1,5 @@
 <script>
   import { onDestroy } from "svelte";
-  import { validateCheck } from "../Utils";
   import Icons from "src/icons/Icons.svelte";
   import CCheckbox from "../Component/CCheckbox.svelte";
   import Confirm from "../Component/Confirm.svelte";
@@ -13,6 +12,7 @@
   import { formatDate } from "../Downloader/utils";
   import apiUtils from "src/apiUtils";
   import BulkEdit from "./BulkEdit.svelte";
+  import { formatSize } from "src/utils";
 
   export let files = [];
   export let socket;
@@ -25,7 +25,7 @@
   let TotalSize = 0;
   let sortBy = "name";
 
-  let removeList = [];
+  let selectedList = [];
   let isChecked = false;
   let filter = "";
 
@@ -37,40 +37,42 @@
   const onCheck = ({ target }) => {
     const id = target.closest("li").id;
     if (id) {
-      if (!removeList.includes(id)) {
-        removeList = [...removeList, id];
+      const file = files.find((f) => f.Id === id);
+      if (!selectedList.includes(file)) {
+        selectedList = [...selectedList, file];
       } else {
-        removeList = removeList.filter((item) => item !== id);
+        selectedList = selectedList.filter((item) => item !== file);
       }
     }
   };
 
   const onCheckAll = () => {
-    if (validateCheck(removeList, filtered)) {
-      removeList = removeList.filter((item) => !filtered.find((i) => i.Id === item));
+    if (selectedList.length === files.length) {
+      selectedList = [];
     } else {
-      removeList = [...removeList, ...filtered.filter((item) => !removeList.includes(item.Id)).map((item) => item.Id)];
+      selectedList = [...files];
     }
   };
 
-  const hideRename = () => (showRename = false);
+  const hideRename = () => {
+    showBulkRename = false;
+  };
 
-  const hideBulkRename = () => (showBulkRename = false);
+  const hideBulkRename = () => {
+    showBulkRename = false;
+  };
 
   const onBulkRename = (item) => {
-    const items = files.filter((f) => removeList.includes(f.Id));
-    socket.emit("file-work", { action: "bulkRename", data: { ...item, files: items } });
+    socket.emit("file-work", { action: "bulkRename", data: { ...item, files: selectedList } });
     hideBulkRename();
   };
 
   const removeFiles = () => {
-    const items = files.filter((f) => removeList.includes(f.Id));
-    socket.emit("file-work", { action: "removeFiles", data: { files: items } });
+    socket.emit("file-work", { action: "removeFiles", data: { files: selectedList } });
   };
 
   const onTransfer = () => {
-    const items = filtered.filter((f) => removeList.includes(f.Id));
-    showMoveDialog = { files: items };
+    showMoveDialog = { files: selectedList };
   };
 
   const acept = (data) => {
@@ -105,9 +107,13 @@
 
   const fileUpdate = ({ move }) => {
     if (move) {
-      removeList = removeList.filter((f) => f.Id !== move.Id);
+      selectedList = selectedList.filter((f) => f.Id !== move.Id);
       files = files.filter((f) => f.Id !== move.Id);
     }
+  };
+
+  const fileUnZip = () => {
+    socket.emit("file-work", { action: "unZip", data: { files: selectedList } });
   };
 
   const renameFile = (data) => {
@@ -134,7 +140,30 @@
   const getSize = () => {
     let sum = 0;
     filtered.forEach((f) => (sum += f.Size));
-    return (sum / 1024 / 1024 / 1024).toFixed(2) + "GB";
+    return formatSize(sum / 1024);
+  };
+
+  const getSize2 = (file) => {
+    let size = file.Size / 1024 / 1024 / 1024;
+    let type = "GB";
+    if (file.Size < 1024 * 1024 * 1024) {
+      size = file.Size / 1024 / 1024;
+      type = "MB";
+    }
+
+    // if (file.Size < 1024 * 1024) {
+    //   size = file.Size / 1024;
+    //   type = "KB";
+    // }
+
+    if (size < 10) {
+      size = size.toFixed(2);
+    } else if (size < 100) {
+      size = size.toFixed(1);
+    } else {
+      size = parseInt(size);
+    }
+    return size + type;
   };
 
   const sorter = {
@@ -143,23 +172,22 @@
     size: (a, b) => b.Size - a.Size,
   };
 
-  $: isChecked = filtered.length && removeList.length === filtered.length;
+  const filterFunc = (filter) => (f) => {
+    if (!showHidden && /^(\.|$)/.test(f.Name)) {
+      return false;
+    }
+    return f.Name.toLocaleLowerCase().includes(filter.toLocaleLowerCase());
+  };
+
+  $: isChecked = filtered.length && selectedList.length === filtered.length;
 
   $: {
-    filtered = files
-      .filter((f) => {
-        if (!showHidden && /^(\.|$)/.test(f.Name)) {
-          return false;
-        }
-        return f.Name.toLocaleLowerCase().includes(filter.toLocaleLowerCase());
-      })
-      .map((d) => ({ ...d, LastModified: new Date(d.LastModified) }))
-      .sort(sorter[sortBy]);
+    filtered = files.filter(filterFunc(filter)).sort(sorter[sortBy]);
     TotalSize = getSize();
   }
 
   $: if (files.length) {
-    removeList = [];
+    selectedList = [];
   }
 </script>
 
@@ -169,7 +197,7 @@
 
 {#if showConfirm}
   <Confirm
-    text={`${removeList.length} Files`}
+    text={`${selectedList.length} Files`}
     acept={removeFiles}
     cancel={() => (showConfirm = false)}
     data={showConfirm}
@@ -177,7 +205,11 @@
 {/if}
 
 {#if showBulkRename}
-  <BulkEdit files={removeList} hide={hideBulkRename} acept={onBulkRename} />
+  {#if selectedList.length === 1}
+    <RenameModal data={files.find((f) => f.Id === selectedList[0])} acept={renameFile} hide={hideRename} />
+  {:else}
+    <BulkEdit files={selectedList} hide={hideBulkRename} acept={onBulkRename} />
+  {/if}
 {/if}
 
 {#if showRename}
@@ -187,36 +219,41 @@
 <div class="col">
   <div class="tree-files">
     <div class="ftree-control">
-      <h4>{filtered.length}/{TotalSize} - {Name}</h4>
+      <h4>{filtered.length} ~ {TotalSize} ~ {Name}</h4>
       <div class="filter">
         <span>
           <CCheckbox id="check-all" on:change={onCheckAll} {isChecked} title="Select All Files" />
-          {#if removeList.length}
+          {#if selectedList.length}
+            {#if selectedList.filter((f) => !/\.zip$/.test(f.Name)).length === 0}
+              <span on:click={fileUnZip} title="Extract Zip">
+                <Icons name="zip" box="0 0 384 512" color="darkgray" />
+              </span>
+            {/if}
             <span on:click={() => (showBulkRename = true)}><Icons name="edit" /></span>
             <span on:click={onTransfer}><Icons name="right-left" /></span>
             <span class="rm-all" on:click={() => (showConfirm = true)}><Icons name="trash" /></span>
           {:else}
-            <span class="btn-sync" on:click={reload}><Icons name="sync" /></span>
+            <span class="btn-sync" on:click={reload} title="Reload Files"><Icons name="sync" /></span>
           {/if}
         </span>
         <Filter id="file-filter" bind:filter />
-        <span class="input-group">
-          <span class="input-group-text"><Icons name="list" color="black" box="0 0 512 512" /></span>
-          <select bind:value={sortBy} class="form-control">
-            <option value="date">Date</option>
-            <option value="name">Name</option>
-            <option value="size">Size</option>
-          </select>
-        </span>
+        {#if selectedList.length === 0}
+          <span class="input-group">
+            <span class="input-group-text"><Icons name="list" color="black" box="0 0 512 512" /></span>
+            <select bind:value={sortBy} class="form-control">
+              <option value="date">Date</option>
+              <option value="name">Name</option>
+              <option value="size">Size</option>
+            </select>
+          </span>
+        {/if}
       </div>
     </div>
     <ul>
       {#each filtered as file}
-        <li id={file.Id} title={formatDate(file.LastModified)}>
-          <CCheckbox on:change={onCheck} isChecked={removeList.includes(file.Id)} />
-          <span on:click={() => (showRename = file)}><Icons name="edit" /></span>
-          {(file.Size / 1024 / 1024 / 1024).toFixed(3)}GB -
-          <span on:click={onCheck}>{file.Name}</span>
+        <li id={file.Id} title={formatDate(new Date(file.LastModified))}>
+          <CCheckbox on:change={onCheck} isChecked={selectedList.find((f) => f.Id === file.Id)} />
+          <span on:click={onCheck}><span class="size">{getSize2(file)}</span> {file.Name}</span>
         </li>
       {/each}
     </ul>
@@ -281,10 +318,9 @@
     width: 30px;
     margin-left: 3px;
   }
-  li:hover span:last-child {
+  li:hover * {
     cursor: pointer;
     text-decoration: underline;
-    background-color: rgba(0, 0, 0, 0.1);
   }
   .filter {
     position: relative;
@@ -331,5 +367,11 @@
   .tree-files .btn-sync {
     display: inline-block;
     width: 35px;
+  }
+  .size {
+    display: inline-block;
+    width: 47px;
+    text-align: right;
+    margin-right: 2px;
   }
 </style>

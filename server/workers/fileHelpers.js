@@ -135,7 +135,10 @@ export const bulkRename = ({ files, ZeroPad, Regex, Replace, With, Case }) => {
     let name = file.Name.replace(ext, "");
 
     if (Replace) {
-      name = name.replaceAll(Replace, With);
+      const withs = With.split("|");
+      for (const [index, rep] of Replace.split("|").entries()) {
+        name = name.replaceAll(rep, withs[index] || "");
+      }
     }
 
     if (Regex) {

@@ -14,6 +14,7 @@
     { Id: "scanDir", Name: "Add to Directories" },
     { Id: "onCalculateSize", Name: "Directory Size", BBorder: true },
     { Id: "createDir", Name: "Create Folder" },
+    { Id: "zipImgFolders", Name: "Zip Img Folders" },
     { Id: "remFolder", Name: "Rename Folder" },
     { Id: "removeDFolder", Name: "Delete Folder" },
   ];
@@ -63,6 +64,10 @@
     socket.emit("file-work", { action: "folderSize", data: item });
   };
 
+  const zipImgFolders = (item) => {
+    socket.emit("file-work", { action: "zipImgFolder", data: item });
+  };
+
   const menuActions = (event, id) => {
     const item = showMenu.file;
 
@@ -71,6 +76,7 @@
       addToWatcher,
       onCalculateSize,
       createDir: () => (showCreateDir = item),
+      zipImgFolders,
       removeDFolder: () => (showConfirm = item),
       remFolder: () => (showRename = item),
     };
