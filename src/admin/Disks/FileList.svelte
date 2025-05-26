@@ -146,15 +146,10 @@
   const getSize2 = (file) => {
     let size = file.Size / 1024 / 1024 / 1024;
     let type = "GB";
-    if (file.Size < 1024 * 1024 * 1024) {
+    if (file.Size < 1000000000) {
       size = file.Size / 1024 / 1024;
       type = "MB";
     }
-
-    // if (file.Size < 1024 * 1024) {
-    //   size = file.Size / 1024;
-    //   type = "KB";
-    // }
 
     if (size < 10) {
       size = size.toFixed(2);
