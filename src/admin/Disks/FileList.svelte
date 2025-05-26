@@ -71,6 +71,24 @@
     socket.emit("file-work", { action: "removeFiles", data: { files: selectedList } });
   };
 
+  const onShowRemoveConfirm = () => {
+    showConfirm = {
+      acept: removeFiles,
+      text: "Remove",
+    };
+  };
+
+  const fileUnZip = () => {
+    socket.emit("file-work", { action: "unZip", data: { files: selectedList } });
+  };
+
+  const onShowUnZipConfirm = () => {
+    showConfirm = {
+      acept: fileUnZip,
+      text: "Unzip",
+    };
+  };
+
   const onTransfer = () => {
     showMoveDialog = { files: selectedList };
   };
@@ -110,10 +128,6 @@
       selectedList = selectedList.filter((f) => f.Id !== move.Id);
       files = files.filter((f) => f.Id !== move.Id);
     }
-  };
-
-  const fileUnZip = () => {
-    socket.emit("file-work", { action: "unZip", data: { files: selectedList } });
   };
 
   const renameFile = (data) => {
@@ -192,16 +206,16 @@
 
 {#if showConfirm}
   <Confirm
-    text={`${selectedList.length} Files`}
-    acept={removeFiles}
+    text={`${showConfirm.text} ${selectedList.length} Files`}
+    acept={showConfirm.acept}
     cancel={() => (showConfirm = false)}
-    data={showConfirm}
+    data={showConfirm.data}
   />
 {/if}
 
 {#if showBulkRename}
   {#if selectedList.length === 1}
-    <RenameModal data={files.find((f) => f.Id === selectedList[0])} acept={renameFile} hide={hideRename} />
+    <RenameModal data={selectedList[0]} acept={renameFile} hide={hideRename} />
   {:else}
     <BulkEdit files={selectedList} hide={hideBulkRename} acept={onBulkRename} />
   {/if}
@@ -220,13 +234,13 @@
           <CCheckbox id="check-all" on:change={onCheckAll} {isChecked} title="Select All Files" />
           {#if selectedList.length}
             {#if selectedList.filter((f) => !/\.zip$/.test(f.Name)).length === 0}
-              <span on:click={fileUnZip} title="Extract Zip">
+              <span on:click={onShowUnZipConfirm} title="Extract Zip">
                 <Icons name="zip" box="0 0 384 512" color="darkgray" />
               </span>
             {/if}
             <span on:click={() => (showBulkRename = true)}><Icons name="edit" /></span>
             <span on:click={onTransfer}><Icons name="right-left" /></span>
-            <span class="rm-all" on:click={() => (showConfirm = true)}><Icons name="trash" /></span>
+            <span class="rm-all" on:click={onShowRemoveConfirm}><Icons name="trash" /></span>
           {:else}
             <span class="btn-sync" on:click={reload} title="Reload Files"><Icons name="sync" /></span>
           {/if}

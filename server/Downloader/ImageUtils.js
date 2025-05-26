@@ -31,8 +31,8 @@ export const getImgNh = async (url, page) => {
   const img = await sharp(buffer, { failOnError: false });
   const meta = await img.metadata();
 
-  if (meta.width > 1024) {
-    await img.resize({ width: 1024 });
+  if (meta.width > 960) {
+    await img.resize({ width: 960 });
   }
 
   return img;

@@ -12,12 +12,15 @@
 </script>
 
 <Dialog {cancel} confirm={onConfirm}>
-  <h4 slot="modal-header">Remove Confirm</h4>
-  <span slot="modal-body"><p>Are you Sure want to remove <strong>{text}</strong></p></span>
+  <h4 slot="modal-header">Confirm</h4>
+  <span slot="modal-body"><p>Are you Sure want to <strong>{text}</strong></p></span>
 </Dialog>
 
 <style>
   strong {
     color: rgb(255, 166, 0);
+  }
+  p {
+    text-align: center;
   }
 </style>

@@ -48,6 +48,7 @@ export const zipImgFolder = async (data) => {
       }
     }
     await zip.writeZip(fpath + ".zip");
+    sendMessage({ text: `${folder} was Zipped` }, "info");
     deleteFolderRecursive(fpath);
   }
 
