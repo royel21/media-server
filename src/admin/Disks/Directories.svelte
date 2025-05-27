@@ -106,7 +106,6 @@
       socket.off("reload", reloadDir);
     };
   });
-  $: console.log($showConsoleStore);
 </script>
 
 {#if confirm}

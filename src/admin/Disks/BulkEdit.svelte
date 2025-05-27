@@ -68,8 +68,9 @@
     min-width: 600px;
     max-width: 95%;
   }
-  .dir-list :global(.input-label) {
-    min-width: 100px;
+  .dir-list :global(.input-label:not(#t-label)) {
+    min-width: 75px;
+    max-width: 75px;
   }
   h4 span {
     color: firebrick;
@@ -82,9 +83,9 @@
     margin-right: 5px;
   }
 
-  .input-control-group :global(div:last-child .input-label) {
-    width: 45px;
-    min-width: 45px;
+  #b-edit .input-control-group :global(div:last-child .input-label) {
+    width: 48px;
+    min-width: 48px;
   }
   .input-control {
     position: relative;
@@ -116,5 +117,10 @@
   }
   .input input {
     margin-right: 5px;
+  }
+  @media screen and (max-width: 600px) {
+    #b-edit :global(.modal-container .modal) {
+      min-width: initial;
+    }
   }
 </style>
