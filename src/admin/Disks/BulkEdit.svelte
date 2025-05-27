@@ -29,7 +29,7 @@
   $: console.log(item.Case);
 </script>
 
-<Dialog cancel={hide} confirm={onConfirm} {errors}>
+<Dialog class="bulk-edit" cancel={hide} confirm={onConfirm} {errors}>
   <h4 slot="modal-header">Edit Name for: <span>{files.length}</span> {files.length > 1 ? "Files" : "File"}</h4>
   <div class="dir-list" slot="modal-body">
     <div class="input-control-group">
@@ -52,7 +52,7 @@
 
 <style>
   .dir-list :global(.input-label) {
-    min-width: 100px;
+    min-width: 92px;
   }
   h4 span {
     color: firebrick;
@@ -66,8 +66,8 @@
   }
 
   .input-control-group :global(div:last-child .input-label) {
-    width: 70px;
-    min-width: 70px;
+    width: 45px;
+    min-width: 45px;
   }
   .input-control {
     position: relative;
