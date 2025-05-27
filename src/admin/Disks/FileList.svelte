@@ -296,6 +296,10 @@
     font-size: 1.2rem;
   }
 
+  ul :global(.select-file) {
+    max-width: 22px;
+  }
+
   .tree-files {
     height: 100%;
     padding: 0 5px;
