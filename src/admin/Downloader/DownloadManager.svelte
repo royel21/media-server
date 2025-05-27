@@ -25,7 +25,7 @@
   document.title = "Download Manager";
 </script>
 
-<Tabs class="d-manager" {tabs} {tab} />
+<Tabs class="d-manager" {tabs} bind:tab />
 
 <style>
   @import "./styles.css";

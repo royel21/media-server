@@ -13,13 +13,14 @@
   ];
 
   $: {
+    console.log(tab);
     navigate(`/admin/content-manager/${tab || "tab-1"}`, { replace: true });
   }
   document.title = "Manager";
 </script>
 
 <div id="admin-manager">
-  <Tabs {tabs} {tab} />
+  <Tabs {tabs} bind:tab />
 </div>
 
 <style>
