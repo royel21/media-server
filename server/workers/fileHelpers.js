@@ -121,8 +121,9 @@ export const transferFiles = async (src, dest) => {
   return { success: false };
 };
 
-export const bulkRename = ({ files, ZeroPad, Regex, Replace, With, Case }) => {
+export const bulkRename = ({ files, ZeroPad, Regex, Replace, With, Case, PreAdd, PostAdd, Secuence, After }) => {
   let regex;
+  Secuence = +Secuence;
 
   try {
     regex = new RegExp(Regex, "gi");
@@ -159,10 +160,27 @@ export const bulkRename = ({ files, ZeroPad, Regex, Replace, With, Case }) => {
       name = name.toLocaleLowerCase();
     }
 
+    if (PreAdd) {
+      name = PreAdd + name;
+    }
+    if (PostAdd) {
+      name += PostAdd;
+    }
+
+    if (Secuence) {
+      const secNumber = Secuence.toString().padStart(ZeroPad, "0");
+      if (After) {
+        name = name.replace(After, `${After}${secNumber} `);
+      } else {
+        name = name + Secuence.toString().padStart(ZeroPad, "0");
+      }
+      Secuence++;
+    }
+
     const num = name.match(/\d+/);
-    if (num && num[0]) {
+    if (ZeroPad && num && num[0]) {
       const number = +num[0];
-      name = name.replace(num[0], number.toString().padStart(2, "0"));
+      name = name.replace(num[0], number.toString().padStart(ZeroPad, "0"));
     }
 
     try {

@@ -12,8 +12,12 @@
     Regex: "",
     Replace: "",
     With: "",
-    ZeroPad: 3,
+    ZeroPad: 0,
     Case: "None",
+    PreAdd: "",
+    PostAdd: "",
+    Secuence: "",
+    After: "",
   };
 
   let errors = [];
@@ -26,37 +30,46 @@
       e.preventDefault();
     }
   };
+
   $: console.log(item.Case);
 </script>
 
-<Dialog class="bulk-edit" cancel={hide} confirm={onConfirm} {errors}>
-  <h4 slot="modal-header">Edit Name for: <span>{files.length}</span> {files.length > 1 ? "Files" : "File"}</h4>
-  <div class="dir-list" slot="modal-body">
-    <div class="input-control-group">
-      <Input key="Replace" {item} on:keydown={onKeydown} />
-      <Input key="With" {item} on:keydown={onKeydown} />
-    </div>
-    <Input label="Zero Pad" key="ZeroPad" type="number" min="0" {item} on:keydown={onKeydown} />
-    <div class="input-control">
-      <div id="t-label" class="input-label">Case Type</div>
-      <div class="input">
-        <label for="None"><input id="None" value="None" type="radio" bind:group={item.Case} /> None</label>
-        <label for="Camel"><input id="Camel" value="Camel" type="radio" bind:group={item.Case} /> Camel</label>
-        <label for="Upper"><input id="Upper" value="Upper" type="radio" bind:group={item.Case} /> Upper</label>
-        <label for="Lower"><input id="Lower" value="Lower" type="radio" bind:group={item.Case} /> Lower</label>
+<div id="b-edit">
+  <Dialog class="bulk-edit" cancel={hide} confirm={onConfirm} {errors}>
+    <h4 slot="modal-header">Edit Name for: <span>{files.length}</span> {files.length > 1 ? "Files" : "File"}</h4>
+    <div class="dir-list" slot="modal-body">
+      <div class="input-control-group">
+        <Input key="Replace" {item} on:keydown={onKeydown} />
+        <Input key="With" {item} on:keydown={onKeydown} />
       </div>
+      <Input label="Pre Add" key="PreAdd" {item} on:keydown={onKeydown} />
+      <Input label="Post Add" key="PostAdd" {item} on:keydown={onKeydown} />
+      <div class="input-control-group">
+        <Input key="Secuence" {item} type="number" min="0" on:keydown={onKeydown} />
+        <Input key="After" {item} on:keydown={onKeydown} />
+      </div>
+      <Input label="Zero Pad" key="ZeroPad" type="number" min="0" {item} on:keydown={onKeydown} />
+      <div class="input-control">
+        <div id="t-label" class="input-label">Case Type</div>
+        <div class="input">
+          <label for="None"><input id="None" value="None" type="radio" bind:group={item.Case} /> None</label>
+          <label for="Camel"><input id="Camel" value="Camel" type="radio" bind:group={item.Case} /> Camel</label>
+          <label for="Upper"><input id="Upper" value="Upper" type="radio" bind:group={item.Case} /> Upper</label>
+          <label for="Lower"><input id="Lower" value="Lower" type="radio" bind:group={item.Case} /> Lower</label>
+        </div>
+      </div>
+      <TextAreaInput focus={true} label="Regex" key="Regex" {item} />
     </div>
-    <TextAreaInput focus={true} label="Regex" key="Regex" {item} />
-  </div>
-</Dialog>
+  </Dialog>
+</div>
 
 <style>
-  :global(.modal-container .modal) {
+  #b-edit :global(.modal-container .modal) {
     min-width: 600px;
     max-width: 95%;
   }
   .dir-list :global(.input-label) {
-    min-width: 92px;
+    min-width: 100px;
   }
   h4 span {
     color: firebrick;

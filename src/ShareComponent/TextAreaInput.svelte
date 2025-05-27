@@ -26,6 +26,7 @@
 <div class="input-control" {style}>
   <slot name="btn-left" />
   <div id="t-label" class="input-label" on:click={handler}>{label || key}</div>
+  <slot name="btn-right" />
   <textarea
     bind:this={ref}
     name={key}
