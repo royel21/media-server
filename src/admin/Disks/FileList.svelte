@@ -158,12 +158,20 @@
   };
 
   const getSize2 = (file) => {
-    let size = file.Size / 1024 / 1024;
-    let type = "MB";
+    let size = file.Size;
+    let type = "KB";
+
+    if (file.Size > 1000) {
+      type = "MB";
+      size = file.Size / 1024 / 1024;
+    }
+
     if (size > 1000) {
       size = file.Size / 1024 / 1024 / 1024;
       type = "GB";
     }
+
+    console.log(file.Size, file.Name);
 
     if (size < 10) {
       size = size.toFixed(2);
@@ -206,7 +214,7 @@
 
 {#if showConfirm}
   <Confirm
-    text={`${showConfirm.text} ${selectedList.length} Files`}
+    text={`${showConfirm.text} ${selectedList.length} Selected ${selectedList.length === 1 ? "File" : "Files"}`}
     acept={showConfirm.acept}
     cancel={() => (showConfirm = false)}
     data={showConfirm.data}
@@ -262,7 +270,10 @@
       {#each filtered as file}
         <li id={file.Id} title={formatDate(new Date(file.LastModified))}>
           <CCheckbox on:change={onCheck} isChecked={selectedList.find((f) => f.Id === file.Id)} />
-          <span on:click={onCheck}><span class="size">{getSize2(file)}</span> {file.Name}</span>
+          <span on:click={onCheck}>
+            <span class="size">{getSize2(file)}</span>
+            <span>{file.Name}</span>
+          </span>
         </li>
       {/each}
     </ul>
