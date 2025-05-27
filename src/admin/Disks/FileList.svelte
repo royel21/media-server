@@ -154,7 +154,7 @@
   const getSize = () => {
     let sum = 0;
     filtered.forEach((f) => (sum += f.Size));
-    return formatSize(sum / 1024);
+    return formatSize(sum / 1024) || 0;
   };
 
   const getSize2 = (file) => {

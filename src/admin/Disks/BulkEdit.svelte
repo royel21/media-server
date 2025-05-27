@@ -51,6 +51,10 @@
 </Dialog>
 
 <style>
+  :global(.modal-container .modal) {
+    min-width: 600px;
+    max-width: 95%;
+  }
   .dir-list :global(.input-label) {
     min-width: 92px;
   }
