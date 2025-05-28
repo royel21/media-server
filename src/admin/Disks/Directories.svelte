@@ -117,28 +117,18 @@
   <table id="dir-list" class="table table-dark table-hover table-bordered">
     <thead>
       <tr>
+        <th class="d-action">Actions</th>
         <th class="f-name">Name</th>
         <th class="f-path">Path</th>
         <th class="d-adult">Adult</th>
         <th class="d-cont"><Icons name="folder" /> {count}</th>
         <th class="d-total"><Icons name="file" /> {allFiles}</th>
-        <th class="d-order">Menu Order</th>
-        <th class="d-action">Actions</th>
+        <th class="m-order d-order">Menu Order</th>
       </tr>
     </thead>
     <tbody>
       {#each dirs as { Id, IsLoading, Name, FullPath, Type, FolderCount, TotalFiles, IsAdult, FirstInList }}
         <tr id={Id} key={Id}>
-          <td class="f-name order" title={FullPath} id="Name" on:click={onShowInput}
-            ><Icons class={IsAdult ? "red" : "blue"} name={Type.includes("Manga") ? "book" : "film"} /> {Name}</td
-          >
-          <td class="f-path order" id="FullPath" on:click={onShowInput}>{FullPath}</td>
-          <td data-name="IsAdult" on:click={updateDir}>{IsAdult}</td>
-          <td>{FolderCount}</td>
-          <td>{TotalFiles}</td>
-          <td class="d-order order" id="FirstInList" on:click={onShowInput}>
-            {FirstInList}
-          </td>
           <td>
             <span class="dir-sync" on:click={rescan}>
               <Icons name="sync" class={IsLoading ? "icon-spin" : ""} box="0 0 512 512" />
@@ -146,6 +136,17 @@
             <span class="dir-remove ml-2" on:click={showConfirm}>
               <Icons name="trash" />
             </span>
+          </td>
+          <td class="f-name order" title={FullPath} id="Name" on:click={onShowInput}>
+            <Icons class={IsAdult ? "red" : "blue"} name={Type.includes("Manga") ? "book" : "film"} />
+            {Name}
+          </td>
+          <td class="f-path order" id="FullPath" on:click={onShowInput}>{FullPath}</td>
+          <td class="d-adult" data-name="IsAdult" on:click={updateDir}>{IsAdult}</td>
+          <td class="d-cont">{FolderCount}</td>
+          <td class="d-total">{TotalFiles}</td>
+          <td class="d-order order" id="FirstInList" on:click={onShowInput}>
+            {FirstInList}
           </td>
         </tr>
       {/each}
@@ -171,14 +172,17 @@
     display: block;
     color: red;
   }
-  .d-action {
-    width: 90px;
-    min-width: 90px;
+  .table td:first-child,
+  .table th:first-child {
+    width: 80px;
+    min-width: 80px;
+    max-width: 80px;
   }
   .d-adult {
-    min-width: 70px;
-    width: 70px;
+    min-width: 55px;
+    width: 55px;
     cursor: pointer;
+    text-align: center;
   }
   .f-path {
     white-space: nowrap;
@@ -186,10 +190,12 @@
   .d-cont {
     min-width: 90px;
     width: 90px;
+    text-align: center;
   }
   .d-total {
-    min-width: 110px;
-    width: 110px;
+    min-width: 105px;
+    width: 105px;
+    text-align: center;
   }
   .d-order {
     text-align: center;

@@ -76,7 +76,7 @@
   table {
     width: 100%;
     margin: 0 auto;
-    max-width: 950px;
+    max-width: 600px;
   }
   .skip {
     text-align: left;
@@ -93,6 +93,6 @@
   }
   th,
   td {
-    padding: 0 10px;
+    padding: 0 5px;
   }
 </style>

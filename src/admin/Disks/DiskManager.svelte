@@ -13,7 +13,6 @@
   ];
 
   $: {
-    console.log(tab);
     navigate(`/admin/content-manager/${tab || "tab-1"}`, { replace: true });
   }
   document.title = "Manager";

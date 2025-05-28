@@ -5,22 +5,48 @@ export const isChar = (c) => {
   return c.match(/[a-z]/i);
 };
 
-export const capitalize = (val) => {
-  let words = val.replace(/( )+/g, " ").split(" ");
-  for (let i = 0; i < words.length; i++) {
-    if (words[i].length > 2) {
-      let word = words[i].toLowerCase();
+const toLowerList = /^(For|No|It|Of|And|In|X|Du|Or|A|Wa|wo|na|to|ni|de|o|by)$/i;
 
-      const index = word.split("").findIndex((c) => /[a-z]/i.test(c));
-      if (index > -1) {
-        words[i] = word.slice(0, index + 1).toUpperCase() + word.slice(index + 1).toLowerCase();
+export const capitalize = (val, splitter = " ", Preserve = true) => {
+  let words = val.replace(/( )+/g, " ").split(splitter);
+
+  if (words.length > 1) {
+    for (let i = 0; i < words.length; i++) {
+      if (i == 0 && words[i].length === 1) {
+        words[i] = words[i].toUpperCase();
+        continue;
       }
-    } else {
-      words[i] = words[i].toLowerCase();
+
+      if (toLowerList.test(words[i])) {
+        console.log(words[i]);
+        words[i] = words[i].toLowerCase();
+        continue;
+      }
+
+      if (words[i].length > 1) {
+        let word = words[i];
+        //find first letter index
+        const index = word.split("").findIndex((c) => /[a-z]/i.test(c));
+        if (index > -1) {
+          words[i] = word.slice(0, index + 1).toUpperCase();
+          if (Preserve) {
+            words[i] += word.slice(index + 1);
+          } else {
+            words[i] += word.slice(index + 1).toLowerCase();
+          }
+        }
+      }
     }
   }
 
-  return words.join(" ").trim();
+  let result = words.join(splitter).trim();
+
+  const found = result.match(/(\.|,) [a-z] /gi);
+  if (found) {
+    result = result.replace(found[0], found[0].toUpperCase());
+  }
+
+  return result;
 };
 
 export const nameFormat = (name) => {
@@ -129,4 +155,23 @@ export const delay = (ms) => {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
+};
+
+function containsJapaneseOrChinese(text) {
+  return /[\u3400-\u9FBF]/g.test(text);
+}
+
+export const fixAltName = (AltName) => {
+  const names = [...new Set(AltName.split("; ").map(formatName))];
+
+  const removeDub = (items) => (n1) => items.filter((n2) => n2.includes(n1)).length === 1;
+
+  const sortJapFirst = (a) => {
+    if (containsJapaneseOrChinese(a)) {
+      return -1;
+    }
+    return 0;
+  };
+
+  return names.filter(removeDub(names)).sort(sortJapFirst).join("; ");
 };

@@ -3,6 +3,8 @@ import os from "node:os";
 import UserAgent from "user-agents";
 
 import addBlocker from "puppeteer-extra-plugin-adblocker";
+import { capitalize, fixAltName } from "./utils";
+
 puppeteer.use(addBlocker());
 
 export const delay = (ms) => {
@@ -46,6 +48,8 @@ export const createPage = async (browser, timeout = 180000) => {
     const userAgent = new UserAgent().random().toString();
     // await page.evaluateOnNewDocument(() => { });
     await page.setUserAgent(userAgent);
+    await page.exposeFunction("capitalize", capitalize);
+    await page.exposeFunction("fixAltName", fixAltName);
     return page;
   } catch (error) {
     console.log(error);

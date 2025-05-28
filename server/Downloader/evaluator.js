@@ -1,12 +1,4 @@
 export const evaluetePage = (query) => {
-  const capitalize = (val) => {
-    let words = val.split(" ");
-    for (let i = 0; i < words.length; i++) {
-      words[i] = words[i].charAt(0).toUpperCase() + words[i].toLowerCase().slice(1);
-    }
-    return words.join(" ");
-  };
-
   const cleanNameRegx =
     /18\+|\nEND| Webtoon|ONGOING|NEW|HOT\n|manga|\nNew shoujo Manhwa| – Mangagreat| - mangagreat| Manga| Comics$|^Hot /g;
 
@@ -126,20 +118,14 @@ export const evaluetePage = (query) => {
 
   data = data.filter((d) => d);
 
+  AltName = fixAltName(AltName);
+
   return { Name, data, poster, AltName, Description, Genres, Status, Author, maxNum };
 };
 
 //******************************Adult Section******************************************************/
 
 export const adultEvalPage = async (query) => {
-  const capitalize = (val) => {
-    let words = val.split(" ");
-    for (let i = 0; i < words.length; i++) {
-      words[i] = words[i].charAt(0).toUpperCase() + words[i].toLowerCase().slice(1);
-    }
-    return words.join(" ");
-  };
-
   let title = document.querySelector(query.Title).innerText.trim();
   let Name = title
     .replace("( Renta black and white comic Version)", "")
@@ -306,7 +292,6 @@ export const adultEvalPage = async (query) => {
   const padding = maxNum > 950 ? 4 : 3;
 
   let data = [];
-  let extraCount = maxNum ? maxNum + 1 : 0;
   as.reverse().forEach((a, i) => {
     let text = (a.querySelector("strong,b,san,.chapter-name") || a).textContent?.trim();
 
@@ -370,13 +355,6 @@ export const adultEvalPage = async (query) => {
   });
 
   data = data.reverse().filter((a) => {
-    // if (/\d+-/.test(a.name)) {
-    //   let num = a.name.match(/^\d+/);
-    //   let regex = new RegExp(`^${num}( |$)`);
-    //   if (data.find((b) => regex.test(b.name))) {
-    //     return false;
-    //   }
-    // }
     if (!/^000(-| |(-| )Prologue|$)/gi.test(a.name)) {
       if (/ raw/i.test(a.name)) {
         return query.Raw;
@@ -410,6 +388,8 @@ export const adultEvalPage = async (query) => {
   if (!Status) {
     Status = /completed|finished/gi.test(document.querySelector(query.Status)?.textContent || "") ? 1 : 0;
   }
+
+  AltName = fixAltName(AltName);
 
   return { Name, data, poster, Description, Status, posterData, Genres, AltName, title, Author };
 };

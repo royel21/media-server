@@ -1,7 +1,5 @@
 <script>
   import Dialog from "../../ShareComponent/Dialog.svelte";
-  import TextAreaInput from "../../ShareComponent/TextAreaInput.svelte";
-  import CheckBox from "../Component/CheckBox.svelte";
   import Input from "../Component/Input.svelte";
 
   export let hide;
@@ -13,7 +11,7 @@
     Replace: "",
     With: "",
     ZeroPad: 0,
-    Case: "None",
+    Case: "Camel",
     PreAdd: "",
     PostAdd: "",
     Secuence: "",
@@ -30,8 +28,6 @@
       e.preventDefault();
     }
   };
-
-  $: console.log(item.Case);
 </script>
 
 <div id="b-edit">
@@ -48,7 +44,7 @@
         <Input key="Secuence" {item} type="number" min="0" on:keydown={onKeydown} />
         <Input key="After" {item} on:keydown={onKeydown} />
       </div>
-      <Input label="Zero Pad" key="ZeroPad" type="number" min="0" {item} on:keydown={onKeydown} />
+      <Input key="Regex" {item} on:keydown={onKeydown} />
       <div class="input-control">
         <div id="t-label" class="input-label">Case Type</div>
         <div class="input">
@@ -58,7 +54,6 @@
           <label for="Lower"><input id="Lower" value="Lower" type="radio" bind:group={item.Case} /> Lower</label>
         </div>
       </div>
-      <TextAreaInput focus={true} label="Regex" key="Regex" {item} />
     </div>
   </Dialog>
 </div>
@@ -71,6 +66,8 @@
   .dir-list :global(.input-label:not(#t-label)) {
     min-width: 75px;
     max-width: 75px;
+    text-align: right;
+    padding-right: 5px;
   }
   h4 span {
     color: firebrick;
@@ -83,10 +80,6 @@
     margin-right: 5px;
   }
 
-  #b-edit .input-control-group :global(div:last-child .input-label) {
-    width: 48px;
-    min-width: 48px;
-  }
   .input-control {
     position: relative;
     flex-wrap: wrap;

@@ -9,6 +9,7 @@
   import { isDiff, formatSize } from "../Utils";
   import { setMessage } from "../Store/MessageStore";
   import { validAltName, validateAuthor, validGenres } from "src/ShareComponent/utils";
+  import { capitalize } from "../Component/util";
 
   export let folderId;
   let hasChanges = false;
@@ -48,6 +49,10 @@
   };
 
   const onChange = ({ target: { name, value, type, checked } }) => {
+    if (name === "Name") {
+      value = capitalize(value.replace(regx, ""));
+    }
+
     if (name === "Genres") {
       value = validGenres(value, tags);
     }

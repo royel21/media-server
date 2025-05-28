@@ -148,6 +148,8 @@ export const bulkRename = ({ files, ZeroPad, Regex, Replace, With, Case, PreAdd,
 
     if (Case === "Camel") {
       name = capitalize(name);
+      name = capitalize(name, "-");
+      name = capitalize(name, "_");
     }
 
     name = name.trim();

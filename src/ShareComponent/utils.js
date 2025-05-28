@@ -1,3 +1,5 @@
+import { capitalize } from "src/admin/Component/util";
+
 /**
  * Map a number from one range to another range
  *
@@ -60,8 +62,9 @@ export const validateAuthor = (auth) => {
 };
 
 export const validAltName = (v) => {
-  return v
+  const result = v
     .replace(/( |)(•|\/)( |)/g, "; ")
     .replace("N; A", "N/A")
     .trim();
+  return capitalize(result);
 };
