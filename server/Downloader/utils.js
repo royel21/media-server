@@ -158,11 +158,11 @@ export const delay = (ms) => {
 };
 
 function containsJapaneseOrChinese(text) {
-  return /[\u3400-\u9FBF]/g.test(text);
+  return /[\u3400-\u9FBF]|[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g.test(text);
 }
 
 export const fixAltName = (AltName) => {
-  const names = [...new Set(AltName.split("; ").map(formatName))];
+  const names = [...new Set(AltName.split("; "))];
 
   const removeDub = (items) => (n1) => items.filter((n2) => n2.includes(n1)).length === 1;
 
