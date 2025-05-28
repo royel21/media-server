@@ -62,9 +62,6 @@ export const validateAuthor = (auth) => {
 };
 
 export const validAltName = (v) => {
-  const result = v
-    .replace(/( |)(•|\/)( |)/g, "; ")
-    .replace("N; A", "N/A")
-    .trim();
+  const result = v.replace(/( |)(•|\/ )( |)/g, "; ").trim();
   return capitalize(result);
 };
