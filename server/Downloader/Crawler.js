@@ -3,7 +3,7 @@ import os from "node:os";
 import UserAgent from "user-agents";
 
 import addBlocker from "puppeteer-extra-plugin-adblocker";
-import { capitalize, fixAltName } from "./utils";
+import { capitalize, fixAltName } from "./utils.js";
 
 puppeteer.use(addBlocker());
 

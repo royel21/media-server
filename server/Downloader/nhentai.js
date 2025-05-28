@@ -1,7 +1,7 @@
 import { createFile, getDb } from "./db-worker.js";
 import path from "node:path";
 import { createDir, sendMessage } from "./utils.js";
-import { getImgNh, saveThumbnail } from "./ImageUtils.js";
+import { getImgNh } from "./ImageUtils.js";
 import defaultConfig from "../default-config.js";
 import fs from "fs-extra";
 import AdmZip from "adm-zip";
