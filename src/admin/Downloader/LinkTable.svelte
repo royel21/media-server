@@ -48,6 +48,7 @@
 
   const onUpdate = (data) => {
     if (data.link) updateDatas(updateLink(data.link, datas), "links", data.link);
+    if (data.links) updateDatas("", "", "", data.links);
     if (data.text) updateConsole(data);
   };
 

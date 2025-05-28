@@ -233,7 +233,10 @@ const startToWork = async () => {
   while (works.pendding.length) {
     const work = works.pendding.shift();
     if (actions[work.action]) {
-      await actions[work.action](work.data);
+      const result = await actions[work.action](work.data);
+      if (result) {
+        await result();
+      }
     }
   }
   console.log("Finish File Work");

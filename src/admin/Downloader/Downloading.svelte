@@ -70,11 +70,18 @@
     datas.running = true;
   };
 
-  const updateDatas = (d, key = "links", link) => {
-    if (link?.remove) {
-      datas.links = d.filter((f) => f.Id !== link?.Id);
-    } else {
-      datas[key] = d;
+  const updateDatas = (d, key, link, links) => {
+    if (key === "links") {
+      if (link?.remove) {
+        datas.links = datas.links.filter((f) => f.Id !== link?.Id);
+      } else if (links) {
+        datas.links = [...datas.links, ...links];
+        datas.totalItems = datas.links.length;
+      }
+    }
+
+    if (key === "running") {
+      datas.running = d;
     }
   };
 

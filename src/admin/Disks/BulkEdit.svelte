@@ -38,8 +38,8 @@
   <Dialog class="bulk-edit" cancel={hide} confirm={onConfirm} {errors}>
     <h4 slot="modal-header">Edit Name for: <span>{files.length}</span> {files.length > 1 ? "Files" : "File"}</h4>
     <div class="dir-list" slot="modal-body">
-      <TextAreaInput focus={true} label="Replace" key="Replace" {item} />
-      <TextAreaInput focus={true} label="With" key="With" {item} />
+      <Input key="Replace" {item} on:keydown={onKeydown} />
+      <Input key="With" {item} on:keydown={onKeydown} />
       <div class="input-control-group">
         <Input label="Pre Add" key="PreAdd" {item} on:keydown={onKeydown} />
         <Input label="Post Add" key="PostAdd" {item} on:keydown={onKeydown} />

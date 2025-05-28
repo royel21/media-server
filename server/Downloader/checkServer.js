@@ -1,7 +1,7 @@
 import fs from "fs-extra";
 import { findFolder, getDb } from "./db-worker.js";
 
-import { filterManga, removeRaw, sendMessage } from "./utils.js";
+import { delay, filterManga, removeRaw, sendMessage } from "./utils.js";
 import { createPage } from "./Crawler.js";
 import { downloadLink } from "./link-downloader.js";
 
@@ -129,6 +129,7 @@ export const downloadFromPage = async (Id, state) => {
           linkData.push({ link, chaps });
         }
       }
+      sendMessage({ links: linkData.map((d) => d.link) }, "link-update");
 
       if (linkData.length) {
         let count = 1;
@@ -186,7 +187,7 @@ export const downloadFromPage = async (Id, state) => {
               await d.link.reload();
             }
 
-            sendMessage({ link: d.link.dataValues }, "update-download");
+            sendMessage({ link: { ...d.link.dataValues, remove: true } }, "link-update");
             await db.Link.update({ Date: new Date() }, { where: { Name: folder.Name } });
           }
           await d.link.update({ IsDownloading: false });

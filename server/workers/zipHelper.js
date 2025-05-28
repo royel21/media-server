@@ -27,7 +27,7 @@ export const zipImgFolder = async (data) => {
 
   sendMessage({ text: `Zipping ${folders.length} Please Wait` }, "info");
 
-  for (const folder of folders) {
+  for (const [i, folder] of folders.entries()) {
     const fpath = path.join(data.Path, folder);
     var zip = new AdmZip();
     let count = 0;
@@ -48,22 +48,21 @@ export const zipImgFolder = async (data) => {
       }
     }
     await zip.writeZip(fpath + ".zip");
-    sendMessage({ text: `${folder} was Zipped` }, "info");
+    sendMessage({ text: `${i + 1}/${folders.length}:  ${folder} was Zipped` }, "info");
     deleteFolderRecursive(fpath);
   }
 
-  console.time("await");
-  await delay(1000);
-  console.timeEnd("await");
-
-  const dirs = fs.readdirSync(data.Path);
-  for (let dir of dirs) {
-    const curPath = path.join(data.Path, dir);
-    if (fs.statSync(curPath).isDirectory() && fs.readdirSync(curPath).length === 0) {
-      fs.removeSync(curPath);
-    }
-  }
   sendMessage({ text: `Finish Zipping  ${folders.length} ${folders.length === 1 ? "folder" : "folders"}` }, "info");
+
+  return () => {
+    const dirs = fs.readdirSync(data.Path);
+    for (let dir of dirs) {
+      const curPath = path.join(data.Path, dir);
+      if (fs.statSync(curPath).isDirectory() && fs.readdirSync(curPath).length === 0) {
+        fs.removeSync(curPath);
+      }
+    }
+  };
 };
 
 export const unZip = async ({ files }) => {
