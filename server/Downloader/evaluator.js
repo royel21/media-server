@@ -1,4 +1,4 @@
-export const evaluetePage = (query) => {
+export const evaluetePage = async (query) => {
   const cleanNameRegx =
     /18\+|\nEND| Webtoon|ONGOING|NEW|HOT\n|manga|\nNew shoujo Manhwa| – Mangagreat| - mangagreat| Manga| Comics$|^Hot /g;
 
@@ -12,7 +12,7 @@ export const evaluetePage = (query) => {
     .replace(/ (\(|\[)official( \& Uncensored|)(\)|\])$/i, "")
     .replace(/( )+/g, " ")
     .trim();
-  Name = capitalize(Name);
+  Name = await window.capitalize(Name);
 
   //get Description
   let Description = document.querySelector(query.Desc)?.textContent.trim();
@@ -96,7 +96,7 @@ export const evaluetePage = (query) => {
   for (let item of document.querySelectorAll(query.AltTitle)) {
     let text = item?.textContent;
     if (text && /Alternative/i.test(text)) {
-      AltName = capitalize(
+      AltName = window.capitalize(
         text
           .replace(/:|\t|\n|\r/gi, "")
           .replace(/Alternative/i, "")
@@ -118,7 +118,7 @@ export const evaluetePage = (query) => {
 
   data = data.filter((d) => d);
 
-  AltName = fixAltName(AltName);
+  AltName = await window.fixAltName(AltName);
 
   return { Name, data, poster, AltName, Description, Genres, Status, Author, maxNum };
 };
@@ -190,7 +190,7 @@ export const adultEvalPage = async (query) => {
         genres.add(d.replace(/\((W|M|G|B|ML|Kid)\)/, "").trim());
       }
     });
-    return capitalize([...genres].sort().join(", "));
+    return window.capitalize([...genres].sort().join(", "));
   };
 
   const getAltName = (text) => {
@@ -200,7 +200,7 @@ export const adultEvalPage = async (query) => {
       .filter((p) => p.trim())
       .map((p) => p.trim())
       .join("; ");
-    return capitalize(
+    return window.capitalize(
       text
         .replace(/:|\t|\n|\r/gi, "")
         .replace(/(Alternative|Other name|Nombres)( |)(:|)/i, "")
@@ -256,7 +256,7 @@ export const adultEvalPage = async (query) => {
           .replace(authorRegex, "")
           .trim()
           .split(/\//g)
-          .map((a) => capitalize(a).trim())
+          .map((a) => window.capitalize(a).trim())
           .join(", ");
       }
     }
@@ -389,7 +389,7 @@ export const adultEvalPage = async (query) => {
     Status = /completed|finished/gi.test(document.querySelector(query.Status)?.textContent || "") ? 1 : 0;
   }
 
-  AltName = fixAltName(AltName);
+  AltName = await window.fixAltName(AltName);
 
   return { Name, data, poster, Description, Status, posterData, Genres, AltName, title, Author };
 };

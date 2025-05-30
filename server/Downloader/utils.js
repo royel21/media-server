@@ -18,7 +18,6 @@ export const capitalize = (val, splitter = " ", Preserve = true) => {
       }
 
       if (toLowerList.test(words[i])) {
-        console.log(words[i]);
         words[i] = words[i].toLowerCase();
         continue;
       }
@@ -39,7 +38,7 @@ export const capitalize = (val, splitter = " ", Preserve = true) => {
     }
   }
 
-  let result = words.join(splitter).trim();
+  let result = words.join(splitter).trim() || "";
 
   const found = result.match(/(\.|,) [a-z] /gi);
   if (found) {

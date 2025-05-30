@@ -74,6 +74,7 @@ const downloadLinks = async (link, page) => {
     ...Server.dataValues,
     link,
   });
+
   await validateName(manga, link);
 
   const { Name } = manga;
