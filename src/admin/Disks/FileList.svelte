@@ -47,10 +47,10 @@
   };
 
   const onCheckAll = () => {
-    if (selectedList.length === files.length) {
+    if (selectedList.length === filtered.length) {
       selectedList = [];
     } else {
-      selectedList = [...files];
+      selectedList = [...filtered];
     }
   };
 
