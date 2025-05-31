@@ -121,7 +121,19 @@ export const transferFiles = async (src, dest) => {
   return { success: false };
 };
 
-export const bulkRename = ({ files, ZeroPad, Regex, Replace, With, Case, PreAdd, PostAdd, Secuence, After }) => {
+export const bulkRename = ({
+  files,
+  ZeroPad,
+  Regex,
+  Replace,
+  With,
+  Case,
+  PreAdd,
+  PostAdd,
+  Secuence,
+  After,
+  Preserve,
+}) => {
   let regex;
   Secuence = +Secuence;
 
@@ -147,7 +159,7 @@ export const bulkRename = ({ files, ZeroPad, Regex, Replace, With, Case, PreAdd,
     }
 
     if (Case === "Camel") {
-      name = capitalize(name);
+      name = capitalize(name, " ", Preserve);
       name = capitalize(name, "-");
       name = capitalize(name, "_");
     }
