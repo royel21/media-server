@@ -57,7 +57,6 @@
   const onSave = async () => {
     const result = await apiUtils.post("files/folder/update", data);
     if (result.valid) {
-      console.log(data);
       update({ ...item, ...data });
       return hide();
     }
