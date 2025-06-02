@@ -85,6 +85,13 @@
     }
   };
 
+  const hideDownloadList = () => {
+    showDownList = false;
+    setTimeout(async () => {
+      await loadItems();
+    }, 1000);
+  };
+
   onMount(async () => {
     await loadItems();
     socket.on("reload-downloads", loadItems);
@@ -99,7 +106,7 @@
 </script>
 
 {#if showDownList}
-  <DownloadListModal hide={() => (showDownList = false)} {loadDownloads} {addToDownload} />
+  <DownloadListModal hide={hideDownloadList} {loadDownloads} {addToDownload} />
 {/if}
 
 <div id="downloading" class="container">
