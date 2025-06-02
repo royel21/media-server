@@ -79,7 +79,7 @@
   };
 
   const fileUnZip = () => {
-    socket.emit("file-work", { action: "unZip", data: { files: selectedList } });
+    socket.emit("bg-work", { action: "unZip", data: { files: selectedList } });
   };
 
   const onShowUnZipConfirm = () => {
@@ -95,7 +95,7 @@
 
   const acept = (data) => {
     showMoveDialog = false;
-    socket.emit("file-work", { action: "moveFiles", data });
+    socket.emit("bg-work", { action: "moveFiles", data });
   };
 
   const onFileInfo = ({ msg, items, bulk, error, ren, file }) => {
@@ -183,7 +183,7 @@
 
   const sorter = {
     name: sortByName,
-    date: (a, b) => b.LastModified - a.LastModified,
+    date: (a, b) => new Date(b.LastModified) - new Date(a.LastModified),
     size: (a, b) => b.Size - a.Size,
   };
 

@@ -235,8 +235,26 @@ const fileWork = (data) => {
   fileWorker.send(data);
 };
 
+let bgWorker;
+const bgWork = (data) => {
+  if (!bgWorker) {
+    bgWorker = fork(appPath + "/workers/bgWorker.js");
+
+    bgWorker.on("message", ({ event, message }) => {
+      io.sockets.emit(event, message);
+    });
+
+    bgWorker.on("exit", () => {
+      fileWorker = null;
+    });
+  }
+
+  bgWorker.send(data);
+};
+
 export default {
   fileWork,
+  bgWork,
   onBackup,
   cleanImagesDir,
   scanDir,

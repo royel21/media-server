@@ -126,7 +126,7 @@
       if (!folder.Name) {
         return (error = "Name Can't be empty");
       }
-      socket.emit("file-work", { action: "renameFolder", data: { ...folder, Transfer: transfer } });
+      socket.emit("bg-work", { action: "renameFolder", data: { ...folder, Transfer: transfer } });
       hasChanges = false;
       old = { ...folder };
       transfer = false;

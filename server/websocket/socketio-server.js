@@ -40,6 +40,7 @@ export default async (server, sessionMeddle) => {
         socket.on("load-disks", FileManager.diskLoader);
 
         socket.on("file-work", FileManager.fileWork);
+        socket.on("bg-work", FileManager.bgWork);
 
         socket.on("clean-images", FileManager.cleanImagesDir);
         socket.on("backup-db", FileManager.onBackup);

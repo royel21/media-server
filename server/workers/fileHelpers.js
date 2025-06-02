@@ -16,7 +16,8 @@ export const moveFiles = ({ files, Path, overwrite }) => {
 
   for (const [i, file] of files.entries()) {
     try {
-      fs.moveSync(file.Path, path.join(Path, file.Name), { overwrite });
+      const dest = path.join(Path, file.Name);
+      fs.moveSync(file.Path, dest, { overwrite });
       console.log(`${i + 1}/${files.length} Moving:`, file.Path, "->", Path);
       console.log();
       sendMessage({ text: `${i + 1}/${files.length} - ${file.Name}`, move: file }, "info");

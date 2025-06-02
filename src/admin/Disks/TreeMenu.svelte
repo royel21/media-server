@@ -32,14 +32,14 @@
 
   const addToWatcher = (data) => {
     if (data.Path) {
-      socket.emit("file-work", { action: "dirScan", data });
+      socket.emit("bg-work", { action: "dirScan", data });
     }
   };
 
   const hideRename = () => (showRename = false);
 
   const onRename = ({ folder, Name }) => {
-    socket.emit("file-work", { action: "remFolder", data: { folder, Name } });
+    socket.emit("bg-work", { action: "remFolder", data: { folder, Name } });
     showRename = false;
   };
 
@@ -61,11 +61,11 @@
 
   const onCalculateSize = (item) => {
     setMessage({ msg: `Calculating "${item.Name}" Size Please Wait...` });
-    socket.emit("file-work", { action: "folderSize", data: item });
+    socket.emit("bg-work", { action: "folderSize", data: item });
   };
 
   const zipImgFolders = (item) => {
-    socket.emit("file-work", { action: "zipImgFolder", data: item });
+    socket.emit("bg-work", { action: "zipImgFolder", data: item });
   };
 
   const menuActions = (event, id) => {

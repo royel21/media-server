@@ -58,7 +58,7 @@
     if (!temp.isNew) {
       item.Name = temp.Name;
     } else {
-      item = result.list;
+      item = { ...result.list };
       downloads = result.downloads;
       downloadList = [...downloadList, result.list].sort(sortList);
     }
@@ -67,8 +67,12 @@
   };
 
   const onChange = async ({ target: { value } }) => {
-    item = downloadList.find((dl) => +dl.Id === +value);
-    downloads = await getLinks(value);
+    const found = downloadList.find((dl) => +dl.Id === +value);
+    console.log(found, downloadList);
+    if (found) {
+      item = { ...found };
+      downloads = await getLinks(found.Id);
+    }
   };
 
   const removeDList = async () => {
@@ -76,7 +80,7 @@
     if (result.valid) {
       downloadList = downloadList.filter((dl) => dl.Id != +item.Id);
       if (downloadList.length) {
-        item = downloadList[0];
+        item = { ...downloadList[0] };
         downloads = await getLinks(item.Id);
       } else {
         downloads = [];
@@ -96,7 +100,7 @@
     const result = await apiUtils.get(["admin", "downloader", "download-list"]);
     if (result.DownloadingList.length) {
       downloadList = result.DownloadingList;
-      item = downloadList[0];
+      item = { ...downloadList[0] };
       downloads = result.downloads.sort(sortByName);
     }
   });

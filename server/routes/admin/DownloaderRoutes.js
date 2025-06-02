@@ -202,22 +202,27 @@ routes.get("/downloads/:Id", async ({ params }, res) => {
 
 routes.post("/save-downloads", async ({ body: { Name } }, res) => {
   try {
-    const links = await db.Link.findAll({ where: { IsDownloading: true } });
+    if (Name) {
+      const links = await db.Link.findAll({ where: { IsDownloading: true } });
 
-    const [dl] = await db.DownloadingList.findOrCreate({ where: { Name } });
+      const [dl] = await db.DownloadingList.findOrCreate({ where: { Name } });
 
-    if (dl) {
-      await db.Downloading.destroy({ where: { DownloadingListId: dl.Id } });
-      await db.Downloading.bulkCreate(links.map((lnk) => ({ LinkId: lnk.Id, DownloadingListId: dl.Id })));
+      if (dl) {
+        await db.Downloading.destroy({ where: { DownloadingListId: dl.Id } });
+        await db.Downloading.bulkCreate(links.map((lnk) => ({ LinkId: lnk.Id, DownloadingListId: dl.Id })));
+      }
+
+      return res.send({
+        list: dl,
+        downloads: await getDownloads(dl.Id),
+      });
     }
-
-    res.send({
-      list: dl,
-      downloads: await getDownloads(dl.Id),
+    return res.send({
+      error: "Name Empty",
     });
   } catch (error) {
     console.log(error);
-    res.send({ error: `Name: ${body.Name} is in use` });
+    res.send({ error: `Name: ${Name} is in use` });
   }
 });
 
