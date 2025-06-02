@@ -39,7 +39,7 @@
   const hideRename = () => (showRename = false);
 
   const onRename = ({ folder, Name }) => {
-    socket.emit("bg-work", { action: "remFolder", data: { folder, Name } });
+    socket.emit("file-work", { action: "remFolder", data: { folder, Name } });
     showRename = false;
   };
 

@@ -1,5 +1,5 @@
 <script>
-  import { getContext, onMount } from "svelte";
+  import { getContext, onDestroy, onMount } from "svelte";
   import Icons from "src/icons/Icons.svelte";
   import apiUtils from "src/apiUtils";
   import { setMessage } from "../Store/MessageStore";
@@ -84,11 +84,12 @@
   };
 
   const onFolderCreate = ({ folder, folderId, msg, error }) => {
-    if (findFile(folderId, msg, error)) {
+    if (item?.Id === folderId && item.Content.length) {
       item.Content.push(folder);
       item.Content.sort(sortByName);
       items = items;
     }
+    return setMessage({ msg, error });
   };
 
   const onRename = ({ folder, error, msg, Name }) => {
@@ -115,13 +116,14 @@
     socket.on("folder-rename", onRename);
     socket.on("folder-move", onFolderMove);
     socket.on("folder-remove", onFolderRemove);
-    return () => {
-      socket.off("folder-info", onInfo);
-      socket.off("folder-move", onFolderMove);
-      socket.off("folder-rename", onRename);
-      socket.off("folder-create", onFolderCreate);
-      socket.on("folder-remove", onFolderRemove);
-    };
+  });
+
+  onDestroy(() => {
+    socket.off("folder-info", onInfo);
+    socket.off("folder-move", onFolderMove);
+    socket.off("folder-rename", onRename);
+    socket.off("folder-create", onFolderCreate);
+    socket.on("folder-remove", onFolderRemove);
   });
 
   const getStyle = (type, content) => {

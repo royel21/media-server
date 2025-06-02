@@ -245,7 +245,7 @@ const bgWork = (data) => {
     });
 
     bgWorker.on("exit", () => {
-      fileWorker = null;
+      bgWorker = null;
     });
   }
 
