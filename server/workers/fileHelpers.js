@@ -200,8 +200,8 @@ export const bulkRename = ({
     //format date
     const date = name.match(/\d+-\d+/);
     if (date) {
-      const parts = date.split("-");
-      if ((date[0].length = 4)) {
+      const parts = date[0].split("-");
+      if (parts[0].length === 4) {
         parts[1] = parts[1].padStart(2, "0");
         name = name.replace(date, parts.join("-"));
       }
