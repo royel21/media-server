@@ -197,6 +197,16 @@ export const bulkRename = ({
       name = name.replace(num[0], number.toString().padStart(ZeroPad, "0"));
     }
 
+    //format date
+    const date = name.match(/\d+-\d+/);
+    if (date) {
+      const parts = date.split("-");
+      if ((date[0].length = 4)) {
+        parts[1] = parts[1].padStart(2, "0");
+        name = name.replace(date, parts.join("-"));
+      }
+    }
+
     try {
       name += ext;
       const src = file.Path;
