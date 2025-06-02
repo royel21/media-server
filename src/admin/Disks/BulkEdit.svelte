@@ -1,5 +1,6 @@
 <script>
   import Dialog from "../../ShareComponent/Dialog.svelte";
+  import CheckBox from "../Component/CheckBox.svelte";
   import Input from "../Component/Input.svelte";
 
   export let hide;
@@ -16,6 +17,7 @@
     PostAdd: "",
     Secuence: "",
     After: "",
+    Preserve: true,
   };
 
   let errors = [];
@@ -44,7 +46,9 @@
         <Input key="Secuence" {item} type="number" min="0" on:keydown={onKeydown} />
         <Input key="After" {item} on:keydown={onKeydown} />
       </div>
+      <Input key="ZeroPad" {item} on:keydown={onKeydown} />
       <Input key="Regex" {item} on:keydown={onKeydown} />
+      <CheckBox key="Preserve" {item} />
       <div class="input-control">
         <div id="t-label" class="input-label">Case Type</div>
         <div class="input">

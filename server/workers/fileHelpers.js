@@ -122,7 +122,19 @@ export const transferFiles = async (src, dest) => {
   return { success: false };
 };
 
-export const bulkRename = ({ files, ZeroPad, Regex, Replace, With, Case, PreAdd, PostAdd, Secuence, After }) => {
+export const bulkRename = ({
+  files,
+  ZeroPad,
+  Regex,
+  Replace,
+  With,
+  Case,
+  PreAdd,
+  PostAdd,
+  Secuence,
+  After,
+  Preserve,
+}) => {
   let regex;
   Secuence = +Secuence;
 
@@ -148,7 +160,7 @@ export const bulkRename = ({ files, ZeroPad, Regex, Replace, With, Case, PreAdd,
     }
 
     if (Case === "Camel") {
-      name = capitalize(name);
+      name = capitalize(name, " ", Preserve);
       name = capitalize(name, "-");
       name = capitalize(name, "_");
     }
@@ -184,6 +196,16 @@ export const bulkRename = ({ files, ZeroPad, Regex, Replace, With, Case, PreAdd,
     if (ZeroPad && num && num[0]) {
       const number = +num[0];
       name = name.replace(num[0], number.toString().padStart(ZeroPad, "0"));
+    }
+
+    //format date
+    const date = name.match(/\d+-\d+/);
+    if (date) {
+      const parts = date[0].split("-");
+      if (parts[0].length === 4) {
+        parts[1] = parts[1].padStart(2, "0");
+        name = name.replace(date, parts.join("-"));
+      }
     }
 
     try {

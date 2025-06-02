@@ -57,14 +57,18 @@ routes.post("/links", async ({ body }, res) => {
     include: { model: db.Server, Attributes: ["Id", "Name"], required: true },
     order: [
       [literal(`Links.LastChapter = ""`), "DESC"],
-      [literal(`Links.Date = null`), "DESC"],
       [order, "DESC"],
-      ["Name", "ASC"],
+      [literal(`Links.LastChapter`), "DESC"],
+      ["Name", "DESC"],
     ],
   };
 
   if (IsDownloading) {
     query.where.IsDownloading = 1;
+    query.order = [
+      ["Name", "DESC"],
+      [literal(`Links.LastChapter = ""`), "DESC"],
+    ];
   }
 
   let servers;

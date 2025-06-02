@@ -40,7 +40,6 @@
 
   const loadItems = async () => {
     const result = await apiUtils.get(["admin", "downloader", "exclude-list", link.Id]);
-    console.log(result);
     if (result?.length) {
       nameList = result;
     }

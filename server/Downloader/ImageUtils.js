@@ -77,8 +77,8 @@ const downloadImg = async (url, page, name = "", isCover) => {
         const { buffer } = parseDataUrl(result);
         buff = buffer;
       } else {
-        let retry = 3;
-        while (retry-- && buff.length === 0) {
+        let retry = 2;
+        while (retry-- && (buff.length === 0 || !buff?.includes("<html>"))) {
           try {
             let viewSource = await page.goto(url.trim());
             buff = await viewSource.buffer();
@@ -89,7 +89,7 @@ const downloadImg = async (url, page, name = "", isCover) => {
             } else {
               sendMessage({ text: `${name} download-Image Error`, url, color: "red", error });
             }
-            await delay(500);
+            await delay(2000);
           }
         }
       }
