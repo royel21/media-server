@@ -7,11 +7,16 @@ const sendMessage = (data, event = "files-info") => {
   process.send({ event, message: data });
 };
 
-export const moveFiles = ({ files, Path, overwrite }) => {
+export const moveFiles = ({ files, Path, overwrite, NewFolder }) => {
   sendMessage({ text: `Moving Files to: ${Path} Please Wait` }, "info");
 
   if (!fs.existsSync(Path)) {
     return sendMessage({ error: `The specified path does not exist: ${Path}` });
+  }
+
+  if (NewFolder) {
+    Path = path.join(Path, NewFolder);
+    fs.mkdirpSync(Path);
   }
 
   for (const [i, file] of files.entries()) {

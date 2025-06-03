@@ -34,6 +34,8 @@
     if (!/^\/(mnt|media)\/.*\/|^[d-z]\:\\|\/home\/.*\/|^c:\\Users\\.*\\/i.test(item.Path)) {
       return errors.push("Path must be on User Space");
     }
+
+    loadDirs(item.Path, item.NewFolder);
     return acept({ files, ...item });
   };
 
@@ -87,6 +89,7 @@
     <CheckBox label="Overwrite" key="overwrite" {item} />
     <Select item={ditem} label="Root" key="Path" options={content.map((d) => ({ ...d, Id: d.Path }))} {onChange} />
     <Input key="Filter" item={ditem} on:keydown={onKeydown} on:input={onFilter} onChange={onFilter} />
+    <Input label="New Folder" key="NewFolder" {item} />
     <TextAreaInput focus={true} label="Path" key="Path" {item} disabled={true} paste={false}>
       <span class="pre-paste" slot="btn-left" on:click={goBack} title="Copy Name">
         <Icons name="reply" color="#045cba" />
@@ -108,7 +111,7 @@
     overflow-y: auto;
   }
   .dir-list :global(.input-label) {
-    width: 100px;
+    width: 135px;
   }
   h4 span {
     color: firebrick;
