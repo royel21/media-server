@@ -17,7 +17,7 @@
   };
 
   const scanDir = (data) => {
-    socket.emit("file-work", { action: "dirScan", data });
+    socket.emit("bg-work", { action: "dirScan", data });
   };
 
   const removeWDir = async (data) => {
