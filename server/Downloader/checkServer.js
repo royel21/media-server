@@ -1,7 +1,7 @@
 import fs from "fs-extra";
 import { findFolder, getDb } from "./db-worker.js";
 
-import { delay, filterManga, removeRaw, sendMessage } from "./utils.js";
+import { filterManga, removeRaw, sendMessage } from "./utils.js";
 import { createPage } from "./Crawler.js";
 import { downloadLink } from "./link-downloader.js";
 
@@ -15,9 +15,11 @@ const evalServer = async (query) => {
   await delay(1000);
 
   return [...document.querySelectorAll(query.HomeQuery)].map((e) => {
-    const Name = e
-      .querySelector(".post-title, .bigor-manga h3")
-      .textContent.replace("( Renta black and white comic Version)", "")
+    const manga = e.querySelector(".post-title, .bigor-manga h3");
+    const Url = e.querySelector(".post-title a").href;
+
+    const Name = manga.textContent
+      .replace("( Renta black and white comic Version)", "")
       .replace(/:|\?|\*|<|>|"| Webtoon| \(Acera\)\n|\n|\t|“|^,/gi, "")
       .replace(/(\.)+$/, "")
       .replace(/”( |)/g, ", ")
@@ -72,7 +74,7 @@ const evalServer = async (query) => {
       })
       .reverse();
 
-    return { Name: Name.replace(/ raw$/i, ""), chaps };
+    return { Name: Name.replace(/ raw$/i, ""), Url, chaps };
   });
 };
 
@@ -112,7 +114,7 @@ export const downloadFromPage = async (Id, state) => {
 
       const linkData = [];
 
-      for (let { Name, chaps } of data) {
+      for (let { Name, chaps, Url } of data) {
         let tname = await db.NameList.findOne({ where: { Name: Name.replace(" Raw") } });
 
         const query = {
@@ -120,7 +122,9 @@ export const downloadFromPage = async (Id, state) => {
           include: ["Server"],
         };
 
-        if (/raw/i.test(Name)) query.where.url = { [db.Op.like]: `%-raw%` };
+        if (Url) {
+          query.where.Url = Url;
+        }
 
         const link = await db.Link.findOne(query);
 
