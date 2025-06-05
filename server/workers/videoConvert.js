@@ -4,7 +4,11 @@ import fs from "fs-extra";
 
 import Ffmpeg from "fluent-ffmpeg";
 import { exec } from "node:child_process";
-import { sendMessage } from "../Downloader/utils";
+
+const sendMessage = (data, event = "files-info") => {
+  console.log(data.msg || data.text || "", data.error || "");
+  process.send({ event, message: data });
+};
 
 function formatTime(time) {
   if (time === 0) return "00:00";
@@ -40,14 +44,12 @@ export const convertVideo = async ({ files, videoBitrate, audioBitrate, Remove, 
   const padding = files.length.toString().length;
 
   for (let file of files) {
-    const filePath = path.join(vPath, file);
-
     await new Promise(async (resolve) => {
-      const name = file.replace(/\.(mp4|webm|mkv|ogg)$/i, "");
-      const toFile = path.resolve(filePath, `${name}-.mp4`);
+      const basePath = file.Path.replace(/\.(mp4|webm|mkv|ogg)$/i, "");
+      const toFile = basePath + `-.mp4`;
       const current = `${(i + 1).toString().padStart(padding, "0")}/${files.length}`;
 
-      const meta = await getMetadata(filePath);
+      const meta = await getMetadata(file.Path);
 
       let resize = meta?.streams[0]?.width > 1280;
 
@@ -90,13 +92,13 @@ export const convertVideo = async ({ files, videoBitrate, audioBitrate, Remove, 
       }
 
       const str = meta?.streams[0];
-      const info = `[${current} ~ ${getime()} ~ ${str ? `${str.width}x${str.height}` : ""} ~ ${file}]`;
+      const info = `[${current} ~ ${getime()} ~ ${str ? `${str.width}x${str.height}` : ""} ~ ${file.Name}]`;
 
       let duration = 0;
+      sendMessage({ text: info }, "info");
+      let elapse = 0;
 
-      sendMessage({ text: info });
-
-      Ffmpeg(filePath)
+      Ffmpeg(file.Path)
         .inputOptions(inputOptions)
         .outputOptions(outOptions)
         .on("start", (cmd) => {
@@ -105,27 +107,30 @@ export const convertVideo = async ({ files, videoBitrate, audioBitrate, Remove, 
           }
         })
         .on("codecData", function (data) {
-          duration = data.duration;
+          duration = data.duration.split(".")[0];
         })
         .on("progress", (p) => {
-          const elapse = (new Date().getTime() - start) / 1000;
+          elapse = (new Date().getTime() - start) / 1000;
           const percent = p.percent.toFixed(2);
           const text = `${percent}% ~ ${p.timemark}/${duration} ~ Elapse: ${formatTime(elapse)}\r`;
           process.stdout.write(text);
         })
         .saveToFile(toFile)
         .on("end", () => {
-          const saveInfo = `\n[End: ${getime()} ~ Save to: ${toFile}]\n`;
-          sendMessage({ text: saveInfo });
+          console.log("\n");
+          const saveInfo = `[Elapse: ${formatTime(elapse)} Duration: ${duration} ~ ${file.Name}]`;
+          sendMessage({ text: saveInfo }, "info");
+          console.log("\n");
 
           resolve(true);
           if (Remove) {
-            fs.removeSync(filePath);
+            fs.removeSync(file.Path);
           }
         })
-        .on("error", (err) => console.log(err));
+        .on("error", (err) => resolve(true));
     });
 
     i++;
   }
+  sendMessage({ convert: true });
 };

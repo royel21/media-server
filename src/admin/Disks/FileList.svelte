@@ -84,6 +84,7 @@
 
   const convertVideos = (options) => {
     socket.emit("bg-work", { action: "convertVideo", data: { files: selectedList, ...options } });
+    showConvertVideo = false;
   };
 
   const fileUnZip = () => {
@@ -106,7 +107,7 @@
     socket.emit("file-work", { action: "moveFiles", data });
   };
 
-  const onFileInfo = ({ msg, items, bulk, error, ren, file }) => {
+  const onFileInfo = ({ msg, items, bulk, error, ren, file, convert }) => {
     if (msg || error) {
       setMessage({ error, msg });
     }
@@ -128,6 +129,10 @@
         files[index] = file;
         files = files.sort(sortByName);
       }
+    }
+
+    if (convert) {
+      reload();
     }
   };
 

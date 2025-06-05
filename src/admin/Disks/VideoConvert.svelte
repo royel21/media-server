@@ -22,13 +22,7 @@
     return acept(item);
   };
 
-  const loadDefaults = () => {
-    console.log(defaults[item.Default]);
-    console.log(item.Default);
-
-    item = { ...item, ...defaults[item.Default] };
-  };
-  //videoBitrate, audioBitrate, remove, debug
+  const onChange = () => (item = { ...item, ...defaults[item.Default] });
 </script>
 
 <div id="v-convert">
@@ -39,8 +33,7 @@
       <Input label="Video Bit Rate" key="audioBitrate" {item} />
       <CheckBox label="Remove Files" key="Remove" {item} />
       <div class="input-control-group anin-def">
-        <Select {item} label="Default" key="Default" {options} />
-        <button class="btn btn-secondary" on:click={loadDefaults}>Load Defaults</button>
+        <Select {item} label="Default" key="Default" {options} {onChange} />
       </div>
     </span>
   </Dialog>
@@ -60,12 +53,6 @@
   .input-control-group {
     display: flex;
     flex-direction: row;
-  }
-
-  .anin-def .btn {
-    margin-left: 5px;
-    min-width: 120px;
-    height: 30px;
   }
 
   @media screen and (max-width: 600px) {
