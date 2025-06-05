@@ -46,6 +46,7 @@
         <Input key="Secuence" {item} type="number" min="0" on:keydown={onKeydown} />
         <Input key="After" {item} on:keydown={onKeydown} />
       </div>
+      <Input key="Ext" {item} on:keydown={onKeydown} />
       <Input key="ZeroPad" {item} on:keydown={onKeydown} />
       <Input key="Regex" {item} on:keydown={onKeydown} />
       <CheckBox key="Preserve" {item} />

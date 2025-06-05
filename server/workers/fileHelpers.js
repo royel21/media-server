@@ -139,6 +139,7 @@ export const bulkRename = ({
   Secuence,
   After,
   Preserve,
+  Ext,
 }) => {
   let regex;
   Secuence = +Secuence;
@@ -214,7 +215,7 @@ export const bulkRename = ({
     }
 
     try {
-      name += ext;
+      name += Ext ? "." + Ext.replace(".", "") : ext;
       const src = file.Path;
       const dest = file.Path.replace(file.Name, name);
       if (src !== dest) {
