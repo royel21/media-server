@@ -256,12 +256,12 @@
         <span>
           <CCheckbox id="check-all" on:change={onCheckAll} {isChecked} title="Select All Files" />
           {#if selectedList.length}
-            {#if selectedList.filter((f) => !/\.zip$/.test(f.Name)).length === 0}
+            {#if selectedList.filter((f) => !/\.zip$/i.test(f.Name)).length === 0}
               <span on:click={onShowUnZipConfirm} title="Extract Zip">
                 <Icons name="zip" box="0 0 384 512" color="darkgray" />
               </span>
             {/if}
-            {#if selectedList.filter((f) => !/\.(mp4|mkv|webm|ogg)$/.test(f.Name)).length === 0}
+            {#if selectedList.filter((f) => !/\.(mp4|mkv|webm|ogg)$/i.test(f.Name)).length === 0}
               <span on:click={onConvertVideos} title="Convert Videos">
                 <Icons name="film2" box="0 0 512 512" color="deepskyblue" />
               </span>
