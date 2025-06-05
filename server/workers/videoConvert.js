@@ -132,5 +132,6 @@ export const convertVideo = async ({ files, videoBitrate, audioBitrate, Remove, 
 
     i++;
   }
-  sendMessage({ convert: true, text: "Finish Converting Videos" });
+  sendMessage({ text: "Finish Converting Videos" }, "info");
+  sendMessage({ convert: true });
 };
