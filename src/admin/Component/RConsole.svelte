@@ -1,5 +1,5 @@
 <script>
-  import { getContext, afterUpdate, onMount, setContext } from "svelte";
+  import { getContext, afterUpdate, onMount } from "svelte";
   import { ConsoleStore, setConsoleData, updateConsole, showConsoleStore } from "../Store/ConsoleStore";
   import Icons from "src/icons/Icons.svelte";
   import apiUtils from "src/apiUtils";

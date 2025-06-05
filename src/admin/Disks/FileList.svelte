@@ -14,6 +14,7 @@
   import BulkEdit from "./BulkEdit.svelte";
   import { formatSize } from "src/utils";
   import VideoConvert from "./VideoConvert.svelte";
+  import { updateConsole } from "../Store/ConsoleStore";
 
   export let files = [];
   export let socket;
@@ -132,6 +133,7 @@
     }
 
     if (convert) {
+      updateConsole({ text: msg });
       reload();
     }
   };

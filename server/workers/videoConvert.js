@@ -122,16 +122,15 @@ export const convertVideo = async ({ files, videoBitrate, audioBitrate, Remove, 
           sendMessage({ text: saveInfo }, "info");
           console.log("\n");
 
-          resolve(true);
           if (Remove) {
             fs.removeSync(file.Path);
           }
+          resolve(true);
         })
         .on("error", (err) => resolve(true));
     });
 
     i++;
   }
-  sendMessage({ text: "Finish Converting Videos" }, "info");
-  sendMessage({ convert: true });
+  sendMessage({ convert: true, msg: "Finish Converting Videos" });
 };
