@@ -16,7 +16,7 @@ const evalServer = async (query) => {
 
   return [...document.querySelectorAll(query.HomeQuery)].map((e) => {
     const manga = e.querySelector(".post-title, .bigor-manga h3");
-    const Url = e.querySelector(".post-title a").href;
+    const Url = e.querySelector(".post-title a")?.href;
 
     const Name = manga.textContent
       .replace("( Renta black and white comic Version)", "")
@@ -122,9 +122,9 @@ export const downloadFromPage = async (Id, state) => {
           include: ["Server"],
         };
 
-        if (Url) {
-          query.where.Url = Url;
-        }
+        // if (Url) {
+        //   query.where.Url = Url;
+        // }
 
         const link = await db.Link.findOne(query);
 
