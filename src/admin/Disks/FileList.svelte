@@ -13,6 +13,7 @@
   import apiUtils from "src/apiUtils";
   import BulkEdit from "./BulkEdit.svelte";
   import { formatSize } from "src/utils";
+  import VideoConvert from "./VideoConvert.svelte";
 
   export let files = [];
   export let socket;
@@ -33,6 +34,7 @@
   let showConfirm = false;
   let showRename = false;
   let showBulkRename = false;
+  let showConvertVideo;
 
   const onCheck = ({ target }) => {
     const id = target.closest("li").id;
@@ -78,6 +80,12 @@
     };
   };
 
+  const onConvertVideos = () => (showConvertVideo = true);
+
+  const convertVideos = (options) => {
+    socket.emit("bg-work", { action: "convertVideo", data: { files: selectedList, ...options } });
+  };
+
   const fileUnZip = () => {
     socket.emit("bg-work", { action: "unZip", data: { files: selectedList } });
   };
@@ -95,7 +103,7 @@
 
   const acept = (data) => {
     showMoveDialog = false;
-    socket.emit("bg-work", { action: "moveFiles", data });
+    socket.emit("file-work", { action: "moveFiles", data });
   };
 
   const onFileInfo = ({ msg, items, bulk, error, ren, file }) => {
@@ -219,6 +227,10 @@
   />
 {/if}
 
+{#if showConvertVideo}
+  <VideoConvert hide={() => (showConvertVideo = false)} acept={convertVideos} />
+{/if}
+
 {#if showBulkRename}
   {#if selectedList.length === 1}
     <RenameModal data={selectedList[0]} acept={renameFile} hide={hideRename} />
@@ -242,6 +254,11 @@
             {#if selectedList.filter((f) => !/\.zip$/.test(f.Name)).length === 0}
               <span on:click={onShowUnZipConfirm} title="Extract Zip">
                 <Icons name="zip" box="0 0 384 512" color="darkgray" />
+              </span>
+            {/if}
+            {#if selectedList.filter((f) => !/\.(mp4|mkv|webm|ogg)$/.test(f.Name)).length === 0}
+              <span on:click={onConvertVideos} title="Convert Videos">
+                <Icons name="film2" box="0 0 512 512" color="deepskyblue" />
               </span>
             {/if}
             <span on:click={() => (showBulkRename = true)}><Icons name="edit" /></span>
@@ -298,6 +315,11 @@
 
   ul :global(.select-file) {
     max-width: 22px;
+  }
+
+  .filter :global(.icon-film2) {
+    width: 21px;
+    top: 5px;
   }
 
   .tree-files {

@@ -32,7 +32,7 @@
 
   const addToWatcher = (data) => {
     if (data.Path) {
-      socket.emit("bg-work", { action: "dirScan", data });
+      socket.emit("file-work", { action: "dirScan", data });
     }
   };
 

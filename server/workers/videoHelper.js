@@ -12,10 +12,6 @@ const sendMessage = (message, event = "finish-cleaning") => {
 
 let count = 0;
 
-function timeout(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 const renameVideoFile = (src, dest, file, regex, text, padding) => {
   if (!/\d+|movie|ova|ending|opening|(e|)special/.test(file)) {
     return;
@@ -155,62 +151,6 @@ export const workVideos = ({ folder, pass, text, padding }) => {
 
   sendMessage(`Finish Cleaning: ${Name}`);
 };
-
-// export const moveToDir = async ({ folder, DirectoryId }) => {
-//   const dir = await db.directory.findOne({ where: { Id: DirectoryId } });
-//   const { Name } = folder;
-
-//   if (fs.existsSync(dir?.FullPath)) {
-//     const Path = path.join(dir.FullPath, folder.Name);
-
-//     sendMessage({ msg: `Moving: ${Name} from: ${folder.Path} -> To: ${Path}` }, "folder-info");
-
-//     try {
-//       if (!fs.exists(folder.Path)) return;
-//       const files = fs.readdirSync(folder.Path);
-
-//       //if contain folder cancer transfer
-//       if (files.find((f) => !/\.[a-zA-Z0-9]{3,4}$/.test(f))) {
-//         return sendMessage(
-//           { error: true, msg: `Transfer Canceled Folder, can't contain other folders` },
-//           "folder-move"
-//         );
-//       }
-
-//       const FileCount = files.filter((f) => vRex.test(f)).length;
-//       let found = await db.folder.findOne({ where: { Name, DirectoryId } });
-
-//       if (found) {
-//         found.update({ FileCount, CreatedAt: new Date() });
-//       } else {
-//         found = await db.folder.create({
-//           Name,
-//           DirectoryId,
-//           FilesType: "videos",
-//           FileCount,
-//           Path,
-//           CreatedAt: new Date(),
-//         });
-//       }
-
-//       for (const file of files) {
-//         fs.moveSync(path.join(folder.Path, file), path.join(Path, file), { overwrite: true });
-//       }
-//       await timeout(100);
-//       fs.removeSync(folder.Path);
-//       sendMessage({ folder, FolderId: found.Id }, "folder-move");
-//     } catch (error) {
-//       console.log(error);
-//       sendMessage(
-//         {
-//           error: error.toString(),
-//           msg: `Some Error Happen when trying to move Folder: ${folder.Name}`,
-//         },
-//         "folder-move"
-//       );
-//     }
-//   }
-// };
 
 export const removeDFolder = ({ Id, Name, Path }) => {
   if (fs.existsSync(Path)) {
