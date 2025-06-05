@@ -1,6 +1,6 @@
 import winExplorer from "win-explorer";
 import { zipImgFolder, unZip } from "./zipHelper.js";
-import { convertVideo } from "./videoConvert.js";
+import { convertVideo, mergeVideos } from "./videoConvert.js";
 
 const sendMessage = (event, message) => {
   process.send({ event, message });
@@ -30,6 +30,7 @@ const actions = {
   unZip,
   zipImgFolder,
   convertVideo,
+  mergeVideos,
 };
 
 const works = {

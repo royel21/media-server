@@ -138,6 +138,17 @@
     }
   };
 
+  const confirmMerge = () => {
+    socket.emit("bg-work", { action: "mergeVideos", data: { files: selectedList } });
+  };
+
+  const onMergeVideo = () => {
+    showConfirm = {
+      acept: confirmMerge,
+      text: "Merge",
+    };
+  };
+
   const fileUpdate = ({ move }) => {
     if (move) {
       selectedList = selectedList.filter((f) => f.Id !== move.Id);
@@ -267,6 +278,9 @@
               <span on:click={onConvertVideos} title="Convert Videos">
                 <Icons name="film2" box="0 0 512 512" color="deepskyblue" />
               </span>
+              <span on:click={onMergeVideo} title="Megre Videos">
+                <Icons name="merge" box="0 0 576 512" color="deepskyblue" />
+              </span>
             {/if}
             <span on:click={() => (showBulkRename = true)}><Icons name="edit" /></span>
             <span on:click={onTransfer}><Icons name="right-left" /></span>
@@ -325,6 +339,11 @@
   }
 
   .filter :global(.icon-film2) {
+    width: 21px;
+    top: 5px;
+  }
+
+  .filter :global(.icon-merge) {
     width: 21px;
     top: 5px;
   }

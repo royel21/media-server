@@ -3,7 +3,7 @@ import os from "node:os";
 import fs from "fs-extra";
 
 import Ffmpeg from "fluent-ffmpeg";
-import { exec } from "node:child_process";
+import { exec, execSync } from "node:child_process";
 
 const sendMessage = (data, event = "files-info") => {
   console.log(data.msg || data.text || "", data.error || "");
@@ -133,4 +133,58 @@ export const convertVideo = async ({ files, videoBitrate, audioBitrate, Remove, 
     i++;
   }
   sendMessage({ convert: true, msg: "Finish Converting Videos" });
+};
+
+export const mergeVideos = async ({ files }) => {
+  if (files.length < 2) return sendMessage({ text: "Must Select more than one video" }, "info");
+  const basePath = path.dirname(files[0].Path);
+  const extension = path.extname(files[0].Name);
+  const name = files[0].Name.replace(extension, "");
+
+  const txtFiles = files.map((f) => `file '${f.Path}'`).join("\n");
+  fs.writeFileSync("./files.txt", txtFiles, "utf8");
+  const outFile = path.join(basePath, `${name}-merged${extension}`);
+
+  sendMessage({ text: "Start Merging Videos" }, "info");
+  await new Promise(async (resolve) => {
+    exec(`ffmpeg -f concat -safe 0 -i ./files.txt -c copy "${outFile}" -y`, (error) => {
+      if (error) {
+        console.log(error.toString());
+        sendMessage({ text: "Error Merging Videos", error: error.toString() }, "info");
+        if (fs.existsSync(outFile)) {
+          fs.removeSync(outFile);
+        }
+      } else {
+        sendMessage({ convert: true, msg: "Finish Merging Videos" });
+      }
+      resolve();
+    });
+  });
+};
+
+export const extraVideoPart = async ({ files, Start, End }) => {
+  if (files.length < 2) return sendMessage({ text: "Must Select more than one video" }, "info");
+  const basePath = path.dirname(files[0].Path);
+  const extension = path.extname(files[0].Name);
+  const name = files[0].Name.replace(extension, "");
+
+  const txtFiles = files.map((f) => `file '${f.Path}'`).join("\n");
+  fs.writeFileSync("./files.txt", txtFiles, "utf8");
+  const outFile = path.join(basePath, `${name}-merged${extension}`);
+
+  await new Promise(async (resolve) => {
+    exec(`ffmpeg -f concat -safe 0 -i ./files.txt -c copy "${outFile}" -y`, (error) => {
+      if (error) {
+        console.log(error);
+        sendMessage({ text: "Error Merging Videos", error: error.toString() }, "info");
+        if (fs.existsSync(outFile)) {
+          fs.removeSync(outFile);
+        }
+        resolve();
+      } else {
+        sendMessage({ convert: true, msg: "Finish Merging Videos" });
+      }
+      resolve();
+    });
+  });
 };
