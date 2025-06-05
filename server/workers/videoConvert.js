@@ -162,27 +162,25 @@ export const mergeVideos = async ({ files }) => {
   });
 };
 
-export const extraVideoPart = async ({ files, Start, End }) => {
-  if (files.length < 2) return sendMessage({ text: "Must Select more than one video" }, "info");
-  const basePath = path.dirname(files[0].Path);
-  const extension = path.extname(files[0].Name);
-  const name = files[0].Name.replace(extension, "");
+export const extraVideoPart = async ({ file, Start, End }) => {
+  const extension = path.extname(file.Name);
+  const name = file.Name.replace(extension, "");
 
-  const txtFiles = files.map((f) => `file '${f.Path}'`).join("\n");
-  fs.writeFileSync("./files.txt", txtFiles, "utf8");
-  const outFile = path.join(basePath, `${name}-merged${extension}`);
+  const outFile = path.join(file.Path, `${name}-A${extension}`);
+
+  sendMessage({ text: "Start Extrating Sub Video" }, "info");
 
   await new Promise(async (resolve) => {
-    exec(`ffmpeg -f concat -safe 0 -i ./files.txt -c copy "${outFile}" -y`, (error) => {
+    exec(`ffmpeg -i "${file.Path}" -ss ${Start} -to ${End} -c copy "${outFile}" -y`, (error) => {
       if (error) {
         console.log(error);
-        sendMessage({ text: "Error Merging Videos", error: error.toString() }, "info");
+        sendMessage({ text: "Error Extrating Sub Video", error: error.toString() }, "info");
         if (fs.existsSync(outFile)) {
           fs.removeSync(outFile);
         }
         resolve();
       } else {
-        sendMessage({ convert: true, msg: "Finish Merging Videos" });
+        sendMessage({ convert: true, msg: "Finish Extrating Sub Video" });
       }
       resolve();
     });
