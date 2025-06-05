@@ -46,7 +46,7 @@
         <Input key="Secuence" {item} type="number" min="0" on:keydown={onKeydown} />
         <Input key="After" {item} on:keydown={onKeydown} />
       </div>
-      <Input key="Ext" {item} on:keydown={onKeydown} />
+      <Input key="Extension" {item} on:keydown={onKeydown} />
       <Input key="ZeroPad" {item} on:keydown={onKeydown} />
       <Input key="Regex" {item} on:keydown={onKeydown} />
       <CheckBox key="Preserve" {item} />
@@ -69,8 +69,8 @@
     max-width: 95%;
   }
   .dir-list :global(.input-label:not(#t-label)) {
-    min-width: 75px;
-    max-width: 75px;
+    min-width: 85px;
+    max-width: 85px;
     text-align: right;
     padding-right: 5px;
   }
