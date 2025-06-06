@@ -12,7 +12,7 @@ let touchData = { ...initialData };
 let time = 0;
 export const setGesture = (player, onPlay, mConfig) => {
   if (player) {
-    player.onmousedown = player.ontouchstart = (e) => {
+    const onStart = (e) => {
       touching = true;
       time = e.timeStamp;
 
@@ -24,7 +24,7 @@ export const setGesture = (player, onPlay, mConfig) => {
       }
     };
 
-    player.ontouchmove = (e) => {
+    const onMove = (e) => {
       if (touching) {
         let { pageX, pageY } = e.touches[0];
         let { startX, startY } = touchData;
@@ -54,7 +54,7 @@ export const setGesture = (player, onPlay, mConfig) => {
       }
     };
 
-    player.onmouseup = player.ontouchend = (e) => {
+    const onEnd = (e) => {
       touching = false;
       touchData = { ...initialData };
       gestureDir = 0;
@@ -62,5 +62,11 @@ export const setGesture = (player, onPlay, mConfig) => {
         onPlay();
       }
     };
+
+    player.addEventListener("mousedown", onStart, { passive: true });
+    player.addEventListener("touchstart", onStart, { passive: true });
+    player.addEventListener("touchmove", onMove, { passive: true });
+    player.addEventListener("mouseup", onEnd, { passive: true });
+    player.addEventListener("touchend", onEnd, { passive: true });
   }
 };

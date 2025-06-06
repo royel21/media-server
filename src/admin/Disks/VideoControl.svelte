@@ -43,7 +43,6 @@
 
   $: show = selectedList.filter((f) => !/\.(mp4|mkv|webm|ogg)$/i.test(f.Name)).length = 0;
   $: count = selectedList.filter((f) => /\.(mp4|mkv|webm|ogg)$/i.test(f.Name)).length;
-  $: console.log(show, count);
 </script>
 
 {#if showConvertVideo}

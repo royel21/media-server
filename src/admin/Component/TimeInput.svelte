@@ -13,7 +13,6 @@
     time[+name] = value.padStart(2, "0");
     item[key] = time.join(":");
     onChange(item[key]);
-    console.log("changes", time);
   };
 </script>
 

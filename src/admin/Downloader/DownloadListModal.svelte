@@ -68,7 +68,6 @@
 
   const onChange = async ({ target: { value } }) => {
     const found = downloadList.find((dl) => +dl.Id === +value);
-    console.log(found, downloadList);
     if (found) {
       item = { ...found };
       downloads = await getLinks(found.Id);
