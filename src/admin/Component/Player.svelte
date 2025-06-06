@@ -156,6 +156,7 @@
 
   .time-progress > .time {
     position: absolute;
+    top: 1px;
     left: 4px;
     display: inline-block;
     border-radius: 0.25rem;
