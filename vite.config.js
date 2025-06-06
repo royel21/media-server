@@ -15,6 +15,7 @@ const warings = [
   "a11y-no-noninteractive-element-interactions",
   "a11y-no-static-element-interactions",
   "a11y-no-noninteractive-tabindex",
+  "a11y-media-has-caption",
 ];
 
 // https://vitejs.dev/config/
