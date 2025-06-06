@@ -79,12 +79,10 @@
     return stop;
   });
 
-  const getTimes = (current, time, duration) => {
-    const filesTag = `${current + 1}/${files.length}`;
-    const timeTag = duration ? `${formatTime(time)}/${formatTime(duration)}` : "00:00/00:00";
-    return `${timeTag} ~ ${filesTag}`;
+  const getTimes = (time, duration) => {
+    return duration ? `${formatTime(time)}/${formatTime(duration)}` : "00:00/00:00";
   };
-  $: timeProgress = getTimes(current, time, duration);
+  $: timeProgress = getTimes(time, duration);
   $: localStorage.setItem(VOLKEY, vol);
 </script>
 
@@ -106,12 +104,13 @@
       />
     </div>
     <div class="v-seeker">
+      <span class="time">{timeProgress}</span>
       <Slider min={0} max={duration} value={time} onChange={onSeek} preview={true} let:value>
         {formatTime(value)}
       </Slider>
     </div>
     <div class="time-progress" on:mousedown|stopPropagation on:touchstart|stopPropagation>
-      <span class="time">{timeProgress}</span>
+      <span class="files-count">{`${current + 1}/${files.length}`}</span>
       <span class="admin-vol" on:click={onMute}>
         <Icons name={mute ? "volumemute" : "volume"} />
         <span>{parseInt(vol * 100)}%</span>
@@ -169,7 +168,7 @@
     height: 28px;
   }
 
-  .time-progress > .time {
+  .time-progress > .files-count {
     position: absolute;
     top: 1px;
     left: 4px;
@@ -178,7 +177,6 @@
     padding: 0 5px;
     background-color: rgba(0, 0, 0, 0.2);
     user-select: none;
-    font-size: 12px;
   }
 
   .time-progress :global(svg) {
@@ -217,6 +215,12 @@
     display: flex;
     align-items: center;
     height: 30px;
+  }
+
+  .v-seeker > span {
+    display: inline-block;
+    padding-left: 10px;
+    line-height: 1.8;
   }
 
   @media screen and (max-width: 600px) {
