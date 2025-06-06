@@ -6,6 +6,7 @@ import path from "path";
 import { ListFiles } from "win-explorer";
 import { literal } from "sequelize";
 import os from "node:os";
+import { streaming } from "../ViewerRoutes.js";
 
 const getNewId = () => {
   return Math.random().toString(36).slice(-5);
@@ -150,6 +151,15 @@ routes.post("/get-dirs", (req, res) => {
   }
 
   return res.send({ Path });
+});
+
+routes.get("/video/:path?", async (req, res) => {
+  const { path } = req.params;
+  if (path && fs.existsSync(path)) {
+    streaming({ Path: path }, req, res);
+  } else {
+    res.send("Error File Not Found");
+  }
 });
 
 routes.get("/", async (req, res) => {

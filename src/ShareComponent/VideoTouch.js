@@ -56,9 +56,11 @@ export const setGesture = (player, onPlay, mConfig) => {
 
     player.onmouseup = player.ontouchend = (e) => {
       touching = false;
-
-      touchData = { initialData };
+      touchData = { ...initialData };
       gestureDir = 0;
+      if (e.timeStamp - time < 110) {
+        onPlay();
+      }
     };
   }
 };

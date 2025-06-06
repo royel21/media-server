@@ -156,6 +156,7 @@
     border-radius: 0.3rem;
     width: 50%;
     overflow: hidden;
+    z-index: 99;
   }
   .col:first-child {
     position: relative;

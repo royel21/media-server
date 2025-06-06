@@ -32,6 +32,7 @@
         <slot name="modal-header" />
       </div>
       <div class="modal-body">
+        <slot />
         <slot name="modal-body" />
         <p class="error">
           {#each errors as error}
@@ -39,11 +40,12 @@
           {/each}
         </p>
       </div>
+
       <div class="modal-footer">
         {#if btnOk}
           <button type="submit" class="btn">{btnOk}</button>
         {/if}
-        {#if cancel}
+        {#if cancel && btnCancer}
           <button type="button" class="btn" on:click={cancel}>{btnCancer}</button>
         {/if}
       </div>
@@ -60,9 +62,11 @@
     z-index: 401;
     padding: 0;
   }
+  .modal-header {
+    border-bottom: 1px solid;
+  }
   .modal-body {
     padding: 15px 5px;
-    border-top: 1px solid;
   }
   .modal-footer {
     border-top: 1px solid;

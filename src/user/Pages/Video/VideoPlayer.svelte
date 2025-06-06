@@ -3,10 +3,10 @@
 
   import Slider from "./Slider.svelte";
   import { setfullscreen, formatTime } from "../pagesUtils";
-  import { setGesture } from "./VideoTouch";
   import Icons from "src/icons/Icons.svelte";
   import { setBatteryMetter } from "./videoUtil";
   import ModalConfig from "./ModalPlayerConfig.svelte";
+  import { setGesture } from "src/ShareComponent/VideoTouch";
 
   export let KeyMap;
   export let file;

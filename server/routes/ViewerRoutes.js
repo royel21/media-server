@@ -40,18 +40,8 @@ routes.post("/favorites/", (req, res) => {
   getFiles(req, res, "favorite");
 });
 
-routes.get("/video/:id", async (req, res) => {
-  const file = await db.file.findOne({
-    attributes: ["Name", "Size"],
-    where: { Id: req.params.id },
-    include: { attributes: ["Path", "IsAdult"], model: db.folder },
-  });
-
-  if (req.user.AdultPass < file.Folder.IsAdult) {
-    return res.status(400).send("User don't have access to this file");
-  }
-
-  if (file && req.headers.range) {
+export const streaming = (file, req, res) => {
+  if (req.headers.range) {
     const range = req.headers.range;
     if (!range) {
       res.status(400).send("Requires Range header");
@@ -74,6 +64,20 @@ routes.get("/video/:id", async (req, res) => {
   } else {
     res.send("Error File Not Found");
   }
+};
+
+routes.get("/video/:id", async (req, res) => {
+  const file = await db.file.findOne({
+    attributes: ["Name", "Size"],
+    where: { Id: req.params.id },
+    include: { attributes: ["Path", "IsAdult"], model: db.folder },
+  });
+
+  if (req.user.AdultPass < file.Folder.IsAdult) {
+    return res.status(400).send("User don't have access to this file");
+  }
+
+  streaming(file, req, res);
 });
 
 //export this Router to use in our index.js

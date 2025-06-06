@@ -13,8 +13,8 @@
   import apiUtils from "src/apiUtils";
   import BulkEdit from "./BulkEdit.svelte";
   import { formatSize } from "src/utils";
-  import VideoConvert from "./VideoConvert.svelte";
   import { updateConsole } from "../Store/ConsoleStore";
+  import VideoControl from "./VideoControl.svelte";
 
   export let files = [];
   export let socket;
@@ -35,7 +35,6 @@
   let showConfirm = false;
   let showRename = false;
   let showBulkRename = false;
-  let showConvertVideo;
 
   const onCheck = ({ target }) => {
     const id = target.closest("li").id;
@@ -79,13 +78,6 @@
       acept: removeFiles,
       text: "Remove",
     };
-  };
-
-  const onConvertVideos = () => (showConvertVideo = true);
-
-  const convertVideos = (options) => {
-    socket.emit("bg-work", { action: "convertVideo", data: { files: selectedList, ...options } });
-    showConvertVideo = false;
   };
 
   const fileUnZip = () => {
@@ -136,17 +128,6 @@
       updateConsole({ text: msg });
       reload();
     }
-  };
-
-  const confirmMerge = () => {
-    socket.emit("bg-work", { action: "mergeVideos", data: { files: selectedList } });
-  };
-
-  const onMergeVideo = () => {
-    showConfirm = {
-      acept: confirmMerge,
-      text: "Merge",
-    };
   };
 
   const fileUpdate = ({ move }) => {
@@ -245,10 +226,6 @@
   />
 {/if}
 
-{#if showConvertVideo}
-  <VideoConvert hide={() => (showConvertVideo = false)} acept={convertVideos} />
-{/if}
-
 {#if showBulkRename}
   {#if selectedList.length === 1}
     <RenameModal data={selectedList[0]} acept={renameFile} hide={hideRename} />
@@ -274,14 +251,7 @@
                 <Icons name="zip" box="0 0 384 512" color="darkgray" />
               </span>
             {/if}
-            {#if selectedList.filter((f) => !/\.(mp4|mkv|webm|ogg)$/i.test(f.Name)).length === 0}
-              <span on:click={onConvertVideos} title="Convert Videos">
-                <Icons name="film2" box="0 0 512 512" color="deepskyblue" />
-              </span>
-              <span on:click={onMergeVideo} title="Megre Videos">
-                <Icons name="merge" box="0 0 576 512" color="deepskyblue" />
-              </span>
-            {/if}
+            <VideoControl {selectedList} {socket} />
             <span on:click={() => (showBulkRename = true)}><Icons name="edit" /></span>
             <span on:click={onTransfer}><Icons name="right-left" /></span>
             <span class="rm-all" on:click={onShowRemoveConfirm}><Icons name="trash" /></span>
@@ -336,16 +306,6 @@
 
   ul :global(.select-file) {
     max-width: 22px;
-  }
-
-  .filter :global(.icon-film2) {
-    width: 21px;
-    top: 5px;
-  }
-
-  .filter :global(.icon-merge) {
-    width: 21px;
-    top: 5px;
   }
 
   .tree-files {

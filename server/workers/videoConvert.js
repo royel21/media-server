@@ -155,20 +155,26 @@ export const mergeVideos = async ({ files }) => {
           fs.removeSync(outFile);
         }
       } else {
-        sendMessage({ convert: true, msg: "Finish Merging Videos" });
+        sendMessage({ convert: true, msg: `Finish Merging Video ${outFile}` });
       }
       resolve();
     });
   });
 };
 
-export const extraVideoPart = async ({ file, Start, End }) => {
+export const extractSubVideo = async ({ file, Start, End }) => {
   const extension = path.extname(file.Name);
   const name = file.Name.replace(extension, "");
+  const basePath = path.dirname(file.Path);
 
-  const outFile = path.join(file.Path, `${name}-A${extension}`);
+  const outFile = path.join(basePath, `${name}-A${extension}`);
 
-  sendMessage({ text: "Start Extrating Sub Video" }, "info");
+  if (End === "00:00:00") {
+    const meta = await getMetadata(file.Path);
+    End = formatTime(meta.streams[0]?.duration);
+  }
+
+  sendMessage({ text: `Extrating Sub Video ${file.Name} from: ${Start} to: ${End}` }, "info");
 
   await new Promise(async (resolve) => {
     exec(`ffmpeg -i "${file.Path}" -ss ${Start} -to ${End} -c copy "${outFile}" -y`, (error) => {
@@ -180,7 +186,7 @@ export const extraVideoPart = async ({ file, Start, End }) => {
         }
         resolve();
       } else {
-        sendMessage({ convert: true, msg: "Finish Extrating Sub Video" });
+        sendMessage({ convert: true, msg: `Finish Extrated to ${outFile}` });
       }
       resolve();
     });

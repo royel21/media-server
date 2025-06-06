@@ -1,52 +1,81 @@
 <script>
   import Input from "../Component/Input.svelte";
   import Dialog from "../../ShareComponent/Dialog.svelte";
-  import CheckBox from "../Component/CheckBox.svelte";
-  import Select from "src/ShareComponent/Select.svelte";
+  import TimeInput from "../Component/TimeInput.svelte";
 
   export let hide;
   export let acept;
 
-  let defaults = {
+  let item = {
     Start: "00:00:00",
     End: "00:00:00",
   };
 
   let errors = [];
 
-  let item = { ...defaults.Anime, Remove: false, Default: "Anime" };
-
   const onConfirm = () => {
+    errors = [];
+    const formatValitator = /^[0-9]{2,2}\:[0-9]{2,2}\:[0-9]{2,2}$/g;
+    if (item.Start === item.End) {
+      return (errors = [`Start and End should no be equal`]);
+    }
+
+    if (!formatValitator.test(item.Start)) {
+      errors = [`Start: ${item.Start} Format not valid`];
+      return;
+    }
+
+    console.log(item.End, formatValitator.test(item.End));
+
+    if (!formatValitator.test(item.End)) {
+      errors = [`End: ${item.End} Format not valid`];
+      return;
+    }
+
+    if (item.End !== "00:00:00") {
+      const startParts = item.Start.split(":");
+      const endParts = item.End.split(":");
+      if (+endParts[2] <= +startParts[2] && +endParts[1] <= +startParts[1] && +endParts[0] <= +startParts[0]) {
+        errors = [`End Time must be higher than Time Start`];
+        return;
+      }
+    }
+
     return acept(item);
   };
-
-  const onChange = () => (item = { ...item, ...defaults[item.Default] });
 </script>
 
-<div id="v-convert">
+<div id="v-subtract">
   <Dialog cancel={hide} confirm={onConfirm} {errors}>
     <h4 slot="modal-header">Extract Sub Video Options</h4>
-    <span slot="modal-body">
-      <Input key="Start" {item} />
-      <Input key="End" {item} />
-    </span>
+    <div slot="modal-body">
+      <TimeInput key="Start" {item} />
+      <TimeInput key="End" {item} />
+    </div>
   </Dialog>
 </div>
 
 <style>
-  #v-convert :global(.modal-container .modal) {
-    min-width: 350px;
-    max-width: 350px;
+  #v-subtract :global(.modal-container .modal) {
+    min-width: 320px;
+    max-width: 320px;
   }
-  #v-convert :global(.input-label:not(#t-label)) {
-    min-width: 120px;
-    max-width: 120px;
+  #v-subtract :global(.input-label:not(#t-label)) {
+    min-width: 80px;
+    max-width: 80px;
     text-align: right;
     padding-right: 5px;
   }
 
+  #v-subtract :global(.modal-footer .btn:first-child) {
+    margin-right: 10px;
+  }
+  div {
+    padding: 0 25px;
+  }
+
   @media screen and (max-width: 600px) {
-    #v-convert :global(.modal-container .modal) {
+    #v-subtract :global(.modal-container .modal) {
       min-width: initial;
     }
   }
