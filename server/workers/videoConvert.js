@@ -167,17 +167,25 @@ export const extractSubVideo = async ({ file, Start, End }) => {
   const name = file.Name.replace(extension, "");
   const basePath = path.dirname(file.Path);
 
-  const outFile = path.join(basePath, `${name}-A${extension}`);
-
-  if (End === "00:00:00") {
-    const meta = await getMetadata(file.Path);
-    End = formatTime(meta.streams[0]?.duration);
+  let outFile = path.join(basePath, `${name}-A${extension}`);
+  let count = 0;
+  let letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+  while (fs.existsSync(outFile)) {
+    outFile = outFile.replace(`-${letters[count]}${extension}`, `-${letters[count + 1]}${extension}`);
+    count++;
+    if (count > letters.length) {
+      return sendMessage({ text: "Can't Create More Parts", error: "Can't Create More Parts" });
+    }
   }
 
-  sendMessage({ text: `Extrating Sub Video ${file.Name} from: ${Start} to: ${End}` }, "info");
+  sendMessage({ text: `Extrating Sub Video ${file.Name} from: ${Start} ${End}` }, "info");
+  console.log("Start: ", Start);
+  Start = Start !== "00:00:00" ? `-ss ${Start}` : "";
+  End = End !== "00:00:00" ? `-to ${End}` : "";
 
   await new Promise(async (resolve) => {
-    exec(`ffmpeg -i "${file.Path}" -ss ${Start} -to ${End} -c copy "${outFile}" -y`, (error) => {
+    console.log(`ffmpeg -i "${file.Path}" ${End} -c copy "${outFile}" -y`);
+    exec(`ffmpeg ${Start} -i "${file.Path}" ${End} -c copy "${outFile}" -y`, (error) => {
       if (error) {
         console.log(error);
         sendMessage({ text: "Error Extrating Sub Video", error: error.toString() }, "info");

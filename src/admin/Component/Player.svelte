@@ -157,6 +157,7 @@
   video {
     width: 100%;
     max-height: 400px;
+    min-height: 345px;
     object-fit: fill;
     pointer-events: none;
   }
