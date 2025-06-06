@@ -34,10 +34,10 @@
     if (e.type === "touchstart") {
       let tch = e.touches[0];
       xpos = tch.pageX - getLeft(tch.target);
-      document.on("touchmove", globalMMove);
+      document.addEventListener("touchmove", globalMMove, { passive: true });
     } else {
       xpos = e.offsetX;
-      document.on("mousemove", globalMMove);
+      document.addEventListener("mousemove", globalMMove, { passive: true });
     }
 
     if (!isNaN(xpos)) {
@@ -73,24 +73,24 @@
 
   document.onmouseup = (e) => {
     isMdown = false;
-    document.off("mousemove", globalMMove);
-    document.off("touchmove", globalMMove);
+    document.removeEventListener("touchmove", globalMMove);
+    document.removeEventListener("mousemove", globalMMove);
   };
 
   const handleThumb = (e) => {
     isMdown = { is: true, id: uniqId };
     if (e.type === "touchstart") {
-      document.on("touchmove", globalMMove);
+      document.addEventListener("touchmove", globalMMove, { passive: true });
     } else {
-      document.on("mousemove", globalMMove);
+      document.addEventListener("mousemove", globalMMove, { passive: true });
     }
   };
 
   $: progress = map(value, min, max, 0, 100);
 
   onDestroy(() => {
-    document.off("mousemove", globalMMove);
-    document.off("touchmove", globalMMove);
+    document.removeEventListener("mousemove", globalMMove);
+    document.removeEventListener("touchmove", globalMMove);
   });
 </script>
 

@@ -251,7 +251,7 @@
                 <Icons name="zip" box="0 0 384 512" color="darkgray" />
               </span>
             {/if}
-            <VideoControl {selectedList} {socket} />
+            <VideoControl {selectedList} {socket} {files} />
             <span on:click={() => (showBulkRename = true)}><Icons name="edit" /></span>
             <span on:click={onTransfer}><Icons name="right-left" /></span>
             <span class="rm-all" on:click={onShowRemoveConfirm}><Icons name="trash" /></span>

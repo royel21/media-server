@@ -7,12 +7,15 @@
 
   export let socket;
   export let selectedList;
+  export let files;
+
   let showConvertVideo;
   let showVideoSubTract;
   let showConfirm = false;
   let showPlayer;
 
   let show = false;
+  const videoRegex = /\.(mp4|mkv|webm|ogg)$/i;
 
   const onConvertVideos = () => (showConvertVideo = true);
 
@@ -41,8 +44,8 @@
 
   const onShowPlayer = () => (showPlayer = true);
 
-  $: show = selectedList.filter((f) => !/\.(mp4|mkv|webm|ogg)$/i.test(f.Name)).length = 0;
-  $: count = selectedList.filter((f) => /\.(mp4|mkv|webm|ogg)$/i.test(f.Name)).length;
+  $: show = selectedList.filter((f) => !videoRegex.test(f.Name)).length = 0;
+  $: count = selectedList.filter((f) => videoRegex.test(f.Name)).length;
 </script>
 
 {#if showConvertVideo}
@@ -63,17 +66,23 @@
 {/if}
 
 {#if showPlayer}
-  <Player file={selectedList[0]} hide={() => (showPlayer = false)} />
+  <Player
+    file={selectedList[0]}
+    hide={() => (showPlayer = false)}
+    files={files.filter((f) => videoRegex.test(f.Name))}
+  />
 {/if}
 
 {#if !show}
-  <span id="film2" on:click={onConvertVideos} title="Convert Videos">
-    <Icons name="film2" box="0 0 512 512" color="deepskyblue" />
-  </span>
   {#if count === 1}
     <span on:click={onShowPlayer} title="Play Video">
       <Icons name="play" box="0 0 512 512" color="deepskyblue" />
     </span>
+  {/if}
+  <span id="film2" on:click={onConvertVideos} title="Convert Videos">
+    <Icons name="film2" box="0 0 512 512" color="deepskyblue" />
+  </span>
+  {#if count === 1}
     <span on:click={onShowExtractSubVideos} title="Extra Sub Video">
       <Icons name="videocut" box="0 0 640 512" color="deepskyblue" />
     </span>

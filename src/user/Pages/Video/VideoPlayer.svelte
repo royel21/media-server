@@ -1,7 +1,7 @@
 <script>
   import { onMount, createEventDispatcher, getContext } from "svelte";
 
-  import Slider from "./Slider.svelte";
+  import Slider from "../../../ShareComponent/Slider.svelte";
   import { setfullscreen, formatTime } from "../pagesUtils";
   import Icons from "src/icons/Icons.svelte";
   import { setBatteryMetter } from "./videoUtil";
@@ -135,9 +135,6 @@
   const onFullscreen = () => (isFullScreen = document.fullscreenElement !== null);
 
   const onMeta = () => {
-    if (!player.onmousedown) {
-      setGesture(player, onPlay, mConfig);
-    }
     player.currentTime = file.CurrentPos;
     player.onended = () => {
       clearTimeout(isNextFile);
@@ -165,9 +162,12 @@
       player.volume = mConfig.volume;
     }
 
+    const stopGesture = setGesture(player, onPlay, mConfig);
+
     return () => {
       window.localStorage.setObject(configTag, mConfig);
       window.removeEventListener("fullscreenchange", onFullscreen);
+      stopGesture();
       Fullscreen.action = null;
     };
   });
