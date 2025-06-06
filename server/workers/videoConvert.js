@@ -46,7 +46,10 @@ export const convertVideo = async ({ files, videoBitrate, audioBitrate, Remove, 
   for (let file of files) {
     await new Promise(async (resolve) => {
       const basePath = file.Path.replace(/\.(mp4|webm|mkv|ogg)$/i, "");
-      const toFile = basePath + `-.mp4`;
+      let toFile = basePath + `.mp4`;
+      if (fs.existsSync(toFile)) {
+        toFile = toFile.replace(".mp4", "-.mp4");
+      }
       const current = `${(i + 1).toString().padStart(padding, "0")}/${files.length}`;
 
       const meta = await getMetadata(file.Path);

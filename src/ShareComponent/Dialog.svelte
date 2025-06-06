@@ -26,7 +26,7 @@
   tabindex="-1"
   on:contextmenu|stopPropagation={() => {}}
   on:keydown|stopPropagation={onKeydown}
-  on:click|stopPropagation={handler}
+  on:mousedown|stopPropagation={handler}
 >
   <div {id} class={`modal card move-to ${clazz}`} transition:fade={{ duration: 200 }}>
     <form on:submit|preventDefault={confirm}>
