@@ -9,10 +9,13 @@
   export let hide;
   export let file;
   export let files;
+
+  const VOLKEY = "admin-vol";
+
   let duration = 0;
   let player;
   let time = 0;
-  let vol = 0.5;
+  let vol = localStorage.getItem(VOLKEY) || 0.05;
   let mute = false;
   let ojectFit = "contain";
   let paused = true;
@@ -74,6 +77,7 @@
     return `${timeTag} ~ ${filesTag}`;
   };
   $: timeProgress = getTimes(current, time, duration);
+  $: localStorage.setItem(VOLKEY, vol);
 </script>
 
 <div class="player">
