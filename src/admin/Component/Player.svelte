@@ -162,6 +162,7 @@
     padding: 0 5px;
     background-color: rgba(0, 0, 0, 0.2);
     user-select: none;
+    font-size: 12px;
   }
 
   .time-progress :global(svg) {
