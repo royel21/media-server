@@ -6,6 +6,7 @@
   export let id = "";
   export let btnOk = "Ok";
   export let btnCancer = "Cancel";
+  export let keydown = () => {};
 
   let clazz = "";
   export { clazz as class };
@@ -14,8 +15,9 @@
     if (currentTarget === target) cancel();
   };
 
-  const onKeydown = ({ keyCode }) => {
-    if (keyCode === 27) cancel();
+  const onKeydown = (e) => {
+    if (e.keyCode === 27) cancel();
+    keydown(e);
   };
 </script>
 

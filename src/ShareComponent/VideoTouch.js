@@ -16,17 +16,13 @@ export const setGesture = (player, onPlay, mConfig) => {
       touching = true;
       time = e.timeStamp;
 
-      if (e.type !== "mousedown") {
-        let { pageX, pageY } = e.touches[0];
-        touchData = { time, startX: pageX, startY: pageY };
-      } else if (e.which === 1) {
-        onPlay();
-      }
+      let { pageX, pageY } = e.touches ? e.touches[0] : e;
+      touchData = { time, startX: pageX, startY: pageY };
     };
 
     const onMove = (e) => {
       if (touching) {
-        let { pageX, pageY } = e.touches[0];
+        let { pageX, pageY } = e.touches ? e.touches[0] : e;
         let { startX, startY } = touchData;
         let deltaX = pageX - startX;
         let deltaY = pageY - startY;
@@ -58,14 +54,18 @@ export const setGesture = (player, onPlay, mConfig) => {
       touching = false;
       touchData = { ...initialData };
       gestureDir = 0;
-      if (e.timeStamp - time < 110) {
-        onPlay();
+      console.log(e.timeStamp - time);
+      if (e.timeStamp - time < 120) {
+        onPlay(e);
       }
     };
 
     player.addEventListener("mousedown", onStart, { passive: true });
     player.addEventListener("touchstart", onStart, { passive: true });
+
     player.addEventListener("touchmove", onMove, { passive: true });
+    player.addEventListener("mousemove", onMove, { passive: true });
+
     player.addEventListener("mouseup", onEnd, { passive: true });
     player.addEventListener("touchend", onEnd, { passive: true });
   }
