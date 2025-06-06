@@ -39,12 +39,14 @@
   };
 
   const onkeydown = ({ keyCode }) => {
-    if (keyCode === 37) {
-      player.currentTime = time - 5;
-    }
+    if (!player.seeking) {
+      if (keyCode === 37) {
+        player.currentTime = time - 5;
+      }
 
-    if (keyCode === 39) {
-      player.currentTime = time + 5;
+      if (keyCode === 39) {
+        player.currentTime = time + 5;
+      }
     }
 
     if (keyCode === 38) {
@@ -66,8 +68,14 @@
 
   const onMute = () => (mute = !mute);
 
+  const onWheel = ({ deltaY }) => {
+    let volume = vol;
+    volume += deltaY < 0 ? 0.05 : -0.05;
+    vol = volume < 0 ? 0 : volume > 1 ? 1 : volume;
+  };
+
   onMount(() => {
-    const stop = setGesture(player, onPlay, { seekRate: 1 });
+    const stop = setGesture(player, onPlay, { seekRate: 2 });
     return stop;
   });
 
@@ -80,16 +88,15 @@
   $: localStorage.setItem(VOLKEY, vol);
 </script>
 
-<div class="player">
+<div class="player" on:wheel={onWheel}>
   <Dialog cancel={hide} btnOk="" btnCancer="" keydown={onkeydown}>
+    <span class="f-name">{file.Name}</span>
     <div class="video-container">
       <video
         autoplay={true}
         bind:this={player}
         bind:currentTime={time}
         bind:duration
-        on:mousedown|preventDefault
-        on:mouseup|preventDefault
         bind:volume={vol}
         bind:muted={mute}
         bind:paused
@@ -117,6 +124,9 @@
       </span>
       <span id="next" class="btn-play" on:click={changeFile}>
         <Icons name="arrowcircleright" />
+      </span>
+      <span class="close btn-play" on:click={() => hide()}>
+        <Icons name="timescircle" />
       </span>
       <span class="fit" on:click={changeFit}>
         <Icons name="expandarrow" />
@@ -149,6 +159,7 @@
     width: 100%;
     max-height: 400px;
     object-fit: fill;
+    pointer-events: none;
   }
   .time-progress {
     position: relative;
@@ -179,6 +190,10 @@
   }
   .btn-play.play {
     margin: 0 10px;
+  }
+
+  #next {
+    margin-right: 10px;
   }
 
   .admin-vol {

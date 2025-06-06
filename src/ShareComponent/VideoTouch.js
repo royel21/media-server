@@ -73,6 +73,9 @@ export const setGesture = (player, onPlay, mConfig) => {
     container.addEventListener(isMobile() ? "touchstart" : "mousedown", onStart, { passive: true });
     container.addEventListener(isMobile() ? "touchmove" : "mousemove", onMove, { passive: true });
     document.body.addEventListener(isMobile() ? "touchend" : "mouseup", onEnd, { passive: true });
+    setTimeout(() => {
+      player.focus();
+    }, 1000);
   }
 
   return () => {
