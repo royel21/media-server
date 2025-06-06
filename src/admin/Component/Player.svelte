@@ -120,7 +120,7 @@
         <Icons name="arrowcircleleft" />
       </span>
       <span class="btn-play play" on:click={onPlay}>
-        <Icons name={paused ? "playcircle" : "stopcircle"} />
+        <Icons name={paused ? "playcircle" : "pausecircle"} />
       </span>
       <span id="next" class="btn-play" on:click={changeFile}>
         <Icons name="arrowcircleright" />
