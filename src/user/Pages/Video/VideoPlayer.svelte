@@ -13,6 +13,7 @@
   export let file;
   export let viewer;
   export let removeFile;
+  export let lastPos = file.CurrentPos;
 
   const { Fullscreen, SkipForward, SkipBack, VolumeUp, VolumeDown, Muted, ShowList } = KeyMap;
 
@@ -127,6 +128,7 @@
   const onFullscreen = () => (isFullScreen = document.fullscreenElement !== null);
 
   const onMeta = () => {
+    file.CurrentPos = lastPos;
     player.onended = () => {
       clearTimeout(isNextFile);
       isNextFile = setTimeout(() => {
@@ -165,6 +167,10 @@
     document.querySelector(".f-name").style.opacity = 1;
   } else {
     document.querySelector(".f-name").style.opacity = 0;
+  }
+  $: if (file.Id) {
+    lastPos = file.CurrentPos;
+    console.log("file-changed", lastPos);
   }
 </script>
 
