@@ -47,6 +47,10 @@ export const streaming = (file, req, res) => {
       res.status(400).send("Requires Range header");
     }
 
+    if (!file.Path || !fs.existsSync(file.Path)) {}
+      res.status(404).send("Resource Not Found");
+    }
+
     const videoSize = fs.statSync(file.Path).size;
     const CHUNK_SIZE = 10 ** 6;
     const start = Number(range.replace(/\D/g, ""));
