@@ -38,15 +38,14 @@
     }
   };
 
-  const onkeydown = ({ keyCode }) => {
-    if (!player.seeking) {
-      if (keyCode === 37) {
-        player.currentTime = time - 5;
-      }
+  const onkeydown = ({ keyCode, ctrlKey }) => {
+    const seekRate = ctrlKey ? 10 : 5;
+    if (keyCode === 37) {
+      player.currentTime = time - seekRate;
+    }
 
-      if (keyCode === 39) {
-        player.currentTime = time + 5;
-      }
+    if (keyCode === 39) {
+      player.currentTime = time + seekRate;
     }
 
     if (keyCode === 38) {
@@ -56,6 +55,8 @@
     if (keyCode === 40) {
       player.volume = map(player.volume - 0.05, 0, 1);
     }
+
+    if (keyCode === 13) onPlay();
   };
 
   const changeFit = () => {
@@ -75,7 +76,7 @@
   };
 
   onMount(() => {
-    const stop = setGesture(player, onPlay, { seekRate: 2 });
+    const stop = setGesture(player, onPlay, { seekRate: 5 });
     return stop;
   });
 

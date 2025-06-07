@@ -110,9 +110,7 @@
   };
 
   const onSkip = (seekRate) => {
-    if (!player.seeking) {
-      player.currentTime += seekRate;
-    }
+    player.currentTime += seekRate;
   };
 
   SkipForward.action = () => onSkip(+mConfig.seekRate);

@@ -39,7 +39,7 @@ export const setGesture = (player, onPlay, mConfig) => {
         gesture = true;
       }
 
-      if (gestureDir === 1 && !player.seeking) {
+      if (gestureDir === 1) {
         if (deltaX > 20 || deltaX < -20) {
           let { duration, currentTime } = player;
           let seek = currentTime + (deltaX > 0 ? +mConfig.seekRate : -mConfig.seekRate);
