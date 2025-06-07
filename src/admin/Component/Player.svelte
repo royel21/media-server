@@ -187,6 +187,7 @@
 
   .btn-play :global(svg) {
     top: 0px;
+    cursor: pointer;
   }
   .btn-play.play {
     margin: 0 10px;
