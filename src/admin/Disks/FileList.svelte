@@ -15,6 +15,8 @@
   import { formatSize } from "src/utils";
   import { updateConsole } from "../Store/ConsoleStore";
   import VideoControl from "./VideoControl.svelte";
+  import Player from "../Component/Player.svelte";
+  import { videoRegex } from "../Component/util";
 
   export let files = [];
   export let socket;
@@ -31,6 +33,7 @@
   let isChecked = false;
   let filter = "";
 
+  let showPlayer;
   let showMoveDialog;
   let showConfirm = false;
   let showRename = false;
@@ -238,6 +241,10 @@
   <RenameModal data={showRename} acept={renameFile} hide={hideRename} />
 {/if}
 
+{#if showPlayer}
+  <Player file={showPlayer} hide={() => (showPlayer = false)} files={files.filter((f) => videoRegex.test(f.Name))} />
+{/if}
+
 <div class="col">
   <div class="tree-files">
     <div class="ftree-control">
@@ -277,6 +284,11 @@
         <li id={file.Id} title={formatDate(new Date(file.LastModified))}>
           <CCheckbox on:change={onCheck} isChecked={selectedList.find((f) => f.Id === file.Id)} />
           <span on:click={onCheck}>
+            {#if videoRegex.test(file.Name)}
+              <span class="f-play" on:click|stopPropagation={() => (showPlayer = file)} title="Play Video">
+                <Icons name="play" box="0 0 512 512" color="deepskyblue" />
+              </span>
+            {/if}
             <span class="size">{getSize2(file)}</span>
             <span>{file.Name}</span>
           </span>
@@ -308,6 +320,17 @@
     max-width: 22px;
   }
 
+  .f-play {
+    margin-left: 5px;
+  }
+
+  .f-play :global(svg) {
+    top: 4px;
+    width: 20px;
+    height: 18px;
+    margin-left: 2px;
+  }
+
   .tree-files {
     height: 100%;
     padding: 0 5px;
@@ -321,7 +344,7 @@
   }
   .tree-files li {
     font-size: 0.9rem;
-    padding: 3px 8px;
+    padding: 4px 8px;
     white-space: nowrap;
   }
   .ftree-control {

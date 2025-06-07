@@ -5,9 +5,10 @@
   import { onMount } from "svelte";
   import Pagination from "src/ShareComponent/Pagination.svelte";
   import ModalWatchList from "./ModalWatchList.svelte";
-  import { formatSize } from "../Component/util";
+  import { formatSize, videoRegex } from "../Component/util";
   import RenameModal from "./RenameModal.svelte";
   import { setMessage } from "../Store/MessageStore";
+  import Player from "../Component/Player.svelte";
 
   let items = [];
   let filter = "";
@@ -15,6 +16,7 @@
   let showWatchList = false;
   let showEdit = "";
   let ref;
+  let showPlayer;
   let pager = { page: 1, totalPages: 0, totalitems: 0, items: window.localStorage.getItem("w-items") || 100 };
 
   const applyFilter = async ({ detail }) => {
@@ -97,6 +99,10 @@
   <ModalWatchList hide={hideModal} />
 {/if}
 
+{#if showPlayer}
+  <Player file={showPlayer} hide={() => (showPlayer = false)} files={items.filter((f) => videoRegex.test(f.Path))} />
+{/if}
+
 {#if showPath}
   <div class="path-tag" style={`top:${showPath.y}px;`}>
     <span id="f-path">
@@ -120,6 +126,9 @@
           <li id={item.Id} class="list-group-item">
             <span on:click={onRemove}><Icons name="trash" /></span>
             <span on:click={() => (showEdit = item)}><Icons name="edit" /></span>
+            {#if videoRegex.test(item.Name)}
+              <span on:click={() => (showPlayer = item)}><Icons name="playcircle" color="firebrick" /></span>
+            {/if}
             <strong>{formatSize(item.Size)}GB</strong>
             <span>{item.Name}</span>
           </li>

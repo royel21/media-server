@@ -89,3 +89,5 @@ export function formatTime(time) {
   let sec = Math.floor(time % 60);
   return (h === 0 ? "" : h + ":") + String(min).padStart(2, "0") + ":" + String(sec).padStart(2, "0");
 }
+
+export const videoRegex = /\.(mp4|mkv|webm|ogg)$/i;

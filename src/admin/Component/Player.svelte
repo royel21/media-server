@@ -6,6 +6,7 @@
   import { map } from "../Utils";
   import Icons from "src/icons/Icons.svelte";
   import Slider from "src/ShareComponent/Slider.svelte";
+
   export let hide;
   export let file;
   export let files;
@@ -20,6 +21,7 @@
   let ojectFit = "contain";
   let paused = true;
   let current = files.findIndex((f) => f.Id === file.Id);
+  let error = "";
 
   const onPlay = (e) => {
     if (paused) {
@@ -77,6 +79,9 @@
 
   onMount(() => {
     const stop = setGesture(player, onPlay, { seekRate: 5 });
+    player.onerror = () => {
+      error = `File  Not Found: ${file.Name}`;
+    };
     return stop;
   });
 
@@ -85,12 +90,17 @@
   };
   $: timeProgress = getTimes(time, duration);
   $: localStorage.setItem(VOLKEY, vol);
+
+  $: if (file.Path !== player?.src) {
+    error = "";
+  }
 </script>
 
 <div class="player" on:wheel={onWheel}>
-  <Dialog cancel={hide} btnOk="" btnCancer="" keydown={onkeydown}>
-    <span class="f-name">{file.Name}</span>
+  <Dialog cancel={hide} btnOk="" btnCancer="" keydown={onkeydown} canDrag={true} background={false}>
+    <span slot="modal-header" class="f-name">{file.Name}</span>
     <div class="video-container">
+      <div class="error">{error}</div>
       <video
         autoplay={true}
         bind:this={player}
@@ -111,7 +121,9 @@
       </Slider>
     </div>
     <div class="time-progress" on:mousedown|stopPropagation on:touchstart|stopPropagation>
-      <span class="files-count">{`${current + 1}/${files.length}`}</span>
+      {#if files.length > 1}
+        <span class="files-count">{`${current + 1}/${files.length}`}</span>
+      {/if}
       <span class="admin-vol" on:click={onMute}>
         <Icons name={mute ? "volumemute" : "volume"} />
         <span>{parseInt(vol * 100)}%</span>
@@ -138,6 +150,12 @@
 <style>
   .video-container {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .error {
+    position: absolute;
   }
   .player :global(.modal-container .modal) {
     min-width: 600px;
