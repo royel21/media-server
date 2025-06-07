@@ -28,7 +28,10 @@
 </script>
 
 <div class={"input-control " + key}>
-  <span class="input-label" on:click={handler}>{label || key}</span>
+  <span class="input-label" on:click={handler}>
+    {label || key}
+    <slot name="icon" />
+  </span>
   {#if type === "date"}
     <input
       bind:this={ref}

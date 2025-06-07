@@ -7,6 +7,7 @@
   import { setBatteryMetter } from "./videoUtil";
   import ModalConfig from "./ModalPlayerConfig.svelte";
   import { setGesture } from "src/ShareComponent/VideoTouch";
+  import { clamp } from "src/ShareComponent/utils";
 
   export let KeyMap;
   export let file;
@@ -32,14 +33,14 @@
   const onReturn = () => dispatch("returnBack");
 
   const onSeek = (value) => {
-    player.currentTime = value;
+    file.CurrentPos = value;
   };
 
   $: if (player) {
     progress = formatTime(file.CurrentPos) + "/" + formatTime(file.Duration);
   }
   const onMuted = ({ target }) => {
-    player.muted = target.checked;
+    mConfig.muted = target.checked;
   };
 
   const fullScreen = () => {
@@ -81,13 +82,8 @@
   };
 
   const onWheel = ({ deltaY }) => {
-    let { volume } = mConfig;
-    volume += deltaY < 0 ? 0.05 : -0.05;
-    mConfig.volume = volume < 0 ? 0 : volume > 1 ? 1 : volume;
-  };
-
-  const updateTime = () => {
-    file.CurrentPos = player.currentTime;
+    const vol = deltaY < 0 ? 0.05 : -0.05;
+    mConfig.volume = clamp(mConfig.volume + vol, 0, 1);
   };
 
   const onPlay = () => {
@@ -103,25 +99,23 @@
   };
 
   const changeVol = (val) => {
-    let newVol = player.volume + val;
-    player.volume = newVol < 0 ? 0 : newVol;
-    mConfig.volume = player.volume;
+    mConfig.volume = clamp(mConfig.volume + val, 0, 1);
     showFullScrVol();
   };
 
   const onSkip = (seekRate) => {
-    player.currentTime += seekRate;
+    file.CurrentPos += seekRate;
   };
 
   SkipForward.action = () => onSkip(+mConfig.seekRate);
   SkipBack.action = () => onSkip(-+mConfig.seekRate);
   FastForward.action = () => onSkip(+mConfig.seekRate + 5);
   FastBackward.action = () => onSkip(-(+mConfig.seekRate + 5));
-  GotoStart.action = () => (player.currentTime = 0);
-  GotoEnd.action = () => (player.currentTime = file.Duration - 5);
-  VolumeUp.action = (e) => changeVol(e.ctrlKey ? -0.05 : -0.01);
-  VolumeDown.action = (e) => changeVol(e.ctrlKey ? 0.05 : 0.01);
-  Muted.action = () => (player.muted = !player.muted);
+  GotoStart.action = () => (file.CurrentPos = 0);
+  GotoEnd.action = () => (file.CurrentPos = file.Duration - 5);
+  VolumeUp.action = (e) => changeVol(-0.05);
+  VolumeDown.action = (e) => changeVol(0.05);
+  Muted.action = () => (mConfig.muted = !mConfig.muted);
   Fullscreen.action = fullScreen;
 
   PlayOrPause.action = onPlay;
@@ -133,7 +127,6 @@
   const onFullscreen = () => (isFullScreen = document.fullscreenElement !== null);
 
   const onMeta = () => {
-    player.currentTime = file.CurrentPos;
     player.onended = () => {
       clearTimeout(isNextFile);
       isNextFile = setTimeout(() => {
@@ -156,8 +149,6 @@
       for (let k of Object.keys(mConfig)) {
         mConfig[k] = tconfig[k] ?? mConfig[k];
       }
-      player.muted = mConfig.muted;
-      player.volume = mConfig.volume;
     }
 
     const stopGesture = setGesture(player, onPlay, mConfig);
@@ -188,9 +179,10 @@
         bind:this={player}
         bind:paused={mConfig.pause}
         bind:volume={mConfig.volume}
+        bind:muted={mConfig.muted}
         on:contextmenu|preventDefault
         on:loadedmetadata={onMeta}
-        on:timeupdate={updateTime}
+        bind:currentTime={file.CurrentPos}
         class="player"
         preload="metadata"
         src={`/api/viewer/video/${file.Id}`}
@@ -233,10 +225,10 @@
                 id="v-mute"
                 type="checkbox"
                 class="vol-ctrl"
-                checked={mConfig.volume === 0 || player.muted}
+                checked={mConfig.volume === 0 || mConfig.muted}
                 on:change={onMuted}
               />
-              <Icons name={player.muted ? "volumemute" : "volume"} />
+              <Icons name={mConfig.muted ? "volumemute" : "volume"} />
             </label>
             <input
               name="vol-range"
@@ -267,7 +259,7 @@
       </div>
     </div>
     <span class="vol-fullscreen" bind:this={volRef}>
-      <Icons name={player.muted ? "volumemute" : "volume"} />
+      <Icons name={mConfig.muted ? "volumemute" : "volume"} />
       <span>{parseInt(mConfig.volume * 100)}%</span>
     </span>
   </div>

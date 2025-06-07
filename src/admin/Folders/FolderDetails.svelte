@@ -171,7 +171,13 @@
     <TextAreaInput file={folder} key="Genres" style="margin-bottom: 5px" rows="2" sept="," {onChange} />
     <TextAreaInput file={folder} key="Description" rows="4" {onChange} />
     <Input key="Author" item={folder} {onChange} sept=", " />
-    <Input key="Server" item={folder} {onChange} />
+    <Input key="Server" item={folder} {onChange}>
+      <a href={folder.Server} slot="icon" class="server-link" target="_blank">
+        {#if folder.Server}
+          <Icons name="world" color="black" />
+        {/if}
+      </a>
+    </Input>
     <Input label="Emission Date" type="date" key="EmissionDate" item={folder} {onChange} />
     <CheckBox label="Completed" key="Status" item={folder} {onChange} />
     <CheckBox label="Is Adult" key="IsAdult" item={folder} {onChange} />
@@ -232,5 +238,8 @@
   .pre-paste {
     position: absolute;
     left: 5px;
+  }
+  .server-link {
+    margin-left: 5px;
   }
 </style>

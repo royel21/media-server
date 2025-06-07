@@ -170,7 +170,7 @@
       <Icons name="download" color="lightblue" />
     </span>
     <span class="d-btn op-ser-page" title={`Open ${server.Name} Home Page`}>
-      <a href={`https://${server.Name}`} target="_blank"><Icons name="wolrd" color="forestgreen" /></a>
+      <a href={`https://${server.Name}`} target="_blank"><Icons name="world" color="forestgreen" /></a>
     </span>
     <span class="d-btn" title={`Open ${server.Name} Config`} on:click={onShowServerEdit}><Icons name="cog" /></span>
     <Select2 label="Servers" bind:item={server} options={servers} {onChange} />
