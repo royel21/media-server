@@ -47,7 +47,7 @@ export const streaming = (file, req, res) => {
       res.status(400).send("Requires Range header");
     }
 
-    if (!file.Path || !fs.existsSync(file.Path)) {}
+    if (!file.Path || !fs.existsSync(file.Path)) {
       res.status(404).send("Resource Not Found");
     }
 
