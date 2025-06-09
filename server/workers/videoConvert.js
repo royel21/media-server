@@ -100,7 +100,7 @@ export const convertVideo = async ({ files, videoBitrate, audioBitrate, Remove, 
       }
 
       if (Height && stream.height > +Height) {
-        sizeOption = sizeOption.replace(/^-1$/, Height);
+        sizeOption = sizeOption.replace(/-1$/, Height);
       }
 
       if (sizeOption != "-1:-1") {
