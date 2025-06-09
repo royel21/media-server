@@ -81,10 +81,9 @@ export const convertVideo = async ({ files, videoBitrate, audioBitrate, Remove, 
         outOptions.push("-map 0:v:0");
         outOptions.push("-map 0:a:0");
         outOptions.push("-map 0:s:0");
+        outOptions.push(`-vf`);
+        outOptions.push(`subtitles='${file.Path}'`);
         outOptions.push("-disposition:s:0 forced");
-        if (subtStream.codec_name === "ass") {
-          outOptions.push(`-vf subtitles='${file.Path}'`);
-        }
         outOptions.push("-c:s mov_text");
       }
 
