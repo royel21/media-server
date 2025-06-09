@@ -9,7 +9,9 @@ export const download = async (data) => {
 
   if (!downloader) {
     spawnSync("rm", [".", "user-data/puppeteer/SingletonLock"]);
+
     downloader = fork(appPath + "/Downloader/Worker.js");
+
     downloader.on("exit", () => {
       global.io.sockets.emit("is-running", { IsRunning: false });
       downloader = null;

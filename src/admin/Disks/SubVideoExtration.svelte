@@ -46,7 +46,7 @@
 </script>
 
 <div id="v-subtract">
-  <Dialog cancel={hide} confirm={onConfirm} {errors}>
+  <Dialog cancel={hide} confirm={onConfirm} {errors} canDrag={true}>
     <h4 slot="modal-header">Extract Sub Video Options</h4>
     <div slot="modal-body">
       <TimeInput key="Start" {item} />

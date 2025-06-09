@@ -1,15 +1,15 @@
 import db from "../../models/index.js";
 
+const MAX_EVENTS = 300;
+
 export const allEvents = async (req, res) => {
-  const { page = 1 } = req.params;
-  const offset = (page - 1) * 100 || 0;
-  const events = await db.eventLog.findAll({ order: [["Date", "DESC"]], limit: 100, offset });
-  return res.send(
-    events.map((e) => {
-      delete e.dataValues.event;
-      return e.dataValues;
-    })
-  );
+  const eventCount = await db.eventLog.count();
+  let offset = eventCount - MAX_EVENTS;
+
+  if (offset < 0) offset = 0;
+
+  const events = await db.eventLog.findAll({ offset, limit: MAX_EVENTS });
+  return res.send(events.map((e) => e.dataValues));
 };
 
 export const clearEvents = async (req, res) => {

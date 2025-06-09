@@ -13,9 +13,10 @@
     { Id: "addToWatcher", Name: "Add to Watcher" },
     { Id: "scanDir", Name: "Add to Directories" },
     { Id: "onCalculateSize", Name: "Directory Size", BBorder: true },
+    { Id: "copyName", Name: "Copy Name" },
     { Id: "createDir", Name: "Create Folder" },
     { Id: "zipImgFolders", Name: "Zip Img Folders" },
-    { Id: "remFolder", Name: "Rename Folder" },
+    { Id: "renameFolder", Name: "Rename Folder" },
     { Id: "removeDFolder", Name: "Delete Folder" },
   ];
   const menuItems2 = [
@@ -39,7 +40,7 @@
   const hideRename = () => (showRename = false);
 
   const onRename = ({ folder, Name }) => {
-    socket.emit("file-work", { action: "remFolder", data: { folder, Name } });
+    socket.emit("file-work", { action: "renameFolder", data: { folder, Name } });
     showRename = false;
   };
 
@@ -68,6 +69,12 @@
     socket.emit("bg-work", { action: "zipImgFolder", data: item });
   };
 
+  const copyName = (item) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(item.Name);
+    }
+  };
+
   const menuActions = (event, id) => {
     const item = showMenu.file;
 
@@ -78,7 +85,8 @@
       createDir: () => (showCreateDir = item),
       zipImgFolders,
       removeDFolder: () => (showConfirm = item),
-      remFolder: () => (showRename = item),
+      renameFolder: () => (showRename = item),
+      copyName,
     };
     return actions[id] && actions[id](item);
   };

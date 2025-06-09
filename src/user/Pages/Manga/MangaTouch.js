@@ -1,5 +1,6 @@
 import { updateToggleMenu } from "src/ShareComponent/ToggleMenu";
 import { showFileName } from "../pagesUtils";
+import { getEvent } from "src/ShareComponent/utils";
 let tStart, tEnd;
 let point = {};
 let touching = false;
@@ -23,7 +24,7 @@ let controls = { nextPage: "", prevPage: "", nextFile: "", prevFile: "" };
 export const onTouchStart = (e) => {
   scroller = e.currentTarget;
   tStart = e.timeStamp;
-  let { pageX, pageY } = (e.touches && e.touches[0]) || e;
+  let { pageX, pageY } = getEvent(e);
   point = { x: pageX, y: pageY };
 
   touching = e.touches?.length === 1 || e.type === "mousedown";

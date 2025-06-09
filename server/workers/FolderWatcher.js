@@ -1,12 +1,10 @@
 import path from "path";
+import fs from "fs-extra";
 import winex from "win-explorer";
 import { db } from "../watch-models/index.js";
+import { sendMessage } from "../utils.js";
 
 let fileTypes = ["mp4", "ogg", "zip", "mkv", "avi"];
-
-export const sendMessageConsole = (message, event = "info") => {
-  process.send({ event, message });
-};
 
 const filterFile = (f) => {
   return !f.isDirectory && fileTypes?.includes(f.Extension.toLocaleLowerCase());
@@ -37,12 +35,18 @@ export const dirScan = async ({ Path }) => {
   try {
     await db.init();
     let dir = await db.Directory.findOrCreate({ where: { Name: path.basename(Path), Path } });
+
     if (dir[0]) {
-      sendMessageConsole({ text: `Scanning: ${dir[0].Path}` });
+      const { Path } = dir[0];
+      if (!fs.existsSync(Path)) {
+        return await sendMessage({ text: `Path: ${Path} not found`, error: true });
+      }
+
+      await sendMessage({ text: `Scanning: ${Path}` });
       await db.File.destroy({ where: { DirectoryId: dir[0].Id } });
-      const files = winex.ListFilesRO(dir[0].Path);
+      const files = winex.ListFilesRO(Path);
       await AddFiles(files, dir[0].Id);
-      sendMessageConsole({ text: `Finish Scanning: ${dir[0].Path}` });
+      await sendMessage({ text: `Finish Scanning: ${Path}` });
     }
   } catch (error) {
     console.log(error);

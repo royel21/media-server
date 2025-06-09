@@ -7,6 +7,7 @@
 
   export let socket;
   export let selectedList;
+  export let bgWorking = false;
 
   let showConvertVideo;
   let showVideoSubTract;
@@ -19,6 +20,7 @@
   const convertVideos = (options) => {
     socket.emit("bg-work", { action: "convertVideo", data: { files: selectedList, ...options } });
     showConvertVideo = false;
+    bgWorking = true;
   };
 
   const onShowExtractSubVideos = () => (showVideoSubTract = true);
@@ -26,6 +28,7 @@
   const extractSubVideo = (options) => {
     socket.emit("bg-work", { action: "extractSubVideo", data: { file: selectedList[0], ...options } });
     showVideoSubTract = false;
+    bgWorking = true;
   };
 
   const confirmMerge = () => {

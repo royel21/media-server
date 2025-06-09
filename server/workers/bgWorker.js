@@ -1,9 +1,10 @@
 import winExplorer from "win-explorer";
 import { zipImgFolder, unZip } from "./zipHelper.js";
 import { convertVideo, extractSubVideo, mergeVideos } from "./videoConvert.js";
+import { sendMessage } from "../utils.js";
 
-const sendMessage = (event, message) => {
-  process.send({ event, message });
+const state = {
+  stop: false,
 };
 
 const getFilesSize = (files) => {
@@ -22,7 +23,7 @@ const getFilesSize = (files) => {
 const folderSize = ({ Name, Path }) => {
   const files = winExplorer.ListFilesRO(Path);
   let Size = (getFilesSize(files) / 1024 / 1024 / 1024).toFixed(2) + "GB";
-  sendMessage("folder-size", { Name, Path, Size });
+  sendMessage({ Name, Path, Size }, "folder-size");
 };
 
 const actions = {
@@ -44,17 +45,23 @@ const startToWork = async () => {
   while (works.pendding.length) {
     const work = works.pendding.shift();
     if (actions[work.action]) {
-      const result = await actions[work.action](work.data);
+      const result = await actions[work.action](work.data, state);
       if (result) {
         await result();
       }
     }
   }
+  await sendMessage({ isWorking: false }, "bg-worker-state");
   console.log("Finish File Work");
+  state.stop = false;
   process.exit();
 };
 
 process.on("message", (work) => {
+  if (work.action === "stop-video-bg") {
+    return (state.stop = true);
+  }
+
   works.pendding.push(work);
   if (!works.isWorking) startToWork();
 });

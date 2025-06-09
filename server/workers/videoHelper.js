@@ -1,14 +1,7 @@
 import path from "path";
 import fs from "fs-extra";
-import db from "../models/index.js";
 import { execSync } from "child_process";
-
-const sendMessage = (message, event = "finish-cleaning") => {
-  if (event === "finish-cleaning") {
-    console.log(message);
-  }
-  process.send({ event, message });
-};
+import { sendMessage } from "../utils.js";
 
 let count = 0;
 
@@ -90,10 +83,10 @@ const checkedToremove = (file) => {
 
 const vRex = /\.(mp4|mkv|avi)/;
 
-export const workVideos = ({ folder, pass, text, padding }) => {
+export const workVideos = async ({ folder, pass, text, padding }) => {
   count = 0;
   const { Name, Path } = folder;
-  sendMessage(`Starting to clean up: ${Name}`);
+  await sendMessage({ msg: `Starting to clean up: ${Name}` }, "finish-cleaning");
 
   pass = pass ? `-p'${pass}'` : "";
 
@@ -115,7 +108,7 @@ export const workVideos = ({ folder, pass, text, padding }) => {
       }
     } catch (error) {
       if (error.toString().includes("Enter password")) {
-        sendMessage({ error: true, msg: `Wrong Password For: ${Name}` });
+        await sendMessage({ error: true, msg: `Wrong Password For: ${Name}` }, "finish-cleaning");
       }
       console.log(error.toString());
       return;
@@ -149,34 +142,34 @@ export const workVideos = ({ folder, pass, text, padding }) => {
     }
   }
 
-  sendMessage(`Finish Cleaning: ${Name}`);
+  await sendMessage({ msg: `Finish Cleaning: ${Name}` }, "finish-cleaning");
 };
 
-export const removeDFolder = ({ Id, Name, Path }) => {
+export const removeDFolder = async ({ Id, Name, Path }) => {
   if (fs.existsSync(Path)) {
     try {
       fs.removeSync(Path);
-      sendMessage({ msg: `Finish Removing: ${Name}`, folder: { Id, Name, Path } }, "folder-remove");
+      await sendMessage({ msg: `Finish Removing: ${Path}`, folder: { Id } }, "folder-remove");
     } catch (error) {
-      sendMessage(
-        { error: error.toString(), msg: `Error Removing: ${Name}`, folder: { Id, Name, Path } },
+      await sendMessage(
+        { error: error.toString(), msg: `Error Removing: ${Path}`, folder: { Id, Name, Path } },
         "folder-remove"
       );
     }
   }
 };
 
-export const remFolder = ({ folder, Name }) => {
+export const renameFolder = async ({ folder, Name }) => {
   if (fs.existsSync(folder.Path)) {
     const data = { msg: "", error: "", folder, Name };
     try {
       fs.moveSync(folder.Path, folder.Path.replace(folder.Name, Name));
       data.msg = `Folder: ${folder.Name} -> Rename to: ${Name}`;
-      sendMessage(data, "folder-rename");
+      await sendMessage(data, "folder-rename");
     } catch (error) {
       data.msg = `Some Error Happen when trying to move Folder: ${folder.Name}`;
       data.error = error;
-      sendMessage(data, "folder-rename");
+      await sendMessage(data, "folder-rename");
     }
   }
 };

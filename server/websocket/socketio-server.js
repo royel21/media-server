@@ -30,7 +30,7 @@ export default async (server, sessionMeddle) => {
       if (/Administrator|Manager/.test(user.Role)) {
         socket.on("scan-dir", (data) => FileManager.scanDir(data, user));
         socket.on("file-work", (data) => {
-          if (data?.action === "removeFile") {
+          if (data?.action === "removeDBFile") {
             FileManager.fileWork(data);
           }
         });

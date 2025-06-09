@@ -138,13 +138,14 @@
       setMessage(data);
     }
 
-    let index = items.findIndex((f) => f.Id === data.Id);
-
-    if (data.success && index > -1) {
-      if (data.Transfer) {
-        reload();
-      } else {
-        items[index] = data.folder;
+    if (data.success) {
+      let index = items.findIndex((f) => f.Id === data.folder.Id);
+      if (index > -1) {
+        if (data.Transfer) {
+          reload();
+        } else {
+          items[index] = data.folder;
+        }
       }
     }
   };

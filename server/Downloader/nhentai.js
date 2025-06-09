@@ -6,6 +6,7 @@ import defaultConfig from "../default-config.js";
 import fs from "fs-extra";
 import AdmZip from "adm-zip";
 import { createPage } from "./Crawler.js";
+import { getProgress } from "../utils.js";
 
 const isChar = (c) => {
   return c.match(/[a-z]/i);
@@ -121,7 +122,7 @@ const download = async (link, page, server, state) => {
     }
   }, server.dataValues);
 
-  sendMessage({ text: `pages: ${data.total} - Name: ${data.name}` });
+  await sendMessage({ text: `pages: ${data.total} - Name: ${data.name}` });
 
   if (!data.name) return;
 
@@ -173,7 +174,7 @@ const download = async (link, page, server, state) => {
         const url = initalUrl.replace(`/1.${ex}`, `/${i}.${newEX}`);
 
         if (f > 4) {
-          sendMessage({ text: `FormatError: ${f} unkown: ${url}`, color: "red" });
+          await sendMessage({ text: `FormatError: ${f} unkown: ${url}`, color: "red" });
           break;
         }
 
@@ -233,14 +234,14 @@ export const downloadNHentais = async (state) => {
       }
 
       const count = state.hsize - state.nhentais.length;
-      sendMessage({
-        text: `\u001b[1;31m ${count}/${state.hsize} - ${link.Name || link.Url} \u001b[0m`,
+      await sendMessage({
+        text: `\u001b[1;31m ${getProgress(i + 1, state.hsize)} - ${link.Name || link.Url} \u001b[0m`,
         url: link.Url,
       });
       try {
         await download(link, page, link.Server, state);
       } catch (error) {
-        sendMessage({ text: `Error ${link.Url} was no properly downloaded`, color: "red", error });
+        await sendMessage({ text: `Error ${link.Url} was no properly downloaded`, color: "red", error });
       }
     }
 

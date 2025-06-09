@@ -120,9 +120,9 @@
 
   const acept = (file, Del) => {
     if (modalType.Del) {
-      socket.emit("file-work", { action: "removeFile", data: { Id: file.Id ? file.Id : removeList, Del } });
+      socket.emit("file-work", { action: "removeDBFile", data: { Id: file.Id ? file.Id : removeList, Del } });
     } else {
-      socket.emit("file-work", { action: "renameFile", data: { Id: file.Id, Name: file.Name } });
+      socket.emit("file-work", { action: "renameDBFile", data: { Id: file.Id, Name: file.Name } });
     }
     showModal = false;
   };

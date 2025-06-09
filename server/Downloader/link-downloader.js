@@ -11,7 +11,7 @@ import defaultConfig from "../default-config.js";
 
 createDir(defaultConfig.ImagesDir);
 
-export const downloadLink = async (d, page, Server, folder, count, state) => {
+export const downloadLink = async ({ d, page, Server, folder, count, state }) => {
   const mangaDir = folder.Path;
   const imgDir = path.join(defaultConfig.ImagesDir, "Manga", folder.Name);
 
@@ -52,7 +52,7 @@ export const downloadLink = async (d, page, Server, folder, count, state) => {
   await page.waitForSelector(Server.Imgs);
 
   const links = await page.evaluate(evaleLinks, Server.dataValues);
-  sendMessage({ text: `Dwn: ${count} imgs: ${links.length} - ${folder.Name} - ${d.name}`, url: d.url });
+  sendMessage({ text: `Dwn: ${count} imgs: ${links.length} ~ ${d.name} ~ ${folder.Name}`, url: d.url });
 
   const destZip = dir + ".zip";
   const imgPath = path.join(imgDir, d.name + ".zip.jpg");

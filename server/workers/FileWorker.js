@@ -1,17 +1,14 @@
 import path from "path";
 import Sharp from "sharp";
 import db from "../models/index.js";
-import { createFolder, removeFiles, renFile, bulkRename, moveFiles, transferFiles } from "./fileHelpers.js";
-import { remFolder, removeDFolder, workVideos } from "./videoHelper.js";
+import { createFolder, removeFiles, renameFile, bulkRename, moveFiles, transferFiles } from "./fileHelpers.js";
+import { renameFolder, removeDFolder, workVideos } from "./videoHelper.js";
 import { createDir } from "../Downloader/utils.js";
 import defaultConfig from "../default-config.js";
 import { dirScan } from "./FolderWatcher.js";
+import { sendMessage } from "../utils.js";
 
-const sendMessage = (event, message) => {
-  process.send({ event, message });
-};
-
-const renameFolder = async (datas) => {
+const renameDBFolder = async (datas) => {
   const {
     Id,
     Name,
@@ -26,12 +23,14 @@ const renameFolder = async (datas) => {
     Server,
     EmissionDate,
   } = datas;
+
   let folder = await db.folder.findOne({
     where: { Id },
     include: { model: db.directory },
   });
 
-  let msg = "Folder not found on DB";
+  let msg;
+  const EVENT = "folder-renamed";
   let success = false;
 
   if (folder) {
@@ -49,18 +48,16 @@ const renameFolder = async (datas) => {
           data.DirectoryId = DirectoryId;
           data.Path = newPath;
 
-          sendMessage("folder-renamed", {
-            Id,
-            success: true,
-            msg: `Transfering: ${folder.Name} this may take some time please wait until completed message`,
-            folder: { ...folder.dataValues },
-            Transfer,
-          });
+          const moveMsg = `from ${folder.Directory.FullPath} to ${dir.FullPath}`;
+
+          msg = `Transfering: ${folder.Name} ${moveMsg} this may take some time please wait until completed message`;
+          await sendMessage({ msg }, EVENT);
+
           const result = await transferFiles(folder.Path, data.Path);
           if (!result.success) {
-            return sendMessage("folder-renamed", { Id, success: false, msg: "Transfer folder fail" });
+            return await sendMessage({ success: false, msg: "Transfer folder fail" }, EVENT);
           }
-          msg = `Folder: ${Name} was moved from ${folder.Directory.FullPath} to ${dir.FullPath}`;
+          msg = `Folder: ${Name} was moved ${moveMsg}`;
         }
       } else {
         msg = `Folder: ${Name} data was Updated`;
@@ -80,14 +77,14 @@ const renameFolder = async (datas) => {
       console.log(error);
     }
 
-    sendMessage("folder-renamed", { Id, success, msg, data, folder: { ...folder.dataValues }, Transfer });
+    await sendMessage({ Id, success, msg, data, folder: { ...folder.dataValues }, Transfer }, EVENT);
   } else {
-    sendMessage("folder-renamed", { Id, success });
+    sendMessage({ msg: "Folder not found on DB", success: false }, EVENT);
   }
 };
 
 /****************** Rename File *******************/
-const renameFile = async ({ Id, Name }) => {
+const renameDBFile = async ({ Id, Name }) => {
   let file = await db.file.findOne({
     where: { Id },
     include: { model: db.folder },
@@ -106,15 +103,17 @@ const renameFile = async ({ Id, Name }) => {
   } else {
     msg = "File not found on db";
   }
-  sendMessage("file-renamed", { success, msg, Name });
+  await sendMessage({ success, msg, Name }, "file-renamed");
 };
 /************ Remove file from db and system ***********************/
 
-const removeFile = async ({ Id, Del, viewer }) => {
+const removeDBFile = async ({ Id, Del, viewer }) => {
   let files = await db.file.findAll({
     where: { Id },
     include: { model: db.folder },
   });
+
+  console.log("files", Id);
 
   const message = { success: false, msg: "", viewer };
   if (files.length) {
@@ -138,7 +137,7 @@ const removeFile = async ({ Id, Del, viewer }) => {
   } else {
     message.msg = "File not found on db";
   }
-  sendMessage("file-removed", message);
+  await sendMessage(message, "file-removed");
 };
 
 const removeFolder = async ({ Id, Del }) => {
@@ -154,7 +153,7 @@ const removeFolder = async ({ Id, Del }) => {
   } catch (err) {
     console.log(err);
   }
-  sendMessage("folder-removed", { success, Id, Name: folder?.Name });
+  await sendMessage({ success, Id, Name: folder?.Name }, "folder-removed");
 };
 
 const createFolderThumb = async ({ folderId, file }) => {
@@ -176,9 +175,9 @@ const createFolderThumb = async ({ folderId, file }) => {
       console.log(Cover);
     }
 
-    sendMessage("cover-update", { Id: folderId, valid: { text: `Cover update for: ${folder.Name}` } });
+    await sendMessage({ Id: folderId, valid: { text: `Cover update for: ${folder.Name}` } }, "cover-update");
   } catch (error) {
-    sendMessage("cover-update", { valid: { text: `Folder-Cover-Error: ${folder.Name}`, color: "Red", error } });
+    await sendMessage({ valid: { text: `Folder-Cover-Error: ${folder.Name}`, color: "Red", error } }, "cover-update");
     console.log(error);
   }
 };
@@ -196,20 +195,20 @@ const getFilesSize = (files) => {
 };
 
 const actions = {
-  renameFile,
-  removeFile,
+  renameDBFile,
+  removeDBFile,
+  renameDBFolder,
+  removeDFolder,
   moveFiles,
-  renameFolder,
   dirScan,
   removeFolder,
-  workVideos,
-  removeDFolder,
-  bulkRename,
-  remFolder,
   removeFiles,
+  workVideos,
+  bulkRename,
+  remFolder: renameFolder,
   createFolder,
   createFolderThumb,
-  renFile,
+  renameFile,
 };
 
 const works = {

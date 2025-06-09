@@ -107,7 +107,7 @@
 
 <style>
   .folder-list {
-    height: 280px;
+    height: 220px;
     overflow-y: auto;
   }
   .dir-list :global(.input-label) {

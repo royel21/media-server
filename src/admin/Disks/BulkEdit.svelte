@@ -77,13 +77,6 @@
   h4 span {
     color: firebrick;
   }
-  .input-control-group {
-    display: flex;
-    flex-direction: row;
-  }
-  .input-control-group :global(.input-control:first-child) {
-    margin-right: 5px;
-  }
 
   .input-control {
     position: relative;

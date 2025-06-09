@@ -10,12 +10,15 @@
   export let placeholder = " ";
   export let focus = false;
   export let type = "text";
+  export let paste = true;
   export let onChange = (e) => {};
   export let min = Number.MIN_SAFE_INTEGER;
   export let max = Number.MAX_SAFE_INTEGER;
   let ref;
   const handler = async () => {
-    handlerPaste(item, key, sept, ref);
+    if (paste) {
+      handlerPaste(item, key, sept, ref);
+    }
   };
   const clear = () => {
     ref.value = "";

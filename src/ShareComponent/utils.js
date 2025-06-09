@@ -65,3 +65,5 @@ export const validAltName = (v) => {
   const result = v.replace(/( |)(•|\/ )( |)/g, "; ").trim();
   return capitalize(result);
 };
+
+export const getEvent = (e) => (e.touches ? e.touches[0] : e);

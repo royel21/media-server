@@ -4,6 +4,7 @@
   import Directories from "./Directories.svelte";
   import DiskInfo from "./DiskInfo.svelte";
   import Tabs from "src/ShareComponent/Tabs.svelte";
+  import { showConsoleStore } from "../Store/ConsoleStore";
   export let tab = "tab-1";
 
   const tabs = [
@@ -13,24 +14,32 @@
   ];
 
   $: {
-    navigate(`/admin/content-manager/${tab || "tab-1"}`, { replace: true });
+    tab = tab || "tab-1";
+    navigate(`/admin/content-manager/${tab}`, { replace: true });
   }
   document.title = "Manager";
 </script>
 
-<div id="admin-manager">
+<div id="admin-manager" class:hasconsole={$showConsoleStore}>
   <Tabs {tabs} bind:tab />
 </div>
 
 <style>
+  #admin-manager {
+    overflow: hidden;
+  }
   #admin-manager :global(#tabs-content) {
     padding: 0;
     height: calc(100% - 63px);
     overflow: auto;
   }
+
+  #admin-manager.hasconsole :global(#tabs-content) {
+    height: calc(100% - 190px);
+  }
+
   #admin-manager {
     position: relative;
     height: 100%;
-    padding: 10px 0 0;
   }
 </style>

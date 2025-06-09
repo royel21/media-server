@@ -11,6 +11,7 @@ import { startBrowser, createPage, delay } from "./Crawler.js";
 import { downloadLink } from "./link-downloader.js";
 import { downloadFromPage } from "./checkServer.js";
 import { downloadNHentais } from "./nhentai.js";
+import { getProgress } from "../utils.js";
 
 // add stealth plugin and use defaults (all evasion techniques)
 const state = { links: [], running: false, size: 0, checkServer: false, nhentais: [], hrunning: false, hsize: 0 };
@@ -66,7 +67,7 @@ const downloadLinks = async (link, page) => {
     await page.goto(link.Url, { waitUntil: "domcontentloaded" });
     await page.waitForSelector(Server.Chapters, { timeout: 60000 });
   } catch (error) {
-    sendMessage({ text: `Could not open URL: ${link.Url}`, color: "red", error });
+    await sendMessage({ text: `Could not open URL: ${link.Url}`, color: "red", error });
     return;
   }
 
@@ -94,10 +95,10 @@ const downloadLinks = async (link, page) => {
   let { files } = await createFolderCover(folder.Path, manga, page);
 
   if (!folder) {
-    return sendMessage({ text: "Fail to find or create folder entry in database", color: "red" });
+    return await sendMessage({ text: "Fail to find or create folder entry in database", color: "red" });
   }
 
-  sendMessage({ text: `Files: ${files.length} - Server: ${manga.data.length}` });
+  await sendMessage({ text: `Files: ${files.length} - Server: ${manga.data.length}` });
 
   if (files.length) {
     manga.data = manga.data.filter(filterManga(files));
@@ -121,9 +122,11 @@ const downloadLinks = async (link, page) => {
 
     try {
       ++count;
-      await downloadLink(d, page, Server, folder, `${count}/${data.length}`, state);
+      //d, page, Server, folder, count, state
+      const count = `${getProgress(count / data.length)}`;
+      await downloadLink({ d, page, Server, folder, state, count });
     } catch (error) {
-      sendMessage({ text: `chapter ${Name} - ${d.name} navigation error`, error });
+      await sendMessage({ text: `chapter ${Name} - ${d.name} navigation error`, error });
     }
   }
 
@@ -161,7 +164,7 @@ const cleanUp = async (error) => {
     state.hrunning = false;
     state.checkServer = false;
   } else if (error) {
-    sendMessage({ text: "Process Stopped - Internal Error:" + error.toString(), color: "red", error });
+    await sendMessage({ text: "Process Stopped - Internal Error:" + error.toString(), color: "red", error });
   }
 
   if (!state.running && !state.hrunning && !state.checkServer) {
@@ -180,7 +183,7 @@ const cleanUp = async (error) => {
     state.running = false;
     state.hrunning = false;
     state.checkServer = false;
-    sendMessage(info);
+    await sendMessage(info);
     process.exit();
   }
 };
@@ -202,26 +205,27 @@ const onDownload = async (bypass) => {
 
       //Exclude link from download
       if (link.Exclude) {
-        sendMessage({ text: `Link ${link.AltName} Is Exclude From Download`, color: "red" });
+        await sendMessage({ text: `Link ${link.AltName} Is Exclude From Download`, color: "red" });
         continue;
       }
 
       if (bypass || !link.Date || dateDiff(new Date(), link.Date) > 3) {
-        sendMessage({
-          text: `\u001b[1;31m ${state.size - state.links.length}/${state.size} - ${link.Name || link.Url} \u001b[0m`,
+        const count = state.size - state.links.length;
+        await sendMessage({
+          text: `\u001b[1;31m ${getProgress(count, state.size)} - ${link.Name || link.Url} \u001b[0m`,
           url: link.Url,
         });
         try {
           await downloadLinks(link, page, link.Server, link.IsAdult);
         } catch (error) {
-          sendMessage({ text: `Error ${link.Url} was no properly downloaded`, color: "red", error });
+          await sendMessage({ text: `Error ${link.Url} was no properly downloaded`, color: "red", error });
         }
 
         await link.update({ IsDownloading: false });
         await link.reload();
         sendMessage({ link }, "link-update");
       } else {
-        sendMessage({ text: `Link ${link.Name} was checked recently`, color: "red" });
+        await sendMessage({ text: `Link ${link.Name} was checked recently`, color: "red" });
       }
     }
 
@@ -367,6 +371,6 @@ const errorToSkip =
 process.on("uncaughtException", async (error) => {
   if (!errorToSkip.test(error.toString())) {
     console.log(error.toString());
-    sendMessage({ text: "uncaughtException Process Stopped - Internal Error", color: "red" });
+    await sendMessage({ text: "uncaughtException Process Stopped - Internal Error", color: "red" });
   }
 });

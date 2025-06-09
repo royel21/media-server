@@ -184,7 +184,12 @@
     color: black;
   }
   ul {
+    position: relative;
+    top: -5px;
     margin-left: 25px;
+  }
+  li span {
+    user-select: none;
   }
   .dir {
     position: relative;

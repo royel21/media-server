@@ -6,10 +6,6 @@ config();
 import db from "../models/index.js";
 import defaultConfig from "../default-config.js";
 
-const sendMessage = (text, event = "info") => {
-  process.send({ event, text });
-};
-
 const types = {
   Manga: "mangas",
   Video: "videos",
@@ -18,7 +14,7 @@ const types = {
 const cleanImages = async () => {
   let count = 0;
   //Cleaning Folder Thumbnails
-  sendMessage(`Cleaning Folder Thumbnails`);
+  await sendMessage({ text: `Cleaning Folder Thumbnails` });
   for (let dir of ["mangas", "videos"]) {
     const imgDir = path.join(defaultConfig.ImagesDir, "Folder", dir);
     const imgs = fs.readdirSync(imgDir);
@@ -51,6 +47,7 @@ const cleanImages = async () => {
       }
     }
   }
+  await sendMessage({ text: `Finish Cleaning Folder Thumbnails` });
   process.exit();
 };
 

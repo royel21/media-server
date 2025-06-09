@@ -2,17 +2,7 @@ import fs from "fs-extra";
 import path from "path";
 import AdmZip from "adm-zip";
 import sharp from "sharp";
-
-const delay = (ms) => {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-};
-
-const sendMessage = (data, event = "files-info") => {
-  console.log(data.msg || data.text || "", data.error || "");
-  process.send({ event, message: data });
-};
+import { getProgress, sendMessage } from "../utils.js";
 
 var deleteFolderRecursive = function (basePath) {
   if (fs.existsSync(basePath)) {
@@ -25,7 +15,7 @@ var deleteFolderRecursive = function (basePath) {
 export const zipImgFolder = async (data) => {
   const folders = fs.readdirSync(data.Path).filter((f) => fs.statSync(path.join(data.Path, f)).isDirectory());
 
-  sendMessage({ text: `Zipping ${folders.length} Please Wait` }, "info");
+  await sendMessage({ text: `Zipping ${folders.length} Please Wait` });
 
   for (const [i, folder] of folders.entries()) {
     const fpath = path.join(data.Path, folder);
@@ -48,11 +38,13 @@ export const zipImgFolder = async (data) => {
       }
     }
     await zip.writeZip(fpath + ".zip");
-    sendMessage({ text: `${i + 1}/${folders.length}:  ${folder} was Zipped` }, "info");
+    await sendMessage({
+      text: `${getProgress(i + 1, folders.length)} ${folder} was Zipped`,
+    });
     deleteFolderRecursive(fpath);
   }
 
-  sendMessage({ text: `Finish Zipping  ${folders.length} ${folders.length === 1 ? "folder" : "folders"}` }, "info");
+  await sendMessage({ text: `Finish Zipping  ${folders.length} ${folders.length === 1 ? "folder" : "folders"}` });
 
   return () => {
     const dirs = fs.readdirSync(data.Path);
@@ -70,10 +62,10 @@ export const unZip = async ({ files }) => {
     const zipFile = AdmZip(file.Path);
     try {
       await zipFile.extractAllTo(file.Path.replace(".zip", ""), true);
-      sendMessage({ text: `${file.Name} was extracted` }, "info");
+      await sendMessage({ text: `${file.Name} was extracted` });
     } catch (error) {
       console.log(error);
     }
   }
-  sendMessage({ text: `Finish Extrating ${files.length} ${files.length === 1 ? "File" : "Files"}` }, "info");
+  await sendMessage({ text: `Finish Extrating ${files.length} ${files.length === 1 ? "File" : "Files"}` });
 };

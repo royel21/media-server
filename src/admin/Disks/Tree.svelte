@@ -7,7 +7,6 @@
   import { setMessage } from "../Store/MessageStore";
   import FileList from "./FileList.svelte";
   import TreeMenu from "./TreeMenu.svelte";
-  import { showConsoleStore } from "../Store/ConsoleStore";
 
   const socket = getContext("socket");
   let content = [];
@@ -46,8 +45,6 @@
     }
   };
 
-  const onCleanupMessage = (message) => setMessage({ error: message.error, msg: message });
-
   const onMenu = (e, file) => {
     showMenu = { e, file };
   };
@@ -57,7 +54,7 @@
     setMessage({ msg: `${Size} - ${Name}` });
   };
 
-  socket.on("finish-cleaning", onCleanupMessage);
+  socket.on("finish-cleaning", setMessage);
   socket.on("disk-loaded", onDiskdata);
   socket.on("folder-size", onFolderSize);
 
@@ -70,7 +67,7 @@
 
   onDestroy(() => {
     document.body.removeEventListener("click", hideMenu);
-    socket.off("finish-cleaning", onCleanupMessage);
+    socket.off("finish-cleaning", setMessage);
     socket.off("disk-loaded", onDiskdata);
     socket.off("folder-size", onFolderSize);
   });
@@ -90,7 +87,7 @@
   <span class="show-hidden" on:click|stopPropagation={() => (showHidden = !showHidden)}>
     Hidden <Icons name={showHidden ? "eye" : "eyeslash"} />
   </span>
-  <div class="d-content" class:expanded={files.length} class:hasconsole={$showConsoleStore}>
+  <div class="d-content" class:expanded={files.length}>
     <div class="rows">
       <div class="col" class:no-files={files.length === 0}>
         <div class="tree" bind:this={treeRef}>
@@ -113,9 +110,6 @@
     height: 100%;
     padding-bottom: 5px;
   }
-  .hasconsole {
-    height: calc(100% - 118px);
-  }
   .d-content.expanded {
     min-width: 760px;
   }
@@ -132,7 +126,7 @@
     border-radius: 0.25rem;
     cursor: pointer;
     user-select: none;
-    z-index: 999;
+    z-index: 102;
   }
   .show-hidden :global(svg) {
     top: 0px;

@@ -110,28 +110,27 @@ export const removeRaw = (data) => (f) => {
 
 export const dateDiff = (d1, d2) => parseInt(Math.abs(d1 - d2) / 36e5);
 
-export function sendMessage(data, event = "info") {
+export async function sendMessage(data, event = "info") {
   const db = getDb();
+
   if (data.text || data.error) {
     console.log(data.text || "", data.error || "");
+
     if (data.error) {
       data.error = data.error.toString().slice(0, 500);
     }
-  }
-  if (data.text?.includes("\x1B[1;31m")) {
-    data.text = data.text.replace(/\x1B\[1;31m | \x1B\[0m/gi, "");
-    data.color = "red";
+
+    if (data.text?.includes("\x1B[1;31m")) {
+      data.text = data.text.replace(/\x1B\[1;31m | \x1B\[0m/gi, "");
+      data.color = "red";
+    }
+    const newEvent = { event, ...data };
+    delete newEvent.Id;
+    await db.eventLog.create(newEvent);
   }
 
   if (process.send) {
     process.send({ event, data: { color: "blue", ...data } });
-  }
-
-  if (data.error && !data.error.toString().includes("ProtocolError: Page.enable")) {
-    db.eventLog.create({
-      event,
-      ...data,
-    });
   }
 }
 

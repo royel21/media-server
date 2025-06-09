@@ -1,18 +1,17 @@
 import fs from "fs-extra";
 import path from "path";
 import { capitalize } from "../Downloader/utils.js";
+import { getProgress, sendMessage } from "../utils.js";
 
-const sendMessage = (data, event = "files-info") => {
-  console.log(data.msg || data.text || "", data.error || "");
-  process.send({ event, message: data });
-};
-
-export const moveFiles = ({ files, Path, overwrite, NewFolder }) => {
-  sendMessage({ text: `Moving Files to: ${Path} Please Wait` }, "info");
-
+export const moveFiles = async ({ files, Path, overwrite, NewFolder }) => {
   if (!fs.existsSync(Path)) {
-    return sendMessage({ error: `The specified path does not exist: ${Path}` });
+    return await sendMessage({ error: `The specified path does not exist: ${Path}` }, "files-info");
   }
+  const count = files.length;
+
+  const fileTxt = count > 1 ? "Files" : "File";
+
+  await sendMessage({ text: `Moving ${count} ${fileTxt} to ${Path} Please Wait` });
 
   if (NewFolder) {
     Path = path.join(Path, NewFolder);
@@ -23,39 +22,43 @@ export const moveFiles = ({ files, Path, overwrite, NewFolder }) => {
     try {
       const dest = path.join(Path, file.Name);
       fs.moveSync(file.Path, dest, { overwrite });
-      console.log(`${i + 1}/${files.length} Moving:`, file.Path, "->", Path);
-      console.log();
-      sendMessage({ text: `${i + 1}/${files.length} - ${file.Name}`, move: file }, "info");
+      await sendMessage({ text: `${getProgress(i + 1, count)} - ${file.Name}`, move: file }, "info");
     } catch (error) {
-      sendMessage({ msg: `Error moving: ${file.Name}`, error });
+      await sendMessage({ text: `Error moving: ${file.Name}`, error: error.toString() });
     }
   }
-  sendMessage({ text: `Finish Moving Files to: ${files.length}-${Path}` }, "info");
+  await sendMessage({ text: `Finish Moving ${count} ${fileTxt} to ${Path}` });
 };
 
-export const removeFiles = ({ files }) => {
-  sendMessage({ msg: `Removing ${files.length} Files Please Wait` });
+export const removeFiles = async ({ files }) => {
+  const count = files.length;
+  await sendMessage({ msg: `Removing ${count} ${count > 1 ? "Files" : "File"} Please Wait` }, "files-info");
   let i = 0;
   for (const file of files) {
     try {
       if (fs.existsSync(file.Path)) {
         fs.removeSync(file.Path);
-        sendMessage({ text: `Removing: ${i + 1}/${files.length} - ${file.Name}`, move: file }, "info");
+
+        await sendMessage(
+          { text: `Removing ${getProgress(i + 1, count)} - ${file.Name}`, move: { Id: file.Id } },
+          "info"
+        );
       }
     } catch (error) {
       console.log(error);
-      sendMessage({ error: `Error Removing: ${file.Name}`, err: error });
+      await sendMessage({ text: `Error Removing: ${file.Name}`, err: error.toString() });
     }
     i++;
   }
-  sendMessage({ msg: "Finish Removing Files", folders: files.map((f) => f.Id) });
+  sendMessage({ folders: files.map((f) => f.Id) }, "files-info");
+  await sendMessage({ text: "Finish Removing Files" });
 };
 
 const getNewId = () => {
   return "nw-" + Math.random().toString(36).slice(-5);
 };
 
-export const createFolder = ({ file, Name }) => {
+export const createFolder = async ({ file, Name }) => {
   const data = { folderId: file.Id };
 
   if (fs.existsSync(file?.Path)) {
@@ -64,7 +67,7 @@ export const createFolder = ({ file, Name }) => {
     if (fs.existsSync(Path)) {
       data.error = true;
       data.msg = `Folder: ${Name} Already Exist`;
-      return sendMessage(data, "folder-create");
+      return await sendMessage(data, "folder-create");
     }
 
     fs.mkdirsSync(Path);
@@ -72,15 +75,15 @@ export const createFolder = ({ file, Name }) => {
     data.msg = `Folder: ${Name} was create`;
     data.folder = { Id: getNewId(), Name: Name, Type: "folder", Path, Content: [] };
 
-    return sendMessage(data, "folder-create");
+    return await sendMessage(data, "folder-create");
   }
   data.error = true;
   data.msg = `Path: ${file?.Path} was not found`;
-  sendMessage(data, "folder-create");
+  await sendMessage(data, "folder-create");
 };
 
 //Rename local file
-export const renFile = ({ file, Name }) => {
+export const renameFile = async ({ file, Name }) => {
   if (fs.existsSync(file.Path)) {
     const data = { msg: "", error: "", file, Name };
     try {
@@ -90,11 +93,11 @@ export const renFile = ({ file, Name }) => {
       data.file.Name = Name;
       data.file.Path = Path;
       data.ren = true;
-      sendMessage(data);
+      await sendMessage(data, "files-info");
     } catch (error) {
       data.msg = `Some Error Happen when trying to Rename File: ${file.Name}`;
       data.error = error;
-      sendMessage(data);
+      await sendMessage(data, "files-info");
     }
   }
 };
@@ -107,12 +110,9 @@ export const transferFiles = async (src, dest) => {
     }
 
     if (fs.existsSync(src)) {
-      sendMessage({ text: `Moving: ${src}  =>  ${dest}` }, "info");
-
       for (const [i, file] of files.entries()) {
         if (file.startsWith(".")) continue;
-        sendMessage({ text: `${i + 1}/${files.length}: ${file}` }, "info");
-
+        await sendMessage({ text: `${getProgress(i + 1, files.length)} ${file}` }, "info", false);
         fs.moveSync(path.join(src, file), path.join(dest, file), { overwrite: true });
       }
       //Remove folder if empty
@@ -127,7 +127,7 @@ export const transferFiles = async (src, dest) => {
   return { success: false };
 };
 
-export const bulkRename = ({
+export const bulkRename = async ({
   files,
   ZeroPad,
   Regex,
@@ -147,7 +147,7 @@ export const bulkRename = ({
   try {
     regex = new RegExp(Regex, "gi");
   } catch (error) {
-    return sendMessage({ error: `Regex: ${error.toString()}` }, "info");
+    return await sendMessage({ error: `Regex: ${error.toString()}` });
   }
 
   for (const [i, file] of files.entries()) {
@@ -220,14 +220,15 @@ export const bulkRename = ({
       const dest = file.Path.replace(file.Name, name);
       if (src !== dest) {
         fs.moveSync(src, dest);
+        await sendMessage({ text: `${file.Name} Renamed to ${name}` });
         file.Name = name;
         file.Path = dest;
         files[i] = file;
       }
     } catch (error) {
-      sendMessage({ text: `Can't Rename: ${file.Name}, ${error.toString()}` }, "info");
+      await sendMessage({ text: `Can't Rename ${file.Name}, ${error.toString()}` });
     }
   }
 
-  sendMessage({ items: files, bulk: true }, "files-info");
+  await sendMessage({ items: files, bulk: true }, "files-info");
 };

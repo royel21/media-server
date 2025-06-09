@@ -3,7 +3,6 @@
   import apiUtils from "src/apiUtils";
   import Icons from "src/icons/Icons.svelte";
   import { setMessage } from "../Store/MessageStore";
-  import { showConsoleStore } from "../Store/ConsoleStore";
   import Confirm from "../Component/Confirm.svelte";
 
   const socket = getContext("socket");
@@ -113,7 +112,7 @@
 {/if}
 
 <div class="message">{msg}</div>
-<div class="table-container" class:hasconsole={$showConsoleStore}>
+<div class="table-container">
   <table id="dir-list" class="table table-dark table-hover table-bordered">
     <thead>
       <tr>
@@ -158,10 +157,6 @@
 </div>
 
 <style>
-  .hasconsole {
-    height: calc(100% - 118px);
-    overflow: auto;
-  }
   .table-container {
     padding: 0px 8px;
   }

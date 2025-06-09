@@ -15,7 +15,8 @@
   ];
 
   $: {
-    navigate(`/admin/configs/${tab || "tab-1"}`, { replace: true });
+    tab = tab || "tab-1";
+    navigate(`/admin/configs/${tab}`, { replace: true });
   }
   document.title = "Configs";
 </script>

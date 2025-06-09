@@ -1,4 +1,5 @@
 import { isMobile } from "src/utils";
+import { getEvent } from "./utils";
 
 const initialData = {
   startX: 0,
@@ -20,13 +21,13 @@ export const setGesture = (player, onPlay, mConfig) => {
   const onStart = (e) => {
     touching = true;
     time = e.timeStamp;
-    let { pageX, pageY } = e.touches ? e.touches[0] : e;
+    let { pageX, pageY } = getEvent(e);
     touchData = { time, startX: pageX, startY: pageY };
   };
 
   const onMove = (e) => {
     if (touching) {
-      let { pageX, pageY } = e.touches ? e.touches[0] : e;
+      let { pageX, pageY } = getEvent(e);
       let { startX, startY } = touchData;
       let deltaX = pageX - startX;
       let deltaY = pageY - startY;

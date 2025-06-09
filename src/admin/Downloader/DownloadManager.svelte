@@ -20,7 +20,8 @@
   ];
 
   $: {
-    navigate(`/admin/downloads/${tab || "downloads"}`, { replace: true });
+    tab = tab || "downloads";
+    navigate(`/admin/downloads/${tab}`, { replace: true });
   }
   document.title = "Download Manager";
 </script>

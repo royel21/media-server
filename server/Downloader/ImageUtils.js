@@ -1,7 +1,7 @@
 import sharp from "sharp";
 import path from "path";
 import fs from "fs-extra";
-import { sendMessage } from "./utils.js";
+import { getProgress, sendMessage } from "../utils.js";
 import axios from "axios";
 import defaultConfig from "../default-config.js";
 import AdmZip from "adm-zip";
@@ -199,7 +199,7 @@ export const downloadAllIMages = async (page, links, state, imgPath, folder, des
       // return result;
     }
 
-    process.stdout.write(`IMG: ${(i + 1).toString().padStart(padding, "0")} / ${length}\r`);
+    process.stdout.write(`IMG: ${getProgress(i + 1, length)}\r`);
 
     const img = await downloadImg(links[i], page, folder);
     if (img.badImg) {

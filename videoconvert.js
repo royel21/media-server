@@ -4,6 +4,7 @@ import fs from "fs-extra";
 
 import Ffmpeg from "fluent-ffmpeg";
 import { exec } from "node:child_process";
+import { getProgress } from "./server/utils.js";
 
 export function formatTime(time) {
   if (time === 0) return "00:00";
@@ -56,14 +57,12 @@ const convertVideo = async (vPath, isAnime) => {
     fs.mkdirsSync(path.join(vPath, "Videos"));
   }
 
-  const padding = files.length.toString().length;
-
   for (let file of files) {
     const filePath = path.join(vPath, file);
 
     await new Promise(async (resolve) => {
       const toFile = path.resolve(vPath, "Videos", file.replace(/mp4|webm/i, "mp4"));
-      const current = `${(i + 1).toString().padStart(padding, "0")}/${files.length}`;
+      const current = getProgress(i + 1, files.length);
 
       const meta = await getMetadata(filePath);
 

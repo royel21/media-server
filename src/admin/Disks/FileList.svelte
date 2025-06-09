@@ -1,5 +1,5 @@
 <script>
-  import { onDestroy } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import Icons from "src/icons/Icons.svelte";
   import CCheckbox from "../Component/CCheckbox.svelte";
   import Confirm from "../Component/Confirm.svelte";
@@ -7,7 +7,6 @@
   import MoveFileDialog from "./MoveFileDialog.svelte";
   import RenameModal from "./RenameModal.svelte";
 
-  import { setMessage } from "../Store/MessageStore";
   import { sortByName } from "src/ShareComponent/utils";
   import { formatDate } from "../Downloader/utils";
   import apiUtils from "src/apiUtils";
@@ -26,7 +25,6 @@
   export let showHidden = false;
 
   let filtered = files;
-  let TotalSize = 0;
   let sortBy = "name";
 
   let selectedList = [];
@@ -38,6 +36,7 @@
   let showConfirm = false;
   let showRename = false;
   let showBulkRename = false;
+  let bgWorking = false;
 
   const onCheck = ({ target }) => {
     const id = target.closest("li").id;
@@ -103,9 +102,9 @@
     socket.emit("file-work", { action: "moveFiles", data });
   };
 
-  const onFileInfo = ({ msg, items, bulk, error, ren, file, convert }) => {
+  const onFileInfo = ({ msg, items, bulk, error, ren, file, convert, progress, Path }) => {
     if (msg || error) {
-      setMessage({ error, msg });
+      updateConsole({ text: msg, error });
     }
 
     if (bulk) {
@@ -116,7 +115,7 @@
         }
       }
       files = files.sort(sortByName);
-      setMessage({ error, msg: "Finish Bulk Rename" });
+      updateConsole({ error, text: "Finish Bulk Rename" });
     }
 
     if (ren) {
@@ -127,8 +126,15 @@
       }
     }
 
+    if (progress) {
+      const index = files.findIndex((f) => f.Path === Path);
+      if (files[index]) {
+        files[index].progress = progress;
+      }
+    }
+
     if (convert) {
-      updateConsole({ text: msg });
+      bgWorking = false;
       reload();
     }
   };
@@ -141,7 +147,7 @@
   };
 
   const renameFile = (data) => {
-    socket.emit("file-work", { action: "renFile", data: { file: data.folder, Name: data.Name } });
+    socket.emit("file-work", { action: "renameFile", data: { file: data.folder, Name: data.Name } });
     hideRename();
   };
 
@@ -154,16 +160,26 @@
     }
   };
 
+  const onWorkState = ({ isWorking }) => {
+    bgWorking = isWorking;
+  };
+
+  onMount(() => {
+    socket.emit("bg-work", { action: "bg-state" });
+  });
+
   socket.on("files-info", onFileInfo);
   socket.on("info", fileUpdate);
+  socket.on("bg-worker-state", onWorkState);
   onDestroy(() => {
+    socket.off("bg-worker-state", onWorkState);
     socket.off("info", fileUpdate);
     socket.off("files-info", onFileInfo);
   });
 
-  const getSize = () => {
+  const getSize = (list) => {
     let sum = 0;
-    filtered.forEach((f) => (sum += f.Size));
+    list.forEach((f) => (sum += f.Size));
     return formatSize(sum / 1024) || 0;
   };
 
@@ -204,16 +220,22 @@
     return f.Name.toLocaleLowerCase().includes(filter.toLocaleLowerCase());
   };
 
+  const stopVideoProcess = () => {
+    socket.emit("bg-work", { action: "stop-video-bg" });
+    bgWorking = false;
+  };
+
   $: isChecked = filtered.length && selectedList.length === filtered.length;
 
   $: {
     filtered = files.filter(filterFunc(filter)).sort(sorter[sortBy]);
-    TotalSize = getSize();
   }
 
   $: if (files.length) {
     selectedList = [];
   }
+
+  $: list = selectedList.length ? selectedList : filtered;
 </script>
 
 {#if showMoveDialog}
@@ -248,17 +270,24 @@
 <div class="col">
   <div class="tree-files">
     <div class="ftree-control">
-      <h4 title={Name}>{filtered.length} ~ {TotalSize} ~ {Name}</h4>
+      <h4 title={Name}>{list.length} ~ {getSize(list)} ~ {Name}</h4>
       <div class="filter">
         <span>
           <CCheckbox id="check-all" on:change={onCheckAll} {isChecked} title="Select All Files" />
+          {#if bgWorking}
+            <span class="stop-bg" on:click={stopVideoProcess} title="Stop backround video work">
+              <Icons name="stopcircle" box="0 0 640 512" color="red" />
+            </span>
+          {/if}
           {#if selectedList.length}
             {#if selectedList.filter((f) => !/\.zip$/i.test(f.Name)).length === 0}
               <span on:click={onShowUnZipConfirm} title="Extract Zip">
                 <Icons name="zip" box="0 0 384 512" color="darkgray" />
               </span>
             {/if}
-            <VideoControl {selectedList} {socket} {files} />
+            {#if !bgWorking}
+              <VideoControl {selectedList} {socket} bind:bgWorking />
+            {/if}
             <span on:click={() => (showBulkRename = true)}><Icons name="edit" /></span>
             <span on:click={onTransfer}><Icons name="right-left" /></span>
             <span class="rm-all" on:click={onShowRemoveConfirm}><Icons name="trash" /></span>
@@ -268,9 +297,11 @@
         </span>
         <Filter id="file-filter" bind:filter />
         {#if selectedList.length === 0}
-          <span class="input-group">
-            <span class="input-group-text"><Icons name="list" color="black" box="0 0 512 512" /></span>
-            <select bind:value={sortBy} class="form-control">
+          <span class="input-control">
+            <span class="input-label">
+              <Icons name="list" color="black" box="0 0 512 512" />
+            </span>
+            <select bind:value={sortBy} class="input">
               <option value="date">Date</option>
               <option value="name">Name</option>
               <option value="size">Size</option>
@@ -292,6 +323,10 @@
             <span class="size">{getSize2(file)}</span>
             <span>{file.Name}</span>
           </span>
+          <div class="progress-bar" class:show-progress={file.progress}>
+            <div class="progress" style={`width: ${file.progress}%`}></div>
+            <span>{file.progress}%</span>
+          </div>
         </li>
       {/each}
     </ul>
@@ -301,11 +336,12 @@
 <style>
   .col {
     position: relative;
+    z-index: 110;
   }
   .col :global(.loading) {
     position: absolute;
     width: 100%;
-    z-index: 402;
+    z-index: 120;
     background-color: rgb(221 170 94 / 13%);
   }
   .col :global(.loading .spin::before) {
@@ -331,6 +367,12 @@
     margin-left: 2px;
   }
 
+  .stop-bg :global(.icon-stopcircle) {
+    top: 5px;
+    width: 30px;
+    left: -3px;
+  }
+
   .tree-files {
     height: 100%;
     padding: 0 5px;
@@ -343,16 +385,16 @@
     padding-bottom: 5px;
   }
   .tree-files li {
+    position: relative;
     font-size: 0.9rem;
     padding: 4px 8px;
     white-space: nowrap;
   }
   .ftree-control {
-    position: sticky;
+    position: relative;
     top: 0;
     text-align: center;
     background-color: #535353;
-    z-index: 9;
   }
   h4 {
     position: relative;
@@ -378,8 +420,10 @@
   .filter {
     position: relative;
     display: flex;
+    align-items: center;
     flex-direction: row;
     padding: 5px;
+    padding-top: 0;
     border-bottom: 1px solid white;
   }
   .filter :global(#filter-control) {
@@ -404,16 +448,24 @@
     max-width: initial;
     padding-right: 5px;
   }
-  .form-control {
-    width: 70px;
+
+  .input-control {
+    width: 95px;
     padding: 0.1rem 0rem;
+    margin: 0;
   }
-  .input-group :global(.icon-list) {
+  .input-label {
+    height: 30px;
+  }
+  .input-label :global(.icon-list) {
     left: -3px;
   }
-  .input-group {
-    min-width: 100px;
+  .input-control .input {
+    height: 30px;
+    min-width: 65px;
+    padding: 0;
   }
+
   .rm-all {
     margin-right: 5px;
   }
@@ -426,5 +478,37 @@
     width: 47px;
     text-align: right;
     margin-right: 2px;
+  }
+
+  .progress-bar {
+    position: absolute;
+    top: 8px;
+    right: 5px;
+    display: none;
+    width: 80px;
+    height: 20px;
+    pointer-events: none;
+    border-radius: 0.25rem;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    text-align: center;
+  }
+  .progress-bar span {
+    position: relative;
+    top: -1px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgb(243, 7, 7);
+    text-shadow: 0px 0px 4px rgba(255, 255, 255, 1);
+    z-index: 99;
+  }
+  .show-progress {
+    display: inline-block;
+  }
+
+  .progress {
+    height: 100%;
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.8);
   }
 </style>

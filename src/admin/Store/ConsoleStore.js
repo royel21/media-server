@@ -6,10 +6,6 @@ const showConsoleStore = writable(false);
 const updateConsole = (data) => {
   ConsoleStore.update((old) => {
     old.push(data);
-    if (old.length > 200) {
-      old = old.slice(old.length - 100, old.length - 1);
-    }
-    old = old;
     return old;
   });
 };

@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
+  import { getEvent } from "./utils";
   export let cancel;
   export let confirm = () => {};
   export let errors = [];
@@ -13,7 +14,7 @@
 
   let ref;
 
-  let draState = { x: 0, y: 0 };
+  let dragState = { x: 0, y: 0 };
 
   let clazz = "";
   export { clazz as class };
@@ -28,34 +29,30 @@
   };
 
   const startDrag = (e) => {
-    if (!draState.drag) {
-      const { clientX, clientY } = e;
+    if (!dragState.drag) {
+      const { clientX, clientY } = getEvent(e);
       const { x, y, width, height } = ref.getClientRects()[0];
-      draState = { cX: clientX - x, cY: clientY - y, drag: true, w: width, h: height };
+      dragState = { cX: clientX - x, cY: clientY - y, drag: true, w: width, h: height };
     }
   };
 
   const stopDrag = () => {
-    draState.drag = false;
+    dragState.drag = false;
   };
 
   const move = (e) => {
-    const { cX, cY, w, h, drag } = draState;
+    const { cX, cY, w, h, drag } = dragState;
     if (drag) {
-      const { clientX, clientY } = e;
+      const { clientX, clientY } = getEvent(e);
       let left = clientX - cX;
       let top = clientY - cY;
 
-      left = left + w > window.innerWidth ? window.innerWidth - w - 2 : left;
+      left = left + w > window.innerWidth ? window.innerWidth - w - 0 : left;
 
-      left = left < 0 ? 2 : left;
-      if (document.webkitIsFullScreen) {
-        top = top + h > window.innerHeight ? window.innerHeight - h - 2 : top;
-        top = top < 0 ? 2 : top;
-      } else {
-        top = top + h > window.innerHeight - 39 ? window.innerHeight - h - 2 - 39 : top;
-        top = top < 43 ? 45 : top;
-      }
+      left = left < 0 ? 0 : left;
+
+      top = top + h > window.innerHeight ? window.innerHeight - h - 0 : top;
+      top = top < 10 ? 10 : top;
 
       ref.style.left = left + "px";
 
@@ -63,17 +60,21 @@
     }
   };
 
+  const listeners = [
+    ["mouseleave", stopDrag],
+    ["mousemove", move],
+    ["mouseup", stopDrag],
+    ["touchmove", move],
+    ["touchend", stopDrag],
+  ];
+
   onMount(() => {
     if (canDrag) {
-      document.addEventListener("mouseleave", stopDrag);
-      document.addEventListener("mousemove", move);
-      document.addEventListener("mouseup", stopDrag);
+      listeners.forEach((event) => document.addEventListener(event[0], event[1]));
     }
     return () => {
       if (canDrag) {
-        document.removeEventListener("mouseleave", stopDrag);
-        document.removeEventListener("mousemove", move);
-        document.removeEventListener("mouseup", startDrag);
+        listeners.forEach((event) => document.removeEventListener(event[0], event[1]));
       }
     };
   });
@@ -89,7 +90,7 @@
 >
   <div bind:this={ref} {id} class={`modal card move-to ${clazz}`} transition:fade={{ duration: 200 }}>
     <form on:submit|preventDefault={confirm}>
-      <div class="modal-header" class:drap={canDrag} on:mousedown={startDrag}>
+      <div class="modal-header" class:drap={canDrag} on:mousedown={startDrag} on:touchstart={startDrag}>
         <slot name="modal-header" />
       </div>
       <div class="modal-body">

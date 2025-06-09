@@ -26,7 +26,14 @@ routes.get("/remove-link/:Id", async ({ params }, res) => {
   const link = await db.Link.findOne({ where: { Id } });
 
   if (link) {
-    link.destroy();
+    await link.destroy();
+    if (!(await db.Link.findOne({ where: { Name: link.Name } }))) {
+      await db.Exclude.destroy({ where: { Name: link.Name } });
+    }
+
+    if (!(await db.Link.findOne({ where: { Name: link.Name } }))) {
+      await db.NameList.destroy({ where: { AltName: link.Name } });
+    }
     return res.send({ valid: true });
   }
   res.send({ valid: false });

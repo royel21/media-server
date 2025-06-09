@@ -1,4 +1,4 @@
-import { DataTypes, literal } from "sequelize";
+import { BOOLEAN, DataTypes, literal } from "sequelize";
 const { INTEGER, STRING, DATE } = DataTypes;
 
 export default (sequelize) =>
@@ -22,6 +22,10 @@ export default (sequelize) =>
     },
     color: {
       type: STRING(25),
+    },
+    important: {
+      type: BOOLEAN,
+      defaultValue: 0,
     },
     date: {
       type: DATE,

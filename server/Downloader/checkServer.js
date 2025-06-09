@@ -4,6 +4,7 @@ import { findFolder, getDb } from "./db-worker.js";
 import { filterManga, removeRaw, sendMessage } from "./utils.js";
 import { createPage } from "./Crawler.js";
 import { downloadLink } from "./link-downloader.js";
+import { getProgress } from "../utils.js";
 
 const evalServer = async (query) => {
   const delay = (ms) => {
@@ -102,15 +103,15 @@ export const downloadFromPage = async (Id, state) => {
 
   const db = getDb();
 
-  const server = await db.Server.findOne({ where: { Id: Id } });
-  if (server && server?.HomeQuery && page) {
+  const Server = await db.Server.findOne({ where: { Id: Id } });
+  if (Server && Server?.HomeQuery && page) {
     try {
-      sendMessage({ text: `** ${formatAMPM(new Date())} ${server.Name} **`, important: true });
+      sendMessage({ text: `** ${formatAMPM(new Date())} ${Server.Name} **`, important: true });
 
-      page.goto(`https:\\${server.Name}`, { waitUntil: "domcontentloaded" });
-      await page.waitForSelector(server.HomeQuery);
+      page.goto(`https:\\${Server.Name}`, { waitUntil: "domcontentloaded" });
+      await page.waitForSelector(Server.HomeQuery);
 
-      const data = await page.evaluate(evalServer, server.dataValues);
+      const data = await page.evaluate(evalServer, Server.dataValues);
 
       const linkData = [];
 
@@ -143,7 +144,7 @@ export const downloadFromPage = async (Id, state) => {
           const folder = await findFolder(d.link.Name);
           if (folder) {
             sendMessage({
-              text: `\u001b[1;31m ${count++}/${linkData.length} ${folder.Name} \u001b[0m`,
+              text: `\u001b[1;31m ${getProgress(count++, linkData.length)} ${folder.Name} \u001b[0m`,
               url: d.link.Url,
               color: "red",
             });
@@ -157,20 +158,10 @@ export const downloadFromPage = async (Id, state) => {
             let chaptCount = 1;
             for (let chap of d.chaps) {
               if (state.stopped) break;
-
+              const count = `${getProgress(chaptCount++, d.chaps.length)}`;
               if (chap.name && checkIfRaw(chap, folder) && !excludes.find((ex) => chap.name.includes(ex.Name))) {
                 try {
-                  if (
-                    await downloadLink(
-                      chap,
-                      page,
-                      server,
-                      folder,
-                      `${chaptCount++}/${d.chaps.length}`,
-                      d.link.IsAdult,
-                      state
-                    )
-                  ) {
+                  if (await downloadLink({ d: chap, page, Server, folder, count, state })) {
                     updateFolder = true;
                   }
                 } catch (error) {
@@ -199,11 +190,12 @@ export const downloadFromPage = async (Id, state) => {
       }
     } catch (error) {
       if (!state.stopped) {
-        sendMessage({ text: `Error checking server ${server?.Name}: Can't access page`, color: "red" });
+        console.log(error);
+        sendMessage({ text: `Error checking server ${Server?.Name}: Can't access page`, color: "red" });
       }
     }
     if (!state.stopped) {
-      sendMessage({ text: `Server finish ${server?.Name}` });
+      sendMessage({ text: `Server finish ${Server?.Name}` });
     }
   }
 

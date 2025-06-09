@@ -218,14 +218,16 @@ const scanDir = async ({ Id, Path, Type, isFolder, IsAdult }, user) => {
   io.sockets.emit("info", { text: msg });
 };
 
+const sendEvents = ({ event, message }) => {
+  io.sockets.emit(event, message);
+};
+
 let fileWorker;
 const fileWork = (data) => {
   if (!fileWorker) {
     fileWorker = fork(appPath + "/workers/FileWorker.js");
 
-    fileWorker.on("message", ({ event, message }) => {
-      io.sockets.emit(event, message);
-    });
+    fileWorker.on("message", sendEvents);
 
     fileWorker.on("exit", () => {
       fileWorker = null;
@@ -235,14 +237,16 @@ const fileWork = (data) => {
   fileWorker.send(data);
 };
 
-let bgWorker;
+let bgWorker = null;
 const bgWork = (data) => {
+  if (data.action === "bg-state") {
+    return sendEvents({ event: "bg-worker-state", message: { isWorking: bgWorker !== null } });
+  }
+
   if (!bgWorker) {
     bgWorker = fork(appPath + "/workers/bgWorker.js");
 
-    bgWorker.on("message", ({ event, message }) => {
-      io.sockets.emit(event, message);
-    });
+    bgWorker.on("message", sendEvents);
 
     bgWorker.on("exit", () => {
       bgWorker = null;

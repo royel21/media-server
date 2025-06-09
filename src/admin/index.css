@@ -64,7 +64,6 @@
   min-width: initial;
   height: max-content;
   width: 350px;
-  background-color: cadetblue;
   margin-bottom: 50px;
 }
 
@@ -116,6 +115,7 @@ input::-webkit-inner-spin-button {
   position: relative;
   height: 100%;
   padding: 10px 0 0;
+  z-index: 302;
 }
 
 .disk-controls {
