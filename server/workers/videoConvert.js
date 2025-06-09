@@ -85,7 +85,7 @@ export const convertVideo = async (
       if (subtStream > -1) {
         const subfilepath = os.platform("win32") ? file.Path.replaceAll("\\", "/").replace(":", "\\:") : file.Path;
         outOptions.push(`-vf`);
-        outOptions.push(`subtitles='${subfilepath}':si=${subtStream + 1}`);
+        outOptions.push(`subtitles='${subfilepath}':si=${subtStream}`);
       }
 
       const { pix_fmt } = stream;
