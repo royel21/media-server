@@ -95,7 +95,7 @@ export const renameFile = async ({ file, Name }) => {
       data.ren = true;
       await sendMessage(data, "files-info");
     } catch (error) {
-      data.msg = `Some Error Happen when trying to Rename File: ${file.Name}`;
+      data.msg = `File ${file.Name} Already Exist or file name no allowed`;
       data.error = error;
       await sendMessage(data, "files-info");
     }
