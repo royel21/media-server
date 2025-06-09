@@ -30,7 +30,7 @@
   });
 </script>
 
-<div class={"input-control " + key}>
+<div class={`input-control ${key}`}>
   <span class="input-label" on:click={handler}>
     {label || key}
     <slot name="icon" />

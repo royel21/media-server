@@ -34,7 +34,10 @@ async function getMetadata(filePath) {
 
 const getime = () => new Date().toLocaleTimeString();
 
-export const convertVideo = async ({ files, videoBitrate, audioBitrate, Remove, Debug, Width, Height }, state) => {
+export const convertVideo = async (
+  { files, videoBitrate, audioBitrate, Remove, Debug, Width, Height, Subtitles },
+  state
+) => {
   let i = 0;
 
   for (let file of files) {
@@ -73,18 +76,16 @@ export const convertVideo = async ({ files, videoBitrate, audioBitrate, Remove, 
       } else {
         inputOptions.push("-hwaccel auto");
       }
-      const subtStream = meta.streams.find(
-        (st) => st.codec_long_name?.includes("subtitle") || st.codec_type === "subtitle"
-      );
 
-      if (subtStream) {
-        outOptions.push("-map 0:v:0");
-        outOptions.push("-map 0:a:0");
-        outOptions.push("-map 0:s:0");
+      const subRegex = new RegExp(Subtitles);
+      const subtStream = meta.streams
+        .filter((st) => /subtitle/.test(st.codec_type))
+        .findIndex((st) => subRegex.test(st.tags.language));
+
+      if (subtStream > -1) {
+        const subfilepath = os.platform("win32") ? file.Path.replaceAll("\\", "/").replace(":", "\\:") : file.Path;
         outOptions.push(`-vf`);
-        outOptions.push(`subtitles='${file.Path}'`);
-        outOptions.push("-disposition:s:0 forced");
-        outOptions.push("-c:s mov_text");
+        outOptions.push(`subtitles='${subfilepath}':si=${subtStream + 1}`);
       }
 
       const { pix_fmt } = stream;
@@ -151,8 +152,9 @@ export const convertVideo = async ({ files, videoBitrate, audioBitrate, Remove, 
           }
           resolve(true);
         })
-        .on("error", (err) => {
-          console.log(err);
+        .on("error", (error) => {
+          error = error.toString();
+          sendMessage({ text: "Error Converting video - " + error, color: "red", error }, "info", false);
           resolve(true);
         });
     });

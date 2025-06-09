@@ -8,8 +8,8 @@
   export let acept;
 
   let defaults = {
-    Anime: { videoBitrate: 832, audioBitrate: 128, Width: 1280, Height: -1, Debug: false },
-    Film: { videoBitrate: 1088, audioBitrate: 128, Width: 1280, Height: -1, Debug: false },
+    Anime: { videoBitrate: 832, audioBitrate: 128, Width: 1280, Height: -1, Subtitles: "eng|spa", Debug: false },
+    Film: { videoBitrate: 1088, audioBitrate: 128, Width: 1280, Height: -1, Subtitles: "eng|spa", Debug: false },
   };
 
   const options = [{ Id: "Anime" }, { Id: "Film" }];
@@ -31,9 +31,10 @@
     <span slot="modal-body">
       <Input label="Video Bitrate" key="videoBitrate" {item} paste={false} />
       <Input label="Video Bitrate" key="audioBitrate" {item} paste={false} />
+      <Input label="Preferred Sub" key="Subtitles" {item} paste={false} />
       <div class="input-control-group">
         <Input label="Max Width" key="Width" {item} paste={false} />
-        <Input label="Max Height" key="Height" {item} paste={false} />
+        <Input key="Height" {item} paste={false} />
       </div>
       <CheckBox key="Debug" {item} />
       <CheckBox label="Remove Files" key="Remove" {item} />
@@ -45,15 +46,25 @@
 </div>
 
 <style>
+  #v-convert :global(.modal-container) {
+    padding-top: 0;
+  }
   #v-convert :global(.modal-container .modal) {
     min-width: 390px;
     max-width: 390px;
   }
-  #v-convert :global(.input-label:not(#t-label)) {
-    min-width: 110px;
-    max-width: 110px;
+  #v-convert :global(.input-label) {
+    min-width: 115px;
+    max-width: 115px;
     text-align: right;
     padding-right: 5px;
+  }
+  #v-convert :global(.Height) {
+    max-width: 170px;
+  }
+  #v-convert :global(.Height .input-label) {
+    min-width: 65px;
+    max-width: 65px;
   }
 
   @media screen and (max-width: 600px) {
