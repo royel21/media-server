@@ -195,7 +195,7 @@ export const extractSubVideo = async ({ file, Start, End }) => {
 
   let outFile = path.join(basePath, `${name}-A${extension}`);
   let count = 0;
-  let letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+  let letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"];
   while (fs.existsSync(outFile)) {
     outFile = outFile.replace(`-${letters[count]}${extension}`, `-${letters[count + 1]}${extension}`);
     count++;
