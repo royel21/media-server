@@ -11,7 +11,7 @@ export default (sequelize, isSqlite) => {
         autoIncrement: true,
       },
       Name: {
-        type: STRING,
+        type: STRING + (isSqlite ? " " : " COLLATE 'utf8mb4_bin'"),
         defaultValue: "",
       },
       UrlName: {

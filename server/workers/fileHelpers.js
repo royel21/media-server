@@ -94,7 +94,7 @@ export const renameFile = async ({ file, Name }) => {
     try {
       const Path = file.Path.replace(file.Name, Name);
       fs.moveSync(file.Path, file.Path.replace(file.Name, Name));
-      data.msg = `File "${file.Name}" Rename to  -> "${Name}"`;
+      data.msg = `File ${file.Name} was rename to ${Name}`;
       data.file.Name = Name;
       data.file.Path = Path;
       data.ren = true;

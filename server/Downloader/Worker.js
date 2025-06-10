@@ -123,8 +123,8 @@ const downloadLinks = async (link, page) => {
     try {
       ++count;
       //d, page, Server, folder, count, state
-      const count = `${getProgress(count / data.length)}`;
-      await downloadLink({ d, page, Server, folder, state, count });
+      const progress = `${getProgress(count / data.length)}`;
+      await downloadLink({ d, page, Server, folder, state, count: progress });
     } catch (error) {
       await sendMessage({ text: `chapter ${Name} - ${d.name} navigation error`, error });
     }
