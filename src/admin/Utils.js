@@ -28,3 +28,6 @@ export const validateCheck = (list, items) => {
 export const formatSize = (size) => {
   return (size / 1024 / 1024).toFixed(3) + "GB";
 };
+
+export const loadObject = (key) => JSON.parse(localStorage.getItem(key));
+export const saveObject = (key, value) => localStorage.setItem(key, JSON.stringify(value));

@@ -1,0 +1,254 @@
+[
+    {
+        "code": "ar",
+        "description": "Standard Arabic"
+    },
+    {
+        "code": "cs",
+        "description": "Czech language"
+    },
+    {
+        "code": "da",
+        "description": "Danish language"
+    },
+    {
+        "code": "de",
+        "description": "Standard German"
+    },
+    {
+        "code": "el",
+        "description": "Modern Greek"
+    },
+    {
+        "code": "en",
+        "description": "English (generic)"
+    },
+    {
+        "code": "eng",
+        "description": "English (generic)"
+    },
+    {
+        "code": "en-CA",
+        "description": "English (Canada)"
+    },
+    {
+        "code": "en-US",
+        "description": "English (United States)"
+    },
+    {
+        "code": "en-GB",
+        "description": "English (United Kingdom)"
+    },
+    {
+        "code": "en-AU",
+        "description": "English (Australia)"
+    },
+    {
+        "code": "en-NZ",
+        "description": "English (New Zealand)"
+    },
+    {
+        "code": "en-IN",
+        "description": "English (India)"
+    },
+    {
+        "code": "en-ZA",
+        "description": "English (South Africa)"
+    },
+    {
+        "code": "en-IE",
+        "description": "English (Ireland)"
+    },
+    {
+        "code": "en-PH",
+        "description": "English (Philippines)"
+    },
+    {
+        "code": "en-SG",
+        "description": "English (Singapore)"
+    },
+    {
+        "code": "en-forced",
+        "description": "Forced English variant (non-regional)"
+    },
+    {
+        "code": "eo",
+        "description": "Esperanto (constructed international auxiliary language)"
+    },
+    {
+        "code": "es",
+        "description": "Spanish (generic)"
+    },
+    {
+        "code": "spa",
+        "description": "Spanish (generic)"
+    },
+    {
+        "code": "es-419",
+        "description": "Spanish (Latin America)"
+    },
+    {
+        "code": "es-ES",
+        "description": "Spanish (Spain)"
+    },
+    {
+        "code": "es-MX",
+        "description": "Spanish (Mexico)"
+    },
+    {
+        "code": "es-US",
+        "description": "Spanish (United States)"
+    },
+    {
+        "code": "et",
+        "description": "Estonian language"
+    },
+    {
+        "code": "fi",
+        "description": "Finnish language"
+    },
+    {
+        "code": "fr",
+        "description": "Standard French"
+    },
+    {
+        "code": "hi",
+        "description": "Hindi language"
+    },
+    {
+        "code": "hu",
+        "description": "Hungarian language"
+    },
+    {
+        "code": "id",
+        "description": "Indonesian language"
+    },
+    {
+        "code": "it",
+        "description": "Italian language"
+    },
+    {
+        "code": "iw",
+        "description": "Hebrew language"
+    },
+    {
+        "code": "ja",
+        "description": "Japanese language"
+    },
+    {
+        "code": "ko",
+        "description": "Korean language"
+    },
+    {
+        "code": "ku",
+        "description": "Kurdish language"
+    },
+    {
+        "code": "la",
+        "description": "Latin language"
+    },
+    {
+        "code": "lv",
+        "description": "Latvian language"
+    },
+    {
+        "code": "mk",
+        "description": "Macedonian language"
+    },
+    {
+        "code": "ml",
+        "description": "Malayalam language"
+    },
+    {
+        "code": "mr",
+        "description": "Marathi language"
+    },
+    {
+        "code": "nb",
+        "description": "Norwegian Bokmål (Norway)"
+    },
+    {
+        "code": "nl",
+        "description": "Dutch language"
+    },
+    {
+        "code": "no",
+        "description": "Norwegian language"
+    },
+    {
+        "code": "pl",
+        "description": "Polish language"
+    },
+    {
+        "code": "pt",
+        "description": "Standard Portuguese"
+    },
+    {
+        "code": "pt-BR",
+        "description": "Portuguese (Brazil)"
+    },
+    {
+        "code": "pt-PT",
+        "description": "Portuguese (Portugal)"
+    },
+    {
+        "code": "ro",
+        "description": "Romanian language"
+    },
+    {
+        "code": "ru",
+        "description": "Russian language"
+    },
+    {
+        "code": "sk",
+        "description": "Slovakian language"
+    },
+    {
+        "code": "sl",
+        "description": "Slovenian language"
+    },
+    {
+        "code": "sr",
+        "description": "Serbian language"
+    },
+    {
+        "code": "sv",
+        "description": "Swedish language"
+    },
+    {
+        "code": "th",
+        "description": "Thai language"
+    },
+    {
+        "code": "tr",
+        "description": "Turkish language"
+    },
+    {
+        "code": "uk",
+        "description": "Ukrainian language"
+    },
+    {
+        "code": "vi",
+        "description": "Vietnamese language"
+    },
+    {
+        "code": "zh",
+        "description": "Chinese (generic)"
+    },
+    {
+        "code": "zh-CN",
+        "description": "Simplified Chinese (Mainland China)"
+    },
+    {
+        "code": "zh-TW",
+        "description": "Traditional Chinese (Taiwan)"
+    },
+    {
+        "code": "zh-HK",
+        "description": "Traditional Chinese (Hong Kong)"
+    },
+    {
+        "code": "zh-SG",
+        "description": "Simplified Chinese (Singapore)"
+    }
+]

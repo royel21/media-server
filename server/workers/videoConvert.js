@@ -47,6 +47,7 @@ export const convertVideo = async (
     await new Promise(async (resolve) => {
       const basePath = file.Path.replace(/\.(mp4|webm|mkv|ogg)$/i, "");
       let toFile = basePath + `.mp4`;
+      //add - to name if mp4 file exists
       if (fs.existsSync(toFile)) {
         toFile = toFile.replace(".mp4", "-.mp4");
       }
@@ -59,7 +60,7 @@ export const convertVideo = async (
       const start = new Date().getTime();
 
       const inputOptions = [];
-
+      // select h264 as video output, aac audio and remove all chapter from output
       const outOptions = [
         "-c:v h264",
         `-b:v ${videoBitrate}k`,
@@ -68,7 +69,7 @@ export const convertVideo = async (
         "-movflags +faststart",
         "-map_chapters -1",
       ];
-
+      // add hardware acceleration
       if (os.platform() === "linux") {
         inputOptions.unshift(`-init_hw_device vaapi=/dev/dri/renderD128`);
         inputOptions.unshift("-hwaccel_output_format qsv");
@@ -77,29 +78,37 @@ export const convertVideo = async (
         inputOptions.push("-hwaccel auto");
       }
 
-      const subRegex = new RegExp(Subtitles);
-      const subtStream = meta.streams
-        .filter((st) => /subtitle/.test(st.codec_type))
-        .findIndex((st) => subRegex.test(st.tags.language));
+      //Select all subtitle stream
+      const subtStream = meta.streams.filter((st) => /subtitle/.test(st.codec_type));
+      let subtIndex = -1;
+      if (subtStream.length > 0) {
+        //select subtitle by order
+        for (const sub of Subtitles.split("|")) {
+          subtIndex = subtStream.findIndex((st) => st.tags.language.includes(sub));
+          if (subtIndex > -1) break;
+        }
+      }
 
-      if (subtStream > -1) {
+      //if found matching subtitle, burn it into video
+      if (subtIndex > -1) {
         const subfilepath = os.platform("win32") ? file.Path.replaceAll("\\", "/").replace(":", "\\:") : file.Path;
         outOptions.push(`-vf`);
-        outOptions.push(`subtitles='${subfilepath}':si=${subtStream}`);
+        outOptions.push(`subtitles='${subfilepath}':si=${subtIndex}`);
       }
 
       const { pix_fmt } = stream;
-
+      //keep pixel format from original video
       if (pix_fmt) {
         outOptions.push(`-pix_fmt ${pix_fmt}`);
       }
 
       let sizeOption = `-1:-1`;
-
+      //resize to keep under maximun width
       if (Width && stream.width > +Width) {
         sizeOption = sizeOption.replace(/^-1/, Width);
       }
 
+      //resize to keep under maximun height
       if (Height && stream.height > +Height) {
         sizeOption = sizeOption.replace(/-1$/, Height);
       }

@@ -27,11 +27,11 @@
       return errors.push("Path can't be empty");
     }
 
-    if (!/^(\/|[d-z]\:\\)/i.test(item.Path)) {
+    if (!/homedir|^(\/|[d-z]\:\\)/i.test(item.Path)) {
       return errors.push("Path must be a valid Path");
     }
 
-    if (!/^\/(mnt|media)\/.*\/|^[d-z]\:\\|\/home\/.*\/|^c:\\Users\\.*\\/i.test(item.Path)) {
+    if (!/homedir|^\/(mnt|media)\/.*\/|^[d-z]\:\\|\/home\/.*\/|^c:\\Users\\.*\\/i.test(item.Path)) {
       return errors.push("Path must be on User Space");
     }
 

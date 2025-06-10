@@ -27,7 +27,7 @@ export const postFile = async (route, data) => {
   return await fetch(`/api/${route}`, { method: "POST", body }).then((res) => res.json());
 };
 
-export const get = async (route, key = "get") => {
+export const get = async (route = [], key = "get") => {
   controller[key]?.abort();
   controller[key] = new AbortController();
   const url = ["/api", ...route].filter((p) => p).join("/");
@@ -35,6 +35,14 @@ export const get = async (route, key = "get") => {
     return await fetch(url, { signal: controller[key].signal }).then((res) => res.json());
   } catch (error) {
     return { error, valid: false };
+  }
+};
+
+export const getStatic = async (url) => {
+  try {
+    return await fetch(url).then((res) => res.json());
+  } catch (error) {
+    return { valid: false, error };
   }
 };
 
@@ -66,4 +74,5 @@ export default {
   postFav,
   postFile,
   cancelQuery,
+  getStatic,
 };

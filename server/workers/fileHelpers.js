@@ -1,9 +1,14 @@
 import fs from "fs-extra";
 import path from "path";
+import os from "os";
 import { capitalize } from "../Downloader/utils.js";
 import { getProgress, sendMessage } from "../utils.js";
 
 export const moveFiles = async ({ files, Path, overwrite, NewFolder }) => {
+  if (/^homedir/.test(Path)) {
+    Path = Path.replace("homedir", os.homedir());
+  }
+
   if (!fs.existsSync(Path)) {
     return await sendMessage({ error: `The specified path does not exist: ${Path}` }, "files-info");
   }
