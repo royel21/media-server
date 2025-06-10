@@ -26,6 +26,7 @@
 
   let filtered = files;
   let sortBy = "name";
+  let length = files.length;
 
   let selectedList = [];
   let isChecked = false;
@@ -231,8 +232,9 @@
     filtered = files.filter(filterFunc(filter)).sort(sorter[sortBy]);
   }
 
-  $: if (files.length) {
+  $: if (files.length !== length) {
     selectedList = [];
+    length = files.length;
   }
 
   $: list = selectedList.length ? selectedList : filtered;

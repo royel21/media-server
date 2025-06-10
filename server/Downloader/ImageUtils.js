@@ -210,18 +210,23 @@ export const downloadAllIMages = async (page, links, state, imgPath, folder, des
     }
 
     if (img && img.toFormat) {
-      const newImg = `${i}`.padStart(padding, "0") + ".jpg";
-      const buff = await img.toFormat("jpg").toBuffer();
+      try {
+        const newImg = `${i}`.padStart(padding, "0") + ".jpg";
+        const buff = await img.toFormat("jpg").toBuffer();
 
-      if (i === thumb && !fs.existsSync(imgPath)) {
-        const isSave = await saveThumbnail(buff, imgPath);
-        if (!isSave) {
-          thumb++;
-        } else {
-          thumb = 0;
+        if (i === thumb && !fs.existsSync(imgPath)) {
+          const isSave = await saveThumbnail(buff, imgPath);
+          if (!isSave) {
+            thumb++;
+          } else {
+            thumb = 0;
+          }
         }
+        zip.addFile(newImg, buff);
+      } catch (error) {
+        console.log(links[i], error);
       }
-      zip.addFile(newImg, buff);
+
       result.count++;
     }
   }
