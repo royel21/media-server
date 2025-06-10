@@ -9,12 +9,12 @@ export default (sequelize, isSqlite) => {
       autoIncrement: true,
     },
     Name: {
-      type: STRING + (isSqlite ? " " : " COLLATE 'utf8mb4_bin'"),
+      type: STRING + (isSqlite ? " " : " COLLATE 'utf8mb4_unicode_ci'"),
       unique: true,
       defaultValue: "",
     },
     AltName: {
-      type: STRING + (isSqlite ? " " : " COLLATE 'utf8mb4_bin'"),
+      type: STRING + (isSqlite ? " " : " COLLATE 'utf8mb4_unicode_ci'"),
       defaultValue: "",
     },
   });

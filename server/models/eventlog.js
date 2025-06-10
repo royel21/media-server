@@ -12,7 +12,7 @@ export default (sequelize, isSqlite) =>
       type: STRING(25),
     },
     text: {
-      type: STRING(512) + (isSqlite ? " " : " COLLATE 'utf8mb4_bin'"),
+      type: STRING(512) + (isSqlite ? " " : " COLLATE 'utf8mb4_unicode_ci'"),
     },
     error: {
       type: STRING(512),
