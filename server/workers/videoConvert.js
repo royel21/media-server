@@ -35,7 +35,7 @@ async function getMetadata(filePath) {
 const getime = () => new Date().toLocaleTimeString();
 
 export const convertVideo = async (
-  { files, videoBitrate, audioBitrate, Remove, Debug, Width, Height, Subtitles },
+  { files, videoBitrate, audioBitrate, Remove, Debug, Width, Height, Subtitles, Audio },
   state
 ) => {
   let i = 0;
@@ -78,22 +78,32 @@ export const convertVideo = async (
         inputOptions.push("-hwaccel auto");
       }
 
-      //Select all subtitle stream
-      const subtStream = meta.streams.filter((st) => /subtitle/.test(st.codec_type));
-      let subtIndex = -1;
-      if (subtStream.length > 0) {
-        //select subtitle by order
-        for (const sub of Subtitles.split("|")) {
-          subtIndex = subtStream.findIndex((st) => st.tags.language.includes(sub));
-          if (subtIndex > -1) break;
+      const getStreamIndexByLang = (list = [], type = "audio") => {
+        const streams = meta.streams.filter((st) => st.codec_type === type);
+        let strIndex = -1;
+        if (streams.length > 0) {
+          //select subtitle by order
+          for (const sub of list.split("|")) {
+            strIndex = streams.findIndex((st) => st.tags.language.includes(sub));
+            if (strIndex > -1) break;
+          }
         }
+
+        return strIndex;
+      };
+
+      //find audio by matching language and copy to video
+      let strIndex = getStreamIndexByLang(Audio, "audio");
+      if (strIndex > -1) {
+        outOptions.push(`-map 0:a:${strIndex}`);
       }
 
       //if found matching subtitle, burn it into video
-      if (subtIndex > -1) {
+      strIndex = getStreamIndexByLang(Subtitles, "subtitle");
+      if (strIndex > -1) {
         const subfilepath = os.platform("win32") ? file.Path.replaceAll("\\", "/").replace(":", "\\:") : file.Path;
         outOptions.push(`-vf`);
-        outOptions.push(`subtitles='${subfilepath}':si=${subtIndex}`);
+        outOptions.push(`subtitles='${subfilepath}':si=${strIndex}`);
       }
 
       const { pix_fmt } = stream;

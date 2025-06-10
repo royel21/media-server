@@ -136,6 +136,10 @@
         "description": "Japanese language"
     },
     {
+        "code": "jap",
+        "description": "Japanese language"
+    },
+    {
         "code": "ko",
         "description": "Korean language"
     },

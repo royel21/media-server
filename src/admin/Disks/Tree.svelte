@@ -62,7 +62,7 @@
     document.body.addEventListener("click", hideMenu);
     setTimeout(() => {
       socket.emit("load-disks");
-    }, 50);
+    }, 400);
   });
 
   onDestroy(() => {

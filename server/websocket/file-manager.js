@@ -96,6 +96,7 @@ const startWork = async (model, isFolder, user) => {
 const sizeInGB = (size) => (size / 1024 / 1024 / 1024).toFixed(1) + "GB";
 // List all hdd
 const diskLoader = async () => {
+  console.log("load disk");
   const drives = await drivelist.list();
   const disks = [];
   for (const drive of drives) {

@@ -6,32 +6,49 @@
   import { loadObject, saveObject } from "../Utils";
   import apiUtils from "src/apiUtils";
   import { onMount } from "svelte";
+  import Language from "./Language.svelte";
 
   export let hide;
   export let acept;
 
   let defaults = {
-    Anime: { videoBitrate: 832, audioBitrate: 128, Width: 1280, Height: -1, Subtitles: "eng|spa", Debug: false },
-    Film: { videoBitrate: 1088, audioBitrate: 128, Width: 1280, Height: -1, Subtitles: "eng|spa", Debug: false },
-    Default: "Anime",
+    Anime: {
+      videoBitrate: 832,
+    },
+    Film: {
+      videoBitrate: 1088,
+    },
+  };
+
+  const commons = {
+    audioBitrate: 128,
+    Subtitles: "eng|spa",
+    Audio: "jap|spa|es|eng",
+    Width: 1280,
+    Height: -1,
+    Remove: false,
+    Debug: false,
   };
 
   const options = [{ Id: "Anime" }, { Id: "Film" }];
   const KEY = "VideoConvertConfig";
   let subtitleCodes = [];
-  let showSubtCodeList = false;
 
   let errors = [];
 
-  let item = loadObject(KEY) || { ...defaults.Anime, Remove: false, Default: "Anime" };
+  const config = {
+    ...commons,
+    ...defaults.Anime,
+    Default: "Anime",
+  };
+
+  let item = loadObject(KEY) || config;
 
   const loadDef = () => {
-    item = { ...item, ...defaults[item.Default] };
+    item = { ...item, ...commons, ...defaults[item.Default] };
   };
 
   const onConfirm = () => acept(item);
-
-  const toggleSubtCodeList = () => (showSubtCodeList = !showSubtCodeList);
 
   onMount(async () => {
     const result = await apiUtils.getStatic("/subtitle-codes.json");
@@ -46,23 +63,13 @@
 </script>
 
 <div id="v-convert">
-  <Dialog cancel={hide} confirm={onConfirm} {errors} canDrag={true}>
+  <Dialog cancel={hide} confirm={onConfirm} {errors}>
     <h4 slot="modal-header">Video Transcoder Options</h4>
     <span slot="modal-body">
       <Input label="Video Bitrate" key="videoBitrate" bind:item paste={false} />
       <Input label="Video Bitrate" key="audioBitrate" bind:item paste={false} />
-      <div class="subt" on:click={toggleSubtCodeList}>
-        <div class="subt-list" class:show-subt-code-list={showSubtCodeList}>
-          <div class="sub-row-1">Write Code Separate By |</div>
-          {#each subtitleCodes as sub}
-            <div class="sub-row">
-              <span>{sub.code}</span>
-              <span>{sub.description}</span>
-            </div>
-          {/each}
-        </div>
-        <Input label="Preferred Sub" key="Subtitles" bind:item paste={false} />
-      </div>
+      <Language label="Preferred Subt" key="Subtitles" bind:item {subtitleCodes} />
+      <Language label="Preferred Audio" key="Audio" bind:item {subtitleCodes} height={188} />
       <div class="input-control-group">
         <Input label="Max Width" key="Width" bind:item paste={false} />
         <Input key="Height" bind:item paste={false} />
@@ -86,8 +93,7 @@
     max-width: 390px;
   }
   #v-convert :global(.input-label) {
-    min-width: 115px;
-    max-width: 115px;
+    min-width: 130px;
     text-align: right;
     padding-right: 5px;
   }
@@ -101,42 +107,6 @@
   button {
     height: 30px;
     width: 140px;
-  }
-  .subt {
-    position: relative;
-  }
-  .subt-list {
-    display: none;
-    position: absolute;
-    top: 30px;
-    background-color: black;
-    z-index: 99;
-    border-radius: 0.25rem;
-    height: 220px;
-    overflow-y: auto;
-  }
-  .sub-row-1 {
-    position: sticky;
-    top: 0;
-    background-color: black;
-  }
-
-  .show-subt-code-list {
-    display: block;
-  }
-  .sub-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 5px;
-  }
-  .sub-row span {
-    display: inline-block;
-    width: 35%;
-    text-align: left;
-    font-size: 0.9rem;
-  }
-  .sub-row span:last-child {
-    width: 65%;
   }
   @media screen and (max-width: 600px) {
     #v-convert :global(.modal-container) {

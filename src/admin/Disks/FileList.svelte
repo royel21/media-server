@@ -321,6 +321,10 @@
               <span class="f-play" on:click|stopPropagation={() => (showPlayer = file)} title="Play Video">
                 <Icons name="play" box="0 0 512 512" color="deepskyblue" />
               </span>
+            {:else}
+              <span class="f-play">
+                <Icons name="file" box="0 0 512 512" color="white" />
+              </span>
             {/if}
             <span class="size">{getSize2(file)}</span>
             <span>{file.Name}</span>
