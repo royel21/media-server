@@ -41,6 +41,13 @@ const renameDBFolder = async (datas) => {
 
       data = { Name, Path, Description, Genres, Status, IsAdult: IsAdult || 0, AltName, Author, Server, EmissionDate };
 
+      const diff = [];
+      for (let key of Object.keys(data)) {
+        if (folder.dataValues[key] !== data[key]) {
+          diff.push(key);
+        }
+      }
+
       if (Transfer) {
         const dir = await db.directory.findOne({ where: { Id: DirectoryId } });
         if (dir) {
@@ -57,10 +64,10 @@ const renameDBFolder = async (datas) => {
           if (!result.success) {
             return await sendMessage({ success: false, msg: "Transfer folder fail" }, EVENT);
           }
-          msg = `Folder: ${Name} was moved ${moveMsg}`;
+          msg = `Folder ${Name} was moved ${moveMsg}`;
         }
       } else {
-        msg = `Folder: ${Name} data was Updated`;
+        msg = `Folder ${Name} -> ${diff.join(", ")} was Updated`;
       }
       //add Completed id
       let gens = Genres?.split(", ").filter((g) => g !== "Completed") || [];

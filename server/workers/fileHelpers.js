@@ -71,13 +71,13 @@ export const createFolder = async ({ file, Name }) => {
 
     if (fs.existsSync(Path)) {
       data.error = true;
-      data.msg = `Folder: ${Name} Already Exist`;
+      data.msg = ` ${Name} Already Exist`;
       return await sendMessage(data, "folder-create");
     }
 
     fs.mkdirsSync(Path);
 
-    data.msg = `Folder: ${Name} was create`;
+    data.msg = `Folder ${Name} was create`;
     data.folder = { Id: getNewId(), Name: Name, Type: "folder", Path, Content: [] };
 
     return await sendMessage(data, "folder-create");

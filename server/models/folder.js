@@ -27,7 +27,7 @@ export default (sequelize, isSqlite) => {
         type: STRING(10),
       },
       Name: {
-        type: STRING,
+        type: STRING + (isSqlite ? " " : " COLLATE 'utf8mb4_unicode_ci'"),
       },
       AltName: {
         type: TEXT + (isSqlite ? " " : " COLLATE 'utf8mb4_unicode_ci'"),
@@ -69,11 +69,11 @@ export default (sequelize, isSqlite) => {
         defaultValue: 0,
       },
       Path: {
-        type: STRING,
+        type: STRING + (isSqlite ? " " : " COLLATE 'utf8mb4_unicode_ci'"),
         unique: true,
       },
       Description: {
-        type: TEXT + (isSqlite ? " " : " COLLATE 'utf8mb4_bin'"),
+        type: TEXT + (isSqlite ? " " : " COLLATE 'utf8mb4_unicode_ci'"),
       },
       Status: {
         type: BOOLEAN,

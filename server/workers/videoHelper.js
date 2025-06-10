@@ -149,10 +149,10 @@ export const removeDFolder = async ({ Id, Name, Path }) => {
   if (fs.existsSync(Path)) {
     try {
       fs.removeSync(Path);
-      await sendMessage({ msg: `Finish Removing: ${Path}`, folder: { Id } }, "folder-remove");
+      await sendMessage({ msg: `Finish Removing ${Path}`, folder: { Id } }, "folder-remove");
     } catch (error) {
       await sendMessage(
-        { error: error.toString(), msg: `Error Removing: ${Path}`, folder: { Id, Name, Path } },
+        { error: error.toString(), msg: `Error Removing ${Path}`, folder: { Id, Name, Path } },
         "folder-remove"
       );
     }
@@ -164,10 +164,10 @@ export const renameFolder = async ({ folder, Name }) => {
     const data = { msg: "", error: "", folder, Name };
     try {
       fs.moveSync(folder.Path, folder.Path.replace(folder.Name, Name));
-      data.msg = `Folder: ${folder.Name} -> Rename to: ${Name}`;
+      data.msg = `Folder ${folder.Name} was rename to ${Name}`;
       await sendMessage(data, "folder-rename");
     } catch (error) {
-      data.msg = `Some Error Happen when trying to move Folder: ${folder.Name}`;
+      data.msg = `Some Error Happen when trying to move Folder ${folder.Name}`;
       data.error = error;
       await sendMessage(data, "folder-rename");
     }
