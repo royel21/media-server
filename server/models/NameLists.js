@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 
-export default (sequelize) => {
+export default (sequelize, isSqlite) => {
   const { INTEGER, STRING } = DataTypes;
   return sequelize.define("NameLists", {
     Id: {

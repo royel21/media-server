@@ -87,7 +87,7 @@ export const findOrCreateFolder = async (manga, IsAdult, isRaw) => {
 
     return folder;
   } catch (error) {
-    console.log(error.toString(), Name, Path);
+    console.log(error.toString(), Name);
     return null;
   }
 };

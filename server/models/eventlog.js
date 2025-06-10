@@ -1,7 +1,7 @@
-import { BOOLEAN, DataTypes, literal } from "sequelize";
-const { INTEGER, STRING, DATE } = DataTypes;
+import { DataTypes, literal } from "sequelize";
+const { INTEGER, STRING, DATE, BOOLEAN } = DataTypes;
 
-export default (sequelize) =>
+export default (sequelize, isSqlite) =>
   sequelize.define("EventLogs", {
     Id: {
       type: INTEGER,
@@ -12,7 +12,7 @@ export default (sequelize) =>
       type: STRING(25),
     },
     text: {
-      type: STRING(512),
+      type: STRING(512) + (isSqlite ? " " : " COLLATE 'utf8mb4_bin'"),
     },
     error: {
       type: STRING(512),
