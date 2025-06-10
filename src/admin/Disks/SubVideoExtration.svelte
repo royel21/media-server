@@ -48,7 +48,7 @@
 <div id="v-subtract">
   <Dialog cancel={hide} confirm={onConfirm} {errors} canDrag={true}>
     <h4 slot="modal-header">Extract Sub Video Options</h4>
-    <div slot="modal-body">
+    <div class="content" slot="modal-body">
       <TimeInput key="Start" {item} />
       <TimeInput key="End" {item} />
     </div>
@@ -70,7 +70,7 @@
   #v-subtract :global(.modal-footer .btn:first-child) {
     margin-right: 10px;
   }
-  div {
+  .content {
     padding: 0 25px;
   }
 
