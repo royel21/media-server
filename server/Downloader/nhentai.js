@@ -232,13 +232,12 @@ export const downloadNHentais = async (state) => {
         console.log(error);
         continue;
       }
-
-      const count = state.hsize - state.nhentais.length;
-      await sendMessage({
-        text: `\u001b[1;31m ${getProgress(i + 1, state.hsize)} - ${link.Name || link.Url} \u001b[0m`,
-        url: link.Url,
-      });
       try {
+        const count = state.hsize - state.nhentais.length;
+        await sendMessage({
+          text: `\u001b[1;31m ${getProgress(count + 1, state.hsize)} - ${link.Name || link.Url} \u001b[0m`,
+          url: link.Url,
+        });
         await download(link, page, link.Server, state);
       } catch (error) {
         await sendMessage({ text: `Error ${link.Url} was no properly downloaded`, color: "red", error });

@@ -41,18 +41,18 @@ routes.post("/favorites/", (req, res) => {
 });
 
 export const streaming = (file, req, res) => {
+  const videoSize = fs.statSync(file.Path).size;
   if (req.headers.range) {
     const range = req.headers.range;
     if (!range) {
-      res.status(400).send("Requires Range header");
+      return res.status(400).send("Requires Range header");
     }
 
     if (!file.Path || !fs.existsSync(file.Path)) {
-      res.status(404).send("Resource Not Found");
+      return res.status(404).send("Resource Not Found");
     }
 
-    const videoSize = fs.statSync(file.Path).size;
-    const CHUNK_SIZE = 10 ** 6;
+    const CHUNK_SIZE = 1024 * 1024;
     const start = Number(range.replace(/\D/g, ""));
     const end = Math.min(start + CHUNK_SIZE, videoSize - 1);
     const contentLength = end - start + 1;
@@ -66,11 +66,17 @@ export const streaming = (file, req, res) => {
     const videoStream = fs.createReadStream(file.Path, { start, end });
     videoStream.pipe(res);
   } else {
-    res.send("Error File Not Found");
+    const headers = {
+      "Content-Length": videoSize,
+      "Content-Type": "video/mp4",
+    };
+    res.writeHead(200, headers);
+    fs.createReadStream(file.Path).pipe(res);
   }
 };
 
 routes.get("/video/:id", async (req, res) => {
+  console.log("not range");
   const file = await db.file.findOne({
     attributes: ["Name", "Size"],
     where: { Id: req.params.id },
