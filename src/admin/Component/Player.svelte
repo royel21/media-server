@@ -2,16 +2,22 @@
   import Dialog from "src/ShareComponent/Dialog.svelte";
   import { setGesture } from "src/ShareComponent/VideoTouch.js";
   import { formatTime } from "./util";
-  import { onMount } from "svelte";
+  import { afterUpdate, onMount, setContext } from "svelte";
   import { map } from "../Utils";
   import Icons from "src/icons/Icons.svelte";
   import Slider from "src/ShareComponent/Slider.svelte";
-
-  export let hide;
-  export let file;
-  export let files;
+  import { FilesStore } from "../Store/FilesStore";
 
   const VOLKEY = "admin-vol";
+  const SEEKLEFT = 37;
+  const SEEKRIGHT = 39;
+  const VOLUMEUP = 37;
+  const VOLUMEDOWN = 40;
+  const PLAY = 37;
+  const CLOSE = 88;
+
+  let file = {};
+  let files = [];
 
   let duration = 0;
   let player;
@@ -20,8 +26,16 @@
   let mute = false;
   let ojectFit = "contain";
   let paused = true;
-  let current = files.findIndex((f) => f.Id === file.Id);
   let error = "";
+  let current = files.findIndex((f) => f.Id === file.Id);
+
+  FilesStore.subscribe((data) => {
+    if (data.files) {
+      file = data.file;
+      files = data.files;
+      player?.focus();
+    }
+  });
 
   const onPlay = (e) => {
     if (paused) {
@@ -29,6 +43,11 @@
     } else {
       player.pause();
     }
+  };
+
+  const hide = () => {
+    file = {};
+    files = [];
   };
 
   const changeFile = ({ target: { id } }) => {
@@ -42,23 +61,24 @@
 
   const onkeydown = ({ keyCode, ctrlKey }) => {
     const seekRate = ctrlKey ? 10 : 5;
-    if (keyCode === 37) {
+    if (keyCode === SEEKLEFT) {
       player.currentTime = time - seekRate;
     }
 
-    if (keyCode === 39) {
+    if (keyCode === SEEKRIGHT) {
       player.currentTime = time + seekRate;
     }
 
-    if (keyCode === 38) {
+    if (keyCode === VOLUMEUP) {
       player.volume = map(player.volume + 0.05, 0, 1);
     }
 
-    if (keyCode === 40) {
+    if (keyCode === VOLUMEDOWN) {
       player.volume = map(player.volume - 0.05, 0, 1);
     }
 
-    if (keyCode === 13) onPlay();
+    if (keyCode === PLAY) onPlay();
+    if (keyCode === CLOSE) hide();
   };
 
   const changeFit = () => {
@@ -77,13 +97,7 @@
     vol = volume < 0 ? 0 : volume > 1 ? 1 : volume;
   };
 
-  onMount(() => {
-    const stop = setGesture(player, onPlay, { seekRate: 5 });
-    player.onerror = () => {
-      error = `File  Not Found: ${file.Name}`;
-    };
-    return stop;
-  });
+  onMount(() => {});
 
   const getTimes = (time, duration) => {
     return duration ? `${formatTime(time)}/${formatTime(duration)}` : "00:00/00:00";
@@ -94,9 +108,21 @@
   $: if (file.Path !== player?.src) {
     error = "";
   }
+
+  onMount(() => {
+    stop = setGesture(player, onPlay, { seekRate: 5 });
+    console.log("set touch");
+    player.onerror = (err) => {
+      error = `No Supported Sources ${file.Name}`;
+    };
+
+    return stop;
+  });
+
+  $: current = files.findIndex((f) => f.Id === file.Id);
 </script>
 
-<div class="player" on:wheel={onWheel}>
+<div class="player" on:wheel={onWheel} class:hidden={!files.length}>
   <Dialog cancel={hide} btnOk="" btnCancer="" keydown={onkeydown} canDrag={true} background={false}>
     <span slot="modal-header" class="f-name">{file.Name}</span>
     <div class="video-container">

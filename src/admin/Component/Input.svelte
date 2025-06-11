@@ -32,8 +32,7 @@
 
 <div class={`input-control ${key}`}>
   <span class="input-label" on:click={handler}>
-    {label || key}
-    <slot name="icon" />
+    <slot name="icon">{label || key}</slot>
   </span>
   {#if type === "date"}
     <input

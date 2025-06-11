@@ -188,7 +188,7 @@
     background-color: transparent;
     z-index: 301;
   }
-  .hidden,
+
   .hide-dragg {
     display: none;
   }

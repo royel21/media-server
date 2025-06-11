@@ -42,6 +42,11 @@ routes.post("/favorites/", (req, res) => {
 
 export const streaming = (file, req, res) => {
   const videoSize = fs.statSync(file.Path).size;
+
+  if (!/\.(mp4|mkv|webm|ogg)$/i.test(file.Path)) {
+    return res.status(404).send("Resource Not a Valid Video");
+  }
+
   if (req.headers.range) {
     const range = req.headers.range;
     if (!range) {

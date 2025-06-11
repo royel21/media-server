@@ -46,7 +46,7 @@
     if (dir.Id) {
       const result = await apiUtils.post("admin/directories/remove", { Id: dir.Id });
       if (result.removed) {
-        dirs = dirs.filter((d) => d.Id !== tr.id);
+        dirs = dirs.filter((d) => d.Id !== dir.Id);
         dirs = dirs;
       } else {
         msg = result.msg;
@@ -79,6 +79,7 @@
   const onShowInput = ({ target }) => {
     let tr = target.closest("tr");
     let found = dirs.find((d) => d.Id === tr.id);
+
     if (found) {
       dir = found;
       target.innerHTML = "";
@@ -136,9 +137,11 @@
               <Icons name="trash" />
             </span>
           </td>
-          <td class="f-name order" title={FullPath} id="Name" on:click={onShowInput}>
+          <td class="f-name" title={FullPath}>
             <Icons class={IsAdult ? "red" : "blue"} name={Type.includes("Manga") ? "book" : "film"} />
-            {Name}
+            <span id="Name" class="order" on:click={onShowInput}>
+              {Name}
+            </span>
           </td>
           <td class="f-path order" id="FullPath" on:click={onShowInput}>{FullPath}</td>
           <td class="d-adult" data-name="IsAdult" on:click={updateDir}>{IsAdult}</td>
@@ -207,10 +210,19 @@
     outline: none;
     text-align: center;
   }
-  .f-name.order :global(input),
+  .f-name .order :global(input),
   .f-path.order :global(input) {
     padding: 0 8px;
     text-align: left;
+    min-width: max-content;
+  }
+  .f-name .order {
+    display: inline-block;
+    width: 84%;
+    height: 30px;
+  }
+  .f-name .order :global(input) {
+    width: 100%;
   }
   .table .f-name {
     width: 155px;

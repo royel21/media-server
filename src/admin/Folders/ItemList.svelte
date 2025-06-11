@@ -57,9 +57,6 @@
             tabindex="-1"
           >
             {#if Type.includes("Folder")}
-              <span class="fol-type">
-                <Icons name={FilesType === "videos" ? "playcircle" : "book"} box="0 0 512 512" />
-              </span>
               <span class="sync" on:click={iconClick}>
                 <Icons name="sync" box="0 0 512 512" class={scanning.includes(Id) || Scanning ? "icon-spin" : ""} />
               </span>
@@ -73,6 +70,10 @@
                   {:else}
                     <span on:click={addGenres}>sort</span>
                   {/if}
+                </span>
+              {:else}
+                <span class="fol-type">
+                  <Icons name={FilesType === "videos" ? "playcircle" : "book"} box="0 0 512 512" />
                 </span>
               {/if}
             {:else}
@@ -128,11 +129,12 @@
     background-color: darkgray;
     color: white;
     padding: 2px 4px;
-    border-radius: 0.25rem;
+    border-radius: 0.2rem;
     cursor: pointer;
     max-width: 75px;
     max-height: 26px;
     overflow: hidden;
+    line-height: 1.3;
   }
 
   .g-list span:active {
@@ -154,7 +156,6 @@
     height: 45px;
   }
   .controls h4 {
-    flex-grow: 1;
     width: 100%;
   }
   .col-6 {
@@ -186,7 +187,7 @@
     pointer-events: none;
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 900px) {
     .controls h4 strong {
       display: none;
     }

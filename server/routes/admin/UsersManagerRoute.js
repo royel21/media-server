@@ -30,12 +30,20 @@ const createUser = async (req) => {
     Hotkeys: defHotkeys,
   };
 
-  let newUser = await db.user.create(user, { encript: true, include: [db.favorite, db.hotkey, db.sorttab] });
+  try {
+    console.log(user);
+    let newUser = await db.user.create(user, { encript: true, include: [db.favorite, db.hotkey, db.sorttab] });
 
-  return {
-    user: { ...newUser.dataValues, Password: "" },
-    fail: false,
-  };
+    return {
+      user: { ...newUser.dataValues, Password: "" },
+      fail: false,
+    };
+  } catch (error) {
+    return {
+      fail: true,
+      msg: "User Name Must Be Unique",
+    };
+  }
 };
 
 const updateUser = async (req) => {

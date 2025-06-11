@@ -36,6 +36,8 @@ export default async (server, sessionMeddle) => {
         });
       }
 
+      socket.on("loadzip-image", (data) => mloader.loadZipImages(data, socket, user.dataValues));
+
       if (user.Role.includes("Administrator")) {
         socket.on("load-disks", FileManager.diskLoader);
 
@@ -62,7 +64,6 @@ export default async (server, sessionMeddle) => {
         socket.on("file-update-pos", (data) => userUpdate.updateFilePos(data, user));
         socket.on("recent-folder", (data) => userUpdate.recentFolder(data, user));
         socket.on("reset-recent", (data) => FileManager.resetRecent(data, user));
-        socket.on("loadzip-image", (data) => mloader.loadZipImages(data, socket, user.dataValues));
       }
 
       socket.on("disconnect", () => console.log("disconnected: ", socket.id));

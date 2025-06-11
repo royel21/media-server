@@ -14,8 +14,8 @@
   import { formatSize } from "src/utils";
   import { updateConsole } from "../Store/ConsoleStore";
   import VideoControl from "./VideoControl.svelte";
-  import Player from "../Component/Player.svelte";
-  import { videoRegex } from "../Component/util";
+  import FileTypeIcon from "../Component/FileTypeIcon.svelte";
+  import { videoRegex } from "../Store/FilesStore";
 
   export let files = [];
   export let socket;
@@ -32,7 +32,6 @@
   let isChecked = false;
   let filter = "";
 
-  let showPlayer;
   let showMoveDialog;
   let showConfirm = false;
   let showRename = false;
@@ -238,6 +237,8 @@
   }
 
   $: list = selectedList.length ? selectedList : filtered;
+  $: videos = list.filter((f) => videoRegex.test(f.Name));
+  $: mangas = list.filter((f) => /\.zip$/i.test(f.Name));
 </script>
 
 {#if showMoveDialog}
@@ -263,10 +264,6 @@
 
 {#if showRename}
   <RenameModal data={showRename} acept={renameFile} hide={hideRename} />
-{/if}
-
-{#if showPlayer}
-  <Player file={showPlayer} hide={() => (showPlayer = false)} files={files.filter((f) => videoRegex.test(f.Name))} />
 {/if}
 
 <div class="col">
@@ -317,15 +314,7 @@
         <li id={file.Id} title={formatDate(new Date(file.LastModified))}>
           <CCheckbox on:change={onCheck} isChecked={selectedList.find((f) => f.Id === file.Id)} />
           <span on:click={onCheck}>
-            {#if videoRegex.test(file.Name)}
-              <span class="f-play" on:click|stopPropagation={() => (showPlayer = file)} title="Play Video">
-                <Icons name="play" box="0 0 512 512" color="deepskyblue" />
-              </span>
-            {:else}
-              <span class="f-play">
-                <Icons name="file" box="0 0 512 512" color="white" />
-              </span>
-            {/if}
+            <FileTypeIcon {file} {mangas} {videos} fileColor="white" />
             <span class="size">{getSize2(file)}</span>
             <span>{file.Name}</span>
           </span>
@@ -360,17 +349,6 @@
 
   ul :global(.select-file) {
     max-width: 22px;
-  }
-
-  .f-play {
-    margin-left: 5px;
-  }
-
-  .f-play :global(svg) {
-    top: 4px;
-    width: 20px;
-    height: 18px;
-    margin-left: 2px;
   }
 
   .stop-bg :global(.icon-stopcircle) {

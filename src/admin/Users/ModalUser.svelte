@@ -1,21 +1,39 @@
 <script>
   import { createEventDispatcher } from "svelte";
-  import { fade } from "svelte/transition";
   import apiUtils from "src/apiUtils";
   import Icons from "src/icons/Icons.svelte";
+  import Input from "../Component/Input.svelte";
+  import Select from "src/ShareComponent/Select.svelte";
+  import Dialog from "src/ShareComponent/Dialog.svelte";
+  import CheckBox from "../Component/CheckBox.svelte";
 
-  export let foundUser = { AdultPass: false, Password: "" };
+  export let foundUser = { AdultPass: false, Password: "", State: "Active" };
+  const roles = [{ Id: "User" }, { Id: "Manager" }, { Id: "Administrator" }];
+  const status = [{ Id: "Active" }, { Id: "InActive" }];
+
+  const Action = foundUser.Id ? "Update" : "Create";
+  const Title = foundUser.Id ? "Edit" : "Create";
 
   const dispatch = createEventDispatcher();
-  let error = "";
+  let errors = [];
 
   const submit = async (e) => {
-    if (!foundUser.Name) return (error = "Name Can't be empty");
+    errors = [];
+
+    if (!foundUser.Name) {
+      return errors.push("Name Can't be empty");
+    }
+
+    if (!foundUser.Id && !foundUser.Password) {
+      return errors.push("Password Can't be empty");
+    }
+
     const result = await apiUtils.post("admin/users/create-update", foundUser);
     if (!result.fail) {
       dispatch("updateusers", result.user);
     } else {
-      error = result.msg;
+      console.log(result.msg);
+      return (errors = [result.msg]);
     }
   };
 
@@ -23,103 +41,38 @@
     dispatch("closeModal");
   };
   const color = "black";
+  console.log(errors);
 </script>
 
-<div class="modal-container">
-  <div class="modal card" transition:fade={{ duration: 200 }}>
-    <div class="modal-header">
-      <h3>{foundUser.Id ? "Edit" : "Create"}</h3>
-    </div>
-    <div class="modal-body">
-      <input type="hidden" name="Id" bind:value={foundUser.Id} />
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <label for="Name" class="input-group-text">
-            <Icons name="user" {color} />
-          </label>
-        </div>
-        <input class="form-control" type="text" name="Name" bind:value={foundUser.Name} />
-      </div>
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <label for="Password" class="input-group-text">
-            <Icons name="key" {color} />
-          </label>
-        </div>
-        <input class="form-control" type="password" bind:value={foundUser.Password} autoComplete="new-password" />
-      </div>
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <label for="Role" class="input-group-text">Role</label>
-        </div>
-        <select class="form-control" name="Role" bind:value={foundUser.Role}>
-          <option value="User">User</option>
-          <option value="Administrator">Administrator</option>
-          <option value="Manager">Manager</option>
-        </select>
-      </div>
-      <div class="input-grouping">
-        <div class="first-ctrl input-group">
-          <div class="input-group-prepend">
-            <label for="State" class="input-group-text">Status</label>
-          </div>
-          <select class="form-control" name="State" bind:value={foundUser.State}>
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
-          </select>
-        </div>
-        <div class="second-ctrl input-group">
-          <div class="input-group-prepend">
-            <label for="Adult" class="input-group-text">Adult</label>
-          </div>
-          <input id="Adult" type="checkbox" bind:checked={foundUser.AdultPass} />
-          <label for="Adult" class="form-control checkadult">
-            <Icons name={foundUser.AdultPass ? "check" : "times"} {color} />
-          </label>
-        </div>
-      </div>
-      <div class="errors">{error}</div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn" on:click={submit}>
-        {foundUser.Id ? "Update" : "Save"}
-      </button>
-      <button class="btn" on:click={closeModal}>Cancel</button>
+<Dialog id="user-modal" cancel={closeModal} confirm={submit} btnOk={Action} {errors}>
+  <div slot="modal-header">
+    <h3>{Title}</h3>
+  </div>
+  <div slot="modal-body">
+    <Input key="Name" item={foundUser}>
+      <span slot="icon">
+        <Icons name="user" {color} />
+      </span>
+    </Input>
+    <Input key="Password" item={foundUser}>
+      <span slot="icon">
+        <Icons name="key" {color} />
+      </span>
+    </Input>
+    <Select key="Role" item={foundUser} options={roles} />
+    <div class="input-control-group">
+      <Select key="State" item={foundUser} options={status} />
+      <CheckBox label="Adult" key="AdultPass" item={foundUser} />
     </div>
   </div>
-</div>
+</Dialog>
 
 <style>
-  .modal-container label:not(.checkadult) :global(svg) {
-    top: 0px;
+  :global(#user-modal) {
+    max-width: 350px;
   }
-  label {
-    color: black;
-    font-weight: 600;
-    max-height: 32px;
-  }
-  .input-grouping {
-    display: flex;
-    justify-content: space-evenly;
-  }
-  .input-grouping .input-group {
-    width: 100%;
-  }
-  .modal .second-ctrl input {
-    display: none;
-  }
-  .modal .checkadult {
-    text-align: center;
-    cursor: pointer;
-  }
-  .checkadult :global(svg) {
-    top: 0;
-  }
-  .input-grouping .second-ctrl {
-    margin-left: 5px;
-  }
-  input,
-  select {
-    max-height: 32px;
+  :global(#user-modal .input-label) {
+    min-width: 60px;
+    max-width: 60px;
   }
 </style>

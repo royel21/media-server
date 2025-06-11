@@ -1,6 +1,6 @@
 import { Router } from "express";
 import db from "../../models/index.js";
-import { getFilter } from "../utils.js";
+import { getFilter, getFilter2 } from "../utils.js";
 import fs from "fs-extra";
 import path from "node:path";
 import { Op, literal } from "sequelize";
@@ -12,8 +12,8 @@ const routes = Router();
 
 const tagsPath = "./server/data/tags.json";
 
-const getData = async ({ params }, res) => {
-  const { page, items, filter, folderId, dirId } = params;
+const getData = async (req, res) => {
+  const { page, items, filter, folderId, dirId } = req.params;
   // calculate the start and end of the query check sql limit
   let limit = +items || 10;
   let offset = (page - 1) * limit || 0;
@@ -40,9 +40,9 @@ const getData = async ({ params }, res) => {
     if (dirId && dirId !== "all") {
       query.where.DirectoryId = dirId;
     }
-    query.attributes = [...query.attributes, "Path", "Status", "FilesType", "Scanning", "Author", "Server"];
-
-    query.where[Op.or] = { AltName: filters, Name: filters, Genres: filters, Author: filters, Server: filters };
+    query.attributes = [...query.attributes, "Path", "Status", "FilesType", "Scanning"];
+    const filters2 = getFilter2(filter, ["AltName", "Name", "Genres", "Author", "Server"]);
+    query.where[Op.or] = filters2;
     result = await db.folder.findAndCountAll(query);
 
     result.rows = result.rows.map((fd) => {

@@ -12,6 +12,8 @@
   import { MessageStore, setMessage } from "./Store/MessageStore";
   import Configs from "./Tools/Configs.svelte";
   import DownloadManager from "./Downloader/DownloadManager.svelte";
+  import Player from "./Component/Player.svelte";
+  import MangaViewer from "./Component/MangaViewer.svelte";
 
   let logout = getContext("logout");
   let user = getContext("User");
@@ -72,6 +74,8 @@
   document.title = "Content Manager";
 </script>
 
+<Player />
+<MangaViewer />
 <Router>
   <div class="toast-container">
     <span bind:this={toastRef} class="toast" class:error={message.error} on:click={hideMessage}>{message.msg}</span>

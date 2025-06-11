@@ -10,13 +10,14 @@
 
   const send = (text = "", type = "filter") => {
     curFilter = text;
-    let ftl = encodeURIComponent(
-      text
+    if (!/http/.test(text)) {
+      text = text
         .replace("’", "'")
         .replace(/:|\?|\"| Raw$/gi, "")
         .replace(/ (\[|\(|)official(\]|\)|)$/i, "")
-        .trim()
-    );
+        .trim();
+    }
+    let ftl = encodeURIComponent(text);
     dispatch(type, ftl);
   };
 

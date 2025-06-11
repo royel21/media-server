@@ -8,6 +8,8 @@
   import apiUtils from "src/apiUtils";
   import Icons from "src/icons/Icons.svelte";
   import { formatSize } from "src/utils";
+  import FileTypeIcon from "../Component/FileTypeIcon.svelte";
+  import { videoRegex } from "../Store/FilesStore";
 
   const socket = getContext("socket");
   export let page = 1;
@@ -22,6 +24,11 @@
   let modalType = {};
   let rows;
   let isMounted = true;
+
+  const mapFile = (f) => {
+    let Path = (f.Path += `${/^\//.test(f.Path) ? "/" : "\\"}${f.Name}`);
+    return { ...f, Path };
+  };
 
   const calRows = () => {
     let container = document.querySelector(".list-container") || {};
@@ -110,6 +117,9 @@
     file = {};
   };
   document.title = "Files";
+
+  $: videos = items.filter((f) => videoRegex.test(f.Name)).map(mapFile);
+  $: mangas = items.filter((f) => /\.zip$/i.test(f.Name)).map(mapFile);
 </script>
 
 {#if showModal}
@@ -138,16 +148,17 @@
             <td colspan="4">No Files Found</td>
           </tr>
         {:else}
-          {#each items as { Id, Name, Path, Size }, i}
-            <tr id={Id} on:click={itemClick}>
+          {#each items as file, i}
+            <tr id={file.Id} on:click={itemClick}>
               <td>{(currentPage - 1) * rows + i + 1}</td>
               <td>
                 <span><Icons name="edit" /></span>
                 <span><Icons name="trash" /></span>
+                <FileTypeIcon {file} {videos} {mangas} />
               </td>
-              <td>{Name}</td>
-              <td>{Path}</td>
-              <td>{formatSize(Size)}</td>
+              <td>{file.Name}</td>
+              <td>{file.Path}</td>
+              <td>{formatSize(file.Size)}</td>
             </tr>
           {/each}
         {/if}
@@ -197,8 +208,9 @@
     min-width: 50px;
   }
   .table tr > *:nth-child(2) {
-    width: 85px;
-    min-width: 85px;
+    text-align: center;
+    width: 105px;
+    min-width: 105px;
   }
   .table tr > *:nth-child(3) {
     min-width: 150px;

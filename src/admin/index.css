@@ -1,3 +1,7 @@
+.hidden {
+  display: none;
+}
+
 .table {
   margin: 0;
 }
@@ -49,10 +53,6 @@
   border-right-color: rgb(69, 77, 85);
   border-bottom-color: rgb(69, 77, 85);
   border-left-color: rgb(69, 77, 85);
-}
-
-.table span:last-child {
-  margin-left: 0.5rem;
 }
 
 /*************Modal*************************/

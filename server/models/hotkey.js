@@ -17,7 +17,6 @@ export default (sequelize) => {
       Name: {
         type: STRING(100),
         allowNull: false,
-        unique: true,
       },
       CtrlKey: {
         type: BOOLEAN,

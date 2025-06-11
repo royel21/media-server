@@ -177,7 +177,11 @@
   };
 
   const onConnect = () => loadImages(file.CurrentPos - 1, 8);
-  const onDisconnect = () => (viewerState.loading = false);
+  const onDisconnect = () => {
+    viewerState.loading = false;
+    scrollImageLoader(loadImages, viewer);
+    PageObserver(changePages, viewer);
+  };
 
   const onError = ({ Id, error: err }) => {
     if (Id === file.Id) {

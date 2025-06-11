@@ -136,18 +136,6 @@ db.init = async (force) => {
         }
       );
     }
-
-    const users = await db.user.findAll({ include: db.sorttab });
-    for (let user of users) {
-      if (!user.SortTabs.length) {
-        await db.sorttab.bulkCreate(defSortTabs.map((d) => ({ ...d, UserId: user.Id })));
-      }
-      for (const key of defHotkeys) {
-        if (!(await db.hotkey.findOne({ where: { Name: key.Name, UserId: user.Id } }))) {
-          await db.hotkey.create({ ...key, UserId: user.Id });
-        }
-      }
-    }
   } catch (error) {
     console.log(error);
   }
