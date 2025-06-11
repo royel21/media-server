@@ -76,7 +76,6 @@ export const streaming = (file, req, res) => {
 };
 
 routes.get("/video/:id", async (req, res) => {
-  console.log("not range");
   const file = await db.file.findOne({
     attributes: ["Name", "Size"],
     where: { Id: req.params.id },

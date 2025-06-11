@@ -120,8 +120,6 @@ const removeDBFile = async ({ Id, Del, viewer }) => {
     include: { model: db.folder },
   });
 
-  console.log("files", Id);
-
   const message = { success: false, msg: "", viewer };
   if (files.length) {
     let folder = files[0].Folder;

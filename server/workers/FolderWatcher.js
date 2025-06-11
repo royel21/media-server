@@ -11,8 +11,6 @@ const filterFile = (f) => {
 };
 
 const AddFiles = async (files, DirectoryId) => {
-  // console.log("files: ", files.length);
-
   if (files.length) {
     const Files = files.filter(filterFile).map((f) => ({ ...f, DirectoryId }));
 
