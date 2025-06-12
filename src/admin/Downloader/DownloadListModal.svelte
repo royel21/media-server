@@ -167,8 +167,7 @@
     border-bottom: 1px solid;
   }
   .dl-filter {
-    padding: 0 5px;
-    padding-bottom: 7px;
+    padding: 5px;
   }
   .dl-filter :global(#filter-control) {
     max-width: 100%;

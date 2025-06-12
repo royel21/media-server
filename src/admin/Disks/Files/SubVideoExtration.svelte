@@ -1,7 +1,6 @@
 <script>
-  import Input from "../Component/Input.svelte";
-  import Dialog from "../../ShareComponent/Dialog.svelte";
-  import TimeInput from "../Component/TimeInput.svelte";
+  import Dialog from "src/ShareComponent/Dialog.svelte";
+  import TimeInput from "src/admin/Component/TimeInput.svelte";
 
   export let hide;
   export let acept;

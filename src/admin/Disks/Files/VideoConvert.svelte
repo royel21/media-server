@@ -1,12 +1,13 @@
 <script>
-  import Input from "../Component/Input.svelte";
-  import Dialog from "../../ShareComponent/Dialog.svelte";
-  import CheckBox from "../Component/CheckBox.svelte";
-  import Select from "src/ShareComponent/Select.svelte";
-  import { loadObject, saveObject } from "../Utils";
-  import apiUtils from "src/apiUtils";
   import { onMount } from "svelte";
+  import { loadObject, saveObject } from "src/admin/Utils";
+
+  import Dialog from "src/ShareComponent/Dialog.svelte";
+  import Select from "src/ShareComponent/Select.svelte";
+  import CheckBox from "src/admin/Component/CheckBox.svelte";
+  import Input from "src/admin/Component/Input.svelte";
   import Language from "./Language.svelte";
+  import apiUtils from "src/apiUtils";
 
   export let hide;
   export let acept;
@@ -69,7 +70,7 @@
       <Input label="Video Bitrate" key="videoBitrate" bind:item paste={false} />
       <Input label="Video Bitrate" key="audioBitrate" bind:item paste={false} />
       <Language label="Preferred Subt" key="Subtitles" bind:item {subtitleCodes} />
-      <Language label="Preferred Audio" key="Audio" bind:item {subtitleCodes} height={188} />
+      <Language label="Preferred Audio" key="Audio" bind:item {subtitleCodes} height={185} />
       <div class="input-control-group">
         <Input label="Max Width" key="Width" bind:item paste={false} />
         <Input key="Height" bind:item paste={false} />

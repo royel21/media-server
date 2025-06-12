@@ -1,20 +1,23 @@
 <script>
   import { onDestroy, onMount } from "svelte";
-  import Icons from "src/icons/Icons.svelte";
-  import CCheckbox from "../Component/CCheckbox.svelte";
-  import Confirm from "../Component/Confirm.svelte";
-  import Filter from "src/ShareComponent/Filter.svelte";
-  import MoveFileDialog from "./MoveFileDialog.svelte";
-  import RenameModal from "./RenameModal.svelte";
-
   import { sortByName } from "src/ShareComponent/utils";
-  import { formatDate } from "../Downloader/utils";
+  import FileTypeIcon from "src/admin/Component/FileTypeIcon.svelte";
+  import Filter from "src/ShareComponent/Filter.svelte";
+  import Icons from "src/icons/Icons.svelte";
+
+  import CCheckbox from "src/admin/Component/CCheckbox.svelte";
+  import Confirm from "src/admin/Component/Confirm.svelte";
+  import MoveFileDialog from "./MoveFileDialog.svelte";
+  import RenameModal from "../RenameModal.svelte";
+
+  import { updateConsole } from "../../Store/ConsoleStore";
+  import { formatDate } from "../../Downloader/utils";
+
+  import VideoControl from "./VideoControl.svelte";
   import apiUtils from "src/apiUtils";
   import BulkEdit from "./BulkEdit.svelte";
+
   import { formatSize } from "src/utils";
-  import { updateConsole } from "../Store/ConsoleStore";
-  import VideoControl from "./VideoControl.svelte";
-  import FileTypeIcon from "../Component/FileTypeIcon.svelte";
 
   export let files = [];
   export let socket;
@@ -33,7 +36,6 @@
 
   let showMoveDialog;
   let showConfirm = false;
-  let showRename = false;
   let showBulkRename = false;
   let bgWorking = false;
 
@@ -163,14 +165,19 @@
     bgWorking = isWorking;
   };
 
+  const onConnect = () => reload();
+
   onMount(() => {
+    socket.on("connect", onConnect);
+    socket.on("files-info", onFileInfo);
+    socket.on("info", fileUpdate);
+    socket.on("bg-worker-state", onWorkState);
+
     socket.emit("bg-work", { action: "bg-state" });
   });
 
-  socket.on("files-info", onFileInfo);
-  socket.on("info", fileUpdate);
-  socket.on("bg-worker-state", onWorkState);
   onDestroy(() => {
+    socket.off("connect", onConnect);
     socket.off("bg-worker-state", onWorkState);
     socket.off("info", fileUpdate);
     socket.off("files-info", onFileInfo);
@@ -253,14 +260,10 @@
 
 {#if showBulkRename}
   {#if selectedList.length === 1}
-    <RenameModal data={selectedList[0]} acept={renameFile} hide={hideRename} />
+    <RenameModal data={selectedList[0]} acept={renameFile} hide={hideRename} title="File" />
   {:else}
     <BulkEdit files={selectedList} hide={hideBulkRename} acept={onBulkRename} />
   {/if}
-{/if}
-
-{#if showRename}
-  <RenameModal data={showRename} acept={renameFile} hide={hideRename} />
 {/if}
 
 <div class="col">

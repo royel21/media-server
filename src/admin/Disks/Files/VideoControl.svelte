@@ -1,9 +1,10 @@
 <script>
   import Icons from "src/icons/Icons.svelte";
+  import Confirm from "src/admin/Component/Confirm.svelte";
   import VideoConvert from "./VideoConvert.svelte";
   import SubVideoExtration from "./SubVideoExtration.svelte";
-  import Confirm from "../Component/Confirm.svelte";
-  import { videoRegex } from "../Store/FilesStore";
+
+  import { videoRegex } from "src/admin/Store/FilesStore";
 
   export let socket;
   export let selectedList;

@@ -1,5 +1,5 @@
 <script>
-  import Input from "../Component/Input.svelte";
+  import Input from "src/admin/Component/Input.svelte";
 
   export let item;
   export let key;
@@ -7,7 +7,7 @@
   export let subtitleCodes = [];
   export let height = 212;
 
-  let showSubtCodeList = true;
+  let showSubtCodeList = false;
   let filter = "";
   let ref;
 
@@ -32,6 +32,7 @@
 </script>
 
 <div class="subt" on:click={toggleSubtCodeList} bind:this={ref} on:mouseleave={hide}>
+  <Input {label} {key} bind:item paste={false} onChange={changes} />
   <div class="subt-list" style={`height: ${height}px`} class:show-subt-code-list={showSubtCodeList}>
     <div class="sub-row-1 input-control">
       <span class="input-label">Filter</span>
@@ -46,7 +47,6 @@
       {/each}
     </div>
   </div>
-  <Input {label} {key} bind:item paste={false} onChange={changes} />
 </div>
 
 <style>

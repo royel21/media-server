@@ -17,10 +17,11 @@
       return errors.push("Name Equal");
     }
 
-    if (/:|\?|\*|<|>|\/|\\"/gi.test(item.Name)) {
-      errors.push("Folder Name should't not have any of those Simbols");
-      return errors.push(':  ?  * < >  / \\ " |');
+    if (/:|\?|\*|<|>|\/|\\|"/gi.test(item.Name)) {
+      errors.push(`${title} Name should't not have any of those Simbols`);
+      return errors.push('\\ / : * " ? < > |');
     }
+
     let Name = item.Name + (extension ? extension : "");
     acept({ folder: data, Name });
   };

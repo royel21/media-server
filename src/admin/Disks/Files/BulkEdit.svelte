@@ -1,7 +1,7 @@
 <script>
-  import Dialog from "../../ShareComponent/Dialog.svelte";
-  import CheckBox from "../Component/CheckBox.svelte";
-  import Input from "../Component/Input.svelte";
+  import Dialog from "../../../ShareComponent/Dialog.svelte";
+  import CheckBox from "../../Component/CheckBox.svelte";
+  import Input from "../../Component/Input.svelte";
 
   export let hide;
   export let files;
