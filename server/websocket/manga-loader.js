@@ -8,14 +8,13 @@ const loadZipImages = async (data, socket, user) => {
   let file;
 
   if (!Path && Id) {
-    await db.file.findOne({
+    file = await db.file.findOne({
       attributes: ["Id", "Name"],
       where: { Id },
       include: { model: db.folder, where: { IsAdult: { [Op.lte]: user.AdultPass } }, required: true },
     });
   }
-
-  console.log(Path);
+  console.log(Path, Id, file?.Path);
 
   if (fs.existsSync(file?.Path || Path)) {
     try {
@@ -51,7 +50,7 @@ const loadZipImages = async (data, socket, user) => {
       console.log(error);
     }
   } else {
-    socket.emit("manga-error", { error: `File ${file.Name} Not Found in server`, Id: Id });
+    socket.emit("manga-error", { error: `File ${file?.Name || Path} Not Found in server`, Id: Id });
   }
 };
 

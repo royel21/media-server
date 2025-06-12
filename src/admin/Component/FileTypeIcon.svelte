@@ -1,6 +1,6 @@
 <script>
   import Icons from "src/icons/Icons.svelte";
-  import { setFiles, videoRegex } from "../Store/FilesStore";
+  import { ImageRegex, MangaRegex, setFiles, TextRex, videoRegex } from "../Store/FilesStore";
   export let file;
   export let files;
   export let fileColor = "grey";
@@ -14,13 +14,17 @@
   <span class="f-play" on:click|stopPropagation={handleClick} title="Play Video">
     <Icons name="play" box="0 0 512 512" color="deepskyblue" />
   </span>
-{:else if /\.zip$/i.test(file.Name)}
+{:else if MangaRegex.test(file.Name)}
   <span class="f-play" on:click|stopPropagation={handleClick}>
     <Icons name="book" box="0 0 512 512" color="red" />
   </span>
-{:else if /\.txt$/i.test(file.Name)}
+{:else if TextRex.test(file.Name)}
   <span class="f-play" on:click|stopPropagation={handleClick}>
     <Icons name="text" box="0 0 384 512" color="antiquewhite" />
+  </span>
+{:else if ImageRegex.test(file.Name)}
+  <span class="f-play" on:click|stopPropagation={handleClick}>
+    <Icons name="image" box="0 0 512 512" color="cyan" />
   </span>
 {:else}
   <span class="f-play">

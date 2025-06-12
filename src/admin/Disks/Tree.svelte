@@ -176,7 +176,7 @@
     padding-bottom: 5px;
   }
   .d-loading {
-    height: calc(100% - 150px);
+    height: 100%;
   }
   @media (pointer: none), (pointer: coarse) and (max-width: 640px) {
     .d-content.expanded {

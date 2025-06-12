@@ -34,7 +34,7 @@
       id = null;
     }
 
-    const current = id || others[0].Id;
+    const current = id || others[0]?.Id;
 
     data = {
       items: {

@@ -156,7 +156,7 @@
 
 <div class="viewer" class:hidden={!files.length}>
   <Dialog cancel={hide} btnOk="" btnCancer="" keydown={onkeydown} canDrag={true} background={false}>
-    <span slot="modal-header" class="f-name">{file.Name}</span>
+    <span slot="modal-header" class="f-name"><span>{file.Name}</span></span>
     <div class="manga-container" bind:this={container} tabindex="-1">
       {#each Array(data.total).fill(null) as _, i}
         <img
@@ -193,15 +193,29 @@
 </div>
 
 <style>
-  .viewer :global(.modal-container .modal) {
+  .viewer :global(.modal) {
+    height: 680px;
     width: 540px;
-    height: max-content;
+    max-width: 99%;
+    max-height: 90%;
     background-color: black;
     overflow: hidden;
   }
+  .f-name {
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 0 5px;
+  }
+  .viewer :global(form) {
+    height: 100%;
+  }
+  .viewer :global(.modal-body) {
+    height: 100%;
+  }
   .manga-container {
     position: relative;
-    height: 600px;
+    height: calc(100% - 60px);
+    max-height: 100%;
     min-width: 100%;
     position: relative;
     display: flex;
@@ -209,12 +223,13 @@
     align-items: center;
     overflow: auto;
     overflow-x: hidden;
+    user-select: none;
   }
   .manga-container img {
     height: auto;
     width: 100%;
     max-height: initial;
-    user-select: none;
+    pointer-events: none;
   }
 
   .manga-container .empty-img {
@@ -332,12 +347,5 @@
   }
   .m-loading.show-loading {
     display: inline-block;
-  }
-
-  @media screen and (max-width: 600px) {
-    .viewer :global(.modal-container .modal) {
-      min-width: 99%;
-      max-width: 99%;
-    }
   }
 </style>

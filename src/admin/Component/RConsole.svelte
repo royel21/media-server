@@ -235,13 +235,14 @@
   }
   .r-console .clean {
     position: absolute;
-    right: 16px;
+    top: -2px;
+    right: 5px;
     z-index: 1000;
-    width: 26px;
+    width: 15px;
   }
   .r-console .clean :global(svg) {
-    height: 30px;
-    width: 25px;
+    height: 20px;
+    width: 15px;
   }
   .r-console:empty {
     display: none;

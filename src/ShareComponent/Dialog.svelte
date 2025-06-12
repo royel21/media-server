@@ -2,17 +2,21 @@
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   import { getEvent } from "./utils";
-  export let cancel;
-  export let confirm = () => {};
+
+  const func = () => {};
+
+  export let confirm = func;
+  export let cancel = func;
+  export let keydown = func;
   export let errors = [];
   export let id = "";
   export let btnOk = "Ok";
   export let btnCancer = "Cancel";
-  export let keydown = () => {};
   export let canDrag = false;
   export let background = true;
 
   let ref;
+  let footerRef;
 
   let dragState = { x: 0, y: 0 };
 
@@ -52,7 +56,7 @@
       left = left < 0 ? 0 : left;
 
       top = top + h > window.innerHeight ? window.innerHeight - h - 0 : top;
-      top = top < 40 ? 40 : top;
+      top = top < 0 ? 0 : top;
 
       ref.style.left = left + "px";
 
@@ -86,6 +90,9 @@
     if (canDrag) {
       listeners.forEach((event) => document.addEventListener(event[0], event[1]));
     }
+    if (!footerRef.textContent.trim()) {
+      footerRef.textContent = "";
+    }
     window.addEventListener("resize", onResize);
     return () => {
       window.removeEventListener("resize", onResize);
@@ -109,17 +116,13 @@
       <div class="modal-header" class:drap={canDrag} on:mousedown={startDrag} on:touchstart={startDrag}>
         <slot name="modal-header" />
       </div>
-      <div class="modal-body">
-        <slot />
-        <slot name="modal-body" />
-        <p class="error">
-          {#each errors as error}
-            <div>{error}</div>
-          {/each}
-        </p>
-      </div>
-
-      <div class="modal-footer">
+      <div class="modal-body"><slot /><slot name="modal-body" /></div>
+      <p class="error">
+        {#each errors as error}
+          <div>{error}</div>
+        {/each}
+      </p>
+      <div class="modal-footer" bind:this={footerRef}>
         {#if btnOk}
           <button type="submit" class="btn">{btnOk}</button>
         {/if}
@@ -150,6 +153,11 @@
     text-align: center;
     border-bottom: 1px solid;
     user-select: none;
+  }
+  .modal-footer:empty,
+  .modal-body:empty,
+  .modal-header:empty {
+    display: none;
   }
   .modal-header.drap {
     cursor: grab;

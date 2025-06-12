@@ -15,23 +15,19 @@ routes.post("/rename-watched-file", renameWatchedFile);
 routes.get("/remove-watched-file/:Id", removeWatchedFile);
 routes.get("/get-watched-files/:page/:items/:filter?", getWatchFiles);
 
-const isTextFile = (Path) => {
-  if (!/\.txt$/i.test(Path)) {
-    return "File is no a text";
-  }
-
+const isValidFile = (Path, size = true) => {
   if (!fs.existsSync(Path)) {
     return "File not found";
   }
 
-  if (fs.statSync(Path).size > 1024 * 1024) {
+  if (size && fs.statSync(Path).size > 1024 * 1024) {
     return "File is too big";
   }
 };
 
 routes.get("/text-file/:Path", (req, res) => {
   const { Path } = req.params;
-  let error = isTextFile(Path);
+  let error = isValidFile(Path);
   if (error) return res.send({ error });
 
   const Text = fs.readFileSync(Path, "utf8");
@@ -41,12 +37,22 @@ routes.get("/text-file/:Path", (req, res) => {
 routes.post("/save-text", (req, res) => {
   const { Path, Text } = req.body;
 
-  let error = isTextFile(Path);
+  let error = isValidFile(Path);
   if (error) return res.send({ error });
 
   fs.writeFileSync(Path, Text);
 
   return res.send({ valid: true });
+});
+
+routes.get("/image/:Path", (req, res) => {
+  const { Path } = req.params;
+  let error = isValidFile(Path, false);
+  if (error) return res.send({ error });
+
+  const type = Path.split(".").pop();
+
+  return res.sendFile(Path, { headers: { "Content-Type": `image/${type}` } });
 });
 
 routes.get("/:page/:items/:filter?", async (req, res) => {

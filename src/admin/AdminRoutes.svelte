@@ -15,6 +15,7 @@
   import Player from "./Component/Player.svelte";
   import MangaViewer from "./Component/MangaViewer.svelte";
   import TextEditor from "./Component/TextEditor.svelte";
+  import ImageViewer from "./Component/ImageViewer.svelte";
 
   let logout = getContext("logout");
   let user = getContext("User");
@@ -78,6 +79,7 @@
 <Player />
 <MangaViewer />
 <TextEditor />
+<ImageViewer />
 <Router>
   <div class="toast-container">
     <span bind:this={toastRef} class="toast" class:error={message.error} on:click={hideMessage}>{message.msg}</span>
