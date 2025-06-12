@@ -144,7 +144,9 @@
     currentImg = 0;
     isLoading = true;
     socket.emit("loadzip-image", { ...file, imageCount: true, indices: getSecuences(0, 5) });
-    container?.focus();
+    setTimeout(() => {
+      container?.focus();
+    }, 1000);
   }
 
   $: if (data.total) {
