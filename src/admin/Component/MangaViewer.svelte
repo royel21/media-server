@@ -1,18 +1,18 @@
 <script>
   import Dialog from "src/ShareComponent/Dialog.svelte";
-  import { map } from "../Utils";
   import Icons from "src/icons/Icons.svelte";
-  import { MangaStore } from "../Store/MangaStore";
   import { getContext, onMount } from "svelte";
   import { getSecuences } from "./util";
+  import { FilesStore, MangaRegex } from "../Store/FilesStore";
 
-  const VOLKEY = "admin-vol";
+  const CLOSE = 88;
+  const PREV_FILE = 37;
+  const NEXT_FILE = 39;
   const socket = getContext("socket");
 
   let file = {};
   let files = [];
 
-  let vol = localStorage.getItem(VOLKEY) || 0.05;
   let error = "";
   let current = files.findIndex((f) => f.Id === file.Id);
   let indices = [];
@@ -22,14 +22,32 @@
   let isLoading = false;
   let data = { total: 0, images: [] };
 
-  MangaStore.subscribe((data) => {
-    if (data.files) {
+  FilesStore.subscribe((data) => {
+    if (MangaRegex.test(data.file.Name)) {
       file = data.file;
       files = data.files;
     }
   });
 
-  export const PageObserver = () => {
+  const hide = () => {
+    FilesStore.set({ file: {}, files: [] });
+    file = {};
+    files = [];
+  };
+
+  const getEmptyIndex = function (arr, from, count, dir) {
+    let index = Math.max(0, from);
+    let items = [];
+    while (items.length < count && index > 0) {
+      if (arr[index] === undefined) {
+        items.push(index);
+      }
+      index += dir;
+    }
+    return items;
+  };
+
+  const PageObserver = () => {
     const imgs = container.querySelectorAll("img");
     pageObserver?.disconnect();
 
@@ -38,11 +56,18 @@
         if (imgs.length) {
           for (let entry of entries) {
             let img = entry.target;
-            if (entry.isIntersecting && img?.src.startsWith("data:img")) {
+            if (entry.isIntersecting) {
+              const dir = currentImg > +img.id ? -1 : 1;
               currentImg = +img.id;
 
-              if ((isLoading && !data.images[currentImg]) || !data.images[currentImg + 5]) {
+              let next = Math.max((currentImg + 3) * dir, 0);
+
+              const needLoad = !data.images[next] || !data.images[currentImg];
+
+              if (!isLoading && needLoad) {
                 isLoading = true;
+                const toLoad = getEmptyIndex(data.images, currentImg, 5, dir, data.total);
+                socket.emit("loadzip-image", { ...file, indices: toLoad });
               }
             }
           }
@@ -57,13 +82,7 @@
     return pageObserver;
   };
 
-  const hide = () => {
-    file = {};
-    files = [];
-  };
-
-  const changeFile = ({ target: { id } }) => {
-    let next = id === "next" ? 1 : -1;
+  const changeFile = (next) => {
     const nextIndex = current + next;
     if (nextIndex > -1 && nextIndex < files.length) {
       file = files[nextIndex];
@@ -71,7 +90,21 @@
     }
   };
 
-  const onkeydown = ({ keyCode, ctrlKey }) => {};
+  const onChangeFile = ({ target: { id } }) => {
+    let next = id === "next" ? 1 : -1;
+    changeFile(next);
+  };
+
+  const onkeydown = ({ keyCode, ctrlKey }) => {
+    if (keyCode === CLOSE) hide();
+    if (keyCode === NEXT_FILE) {
+      changeFile(1);
+    }
+
+    if (keyCode === PREV_FILE) {
+      changeFile(-1);
+    }
+  };
 
   const onImageCount = ({ total }) => {
     if (total) data.total = total;
@@ -83,31 +116,33 @@
       data.images[d.page] = d.img;
     }
 
-    if (d.last) isLoading = true;
+    if (d.last) {
+      isLoading = false;
+    }
+  };
+
+  const onDisconnect = () => {
+    isLoading = false;
   };
 
   onMount(() => {
     socket.on("zip-data", onImageCount);
     socket.on("image-loaded", onImageData);
+    socket.on("disconnect", onDisconnect);
+    container?.focus();
 
     return () => {
+      socket.off("disconnect", onDisconnect);
       socket.off("zip-data", onImageCount);
       socket.off("image-loaded", onImageData);
     };
   });
-
-  const onWheel = ({ deltaY }) => {
-    let volume = vol;
-    volume += deltaY < 0 ? 0.05 : -0.05;
-    vol = volume < 0 ? 0 : volume > 1 ? 1 : volume;
-  };
 
   $: current = files.findIndex((f) => f.Id === file.Id);
 
   $: if (file.Id && data.Id !== file.Id) {
     data = { ...file, total: 0, images: [] };
     currentImg = 0;
-    console.log(getSecuences(0, 5));
     isLoading = true;
     socket.emit("loadzip-image", { ...file, imageCount: true, indices: getSecuences(0, 5) });
   }
@@ -117,7 +152,7 @@
   }
 </script>
 
-<div class="viewer" on:wheel={onWheel} class:hidden={!files.length}>
+<div class="viewer" class:hidden={!files.length}>
   <Dialog cancel={hide} btnOk="" btnCancer="" keydown={onkeydown} canDrag={true} background={false}>
     <span slot="modal-header" class="f-name">{file.Name}</span>
     <div class="manga-container" bind:this={container}>
@@ -125,21 +160,24 @@
         <img
           class:empty-img={!data.images[i]}
           id={i}
-          style="object-fit: fill"
+          style="object-fit: contain"
           src={data.images[i] ? "data:img/jpeg;base64, " + data.images[i] : ""}
           alt={`Loading... Image ${i + 1}`}
         />
       {/each}
+      <span class="m-loading" class:show-loading={isLoading}>
+        <Icons name="sync" box="0 0 512 512" />
+      </span>
     </div>
     <div class="error">{error}</div>
     <div class="time-progress" on:mousedown|stopPropagation on:touchstart|stopPropagation>
       {#if files.length > 1}
         <span class="files-count">{`${current + 1}/${files.length}`}</span>
       {/if}
-      <span id="prev" class="btn-play" on:click={changeFile}>
+      <span id="prev" class="btn-play" on:click={onChangeFile}>
         <Icons name="arrowcircleleft" />
       </span>
-      <span id="next" class="btn-play" on:click={changeFile}>
+      <span id="next" class="btn-play" on:click={onChangeFile}>
         <Icons name="arrowcircleright" />
       </span>
       <span class="close btn-play" on:click={() => hide()}>
@@ -154,25 +192,27 @@
 
 <style>
   .viewer :global(.modal-container .modal) {
-    min-width: 400px;
-    max-width: 400px;
+    width: 540px;
     height: max-content;
     background-color: black;
     overflow: hidden;
   }
   .manga-container {
-    height: 400px;
-    width: 400px;
+    position: relative;
+    height: 600px;
+    min-width: 100%;
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     overflow: auto;
+    overflow-x: hidden;
   }
   .manga-container img {
     height: auto;
     width: 100%;
     max-height: initial;
+    user-select: none;
   }
 
   .manga-container .empty-img {
@@ -254,13 +294,48 @@
   }
 
   #next {
-    margin: 0 10px;
+    margin: 0 20px;
+  }
+
+  .m-loading {
+    display: none;
+    position: absolute;
+    left: 2px;
+    bottom: 2px;
+    z-index: 99;
+    background-color: rgba(0, 0, 0, 0.582);
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+  }
+
+  .m-loading :global(svg) {
+    top: 4px;
+    left: 4px;
+    width: 18px;
+    height: 18px;
+    fill: hwb(165 2% 0%);
+    animation: rotate 3s linear infinite;
+    transition: all 0.3s;
+  }
+
+  @keyframes rotate {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .show-loading {
+    display: inline-block;
+  }
+  .m-loading.show-loading {
+    display: inline-block;
   }
 
   @media screen and (max-width: 600px) {
     .viewer :global(.modal-container .modal) {
-      min-width: 95%;
-      max-width: 95%;
+      min-width: 99%;
+      max-width: 99%;
     }
   }
 </style>

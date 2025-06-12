@@ -52,11 +52,25 @@
       left = left < 0 ? 0 : left;
 
       top = top + h > window.innerHeight ? window.innerHeight - h - 0 : top;
-      top = top < 10 ? 10 : top;
+      top = top < 40 ? 40 : top;
 
       ref.style.left = left + "px";
 
       ref.style.top = top + "px";
+    }
+  };
+
+  const onResize = () => {
+    const bounds = ref.getBoundingClientRect();
+    const leftPos = bounds.x + bounds.width;
+    let dist = leftPos - window.innerWidth;
+    if (dist > 0) {
+      ref.style.left = Math.max(bounds.x - dist, 0) + "px";
+    }
+    const topPos = bounds.y + bounds.height;
+    dist = topPos - window.innerHeight;
+    if (dist > 0) {
+      ref.style.top = Math.max(bounds.y - dist, 0) + "px";
     }
   };
 
@@ -72,7 +86,9 @@
     if (canDrag) {
       listeners.forEach((event) => document.addEventListener(event[0], event[1]));
     }
+    window.addEventListener("resize", onResize);
     return () => {
+      window.removeEventListener("resize", onResize);
       if (canDrag) {
         listeners.forEach((event) => document.removeEventListener(event[0], event[1]));
       }

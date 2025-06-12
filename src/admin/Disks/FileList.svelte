@@ -15,7 +15,6 @@
   import { updateConsole } from "../Store/ConsoleStore";
   import VideoControl from "./VideoControl.svelte";
   import FileTypeIcon from "../Component/FileTypeIcon.svelte";
-  import { videoRegex } from "../Store/FilesStore";
 
   export let files = [];
   export let socket;
@@ -237,8 +236,6 @@
   }
 
   $: list = selectedList.length ? selectedList : filtered;
-  $: videos = list.filter((f) => videoRegex.test(f.Name));
-  $: mangas = list.filter((f) => /\.zip$/i.test(f.Name));
 </script>
 
 {#if showMoveDialog}
@@ -314,7 +311,7 @@
         <li id={file.Id} title={formatDate(new Date(file.LastModified))}>
           <CCheckbox on:change={onCheck} isChecked={selectedList.find((f) => f.Id === file.Id)} />
           <span on:click={onCheck}>
-            <FileTypeIcon {file} {mangas} {videos} fileColor="white" />
+            <FileTypeIcon {file} {files} fileColor="white" />
             <span class="size">{getSize2(file)}</span>
             <span>{file.Name}</span>
           </span>

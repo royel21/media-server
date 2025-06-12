@@ -26,13 +26,11 @@ export const getFilter2 = (data, names = []) => {
   for (const part of parts) {
     if (part.indexOf("=") > -1) {
       const p = part.split("=");
-      console.log(p);
       obj[p[0]] = { [op]: mapFilter(p[1]) };
     } else {
       filters.push(mapFilter(part));
     }
   }
-  console.log(obj);
 
   for (const key of Object.keys(obj)) {
     if (!obj[key]) {

@@ -6,7 +6,7 @@
   import { map } from "../Utils";
   import Icons from "src/icons/Icons.svelte";
   import Slider from "src/ShareComponent/Slider.svelte";
-  import { FilesStore } from "../Store/FilesStore";
+  import { FilesStore, videoRegex } from "../Store/FilesStore";
 
   const VOLKEY = "admin-vol";
   const SEEKLEFT = 37;
@@ -30,12 +30,17 @@
   let current = files.findIndex((f) => f.Id === file.Id);
 
   FilesStore.subscribe((data) => {
-    if (data.files) {
+    if (videoRegex.test(data.file.Name)) {
       file = data.file;
       files = data.files;
       player?.focus();
     }
   });
+  const hide = () => {
+    FilesStore.set({ file: {}, files: [] });
+    file = {};
+    files = [];
+  };
 
   const onPlay = (e) => {
     if (paused) {
@@ -43,11 +48,6 @@
     } else {
       player.pause();
     }
-  };
-
-  const hide = () => {
-    file = {};
-    files = [];
   };
 
   const changeFile = ({ target: { id } }) => {

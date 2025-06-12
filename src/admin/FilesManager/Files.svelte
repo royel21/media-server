@@ -9,7 +9,6 @@
   import Icons from "src/icons/Icons.svelte";
   import { formatSize } from "src/utils";
   import FileTypeIcon from "../Component/FileTypeIcon.svelte";
-  import { videoRegex } from "../Store/FilesStore";
 
   const socket = getContext("socket");
   export let page = 1;
@@ -117,9 +116,6 @@
     file = {};
   };
   document.title = "Files";
-
-  $: videos = items.filter((f) => videoRegex.test(f.Name)).map(mapFile);
-  $: mangas = items.filter((f) => /\.zip$/i.test(f.Name)).map(mapFile);
 </script>
 
 {#if showModal}
@@ -154,7 +150,7 @@
               <td>
                 <span><Icons name="edit" /></span>
                 <span><Icons name="trash" /></span>
-                <FileTypeIcon {file} {videos} {mangas} />
+                <FileTypeIcon {file} files={items} />
               </td>
               <td>{file.Name}</td>
               <td>{file.Path}</td>

@@ -84,8 +84,6 @@ export function formatTime(time) {
   return (h === 0 ? "" : h + ":") + String(min).padStart(2, "0") + ":" + String(sec).padStart(2, "0");
 }
 
-export const videoRegex = /\.(mp4|mkv|webm|ogg)$/i;
-
 export const getSecuences = (from, to) => {
   return [...Array(to - from + 1).keys()].map((a) => a + from);
 };

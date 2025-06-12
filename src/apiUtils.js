@@ -48,8 +48,8 @@ export const getStatic = async (url) => {
 
 export const postFav = async (route, params) => post("files/favorites/" + route, params);
 
-const admin = async (path, key = "get") => get(["admin", ...path], key);
-const files = async (path, key = "get") => get(["files", ...path], key);
+const admin = async (path = [], key = "get") => get(["admin", ...path], key);
+const files = async (path = [], key = "get") => get(["files", ...path], key);
 
 export const getItemsList = async (url, key = "item-list") => {
   try {

@@ -3,7 +3,7 @@
   import VideoConvert from "./VideoConvert.svelte";
   import SubVideoExtration from "./SubVideoExtration.svelte";
   import Confirm from "../Component/Confirm.svelte";
-  import { videoRegex } from "../Component/util";
+  import { videoRegex } from "../Store/FilesStore";
 
   export let socket;
   export let selectedList;
@@ -42,7 +42,7 @@
     };
   };
 
-  $: show = selectedList.filter((f) => !videoRegex.test(f.Name)).length = 0;
+  $: show = selectedList.filter((f) => !videoRegex.test(f.Name)).length === 0;
   $: count = selectedList.filter((f) => videoRegex.test(f.Name)).length;
 </script>
 
@@ -63,7 +63,7 @@
   />
 {/if}
 
-{#if !show}
+{#if show}
   <span id="film2" on:click={onConvertVideos} title="Convert Videos">
     <Icons name="film2" box="0 0 512 512" color="deepskyblue" />
   </span>

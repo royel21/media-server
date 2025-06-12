@@ -9,7 +9,6 @@
   import RenameModal from "./RenameModal.svelte";
   import { setMessage } from "../Store/MessageStore";
   import FileTypeIcon from "../Component/FileTypeIcon.svelte";
-  import { videoRegex } from "../Store/FilesStore";
 
   let items = [];
   let filter = "";
@@ -89,8 +88,6 @@
   onMount(async () => {
     load();
   });
-  $: mangas = items.filter((f) => /\.zip$/i.test(f.Name));
-  $: videos = items.filter((f) => videoRegex.test(f.Name));
 </script>
 
 {#if showEdit}
@@ -124,7 +121,7 @@
           <li id={file.Id} class="list-group-item">
             <span on:click={onRemove}><Icons name="trash" /></span>
             <span on:click={() => (showEdit = file)}><Icons name="edit" /></span>
-            <FileTypeIcon {file} {mangas} {videos} />
+            <FileTypeIcon {file} files={items} />
             <strong>{formatSize(file.Size)}GB</strong>
             <span>{file.Name}</span>
           </li>

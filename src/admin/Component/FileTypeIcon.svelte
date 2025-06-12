@@ -1,20 +1,26 @@
 <script>
   import Icons from "src/icons/Icons.svelte";
-  import { setPlayer, videoRegex } from "../Store/FilesStore";
-  import { setViewer } from "../Store/MangaStore";
+  import { setFiles, videoRegex } from "../Store/FilesStore";
   export let file;
-  export let mangas;
-  export let videos;
+  export let files;
   export let fileColor = "grey";
+
+  const handleClick = () => {
+    setFiles({ file, files });
+  };
 </script>
 
 {#if videoRegex.test(file.Name)}
-  <span class="f-play" on:click|stopPropagation={() => setPlayer({ file, files: videos })} title="Play Video">
+  <span class="f-play" on:click|stopPropagation={handleClick} title="Play Video">
     <Icons name="play" box="0 0 512 512" color="deepskyblue" />
   </span>
-{:else if /\.zip$/.test(file.Name)}
-  <span class="f-play" on:click|stopPropagation={() => setViewer({ file, files: mangas })}>
-    <Icons name="book" box="0 0 512 512" color={"red"} />
+{:else if /\.zip$/i.test(file.Name)}
+  <span class="f-play" on:click|stopPropagation={handleClick}>
+    <Icons name="book" box="0 0 512 512" color="red" />
+  </span>
+{:else if /\.txt$/i.test(file.Name)}
+  <span class="f-play" on:click|stopPropagation={handleClick}>
+    <Icons name="text" box="0 0 384 512" color="antiquewhite" />
   </span>
 {:else}
   <span class="f-play">
