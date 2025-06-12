@@ -4,7 +4,7 @@ let downloader = null;
 
 export const download = async (data) => {
   if (data.action === "is-running") {
-    return global.io.sockets.emit("is-running", { IsRunning: downloader === null });
+    return global.io.sockets.emit("is-running", { IsRunning: downloader !== null });
   }
 
   if (!downloader) {
