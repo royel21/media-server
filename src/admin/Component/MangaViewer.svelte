@@ -129,7 +129,6 @@
     socket.on("zip-data", onImageCount);
     socket.on("image-loaded", onImageData);
     socket.on("disconnect", onDisconnect);
-    container?.focus();
 
     return () => {
       socket.off("disconnect", onDisconnect);
@@ -145,6 +144,7 @@
     currentImg = 0;
     isLoading = true;
     socket.emit("loadzip-image", { ...file, imageCount: true, indices: getSecuences(0, 5) });
+    container?.focus();
   }
 
   $: if (data.total) {
@@ -155,7 +155,7 @@
 <div class="viewer" class:hidden={!files.length}>
   <Dialog cancel={hide} btnOk="" btnCancer="" keydown={onkeydown} canDrag={true} background={false}>
     <span slot="modal-header" class="f-name">{file.Name}</span>
-    <div class="manga-container" bind:this={container}>
+    <div class="manga-container" bind:this={container} tabindex="-1">
       {#each Array(data.total).fill(null) as _, i}
         <img
           class:empty-img={!data.images[i]}
