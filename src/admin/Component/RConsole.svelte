@@ -143,7 +143,6 @@
     canShow = tabRex.test(update);
   }
   $: showConsoleStore.set(canShow && $ConsoleStore.length && toggle);
-  const virtual = true;
   $: props = { height: height - 8, width: "auto", itemSize: 23 };
   $: props2 = { itemCount: $ConsoleStore.length, scrollToIndex, stickyIndices: getStycky() };
 </script>
