@@ -55,56 +55,6 @@
   border-left-color: rgb(69, 77, 85);
 }
 
-/*************Modal*************************/
-
-.modal {
-  display: block;
-  z-index: 99;
-  min-height: initial;
-  min-width: initial;
-  height: max-content;
-  width: 350px;
-  margin-bottom: 50px;
-}
-
-.modal-header > * {
-  text-align: center;
-}
-
-.modal .errors {
-  font-size: 20px;
-}
-
-.modal label,
-.modal .form-control {
-  padding: 5px;
-}
-
-.modal label {
-  width: 55px;
-  justify-content: space-evenly;
-  font-weight: 600;
-}
-
-.modal label i {
-  font-size: 20px;
-}
-
-.modal-header h3 {
-  margin-bottom: 0;
-}
-
-.modal-footer {
-  display: flex;
-  justify-content: center;
-  padding: 5px;
-}
-
-.modal-footer .btn {
-  min-width: 75px;
-  margin: 0 10px;
-}
-
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -224,10 +174,4 @@ input[type="radio"]:checked + label span {
   background-color: rgb(88, 86, 86);
   left: calc(50% - 6px);
   z-index: 0;
-}
-
-@media screen and (max-height: 700px) {
-  .modal-container {
-    padding-top: 110px;
-  }
 }

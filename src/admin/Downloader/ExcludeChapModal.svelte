@@ -52,12 +52,12 @@
 </script>
 
 <Dialog id="modal-ex" cancel={hide} confirm={submit}>
-  <h4 slot="modal-header">
+  <div class="control" slot="modal-header">
     <span class="btn-add" on:click={addRename} on:keydown>
-      <Icons name="squareplus" />
+      <Icons name="squareplus" box="0 0 512 512" />
     </span>
     <span class="title">Chapter Exclude From Download</span>
-  </h4>
+  </div>
   <span slot="modal-body">
     {#each nameList as name}
       <div class="name-item" id={name.Id}>
@@ -69,20 +69,29 @@
 </Dialog>
 
 <style>
+  .control {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   .title {
     position: relative;
-    display: inline-block;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 18px;
     text-align: center;
-    top: -11px;
   }
   :global(#modal-ex .modal-body) {
     min-height: 300px;
   }
-  :global(#modal-ex .icon-squareplus) {
-    height: 35px;
-    width: 45px;
+  .btn-add {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+  }
+
+  .btn-add :global(.icon-squareplus) {
+    height: 28px;
+    width: 28px;
     top: -1px;
   }
   :global(#modal-ex .input-label) {

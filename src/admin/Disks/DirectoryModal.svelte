@@ -2,6 +2,7 @@
   import { fade } from "svelte/transition";
   import CheckBox from "../Component/CheckBox.svelte";
   import Select from "src/ShareComponent/Select.svelte";
+  import Dialog from "src/ShareComponent/Dialog.svelte";
   export let createDirectory;
   export let hideModal;
   export let Name;
@@ -25,27 +26,21 @@
   };
 </script>
 
-<div class="modal-container">
-  <div class="modal card" transition:fade={{ duration: 200 }}>
-    <div class="modal-header">
-      <h3>Add <strong>{Name}</strong> To Directories</h3>
-    </div>
-    <div class="modal-body">
-      <Select item={values} key="Type" {options} {onChange} />
-      <CheckBox label="Is Adult" key="IsAdult" item={values} />
-    </div>
-    <div class="modal-footer">
-      <button class="btn" on:click={create}>Create</button>
-      <button class="btn" on:click={hideModal}>Cancel</button>
-    </div>
+<Dialog id="modal-watch" confirm={create} cancel={hideModal} btnOk="Create">
+  <div slot="modal-header">
+    <h3>Add <strong>{Name}</strong> To Directories</h3>
   </div>
-</div>
+  <div class="modal-body">
+    <Select item={values} key="Type" {options} {onChange} />
+    <CheckBox label="Is Adult" key="IsAdult" item={values} />
+  </div>
+</Dialog>
 
 <style>
-  .modal {
-    width: 300px;
+  :global(#modal-watch) {
+    width: 360px;
   }
-  .modal h3 {
+  h3 {
     font-size: 20px;
     margin-bottom: 10px;
   }
@@ -53,10 +48,10 @@
     color: black;
     font-size: 16px;
   }
-  :global(.input-label) {
+  :global(#modal-watch .input-label) {
     width: 120px;
   }
-  :global(.input-control) {
+  :global(#modal-watch .input-control) {
     margin-bottom: 5px;
   }
 </style>

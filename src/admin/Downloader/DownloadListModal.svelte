@@ -7,6 +7,7 @@
   import Input from "../Component/Input.svelte";
   import { sortByName } from "src/ShareComponent/utils";
   import Filter from "src/ShareComponent/Filter.svelte";
+  import Dialog from "src/ShareComponent/Dialog.svelte";
 
   export let hide;
   export let loadDownloads;
@@ -109,62 +110,52 @@
   $: filter, (filtered = downloads.filter(filterDownloads));
 </script>
 
-<div class="modal-container" tabindex="-1">
-  <div class="modal card" transition:fade={{ duration: 200 }}>
-    <div class="modal-header">
-      <h3>Saved Download List <strong>- {downloads.length}</strong></h3>
-      <div class="m-controls">
-        {#if temp.isNew || temp.Name}
-          <Input label="Edit Name" key="Name" item={temp} />
-        {:else}
-          <span on:click={addNew}><Icons name="squareplus" /></span>
-          {#if !temp.isNew}
-            <span on:click={() => (temp.Name = item.Name)}><Icons name="edit" /></span>
-          {/if}
-          <span on:click={removeDList}><Icons name="trash" /></span>
-          <span id="sync" on:click={reloadLinks}><Icons name="sync" /></span>
-          <Select label="Downloads" key="Id" {item} options={downloadList} {onChange} />
-        {/if}
-      </div>
-    </div>
-    <div class="modal-body">
-      <div class="dl-filter">
-        <Filter bind:filter />
-      </div>
-      <ol>
-        {#each filtered as { Id, Name, Url, LinkId }}
-          <li>
-            <span id={"dlink-" + Id} on:click={removeLink}> <Icons name="trash" color="firebrick" /></span>
-            <span id={LinkId} on:click={addToDownload} title="Download This Link" on:keydown>
-              <Icons name="download" />
-            </span>
-            <a href={Url} target="_blank">{Name || Url}</a>
-          </li>
-        {/each}
-      </ol>
-    </div>
-    <div class="modal-footer">
-      {#if temp.Name || temp.isNew}
-        <button type="button" class="btn" on:click={updateName}>{temp.isNew ? "Save" : "Update Name"}</button>
+<Dialog id="server-modal">
+  <div class="modal-header" slot="modal-header">
+    <h3>Saved Download List <strong>- {downloads.length}</strong></h3>
+    <div class="m-controls">
+      {#if temp.isNew || temp.Name}
+        <Input label="Edit Name" key="Name" item={temp} />
       {:else}
-        <button type="submit" class="btn" on:click={() => loadDownloads(item.Id)}>Load</button>
+        <span on:click={addNew}><Icons name="squareplus" /></span>
+        {#if !temp.isNew}
+          <span on:click={() => (temp.Name = item.Name)}><Icons name="edit" /></span>
+        {/if}
+        <span on:click={removeDList}><Icons name="trash" /></span>
+        <span id="sync" on:click={reloadLinks}><Icons name="sync" /></span>
+        <Select label="Downloads" key="Id" {item} options={downloadList} {onChange} />
       {/if}
-      <button type="button" class="btn" on:click={onCancel}>Cancel</button>
     </div>
   </div>
-</div>
+  <div class="modal-body" slot="modal-body">
+    <div class="dl-filter">
+      <Filter bind:filter />
+    </div>
+    <ol>
+      {#each filtered as { Id, Name, Url, LinkId }}
+        <li>
+          <span id={"dlink-" + Id} on:click={removeLink}> <Icons name="trash" color="firebrick" /></span>
+          <span id={LinkId} on:click={addToDownload} title="Download This Link" on:keydown>
+            <Icons name="download" />
+          </span>
+          <a href={Url} target="_blank">{Name || Url}</a>
+        </li>
+      {/each}
+    </ol>
+  </div>
+  <div class="modal-footer" slot="modal-footer">
+    {#if temp.Name || temp.isNew}
+      <button type="button" class="btn" on:click={updateName}>{temp.isNew ? "Save" : "Update Name"}</button>
+    {:else}
+      <button type="submit" class="btn" on:click={() => loadDownloads(item.Id)}>Load</button>
+    {/if}
+    <button type="button" class="btn" on:click={onCancel}>Cancel</button>
+  </div>
+</Dialog>
 
 <style>
-  .modal {
-    width: 500px;
-    outline: none;
-    padding: 0;
-  }
   strong {
     color: black;
-  }
-  .modal-header {
-    border-bottom: 1px solid;
   }
   .dl-filter {
     padding: 5px;
@@ -180,23 +171,12 @@
     display: flex;
     padding: 5px;
   }
-  .modal-container :global(svg) {
-    transform: scale(1.1);
-  }
   .modal-body {
     display: flex;
     flex-direction: column;
   }
   .modal-footer {
     border-top: 1px solid;
-  }
-  .modal-container :global(.input-control) {
-    margin-bottom: 5px;
-  }
-  .modal-container :global(.input-label) {
-    padding-left: 0.35rem;
-    text-align: left;
-    min-width: 100px;
   }
 
   a:hover {
@@ -219,19 +199,5 @@
   .btn {
     padding: 2px;
     min-width: 70px;
-  }
-
-  #sync {
-    margin-left: 5px;
-  }
-
-  .modal-body :global(.icon-sync) {
-    fill: blue;
-  }
-
-  @media screen and (max-width: 600px) {
-    .modal {
-      width: 400px;
-    }
   }
 </style>

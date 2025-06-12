@@ -2,12 +2,22 @@
   import Dialog from "src/ShareComponent/Dialog.svelte";
   import TimeInput from "src/admin/Component/TimeInput.svelte";
 
-  export let hide;
-  export let acept;
+  export let socket;
+  export let bgWorking;
+  export let selectedList = [];
+  export let showVideoSubTract;
 
   let item = {
     Start: "00:00:00",
     End: "00:00:00",
+  };
+
+  const hide = () => (showVideoSubTract = false);
+
+  const extractSubVideo = (options) => {
+    socket.emit("bg-work", { action: "extractSubVideo", data: { files: selectedList, ...options } });
+    showVideoSubTract = false;
+    bgWorking = true;
   };
 
   let errors = [];
@@ -40,7 +50,7 @@
       }
     }
 
-    return acept(item);
+    return extractSubVideo(item);
   };
 </script>
 

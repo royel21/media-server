@@ -111,7 +111,7 @@
   on:keydown|stopPropagation={onKeydown}
   on:mousedown|stopPropagation={handler}
 >
-  <div bind:this={ref} {id} class={`modal card move-to ${clazz}`} transition:fade={{ duration: 200 }}>
+  <div bind:this={ref} {id} class={`modal move-to ${clazz}`} transition:fade={{ duration: 200 }}>
     <form on:submit|preventDefault={confirm}>
       <div class="modal-header" class:drap={canDrag} on:mousedown={startDrag} on:touchstart={startDrag}>
         <slot name="modal-header" />
@@ -122,19 +122,35 @@
           <div>{error}</div>
         {/each}
       </p>
-      <div class="modal-footer" bind:this={footerRef}>
-        {#if btnOk}
-          <button type="submit" class="btn">{btnOk}</button>
-        {/if}
-        {#if cancel && btnCancer}
-          <button type="button" class="btn" on:click={cancel}>{btnCancer}</button>
-        {/if}
-      </div>
+      <slot name="modal-footer">
+        <div class="modal-footer" bind:this={footerRef}>
+          {#if btnOk}
+            <button type="submit" class="btn">{btnOk}</button>
+          {/if}
+          {#if cancel && btnCancer}
+            <button type="button" class="btn" on:click={cancel}>{btnCancer}</button>
+          {/if}
+        </div>
+      </slot>
     </form>
   </div>
 </div>
 
 <style>
+  .modal-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-height: 100%;
+    height: 100%;
+    width: 100%;
+    z-index: 999;
+    background-color: rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+  }
   .no-background {
     background-color: transparent;
     pointer-events: none;
@@ -147,6 +163,11 @@
     max-width: 93%;
     z-index: 401;
     padding: 0;
+    min-width: 0;
+    background-color: #343a40;
+    background-clip: border-box;
+    border-radius: 0.25rem;
+    border: 1px solid white;
   }
   .modal-header {
     padding: 4px 0;
@@ -166,6 +187,8 @@
     padding: 15px 5px;
   }
   .modal-footer {
+    display: flex;
+    justify-content: center;
     border-top: 1px solid;
     text-align: center;
   }

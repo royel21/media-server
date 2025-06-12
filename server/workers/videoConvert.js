@@ -209,38 +209,60 @@ export const mergeVideos = async ({ files }) => {
   });
 };
 
-export const extractSubVideo = async ({ file, Start, End }) => {
-  const extension = path.extname(file.Name);
-  const name = file.Name.replace(extension, "");
-  const basePath = path.dirname(file.Path);
-
-  let outFile = path.join(basePath, `${name}-A${extension}`);
-  let count = 0;
-  let letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"];
-  while (fs.existsSync(outFile)) {
-    outFile = outFile.replace(`-${letters[count]}${extension}`, `-${letters[count + 1]}${extension}`);
-    count++;
-    if (count > letters.length) {
-      return await sendMessage({ text: "Can't Create More Parts", error: "Can't Create More Parts" }, "files-info");
-    }
-  }
-
-  await sendMessage({ text: `Extrating Sub Video ${file.Name} from: ${Start} ${End}` });
+export const extractSubVideo = async ({ files, Start, End }) => {
   Start = Start !== "00:00:00" ? `-ss ${Start}` : "";
   End = End !== "00:00:00" ? `-to ${End}` : "";
 
-  await new Promise(async (resolve) => {
-    exec(`ffmpeg ${Start} -i "${file.Path}" ${End} -c copy "${outFile}" -y`, async (error) => {
-      if (error) {
-        console.log(error);
-        await sendMessage({ text: "Error Extrating Sub Video", error: error.toString() });
-        if (fs.existsSync(outFile)) {
-          fs.removeSync(outFile);
+  for (const file of files) {
+    const extension = path.extname(file.Name);
+    const name = file.Name.replace(extension, "");
+    const basePath = path.dirname(file.Path);
+
+    try {
+      let outFile = path.join(basePath, `${name}-A${extension}`);
+      let count = 0;
+      let letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"];
+      while (fs.existsSync(outFile)) {
+        outFile = outFile.replace(`-${letters[count]}${extension}`, `-${letters[count + 1]}${extension}`);
+        count++;
+        if (count > letters.length) {
+          return await sendMessage({ text: "Can't Create More Parts", error: "Can't Create More Parts" }, "files-info");
         }
-      } else {
-        await sendMessage({ convert: true, msg: `Finish Extrated to ${outFile}` }, "files-info");
       }
-      resolve();
-    });
-  });
+
+      await sendMessage({ text: `Extrating Sub Video ${file.Name} from: ${Start} ${End}` });
+
+      await new Promise(async (resolve) => {
+        exec(`ffmpeg ${Start} -i "${file.Path}" ${End} -c copy "${outFile}" -y`, async (error) => {
+          if (error) {
+            console.log(error);
+            await sendMessage({ text: "Error Extrating Sub Video", error: error.toString() });
+            if (fs.existsSync(outFile)) {
+              fs.removeSync(outFile);
+            }
+          } else {
+          }
+          resolve();
+        });
+      });
+      const stats = fs.statSync(outFile);
+      const newFile = {
+        Id: Math.random().toString(36).slice(-5),
+        Name: path.basename(outFile),
+        Path: outFile,
+        Content: [],
+        Type: "file",
+        Size: stats.size,
+        LastModified: stats.mtime,
+      };
+      await sendMessage(
+        { convert: true, msg: `File ${file.Name} Extrated to ${outFile}`, file: newFile },
+        "files-info"
+      );
+    } catch (error) {
+      console.loge(error);
+    }
+  }
+
+  await sendMessage({ convert: true, msg: `Finish Extrating Files`, End: true }, "files-info");
 };

@@ -18,6 +18,8 @@
   import BulkEdit from "./BulkEdit.svelte";
 
   import { formatSize } from "src/utils";
+  import VideoConvert from "./VideoConvert.svelte";
+  import SubVideoExtration from "./SubVideoExtration.svelte";
 
   export let files = [];
   export let socket;
@@ -38,6 +40,8 @@
   let showConfirm = false;
   let showBulkRename = false;
   let bgWorking = false;
+  let showConvertVideo;
+  let showVideoSubTract;
 
   const onCheck = ({ target }) => {
     const id = target.closest("li").id;
@@ -103,7 +107,7 @@
     socket.emit("file-work", { action: "moveFiles", data });
   };
 
-  const onFileInfo = ({ msg, items, bulk, error, ren, file, convert, progress, Path }) => {
+  const onFileInfo = ({ msg, items, bulk, error, ren, file, convert, progress, Path, End }) => {
     if (msg || error) {
       updateConsole({ text: msg, error });
     }
@@ -137,8 +141,13 @@
     }
 
     if (convert) {
-      bgWorking = false;
-      reload();
+      if (End) {
+        bgWorking = false;
+        selectedList = [];
+        reload();
+      } else {
+        files = [...files, file].sort(sorter[sortBy]);
+      }
     }
   };
 
@@ -260,6 +269,14 @@
   />
 {/if}
 
+{#if showConvertVideo}
+  <VideoConvert bind:showConvertVideo bind:bgWorking {socket} {selectedList} />
+{/if}
+
+{#if showVideoSubTract}
+  <SubVideoExtration bind:showVideoSubTract bind:bgWorking {socket} {selectedList} />
+{/if}
+
 {#if showBulkRename}
   {#if selectedList.length === 1}
     <RenameModal data={selectedList[0]} acept={renameFile} hide={hideRename} title="File" />
@@ -287,7 +304,7 @@
               </span>
             {/if}
             {#if !bgWorking}
-              <VideoControl {selectedList} {socket} bind:bgWorking />
+              <VideoControl bind:showConvertVideo bind:showVideoSubTract {selectedList} {socket} />
             {/if}
             <span on:click={() => (showBulkRename = true)}><Icons name="edit" /></span>
             <span on:click={onTransfer}><Icons name="right-left" /></span>
