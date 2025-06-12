@@ -21,9 +21,15 @@ export const handlerPaste = async (item, key, sept, ref) => {
     let text = await navigator.clipboard?.readText();
     if (text) {
       text = text.trim();
-      ref.focus();
-      ref.select();
-      document.execCommand("paste");
+      if (item[key] && sept) {
+        if (!item[key].includes(text)) {
+          item[key] = item[key] + sept + text;
+        }
+      } else {
+        item[key] = text;
+      }
+      ref.value = item[key];
+      return ref.dispatchEvent(new Event("change"));
     }
   } catch (error) {
     console.log(error);
