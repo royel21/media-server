@@ -133,18 +133,18 @@ export const transferFiles = async (src, dest) => {
 };
 
 export const bulkRename = async ({
-  files,
-  ZeroPad,
-  Regex,
-  Replace,
-  With,
-  Case,
-  PreAdd,
-  PostAdd,
-  Secuence,
-  After,
-  Preserve,
-  Extension,
+  files = [],
+  ZeroPad = 0,
+  Regex = "",
+  Replace = "",
+  With = "",
+  Case = "",
+  PreAdd = "",
+  PostAdd = "",
+  Secuence = 0,
+  After = "",
+  Extension = "",
+  Preserve = true,
 }) => {
   let regex;
   Secuence = +Secuence;

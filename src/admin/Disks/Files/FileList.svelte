@@ -121,9 +121,11 @@
 
     if (ren) {
       const index = files.findIndex((f) => f.Id === file.Id);
+
       if (index > -1) {
         files[index] = file;
         files = files.sort(sortByName);
+        selectedList = [file];
       }
     }
 
