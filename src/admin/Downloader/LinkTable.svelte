@@ -122,6 +122,10 @@
     }
   };
 
+  const onConnect = () => {
+    socket.emit("download-server", { action: "is-running" });
+  };
+
   onMount(() => {
     const dmanager = document.querySelector(".d-manager");
 
@@ -129,10 +133,12 @@
 
     socket.on("link-update", onUpdate);
     socket.on("is-running", updateRunning);
+    socket.on("connect", onConnect);
     return () => {
       dmanager.removeEventListener("keydown", changePage);
       socket.off("link-update", onUpdate);
       socket.off("is-running", updateRunning);
+      socket.off("connect", onConnect);
     };
   });
 
