@@ -111,7 +111,6 @@
 
   onMount(() => {
     stop = setGesture(player, onPlay, { seekRate: 5 });
-    console.log("set touch");
     player.onerror = (err) => {
       error = `No Supported Sources ${file.Name}`;
     };

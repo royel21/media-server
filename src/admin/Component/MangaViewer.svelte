@@ -207,7 +207,7 @@
       <span id="prev" class="btn-play" on:click={onChangeFile}>
         <Icons name="arrowcircleleft" />
       </span>
-      <span class="img-selector">
+      <span class="img-selector btn-play">
         <input
           class="input"
           type="number"
@@ -245,10 +245,6 @@
     border: none;
   }
 
-  .viewer.isFullScreen :global(.modal-header) {
-    display: none;
-  }
-
   .f-name {
     white-space: nowrap;
     overflow: hidden;
@@ -272,10 +268,6 @@
     overflow: auto;
     overflow-x: hidden;
     user-select: none;
-  }
-
-  .viewer.isFullScreen .manga-container {
-    height: calc(100% - 25px);
   }
 
   .manga-container img {
@@ -336,6 +328,7 @@
     justify-content: center;
     align-items: center;
     height: 28px;
+    border-top: 1px solid;
   }
 
   .files-count {
@@ -353,8 +346,8 @@
     pointer-events: none;
   }
 
-  .time-progress > span {
-    margin: 0 15px;
+  .time-progress .btn-play {
+    margin: 0 10px;
   }
 
   .btn-play :global(svg) {
@@ -383,11 +376,10 @@
     animation: rotate 3s linear infinite;
     transition: all 0.3s;
   }
-
   .img-selector {
-    height: 99%;
+    position: relative;
+    top: -2px;
   }
-
   .img-selector .input {
     text-align: center;
     height: 92%;
@@ -417,8 +409,13 @@
     .files-count {
       top: 5px;
     }
-    .time-progress span {
+    .btn-play {
       height: 30px;
+    }
+    .img-selector {
+      height: 25px;
+      position: relative;
+      top: 6px;
     }
   }
 
