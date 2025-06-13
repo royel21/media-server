@@ -78,8 +78,11 @@ const download = async (link, page, server, state) => {
           let parts = val.split(splitP);
           val = parts[0];
           if (parts.length > 1) {
+            const nums = parts[1].match(/(ch\. |ch |ch\.|ch|)\d+/i);
             const vol = parts[1].match(/(vol\.( |))\d+/i);
-            if (vol && !val.includes(vol[0])) {
+            if (nums) {
+              val += " " + nums[0].replace(" ", "");
+            } else if (vol && !val.includes(vol[0])) {
               val = val + " " + vol[0].replaceAll(" ", "");
             }
           }
@@ -123,7 +126,7 @@ const download = async (link, page, server, state) => {
   }, server.dataValues);
 
   await sendMessage({ text: `pages: ${data.total} - Name: ${data.name}` });
-
+  console.log(data.name);
   if (!data.name) return;
 
   const curDir = dirs[data.type] || dirs.nHentai;
