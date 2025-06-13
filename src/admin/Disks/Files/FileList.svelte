@@ -231,7 +231,7 @@
   };
 
   const filterFunc = (filter) => (f) => {
-    if (!showHidden && /^(\.|$)/.test(f.Name)) {
+    if (!showHidden && /^(\.|$)/.test(f?.Name)) {
       return false;
     }
     return f.Name.toLocaleLowerCase().includes(filter.toLocaleLowerCase());

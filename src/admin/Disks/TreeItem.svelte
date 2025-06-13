@@ -28,7 +28,7 @@
         const data = await apiUtils.post("admin/directories/Content", { Path: item.Path });
         if (data.data) {
           item.Content = data.data.filter((it) => {
-            if (!showHidden && /^(\.|$)/.test(it.Name)) {
+            if (!showHidden && /^(\.|$)/.test(it?.Name)) {
               return false;
             }
             return it.Type !== "file";
