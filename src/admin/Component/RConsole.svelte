@@ -153,7 +153,7 @@
 </label>
 {#if canShow}
   <div class="cls-container" bind:this={rconsole} class:hide-dragg={items.length === 0 || !toggle}>
-    <div class="dragger" bind:this={dragger} on:touchstart={startResize} on:mousedown={startResize} />
+    <div class="dragger" bind:this={dragger} on:touchstart|passive={startResize} on:mousedown={startResize} />
     {#if toggle && items.length}
       <div class="r-console" on:dblclick={onExpand}>
         <span class="clean" on:keydown on:click={onClear}>

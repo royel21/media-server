@@ -113,7 +113,7 @@
 >
   <div bind:this={ref} {id} class={`modal move-to ${clazz}`} transition:fade={{ duration: 200 }}>
     <form on:submit|preventDefault={confirm}>
-      <div class="modal-header" class:drap={canDrag} on:mousedown={startDrag} on:touchstart={startDrag}>
+      <div class="modal-header" class:drap={canDrag} on:mousedown={startDrag} on:touchstart|passive={startDrag}>
         <slot name="modal-header" />
       </div>
       <div class="modal-body"><slot /><slot name="modal-body" /></div>

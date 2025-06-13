@@ -40,7 +40,7 @@
   };
 
   const onFilter = (val) => {
-    playList = files.filter((f) => f.Name.toLocaleLowerCase().includes(val.toLocaleLowerCase()));
+    playList = files.filter((f) => f?.Name.toLocaleLowerCase().includes(val?.toLocaleLowerCase()));
   };
 
   const selectFile = async ({ target: { id } }) => {

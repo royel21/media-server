@@ -111,7 +111,7 @@
         <span
           class="rc-thumb"
           style={`left: calc(${progress}% - 11px)`}
-          on:touchstart|stopPropagation={handleThumb}
+          on:touchstart|passive|stopPropagation={handleThumb}
           on:mousedown|stopPropagation={handleThumb}
         />
       {/if}

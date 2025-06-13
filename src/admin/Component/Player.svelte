@@ -146,7 +146,7 @@
         {formatTime(value)}
       </Slider>
     </div>
-    <div class="time-progress" on:mousedown|stopPropagation on:touchstart|stopPropagation>
+    <div class="time-progress" on:mousedown|stopPropagation on:touchstart|passive|stopPropagation>
       {#if files.length > 1}
         <span class="files-count">{`${current + 1}/${files.length}`}</span>
       {/if}
