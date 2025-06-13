@@ -32,6 +32,7 @@
 
   $: current = items?.findIndex((f) => f.Id === item.Id);
   $: src = item?.Path ? `/api/admin/files/image/${encodeURIComponent(item.Path)}` : "";
+  $: console.log("load image", src);
 </script>
 
 {#if item?.Path !== undefined}
@@ -76,8 +77,10 @@
   }
   #next,
   #prev {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: absolute;
-    align-content: center;
     height: 100%;
     width: 10%;
     font-size: 30px;
@@ -85,6 +88,7 @@
     opacity: 0;
     transition: 0.3s all;
     z-index: 1;
+    user-select: none;
   }
   #next:hover,
   #prev:hover {

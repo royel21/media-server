@@ -87,7 +87,9 @@ const downloadLinks = async (link, page) => {
 
   const exclude = await db.Exclude.findAll({ where: { LinkName: folder.Name } });
 
-  manga.data = manga.data.filter(removeRaw(manga.data)).filter((f) => !exclude.find((ex) => f.name.includes(ex.Name)));
+  manga.data = manga.data
+    .filter(removeRaw(manga.data))
+    .filter((f) => !exclude.find((ex) => f.name.includes(ex.Name)) || /( |\[)end(\]|)$/i.test("- end"));
 
   await updateLastChapter(manga, link);
   manga.type = "mangas";
