@@ -193,15 +193,7 @@
 </script>
 
 <div class="viewer" class:hidden={!files.length} class:isFullScreen>
-  <Dialog
-    bind:ref={modalRef}
-    cancel={hide}
-    btnOk=""
-    btnCancer=""
-    keydown={onkeydown}
-    canDrag={true}
-    background={isMobile()}
-  >
+  <Dialog bind:ref={modalRef} cancel={hide} btnOk="" btnCancer="" keydown={onkeydown} canDrag={true}>
     <span slot="modal-header" class="f-name"><span>{file.Name}</span></span>
     <div class="manga-container" bind:this={container} tabindex="-1">
       {#each Array(data.total).fill(null) as _, i}
@@ -252,8 +244,8 @@
 
 <style>
   .viewer :global(.modal) {
-    height: 680px;
-    width: 540px;
+    height: 560px;
+    width: 440px;
     max-width: 99%;
     max-height: 90%;
     background-color: black;
@@ -417,8 +409,15 @@
   }
 
   @media screen and (max-width: 700px) {
+    .viewer :global(.modal) {
+      height: 450px;
+      width: 350px;
+    }
     .viewer .manga-container {
       height: calc(100% - 70px);
+    }
+    .time-progress .btn-play {
+      margin: 0 5px;
     }
     .btn-play :global(svg) {
       width: 32px;
