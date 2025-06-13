@@ -4,9 +4,11 @@
   import Dialog from "src/ShareComponent/Dialog.svelte";
   import TextAreaInput from "src/ShareComponent/TextAreaInput.svelte";
   import { FilesStore, TextRex } from "../Store/FilesStore";
+  import CCheckbox from "./CCheckbox.svelte";
   let errors = [];
   let item = {};
   let ref;
+  let textwrap = false;
 
   FilesStore.subscribe(async ({ file }) => {
     if (TextRex.test(file.Name)) {
@@ -14,10 +16,13 @@
       if (result.error) {
         return (errors = [result.error]);
       }
-
+      errors = [];
       item = { ...file, Text: result.Text };
     }
   });
+
+  const onCheck = () => textwrap != textwrap;
+
   const hide = () => {
     FilesStore.set({ file: {} });
     item = {};
@@ -36,27 +41,52 @@
     ref.focus();
     document.execCommand("paste");
   };
+  $: console.log(textwrap);
 </script>
 
 {#if item.Text !== undefined}
   <Dialog id="text-edit" cancel={hide} confirm={save} {errors} canDrag={true} btnOk="Save" background={false}>
     <h4 slot="modal-header">Text Editor</h4>
-    <div slot="modal-body">
-      <TextAreaInput bind:ref focus={true} key="Text" rows={15} {item} paste={false}>
+    <div class="text-content" slot="modal-body">
+      <TextAreaInput bind:ref focus={true} key="Text" {item} paste={false} {textwrap}>
         <span class="pre-paste" slot="btn-left" on:click={paste} title="Copy Name">
           <Icons name="paste" color="#045cba" />
         </span>
       </TextAreaInput>
+      <label class="text-wrap" for="check" on:click={onCheck}>
+        <CCheckbox isChecked={textwrap} /> Text Wrap
+      </label>
     </div>
   </Dialog>
 {/if}
 
 <style>
+  :global(#text-edit) {
+    height: 450px;
+    width: 560px;
+    max-width: 99%;
+  }
+  .text-content {
+    position: relative;
+    height: 100%;
+  }
   :global(#text-edit .modal-body) {
-    padding: 4px 4px 0px 4px;
+    height: calc(100% - 84px);
+    padding: 4px;
+  }
+  :global(#text-edit .input-control) {
+    height: 92%;
+  }
+  :global(#text-edit textarea) {
+    height: 100%;
+    resize: none;
   }
   .pre-paste {
     position: absolute;
     left: 5px;
+  }
+  .text-wrap {
+    position: absolute;
+    bottom: -41px;
   }
 </style>

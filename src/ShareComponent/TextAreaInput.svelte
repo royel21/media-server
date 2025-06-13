@@ -14,6 +14,7 @@
   export let disabled = false;
   export let paste = true;
   export let onChange = () => {};
+  export let textwrap = true;
 
   onMount(() => {
     if (ref && focus) ref.focus();
@@ -36,6 +37,7 @@
     on:change={onChange}
     on:blur={onChange}
     {disabled}
+    class:textwrap
   />
 </div>
 
@@ -60,5 +62,9 @@
   }
   textarea {
     resize: vertical;
+  }
+
+  textarea.textwrap {
+    white-space: nowrap;
   }
 </style>

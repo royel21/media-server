@@ -169,6 +169,9 @@
     border-radius: 0.25rem;
     border: 1px solid white;
   }
+  form {
+    height: 100%;
+  }
   .modal-header {
     padding: 4px 0;
     text-align: center;

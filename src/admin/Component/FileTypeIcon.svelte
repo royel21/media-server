@@ -47,6 +47,10 @@
     cursor: pointer;
   }
 
+  span :global(.icon-text) {
+    width: 16px;
+  }
+
   span:active :global(svg) {
     transform: scale(1.1);
   }
