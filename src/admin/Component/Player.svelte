@@ -122,7 +122,7 @@
   $: current = files.findIndex((f) => f.Id === file.Id);
 </script>
 
-<div class="player" on:wheel={onWheel} class:hidden={!files.length}>
+<div class="player" on:wheel|passive={onWheel} class:hidden={!files.length}>
   <Dialog cancel={hide} btnOk="" btnCancer="" keydown={onkeydown} canDrag={true} background={false}>
     <span slot="modal-header" class="f-name">{file.Name}</span>
     <div class="video-container">

@@ -174,7 +174,7 @@
 </script>
 
 {#if file.Id}
-  <div class="player-container" class:isFullScreen on:mousemove={hideControls} on:wheel={onWheel}>
+  <div class="player-container" class:isFullScreen on:mousemove={hideControls} on:wheel|passive={onWheel}>
     <div class="player-content">
       <span class="v-state">
         <span class="batt-state">{battLevel ? `${battLevel}` : ""}</span>

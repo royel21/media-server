@@ -100,7 +100,7 @@
       id={uniqId}
       class="rc-track"
       on:mousedown|stopPropagation={onMDown}
-      on:touchstart|stopPropagation={onMDown}
+      on:touchstart|passive|stopPropagation={onMDown}
       bind:this={sliderRef}
       on:mousemove={onPreview}
     >
