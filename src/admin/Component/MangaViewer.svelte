@@ -145,8 +145,11 @@
     pageObserver?.disconnect();
     isLoading = true;
     isFullScreen = setfullscreen(modalRef);
-    PageObserver();
-    isLoading = false;
+    setTimeout(() => {
+      imgs[currentImg]?.scrollIntoViewIfNeeded();
+      PageObserver();
+      isLoading = false;
+    }, 200);
   };
 
   const onDisconnect = () => {
@@ -415,7 +418,7 @@
     .img-selector {
       height: 25px;
       position: relative;
-      top: 6px;
+      top: 4px;
     }
   }
 
