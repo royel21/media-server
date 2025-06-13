@@ -6,10 +6,12 @@
   import { FilesStore, MangaRegex } from "../Store/FilesStore";
   import { setfullscreen } from "src/user/Pages/pagesUtils";
   import { map } from "../Utils";
+  import { isMobile } from "src/utils";
 
   const CLOSE = 88;
   const PREV_FILE = 37;
   const NEXT_FILE = 39;
+  const FULLSCREEN = 13;
   const socket = getContext("socket");
 
   let file = {};
@@ -124,6 +126,10 @@
     if (keyCode === PREV_FILE) {
       changeFile(-1);
     }
+
+    if (keyCode === FULLSCREEN) {
+      onFullScreen();
+    }
   };
 
   const onImageCount = ({ total }) => {
@@ -149,6 +155,7 @@
       imgs[currentImg]?.scrollIntoViewIfNeeded();
       PageObserver();
       isLoading = false;
+      container.focus();
     }, 200);
   };
 
@@ -186,7 +193,15 @@
 </script>
 
 <div class="viewer" class:hidden={!files.length} class:isFullScreen>
-  <Dialog bind:ref={modalRef} cancel={hide} btnOk="" btnCancer="" keydown={onkeydown} canDrag={true} background={false}>
+  <Dialog
+    bind:ref={modalRef}
+    cancel={hide}
+    btnOk=""
+    btnCancer=""
+    keydown={onkeydown}
+    canDrag={true}
+    background={isMobile()}
+  >
     <span slot="modal-header" class="f-name"><span>{file.Name}</span></span>
     <div class="manga-container" bind:this={container} tabindex="-1">
       {#each Array(data.total).fill(null) as _, i}
