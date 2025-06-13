@@ -14,8 +14,8 @@
   export let btnCancer = "Cancel";
   export let canDrag = false;
   export let background = true;
+  export let ref;
 
-  let ref;
   let footerRef;
 
   let dragState = { x: 0, y: 0 };

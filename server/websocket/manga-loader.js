@@ -14,7 +14,6 @@ const loadZipImages = async (data, socket, user) => {
       include: { model: db.folder, where: { IsAdult: { [Op.lte]: user.AdultPass } }, required: true },
     });
   }
-  console.log(Path, Id, file?.Path);
 
   if (fs.existsSync(file?.Path || Path)) {
     try {

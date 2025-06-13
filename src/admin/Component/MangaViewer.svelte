@@ -4,6 +4,8 @@
   import { getContext, onMount } from "svelte";
   import { getSecuences } from "./util";
   import { FilesStore, MangaRegex } from "../Store/FilesStore";
+  import { setfullscreen } from "src/user/Pages/pagesUtils";
+  import { map } from "../Utils";
 
   const CLOSE = 88;
   const PREV_FILE = 37;
@@ -21,6 +23,9 @@
   let pageObserver;
   let isLoading = false;
   let data = { total: 0, images: [] };
+  let modalRef;
+  let isFullScreen = false;
+  let imgs = [];
 
   FilesStore.subscribe((data) => {
     if (MangaRegex.test(data.file.Name)) {
@@ -47,8 +52,14 @@
     return items;
   };
 
+  const loadImg = (dir) => {
+    isLoading = true;
+    const toLoad = getEmptyIndex(data.images, currentImg, 5, dir, data.total);
+    socket.emit("loadzip-image", { ...file, indices: toLoad });
+  };
+
   const PageObserver = () => {
-    const imgs = container.querySelectorAll("img");
+    imgs = container.querySelectorAll("img");
     pageObserver?.disconnect();
 
     pageObserver = new IntersectionObserver(
@@ -64,11 +75,7 @@
 
               const needLoad = !data.images[next] || !data.images[currentImg];
 
-              if (!isLoading && needLoad) {
-                isLoading = true;
-                const toLoad = getEmptyIndex(data.images, currentImg, 5, dir, data.total);
-                socket.emit("loadzip-image", { ...file, indices: toLoad });
-              }
+              if (!isLoading && needLoad) loadImg();
             }
           }
         }
@@ -87,6 +94,19 @@
     if (nextIndex > -1 && nextIndex < files.length) {
       file = files[nextIndex];
       current = nextIndex;
+    }
+  };
+  const onSelectImg = ({ target }) => {
+    target.value = currentImg + 1;
+  };
+  const jumpTop = ({ target }) => {
+    const img = map(+target.value - 1, 0, data.total - 1);
+    if (imgs[img]) {
+      isLoading = true;
+      imgs[img]?.scrollIntoViewIfNeeded();
+      currentImg = img;
+      isLoading = false;
+      loadImg(1);
     }
   };
 
@@ -119,6 +139,14 @@
     if (d.last) {
       isLoading = false;
     }
+  };
+
+  const onFullScreen = () => {
+    pageObserver?.disconnect();
+    isLoading = true;
+    isFullScreen = setfullscreen(modalRef);
+    PageObserver();
+    isLoading = false;
   };
 
   const onDisconnect = () => {
@@ -154,8 +182,8 @@
   }
 </script>
 
-<div class="viewer" class:hidden={!files.length}>
-  <Dialog cancel={hide} btnOk="" btnCancer="" keydown={onkeydown} canDrag={true} background={false}>
+<div class="viewer" class:hidden={!files.length} class:isFullScreen>
+  <Dialog bind:ref={modalRef} cancel={hide} btnOk="" btnCancer="" keydown={onkeydown} canDrag={true} background={false}>
     <span slot="modal-header" class="f-name"><span>{file.Name}</span></span>
     <div class="manga-container" bind:this={container} tabindex="-1">
       {#each Array(data.total).fill(null) as _, i}
@@ -179,15 +207,27 @@
       <span id="prev" class="btn-play" on:click={onChangeFile}>
         <Icons name="arrowcircleleft" />
       </span>
+      <span class="img-selector">
+        <input
+          class="input"
+          type="number"
+          min="0"
+          max={data.total}
+          on:change={jumpTop}
+          placeholder="{currentImg + 1}/{data.total}"
+          on:focus={onSelectImg}
+          on:blur={({ target }) => (target.value = "")}
+        />
+      </span>
       <span id="next" class="btn-play" on:click={onChangeFile}>
         <Icons name="arrowcircleright" />
+      </span>
+      <span class="btn-fullscreen btn-play" on:click={onFullScreen}>
+        <Icons name="expandarrow" />
       </span>
       <span class="close btn-play" on:click={() => hide()}>
         <Icons name="timescircle" />
       </span>
-      {#if data.total > 0}
-        <span class="img-count">{currentImg + 1}/{data.total}</span>
-      {/if}
     </div>
   </Dialog>
 </div>
@@ -201,6 +241,14 @@
     background-color: black;
     overflow: hidden;
   }
+  .viewer.isFullScreen :global(.modal) {
+    border: none;
+  }
+
+  .viewer.isFullScreen :global(.modal-header) {
+    display: none;
+  }
+
   .f-name {
     white-space: nowrap;
     overflow: hidden;
@@ -225,6 +273,11 @@
     overflow-x: hidden;
     user-select: none;
   }
+
+  .viewer.isFullScreen .manga-container {
+    height: calc(100% - 25px);
+  }
+
   .manga-container img {
     height: auto;
     width: 100%;
@@ -281,11 +334,11 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: center;
     height: 28px;
   }
 
-  .img-count,
-  .time-progress > .files-count {
+  .files-count {
     position: absolute;
     top: 1px;
     left: 4px;
@@ -296,22 +349,17 @@
     user-select: none;
   }
 
-  .img-count {
-    left: initial;
-    right: 1px;
-  }
-
   .time-progress :global(svg) {
     pointer-events: none;
+  }
+
+  .time-progress > span {
+    margin: 0 15px;
   }
 
   .btn-play :global(svg) {
     top: 3px;
     cursor: pointer;
-  }
-
-  #next {
-    margin: 0 20px;
   }
 
   .m-loading {
@@ -336,6 +384,15 @@
     transition: all 0.3s;
   }
 
+  .img-selector {
+    height: 99%;
+  }
+
+  .img-selector .input {
+    text-align: center;
+    height: 92%;
+  }
+
   @keyframes rotate {
     100% {
       transform: rotate(360deg);
@@ -347,5 +404,51 @@
   }
   .m-loading.show-loading {
     display: inline-block;
+  }
+
+  @media screen and (max-width: 700px) {
+    .viewer .manga-container {
+      height: calc(100% - 70px);
+    }
+    .btn-play :global(svg) {
+      width: 32px;
+      height: 30px;
+    }
+    .files-count {
+      top: 5px;
+    }
+    .time-progress span {
+      height: 30px;
+    }
+  }
+
+  @media screen and (min-width: 700px) {
+    .viewer.isFullScreen img {
+      width: 100%;
+    }
+  }
+
+  @media screen and (min-width: 1000px) {
+    .viewer.isFullScreen img {
+      width: 70%;
+    }
+  }
+
+  @media screen and (min-width: 1200px) {
+    .viewer.isFullScreen img {
+      width: 65%;
+    }
+  }
+
+  @media screen and (min-width: 1500px) {
+    .viewer.isFullScreen img {
+      width: 55%;
+    }
+  }
+
+  @media screen and (min-width: 1700px) {
+    .viewer.isFullScreen img {
+      width: 50%;
+    }
   }
 </style>
