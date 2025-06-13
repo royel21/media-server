@@ -32,7 +32,6 @@
 
   $: current = items?.findIndex((f) => f.Id === item.Id);
   $: src = item?.Path ? `/api/admin/files/image/${encodeURIComponent(item.Path)}` : "";
-  $: console.log("load image", src);
 </script>
 
 {#if item?.Path !== undefined}

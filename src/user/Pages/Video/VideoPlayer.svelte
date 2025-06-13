@@ -170,7 +170,6 @@
   }
   $: if (file.Id) {
     lastPos = file.CurrentPos;
-    console.log("file-changed", lastPos);
   }
 </script>
 
