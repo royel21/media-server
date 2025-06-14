@@ -3,11 +3,10 @@
   import apiUtils from "src/apiUtils";
   import Filter from "src/ShareComponent/Filter.svelte";
   import Icons from "src/icons/Icons.svelte";
-  import Modal from "./Modal.svelte";
+  import Modal from "./ModalServerConfig.svelte";
   import ModalLink from "./ModalLink.svelte";
   import RenameModal from "./RenameModal.svelte";
   import ExcludeChapModal from "./ExcludeChapModal.svelte";
-  import ModalServerList from "./ModalServerList.svelte";
   import LinkTable from "./LinkTable.svelte";
   import LinkPager from "./LinkPager.svelte";
 
@@ -16,7 +15,6 @@
   let showLinkModal = false;
   let showRenamer = false;
   let showExcludeChapModal;
-  let showServerList = false;
   let isMounted = true;
 
   const socket = getContext("socket");
@@ -65,11 +63,6 @@
     datas.links = [...datas.links];
   };
 
-  const onHideServerList = async (reload) => {
-    if (reload) await loadItems();
-    showServerList = false;
-  };
-
   const onNewlink = (newLink) => {
     if (newLink) {
       loadItems();
@@ -116,10 +109,6 @@
 
 {#if showRenamer}
   <RenameModal hide={() => (showRenamer = false)} />
-{/if}
-
-{#if showServerList}
-  <ModalServerList hide={onHideServerList} />
 {/if}
 
 {#if showExcludeChapModal}

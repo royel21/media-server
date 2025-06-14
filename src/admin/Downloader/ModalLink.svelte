@@ -57,7 +57,7 @@
   });
 </script>
 
-<Dialog cancel={hide} confirm={submit} {errors}>
+<Dialog id="new-link" cancel={hide} confirm={submit} {errors}>
   <h4 slot="modal-header">New Link</h4>
   <svelte:fragment slot="modal-body">
     <TextAreaInput key="Name" file={link} onChange={handle} />
@@ -77,5 +77,8 @@
     position: absolute;
     left: 5px;
     padding: 0 6px;
+  }
+  :global(#new-link .check-box .input-label) {
+    min-width: 80px;
   }
 </style>

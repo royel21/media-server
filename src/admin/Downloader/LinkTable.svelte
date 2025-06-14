@@ -3,7 +3,7 @@
   import { excludeLink, updateLink } from "./utils";
   import { formatDate, nameFromurl } from "./utils";
   import ExcludeChapModal from "./ExcludeChapModal.svelte";
-  import Modal from "./Modal.svelte";
+  import Modal from "./ModalServerConfig.svelte";
   import RenameModal from "./RenameModal.svelte";
   import Icons from "src/icons/Icons.svelte";
 

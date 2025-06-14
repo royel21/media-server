@@ -6,7 +6,6 @@
   import { FilesStore, MangaRegex } from "../Store/FilesStore";
   import { setfullscreen } from "src/user/Pages/pagesUtils";
   import { map } from "../Utils";
-  import { isMobile } from "src/utils";
 
   const CLOSE = 88;
   const PREV_FILE = 37;
@@ -28,6 +27,8 @@
   let modalRef;
   let isFullScreen = false;
   let imgs = [];
+  let jumping = false;
+  let mangaDir = true;
 
   FilesStore.subscribe((data) => {
     if (MangaRegex.test(data.file.Name)) {
@@ -41,6 +42,8 @@
     file = {};
     files = [];
   };
+
+  const changeMangaDir = () => (mangaDir = !mangaDir);
 
   const getEmptyIndex = function (arr, from, count, dir) {
     let index = Math.max(0, from);
@@ -69,15 +72,9 @@
         if (imgs.length) {
           for (let entry of entries) {
             let img = entry.target;
-            if (entry.isIntersecting) {
-              const dir = currentImg > +img.id ? -1 : 1;
+            if (entry.isIntersecting && !jumping) {
               currentImg = +img.id;
-
-              let next = Math.max((currentImg + 3) * dir, 0);
-
-              const needLoad = !data.images[next] || !data.images[currentImg];
-
-              if (!isLoading && needLoad) loadImg();
+              if (!isLoading) loadImg();
             }
           }
         }
@@ -101,9 +98,11 @@
   const onSelectImg = ({ target }) => {
     target.value = currentImg + 1;
   };
-  const jumpTop = ({ target }) => {
-    const img = map(+target.value - 1, 0, data.total - 1);
+
+  const changePage = (val) => {
+    const img = map(val, 0, data.total - 1);
     if (imgs[img]) {
+      jumping = true;
       isLoading = true;
       imgs[img]?.scrollIntoViewIfNeeded();
       currentImg = img;
@@ -112,6 +111,8 @@
     }
   };
 
+  const jumpTop = ({ target }) => changePage(+target.value - 1);
+
   const onChangeFile = ({ target: { id } }) => {
     let next = id === "next" ? 1 : -1;
     changeFile(next);
@@ -119,12 +120,17 @@
 
   const onkeydown = ({ keyCode, ctrlKey }) => {
     if (keyCode === CLOSE) hide();
-    if (keyCode === NEXT_FILE) {
+    if (ctrlKey && keyCode === PREV_FILE) {
+      changeFile(-1);
+    }
+    if (ctrlKey && keyCode === NEXT_FILE) {
       changeFile(1);
     }
-
     if (keyCode === PREV_FILE) {
-      changeFile(-1);
+      changePage(currentImg - 1);
+    }
+    if (keyCode === NEXT_FILE) {
+      changePage(currentImg + 1);
     }
 
     if (keyCode === FULLSCREEN) {
@@ -143,7 +149,10 @@
     }
 
     if (d.last) {
-      isLoading = false;
+      setTimeout(() => {
+        jumping = false;
+        isLoading = false;
+      }, 100);
     }
   };
 
@@ -161,6 +170,7 @@
 
   const onDisconnect = () => {
     isLoading = false;
+    jumping = false;
   };
 
   onMount(() => {
@@ -192,7 +202,7 @@
   }
 </script>
 
-<div class="viewer" class:hidden={!files.length} class:isFullScreen>
+<div class="viewer" class:hidden={!files.length} class:isFullScreen class:webtoon={mangaDir}>
   <Dialog bind:ref={modalRef} cancel={hide} btnOk="" btnCancer="" keydown={onkeydown} canDrag={true}>
     <span slot="modal-header" class="f-name"><span>{file.Name}</span></span>
     <div class="manga-container" bind:this={container} tabindex="-1">
@@ -200,7 +210,6 @@
         <img
           class:empty-img={!data.images[i]}
           id={i}
-          style="object-fit: contain"
           src={data.images[i] ? "data:img/jpeg;base64, " + data.images[i] : ""}
           alt={`Loading... Image ${i + 1}`}
         />
@@ -214,29 +223,33 @@
       {#if files.length > 1}
         <span class="files-count">{`${current + 1}/${files.length}`}</span>
       {/if}
+      <span class="manga-dir btn-play" class:rotate={mangaDir} on:click={changeMangaDir}>
+        Read <Icons name="arrowupdown" box="0 0 320 512" />
+      </span>
       <span id="prev" class="btn-play" on:click={onChangeFile}>
-        <Icons name="arrowcircleleft" />
+        <Icons name="arrowcircleleft" box="0 0 512 512" />
       </span>
       <span class="img-selector btn-play">
         <input
           class="input"
           type="number"
-          min="0"
+          min="1"
           max={data.total}
           on:change={jumpTop}
           placeholder="{currentImg + 1}/{data.total}"
           on:focus={onSelectImg}
           on:blur={({ target }) => (target.value = "")}
+          on:keydown|stopPropagation
         />
       </span>
       <span id="next" class="btn-play" on:click={onChangeFile}>
-        <Icons name="arrowcircleright" />
+        <Icons name="arrowcircleright" box="0 0 512 512" />
       </span>
       <span class="btn-fullscreen btn-play" on:click={onFullScreen}>
-        <Icons name="expandarrow" />
+        <Icons name="expandarrow" box="0 0 512 512" />
       </span>
       <span class="close btn-play" on:click={() => hide()}>
-        <Icons name="timescircle" />
+        <Icons name="timescircle" box="0 0 512 512" />
       </span>
     </div>
   </Dialog>
@@ -244,13 +257,14 @@
 
 <style>
   .viewer :global(.modal) {
-    height: 560px;
-    width: 440px;
+    height: 640px;
+    width: 460px;
     max-width: 99%;
     max-height: 90%;
     background-color: black;
     overflow: hidden;
   }
+
   .viewer.isFullScreen :global(.modal) {
     border: none;
   }
@@ -281,16 +295,20 @@
   }
 
   .manga-container img {
-    height: auto;
     width: 100%;
-    max-height: initial;
+    min-height: 100%;
     pointer-events: none;
+    object-fit: fill;
+  }
+  .webtoon img {
+    object-fit: contain;
+    min-height: initial;
+    min-width: 100%;
   }
 
   .manga-container .empty-img {
     position: relative;
     color: black;
-    min-height: 100%;
   }
   .empty-img:before {
     display: inline-block;
@@ -364,6 +382,16 @@
     top: 3px;
     cursor: pointer;
   }
+  .close,
+  .btn-fullscreen {
+    position: absolute;
+  }
+  .btn-fullscreen {
+    right: 30px;
+  }
+  .close {
+    right: 0px;
+  }
 
   .m-loading {
     display: none;
@@ -395,6 +423,21 @@
     height: 92%;
   }
 
+  .manga-dir {
+    width: 62px;
+    line-height: 1.6;
+    cursor: pointer;
+    user-select: none;
+  }
+  .manga-dir :global(svg) {
+    height: 18px;
+    width: 15px;
+    margin-left: 2px;
+  }
+  .rotate :global(svg) {
+    transform: rotate(90deg);
+  }
+
   @keyframes rotate {
     100% {
       transform: rotate(360deg);
@@ -407,32 +450,38 @@
   .m-loading.show-loading {
     display: inline-block;
   }
+  @media screen and (max-width: 600px) {
+    .viewer :global(.modal) {
+      height: 490px;
+      width: 340px;
+    }
+    .close,
+    .btn-fullscreen {
+      margin: 0;
+    }
+  }
 
   @media screen and (max-width: 700px) {
-    .viewer :global(.modal) {
-      height: 450px;
-      width: 350px;
-    }
     .viewer .manga-container {
       height: calc(100% - 70px);
     }
+    .time-progress {
+      height: 36px;
+    }
     .time-progress .btn-play {
-      margin: 0 5px;
+      margin: 0 6.5px;
     }
     .btn-play :global(svg) {
-      width: 32px;
-      height: 30px;
+      width: 20px;
+      height: 20px;
     }
     .files-count {
       top: 5px;
     }
-    .btn-play {
-      height: 30px;
-    }
     .img-selector {
       height: 25px;
       position: relative;
-      top: 4px;
+      top: 0px;
     }
   }
 

@@ -6,7 +6,7 @@
   import LinkTable from "./LinkTable.svelte";
   import LinkPager from "./LinkPager.svelte";
   import apiUtils from "src/apiUtils";
-  import Modal from "./Modal.svelte";
+  import Modal from "./ModalServerConfig.svelte";
   import Confirm from "../Component/Confirm.svelte";
   import ModalLink from "./ModalLink.svelte";
   import { sortByName } from "src/ShareComponent/utils";

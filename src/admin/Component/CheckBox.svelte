@@ -13,7 +13,7 @@
   };
 </script>
 
-<div class={"input-control " + key}>
+<div class={"check-box input-control " + key}>
   <span class="input-label" on:click={onClick}>{label || key}</span>
   <label class="input">
     <Icons name={item[key] ? "check" : "times"} color="black" />
@@ -36,6 +36,8 @@
     cursor: pointer;
   }
   .input-label {
+    padding: 0 4px;
+    min-width: max-content;
     user-select: none;
     cursor: pointer;
   }

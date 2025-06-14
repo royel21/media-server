@@ -37,7 +37,7 @@
     on:change={onChange}
     on:blur={onChange}
     {disabled}
-    class:textwrap
+    class:textwrap={!textwrap}
   />
 </div>
 
@@ -64,7 +64,7 @@
     resize: vertical;
   }
 
-  textarea.textwrap {
+  .textwrap {
     white-space: nowrap;
   }
 </style>

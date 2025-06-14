@@ -242,4 +242,9 @@
   .server-link {
     margin-left: 5px;
   }
+  @media screen and (max-height: 810px) {
+    .detail {
+      padding-bottom: 15px;
+    }
+  }
 </style>

@@ -128,7 +128,9 @@ const downloadLinks = async (link, page) => {
       const progress = `${getProgress(count, data.length)}`;
       await downloadLink({ d, page, Server, folder, state, count: progress });
     } catch (error) {
-      await sendMessage({ text: `chapter ${Name} - ${d.name} navigation error`, error });
+      if (!state.stopped) {
+        await sendMessage({ text: `chapter ${Name} - ${d.name} navigation error`, error });
+      }
     }
   }
 
@@ -312,17 +314,17 @@ const removeDownloading = async (Id) => {
 };
 
 process.on("message", async ({ action, datas, remove, bypass, server }) => {
-  console.log("*************** Server ******************");
-  console.log(`Action: ${action} ~ checking-server: ${state.checkServer} ~ other-running: ${state.running}`);
   if (!state.running) {
     await delay(500);
   }
   if (!state.browser && !["Exit", "Remove"].includes(action)) {
     try {
+      console.log("*************** Server ******************");
       state.stopped = false;
       state.browser = await startBrowser({ headless: false });
       sendMessage({ IsRunning: state.browser !== undefined }, "is-running");
     } catch (error) {
+      console.log("error trying to start browser");
       console.log(error);
     }
   }

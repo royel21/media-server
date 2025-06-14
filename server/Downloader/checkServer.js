@@ -165,7 +165,9 @@ export const downloadFromPage = async (Id, state) => {
                     updateFolder = true;
                   }
                 } catch (error) {
-                  sendMessage({ text: `chapter ${d.link.Name} - ${d.name} navigation error`, error });
+                  if (!state.stopped) {
+                    sendMessage({ text: `chapter ${d.link.Name} - ${d.name} navigation error`, error });
+                  }
                 }
               }
             }

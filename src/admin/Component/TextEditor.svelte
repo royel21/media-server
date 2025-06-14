@@ -8,7 +8,7 @@
   let errors = [];
   let item = {};
   let ref;
-  let textwrap = false;
+  let textwrap = localStorage.getItem("edit-wrap");
 
   FilesStore.subscribe(async ({ file }) => {
     if (TextRex.test(file.Name)) {
@@ -21,7 +21,11 @@
     }
   });
 
-  const onCheck = () => textwrap != textwrap;
+  const onCheck = () => {
+    textwrap = !textwrap;
+
+    console.log(textwrap);
+  };
 
   const hide = () => {
     FilesStore.set({ file: {} });
@@ -41,7 +45,7 @@
     ref.focus();
     document.execCommand("paste");
   };
-  $: console.log(textwrap);
+  $: localStorage.setItem("edit-wrap", textwrap);
 </script>
 
 {#if item.Text !== undefined}
@@ -49,7 +53,7 @@
     <h4 slot="modal-header">Text Editor</h4>
     <div class="text-content" slot="modal-body">
       <TextAreaInput bind:ref focus={true} key="Text" {item} paste={false} {textwrap}>
-        <span class="pre-paste" slot="btn-left" on:click={paste} title="Copy Name">
+        <span class="pre-paste" slot="btn-left" on:click={paste} title="Paste">
           <Icons name="paste" color="#045cba" />
         </span>
       </TextAreaInput>

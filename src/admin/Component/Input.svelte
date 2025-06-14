@@ -83,6 +83,7 @@
   }
   span {
     user-select: none;
+    padding: 0 0.25rem;
   }
   .clear {
     display: none;

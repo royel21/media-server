@@ -18,7 +18,7 @@ export default (sequelize, isSqlite) => {
         allowNull: false,
       },
       Name: {
-        type: "VARCHAR(255)" + (isSqlite ? " " : " COLLATE 'utf8mb4_unicode_ci'"),
+        type: "VARCHAR(255)" + (isSqlite ? " " : " COLLATE 'utf8mb4_bin'"),
       },
       Path: {
         type: VIRTUAL,
