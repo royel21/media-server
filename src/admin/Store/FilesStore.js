@@ -23,7 +23,7 @@ const setFiles = (data) => {
       files = data.files.filter((f) => ImageRegex.test(f.Path));
     }
   }
-  if (file?.Path) {
+  if (data.file?.Path) {
     FilesStore.update(() => {
       return { file: data.file || {}, files };
     });

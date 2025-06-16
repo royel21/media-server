@@ -11,7 +11,8 @@
   let textwrap = localStorage.getItem("edit-wrap");
 
   FilesStore.subscribe(async ({ file }) => {
-    if (file.Path || TextRex.test(file.Path)) {
+    if (TextRex.test(file.Path)) {
+      errors = [];
       const result = await apiUtils.admin(["files", "text-file", encodeURIComponent(file.Path)], "text-edit");
       if (result.error) {
         return (errors = [result.error]);
@@ -23,8 +24,6 @@
 
   const onCheck = () => {
     textwrap = !textwrap;
-
-    console.log(textwrap);
   };
 
   const hide = () => {
