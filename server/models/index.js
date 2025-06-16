@@ -38,27 +38,27 @@ config.storage = dbStorage;
 const sequelize = new Sequelize(dbName, dbUser, dbPassword, config);
 const db = {};
 
-(db.Op = Sequelize.Op),
-  (db.sqlze = sequelize),
-  (db.AppConfig = AppConfig(sequelize)),
-  (db.user = user(sequelize)),
-  (db.file = file(sequelize, db)),
-  (db.folder = folder(sequelize, db)),
-  (db.favorite = favorite(sequelize)),
-  (db.hotkey = hotkeys(sequelize)),
-  (db.sorttab = sortTab(sequelize)),
-  (db.directory = directory(sequelize)),
-  (db.favoriteFolder = favoriteFolder(sequelize)),
-  (db.recentFolder = recentFolder(sequelize)),
-  (db.recentFile = recentFile(sequelize)),
-  (db.eventLog = eventLog(sequelize)),
-  (db.Link = Links(sequelize)),
-  (db.Server = Servers(sequelize)),
-  (db.NameList = NameLists(sequelize)),
-  (db.Exclude = Excludes(sequelize)),
-  (db.DownloadingList = DownloadingList(sequelize)),
-  (db.Downloading = Downloading(sequelize)),
-  db.favorite.belongsToMany(db.folder, { through: { model: db.favoriteFolder } });
+db.Op = Sequelize.Op;
+db.sqlze = sequelize;
+db.AppConfig = AppConfig(sequelize);
+db.user = user(sequelize);
+db.file = file(sequelize, db);
+db.folder = folder(sequelize, db);
+db.favorite = favorite(sequelize);
+db.hotkey = hotkeys(sequelize);
+db.sorttab = sortTab(sequelize);
+db.directory = directory(sequelize);
+db.favoriteFolder = favoriteFolder(sequelize);
+db.recentFolder = recentFolder(sequelize);
+db.recentFile = recentFile(sequelize);
+db.eventLog = eventLog(sequelize);
+db.Link = Links(sequelize);
+db.Server = Servers(sequelize);
+db.NameList = NameLists(sequelize);
+db.Exclude = Excludes(sequelize);
+db.DownloadingList = DownloadingList(sequelize);
+db.Downloading = Downloading(sequelize);
+db.favorite.belongsToMany(db.folder, { through: { model: db.favoriteFolder } });
 
 db.folder.belongsToMany(db.favorite, {
   through: { model: db.favoriteFolder, onDelete: "cascade" },
@@ -116,9 +116,9 @@ db.init = async (force) => {
     let found = await db.AppConfig.findOne();
     if (!found) {
       const defFolders = {
-        AdultPath: path.join(os.homedir(), "Downloads/MediaServer"),
-        MangaPath: path.join(os.homedir(), "Downloads/MediaServer"),
-        CoverPath: path.join(os.homedir(), "Images/MediaServer"),
+        AdultPath: path.join(os.homedir(), "Downloads/mediaserver/R18"),
+        MangaPath: path.join(os.homedir(), "Downloads/mediaserver"),
+        CoverPath: path.join(os.homedir(), "images"),
       };
       const appConfig = await db.AppConfig.create({
         LoginTimeout: 5,
