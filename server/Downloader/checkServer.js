@@ -123,10 +123,6 @@ export const downloadFromPage = async (Id, state) => {
           include: ["Server"],
         };
 
-        // if (Url) {
-        //   query.where.Url = Url;
-        // }
-
         const link = await db.Link.findOne(query);
 
         if (link) {

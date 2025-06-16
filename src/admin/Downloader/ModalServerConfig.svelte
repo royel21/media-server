@@ -89,7 +89,7 @@
     }
     .server :global(.modal) {
       position: initial;
-      margin: 20px auto;
+      margin: 10px auto;
     }
   }
 </style>

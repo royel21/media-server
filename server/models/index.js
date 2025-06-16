@@ -22,6 +22,7 @@ import dbconfig from "./config.js";
 import { config as configEnv } from "dotenv";
 import defaultConfig from "../default-config.js";
 import { defHotkeys, defSortTabs } from "../defaultHotkeys.js";
+import AppConfig from "./AppConfig.js";
 configEnv();
 
 const { dbConnector, dbName, dbStorage, dbUser, dbPassword, dbHost } = defaultConfig;
@@ -35,6 +36,7 @@ const isSqlite = /sqlite/i.test(dbConnector);
 const db = {
   Op: Sequelize.Op,
   sqlze: sequelize,
+  AppConfig: AppConfig(sequelize),
   user: user(sequelize),
   file: file(sequelize, isSqlite),
   folder: folder(sequelize, isSqlite),
@@ -94,20 +96,29 @@ db.Link.belongsTo(db.Server, { foreignKey: "ServerId" });
 db.DownloadingList.hasMany(db.Downloading, { onDelete: "CASCADE" });
 db.Downloading.belongsTo(db.Link, { foreignKey: "LinkId", onDelete: "CASCADE" });
 
+const queries = [
+  "ALTER TABLE Users ADD LastLogin DATETIME DEFAULT CURRENT_TIMESTAMP;",
+  "ALTER TABLE Users ADD LoginCount INT(11) NULL DEFAULT '0';",
+];
+
 db.init = async (force) => {
-  try {
-    await db.sqlze.query("ALTER TABLE Hotkeys ADD Type INT(11) NULL DEFAULT '1';");
-  } catch (error) {}
+  for (const q of queries) {
+    try {
+      await db.sqlze.query(q);
+    } catch (error) {}
+  }
+
   await sequelize.sync({ force });
 
   try {
-    let admin = await db.user.findOne({ where: { Name: "Administrator" } });
+    let found = await db.AppConfig.findOne();
+    if (!found) {
+      await db.AppConfig.create({ LoginTimeout: 5 });
 
-    if (!admin) {
       await db.user.create(
         {
           Name: "Administrator",
-          Password: "Admin",
+          Password: defaultConfig.adminPass,
           Role: "Administrator",
           UserConfig: {
             Name: "Administrator",

@@ -78,6 +78,7 @@
         <th>Name</th>
         <th>Role</th>
         <th>State</th>
+        <th class="lo-count">Login Count</th>
         <th>Adult</th>
       </tr>
     </thead>
@@ -98,6 +99,7 @@
           <td>{user.Name}</td>
           <td>{user.Role}</td>
           <td>{user.State}</td>
+          <td class="lo-count">{user.LoginCount}</td>
           <td>{user.AdultPass ? "true" : "false"}</td>
         </tr>
       {/each}
@@ -150,6 +152,17 @@
     min-width: 120px;
     padding: 0.4rem 0.8rem;
     vertical-align: middle;
+    text-align: center;
+  }
+
+  .table td:last-child,
+  .table th:last-child {
+    text-align: center;
+  }
+
+  .lo-count {
+    min-width: 110px;
+    max-width: 110px;
     text-align: center;
   }
 </style>

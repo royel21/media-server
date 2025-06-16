@@ -2,7 +2,7 @@
   import Input from "./ShareComponent/Input.svelte";
   import Icons from "./icons/Icons2.svelte";
 
-  export let error = "";
+  export let errors = [];
   export let logIn;
   let uref;
   let pref;
@@ -18,12 +18,13 @@
       user.password = pref.value;
     }
 
-    if (!user.username) return (error = "User can't be empty");
-    if (!user.password) return (error = "Password can't be empty");
+    if (!user.username) return error.push((error = "User can't be empty"));
+    if (!user.password) return error.push((error = "Password can't be empty"));
     logIn(user);
   };
 
   document.title = "Media Server";
+  $: showPass, (errors = []);
 </script>
 
 <div id="login-container" class:more={showPass}>
@@ -54,7 +55,11 @@
       {/if}
     </div>
 
-    <div class="error">{error}</div>
+    <div class="errors">
+      {#each errors as error}
+        <div class="error">{error}</div>
+      {/each}
+    </div>
     <div class="form-footer">
       <button type="submit">Submit</button>
     </div>
@@ -82,12 +87,18 @@
     justify-content: center;
     align-items: center;
   }
+  .errors {
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0;
+  }
 
   .error {
     display: block;
-    margin: 10px 0;
-    color: firebrick;
-    font-weight: 600;
+    color: rgb(255, 48, 48);
+    font-weight: 700;
+    padding: 0;
+    text-align: left;
   }
 
   .error:empty {
@@ -106,9 +117,6 @@
     padding: 0 20px;
     color: white;
     text-align: center;
-  }
-  #login-container.more {
-    height: 312px;
   }
 
   .cp-label {
@@ -141,7 +149,7 @@
     margin: 15px;
   }
   .form-footer {
-    padding: 15px;
+    padding: 0px 0 10px 0;
   }
 
   button {

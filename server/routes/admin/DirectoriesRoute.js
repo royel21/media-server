@@ -104,25 +104,6 @@ routes.post("/update", async (req, res) => {
   res.send({ success, error });
 });
 
-routes.get("/backups", async (_, res) => {
-  let backups = [];
-  if (fs.existsSync(BACKUP_DIR)) {
-    backups = fs.readdirSync(BACKUP_DIR);
-  }
-
-  res.send(backups);
-});
-
-routes.post("/rm-backup", async ({ body }, res) => {
-  if (body.backup) {
-    const backup = path.join(BACKUP_DIR, body.backup);
-    if (fs.existsSync(backup)) {
-      fs.removeSync(backup);
-    }
-    res.send({ success: true });
-  }
-});
-
 routes.post("/get-dirs", (req, res) => {
   const { dir, next, back } = req.body;
 

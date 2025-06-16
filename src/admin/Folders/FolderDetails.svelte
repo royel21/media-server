@@ -172,11 +172,14 @@
     <TextAreaInput file={folder} key="Description" rows="4" {onChange} />
     <Input key="Author" item={folder} {onChange} sept=", " />
     <Input key="Server" item={folder} {onChange}>
-      <a href={folder.Server} slot="icon" class="server-link" target="_blank">
-        {#if folder.Server}
-          <Icons name="world" color="black" />
+      <span slot="icon" class="server-link">
+        Server
+        {#if /^http/.test(folder.Server)}
+          <a href={folder.Server} target="_blank">
+            <Icons name="world" color="black" />
+          </a>
         {/if}
-      </a>
+      </span>
     </Input>
     <Input label="Emission Date" type="date" key="EmissionDate" item={folder} {onChange} />
     <CheckBox label="Completed" key="Status" item={folder} {onChange} />
@@ -240,7 +243,14 @@
     left: 5px;
   }
   .server-link {
-    margin-left: 5px;
+    display: inline-block;
+    position: relative;
+    width: 100%;
+  }
+  .server-link a {
+    position: absolute;
+    top: -1px;
+    right: -4px;
   }
   @media screen and (max-height: 810px) {
     .detail {

@@ -28,7 +28,9 @@
 <input type="checkbox" name="show-config" id="show" bind:checked={show} />
 <div id="content" class:show on:click|stopPropagation|preventDefault>
   <div class="input-group">
-    <div class="input-group-prepend"><label for="img-fill" class="input-group-text">Ajust Image:</label></div>
+    <div class="input-group-prepend">
+      <label for="img-fill" class="input-group-text">Ajust Image</label>
+    </div>
     <select id="img-fill" name="image-fill" class="form-control" bind:value={config.Viewer.manga.imgAbjust}>
       <option value="fill">fill</option>
       <option value="cover">cover</option>
@@ -36,7 +38,9 @@
     </select>
   </div>
   <div class="input-group">
-    <div class="input-group-prepend"><label for="img-width" class="input-group-text">Width</label></div>
+    <div class="input-group-prepend">
+      <label for="img-width" class="input-group-text">Image Width</label>
+    </div>
     <input
       id="img-width"
       name="img-width"
@@ -84,13 +88,13 @@
     margin: 0;
   }
   #content * {
-    max-height: 32px;
+    height: 32px;
   }
   .input-group {
     margin-bottom: 5px;
   }
   label {
-    width: 110px;
+    width: 105px;
     position: relative;
   }
 </style>

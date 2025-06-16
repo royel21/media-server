@@ -1,7 +1,7 @@
 "use strict";
 import { compareSync, hashSync, genSaltSync } from "bcrypt";
 import { nanoid } from "nanoid";
-import { DataTypes } from "sequelize";
+import { DataTypes, INTEGER, literal } from "sequelize";
 
 export default (sequelize) => {
   const { STRING, DATE, BOOLEAN } = DataTypes;
@@ -38,6 +38,14 @@ export default (sequelize) => {
       },
       CreatedAt: {
         type: DATE,
+      },
+      LoginCount: {
+        type: INTEGER,
+        defaultValue: 0,
+      },
+      LastLogin: {
+        type: DATE,
+        defaultValue: literal("CURRENT_TIMESTAMP"),
       },
     },
     {

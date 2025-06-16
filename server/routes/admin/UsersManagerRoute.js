@@ -1,6 +1,7 @@
 import { Router } from "express";
 import db from "../../models/index.js";
 import { defHotkeys, defSortTabs } from "../../defaultHotkeys.js";
+import defaultConfig from "../../default-config.js";
 
 const routes = Router();
 
@@ -21,6 +22,9 @@ const getUser = async (req) => {
 };
 
 const createUser = async (req) => {
+  const config = await db.AppConfig.findOne();
+  const Password = req.body.Role === "Administrator" ? config.AdminPassword : config.UserPassword;
+
   let user = {
     ...req.body,
     Id: null,
@@ -28,10 +32,10 @@ const createUser = async (req) => {
     Favorites: [{ Name: "Default" }],
     SortTabs: defSortTabs,
     Hotkeys: defHotkeys,
+    Password,
   };
 
   try {
-    console.log(user);
     let newUser = await db.user.create(user, { encript: true, include: [db.favorite, db.hotkey, db.sorttab] });
 
     return {
@@ -67,6 +71,25 @@ const updateUser = async (req) => {
 routes.post("/create-update", async (req, res) => {
   const result = await (req.body.Id ? updateUser(req) : createUser(req));
   return res.send(result);
+});
+
+routes.post("/reset-pass", async (req, res) => {
+  const config = await db.AppConfig.findOne();
+  const isAdmin = req.user.Role;
+
+  if (!isAdmin) {
+    return { error: ["User Not Auothoried"] };
+  }
+
+  const user = await db.user.findOne({ where: { Id: req.body.Id } });
+  if (user) {
+    const { Role } = user.dataValues;
+
+    const Password = /Admin|Manager/i.test(Role) ? config.AdminPassword : config.UserPassword;
+    await user.update({ Id: req.body.Id, Password, LoginCount: 0 }, { encript: Password });
+  }
+
+  return res.send({ valid: true });
 });
 
 routes.post("/remove", async (req, res) => {

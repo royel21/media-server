@@ -73,6 +73,9 @@
   };
 
   const setFolderInfo = (data) => {
+    if (data.EmissionDate) {
+      data = { ...data, Year: data.EmissionDate.split("-")[0] };
+    }
     folderinfo = data;
   };
 
@@ -144,6 +147,11 @@
             <span class="d-state" class:completed={folderinfo?.Status}>
               {folderinfo?.Status ? "Completed" : "On Going"}
             </span>
+            {#if folderinfo?.Year}
+              <span class="d-state Year">
+                {folderinfo?.Year}
+              </span>
+            {/if}
           </span>
           <div id="info-names">
             <div class="manga-name">
@@ -341,9 +349,15 @@
     background-color: darkgreen;
     padding: 0 5px;
     border-radius: 0.25rem;
-    font-size: 10px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 700;
   }
+  #img-info .Year {
+    left: initial;
+    right: 5px;
+    background-color: #3072ec;
+  }
+
   #img-info .completed {
     background-color: red;
   }

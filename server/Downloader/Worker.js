@@ -67,7 +67,9 @@ const downloadLinks = async (link, page) => {
     await page.goto(link.Url, { waitUntil: "domcontentloaded" });
     await page.waitForSelector(Server.Chapters, { timeout: 60000 });
   } catch (error) {
-    await sendMessage({ text: `Could not open URL: ${link.Url}`, color: "red", error });
+    if (!state.stopped) {
+      await sendMessage({ text: `Could not open URL: ${link.Url}`, color: "red", error });
+    }
     return;
   }
 
@@ -128,9 +130,7 @@ const downloadLinks = async (link, page) => {
       const progress = `${getProgress(count, data.length)}`;
       await downloadLink({ d, page, Server, folder, state, count: progress });
     } catch (error) {
-      if (!state.stopped) {
-        await sendMessage({ text: `chapter ${Name} - ${d.name} navigation error`, error });
-      }
+      await sendMessage({ text: `chapter ${Name} - ${d.name} navigation error`, error });
     }
   }
 
@@ -313,25 +313,50 @@ const removeDownloading = async (Id) => {
   state.nhentais = state.nhentais.filter((ld) => !Id.includes(ld.Id));
 };
 
+let loadingBroser = false;
+
 process.on("message", async ({ action, datas, remove, bypass, server }) => {
-  if (!state.running) {
+  if (action === "Exit") {
+    state.stopped = true;
+  }
+
+  while (loadingBroser) {
     await delay(500);
   }
+
+  loadingBroser = true;
+
   if (!state.browser && !["Exit", "Remove"].includes(action)) {
-    try {
-      console.log("*************** Server ******************");
-      state.stopped = false;
-      state.browser = await startBrowser({ headless: false });
-      sendMessage({ IsRunning: state.browser !== undefined }, "is-running");
-    } catch (error) {
-      console.log("error trying to start browser");
-      console.log(error);
+    let tryCount = 2;
+    let err;
+    console.log(tryCount, !state.browser);
+    while (tryCount > 0 && !state.browser) {
+      try {
+        console.log("*************** Server ******************");
+        state.browser = await startBrowser({ headless: false });
+        sendMessage({ IsRunning: state.browser !== undefined }, "is-running");
+        break;
+      } catch (error) {
+        err = error;
+        console.log(err);
+      }
+      await delay(500);
+      tryCount--;
     }
+    if (!state.browser) {
+      console.log(err);
+      return console.log("error trying to start browser");
+    }
+  }
+
+  loadingBroser = false;
+
+  if (state.stopped) {
+    return;
   }
 
   switch (action) {
     case "Exit": {
-      state.stopped = true;
       await cleanUp();
       break;
     }
@@ -373,7 +398,7 @@ const errorToSkip =
   /frame|Parent frame|main frame|Target closed|Session closed|Page.addScriptToEvaluateOnNewDocument|TargetCloseError|Protocol error|navigation error/gi;
 
 process.on("uncaughtException", async (error) => {
-  if (!errorToSkip.test(error.toString())) {
+  if (!errorToSkip.test(error.toString()) && !state.stopped) {
     console.log(error.toString());
     await sendMessage({ text: "uncaughtException Process Stopped - Internal Error", color: "red" });
   }

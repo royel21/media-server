@@ -1,16 +1,17 @@
 <script>
-  import { onDestroy, onMount } from "svelte";
+  import { onMount } from "svelte";
   import { sortByName } from "src/ShareComponent/utils";
   import FileTypeIcon from "src/admin/Component/FileTypeIcon.svelte";
   import Filter from "src/ShareComponent/Filter.svelte";
   import Icons from "src/icons/Icons.svelte";
+  import VirtualList from "svelte-tiny-virtual-list";
 
   import CCheckbox from "src/admin/Component/CCheckbox.svelte";
   import Confirm from "src/admin/Component/Confirm.svelte";
   import MoveFileDialog from "./MoveFileDialog.svelte";
   import RenameModal from "../RenameModal.svelte";
 
-  import { updateConsole } from "../../Store/ConsoleStore";
+  import { showConsoleStore, updateConsole } from "../../Store/ConsoleStore";
   import { formatDate } from "../../Downloader/utils";
 
   import VideoControl from "./VideoControl.svelte";
@@ -42,6 +43,14 @@
   let bgWorking = false;
   let showConvertVideo;
   let showVideoSubTract;
+  let itemContainerRef;
+  let height = 0;
+
+  showConsoleStore.subscribe(() => {
+    setTimeout(() => {
+      height = itemContainerRef?.offsetHeight || 0;
+    }, 50);
+  });
 
   const onCheck = ({ target }) => {
     const id = target.closest("li").id;
@@ -178,22 +187,6 @@
 
   const onConnect = () => reload();
 
-  onMount(() => {
-    socket.on("connect", onConnect);
-    socket.on("files-info", onFileInfo);
-    socket.on("info", fileUpdate);
-    socket.on("bg-worker-state", onWorkState);
-
-    socket.emit("bg-work", { action: "bg-state" });
-  });
-
-  onDestroy(() => {
-    socket.off("connect", onConnect);
-    socket.off("bg-worker-state", onWorkState);
-    socket.off("info", fileUpdate);
-    socket.off("files-info", onFileInfo);
-  });
-
   const getSize = (list) => {
     let sum = 0;
     list.forEach((f) => (sum += f.Size));
@@ -242,6 +235,30 @@
     bgWorking = false;
   };
 
+  const getItemDate = ({ LastModified }) => {
+    return formatDate(new Date(LastModified));
+  };
+
+  const onResize = () => {
+    height = itemContainerRef.offsetHeight;
+  };
+
+  onMount(() => {
+    window.addEventListener("resize", onResize, { passive: true });
+    socket.on("connect", onConnect);
+    socket.on("files-info", onFileInfo);
+    socket.on("info", fileUpdate);
+    socket.on("bg-worker-state", onWorkState);
+    socket.emit("bg-work", { action: "bg-state" });
+    return () => {
+      window.removeEventListener("resize", onResize);
+      socket.off("connect", onConnect);
+      socket.off("bg-worker-state", onWorkState);
+      socket.off("info", fileUpdate);
+      socket.off("files-info", onFileInfo);
+    };
+  });
+
   $: isChecked = filtered.length && selectedList.length === filtered.length;
 
   $: {
@@ -253,7 +270,10 @@
     length = files.length;
   }
 
+  let virtual = true;
   $: list = selectedList.length ? selectedList : filtered;
+  $: height = itemContainerRef?.offsetHeight || 0;
+  $: props = { itemSize: 34, itemCount: filtered.length };
 </script>
 
 {#if showMoveDialog}
@@ -328,26 +348,48 @@
         {/if}
       </div>
     </div>
-    <ul>
-      {#each filtered as file}
-        <li id={file.Id} title={formatDate(new Date(file.LastModified))}>
-          <CCheckbox on:change={onCheck} isChecked={selectedList.find((f) => f.Id === file.Id)} />
-          <span on:click={onCheck}>
-            <FileTypeIcon {file} {files} fileColor="white" />
-            <span class="size">{getSize2(file)}</span>
-            <span>{file.Name}</span>
-          </span>
-          <div class="progress-bar" class:show-progress={file.progress}>
-            <div class="progress" style={`width: ${file.progress}%`}></div>
-            <span>{file.progress}%</span>
-          </div>
-        </li>
-      {/each}
-    </ul>
+    {#if virtual}
+      <div class="items" bind:this={itemContainerRef}>
+        <VirtualList {...props} {height}>
+          <li slot="item" let:index let:style {style} id={filtered[index].Id} title={getItemDate(filtered[index])}>
+            <CCheckbox on:change={onCheck} isChecked={selectedList.find((f) => f.Id === filtered[index].Id)} />
+            <span on:click={onCheck}>
+              <FileTypeIcon file={filtered[index]} {files} fileColor="white" />
+              <span class="size">{getSize2(filtered[index])}</span>
+              <span>{filtered[index].Name}</span>
+            </span>
+            <div class="progress-bar" class:show-progress={filtered[index].progress}>
+              <div class="progress" style={`width: ${filtered[index].progress}%`}></div>
+              <span>{filtered[index].progress}%</span>
+            </div>
+          </li>
+        </VirtualList>
+      </div>
+    {:else}
+      <ul>
+        {#each filtered as file}
+          <li id={file.Id} title={formatDate(new Date(file.LastModified))}>
+            <CCheckbox on:change={onCheck} isChecked={selectedList.find((f) => f.Id === file.Id)} />
+            <span on:click={onCheck}>
+              <FileTypeIcon {file} {files} fileColor="white" />
+              <span class="size">{getSize2(file)}</span>
+              <span>{file.Name}</span>
+            </span>
+            <div class="progress-bar" class:show-progress={file.progress}>
+              <div class="progress" style={`width: ${file.progress}%`}></div>
+              <span>{file.progress}%</span>
+            </div>
+          </li>
+        {/each}
+      </ul>
+    {/if}
   </div>
 </div>
 
 <style>
+  .items {
+    height: calc(100% - 78px);
+  }
   .col {
     position: relative;
     z-index: 110;

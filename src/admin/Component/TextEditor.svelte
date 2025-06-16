@@ -11,12 +11,12 @@
   let textwrap = localStorage.getItem("edit-wrap");
 
   FilesStore.subscribe(async ({ file }) => {
-    if (TextRex.test(file.Name)) {
+    if (file.Path || TextRex.test(file.Path)) {
       const result = await apiUtils.admin(["files", "text-file", encodeURIComponent(file.Path)], "text-edit");
       if (result.error) {
         return (errors = [result.error]);
       }
-      errors = [];
+      // errors = [];
       item = { ...file, Text: result.Text };
     }
   });
@@ -33,7 +33,7 @@
   };
 
   const save = async () => {
-    const result = await apiUtils.post("/admin/files/save-text", { ...item });
+    const result = await apiUtils.post("admin/files/save-text", { ...item });
     if (result.error) {
       return (errors = [result.error]);
     }
@@ -49,33 +49,37 @@
 </script>
 
 {#if item.Text !== undefined}
-  <Dialog id="text-edit" cancel={hide} confirm={save} {errors} canDrag={true} btnOk="Save" background={false}>
+  <Dialog id="text-edit" confirm={save} {errors} canDrag={true} background={false}>
     <h4 slot="modal-header">Text Editor</h4>
-    <div class="text-content" slot="modal-body">
+    <svelte:fragment slot="modal-body">
       <TextAreaInput bind:ref focus={true} key="Text" {item} paste={false} {textwrap}>
         <span class="pre-paste" slot="btn-left" on:click={paste} title="Paste">
           <Icons name="paste" color="#045cba" />
         </span>
       </TextAreaInput>
+    </svelte:fragment>
+    <div class="footer" slot="modal-footer">
       <label class="text-wrap" for="check" on:click={onCheck}>
         <CCheckbox isChecked={textwrap} /> Text Wrap
       </label>
+      <button class="btn" type="">Save</button>
+      <button class="btn" type="button" on:click={hide}>Cancel</button>
     </div>
   </Dialog>
 {/if}
 
 <style>
   :global(#text-edit) {
-    height: 450px;
+    height: initial;
     width: 560px;
     max-width: 99%;
   }
-  .text-content {
-    position: relative;
-    height: 100%;
+  :global(#text-edit .form) {
+    display: flex;
+    flex-direction: row;
   }
   :global(#text-edit .modal-body) {
-    height: calc(100% - 84px);
+    height: 300px;
     padding: 4px;
   }
   :global(#text-edit .input-control) {
@@ -91,6 +95,21 @@
   }
   .text-wrap {
     position: absolute;
-    bottom: -41px;
+    left: 5px;
+    bottom: 5px;
+    cursor: pointer;
+  }
+
+  .text-wrap > :global(label) {
+    right: 10px;
+  }
+  .footer {
+    position: relative;
+    text-align: center;
+    border-top: 1px solid;
+    padding: 5px 0;
+  }
+  .footer .btn {
+    margin: 0 5px;
   }
 </style>

@@ -10,7 +10,7 @@
   import Loading from "./ShareComponent/Loading.svelte";
 
   let user = { username: "" };
-  let error = "";
+  let errors = [];
   let loading = true;
 
   const getUrl = ({ role }) => `/${/admin/gi.test(role) ? "admin/" : ""}`;
@@ -24,19 +24,22 @@
   });
 
   const logIn = async (userData) => {
+    errors = [];
     try {
       const data = await apiUtils.post("users/login", userData);
-      if (data.isAutenticated) {
-        user = data;
-        navigate(getUrl(user));
-      }
 
       if (data.info) {
-        error = data.info.message;
+        errors = data.info.message;
+        return;
+      }
+
+      if (data.isAutenticated) {
+        user = data;
+        return navigate(getUrl(user));
       }
     } catch (err) {
       console.log(err);
-      error = `Server ${/Network Error/i.test(err.toString()) ? "offilne" : "error"}`;
+      errors.push(`Server ${/Network Error/i.test(err.toString()) ? "offilne" : "error"}`);
     }
   };
 </script>
@@ -53,7 +56,7 @@
   </ConfigPage>
 {:else}
   <div id="root">
-    <Login {logIn} {error} />
+    <Login {logIn} {errors} />
   </div>
 {/if}
 

@@ -10,7 +10,6 @@ const TextRex = new RegExp(textRegex2, "i");
 
 const setFiles = (data) => {
   let files = [];
-
   if (data.files?.length > 0) {
     if (videoRegex.test(data.file.Name)) {
       files = data.files.filter((f) => videoRegex.test(f.Path));
@@ -19,14 +18,16 @@ const setFiles = (data) => {
     if (MangaRegex.test(data.file.Name)) {
       files = data.files.filter((f) => MangaRegex.test(f.Path));
     }
+
     if (ImageRegex.test(data.file.Name)) {
       files = data.files.filter((f) => ImageRegex.test(f.Path));
     }
   }
-
-  FilesStore.update(() => {
-    return { file: data.file || {}, files };
-  });
+  if (file?.Path) {
+    FilesStore.update(() => {
+      return { file: data.file || {}, files };
+    });
+  }
 };
 
 export { FilesStore, setFiles, videoRegex, MangaRegex, TextRex, ImageRegex };

@@ -13,6 +13,7 @@
     if (!/http/.test(text)) {
       text = text
         .replace("’", "'")
+        .replace("–", "-")
         .replace(/:|\?|\"| Raw$/gi, "")
         .replace(/ (\[|\(|)official(\]|\)|)$/i, "")
         .trim();

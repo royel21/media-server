@@ -27,3 +27,51 @@ export const getProgress = (count, length) => {
   count = count.toString().padStart(padding, "0");
   return `${count}/${length}`;
 };
+
+const toLowerList = /^(For|No|It|Of|And|In|X|Du|Or|A|Wa|wo|na|to|ni|de|o|by)$/i;
+
+export const capitalize = (val, splitter = " ", Preserve = true) => {
+  let words = val.replace(/( )+/g, " ").split(splitter);
+
+  if (words.length > 1) {
+    for (let i = 0; i < words.length; i++) {
+      if (i == 0 && words[i].length === 1) {
+        words[i] = words[i].toUpperCase();
+        continue;
+      }
+
+      if (toLowerList.test(words[i])) {
+        words[i] = words[i].toLowerCase();
+        continue;
+      }
+
+      if (words[i].length > 1) {
+        let word = words[i];
+        //find first letter index
+        const index = word.split("").findIndex((c) => /[a-z]/i.test(c));
+        if (index > -1) {
+          words[i] = word.slice(0, index + 1).toUpperCase();
+          if (Preserve) {
+            words[i] += word.slice(index + 1);
+          } else {
+            words[i] += word.slice(index + 1).toLowerCase();
+          }
+        }
+      }
+    }
+  }
+
+  let result = words.join(splitter).trim();
+
+  const found = result.match(/(\.|:|,) [a-z] /gi);
+  if (found) {
+    result = result.replace(found[0], found[0].toUpperCase());
+  }
+
+  return result;
+};
+
+export const getElapseSec = (date) => {
+  const differenceInMilliseconds = new Date() - date;
+  return differenceInMilliseconds / 1000;
+};

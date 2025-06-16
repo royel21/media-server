@@ -2,7 +2,6 @@ import { Router } from "express";
 
 import passport from "passport";
 import db from "../models/index.js";
-import { defSortTabs, defHotkeys } from "../defaultHotkeys.js";
 
 const routes = Router();
 
@@ -19,14 +18,46 @@ const sendUser = async (res, user = { UserConfig: { dataValues: {} } }) => {
 };
 
 routes.post("/login", (req, res, next) => {
+  global.url = req.headers.host;
+
   return passport.authenticate("local", async (err, user, info) => {
     if (err) return next(err);
 
+    const config = await db.AppConfig.findOne();
+
     if (user) {
       const { newpassword } = req.body;
-      if (newpassword && /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/.test(newpassword)) {
-        user.update({ Password: newpassword }, { encript: newpassword });
+      if (newpassword) {
+        if (!/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/.test(newpassword)) {
+          return res.json({
+            isAutenticated: false,
+            info: {
+              message: [
+                "Password Must Have Upper Case",
+                "Password Must Have Lower Case",
+                "Password Must Have Symbol",
+                "Password Must Have Number",
+              ],
+            },
+          });
+        }
+        await user.update({ Password: newpassword }, { encript: newpassword });
+        await user.reload();
       }
+
+      if (user.validPassword(user.Role.includes("Admin") ? config.AdminPassword : config.UserPassword)) {
+        return res.json({
+          isAutenticated: false,
+          info: {
+            message: ["Please Change Default Password"],
+          },
+        });
+      }
+
+      user.LoginCount = 0;
+      user.LastLogin = new Date();
+      await user.save();
+
       req.logIn(user, (err) => {
         if (err) return next(err);
         return sendUser(res, user);

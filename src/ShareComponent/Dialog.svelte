@@ -90,7 +90,7 @@
     if (canDrag) {
       listeners.forEach((event) => document.addEventListener(event[0], event[1]));
     }
-    if (!footerRef.textContent.trim()) {
+    if (footerRef?.textContent === " ") {
       footerRef.textContent = "";
     }
     window.addEventListener("resize", onResize);

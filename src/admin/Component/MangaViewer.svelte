@@ -1,7 +1,7 @@
 <script>
   import Dialog from "src/ShareComponent/Dialog.svelte";
   import Icons from "src/icons/Icons.svelte";
-  import { getContext, onMount } from "svelte";
+  import { afterUpdate, getContext, onMount } from "svelte";
   import { getSecuences } from "./util";
   import { FilesStore, MangaRegex } from "../Store/FilesStore";
   import { setfullscreen } from "src/user/Pages/pagesUtils";
@@ -21,7 +21,6 @@
   let indices = [];
   let currentImg = 0;
   let container;
-  let pageObserver;
   let isLoading = false;
   let data = { total: 0, images: [] };
   let modalRef;
@@ -29,6 +28,13 @@
   let imgs = [];
   let jumping = false;
   let mangaDir = true;
+
+  let state = {
+    jumping: false,
+    mangaDir: false,
+    changingPage: false,
+    pageObserver: null,
+  };
 
   FilesStore.subscribe((data) => {
     if (MangaRegex.test(data.file.Name)) {
@@ -43,7 +49,70 @@
     files = [];
   };
 
-  const changeMangaDir = () => (mangaDir = !mangaDir);
+  let observerTimeOut;
+
+  const PageObserver = (scroll = false, time = 100) => {
+    if (mangaDir) {
+      state.pageObserver?.disconnect();
+      imgs = container.querySelectorAll("img");
+
+      if (scroll) {
+        imgs[currentImg]?.scrollIntoView();
+      }
+      clearTimeout(observerTimeOut);
+      observerTimeOut = setTimeout(() => {
+        state.pageObserver = new IntersectionObserver(
+          (entries) => {
+            if (state.changingPage) {
+              return (state.changingPage = false);
+            }
+
+            if (imgs.length) {
+              for (let entry of entries) {
+                if (entry.isIntersecting) {
+                  currentImg = +entry.target.id;
+                  if (!isLoading) loadImg();
+                }
+              }
+            }
+          },
+          { root: container, threshold: 0.01 }
+        );
+        imgs.forEach((lazyImg) => {
+          state.pageObserver.observe(lazyImg);
+        });
+      }, time);
+    }
+
+    return state.pageObserver;
+  };
+
+  const changePage = (val, dir) => {
+    if (val > -1 && val < data.total) {
+      currentImg = val;
+      isLoading = true;
+      if (mangaDir) {
+        state.changingPage = true;
+        PageObserver(true);
+      }
+      loadImg(1);
+    } else if (dir) {
+      changeFile(dir);
+    }
+  };
+
+  let changeDirTimeOut;
+  const changeMangaDir = () => {
+    mangaDir = !mangaDir;
+    if (mangaDir) {
+      clearTimeout(changeDirTimeOut);
+      changeDirTimeOut = setTimeout(() => {
+        PageObserver(true, 100);
+      }, 100);
+    } else {
+      state.pageObserver.disconnect();
+    }
+  };
 
   const getEmptyIndex = function (arr, from, count, dir) {
     let index = Math.max(0, from);
@@ -63,31 +132,6 @@
     socket.emit("loadzip-image", { ...file, indices: toLoad });
   };
 
-  const PageObserver = () => {
-    imgs = container.querySelectorAll("img");
-    pageObserver?.disconnect();
-
-    pageObserver = new IntersectionObserver(
-      (entries) => {
-        if (imgs.length) {
-          for (let entry of entries) {
-            let img = entry.target;
-            if (entry.isIntersecting && !jumping) {
-              currentImg = +img.id;
-              if (!isLoading) loadImg();
-            }
-          }
-        }
-      },
-      { root: container, threshold: 0.01 }
-    );
-    imgs.forEach((lazyImg) => {
-      pageObserver.observe(lazyImg);
-    });
-
-    return pageObserver;
-  };
-
   const changeFile = (next) => {
     const nextIndex = current + next;
     if (nextIndex > -1 && nextIndex < files.length) {
@@ -95,23 +139,14 @@
       current = nextIndex;
     }
   };
+
   const onSelectImg = ({ target }) => {
     target.value = currentImg + 1;
   };
 
-  const changePage = (val) => {
-    const img = map(val, 0, data.total - 1);
-    if (imgs[img]) {
-      jumping = true;
-      isLoading = true;
-      imgs[img]?.scrollIntoViewIfNeeded();
-      currentImg = img;
-      isLoading = false;
-      loadImg(1);
-    }
+  const jumpTop = ({ target }) => {
+    changePage(map(target.value - 1, 0, data.total - 1));
   };
-
-  const jumpTop = ({ target }) => changePage(+target.value - 1);
 
   const onChangeFile = ({ target: { id } }) => {
     let next = id === "next" ? 1 : -1;
@@ -127,10 +162,10 @@
       changeFile(1);
     }
     if (keyCode === PREV_FILE) {
-      changePage(currentImg - 1);
+      changePage(currentImg - 1, -1);
     }
     if (keyCode === NEXT_FILE) {
-      changePage(currentImg + 1);
+      changePage(currentImg + 1, 1);
     }
 
     if (keyCode === FULLSCREEN) {
@@ -157,15 +192,14 @@
   };
 
   const onFullScreen = () => {
-    pageObserver?.disconnect();
+    state.pageObserver?.disconnect();
     isLoading = true;
     isFullScreen = setfullscreen(modalRef);
     setTimeout(() => {
-      imgs[currentImg]?.scrollIntoViewIfNeeded();
-      PageObserver();
-      isLoading = false;
-      container.focus();
-    }, 200);
+      PageObserver(true);
+    }, 150);
+    isLoading = false;
+    container.focus();
   };
 
   const onDisconnect = () => {
@@ -185,6 +219,14 @@
     };
   });
 
+  afterUpdate(() => {
+    if (file) {
+      setTimeout(() => {
+        container?.focus();
+      }, 300);
+    }
+  });
+
   $: current = files.findIndex((f) => f.Id === file.Id);
 
   $: if (file.Id && data.Id !== file.Id) {
@@ -193,27 +235,31 @@
     isLoading = true;
     socket.emit("loadzip-image", { ...file, imageCount: true, indices: getSecuences(0, 5) });
     setTimeout(() => {
-      container?.focus();
-    }, 1000);
-  }
-
-  $: if (data.total) {
-    PageObserver();
+      PageObserver(true, 100);
+    }, 100);
   }
 </script>
 
-<div class="viewer" class:hidden={!files.length} class:isFullScreen class:webtoon={mangaDir}>
+<div class="viewer" class:hidden={!files.length} class:isFullScreen class:webtoon={!mangaDir}>
   <Dialog bind:ref={modalRef} cancel={hide} btnOk="" btnCancer="" keydown={onkeydown} canDrag={true}>
     <span slot="modal-header" class="f-name"><span>{file.Name}</span></span>
     <div class="manga-container" bind:this={container} tabindex="-1">
-      {#each Array(data.total).fill(null) as _, i}
+      {#if mangaDir}
+        {#each Array(data.total).fill(null) as _, i}
+          <img
+            class:empty-img={!data.images[i]}
+            id={i}
+            src={data.images[i] ? "data:img/jpeg;base64, " + data.images[i] : ""}
+            alt={`Loading... Image ${i + 1}`}
+          />
+        {/each}
+      {:else}
         <img
-          class:empty-img={!data.images[i]}
-          id={i}
-          src={data.images[i] ? "data:img/jpeg;base64, " + data.images[i] : ""}
-          alt={`Loading... Image ${i + 1}`}
+          class:empty-img={!data.images[currentImg]}
+          src={data.images[currentImg] ? "data:img/jpeg;base64, " + data.images[currentImg] : ""}
+          alt={`Loading... Image ${currentImg + 1}`}
         />
-      {/each}
+      {/if}
       <span class="m-loading" class:show-loading={isLoading}>
         <Icons name="sync" box="0 0 512 512" />
       </span>
@@ -223,7 +269,7 @@
       {#if files.length > 1}
         <span class="files-count">{`${current + 1}/${files.length}`}</span>
       {/if}
-      <span class="manga-dir btn-play" class:rotate={mangaDir} on:click={changeMangaDir}>
+      <span class="manga-dir btn-play" class:rotate={!mangaDir} on:click={changeMangaDir}>
         Read <Icons name="arrowupdown" box="0 0 320 512" />
       </span>
       <span id="prev" class="btn-play" on:click={onChangeFile}>
@@ -278,14 +324,13 @@
     height: 100%;
   }
   .viewer :global(.modal-body) {
-    height: 100%;
+    height: calc(100% - 33px);
   }
   .manga-container {
     position: relative;
-    height: calc(100% - 60px);
+    height: calc(100% - 28px);
     max-height: 100%;
     min-width: 100%;
-    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -294,19 +339,24 @@
     user-select: none;
   }
 
+  .webtoon .manga-container {
+    flex-direction: row;
+  }
+
   .manga-container img {
     width: 100%;
-    min-height: 100%;
     pointer-events: none;
     object-fit: fill;
   }
   .webtoon img {
-    object-fit: contain;
+    object-fit: fill;
     min-height: initial;
+    max-height: 100%;
     min-width: 100%;
   }
 
   .manga-container .empty-img {
+    min-height: 100%;
     position: relative;
     color: black;
   }
@@ -424,7 +474,7 @@
   }
 
   .manga-dir {
-    width: 62px;
+    width: 64px;
     line-height: 1.6;
     cursor: pointer;
     user-select: none;
@@ -463,21 +513,26 @@
 
   @media screen and (max-width: 700px) {
     .viewer .manga-container {
-      height: calc(100% - 70px);
+      height: calc(100% - 36px);
     }
+
     .time-progress {
       height: 36px;
     }
+
     .time-progress .btn-play {
-      margin: 0 6.5px;
+      margin: 0 5px;
     }
+
     .btn-play :global(svg) {
       width: 20px;
       height: 20px;
     }
+
     .files-count {
       top: 5px;
     }
+
     .img-selector {
       height: 25px;
       position: relative;

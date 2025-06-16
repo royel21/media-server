@@ -143,7 +143,7 @@
     canShow = tabRex.test(update);
   }
   $: showConsoleStore.set(canShow && $ConsoleStore.length && toggle);
-  $: props = { height: height - 8, width: "auto", itemSize: 25 };
+  $: props = { height: height - 10, width: "auto", itemSize: 25 };
   $: props2 = { itemCount: $ConsoleStore.length, scrollToIndex, stickyIndices: getStycky() };
 </script>
 
@@ -197,6 +197,7 @@
     padding: 2px;
     background-color: white;
     border-radius: 0.25rem;
+    padding-top: 5px;
   }
   .r-console::after {
     content: " ";

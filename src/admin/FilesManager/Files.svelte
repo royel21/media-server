@@ -18,6 +18,7 @@
   let totalItems = 0;
   let currentPage = page || 1;
   let items = [];
+  let files = [];
   let file = {};
   let showModal = false;
   let modalType = {};
@@ -25,7 +26,7 @@
   let isMounted = true;
 
   const mapFile = (f) => {
-    let Path = (f.Path += `${/^\//.test(f.Path) ? "/" : "\\"}${f.Name}`);
+    let Path = `${f.Path}${/^\//.test(f.Path) ? "/" : "\\"}${f.Name}`;
     return { ...f, Path };
   };
 
@@ -41,6 +42,7 @@
 
     if (data.files && isMounted) {
       items = data.files;
+      files = data.files.map(mapFile);
       totalPages = data.totalPages || 0;
       totalItems = data.totalItems || 0;
       currentPage = +pg;
@@ -150,7 +152,7 @@
               <td>
                 <span><Icons name="edit" /></span>
                 <span><Icons name="trash" /></span>
-                <FileTypeIcon {file} files={items} />
+                <FileTypeIcon file={mapFile(file)} {files} />
               </td>
               <td>{file.Name}</td>
               <td>{file.Path}</td>

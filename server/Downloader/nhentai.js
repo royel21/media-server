@@ -194,7 +194,9 @@ const download = async (link, page, server, state) => {
             i++;
           }
         } catch (error) {
-          console.log(error);
+          if (!state.stopped) {
+            console.log(error);
+          }
           newEX = formats[f];
           f++;
         }

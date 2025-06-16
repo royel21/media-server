@@ -2,13 +2,12 @@
   import { onMount } from "svelte";
   import Login from "../Login.svelte";
 
-  let error = "";
+  let errors = [];
 
   const getUrl = ({ role }) => `/${/admin/gi.test(role) ? "admin" : ""}`;
 
   const onError = (err) => {
-    console.log(err);
-    error = `Server ${/Network Error/i.test(err.toString()) ? "offline" : "error"}`;
+    errors = [`Server ${/Network Error/i.test(err.toString()) ? "offline" : "error"}`];
   };
 
   const logIn = async (userData) => {
@@ -24,7 +23,7 @@
       if (data.isAutenticated) {
         location.href = getUrl(data);
       } else {
-        error = data.info.message;
+        errors = data.info.message;
       }
     } catch (err) {
       onError(err);
@@ -42,5 +41,5 @@
 </script>
 
 <div id="root">
-  <Login {logIn} {error} />
+  <Login {logIn} {errors} />
 </div>

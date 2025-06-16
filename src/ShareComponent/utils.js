@@ -41,9 +41,15 @@ export const isValidKey = (e, k) => {
 
 export const validGenres = (g, tags) => {
   const regex = new RegExp(tags.join("|"), "ig");
-  const parts = g.match(regex) || [];
 
-  const gens = new Set([...parts, ...g.replace(regex, "").split(/,|\/|\n| /g)].sort());
+  const parts = g
+    .replace(/Genres:(\t|)/g, "")
+    .replace(regex, "")
+    .split(/,|\/|\n| /g);
+  const defTags = g.replace(/Genres\:/gi, "").match(regex) || [];
+
+  const gens = new Set([...defTags, ...parts].sort());
+
   return [...gens].filter((g) => g.trim()).join(", ");
 };
 
@@ -51,6 +57,7 @@ export const validateAuthor = (auth) => {
   if (auth === "N/A") return auth;
 
   auth = auth
+    .replace(/(Artists|Authors)\:|/gi, "")
     .split(/\/|,|;/)
     .map((a) => a.trim())
     .filter((a) => a)

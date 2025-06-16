@@ -77,7 +77,7 @@
   };
 
   const getServName = ({ Name }) => {
-    return Name.replace(/manga|manhua|manhwa|scan(s|)|toon/gi, "");
+    return Name.replace(/manga|manhua|manhwa|scan(s|)|toon|dex/gi, "");
   };
 
   const changePage = (e) => {

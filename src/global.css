@@ -191,6 +191,7 @@ input[type="text"]:not(:placeholder-shown) + span {
   text-align: center;
   line-height: 1.8;
   font-weight: bold;
+  padding: 0 0.2rem;
 }
 
 .nav-tabs {
