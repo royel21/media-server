@@ -13,11 +13,11 @@ export default (sequelize) => {
       AdminPassword: {
         type: STRING(20),
         allowNull: false,
-        defaultValue: "@Dmin123",
+        defaultValue: atob("QERtaW4xMjM="),
       },
       UserPassword: {
         type: STRING(20),
-        defaultValue: "@Ab12345",
+        defaultValue: atob("QEFiMTIzNDU="),
         allowNull: false,
       },
       LoginTimeout: {
@@ -27,6 +27,15 @@ export default (sequelize) => {
       LoginLockCount: {
         type: INTEGER,
         defaultValue: 3,
+      },
+      AdultPath: {
+        type: STRING,
+      },
+      MangaPath: {
+        type: STRING,
+      },
+      CoverPath: {
+        type: STRING,
       },
     },
     {

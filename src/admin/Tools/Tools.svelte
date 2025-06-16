@@ -2,19 +2,36 @@
   import apiUtils from "src/apiUtils";
   import { onMount, getContext } from "svelte";
   import Input from "../Component/Input.svelte";
+
   import { setMessage } from "../Store/MessageStore";
   import { formatDate } from "../Downloader/utils";
+  import ChoosePath from "./ChoosePath.svelte";
   const socket = getContext("socket");
   //clean-images
   let config = {};
   let defConfig = {};
   let errors = [];
+  let showChoosePath = false;
 
   const onUpdateServer = () => {
     socket.emit("update-server", {});
   };
   const rebuildAndReload = () => {
     socket.emit("update-server", { reload: true });
+  };
+
+  const hideChooser = () => {
+    showChoosePath = false;
+  };
+
+  const onShowChoosePath = ({ currentTarget }) => {
+    const key = currentTarget.id;
+    const label = currentTarget.querySelector(".input-label").textContent;
+    showChoosePath = {
+      key,
+      label,
+      hide: hideChooser,
+    };
   };
 
   const saveConfig = async () => {
@@ -60,22 +77,30 @@
   document.title = "Tools";
 </script>
 
+{#if showChoosePath}
+  <ChoosePath props={showChoosePath} bind:config />
+{/if}
+
 <div class="t-container">
   <div class="button-bar">
     <button class="btn" on:click={onUpdateServer}>Build App</button>
     <button class="btn" on:click={rebuildAndReload}>Reload Server</button>
   </div>
   <div class="app-content">
+    <h4>App Default Config</h4>
     <div class="app-config">
       <div class="ctl-title">
         <button class="btn btn2" on:click={onReset}>Reset</button>
         <button class="btn" on:click={saveConfig}>Save</button>
-        <span>App Default Config</span>
       </div>
       <Input label="Admin Def Password" key="AdminPassword" item={config} onChange={handler} />
       <Input label="User Def Password" key="UserPassword" item={config} onChange={handler} />
       <Input label="Time Out" key="LoginTimeout" item={config} onChange={handler} />
       <Input label="Lock Count" key="LoginLockCount" item={config} onChange={handler} />
+      <div class="input-control" id="CoverPath" on:click={onShowChoosePath}>
+        <span class="input-label">Cover Path</span>
+        <input class="input" value={config.CoverPath || "Click to Choose"} disabled />
+      </div>
       {#each errors as error}
         <div class="error">{error}</div>
       {/each}
@@ -84,6 +109,10 @@
 </div>
 
 <style>
+  h4 {
+    text-align: center;
+    margin-bottom: 5px;
+  }
   .t-container {
     height: calc(100% - 6px);
     overflow: hidden;
@@ -103,11 +132,11 @@
     border-bottom: 1px solid;
   }
   .app-content {
-    height: calc(100% - 55px);
+    height: calc(100% - 95px);
   }
   .app-config {
     text-align: center;
-    max-width: 600px;
+    max-width: 650px;
     margin: 0 auto;
     border: 1px solid white;
     border-radius: 0.25rem;
@@ -117,6 +146,10 @@
     overflow-y: auto;
   }
   .app-config :global(.input-label) {
-    width: 180px;
+    width: 130px;
+    text-align: right;
+  }
+  .input {
+    pointer-events: none;
   }
 </style>

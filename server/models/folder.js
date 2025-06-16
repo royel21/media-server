@@ -2,12 +2,12 @@ import fs from "fs-extra";
 import path from "path";
 import { nanoid } from "nanoid";
 import { DataTypes } from "sequelize";
-import defaultConfig from "../default-config.js";
-import { type } from "os";
 
-export default (sequelize, isSqlite) => {
-  const getFileType = ({ FilesType }) => (FilesType === "mangas" ? "Manga" : "Video");
-  const getCoverPath = (name, type) => path.join(defaultConfig.ImagesDir, "Folder", type, name + ".jpg");
+export default (sequelize, db) => {
+  const getCoverPath = async (name, type) => {
+    const appConfig = await db.appConfig.findOne();
+    return path.join(appConfig.CoverPath, "Folder", type, name + ".jpg");
+  };
 
   const { INTEGER, STRING, DATE, TEXT, BOOLEAN, VIRTUAL } = DataTypes;
   const Folder = sequelize.define(
@@ -27,10 +27,12 @@ export default (sequelize, isSqlite) => {
         type: STRING(10),
       },
       Name: {
-        type: STRING + (isSqlite ? " " : " COLLATE 'utf8mb4_unicode_ci'"),
+        type: STRING,
+        collate: "utf8mb4_unicode_ci",
       },
       AltName: {
-        type: TEXT + (isSqlite ? " " : " COLLATE 'utf8mb4_unicode_ci'"),
+        type: TEXT,
+        collate: "utf8mb4_unicode_ci",
       },
       Genres: {
         type: STRING(255),
@@ -69,11 +71,13 @@ export default (sequelize, isSqlite) => {
         defaultValue: 0,
       },
       Path: {
-        type: STRING + (isSqlite ? " " : " COLLATE 'utf8mb4_unicode_ci'"),
+        type: STRING,
+        collate: "utf8mb4_bin",
         unique: true,
       },
       Description: {
-        type: TEXT + (isSqlite ? " " : " COLLATE 'utf8mb4_unicode_ci'"),
+        type: TEXT,
+        collate: "utf8mb4_unicode_ci",
       },
       Status: {
         type: BOOLEAN,
@@ -111,6 +115,8 @@ export default (sequelize, isSqlite) => {
         beforeUpdate: async function (item, opt) {
           let { Path, Name } = item._previousDataValues;
           if (Name !== item.Name && fs.existsSync(Path)) {
+            const getFileType = ({ FilesType }) => (FilesType === "mangas" ? "Manga" : "Video");
+
             if (!opt.Transfer) {
               //rename folder
               fs.moveSync(Path, item.Path, { overwrite: true });
@@ -119,13 +125,13 @@ export default (sequelize, isSqlite) => {
             if (Name !== item.Name) {
               const type = item.FilesType;
 
-              let oldCover = getCoverPath(Name, type);
-              const Cover = getCoverPath(item.Name, type);
+              let oldCover = await getCoverPath(Name, type);
+              const Cover = await getCoverPath(item.Name, type);
               //rename cover name
               if (fs.existsSync(oldCover) && Cover !== oldCover) {
                 fs.moveSync(oldCover, Cover, { overwrite: true });
               }
-              const thumbsPath = `${defaultConfig.ImagesDir}/${getFileType(item)}/${opt.Name}`;
+              const thumbsPath = `${appConfig.CoverPath}/${getFileType(item)}/${opt.Name}`;
               if (fs.existsSync(thumbsPath)) {
                 const newthumbsPath = thumbsPath.replace(opt.Name, item.Name);
                 try {
@@ -139,13 +145,15 @@ export default (sequelize, isSqlite) => {
         },
         beforeDestroy: async function (item, opt) {
           if (opt.Del) {
-            let cPath = getCoverPath(item.Name, item.FilesType);
+            const appConfig = await db.appConfig.findOne();
+
+            let cPath = await getCoverPath(item.Name, item.FilesType);
 
             //Remove Cover from images
             if (fs.existsSync(cPath)) fs.removeSync(cPath);
 
             //Remove files Thumbnails from images folder
-            const imagesFolder = path.join(defaultConfig.ImagesDir, getFileType(item), item.Name);
+            const imagesFolder = path.join(appConfig.CoverPath, getFileType(item), item.Name);
             if (fs.existsSync(imagesFolder)) fs.removeSync(imagesFolder);
 
             //Remove folder from disk

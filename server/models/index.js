@@ -1,4 +1,6 @@
 import Sequelize from "sequelize";
+import os from "node:os";
+
 import user from "./user.js";
 import file from "./file.js";
 import folder from "./folder.js";
@@ -21,8 +23,10 @@ import Downloading from "./Downloading.js";
 import dbconfig from "./config.js";
 import { config as configEnv } from "dotenv";
 import defaultConfig from "../default-config.js";
-import { defHotkeys, defSortTabs } from "../defaultHotkeys.js";
 import AppConfig from "./AppConfig.js";
+import path from "node:path";
+import fs from "fs-extra";
+
 configEnv();
 
 const { dbConnector, dbName, dbStorage, dbUser, dbPassword, dbHost } = defaultConfig;
@@ -32,31 +36,29 @@ config.host = dbHost;
 config.storage = dbStorage;
 
 const sequelize = new Sequelize(dbName, dbUser, dbPassword, config);
-const isSqlite = /sqlite/i.test(dbConnector);
-const db = {
-  Op: Sequelize.Op,
-  sqlze: sequelize,
-  AppConfig: AppConfig(sequelize),
-  user: user(sequelize),
-  file: file(sequelize, isSqlite),
-  folder: folder(sequelize, isSqlite),
-  favorite: favorite(sequelize),
-  hotkey: hotkeys(sequelize),
-  sorttab: sortTab(sequelize),
-  directory: directory(sequelize),
-  favoriteFolder: favoriteFolder(sequelize),
-  recentFolder: recentFolder(sequelize),
-  recentFile: recentFile(sequelize),
-  eventLog: eventLog(sequelize),
-  Link: Links(sequelize, isSqlite),
-  Server: Servers(sequelize),
-  NameList: NameLists(sequelize),
-  Exclude: Excludes(sequelize),
-  DownloadingList: DownloadingList(sequelize),
-  Downloading: Downloading(sequelize),
-};
+const db = {};
 
-db.favorite.belongsToMany(db.folder, { through: { model: db.favoriteFolder } });
+(db.Op = Sequelize.Op),
+  (db.sqlze = sequelize),
+  (db.AppConfig = AppConfig(sequelize)),
+  (db.user = user(sequelize)),
+  (db.file = file(sequelize, db)),
+  (db.folder = folder(sequelize, db)),
+  (db.favorite = favorite(sequelize)),
+  (db.hotkey = hotkeys(sequelize)),
+  (db.sorttab = sortTab(sequelize)),
+  (db.directory = directory(sequelize)),
+  (db.favoriteFolder = favoriteFolder(sequelize)),
+  (db.recentFolder = recentFolder(sequelize)),
+  (db.recentFile = recentFile(sequelize)),
+  (db.eventLog = eventLog(sequelize)),
+  (db.Link = Links(sequelize)),
+  (db.Server = Servers(sequelize)),
+  (db.NameList = NameLists(sequelize)),
+  (db.Exclude = Excludes(sequelize)),
+  (db.DownloadingList = DownloadingList(sequelize)),
+  (db.Downloading = Downloading(sequelize)),
+  db.favorite.belongsToMany(db.folder, { through: { model: db.favoriteFolder } });
 
 db.folder.belongsToMany(db.favorite, {
   through: { model: db.favoriteFolder, onDelete: "cascade" },
@@ -97,8 +99,8 @@ db.DownloadingList.hasMany(db.Downloading, { onDelete: "CASCADE" });
 db.Downloading.belongsTo(db.Link, { foreignKey: "LinkId", onDelete: "CASCADE" });
 
 const queries = [
-  "ALTER TABLE Users ADD LastLogin DATETIME DEFAULT CURRENT_TIMESTAMP;",
-  "ALTER TABLE Users ADD LoginCount INT(11) NULL DEFAULT '0';",
+  "ALTER TABLE AppConfigs ADD AdultPath VARCHAR(255) NOT NULL DEFAULT '';",
+  "ALTER TABLE AppConfigs ADD MangaPath VARCHAR(255) NOT NULL DEFAULT '';",
 ];
 
 db.init = async (force) => {
@@ -113,12 +115,24 @@ db.init = async (force) => {
   try {
     let found = await db.AppConfig.findOne();
     if (!found) {
-      await db.AppConfig.create({ LoginTimeout: 5 });
+      const defFolders = {
+        AdultPath: path.join(os.homedir(), "Downloads/MediaServer"),
+        MangaPath: path.join(os.homedir(), "Downloads/MediaServer"),
+        CoverPath: path.join(os.homedir(), "Images/MediaServer"),
+      };
+      const appConfig = await db.AppConfig.create({
+        LoginTimeout: 5,
+        ...defFolders,
+      });
+
+      for (let folder of Object.keys(defFolders)) {
+        fs.mkdirpSync(folder);
+      }
 
       await db.user.create(
         {
           Name: "Administrator",
-          Password: defaultConfig.adminPass,
+          Password: appConfig.AdminPassword,
           Role: "Administrator",
           UserConfig: {
             Name: "Administrator",
@@ -151,8 +165,6 @@ db.init = async (force) => {
     console.log(error);
   }
 };
-
-await db.init();
 
 export const createdb = async () => {
   if (dbConnector === "mariadb") {

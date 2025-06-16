@@ -18,8 +18,8 @@
       user.password = pref.value;
     }
 
-    if (!user.username) return error.push((error = "User can't be empty"));
-    if (!user.password) return error.push((error = "Password can't be empty"));
+    if (!user.username) return error.push("User can't be empty");
+    if (!user.password) return error.push("Password can't be empty");
     logIn(user);
   };
 

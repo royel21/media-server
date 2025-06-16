@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 
-export default (sequelize, isSqlite) => {
+export default (sequelize) => {
   const { INTEGER, STRING } = DataTypes;
   return sequelize.define(
     "Excludes",
@@ -11,11 +11,13 @@ export default (sequelize, isSqlite) => {
         autoIncrement: true,
       },
       Name: {
-        type: STRING + (isSqlite ? " " : " COLLATE 'utf8mb4_unicode_ci'"),
+        type: STRING,
+        collate: "utf8mb4_unicode_ci",
         defaultValue: "",
       },
       LinkName: {
-        type: STRING + (isSqlite ? " " : " COLLATE 'utf8mb4_unicode_ci'"),
+        type: STRING,
+        collate: "utf8mb4_unicode_ci",
       },
     },
     {

@@ -1,4 +1,6 @@
+import { createDir } from "./Downloader/utils.js";
 import db from "./models/index.js";
+import path from "path";
 
 export const sendMessage = async (data, event = "info", log = true) => {
   if (data.msg || data.text || data.error) {
@@ -74,4 +76,11 @@ export const capitalize = (val, splitter = " ", Preserve = true) => {
 export const getElapseSec = (date) => {
   const differenceInMilliseconds = new Date() - date;
   return differenceInMilliseconds / 1000;
+};
+
+export const createDefaultImageDirs = (CoverPath) => {
+  createDir(path.join(CoverPath, "Folder", "videos"));
+  createDir(path.join(CoverPath, "Folder", "mangas"));
+  createDir(path.join(CoverPath, "Manga"));
+  createDir(path.join(CoverPath, "Video"));
 };

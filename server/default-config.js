@@ -22,8 +22,6 @@ const defaultConfig = {
   dbStorage: dbName + ".sqlite",
   dbUser: DB_USER || "root",
   dbPassword: atob(DB_PASSWORD.toString()) || "",
-  adminPass: atob(ADMIN_PASS.toString()) || "@A12345",
-  userPASS: atob(USER_PASS.toString()) || "123456",
   userTimeout: LOGIN_TIMEOUT_SEC || 5,
   dbHost: (USE_DEV ? DB_HOST : DEV_DB_HOST) || "localhost",
   DownloadDir: DOWNLOAD_DIR || path.join(os.homedir(), "rcstudio", "downloads"),
@@ -34,8 +32,6 @@ const defaultConfig = {
   sessionSecret: SESSION_SECRET || "1234-5678-9123",
   MAXLOGIN: +MAXLOGIN || 5,
 };
-
-console.log(defaultConfig.dbPassword);
 
 if (/mariadb/.test(CONNECTOR) && !DB_USER && !DB_PASSWORD) {
   throw "Can't use mariadb without DB_USER and DB_PASSWORD check sample-env.txt";

@@ -3,9 +3,10 @@ import { existsSync, mkdirSync, readdirSync } from "fs";
 import { getVideoThumnail, ZipCover } from "./ThumbnailUtils.js";
 import db from "../models/index.js";
 import { getFileType } from "../Downloader/utils.js";
-import defaultConfig from "../default-config.js";
 
 export const genFileThumbnails = async (folders, sendMessage) => {
+  const { CoverPath } = await db.AppConfig.findOne();
+
   let total = 0;
   let i = 0;
 
@@ -19,7 +20,7 @@ export const genFileThumbnails = async (folders, sendMessage) => {
     if (existsSync(folder.Path)) {
       let files = [];
 
-      const thumbPath = join(defaultConfig.ImagesDir, getFileType(folder), folder.Name);
+      const thumbPath = join(CoverPath, getFileType(folder), folder.Name);
 
       if (!existsSync(thumbPath)) {
         mkdirSync(thumbPath);
@@ -66,13 +67,13 @@ export const genFileThumbnails = async (folders, sendMessage) => {
 
 //Generate Thumbnail for folders
 export const genFolderThumbnails = async (folders) => {
-  for (let { filePath, CoverPath } of folders) {
+  for (let { filePath, coverPath } of folders) {
     try {
       if (existsSync(filePath)) {
         if (/zip/gi.test(filePath)) {
-          await ZipCover(filePath, CoverPath);
+          await ZipCover(filePath, coverPath);
         } else {
-          await getVideoThumnail(filePath, CoverPath);
+          await getVideoThumnail(filePath, coverPath);
         }
       }
     } catch (err) {

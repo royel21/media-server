@@ -10,13 +10,17 @@
     errors = [`Server ${/Network Error/i.test(err.toString()) ? "offline" : "error"}`];
   };
 
+  const headers = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
   const logIn = async (userData) => {
     try {
       const data = await fetch("/api/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        ...headers,
         body: JSON.stringify(userData),
       }).then((res) => res.json());
 

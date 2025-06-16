@@ -2,10 +2,12 @@ import path from "path";
 import fs from "fs-extra";
 import { nanoid } from "nanoid";
 import { DataTypes } from "sequelize";
-import defaultConfig from "../default-config.js";
 
-export default (sequelize, isSqlite) => {
-  const genImgPath = (type, fname, name) => `${defaultConfig.ImagesDir}/${type}/${fname}/${name}.jpg`;
+export default (sequelize, db) => {
+  const genImgPath = async (type, fname, name) => {
+    const appConfig = await db.AppConfig.findOne();
+    return path.join(appConfig.CoverPath, type, fname, name + ".jpg");
+  };
 
   const { BIGINT, STRING, DATE, FLOAT, VIRTUAL } = DataTypes;
   const File = sequelize.define(
@@ -18,7 +20,8 @@ export default (sequelize, isSqlite) => {
         allowNull: false,
       },
       Name: {
-        type: "VARCHAR(255)" + (isSqlite ? " " : " COLLATE 'utf8mb4_bin'"),
+        type: STRING,
+        collate: "utf8mb4_unicode_ci",
       },
       Path: {
         type: VIRTUAL,
@@ -91,8 +94,8 @@ export default (sequelize, isSqlite) => {
                 fs.moveSync(fromFile, toFile);
               }
 
-              const oldCover = genImgPath(item.Type, folder.Name, oldName);
-              const cover = genImgPath(item.Type, folder.Name, item.Name);
+              const oldCover = await genImgPath(item.Type, folder.Name, oldName);
+              const cover = await genImgPath(item.Type, folder.Name, item.Name);
               if (fs.existsSync(oldCover) && !fs.existsSync(cover)) {
                 fs.moveSync(oldCover, cover);
               }
@@ -111,7 +114,7 @@ export default (sequelize, isSqlite) => {
                   fs.removeSync(fPath);
                 }
                 //Delete Cover
-                const cover = genImgPath(item.Type, folder.Name, item.Name);
+                const cover = await genImgPath(item.Type, folder.Name, item.Name);
                 if (fs.existsSync(cover)) {
                   console.log("remove", cover);
                   fs.removeSync(cover);

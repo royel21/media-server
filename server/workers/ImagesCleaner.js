@@ -4,7 +4,6 @@ import { config } from "dotenv";
 
 config();
 import db from "../models/index.js";
-import defaultConfig from "../default-config.js";
 
 const types = {
   Manga: "mangas",
@@ -12,11 +11,11 @@ const types = {
 };
 
 const cleanImages = async () => {
-  let count = 0;
+  const { CoverPath } = await db.AppConfig.findOne();
   //Cleaning Folder Thumbnails
   await sendMessage({ text: `Cleaning Folder Thumbnails` });
   for (let dir of ["mangas", "videos"]) {
-    const imgDir = path.join(defaultConfig.ImagesDir, "Folder", dir);
+    const imgDir = path.join(CoverPath, "Folder", dir);
     const imgs = fs.readdirSync(imgDir);
     for (let img of imgs) {
       if ((await db.folder.findOne({ where: { Name: img.replace(".jpg", "") } })) === null) {
@@ -26,7 +25,7 @@ const cleanImages = async () => {
   }
 
   for (const Type of ["Manga", "Video"]) {
-    const imgDir = path.join(defaultConfig.ImagesDir, Type);
+    const imgDir = path.join(CoverPath, Type);
     const folders = fs.readdirSync(imgDir);
     for (const folder of folders) {
       const found = await db.folder.findOne({

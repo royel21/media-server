@@ -102,10 +102,20 @@ app.use((e, _, res, __) => {
 });
 
 const iniServer = async () => {
-  console.log("Create DB if Needed", defaultConfig.dbName);
-  await createdb();
-  console.log("Initialize db Tables");
-  await db.init();
+  try {
+    // await createdb();
+    console.log("Initialize database");
+    await db.init();
+  } catch (error) {
+    console.log(error);
+    if (/Unknown database/.test(error.toString())) {
+      console.log(`Database ${defaultConfig.dbNameg} no found or don't have access`);
+      console.log(`Please create dabase ${defaultConfig.dbNameg} and give access to the app`);
+    }
+    console.log("Server shutdown");
+    return process.exit();
+  }
+
   console.log("Initialize Server");
   websocketConfig(app.listen(defaultConfig.port, defaultConfig.host), sessionMeddle);
   console.log(`Server is running.. at http://${defaultConfig.host}:${defaultConfig.port}`);

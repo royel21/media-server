@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 
-export default (sequelize, isSqlite) => {
+export default (sequelize) => {
   const { INTEGER, STRING } = DataTypes;
   return sequelize.define("NameLists", {
     Id: {
@@ -9,12 +9,14 @@ export default (sequelize, isSqlite) => {
       autoIncrement: true,
     },
     Name: {
-      type: STRING + (isSqlite ? " " : " COLLATE 'utf8mb4_unicode_ci'"),
+      type: STRING,
       unique: true,
+      collate: "utf8mb4_unicode_ci",
       defaultValue: "",
     },
     AltName: {
-      type: STRING + (isSqlite ? " " : " COLLATE 'utf8mb4_unicode_ci'"),
+      type: STRING,
+      collate: "utf8mb4_unicode_ci",
       defaultValue: "",
     },
   });

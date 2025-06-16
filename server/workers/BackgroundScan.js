@@ -9,7 +9,6 @@ import path from "path";
 import WinDrive from "win-explorer";
 import db from "../models/index.js";
 import { createDir, getFileType } from "../Downloader/utils.js";
-import defaultConfig from "../default-config.js";
 
 let folders = [];
 
@@ -25,11 +24,14 @@ const ValidFiles = /\.(avi|avi2|mp4|mkv|ogg|webm|rar|zip)/i;
 const IMGTYPES = /\.(jpg|jpeg|png|gif|webp|jpe)$/i;
 
 let DirectoryId;
+let CoverPath;
 
-createDir(path.join(defaultConfig.ImagesDir, "Folder", "videos"));
-createDir(path.join(defaultConfig.ImagesDir, "Folder", "mangas"));
-createDir(path.join(defaultConfig.ImagesDir, "Manga"));
-createDir(path.join(defaultConfig.ImagesDir, "Video"));
+const createDefaultImageDirs = () => {
+  createDir(path.join(CoverPath, "Folder", "videos"));
+  createDir(path.join(CoverPath, "Folder", "mangas"));
+  createDir(path.join(CoverPath, "Manga"));
+  createDir(path.join(CoverPath, "Video"));
+};
 
 const sendMessage = (text, event = "info") => {
   console.log(text);
@@ -55,7 +57,6 @@ const rmOrphanFiles = async (folder) => {
 
     const files = folder.Files.filter((f) => !tfiles.includes(f.Name));
     if (files.length) {
-      console.log(folder.Name, files.length);
       for (const file of files) {
         try {
           console.log("Removing orphan file", file.Name);
@@ -70,7 +71,7 @@ const rmOrphanFiles = async (folder) => {
 
   folder.Files = folder.Files.filter((f) => !removed.includes(f.Id));
   const imgs = folder.Files.map((f) => f.Name + ".jpg");
-  const imageDir = path.join(defaultConfig.ImagesDir, getFileType(folder), folder.Name);
+  const imageDir = path.join(CoverPath, getFileType(folder), folder.Name);
 
   if (fs.existsSync(imageDir)) {
     const founds = fs.readdirSync(imageDir).filter((f) => /jpg/.test(f));
@@ -87,18 +88,18 @@ const foldersPendingCover = [];
 
 const createFolderThumbnail = async (folder, files, isFolder) => {
   try {
-    let CoverPath = path.join(defaultConfig.ImagesDir, "Folder", folder.FilesType, folder.Name + ".jpg");
+    let coverPath = path.join(CoverPath, "Folder", folder.FilesType, folder.Name + ".jpg");
 
-    if (!fs.existsSync(CoverPath) || isFolder) {
+    if (!fs.existsSync(coverPath) || isFolder) {
       let img = files.find((f) => IMGTYPES.test(f.Name));
       //if folder contain a image use as thumbnailError
       if (img) {
         let imgPath = path.join(folder.Path, img.Name);
-        await sharp(imgPath).jpeg().resize({ width: 340 }).toFile(CoverPath);
+        await sharp(imgPath).jpeg().resize({ width: 340 }).toFile(coverPath);
       } else {
         //else push to list of folder for later process of thumbnail from first file
         const filePath = path.join(folder.Path, files[0].Name);
-        foldersPendingCover.push({ CoverPath, filePath });
+        foldersPendingCover.push({ coverPath, filePath });
       }
     }
   } catch (error) {
@@ -214,6 +215,13 @@ const getFolders = async (id, isFolder) => {
 };
 
 const scanDirectory = async ({ id, dir, isFolder }) => {
+  const appConfig = await db.AppConfig.findOne();
+  CoverPath = appConfig.CoverPath;
+
+  if (fs.existsSync(path.join(appConfig.CoverPath, "Manga"))) {
+    createDefaultImageDirs(CoverPath);
+  }
+
   DirectoryId = id;
   try {
     if (fs.existsSync(dir)) {

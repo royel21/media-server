@@ -14,8 +14,6 @@ const getNewId = () => {
 
 const routes = Router();
 
-const { BACKUP_DIR } = process.env;
-
 routes.post("/remove", (req, res) => {
   let { Id } = req.body;
   db.directory
@@ -106,7 +104,6 @@ routes.post("/update", async (req, res) => {
 
 routes.post("/get-dirs", (req, res) => {
   const { dir, next, back } = req.body;
-
   let Path = dir || "";
 
   if (Path.includes("homedir")) {
@@ -115,7 +112,7 @@ routes.post("/get-dirs", (req, res) => {
 
   if (next && Path) Path = path.join(Path, next);
 
-  if (back && Path !== homeDir && !/(\/mnt|C:\\)$/i.test(Path)) {
+  if (back && (os.platform() === "win32" || !/(\/(mnt|media))$/i.test(Path))) {
     Path = path.dirname(Path);
   }
 
@@ -124,11 +121,22 @@ routes.post("/get-dirs", (req, res) => {
       .filter((d) => d.isDirectory)
       .map((d) => d.Name);
 
-    if (Path.includes(homeDir)) {
+    if (Path.includes(homeDir) && os.platform() === "linux") {
       Path = Path.replace(homeDir, "homedir");
     }
 
     return res.send({ dirs, Path });
+  }
+
+  return res.send({ Path, dirs: [] });
+});
+
+routes.post("/create-path", async (req, res) => {
+  let { Path, NewFolder } = req.body;
+
+  if (NewFolder) {
+    Path = path.join(Path, NewFolder);
+    fs.mkdirpSync(Path);
   }
 
   return res.send({ Path });

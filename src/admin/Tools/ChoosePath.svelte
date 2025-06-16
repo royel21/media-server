@@ -1,43 +1,45 @@
 <script>
-  import { onMount } from "svelte";
-  import TextAreaInput from "src/ShareComponent/TextAreaInput.svelte";
+  import { getContext, onMount } from "svelte";
   import Dialog from "src/ShareComponent/Dialog.svelte";
-  import Select from "src/ShareComponent/Select.svelte";
-  import Icons from "src/icons/Icons.svelte";
   import apiUtils from "src/apiUtils";
+  import Icons from "src/icons/Icons.svelte";
+  import Input from "../Component/Input.svelte";
+  import Select from "src/ShareComponent/Select.svelte";
+  import TextAreaInput from "src/ShareComponent/TextAreaInput.svelte";
 
-  import CheckBox from "../../Component/CheckBox.svelte";
-  import Input from "../../Component/Input.svelte";
+  export let props = {};
+  export let config;
 
-  export let hide;
-  export let files;
-  export let acept;
-  export let content;
-
-  let item = { Path: "/mnt/", overwrite: false };
+  const socket = getContext("socket");
   let errors = [];
   let dirs = [];
   let ditem = { Filter: "" };
   let filtered = [];
+  let content = [];
   const dDir = "dDir";
   const dPath = "dPath";
-
-  const onConfirm = () => {
+  let item = { Path: config[props.key] };
+  const onConfirm = async () => {
     errors = [];
     if (!item.Path) {
       return errors.push("Path can't be empty");
     }
 
-    if (!/homedir|^(\/|[d-z]\:\\)/i.test(item.Path)) {
-      return errors.push("Path must be a valid Path");
-    }
-
-    if (!/homedir|^\/(mnt|media)\/.*\/|^[d-z]\:\\|\/home\/.*\/|^c:\\Users\\.*\\/i.test(item.Path)) {
+    if (!/homedir|^\/(mnt|media)\/.*\/|^[c-z]\:\\|\/home\/.*\//i.test(item.Path)) {
       return errors.push("Path must be on User Space");
     }
 
-    loadDirs(item.Path, item.NewFolder);
-    return acept({ files, ...item });
+    if (item.NewFolder) {
+      if (item.NewFolder.match(/\:|\||\?|"|\*|\/|\\/)) {
+        errors.push("Folder Name Must not have those symbols");
+        return errors.push('/ \\ : | ? " *');
+      }
+      const result = await apiUtils.post("admin/directories/create-path", item);
+      item.Path = result.Path;
+    }
+
+    config[props.key] = item.Path;
+    return props.hide();
   };
 
   const loadDirs = async (dir, next, back) => {
@@ -47,6 +49,7 @@
       item.Path = result.Path;
       localStorage.setItem(dPath, result.Path);
       dirs = result.dirs;
+      ditem.Filter = "";
       onFilter();
     }
   };
@@ -71,6 +74,20 @@
     }
   };
 
+  const onDiskdata = (data) => {
+    content = data;
+    const start = item.Path?.match(/^(\/.*\/|[A-Z]+\:\\)/);
+    console.log(content);
+    if (start) {
+      const found = content.find((c) => c.Path.startsWith(start[0]));
+      ditem.Path = found.Path;
+    } else {
+      ditem.Path = content[0].Path;
+      item.Path = ditem.Path;
+    }
+    loadDirs(item.Path);
+  };
+
   const onFilter = (e) => {
     const value = e?.target.value || "";
     const regx = RegExp(value, "i");
@@ -78,20 +95,22 @@
   };
 
   onMount(() => {
-    ditem.Path = localStorage.getItem(dDir) || content[0].Path;
-    item.Path = localStorage.getItem(dPath) || ditem.Path;
-    loadDirs(item.Path);
+    socket.on("disk-loaded", onDiskdata);
+    socket.emit("load-disks");
+
+    return () => {
+      socket.off("disk-loaded", onDiskdata);
+    };
   });
 </script>
 
-<Dialog cancel={hide} confirm={onConfirm} {errors}>
-  <h4 slot="modal-header">Move <span>{files.length}</span> {files.length > 1 ? "Files" : "File"} to Path</h4>
+<Dialog id="def-folder" cancel={props.hide} confirm={onConfirm} {errors} btnOk="Acept">
+  <h4 slot="modal-header">Choose {props.label} Path</h4>
   <div class="dir-list" slot="modal-body">
-    <CheckBox label="Overwrite" key="overwrite" {item} />
     <Select item={ditem} label="Root" key="Path" options={content.map((d) => ({ ...d, Id: d.Path }))} {onChange} />
     <Input label="New Folder" key="NewFolder" {item} />
     <Input key="Filter" item={ditem} on:keydown={onKeydown} on:input={onFilter} onChange={onFilter} focus={true} />
-    <TextAreaInput focus={true} label="Path" key="Path" {item} disabled={true} paste={false}>
+    <TextAreaInput focus={true} label={props.label} key="Path" {item} disabled={true} paste={false}>
       <span class="pre-paste" slot="btn-left" on:click={goBack} title="Copy Name">
         <Icons name="reply" color="#045cba" />
       </span>
@@ -107,15 +126,16 @@
 </Dialog>
 
 <style>
+  :global(#def-folder .modal-body) {
+    padding: 4px;
+  }
+
   .folder-list {
-    height: 220px;
+    height: 135px;
     overflow-y: auto;
   }
   .dir-list :global(.input-label) {
     width: 135px;
-  }
-  h4 span {
-    color: firebrick;
   }
 
   ul {
