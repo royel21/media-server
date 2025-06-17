@@ -29,18 +29,12 @@ const defaultConfig = {
   ImagesDir: IMAGES_DIR || path.join(os.homedir(), "rcstudio", "images"),
   BackupDir: BACKUP_DIR || path.join(os.homedir(), "rcstudio", "backups"),
   sessionName: SESSION_NAME || "rcmediaserver",
-  sessionSecret: atob(SESSION_SECRET) || "2a91eb22-5c5d-edc8-8ff7",
+  sessionSecret: SESSION_SECRET || "2a91eb22-5c5d-edc8-8ff7",
   MAXLOGIN: +MAXLOGIN || 5,
 };
 
 if (/mariadb/.test(CONNECTOR) && !DB_USER && !DB_PASSWORD) {
   throw "Can't use mariadb without DB_USER and DB_PASSWORD check sample-env.txt";
-}
-
-for (const key of ["DownloadDir", "ImagesDir", "BackupDir"]) {
-  try {
-    createDir(defaultConfig[key]);
-  } catch (error) {}
 }
 
 export default defaultConfig;
