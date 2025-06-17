@@ -7,14 +7,6 @@ import { downloadLink } from "./link-downloader.js";
 import { getProgress } from "../utils.js";
 
 const evalServer = async (query) => {
-  const delay = (ms) => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  };
-  document.querySelector("#navigation-ajax")?.click();
-  await delay(10000);
-
   return [...document.querySelectorAll(query.HomeQuery)].map((e) => {
     const manga = e.querySelector(".post-title, .bigor-manga h3");
     const Url = e.querySelector(".post-title a")?.href;
@@ -111,7 +103,9 @@ export const downloadFromPage = async (Id, state) => {
       page.goto(`https:\\${Server.Name}`, { waitUntil: "domcontentloaded" });
       await page.waitForSelector(Server.HomeQuery);
 
-      await page.click("#navigation-ajax");
+      try {
+        await page.click("#navigation-ajax");
+      } catch (error) {}
 
       const data = await page.evaluate(evalServer, Server.dataValues);
 
