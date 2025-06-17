@@ -7,6 +7,10 @@ import { downloadLink } from "./link-downloader.js";
 import { getProgress } from "../utils.js";
 
 const evalServer = async (query) => {
+  try {
+    document.querySelector("#navigation-ajax")?.click();
+  } catch (error) {}
+
   return [...document.querySelectorAll(query.HomeQuery)].map((e) => {
     const manga = e.querySelector(".post-title, .bigor-manga h3");
     const Url = e.querySelector(".post-title a")?.href;

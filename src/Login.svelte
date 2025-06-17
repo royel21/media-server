@@ -181,9 +181,4 @@
   #login-container :global(.input-control > span) {
     height: 36px;
   }
-  @media screen and (max-width: 600px) {
-    #login-container {
-      width: calc(100% - 15px);
-    }
-  }
 </style>

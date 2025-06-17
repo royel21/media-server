@@ -96,6 +96,11 @@
 
   $: icon = icons[name];
   $: fill = color || "white";
+  let boxes = {
+    files: "0 0 384 512",
+    folder: "0 0 512 512",
+    hdd: "0 0 576 512",
+  };
 </script>
 
 <svg
@@ -104,7 +109,7 @@
   xmlns="http://www.w3.org/2000/svg"
   {height}
   {width}
-  viewBox={box}
+  viewBox={boxes[name] || box}
 >
   {@html icon}
 </svg>

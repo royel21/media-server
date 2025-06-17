@@ -88,8 +88,12 @@
     height: 24px;
   }
 
+  .tabs .disk-controls :global(.icon-files) {
+    width: 20px;
+  }
+
   .tabs .nav-link {
-    padding: 5px 10px;
+    padding: 5px 6px;
   }
 
   .tabs input[type="radio"] {
