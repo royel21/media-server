@@ -6,7 +6,7 @@ import { DataTypes } from "sequelize";
 export default (sequelize, db) => {
   const genImgPath = async (type, fname, name) => {
     const appConfig = await db.AppConfig.findOne();
-    return path.join(appConfig.CoverPath, type, fname, name + ".jpg");
+    return path.join(appConfig.ImagesPath, type, fname, name + ".jpg");
   };
 
   const { BIGINT, STRING, DATE, FLOAT, VIRTUAL } = DataTypes;

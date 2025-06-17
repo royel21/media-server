@@ -12,8 +12,8 @@ const evalServer = async (query) => {
       setTimeout(resolve, ms);
     });
   };
-  document.querySelector(".load-title")?.click();
-  await delay(1000);
+  document.querySelector("#navigation-ajax")?.click();
+  await delay(10000);
 
   return [...document.querySelectorAll(query.HomeQuery)].map((e) => {
     const manga = e.querySelector(".post-title, .bigor-manga h3");
@@ -110,6 +110,8 @@ export const downloadFromPage = async (Id, state) => {
 
       page.goto(`https:\\${Server.Name}`, { waitUntil: "domcontentloaded" });
       await page.waitForSelector(Server.HomeQuery);
+
+      await page.click("#navigation-ajax");
 
       const data = await page.evaluate(evalServer, Server.dataValues);
 

@@ -5,7 +5,7 @@ import db from "../models/index.js";
 import { getFileType } from "../Downloader/utils.js";
 
 export const genFileThumbnails = async (folders, sendMessage) => {
-  const { CoverPath } = await db.AppConfig.findOne();
+  const { ImagesPath } = await db.AppConfig.findOne();
 
   let total = 0;
   let i = 0;
@@ -20,7 +20,7 @@ export const genFileThumbnails = async (folders, sendMessage) => {
     if (existsSync(folder.Path)) {
       let files = [];
 
-      const thumbPath = join(CoverPath, getFileType(folder), folder.Name);
+      const thumbPath = join(ImagesPath, getFileType(folder), folder.Name);
 
       if (!existsSync(thumbPath)) {
         mkdirSync(thumbPath);

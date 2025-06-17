@@ -11,11 +11,11 @@ const types = {
 };
 
 const cleanImages = async () => {
-  const { CoverPath } = await db.AppConfig.findOne();
+  const { ImagesPath } = await db.AppConfig.findOne();
   //Cleaning Folder Thumbnails
   await sendMessage({ text: `Cleaning Folder Thumbnails` });
   for (let dir of ["mangas", "videos"]) {
-    const imgDir = path.join(CoverPath, "Folder", dir);
+    const imgDir = path.join(ImagesPath, "Folder", dir);
     const imgs = fs.readdirSync(imgDir);
     for (let img of imgs) {
       if ((await db.folder.findOne({ where: { Name: img.replace(".jpg", "") } })) === null) {
@@ -25,7 +25,7 @@ const cleanImages = async () => {
   }
 
   for (const Type of ["Manga", "Video"]) {
-    const imgDir = path.join(CoverPath, Type);
+    const imgDir = path.join(ImagesPath, Type);
     const folders = fs.readdirSync(imgDir);
     for (const folder of folders) {
       const found = await db.folder.findOne({

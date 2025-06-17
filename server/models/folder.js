@@ -2,10 +2,11 @@ import fs from "fs-extra";
 import path from "path";
 import { nanoid } from "nanoid";
 import { DataTypes } from "sequelize";
+import { getFileType } from "../Downloader/utils.js";
 
 export default (sequelize, db) => {
   const getCoverPath = async (name, type) => {
-    const appConfig = await db.appConfig.findOne();
+    const appConfig = await db.AppConfig.findOne();
     return path.join(appConfig.CoverPath, "Folder", type, name + ".jpg");
   };
 
@@ -131,7 +132,8 @@ export default (sequelize, db) => {
               if (fs.existsSync(oldCover) && Cover !== oldCover) {
                 fs.moveSync(oldCover, Cover, { overwrite: true });
               }
-              const thumbsPath = `${appConfig.CoverPath}/${getFileType(item)}/${opt.Name}`;
+              const thumbsPath = path.join(appConfig.CoverPath, getFileType(item), opt.Name);
+
               if (fs.existsSync(thumbsPath)) {
                 const newthumbsPath = thumbsPath.replace(opt.Name, item.Name);
                 try {
@@ -145,7 +147,7 @@ export default (sequelize, db) => {
         },
         beforeDestroy: async function (item, opt) {
           if (opt.Del) {
-            const appConfig = await db.appConfig.findOne();
+            const appConfig = await db.AppConfig.findOne();
 
             let cPath = await getCoverPath(item.Name, item.FilesType);
 

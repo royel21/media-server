@@ -25,7 +25,7 @@
       return errors.push("Path can't be empty");
     }
 
-    if (!/homedir|^\/(mnt|media)\/.*\/|^[c-z]\:\\|\/home\/.*\//i.test(item.Path)) {
+    if (!/^(\/(mnt|media)\/|homedir|[A-Z]+\:\\)/i.test(item.Path)) {
       return errors.push("Path must be on User Space");
     }
 
@@ -76,8 +76,9 @@
 
   const onDiskdata = (data) => {
     content = data;
-    const start = item.Path?.match(/^(\/.*\/|[A-Z]+\:\\)/);
-    console.log(content);
+
+    const start = item.Path?.match(/^(\/(mnt|media)\/|homedir|[A-Z]+\:\\)/);
+
     if (start) {
       const found = content.find((c) => c.Path.startsWith(start[0]));
       ditem.Path = found.Path;
@@ -85,6 +86,7 @@
       ditem.Path = content[0].Path;
       item.Path = ditem.Path;
     }
+
     loadDirs(item.Path);
   };
 
@@ -104,7 +106,7 @@
   });
 </script>
 
-<Dialog id="def-folder" cancel={props.hide} confirm={onConfirm} {errors} btnOk="Acept">
+<Dialog id="def-folder" cancel={props.hide} confirm={onConfirm} {errors} btnOk="Acept" canDrag={true}>
   <h4 slot="modal-header">Choose {props.label} Path</h4>
   <div class="dir-list" slot="modal-body">
     <Select item={ditem} label="Root" key="Path" options={content.map((d) => ({ ...d, Id: d.Path }))} {onChange} />

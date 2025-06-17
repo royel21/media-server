@@ -87,7 +87,7 @@ const downloadImg = async (url, page, name = "", isCover) => {
             if (!error.toString().includes("net::ERR_CONNECTION_CLOSED")) {
               break;
             } else {
-              sendMessage({ text: `${name} download-Image Error`, url, color: "red", error });
+              sendMessage({ text: `${name} download-Image Error`, url, color: "red", error: error.toString() });
             }
             await delay(2000);
           }
@@ -95,9 +95,10 @@ const downloadImg = async (url, page, name = "", isCover) => {
       }
     } catch (error) {
       console.log(url, error);
-      sendMessage({ text: `${name} download-Image Error`, url, color: "red", error });
+      sendMessage({ text: `${name} download-Image Error`, url, color: "red", error: error.toString() });
     }
 
+    await delay(100);
     if (buff?.length > 0 && !buff.includes("<html>")) {
       try {
         const img = await sharp(buff, { failOnError: false });
@@ -114,7 +115,7 @@ const downloadImg = async (url, page, name = "", isCover) => {
         return img;
       } catch (error) {
         console.log(error);
-        sendMessage({ text: `${name} ResizeImage-Error: ${url}`, color: "red", error, url });
+        sendMessage({ text: `${name} ResizeImage-Error: ${url}`, color: "red", error: error.toString(), url });
       }
     } else {
       sendMessage({ text: `${name} buffer-Error: ${url} - could't get the image`, url, color: "red" });

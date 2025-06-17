@@ -3,12 +3,15 @@ import { config } from "dotenv";
 
 config();
 
-import sharp from "sharp";
-import fs from "fs-extra";
+import os from "os";
 import path from "path";
+import fs from "fs-extra";
+import sharp from "sharp";
 import WinDrive from "win-explorer";
 import db from "../models/index.js";
-import { createDir, getFileType } from "../Downloader/utils.js";
+
+import { getFileType } from "../Downloader/utils.js";
+import { createDefaultImageDirs } from "../utils.js";
 
 let folders = [];
 
@@ -25,13 +28,6 @@ const IMGTYPES = /\.(jpg|jpeg|png|gif|webp|jpe)$/i;
 
 let DirectoryId;
 let CoverPath;
-
-const createDefaultImageDirs = () => {
-  createDir(path.join(CoverPath, "Folder", "videos"));
-  createDir(path.join(CoverPath, "Folder", "mangas"));
-  createDir(path.join(CoverPath, "Manga"));
-  createDir(path.join(CoverPath, "Video"));
-};
 
 const sendMessage = (text, event = "info") => {
   console.log(text);
@@ -216,9 +212,10 @@ const getFolders = async (id, isFolder) => {
 
 const scanDirectory = async ({ id, dir, isFolder }) => {
   const appConfig = await db.AppConfig.findOne();
-  CoverPath = appConfig.CoverPath;
 
-  if (fs.existsSync(path.join(appConfig.CoverPath, "Manga"))) {
+  CoverPath = appConfig.ImagesPath;
+
+  if (fs.existsSync(path.join(CoverPath, "Manga"))) {
     createDefaultImageDirs(CoverPath);
   }
 

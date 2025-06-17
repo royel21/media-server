@@ -24,7 +24,6 @@ import dbconfig from "./config.js";
 import { config as configEnv } from "dotenv";
 import defaultConfig from "../default-config.js";
 import AppConfig from "./AppConfig.js";
-import path from "node:path";
 import fs from "fs-extra";
 
 configEnv();
@@ -98,10 +97,7 @@ db.Link.belongsTo(db.Server, { foreignKey: "ServerId" });
 db.DownloadingList.hasMany(db.Downloading, { onDelete: "CASCADE" });
 db.Downloading.belongsTo(db.Link, { foreignKey: "LinkId", onDelete: "CASCADE" });
 
-const queries = [
-  "ALTER TABLE AppConfigs ADD AdultPath VARCHAR(255) NOT NULL DEFAULT '';",
-  "ALTER TABLE AppConfigs ADD MangaPath VARCHAR(255) NOT NULL DEFAULT '';",
-];
+const queries = [];
 
 db.init = async (force) => {
   for (const q of queries) {
@@ -114,19 +110,17 @@ db.init = async (force) => {
 
   try {
     let found = await db.AppConfig.findOne();
+
     if (!found) {
       const defFolders = {
-        AdultPath: path.join(os.homedir(), "Downloads/mediaserver/R18"),
-        MangaPath: path.join(os.homedir(), "Downloads/mediaserver"),
-        CoverPath: path.join(os.homedir(), "images"),
+        AdultPath: "homedir/Downloads/mediaserver/R18",
+        MangaPath: "homedir/Downloads/mediaserver",
+        CoverPath: "homedir/images",
       };
-      const appConfig = await db.AppConfig.create({
-        LoginTimeout: 5,
-        ...defFolders,
-      });
+      const appConfig = await db.AppConfig.create({ LoginTimeout: 5 });
 
       for (let folder of Object.keys(defFolders)) {
-        fs.mkdirpSync(folder);
+        fs.mkdirpSync(folder.replace("homedir", os.homedir()));
       }
 
       await db.user.create(
@@ -161,9 +155,7 @@ db.init = async (force) => {
         }
       );
     }
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const createdb = async () => {

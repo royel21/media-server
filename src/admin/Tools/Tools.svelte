@@ -36,7 +36,6 @@
 
   const saveConfig = async () => {
     errors = [];
-    console.log("save config", config);
     if (!config.AdminPassword) {
       errors.push("Admin Default Password can't be empty");
     }
@@ -100,6 +99,14 @@
       <div class="input-control" id="CoverPath" on:click={onShowChoosePath}>
         <span class="input-label">Cover Path</span>
         <input class="input" value={config.CoverPath || "Click to Choose"} disabled />
+      </div>
+      <div class="input-control" id="MangaPath" on:click={onShowChoosePath}>
+        <span class="input-label">Manga Path</span>
+        <input class="input" value={config.MangaPath || "Click to Choose"} disabled />
+      </div>
+      <div class="input-control" id="AdultPath" on:click={onShowChoosePath}>
+        <span class="input-label">Adult Path</span>
+        <input class="input" value={config.AdultPath || "Click to Choose"} disabled />
       </div>
       {#each errors as error}
         <div class="error">{error}</div>

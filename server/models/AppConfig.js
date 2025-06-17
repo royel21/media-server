@@ -1,8 +1,8 @@
+import os from "os";
 import { nanoid } from "nanoid";
-import { DataTypes, INTEGER } from "sequelize";
+import { INTEGER, STRING, VIRTUAL } from "sequelize";
 
 export default (sequelize) => {
-  const { STRING } = DataTypes;
   return sequelize.define(
     "AppConfigs",
     {
@@ -30,12 +30,42 @@ export default (sequelize) => {
       },
       AdultPath: {
         type: STRING,
+        defaultValue: "homedir/Downloads/mediaserver/R18",
+        get() {
+          const rawValue = this.getDataValue("AdultPath");
+          return rawValue.replace("homedir", os.homedir());
+        },
+        set(value) {
+          this.setDataValue("AdultPath", value.replace(os.homedir(), "homedir"));
+        },
       },
       MangaPath: {
         type: STRING,
+        defaultValue: "homedir/Downloads/mediaserver",
+        get() {
+          const rawValue = this.getDataValue("MangaPath");
+          return rawValue.replace("homedir", os.homedir());
+        },
+        set(value) {
+          this.setDataValue("MangaPath", value.replace(os.homedir(), "homedir"));
+        },
       },
       CoverPath: {
         type: STRING,
+        defaultValue: "homedir/images",
+        get() {
+          const rawValue = this.getDataValue("CoverPath");
+          return rawValue.replace("homedir", os.homedir());
+        },
+        set(value) {
+          this.setDataValue("CoverPath", value.replace(os.homedir(), "homedir"));
+        },
+      },
+      ImagesPath: {
+        type: VIRTUAL,
+        get() {
+          return CoverPath.replace(os.homedir(), "homedir");
+        },
       },
     },
     {

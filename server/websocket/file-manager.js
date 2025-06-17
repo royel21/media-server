@@ -40,7 +40,6 @@ const cleanImagesDir = () => {
     imageWorker = fork(appPath + "/workers/ImagesCleaner.js");
 
     io.sockets.emit("info", { text: "Start to clean folder please wait" });
-    console.log("info", "Start to clean folder please wait");
 
     imageWorker.on("message", (data) => {
       io.sockets.emit("info", data);

@@ -96,7 +96,7 @@ routes.post("/update", async (req, res) => {
       await dir.update(body);
     } catch (err) {
       error = `Path Can't be duplicate`;
-      console.log(error, body, err);
+      console.log(err);
     }
   }
   res.send({ success, error });
@@ -112,7 +112,9 @@ routes.post("/get-dirs", (req, res) => {
 
   if (next && Path) Path = path.join(Path, next);
 
-  if (back && (os.platform() === "win32" || !/(\/(mnt|media))$/i.test(Path))) {
+  if (back && os.platform() === "win32") {
+    Path = path.dirname(Path);
+  } else if (back && Path !== homeDir && !/(\/(mnt|media))$/i.test(Path)) {
     Path = path.dirname(Path);
   }
 
