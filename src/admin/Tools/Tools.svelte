@@ -88,29 +88,31 @@
   <div class="app-content">
     <h4>App Default Config</h4>
     <div class="app-config">
+      <div class="app-inputs">
+        <Input label="Admin Def Password" key="AdminPassword" item={config} onChange={handler} />
+        <Input label="User Def Password" key="UserPassword" item={config} onChange={handler} />
+        <Input label="Time Out" key="LoginTimeout" item={config} onChange={handler} />
+        <Input label="Lock Count" key="LoginLockCount" item={config} onChange={handler} />
+        <div class="input-control" id="CoverPath" on:click={onShowChoosePath}>
+          <span class="input-label">Cover Path</span>
+          <input class="input" value={config.CoverPath || "Click to Choose"} disabled />
+        </div>
+        <div class="input-control" id="MangaPath" on:click={onShowChoosePath}>
+          <span class="input-label">Manga Path</span>
+          <input class="input" value={config.MangaPath || "Click to Choose"} disabled />
+        </div>
+        <div class="input-control" id="AdultPath" on:click={onShowChoosePath}>
+          <span class="input-label">Adult Path</span>
+          <input class="input" value={config.AdultPath || "Click to Choose"} disabled />
+        </div>
+        {#each errors as error}
+          <div class="error">{error}</div>
+        {/each}
+      </div>
       <div class="ctl-title">
         <button class="btn btn2" on:click={onReset}>Reset</button>
         <button class="btn" on:click={saveConfig}>Save</button>
       </div>
-      <Input label="Admin Def Password" key="AdminPassword" item={config} onChange={handler} />
-      <Input label="User Def Password" key="UserPassword" item={config} onChange={handler} />
-      <Input label="Time Out" key="LoginTimeout" item={config} onChange={handler} />
-      <Input label="Lock Count" key="LoginLockCount" item={config} onChange={handler} />
-      <div class="input-control" id="CoverPath" on:click={onShowChoosePath}>
-        <span class="input-label">Cover Path</span>
-        <input class="input" value={config.CoverPath || "Click to Choose"} disabled />
-      </div>
-      <div class="input-control" id="MangaPath" on:click={onShowChoosePath}>
-        <span class="input-label">Manga Path</span>
-        <input class="input" value={config.MangaPath || "Click to Choose"} disabled />
-      </div>
-      <div class="input-control" id="AdultPath" on:click={onShowChoosePath}>
-        <span class="input-label">Adult Path</span>
-        <input class="input" value={config.AdultPath || "Click to Choose"} disabled />
-      </div>
-      {#each errors as error}
-        <div class="error">{error}</div>
-      {/each}
     </div>
   </div>
 </div>
@@ -141,6 +143,7 @@
   .app-content {
     height: calc(100% - 95px);
   }
+
   .app-config {
     text-align: center;
     max-width: 650px;
@@ -149,12 +152,20 @@
     border-radius: 0.25rem;
     padding: 5px;
     height: 100%;
+    overflow: hidden;
     padding-bottom: 15px;
+  }
+  .app-inputs {
+    height: calc(100% - 30px);
     overflow-y: auto;
   }
+
   .app-config :global(.input-label) {
     width: 130px;
     text-align: right;
+  }
+  .input-control {
+    cursor: pointer;
   }
   .input {
     pointer-events: none;

@@ -1,5 +1,7 @@
 import Sequelize from "sequelize";
 import os from "node:os";
+import path from "node:path";
+import fs from "fs-extra";
 
 import user from "./user.js";
 import file from "./file.js";
@@ -24,7 +26,6 @@ import dbconfig from "./config.js";
 import { config as configEnv } from "dotenv";
 import defaultConfig from "../default-config.js";
 import AppConfig from "./AppConfig.js";
-import fs from "fs-extra";
 
 configEnv();
 
@@ -113,47 +114,28 @@ db.init = async (force) => {
 
     if (!found) {
       const defFolders = {
-        AdultPath: "homedir/Downloads/mediaserver/R18",
-        MangaPath: "homedir/Downloads/mediaserver",
-        CoverPath: "homedir/images",
+        AdultPath: path.join(os.homedir(), "Downloads", "mediaserver"),
+        MangaPath: path.join(os.homedir(), "Downloads", "mediaserver"),
+        CoverPath: path.join(os.homedir(), "images"),
       };
+
       const appConfig = await db.AppConfig.create({ LoginTimeout: 5 });
 
       for (let folder of Object.keys(defFolders)) {
-        fs.mkdirpSync(folder.replace("homedir", os.homedir()));
+        fs.mkdirpSync(folder);
       }
-
-      await db.user.create(
-        {
-          Name: "Administrator",
-          Password: appConfig.AdminPassword,
-          Role: "Administrator",
-          UserConfig: {
+      const admin = await db.user.findOne({ where: { Name: "Administrator" } });
+      if (!admin) {
+        await db.user.create(
+          {
             Name: "Administrator",
-            Config: JSON.stringify({
-              order: "nu",
-              items: 0,
-              recentFolders: [],
-              video: {
-                KeysMap: {},
-                volume: 0.3,
-                pause: true,
-                mute: false,
-              },
-              manga: {
-                KeysMap: {},
-                scaleX: 0.6,
-                scaleY: 1,
-                aniDuration: 300,
-              },
-            }),
+            Password: appConfig.AdminPassword,
+            Role: "Administrator",
+            AdultPass: 1,
           },
-        },
-        {
-          include: [db.favorite],
-          encript: true,
-        }
-      );
+          { encript: true }
+        );
+      }
     }
   } catch (error) {}
 };

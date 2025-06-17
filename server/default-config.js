@@ -6,7 +6,7 @@ import { config } from "dotenv";
 config();
 
 const { DOWNLOAD_DIR, DOWNLOAD_DIR2, IMAGES_DIR, BACKUP_DIR, LOGIN_TIMEOUT_SEC } = process.env;
-const { SESSION_NAME, SESSION_SECRET, MAXLOGIN, ADMIN_PASS, USER_PASS } = process.env;
+const { SESSION_NAME, SESSION_SECRET, MAXLOGIN } = process.env;
 const { DB_HOST, DEV_DB_HOST, DB_USER, DB_PASSWORD, USE_DEV, DB_NAME, CONNECTOR } = process.env;
 const dbName = DB_NAME || "mediaserverdb";
 
@@ -29,7 +29,7 @@ const defaultConfig = {
   ImagesDir: IMAGES_DIR || path.join(os.homedir(), "rcstudio", "images"),
   BackupDir: BACKUP_DIR || path.join(os.homedir(), "rcstudio", "backups"),
   sessionName: SESSION_NAME || "rcmediaserver",
-  sessionSecret: SESSION_SECRET || "1234-5678-9123",
+  sessionSecret: atob(SESSION_SECRET) || "2a91eb22-5c5d-edc8-8ff7",
   MAXLOGIN: +MAXLOGIN || 5,
 };
 

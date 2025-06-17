@@ -157,11 +157,11 @@ routes.get("/", async (req, res) => {
   const data = await db.directory.findAll({
     attributes: {
       include: [
-        [literal("(Select COUNT(Folders.Id) from Folders where DirectoryId = Directory.Id)"), "FolderCount"],
-        [literal("(Select SUM(FileCount) from Folders where DirectoryId = Directory.Id)"), "TotalFiles"],
+        [literal("IFNULL((Select COUNT(Folders.Id) from Folders where DirectoryId = Directory.Id), 0)"), "FolderCount"],
+        [literal("IFNULL((Select SUM(FileCount) from Folders where DirectoryId = Directory.Id), 0)"), "TotalFiles"],
       ],
     },
-    order: ["Type", "FullPath", "IsAdult"],
+    order: ["Type", "IsAdult", "FullPath"],
   });
 
   let dirs = data.map((d) => d.dataValues);

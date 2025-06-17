@@ -95,7 +95,7 @@
 
   .error {
     display: block;
-    color: rgb(255, 48, 48);
+    color: rgb(231 83 83);
     font-weight: 700;
     padding: 0;
     text-align: left;

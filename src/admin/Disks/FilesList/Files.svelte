@@ -5,10 +5,10 @@
   import { onMount } from "svelte";
   import Pagination from "src/ShareComponent/Pagination.svelte";
   import ModalWatchList from "./ModalWatchList.svelte";
-  import { formatSize } from "../Component/util";
+  import { formatSize } from "../../Component/util";
   import RenameModal from "./RenameModal.svelte";
-  import { setMessage } from "../Store/MessageStore";
-  import FileTypeIcon from "../Component/FileTypeIcon.svelte";
+  import { setMessage } from "../../Store/MessageStore";
+  import FileTypeIcon from "../../Component/FileTypeIcon.svelte";
 
   let items = [];
   let filter = "";
@@ -144,7 +144,9 @@
   #tag-list {
     display: flex;
     flex-direction: column;
-    height: calc(100% - 10px);
+    height: 100%;
+    padding: 5px;
+    padding-bottom: 0px;
   }
 
   #tag-list .list-container {
@@ -152,6 +154,7 @@
     margin-bottom: 8px;
     flex-grow: 1;
     height: calc(100% - 80px);
+    width: 100%;
     overflow: hidden;
   }
 
@@ -207,7 +210,7 @@
   }
   #tag-list .bagde {
     margin-left: 5px;
-    padding: 5px;
+    padding: 3px;
     border-radius: 0.25rem;
     background-color: #2196f3;
   }

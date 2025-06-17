@@ -5,7 +5,7 @@
   import Icons from "src/icons/Icons.svelte";
   import Loading from "src/ShareComponent/Loading.svelte";
   import { setMessage } from "../Store/MessageStore";
-  import FileList from "./Files/FileList.svelte";
+  import FileList from "./FolderFiles/FileList.svelte";
   import TreeMenu from "./TreeMenu.svelte";
 
   const socket = getContext("socket");

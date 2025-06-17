@@ -226,7 +226,7 @@
     position: absolute;
     background: white;
     z-index: 99;
-    right: 20px;
+    right: 12px;
     top: 54px;
     padding: 2px;
     border-radius: 0.25rem;

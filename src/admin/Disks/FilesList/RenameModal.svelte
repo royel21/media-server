@@ -1,6 +1,6 @@
 <script>
-  import TextAreaInput from "../../ShareComponent/TextAreaInput.svelte";
-  import Dialog from "../../ShareComponent/Dialog.svelte";
+  import TextAreaInput from "../../../ShareComponent/TextAreaInput.svelte";
+  import Dialog from "../../../ShareComponent/Dialog.svelte";
   export let hide;
   export let acept;
   export let file = "";

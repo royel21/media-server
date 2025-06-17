@@ -111,7 +111,7 @@ export const downloadFromPage = async (Id, state) => {
 
       const linkData = [];
 
-      for (let { Name, chaps, Url } of data) {
+      for (let { Name, chaps } of data) {
         let tname = await db.NameList.findOne({ where: { Name: Name.replace(" Raw") } });
 
         const query = {
