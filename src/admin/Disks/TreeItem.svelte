@@ -102,9 +102,9 @@
   };
 
   const onFolderRemove = ({ error, msg, folder }) => {
-    if (findFile(folder.Id, msg, error)) {
-      items = items.filter((f) => f.Id !== folder.Id);
-      item = null;
+    if (item.Content?.find((f) => f.Id === folder.Id)) {
+      item.Content = item.Content.filter((f) => f.Id !== folder.Id);
+      items = items;
     }
   };
 
