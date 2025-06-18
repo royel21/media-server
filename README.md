@@ -23,12 +23,6 @@
 - SESSION_NAME=rcmediaserver **# name for express session**
 - SESSION_SECRET=rcmediaserver **# Secret for express session**
 
-### -> Directory config optional
-
-- DOWNLOAD_DIR=**\<user>/rcstudio/downloads**
-- IMAGES_DIR=**\<user>/rcstudio/images**
-- BACKUP_DIR=**\<user>/rcstudio/backups**
-
 ### -> database configuration optional
 
 - CONNECTOR=sqlite **# madiadb or sqlite**
