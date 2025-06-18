@@ -23,11 +23,11 @@
 - SESSION_NAME=rcmediaserver **# name for express session**
 - SESSION_SECRET=rcmediaserver **# Secret for express session**
 
-### -> database configuration optional
+### -> database configuration optional - database must be create and give access to user if connector is mariadb or mysql
 
 - CONNECTOR=sqlite **# madiadb or sqlite**
-- DB_NAME=mediaserverdb **# database name**
-- DB_HOST=localhost **# ip of the mariadb server**
+- DB_NAME=mediaserverdb **# default database name**
+- DB_HOST=localhost **# ip or url of the mariadb server**
 - DB_USER=root **# mariadb username**
 - DB_PASSWORD=root **# mariadb password**
 
