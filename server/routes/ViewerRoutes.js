@@ -57,7 +57,7 @@ export const streaming = (file, req, res) => {
       return res.status(404).send("Resource Not Found");
     }
 
-    const CHUNK_SIZE = 1024 * 1024;
+    const CHUNK_SIZE = 10 ** 6;
     const start = Number(range.replace(/\D/g, ""));
     const end = Math.min(start + CHUNK_SIZE, videoSize - 1);
     const contentLength = end - start + 1;
