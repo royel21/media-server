@@ -3,7 +3,7 @@ import userUpdate from "./user-update.js";
 import mloader from "./manga-loader.js";
 import { Server } from "socket.io";
 
-import db from "../models/index.js";
+import db from "#server/models/index";
 import { download } from "./downloader.js";
 import { exec } from "node:child_process";
 

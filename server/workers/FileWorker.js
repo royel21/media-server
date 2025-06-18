@@ -1,12 +1,12 @@
 import path from "path";
 import Sharp from "sharp";
-import db from "../models/index.js";
+import db from "#server/models/index";
 import { createFolder, removeFiles, renameFile, bulkRename, moveFiles, transferFiles } from "./fileHelpers.js";
 import { renameFolder, removeDFolder, workVideos } from "./videoHelper.js";
-import { createDir } from "../Downloader/utils.js";
-import defaultConfig from "../default-config.js";
+import { createDir } from "#server/Downloader/utils";
+import defaultConfig from "#server/default-config";
 import { dirScan } from "./FolderWatcher.js";
-import { sendMessage } from "../utils.js";
+import { sendMessage } from "#server/utils";
 
 const renameDBFolder = async (datas) => {
   const {

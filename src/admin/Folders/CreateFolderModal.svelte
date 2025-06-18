@@ -14,6 +14,7 @@
 
   let message = "";
   let tags = [];
+  let removeTags = [];
 
   const types = [
     { Id: "mangas", Name: "Mangas" },
@@ -35,7 +36,7 @@
     }
 
     if (file.Status) {
-      file.Genres = validGenres(file.Genres + ", Completed", tags);
+      file.Genres = validGenres(file.Genres + ", Completed", tags, removeTags);
     }
 
     const result = await apiUtils.post("admin/folders/folder-create", file);
@@ -56,14 +57,15 @@
 
   const onChange = ({ target: { name, value, checked, type } }) => {
     if (type === "checkbox") value = checked;
-    if (name === "Genres") value = validGenres(value, tags);
+    if (name === "Genres") value = validGenres(value, tags, removeTags);
     file[name] = value;
   };
 
   onMount(async () => {
     const data = await apiUtils.admin(["folders", "dirs"]);
     if (data.dirs) {
-      tags = data.tags || [];
+      tags = data.tags.filter((g) => !g.IsRemove).map((g) => g.Name);
+      removeTags = data.tags.filter((g) => g.IsRemove).map((g) => g.Name);
       options = [{ Name: "Select Directory" }, ...data.dirs.map((d) => ({ Id: d.Id, Name: d.FullPath }))];
     }
   });

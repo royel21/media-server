@@ -1,4 +1,4 @@
-import db from "../../models/index.js";
+import db from "#server/models/index";
 
 const getServers = async (req, res) => {
   const servers = await db.Server.findAll({ order: ["Name"] });

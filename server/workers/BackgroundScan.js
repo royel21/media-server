@@ -3,14 +3,13 @@ import { config } from "dotenv";
 
 config();
 
-import os from "os";
 import path from "path";
 import fs from "fs-extra";
 import sharp from "sharp";
 import WinDrive from "win-explorer";
-import db from "../models/index.js";
+import db from "#server/models/index";
 
-import { getFileType } from "../Downloader/utils.js";
+import { getFileType } from "#server/Downloader/utils";
 import { createDefaultImageDirs } from "../utils.js";
 
 let folders = [];

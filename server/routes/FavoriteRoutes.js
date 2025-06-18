@@ -1,5 +1,5 @@
 import { Router } from "express";
-import db from "../models/index.js";
+import db from "#server/models/index";
 
 import { getOrderBy } from "./query-helper.js";
 import { Op } from "sequelize";

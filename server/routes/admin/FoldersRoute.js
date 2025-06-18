@@ -1,16 +1,15 @@
-import { Router } from "express";
-import db from "../../models/index.js";
-import { getFilter, getFilter2 } from "../utils.js";
+import Sharp from "sharp";
 import fs from "fs-extra";
 import path from "node:path";
+import db from "#server/models/index";
+import defaultConfig from "#server/default-config";
+
+import { Router } from "express";
 import { Op, literal } from "sequelize";
-import Sharp from "sharp";
-import defaultConfig from "../../default-config.js";
-import { createDir } from "../../Downloader/utils.js";
+import { getFilter, getFilter2 } from "../utils.js";
+import { createDir } from "#server/Downloader/utils";
 
 const routes = Router();
-
-const tagsPath = "./server/data/tags.json";
 
 const getData = async (req, res) => {
   const { page, items, filter, folderId, dirId } = req.params;
@@ -60,10 +59,15 @@ const getData = async (req, res) => {
   });
 };
 
+const getTags = async () => {
+  const tags = await db.Genres.findAll({ order: ["Name"] });
+  return tags.map((g) => ({ ...g.dataValues }));
+};
+
 routes.get("/dirs", async (req, res) => {
   const dirs = await db.directory.findAll({ order: [literal(`LOWER(FullPath)`)] });
-  const tags = fs.readJSONSync(tagsPath);
-  res.send({ tags, dirs: [...dirs.map((d) => d.dataValues)] });
+
+  res.send({ tags: await getTags(), dirs: [...dirs.map((d) => d.dataValues)] });
 });
 
 routes.get("/folder-raw/:Id", async (req, res) => {
@@ -148,10 +152,6 @@ routes.get("/folder/:folderId?", async (req, res) => {
   if (fs.existsSync(folder.Path)) {
     files = fs.readdirSync(folder.Path).filter((f) => !/\.(webp|jpg|png|gif|jpeg)/.test(f));
   }
-  let tags = [];
-  if (fs.existsSync(tagsPath)) {
-    tags = fs.readJSONSync(tagsPath);
-  }
 
   res.send({
     Name: folder.Name,
@@ -168,7 +168,7 @@ routes.get("/folder/:folderId?", async (req, res) => {
     Last: files.length > 0 ? files[files.length - 1] : "N/A",
     Total: files.length > 0 ? files.length : 0,
     dirs,
-    tags,
+    tags: await getTags(),
   });
 });
 
@@ -198,21 +198,6 @@ routes.post("/cover", async (req, res) => {
 
       console.log(error);
     }
-  }
-});
-
-routes.get("/tags", async (req, res) => {
-  try {
-    return res.send(fs.readJSONSync(tagsPath));
-  } catch (error) {
-    console.log(error);
-  }
-  res.send([]);
-});
-routes.post("/tags", async (req, res) => {
-  const { tags } = req.body;
-  if (tags && tags.length > 0) {
-    fs.writeJSONSync(tagsPath, tags.sort());
   }
 });
 

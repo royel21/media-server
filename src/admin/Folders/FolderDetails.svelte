@@ -17,6 +17,7 @@
   const socket = getContext("socket");
   let old = {};
   let tags = [];
+  let removeTags = [];
   let folder = {};
   let options = [];
   let imageData = { Id: "", Url: "", file: "" };
@@ -42,7 +43,8 @@
       delete data.dirs;
       folder = { ...folder, ...data };
       old = { ...folder };
-      tags = data.tags;
+      tags = data.tags.filter((g) => !g.IsRemove).map((g) => g.Name);
+      removeTags = data.tags.filter((g) => g.IsRemove).map((g) => g.Name);
     }
     transfer = false;
     hasChanges = false;
@@ -54,7 +56,7 @@
     }
 
     if (name === "Genres") {
-      value = validGenres(value, tags);
+      value = validGenres(value, tags, removeTags);
     }
 
     if (name === "AltName") {

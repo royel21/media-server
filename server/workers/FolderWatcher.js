@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs-extra";
 import winex from "win-explorer";
-import { db } from "../watch-models/index.js";
+import { db } from "#server/watch-models/index";
 import { sendMessage } from "../utils.js";
 
 let fileTypes = ["mp4", "ogg", "zip", "mkv", "avi"];

@@ -3,7 +3,7 @@ import path from "path";
 import { config } from "dotenv";
 
 config();
-import db from "../models/index.js";
+import db from "#server/models/index";
 
 const types = {
   Manga: "mangas",

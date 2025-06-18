@@ -3,8 +3,8 @@ import fs from "fs-extra";
 import os from "os";
 
 import { Router } from "express";
-import db from "../../models/index.js";
-import { createDefaultImageDirs } from "../../utils.js";
+import db from "#server/models/index";
+import { createDefaultImageDirs } from "#server/utils";
 
 const routes = Router();
 const Names = ["Mangas", "Webtoons"];
@@ -32,9 +32,11 @@ routes.post("/save", async (req, res) => {
 
   if (data) {
     try {
-      createDefaultImageDirs(req.body.CoverPath.replace("homedir", os.homedir()));
-
       await data.update(body);
+      await data.reload();
+
+      createDefaultImageDirs(data.ImagesPath);
+
       await createDirs(body.MangaPath.replace("homedir", os.homedir()), Names);
       await createDirs(body.AdultPath.replace("homedir", os.homedir()), AdultNames, true);
 
@@ -46,6 +48,40 @@ routes.post("/save", async (req, res) => {
   }
 
   return res.send({ error: "Config Not Found" });
+});
+
+routes.get("/genres", async (req, res) => {
+  try {
+    const tags = await db.Genres.findAll({ order: ["Name"] });
+
+    return res.send(tags);
+  } catch (error) {
+    console.log(error);
+  }
+  res.send([]);
+});
+
+routes.post("/genres", async (req, res) => {
+  const { Genre } = req.body;
+  let found = await db.Genres.findOne({ where: { Name: Genre.Name } });
+  const data = { Name: Genre.name || Genre.Name, IsRemove: Genre.IsRemove };
+
+  try {
+    if (found) {
+      await found.update(data);
+    } else {
+      found = await db.Genres.create(data);
+    }
+    return res.send({ valid: true, Id: found.Id });
+  } catch (error) {
+    return res.send({ valid: false, error: error.toString() });
+  }
+});
+routes.post("/genres/remove", async (req, res) => {
+  const { Id } = req.body;
+
+  const valid = await db.Genres.destroy({ where: { Id } });
+  return res.send({ valid, Id });
 });
 
 routes.get("/", async (req, res) => {

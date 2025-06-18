@@ -5,7 +5,7 @@ import RenameRoutes from "./RenameRoutes.js";
 import ExcludeChapRoutes from "./ExcludeChapRoutes.js";
 import EventLogsRoutes from "./EventLogsRoutes.js";
 import ServersRoutes from "./ServersRoutes.js";
-import db from "../../models/index.js";
+import db from "#server/models/index";
 
 const routes = Router();
 

@@ -3,7 +3,7 @@ import drivelist from "drivelist";
 import path from "path";
 import winEx from "win-explorer";
 import { nanoid } from "nanoid";
-import db from "../models/index.js";
+import db from "#server/models/index";
 import diskusage from "diskusage";
 import os from "node:os";
 import fs from "fs-extra";

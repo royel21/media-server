@@ -1,7 +1,6 @@
 import { Router } from "express";
-import db from "../../models/index.js";
-import { defHotkeys, defSortTabs } from "../../defaultHotkeys.js";
-import defaultConfig from "../../default-config.js";
+import db from "#server/models/index";
+import { defHotkeys, defSortTabs } from "#server/defaultHotkeys";
 
 const routes = Router();
 

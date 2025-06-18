@@ -21,11 +21,15 @@ import NameLists from "./NameLists.js";
 import Excludes from "./Excludes.js";
 import DownloadingList from "./DownloadingList.js";
 import Downloading from "./Downloading.js";
+import Genres from "./Genres.js"
 
 import dbconfig from "./config.js";
 import { config as configEnv } from "dotenv";
 import defaultConfig from "../default-config.js";
 import AppConfig from "./AppConfig.js";
+
+import tags from "../data/tags.json" with {type: "json"};
+import { defHotkeys, defSortTabs } from "../defaultHotkeys.js";
 
 configEnv();
 
@@ -54,6 +58,7 @@ db.recentFile = recentFile(sequelize);
 db.eventLog = eventLog(sequelize);
 db.Link = Links(sequelize);
 db.Server = Servers(sequelize);
+db.Genres = Genres(sequelize);
 db.NameList = NameLists(sequelize);
 db.Exclude = Excludes(sequelize);
 db.DownloadingList = DownloadingList(sequelize);
@@ -132,10 +137,18 @@ db.init = async (force) => {
             Password: appConfig.AdminPassword,
             Role: "Administrator",
             AdultPass: 1,
+            SortTabs: defSortTabs,
+            Hotkeys: defHotkeys,
           },
           { encript: true }
         );
       }
+    }
+
+    const founds = await db.Genres.findAll({order: ["Name"]});
+    const genres = tags.filter(g1=> !founds.find(g2=> g2.Name === g1)).map(g=> ({Name: g}));
+    if(genres){
+      await db.Genres.bulkCreate(genres, {updateOnDuplicate: ["Name"]})
     }
   } catch (error) {}
 };

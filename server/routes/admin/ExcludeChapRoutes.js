@@ -1,4 +1,4 @@
-import db from "../../models/index.js";
+import db from "#server/models/index";
 
 export const excludeChapList = async (req, res) => {
   const { Id } = req.params;

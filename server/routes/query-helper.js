@@ -1,7 +1,7 @@
 import { Op, literal } from "sequelize";
-import db from "../models/index.js";
+import db from "#server/models/index";
 
-import { clamp, getFilter, getFilter2 } from "./utils.js";
+import { clamp, getFilter2 } from "./utils.js";
 
 export const qryCurrentPos = (user, table) => [
   literal(`IFNULL((Select LastPos from RecentFiles where FileId = ${table}.Id and UserId = '${user.Id}'), 0)`),

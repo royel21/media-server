@@ -18,13 +18,13 @@
 
   const onkeydown = (e) => {
     const found = document.querySelector(`.disk-controls .checked`);
-    if (found && [nextTab.Key, prevTab.Key].includes(e.keyCode)) {
+    if (found && [nextTab?.Key, prevTab?.Key].includes(e.keyCode)) {
       let item;
       if (isValidKey(e, { ...prevTab, AltKey: true })) {
         item = found.previousElementSibling;
       }
 
-      if (isValidKey(e, { ...nextTab, AltKey: true })) {
+      if (nextTab && isValidKey(e, { ...nextTab, AltKey: true })) {
         item = found.nextElementSibling;
       }
 

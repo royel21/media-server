@@ -113,11 +113,8 @@ export const evaluetePage = async (query) => {
     }
   }
 
-  genres.sort();
-  Genres = [...new Set(genres)].join(", ");
-  if (Genres.includes("Manhwa")) {
-    Genres = Genres.filter((g) => !/Manga|Webtoon/.test(g));
-  }
+  Genres = genres.sort().join(",");
+
   data = data.filter((d) => d);
 
   AltName = await window.fixAltName(AltName);
@@ -392,14 +389,6 @@ export const adultEvalPage = async (query) => {
   }
 
   AltName = await window.fixAltName(AltName);
-
-  Genres = Genres.split(",");
-
-  if (Genres.includes("Manhwa")) {
-    Genres = Genres.filter((g) => !/Manga|Webtoon/.test(g));
-  }
-
-  Genres = [...new Set(genres)].join(", ");
 
   return { Name, data, poster, Description, Status, posterData, Genres, AltName, title, Author };
 };

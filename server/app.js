@@ -13,7 +13,7 @@ import { fileURLToPath } from "url";
 
 config();
 
-import db, { createdb } from "./models/index.js";
+import db from "./models/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 global.appPath = path.dirname(__filename);

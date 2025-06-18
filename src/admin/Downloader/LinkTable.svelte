@@ -203,7 +203,7 @@
             <Icons name="edit" />
           </span>
           <span on:click={onExcludeLink} title="Exclude Link From Group Download">
-            <Icons name="files" box="0 0 464 512" color={link.Exclude ? "firebrick" : "#47f046"} />
+            <Icons name={`square${link.Exclude ? "xmark" : "check"}`} color={link.Exclude ? "red" : "green"} />
           </span>
           <span on:click={removeLink} title="Remove Link">
             <Icons name="trash" color="firebrick" />

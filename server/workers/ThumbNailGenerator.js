@@ -1,8 +1,8 @@
 import { join } from "path";
+import db from "#server/models/index";
 import { existsSync, mkdirSync, readdirSync } from "fs";
 import { getVideoThumnail, ZipCover } from "./ThumbnailUtils.js";
-import db from "../models/index.js";
-import { getFileType } from "../Downloader/utils.js";
+import { getFileType } from "#server/Downloader/utils";
 
 export const genFileThumbnails = async (folders, sendMessage) => {
   const { ImagesPath } = await db.AppConfig.findOne();

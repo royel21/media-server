@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import passport from "passport";
-import db from "../models/index.js";
+import db from "#server/models/index";
 
 const routes = Router();
 

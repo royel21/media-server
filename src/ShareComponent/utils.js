@@ -39,14 +39,16 @@ export const isValidKey = (e, k) => {
   return e.keyCode === k.Key && e.altKey === k.AltKey && e.shiftKey === k.ShiftKey && e.ctrlKey === k.CtrlKey;
 };
 
-export const validGenres = (g, tags) => {
-  const regex = new RegExp(tags.join("|"), "ig");
+export const validGenres = (g, tags, removeTags = []) => {
+  const regex = new RegExp([...tags, ...removeTags].join("|"), "ig");
+  const regex2 = new RegExp(tags.join("|"), "ig");
 
   const parts = g
     .replace(/Genres:(\t|)/g, "")
     .replace(regex, "")
     .split(/,|\/|\n| /g);
-  const defTags = g.replace(/Genres\:/gi, "").match(regex) || [];
+
+  const defTags = g.replace(/Genres\:/gi, "").match(regex2) || [];
 
   const gens = new Set([...defTags, ...parts].sort());
 

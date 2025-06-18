@@ -1,5 +1,5 @@
 import { Router } from "express";
-import db from "../../models/index.js";
+import db from "#server/models/index";
 
 import fs from "fs-extra";
 import path from "path";

@@ -5,9 +5,8 @@ import { DataTypes } from "sequelize";
 import { getFileType } from "../Downloader/utils.js";
 
 export default (sequelize, db) => {
-  const getCoverPath = async (name, type) => {
-    const appConfig = await db.AppConfig.findOne();
-    return path.join(appConfig.CoverPath, "Folder", type, name + ".jpg");
+  const getCoverPath = async (basePath, name, type) => {
+    return path.join(basePath, "Folder", type, name + ".jpg");
   };
 
   const { INTEGER, STRING, DATE, TEXT, BOOLEAN, VIRTUAL } = DataTypes;
@@ -114,6 +113,8 @@ export default (sequelize, db) => {
           }
         },
         beforeUpdate: async function (item, opt) {
+          const appConfig = await db.AppConfig.findOne();
+
           let { Path, Name } = item._previousDataValues;
           if (Name !== item.Name && fs.existsSync(Path)) {
             const getFileType = ({ FilesType }) => (FilesType === "mangas" ? "Manga" : "Video");
@@ -126,13 +127,13 @@ export default (sequelize, db) => {
             if (Name !== item.Name) {
               const type = item.FilesType;
 
-              let oldCover = await getCoverPath(Name, type);
-              const Cover = await getCoverPath(item.Name, type);
+              let oldCover = await getCoverPath(appConfig.ImagesPath, Name, type);
+              const Cover = await getCoverPath(appConfig.ImagesPath, item.Name, type);
               //rename cover name
               if (fs.existsSync(oldCover) && Cover !== oldCover) {
                 fs.moveSync(oldCover, Cover, { overwrite: true });
               }
-              const thumbsPath = path.join(appConfig.CoverPath, getFileType(item), opt.Name);
+              const thumbsPath = path.join(appConfig.ImagesPath, getFileType(item), opt.Name);
 
               if (fs.existsSync(thumbsPath)) {
                 const newthumbsPath = thumbsPath.replace(opt.Name, item.Name);
@@ -149,13 +150,13 @@ export default (sequelize, db) => {
           if (opt.Del) {
             const appConfig = await db.AppConfig.findOne();
 
-            let cPath = await getCoverPath(item.Name, item.FilesType);
+            let cPath = await getCoverPath(appConfig.ImagesPath, item.Name, item.FilesType);
 
             //Remove Cover from images
             if (fs.existsSync(cPath)) fs.removeSync(cPath);
 
             //Remove files Thumbnails from images folder
-            const imagesFolder = path.join(appConfig.CoverPath, getFileType(item), item.Name);
+            const imagesFolder = path.join(appConfig.ImagesPath, getFileType(item), item.Name);
             if (fs.existsSync(imagesFolder)) fs.removeSync(imagesFolder);
 
             //Remove folder from disk

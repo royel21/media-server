@@ -11,13 +11,14 @@
   export let update;
   let errors = [];
   let tags = [];
+  let removeTags = [];
   let data = { Id: item.Id, [title]: item[title] };
 
   const validate = () => {
     if (!data[title]) return;
 
     if (title === "Genres") {
-      data.Genres = validGenres(data.Genres, tags);
+      data.Genres = validGenres(data.Genres, tags, removeTags);
     }
 
     if (title === "AltName") {
@@ -65,7 +66,11 @@
   };
 
   onMount(async () => {
-    tags = await apiUtils.get(["files", "folder", "tags"]);
+    const result = await apiUtils.get(["files", "folder", "tags"]);
+    if (result.error) {
+      tags = result.filter((g) => !g.IsRemove).map((g) => g.Name);
+      removeTags = result.filter((g) => g.IsRemove).map((g) => g.Name);
+    }
   });
 </script>
 

@@ -1,4 +1,4 @@
-import db from "../models/index.js";
+import db from "#server/models/index";
 
 const recentFolder = async ({ FolderId, CurrentFile }, user) => {
   if (FolderId) {

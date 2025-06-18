@@ -1,7 +1,7 @@
 import fs from "fs-extra";
 import path from "path";
 import os from "os";
-import { capitalize } from "../Downloader/utils.js";
+import { capitalize } from "#server/Downloader/utils";
 import { getProgress, sendMessage } from "../utils.js";
 
 export const moveFiles = async ({ files, Path, overwrite, NewFolder }) => {

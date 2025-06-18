@@ -1,4 +1,4 @@
-import db from "../../models/index.js";
+import db from "#server/models/index";
 
 export const renameList = async (_, res) => {
   const names = await db.NameList.findAll({ order: ["AltName"] });

@@ -1,11 +1,10 @@
 import { Router } from "express";
-import db from "../models/index.js";
+import db from "#server/models/index";
 
 import { getFiles, getFolders } from "./query-helper.js";
 
 import { clamp, getFilter } from "./utils.js";
 import { Op, literal } from "sequelize";
-import fs from "fs-extra";
 
 const routes = Router();
 
@@ -153,14 +152,10 @@ routes.get("/first-last/:isfirst/:folderid", async (req, res) => {
 
 routes.get("/folders/:order/:page?/:items?/:search?", getFolders);
 
-routes.get("/folder/tags", (_, res) => {
-  let tags = [];
+routes.get("/folder/tags", async (_, res) => {
+  const tags = await db.Genres.findAll({ order: ["Name"] });
 
-  if (fs.existsSync(tagsPath)) {
-    tags = fs.readJSONSync(tagsPath);
-  }
-
-  return res.send(tags);
+  return res.send(tags.map((g) => ({ ...g.dataValues })));
 });
 
 routes.post("/folder/update", async ({ body, user }, res) => {

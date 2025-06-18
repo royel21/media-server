@@ -20,7 +20,10 @@
     if (ref && focus) ref.focus();
   });
 
-  const handler = async () => paste && handlerPaste(file, key, sept, ref);
+  const handler = async () => {
+    paste && handlerPaste(file, key, sept, ref);
+    console.log(key, sept);
+  };
   $: if (item) file = item;
 </script>
 

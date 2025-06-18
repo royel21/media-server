@@ -1,5 +1,5 @@
 import StreamZip from "node-stream-zip";
-import db from "../models/index.js";
+import db from "#server/models/index";
 import { Op } from "sequelize";
 import fs from "fs-extra";
 

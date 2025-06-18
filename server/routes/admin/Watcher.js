@@ -1,5 +1,5 @@
-import { literal, Op } from "sequelize";
-import { db } from "../../watch-models/index.js";
+import { literal } from "sequelize";
+import { db } from "#server/watch-models/index";
 import fs from "fs-extra";
 import { getFilter } from "../utils.js";
 

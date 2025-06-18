@@ -1,6 +1,6 @@
 import { Router } from "express";
 import fs from "fs-extra";
-import db from "../../models/index.js";
+import db from "#server/models/index";
 
 import { Op } from "sequelize";
 import { getFilter } from "../utils.js";
