@@ -2,7 +2,6 @@ import { Strategy as LocalStrategy } from "passport-local";
 import db from "./models/index.js";
 import passport from "passport";
 import { literal } from "sequelize";
-import defaultConfig from "./default-config.js";
 import { getElapseSec } from "./utils.js";
 
 export default () => {

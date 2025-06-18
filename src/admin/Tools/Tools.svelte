@@ -51,7 +51,10 @@
 
     if (errors.length) return (errors = errors);
 
-    const result = await apiUtils.post("/admin/app-config/save", config);
+    const { UserPassword, AdminPassword } = config;
+    const cfg = { ...config, UserPassword: btoa(UserPassword), AdminPassword: btoa(AdminPassword) };
+
+    const result = await apiUtils.post("/admin/app-config/save", cfg);
 
     if (result.valid) {
       return setMessage({ msg: `${formatDate(new Date())} App Config Save` });
@@ -68,8 +71,9 @@
   onMount(async () => {
     const result = await apiUtils.get(["admin", "app-config"]);
     if (result.config) {
-      config = { ...result.config };
-      defConfig = { ...result.config };
+      const { UserPassword, AdminPassword } = result.config;
+      config = { ...result.config, UserPassword: atob(UserPassword), AdminPassword: atob(AdminPassword) };
+      defConfig = { ...config };
     }
   });
 

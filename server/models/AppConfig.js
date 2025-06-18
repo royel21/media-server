@@ -5,7 +5,7 @@ import { nanoid } from "nanoid";
 import { INTEGER, STRING, VIRTUAL } from "sequelize";
 
 export default (sequelize) => {
-  return sequelize.define(
+  const AppConfig = sequelize.define(
     "AppConfigs",
     {
       Id: {
@@ -15,11 +15,11 @@ export default (sequelize) => {
       AdminPassword: {
         type: STRING(20),
         allowNull: false,
-        defaultValue: atob("QERtaW4xMjM="),
+        defaultValue: "QERtaW4xMjM=",
       },
       UserPassword: {
         type: STRING(20),
-        defaultValue: atob("QEFiMTIzNDU="),
+        defaultValue: "QEFiMTIzNDU=",
         allowNull: false,
       },
       LoginTimeout: {
@@ -33,35 +33,14 @@ export default (sequelize) => {
       AdultPath: {
         type: STRING,
         defaultValue: path.join("homedir", "Downloads", "mediaserver"),
-        get() {
-          const rawValue = this.getDataValue("AdultPath");
-          return rawValue.replace("homedir", os.homedir());
-        },
-        set(value) {
-          this.setDataValue("AdultPath", value.replace(os.homedir(), "homedir"));
-        },
       },
       MangaPath: {
         type: STRING,
         defaultValue: path.join("homedir", "Downloads", "mediaserver"),
-        get() {
-          const rawValue = this.getDataValue("MangaPath");
-          return rawValue.replace("homedir", os.homedir());
-        },
-        set(value) {
-          this.setDataValue("MangaPath", value.replace(os.homedir(), "homedir"));
-        },
       },
       CoverPath: {
         type: STRING,
         defaultValue: path.join("homedir", "images"),
-        get() {
-          const rawValue = this.getDataValue("CoverPath");
-          return rawValue.replace("homedir", os.homedir());
-        },
-        set(value) {
-          this.setDataValue("CoverPath", value.replace(os.homedir(), "homedir"));
-        },
       },
       ImagesPath: {
         type: VIRTUAL,
@@ -81,4 +60,11 @@ export default (sequelize) => {
       },
     }
   );
+
+  AppConfig.prototype.getPassword = function (Role) {
+    const password = btoa(Role) === "QWRtaW5pc3RyYXRvcg==" ? this.AdminPassword : this.UserPassword;
+    return atob(password);
+  };
+
+  return AppConfig;
 };

@@ -45,7 +45,7 @@ routes.post("/login", (req, res, next) => {
         await user.reload();
       }
 
-      if (user.validPassword(user.Role.includes("Admin") ? config.AdminPassword : config.UserPassword)) {
+      if (user.validPassword(config.getPassword(user.Role))) {
         return res.json({
           isAutenticated: false,
           info: {

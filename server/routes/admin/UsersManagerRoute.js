@@ -21,18 +21,17 @@ const getUser = async (req) => {
   return { user, admins: users.filter((a) => /^Adm/i.test(a.Role)).length > 1 };
 };
 
-const createUser = async (req) => {
+const createUser = async ({ body }) => {
   const config = await db.AppConfig.findOne();
-  const Password = req.body.Role === "Administrator" ? config.AdminPassword : config.UserPassword;
 
   let user = {
-    ...req.body,
+    ...body,
     Id: null,
     CreatedAt: new Date(),
     Favorites: [{ Name: "Default" }],
     SortTabs: defSortTabs,
     Hotkeys: defHotkeys,
-    Password,
+    Password: config.getPassword(body.Role),
   };
 
   try {
@@ -85,7 +84,8 @@ routes.post("/reset-pass", async (req, res) => {
   if (user) {
     const { Role } = user.dataValues;
 
-    const Password = /Admin|Manager/i.test(Role) ? config.AdminPassword : config.UserPassword;
+    const Password = config.getPassword(Role);
+    console.log(Password);
     await user.update({ Id: req.body.Id, Password, LoginCount: 0 }, { encript: Password });
   }
 

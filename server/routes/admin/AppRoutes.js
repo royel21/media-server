@@ -50,7 +50,7 @@ routes.post("/save", async (req, res) => {
 
 routes.get("/", async (req, res) => {
   const data = await db.AppConfig.findOne();
-  res.send({ config: data });
+  res.send({ config: data.dataValues });
 });
 
 export default routes;
