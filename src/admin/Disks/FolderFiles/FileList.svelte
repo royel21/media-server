@@ -126,6 +126,8 @@
         const index = files.findIndex((f) => f.Id === item.Id);
         if (files[index]) {
           files[index] = item;
+          console.log(item);
+          selectedList = items;
         }
       }
       files = files.sort(sortByName);

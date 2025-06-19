@@ -94,7 +94,7 @@ const downloadLinks = async (link, page) => {
 
   manga.data = manga.data
     .filter(removeRaw(manga.data))
-    .filter((f) => !exclude.find((ex) => f.name.includes(ex.Name)) || /( |\[)end(\]|)$/i.test("- end"));
+    .filter((f) => !exclude.find((ex) => f.name.includes(ex.Name)) || /( |\[)end(\]|)$/i.test(f.name));
 
   await updateLastChapter(manga, link);
   manga.type = "mangas";
