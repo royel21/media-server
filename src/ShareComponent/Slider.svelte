@@ -1,7 +1,7 @@
 <script>
   import { onDestroy } from "svelte";
 
-  import { map, clamp } from "src/ShareComponent/utils";
+  import { map, clamp } from "@share/utils";
   import { isMobile } from "src/utils";
   export let value;
   export let preview = false;

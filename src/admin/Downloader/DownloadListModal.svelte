@@ -5,7 +5,7 @@
   import apiUtils from "src/apiUtils";
   import Icons from "src/icons/Icons.svelte";
   import Input from "../Component/Input.svelte";
-  import { sortByName } from "src/ShareComponent/utils";
+  import { sortByName } from "@share/utils";
   import Filter from "src/ShareComponent/Filter.svelte";
   import Dialog from "src/ShareComponent/Dialog.svelte";
 

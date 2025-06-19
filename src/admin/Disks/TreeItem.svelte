@@ -3,7 +3,7 @@
   import Icons from "src/icons/Icons.svelte";
   import apiUtils from "src/apiUtils";
   import { setMessage } from "../Store/MessageStore";
-  import { sortByName } from "src/ShareComponent/utils";
+  import { sortByName } from "@share/utils";
 
   export let items = [];
   export let type;

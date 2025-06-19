@@ -1,4 +1,4 @@
-import { clamp } from "./utils";
+import { clamp } from "@share/utils";
 
 const paginationInput = (li, page, totalPages, dispatch, min) => {
   let input = li.querySelector("input");

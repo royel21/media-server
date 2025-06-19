@@ -1,5 +1,5 @@
 <script>
-  import { sortByName } from "src/ShareComponent/utils";
+  import { sortByName } from "@share/utils";
   import { onMount } from "svelte";
   import apiUtils from "src/apiUtils";
   import ModalUser from "./ModalUser.svelte";

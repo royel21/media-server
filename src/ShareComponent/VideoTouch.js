@@ -1,5 +1,5 @@
 import { isMobile } from "src/utils";
-import { getEvent } from "./utils";
+import { getEvent } from "@share/utils";
 
 const initialData = {
   startX: 0,

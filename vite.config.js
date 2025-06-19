@@ -43,7 +43,10 @@ export default defineConfig({
     },
   },
   resolve: {
-    alias: [{ find: "src", replacement: fileURLToPath(new URL("./src", import.meta.url)) }],
+    alias: [
+      { find: "src", replacement: fileURLToPath(new URL("./src", import.meta.url)) },
+      { find: "@share", replacement: fileURLToPath(new URL("./server/share", import.meta.url)) },
+    ],
   },
   server: {
     host,

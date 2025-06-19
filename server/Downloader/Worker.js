@@ -12,6 +12,7 @@ import { downloadLink } from "./link-downloader.js";
 import { downloadFromPage } from "./checkServer.js";
 import { downloadNHentais } from "./nhentai.js";
 import { getProgress } from "../utils.js";
+import { validAltName } from "#server/share/utils";
 
 // add stealth plugin and use defaults (all evasion techniques)
 const state = { links: [], running: false, size: 0, checkServer: false, nhentais: [], hrunning: false, hsize: 0 };
@@ -41,17 +42,19 @@ const validateName = async (manga, link) => {
     }
   }
 
-  await db.Link.update({ AltName: link.AltName }, { where: { Name } });
+  await db.Link.update({ AltName: validAltName(link.AltName) }, { where: { Name } });
 };
 
 const updateLastChapter = async ({ data }, link) => {
   if (data.length) {
-    const LastChapter = data[0].name.match(/\d+(-\d+|)( - | |)(raw|END|\[END\]|)/i);
+    const LastChapter = data[0].name;
 
-    if (LastChapter && LastChapter[0] !== link.LastChapter) {
-      await link.update({ LastChapter: LastChapter[0] });
-      sendMessage({ Id: link.Id, ServerId: link.Server.Id }, "update-name");
-    }
+    try {
+      if (LastChapter !== link.LastChapter) {
+        await link.update({ LastChapter });
+        sendMessage({ Id: link.Id, ServerId: link.Server.Id }, "update-name");
+      }
+    } catch (error) {}
   }
 };
 

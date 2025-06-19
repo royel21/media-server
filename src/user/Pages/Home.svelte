@@ -3,7 +3,7 @@
   import { navigate } from "svelte-routing";
   import { getFilesPerPage, getFilesPerRows, ProcessFile } from "./filesUtils";
 
-  import { clamp } from "src/ShareComponent/utils";
+  import { clamp } from "@share/utils";
   import { fileKeypress, selectByTitle, selectElementById } from "../Component/fileEvents";
   import { getDate, getLastChap } from "../Component/fileUtils";
 

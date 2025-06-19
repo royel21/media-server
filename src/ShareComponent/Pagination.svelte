@@ -1,7 +1,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
   import paginationInput from "./PageInput";
-  import { clamp } from "./utils";
+  import { clamp } from "@share/utils";
   import Icons from "../icons/Icons.svelte";
 
   const dispatch = createEventDispatcher();

@@ -5,7 +5,7 @@
   import ItemList from "./ItemList.svelte";
   import { calRows } from "../Utils";
   import apiUtils from "src/apiUtils";
-  import { clamp } from "src/ShareComponent/utils";
+  import { clamp } from "@share/utils";
   import Icons from "src/icons/Icons.svelte";
   import CreateFolderModal from "./CreateFolderModal.svelte";
   import ReplaceImage from "./ReplaceImage.svelte";

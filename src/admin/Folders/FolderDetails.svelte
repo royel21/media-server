@@ -8,8 +8,7 @@
   import Icons from "src/icons/Icons.svelte";
   import { isDiff, formatSize } from "../Utils";
   import { setMessage } from "../Store/MessageStore";
-  import { validAltName, validateAuthor, validGenres } from "src/ShareComponent/utils";
-  import { capitalize } from "../Component/util";
+  import { capitalize, validAltName, validateAuthor, validGenres } from "@share/utils";
 
   export let folderId;
   let hasChanges = false;
@@ -223,7 +222,7 @@
     width: 50%;
   }
   .detail :global(.input-label) {
-    width: 165px;
+    min-width: 120px;
   }
   .d-buttons {
     position: absolute;

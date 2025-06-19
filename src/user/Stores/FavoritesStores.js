@@ -1,4 +1,4 @@
-import { sortByName } from "src/ShareComponent/utils";
+import { sortByName } from "@share/utils";
 import { writable } from "svelte/store";
 import apiUtils from "src/apiUtils";
 

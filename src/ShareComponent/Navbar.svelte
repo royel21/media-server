@@ -5,7 +5,7 @@
   import { getProps } from "./DataUtils";
   import Icons from "../icons/Icons.svelte";
   import NavItem from "src/ShareComponent/NavItem.svelte";
-  import { isValidKey } from "./utils.js";
+  import { isValidKey } from "@share/utils";
 
   export let navItems;
   export let filters = [];

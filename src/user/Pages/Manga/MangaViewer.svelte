@@ -1,6 +1,6 @@
 <script>
   import { getContext, createEventDispatcher, afterUpdate, onMount } from "svelte";
-  import { clamp } from "src/ShareComponent/utils";
+  import { clamp } from "@share/utils";
   import { setfullscreen } from "../pagesUtils";
   import { scrollInView, getEmptyIndex } from "./mangaUtils";
   import { disconnectObvrs, PageObserver, scrollImageLoader } from "./Observers";

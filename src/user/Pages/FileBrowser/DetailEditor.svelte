@@ -3,7 +3,7 @@
   import Icons from "src/icons/Icons.svelte";
   import Dialog from "src/ShareComponent/Dialog.svelte";
   import TextAreaInput from "src/ShareComponent/TextAreaInput.svelte";
-  import { validAltName, validateAuthor, validGenres } from "src/ShareComponent/utils";
+  import { validAltName, validateAuthor, validGenres } from "@share/utils";
   import { onMount } from "svelte";
   export let hide;
   export let item;

@@ -1,6 +1,6 @@
 <script>
   import { onMount, onDestroy, afterUpdate } from "svelte";
-  import { clamp } from "src/ShareComponent/utils";
+  import { clamp } from "@share/utils";
   import { fly } from "svelte/transition";
   import { formatTime } from "../Pages/pagesUtils";
 

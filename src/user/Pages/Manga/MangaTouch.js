@@ -1,6 +1,6 @@
 import { updateToggleMenu } from "src/ShareComponent/ToggleMenu";
 import { showFileName } from "../pagesUtils";
-import { getEvent } from "src/ShareComponent/utils";
+import { getEvent } from "@share/utils";
 let tStart, tEnd;
 let point = {};
 let touching = false;

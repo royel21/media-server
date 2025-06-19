@@ -1,5 +1,3 @@
-import { capitalize } from "src/admin/Component/util";
-
 /**
  * Map a number from one range to another range
  *
@@ -39,6 +37,20 @@ export const isValidKey = (e, k) => {
   return e.keyCode === k.Key && e.altKey === k.AltKey && e.shiftKey === k.ShiftKey && e.ctrlKey === k.CtrlKey;
 };
 
+export const validateAuthor = (auth) => {
+  if (auth === "N/A") return auth;
+
+  auth = auth
+    .split(/\/|,|;/)
+    .map((a) => a.trim())
+    .filter((a) => a)
+    .join(", ");
+  return auth
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLocaleLowerCase())
+    .join(" ");
+};
+
 export const validGenres = (g, tags, removeTags = []) => {
   const regex = new RegExp([...tags, ...removeTags].join("|"), "ig");
   const regex2 = new RegExp(tags.join("|"), "ig");
@@ -55,24 +67,57 @@ export const validGenres = (g, tags, removeTags = []) => {
   return [...gens].filter((g) => g.trim()).join(", ");
 };
 
-export const validateAuthor = (auth) => {
-  if (auth === "N/A") return auth;
+const toLowerList = /^(For|No|It|Of|And|In|X|Du|Or|A|Wa|wo|na|to|ni|de|o|by)$/i;
 
-  auth = auth
-    .replace(/(Artists|Authors)\:|/gi, "")
-    .split(/\/|,|;/)
-    .map((a) => a.trim())
-    .filter((a) => a)
-    .join(", ");
-  return auth
-    .split(" ")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLocaleLowerCase())
-    .join(" ");
+export const capitalize = (val, splitter = " ", Preserve = true) => {
+  let words = val.replace(/( )+/g, " ").split(splitter);
+
+  if (words.length > 1) {
+    for (let i = 0; i < words.length; i++) {
+      if (i == 0 && words[i].length === 1) {
+        words[i] = words[i].toUpperCase();
+        continue;
+      }
+
+      if (toLowerList.test(words[i])) {
+        words[i] = words[i].toLowerCase();
+        continue;
+      }
+
+      if (words[i].length > 1) {
+        let word = words[i];
+        //find first letter index
+        const index = word.split("").findIndex((c) => /[a-z]/i.test(c));
+        if (index > -1) {
+          words[i] = word.slice(0, index + 1).toUpperCase();
+          if (Preserve) {
+            words[i] += word.slice(index + 1);
+          } else {
+            words[i] += word.slice(index + 1).toLowerCase();
+          }
+        }
+      }
+    }
+  }
+
+  let result = words.join(splitter).trim();
+
+  return result;
 };
 
 export const validAltName = (v) => {
   const result = v.replace(/( |)(•|\/ )( |)/g, "; ").trim();
-  return capitalize(result);
+  const altnames = capitalize(result);
+  let parts = altnames.split("; ");
+
+  for (let i = 0; i < parts.length; i++) {
+    const part = parts[i];
+    if (/^[a-z] /i.test(part)) {
+      parts[i] = part[0].toUpperCase() + part.slice(1, part.length);
+    }
+  }
+
+  return parts.join("; ");
 };
 
 export const getEvent = (e) => (e.touches ? e.touches[0] : e);

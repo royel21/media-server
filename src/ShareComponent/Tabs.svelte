@@ -1,7 +1,7 @@
 <script>
   import { onMount, getContext } from "svelte";
   import Icons from "src/icons/Icons.svelte";
-  import { isValidKey } from "./utils";
+  import { isValidKey } from "@share/utils";
   export let tab;
   export let tabs;
 

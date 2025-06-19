@@ -9,7 +9,7 @@
   import Modal from "./ModalServerConfig.svelte";
   import Confirm from "../Component/Confirm.svelte";
   import ModalLink from "./ModalLink.svelte";
-  import { sortByName } from "src/ShareComponent/utils";
+  import { sortByName } from "@share/utils";
 
   const socket = getContext("socket");
 

@@ -4,7 +4,7 @@
   import Filter from "src/ShareComponent/Filter.svelte";
   import { onMount } from "svelte";
   import InputTag from "./InputTag.svelte";
-  import { sortByName } from "src/ShareComponent/utils";
+  import { sortByName } from "@share/utils";
 
   let items = [];
   let filter = "";

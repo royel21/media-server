@@ -1,4 +1,4 @@
-import { isValidKey } from "src/ShareComponent/utils";
+import { isValidKey } from "@share/utils";
 
 export const isVideo = (file) => file?.Type.includes("Video");
 export const isManga = (file) => file?.Type.includes("Manga");

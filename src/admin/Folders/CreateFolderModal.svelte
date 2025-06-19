@@ -5,7 +5,7 @@
   import Select from "src/ShareComponent/Select.svelte";
   import TextAreaInput from "../../ShareComponent/TextAreaInput.svelte";
   import Input from "../Component/Input.svelte";
-  import { validGenres } from "src/ShareComponent/utils";
+  import { validGenres } from "@share/utils";
   import Dialog from "src/ShareComponent/Dialog.svelte";
 
   export let error = "";

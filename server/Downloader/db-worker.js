@@ -1,6 +1,7 @@
 import winex from "win-explorer";
 import db from "../models/index.js";
 import path from "node:path";
+import { validateAuthor, validGenres } from "#server/share/utils";
 
 export const getDb = () => db;
 
@@ -18,31 +19,16 @@ export const findFolder = async (Name) => {
   return db.folder.findOne({ where: { Name, FilesType } });
 };
 
-const validGenres = async (g) => {
-  const result = await db.Genres.findAll();
-
-  const tags = result.filter((g) => !g.IsRemove).map((g) => g.Name);
-  const removeTags = result.filter((g) => g.IsRemove).map((g) => g.Name);
-
-  const regex = new RegExp([...tags, ...removeTags].join("|"), "ig");
-  const regex2 = new RegExp(tags.join("|"), "ig");
-
-  const parts = g
-    .replace(/Genres:(\t|)/g, "")
-    .replace(regex, "")
-    .split(/,|\/|\n| /g);
-
-  const defTags = g.replace(/Genres\:/gi, "").match(regex2) || [];
-
-  const gens = new Set([...defTags, ...parts].sort());
-
-  return [...gens].filter((g) => g.trim()).join(", ");
-};
-
 export const findOrCreateFolder = async (manga, IsAdult, isRaw) => {
   let { Name, Description, Genres, AltName, Status, Server, Author } = manga;
 
-  Genres = await validGenres(Genres);
+  const genres = await db.Genres.findAll();
+
+  const tags = genres.filter((g) => !g.IsRemove).map((g) => g.Name);
+  const removeTags = genres.filter((g) => g.IsRemove).map((g) => g.Name);
+  Genres = await validGenres(Genres, tags, removeTags);
+
+  Author = validateAuthor(Author);
 
   if (AltName.includes(Name)) {
     const regx = new RegExp(`(; |)${Name}( ;|)`, "i");

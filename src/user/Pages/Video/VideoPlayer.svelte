@@ -7,7 +7,7 @@
   import { setBatteryMetter } from "./videoUtil";
   import ModalConfig from "./ModalPlayerConfig.svelte";
   import { setGesture } from "src/ShareComponent/VideoTouch";
-  import { clamp } from "src/ShareComponent/utils";
+  import { clamp } from "@share/utils";
 
   export let KeyMap;
   export let file;

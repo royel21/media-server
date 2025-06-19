@@ -35,6 +35,7 @@ export default (sequelize) => {
       LastChapter: {
         type: STRING,
         defaultValue: "",
+        collate: "utf8mb4",
       },
       Date: {
         type: DATE,

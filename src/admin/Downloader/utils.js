@@ -1,5 +1,5 @@
 import apiUtils from "src/apiUtils";
-import { sortByName } from "src/ShareComponent/utils";
+import { sortByName } from "@share/utils";
 
 export const excludeLink = async ({ target }, datas) => {
   const id = target.closest(".link").id;

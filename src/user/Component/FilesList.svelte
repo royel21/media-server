@@ -9,7 +9,7 @@
   import Pagination from "src/ShareComponent/Pagination.svelte";
   import Filter from "src/ShareComponent/Filter.svelte";
   import FavoriteList from "./FavoriteList.svelte";
-  import { clamp } from "src/ShareComponent/utils";
+  import { clamp } from "@share/utils";
   import { getItemsList } from "src/apiUtils";
   import Icons from "src/icons/Icons.svelte";
   import LazyImage from "./LazyImage.svelte";

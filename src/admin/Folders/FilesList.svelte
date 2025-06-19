@@ -5,7 +5,7 @@
   import ItemList from "./ItemList.svelte";
   import Modal from "./Modal.svelte";
   import apiUtils from "src/apiUtils";
-  import { clamp } from "src/ShareComponent/utils";
+  import { clamp } from "@share/utils";
   import Icons from "src/icons/Icons.svelte";
   import CCheckbox from "../Component/CCheckbox.svelte";
 

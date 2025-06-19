@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { sortByName } from "src/ShareComponent/utils";
+  import { sortByName } from "@share/utils";
   import FileTypeIcon from "src/admin/Component/FileTypeIcon.svelte";
   import Filter from "src/ShareComponent/Filter.svelte";
   import Icons from "src/icons/Icons.svelte";

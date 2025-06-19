@@ -7,7 +7,7 @@
   import FilesList from "src/user/Component/FilesList.svelte";
   import { ProcessFile, getReturnPath } from "../filesUtils";
   import Icons from "src/icons/Icons.svelte";
-  import { isValidKey } from "src/ShareComponent/utils";
+  import { isValidKey } from "@share/utils";
   import Condition from "./ConditionNF.svelte";
   import DetailEditor from "./DetailEditor.svelte";
 
