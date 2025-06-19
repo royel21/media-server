@@ -4,7 +4,7 @@ import fs from "fs-extra";
 import { getFilter } from "../utils.js";
 
 export const getWatchedDirs = async (req, res) => {
-  const dirs = await db.Directory.findAll({ order: ["Name"] });
+  const dirs = await db.Directory.findAll({ order: ["Path"] });
 
   res.send(dirs);
 };

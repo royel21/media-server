@@ -45,7 +45,7 @@ export default (sequelize) => {
       ImagesPath: {
         type: VIRTUAL,
         get() {
-          return this.CoverPath.replace(os.homedir(), "homedir");
+          return this.CoverPath.replace("homedir", os.homedir());
         },
       },
     },
