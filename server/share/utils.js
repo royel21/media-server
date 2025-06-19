@@ -55,10 +55,14 @@ export const validGenres = (g, tags, removeTags = []) => {
   const regex = new RegExp([...tags, ...removeTags].join("|"), "ig");
   const regex2 = new RegExp(tags.join("|"), "ig");
 
-  const parts = g
+  let parts = g
     .replace(/Genres:(\t|)/g, "")
     .replace(regex, "")
     .split(/,|\/|\n| /g);
+
+  if (parts.includes("Manhwa")) {
+    parts = parts.filter((p) => !/Manga|Webtoon/i.test(p));
+  }
 
   const defTags = g.replace(/Genres\:/gi, "").match(regex2) || [];
 

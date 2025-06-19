@@ -247,7 +247,8 @@ export const adultEvalPage = async (query) => {
     for (let tag of [...document.querySelectorAll(".attr-item")]) {
       let text = tag.textContent || "";
       if (genreRegex.test(text)) {
-        Genres = formatGenres(text.replace(genreRegex, "").trim(), ["Adult", "Manga"]);
+        const adult = /Mature|Smut|hentai/i.test(text) ? ["Adult"] : [];
+        Genres = formatGenres(text.replace(genreRegex, "").trim(), adult);
       }
 
       if (authorRegex.test(text)) {
