@@ -103,10 +103,15 @@ const diskLoader = async () => {
       if (mp.path.includes("/boot")) continue;
 
       const data = await diskusage.check(mp.path);
-      mp = mp === "/" ? "/home" : mp;
+      const Name = `${mp.label || path.basename(mp.path) || mp.path}`;
+
+      if (Name === "C:\\") {
+        continue;
+      }
+
       disks.push({
         Id: nanoid(5),
-        Name: `${mp.label || path.basename(mp.path) || mp.path}`,
+        Name,
         Path: mp.path,
         Content: [],
         Free: sizeInGB(data.free),
@@ -136,25 +141,18 @@ const diskLoader = async () => {
   }
 
   disks.sort((a, b) => a.Name.localeCompare(b.Name));
+  const hdata = await diskusage.check(os.platform() === "win32" ? "C:\\" : "/");
+  disks.unshift({
+    Id: nanoid(5),
+    Name: "Home",
+    Path: `homedir`,
+    Content: [],
+    Free: sizeInGB(hdata.free),
+    Used: sizeInGB(hdata.total - hdata.free),
+    Size: sizeInGB(hdata.total),
+  });
 
-  if (os.platform() === "linux") {
-    const hdata = await diskusage.check("/");
-    let diskData = [
-      {
-        Id: nanoid(5),
-        Name: "Home",
-        Path: `homedir`,
-        Content: [],
-        Free: sizeInGB(hdata.free),
-        Used: sizeInGB(hdata.total - hdata.free),
-        Size: sizeInGB(hdata.total),
-      },
-      ...disks,
-    ];
-    io.sockets.emit("disk-loaded", diskData);
-  } else {
-    io.sockets.emit("disk-loaded", disks);
-  }
+  io.sockets.emit("disk-loaded", disks);
 };
 
 const resetRecent = async (data, user) => {

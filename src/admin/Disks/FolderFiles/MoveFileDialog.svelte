@@ -14,7 +14,7 @@
   export let acept;
   export let content;
 
-  let item = { Path: "/mnt/", overwrite: false };
+  let item = { Path: "homedir", overwrite: false };
   let errors = [];
   let dirs = [];
   let ditem = { Filter: "" };
@@ -32,7 +32,7 @@
       return errors.push("Path must be a valid Path");
     }
 
-    if (!/homedir|^\/(mnt|media)\/.*\/|^[d-z]\:\\|\/home\/.*\/|^c:\\Users\\.*\\/i.test(item.Path)) {
+    if (!/homedir|^\/(mnt|media)\/.*\/|^[d-z]\:\\/i.test(item.Path)) {
       return errors.push("Path must be on User Space");
     }
 

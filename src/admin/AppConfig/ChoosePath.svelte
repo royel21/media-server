@@ -16,8 +16,6 @@
   let ditem = { Filter: "" };
   let filtered = [];
   let content = [];
-  const dDir = "dDir";
-  const dPath = "dPath";
   let item = { Path: config[props.key] };
   const onConfirm = async () => {
     errors = [];
@@ -47,7 +45,6 @@
 
     if (result.dirs) {
       item.Path = result.Path;
-      localStorage.setItem(dPath, result.Path);
       dirs = result.dirs;
       ditem.Filter = "";
       onFilter();
@@ -55,7 +52,6 @@
   };
 
   const onChange = ({ target: { value } }) => {
-    localStorage.setItem(dDir, value);
     ditem.Path = value;
     loadDirs(value);
   };

@@ -112,9 +112,7 @@ routes.post("/get-dirs", (req, res) => {
 
   if (next && Path) Path = path.join(Path, next);
 
-  if (back && os.platform() === "win32") {
-    Path = path.dirname(Path);
-  } else if (back && Path !== homeDir && !/(\/(mnt|media))$/i.test(Path)) {
+  if (back && Path !== homeDir) {
     Path = path.dirname(Path);
   }
 
@@ -123,7 +121,7 @@ routes.post("/get-dirs", (req, res) => {
       .filter((d) => d.isDirectory)
       .map((d) => d.Name);
 
-    if (Path.includes(homeDir) && os.platform() === "linux") {
+    if (Path.includes(homeDir)) {
       Path = Path.replace(homeDir, "homedir");
     }
 

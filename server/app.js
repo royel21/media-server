@@ -71,10 +71,9 @@ app.use("/api/files/favorites", favoriteRoutes);
 app.use("/api/files", filesRoutes);
 app.use("/api/viewer", ViewerRoutes);
 
-app.use("/api/admin", ({ user, url }, res, next) => {
-  console.log(url);
-  return user.Role.includes("Administrator") ? next() : res.redirect("/notfound");
-});
+app.use("/api/admin", ({ user }, res, next) =>
+  user.Role.includes("Administrator") ? next() : res.redirect("/notfound")
+);
 
 app.use("/api/admin/users", UsersManagerRoute);
 app.use("/api/admin/directories", DirectoriesRoute);
