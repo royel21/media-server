@@ -245,6 +245,10 @@
     height = itemContainerRef.offsetHeight;
   };
 
+  const getDownloadUrl = () => {
+    return `/api/admin/files/download/${encodeURIComponent(selectedList[0].Path)}`;
+  };
+
   onMount(() => {
     window.addEventListener("resize", onResize, { passive: true });
     socket.on("connect", onConnect);
@@ -330,6 +334,11 @@
             {/if}
             <span on:click={() => (showBulkRename = true)}><Icons name="edit" /></span>
             <span on:click={onTransfer}><Icons name="right-left" /></span>
+            {#if selectedList.length === 1}
+              <a class="download" href={getDownloadUrl()} download={selectedList[0].Name}>
+                <Icons name="download" box="0 0 512 512" />
+              </a>
+            {/if}
             <span class="rm-all" on:click={onShowRemoveConfirm}><Icons name="trash" /></span>
           {:else}
             <span class="btn-sync" on:click={reload} title="Reload Files"><Icons name="sync" /></span>
@@ -480,11 +489,12 @@
     display: flex;
     flex-direction: row;
   }
+  .filter span > a,
   .filter span > span {
     position: relative;
     display: inline-block;
     width: 30px;
-    padding: 0 5px;
+    margin: 0 3px;
     text-align: center;
   }
 

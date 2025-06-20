@@ -55,6 +55,16 @@ routes.get("/image/:Path", (req, res) => {
   return res.sendFile(Path, { headers: { "Content-Type": `image/${type}` } });
 });
 
+routes.get("/download/:Path", (req, res) => {
+  const { Path } = req.params;
+  if (fs.existsSync(Path)) {
+    console.log("send-file");
+    return res.sendFile(Path);
+  }
+
+  return res.status(404).send("File not found");
+});
+
 routes.get("/:page/:items/:filter?", async (req, res) => {
   const { page, items, filter } = req.params;
 
