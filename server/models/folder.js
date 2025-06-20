@@ -124,26 +124,21 @@ export default (sequelize, db) => {
               fs.moveSync(Path, item.Path, { overwrite: true });
             }
             //Rename Folder for thumbnail
-            if (Name !== item.Name) {
-              const type = item.FilesType;
+            const type = item.FilesType;
 
-              let oldCover = await getCoverPath(appConfig.ImagesPath, Name, type);
-              const Cover = await getCoverPath(appConfig.ImagesPath, item.Name, type);
+            const moveCover = (Path) => {
+              const newPath = Path.replace(Name, item.Name);
               //rename cover name
-              if (fs.existsSync(oldCover) && Cover !== oldCover) {
-                fs.moveSync(oldCover, Cover, { overwrite: true });
+              if (fs.existsSync(Path) && Path !== newPath) {
+                fs.moveSync(Path, newPath, { overwrite: true });
               }
-              const thumbsPath = path.join(appConfig.ImagesPath, getFileType(item), opt.Name);
+            };
 
-              if (fs.existsSync(thumbsPath)) {
-                const newthumbsPath = thumbsPath.replace(opt.Name, item.Name);
-                try {
-                  fs.moveSync(thumbsPath, newthumbsPath);
-                } catch (error) {
-                  console.log(error);
-                }
-              }
-            }
+            let oldCover = await getCoverPath(appConfig.ImagesPath, Name, type);
+            moveCover(oldCover);
+
+            oldCover = await path.join(appConfig.ImagesPath, getFileType(item), Name);
+            moveCover(oldCover);
           }
         },
         beforeDestroy: async function (item, opt) {

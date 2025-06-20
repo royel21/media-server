@@ -83,11 +83,8 @@ const downloadImg = async (url, page, name = "", isCover) => {
             let viewSource = await page.goto(url.trim());
             buff = await viewSource.buffer();
           } catch (error) {
-            console.log(error);
             if (!error.toString().includes("net::ERR_CONNECTION_CLOSED")) {
               break;
-            } else {
-              sendMessage({ text: `${name} download-Image Error`, url, color: "red", error: error.toString() });
             }
             await delay(2000);
           }

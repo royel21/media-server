@@ -19,6 +19,10 @@ const state = { links: [], running: false, size: 0, checkServer: false, nhentais
 
 const db = getDb();
 
+function escapeRegExp(string) {
+  return string.replace(/([^a-zA-Z0-9])/g, "\\$1"); // $& means the whole matched string
+}
+
 const validateName = async (manga, link) => {
   let tname = await db.NameList.findOne({ where: { Name: manga.Name } });
   let name = manga.Name;
@@ -59,6 +63,8 @@ const updateLastChapter = async ({ data }, link) => {
 };
 
 const downloadLinks = async (link, page) => {
+  const appConfig = await db.AppConfig.findOne();
+
   const { Server } = link;
   let isAdult = link.IsAdult;
 
@@ -80,10 +86,18 @@ const downloadLinks = async (link, page) => {
     ...Server.dataValues,
     link,
   });
+  const parts = appConfig.RemoveInName.split(";");
 
-  await validateName(manga, link);
+  for (const part of parts) {
+    try {
+      const regex = new RegExp(escapeRegExp(part), "i");
+      manga.Name = manga.Name.replace(regex, "").trim();
+    } catch (error) {}
+  }
 
   const { Name } = manga;
+
+  await validateName(manga, link);
 
   manga.Server = link.Url;
 

@@ -38,37 +38,17 @@ export const isValidKey = (e, k) => {
 };
 
 export const validateAuthor = (auth) => {
-  if (auth === "N/A") return auth;
+  if (!auth && auth === "N/A") return auth;
 
   auth = auth
-    .split(/\/|,|;/)
+    .split(", ")
     .map((a) => a.trim())
-    .filter((a) => a)
-    .join(", ");
+    .filter((a) => a);
+  auth = [...new Set([...auth])].join(", ");
   return auth
     .split(" ")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLocaleLowerCase())
     .join(" ");
-};
-
-export const validGenres = (g, tags, removeTags = []) => {
-  const regex = new RegExp([...tags, ...removeTags].join("|"), "ig");
-  const regex2 = new RegExp(tags.join("|"), "ig");
-
-  let parts = g
-    .replace(/Genres:(\t|)/g, "")
-    .replace(regex, "")
-    .split(/,|\/|\n| /g);
-
-  if (parts.includes("Manhwa")) {
-    parts = parts.filter((p) => !/Manga|Webtoon/i.test(p));
-  }
-
-  const defTags = g.replace(/Genres\:/gi, "").match(regex2) || [];
-
-  const gens = new Set([...defTags, ...parts].sort());
-
-  return [...gens].filter((g) => g.trim()).join(", ");
 };
 
 const toLowerList = /^(For|No|It|Of|And|In|X|Du|Or|A|Wa|wo|na|to|ni|de|o|by)$/i;
@@ -83,9 +63,13 @@ export const capitalize = (val, splitter = " ", Preserve = true) => {
         continue;
       }
 
-      if (toLowerList.test(words[i])) {
+      if (words[i].length < 3 && i > 0 && toLowerList.test(words[i])) {
         words[i] = words[i].toLowerCase();
         continue;
+      }
+
+      if (i === 0 && words[i].length < 2) {
+        words[i] = words[i][0].toUpperCase() + words[i].slice(1);
       }
 
       if (words[i].length > 1) {
@@ -109,6 +93,47 @@ export const capitalize = (val, splitter = " ", Preserve = true) => {
   return result;
 };
 
+export const validGenres = (g, tags, removeTags = []) => {
+  const regex = new RegExp([...tags, ...removeTags].join("|"), "ig");
+  const regex2 = new RegExp(tags.join("|"), "ig");
+
+  g = capitalize(g);
+
+  let parts = g
+    .replace(/Genres:(\t|)/g, "")
+    .replace(regex, "")
+    .split(/,|\/|\n| /g);
+
+  if (parts.includes("Manhwa")) {
+    parts = parts.filter((p) => !/Manga|Webtoon/i.test(p));
+  }
+
+  const defTags = g.replace(/Genres\:/gi, "").match(regex2) || [];
+
+  const gens = new Set([...defTags, ...parts].sort());
+
+  return [...gens].filter((g) => g.trim()).join(", ");
+};
+
+function containsJapaneseOrChinese(text) {
+  return /[\u3400-\u9FBF]|[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g.test(text);
+}
+
+const fixAltName = (AltName) => {
+  const names = [...new Set(AltName)];
+
+  const removeDub = (items) => (n1) => items.filter((n2) => n2.includes(n1)).length === 1;
+
+  const sortJapFirst = (a) => {
+    if (containsJapaneseOrChinese(a)) {
+      return -1;
+    }
+    return 0;
+  };
+
+  return names.filter(removeDub(names)).sort(sortJapFirst).join("; ");
+};
+
 export const validAltName = (v) => {
   const result = v.replace(/( |)(•|\/ )( |)/g, "; ").trim();
   const altnames = capitalize(result);
@@ -121,7 +146,7 @@ export const validAltName = (v) => {
     }
   }
 
-  return parts.join("; ");
+  return fixAltName(parts);
 };
 
 export const getEvent = (e) => (e.touches ? e.touches[0] : e);

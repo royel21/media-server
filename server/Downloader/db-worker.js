@@ -1,13 +1,13 @@
 import winex from "win-explorer";
 import db from "../models/index.js";
 import path from "node:path";
-import { validateAuthor, validGenres } from "#server/share/utils";
+import { validAltName, validateAuthor, validGenres } from "#server/share/utils";
 
 export const getDb = () => db;
 
 export const destroy = async (data) => {
   try {
-    await db.file.destroy(data, { Del: true });
+    await db.file.destroy({ ...data, Del: true, individualHooks: true });
   } catch (error) {
     console.log("destroy failed", error);
   }
@@ -29,6 +29,8 @@ export const findOrCreateFolder = async (manga, IsAdult, isRaw) => {
   Genres = await validGenres(Genres, tags, removeTags);
 
   Author = validateAuthor(Author);
+
+  AltName = validAltName(AltName);
 
   if (AltName.includes(Name)) {
     const regx = new RegExp(`(; |)${Name}( ;|)`, "i");

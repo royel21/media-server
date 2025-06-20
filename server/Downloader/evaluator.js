@@ -117,8 +117,6 @@ export const evaluetePage = async (query) => {
 
   data = data.filter((d) => d);
 
-  AltName = await window.fixAltName(AltName);
-
   return { Name, data, poster, AltName, Description, Genres, Status, Author, maxNum };
 };
 
@@ -223,9 +221,25 @@ export const adultEvalPage = async (query) => {
         if (/Alternative|Nombres|Other name/i.test(text)) {
           AltName = getAltName(text || "");
         }
-        if (authorRegex.test(text) && !/updating|Desconocido/i.test(text)) {
-          Author = text.replace(authorRegex, "").trim();
+
+        if (authorRegex.test(text) && !/known|updating|Desconocido/i.test(text)) {
+          Author = text
+            .replace(authorRegex, "")
+            .split(/;|\/|,/)
+            .map((a) => a.trim())
+            .filter((a) => a)
+            .join(", ");
         }
+
+        if (/Artists|Artista/i.test(text)) {
+          text = text
+            .replace(/(Artists|Artista)(\:|)/, "")
+            .split(/;|\/|,/)
+            .filter((a) => a)
+            .map((a) => a.trim());
+          Author = [...Author.split(", "), ...text].join(", ");
+        }
+
         if (genreRegex.test(text)) {
           Genres = formatGenres(text.replace(genreRegex, "").trim());
         }
@@ -241,40 +255,6 @@ export const adultEvalPage = async (query) => {
 
   if (Genres === "") {
     Genres = formatGenres(document.querySelector(query.Genres)?.textContent.replace(genreRegex, "").trim() || "");
-  }
-
-  if (query.Name.includes("bato")) {
-    for (let tag of [...document.querySelectorAll(".attr-item")]) {
-      let text = tag.textContent || "";
-      if (genreRegex.test(text)) {
-        const adult = /Mature|Smut|hentai/i.test(text) ? ["Adult"] : [];
-        Genres = formatGenres(text.replace(genreRegex, "").trim(), adult);
-      }
-
-      if (authorRegex.test(text)) {
-        Author = text
-          .replace(authorRegex, "")
-          .trim()
-          .split(/\//g)
-          .map((a) => window.capitalize(a).trim())
-          .join(", ");
-      }
-    }
-  }
-
-  if (location.href.includes("kaliscan")) {
-    const meta = [...document.querySelectorAll(".book-info .meta p")].map((p) => p.textContent);
-    let text = meta.find((ctext) => authorRegex.test(ctext));
-    if (text && !/unknown/i.test(text)) {
-      Author = text
-        .replace(authorRegex, "")
-        .trim()
-        .split(",")
-        .map((p) => p.trim())
-        .join(", ");
-    }
-    text = meta.find((ctext) => genreRegex.test(ctext))?.replace(genreRegex, "");
-    Genres = formatGenres(text);
   }
 
   let as = [...document.querySelectorAll(query.Chapters)];
@@ -389,7 +369,12 @@ export const adultEvalPage = async (query) => {
     Status = /completed|finished/gi.test(document.querySelector(query.Status)?.textContent || "") ? 1 : 0;
   }
 
-  AltName = await window.fixAltName(AltName);
+  let Unc = /Uncensored/i.test(title);
+  if (Unc) {
+    for (let d of data) {
+      d.name = d.name + " unc";
+    }
+  }
 
   return { Name, data, poster, Description, Status, posterData, Genres, AltName, title, Author };
 };

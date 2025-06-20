@@ -108,10 +108,11 @@ export default (sequelize, db) => {
               const folder = await item.getFolder();
               if (folder) {
                 //Delete File
-                const fPath = `${folder.Path}/${item.Name}`;
+                const fPath = path.join(folder.Path, item.Name);
 
                 if (fs.existsSync(fPath)) {
                   fs.removeSync(fPath);
+                  console.log("remove: ", fPath);
                 }
                 //Delete Cover
                 const cover = await genImgPath(item.Type, folder.Name, item.Name);

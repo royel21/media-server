@@ -21,15 +21,16 @@ export const downloadLink = async ({ d, page, Server, folder, count, state }) =>
   const exists = fs.readdirSync(mangaDir).find(findRaw(d.name));
 
   if (!/ raw/i.test(d.name) && exists) {
-    fs.removeSync(path.join(mangaDir, exists));
-    const cover = path.join(imgDir, exists + ".jpg");
-    if (fs.existsSync(cover)) {
-      fs.removeSync(cover);
-    }
     await destroy({ where: { Name: exists, FolderId: folder.Id } });
   }
 
   let dir = path.join(mangaDir, d.name);
+  const noCensored = dir.replace(/ unc$/, ".zip");
+
+  if (/ unc$/i.test(d.name) && fs.existsSync(noCensored)) {
+    await destroy({ where: { Name: d.name.replace(" unc", ".zip"), FolderId: folder.Id } });
+  }
+
   if (fs.existsSync(dir + ".zip") || fs.existsSync(dir.replace(" raw", "") + ".zip")) {
     return;
   }

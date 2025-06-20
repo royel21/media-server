@@ -102,8 +102,10 @@ db.Link.belongsTo(db.Server, { foreignKey: "ServerId" });
 
 db.DownloadingList.hasMany(db.Downloading, { onDelete: "CASCADE" });
 db.Downloading.belongsTo(db.Link, { foreignKey: "LinkId", onDelete: "CASCADE" });
-
-const queries = [];
+// "ALTER TABLE AppConfigs ADD AdultPath VARCHAR(255) NOT NULL DEFAULT '';"
+const queries = [
+ "ALTER TABLE AppConfigs ADD RemoveInName VARCHAR(512) DEFAULT 'Manhwa|Webtoon(s|)';"
+];
 
 db.init = async (force) => {
   for (const q of queries) {
@@ -152,6 +154,8 @@ db.init = async (force) => {
     }
   } catch (error) {}
 };
+
+await db.init();
 
 export const createdb = async () => {
   if (dbConnector === "mariadb") {

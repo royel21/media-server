@@ -29,7 +29,7 @@
   ConsoleStore.subscribe((value) => (items = value));
 
   const onData = (data) => {
-    if (data.text) {
+    if (data?.text) {
       updateConsole(data);
     }
 

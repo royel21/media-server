@@ -59,7 +59,7 @@
     }
 
     if (name === "AltName") {
-      value = validAltName(value.replace(regx, ""));
+      value = validAltName(value);
     }
 
     if (name === "Author") {

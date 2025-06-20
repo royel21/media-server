@@ -10,7 +10,7 @@
   import Icons from "../icons/Icons.svelte";
   import RConsole from "./Component/RConsole.svelte";
   import { MessageStore, setMessage } from "./Store/MessageStore";
-  import Configs from "./Tools/Configs.svelte";
+  import Configs from "./AppConfig/Configs.svelte";
   import DownloadManager from "./Downloader/DownloadManager.svelte";
   import Player from "./Component/Player.svelte";
   import MangaViewer from "./Component/MangaViewer.svelte";

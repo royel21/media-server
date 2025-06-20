@@ -46,25 +46,6 @@ export const createPage = async (browser, timeout = 180000) => {
     });
     const userAgent = new UserAgent().random().toString();
     await page.evaluateOnNewDocument(() => {
-      function containsJapaneseOrChinese(text) {
-        return /[\u3400-\u9FBF]|[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g.test(text);
-      }
-
-      window.fixAltName = (AltName) => {
-        const names = [...new Set(AltName.split("; "))];
-
-        const removeDub = (items) => (n1) => items.filter((n2) => n2.includes(n1)).length === 1;
-
-        const sortJapFirst = (a) => {
-          if (containsJapaneseOrChinese(a)) {
-            return -1;
-          }
-          return 0;
-        };
-
-        return names.filter(removeDub(names)).sort(sortJapFirst).join("; ");
-      };
-
       const toLowerList = /^(For|No|It|Of|And|In|X|Du|Or|A|Wa|wo|na|to|ni|de|o|by)$/i;
 
       window.capitalize = (val, splitter = " ", Preserve = true) => {

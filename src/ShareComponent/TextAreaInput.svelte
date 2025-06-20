@@ -22,7 +22,6 @@
 
   const handler = async () => {
     paste && handlerPaste(file, key, sept, ref);
-    console.log(key, sept);
   };
   $: if (item) file = item;
 </script>

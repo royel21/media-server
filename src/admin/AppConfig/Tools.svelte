@@ -6,6 +6,7 @@
   import { setMessage } from "../Store/MessageStore";
   import { formatDate } from "../Downloader/utils";
   import ChoosePath from "./ChoosePath.svelte";
+  import TextAreaInput from "src/ShareComponent/TextAreaInput.svelte";
   const socket = getContext("socket");
   //clean-images
   let config = {};
@@ -64,6 +65,10 @@
     config[name] = value;
   };
 
+  const HandleRemoveInName = ({ target: { value } }) => {
+    config.RemoveInName = [...new Set(value.split("|"))].join("|");
+  };
+
   const onReset = () => {
     config = { ...defConfig };
   };
@@ -78,6 +83,7 @@
   });
 
   document.title = "Tools";
+  const textAreaProp = { label: "Remove Text In Folder Name ~ Using RegExp", key: "RemoveInName", rows: "3" };
 </script>
 
 {#if showChoosePath}
@@ -97,6 +103,7 @@
         <Input label="User Def Password" key="UserPassword" item={config} onChange={handler} />
         <Input label="Time Out" key="LoginTimeout" item={config} onChange={handler} />
         <Input label="Lock Count" key="LoginLockCount" item={config} onChange={handler} />
+        <TextAreaInput {...textAreaProp} item={config} onChange={HandleRemoveInName} paste={true} sept=";" />
         <div class="input-control" id="CoverPath" on:click={onShowChoosePath}>
           <span class="input-label">Cover Path</span>
           <input class="input" value={config.CoverPath || "Click to Choose"} disabled />

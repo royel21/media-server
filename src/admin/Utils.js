@@ -1,5 +1,7 @@
 export const calRows = (query) => {
-  let container = document.querySelector(query || ".list-container") || {};
+  let container = document.querySelector(query || ".list-container");
+  if (!container) return 0;
+
   const li = container.querySelector("li");
   return parseInt(container.offsetHeight / li.offsetHeight);
 };

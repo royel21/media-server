@@ -30,6 +30,11 @@ export default (sequelize) => {
         type: INTEGER,
         defaultValue: 3,
       },
+      RemoveInName: {
+        type: STRING,
+        defaulValue: "Manhwa|Webtoon(s|)",
+        collate: "utf8mb4_bin",
+      },
       AdultPath: {
         type: STRING,
         defaultValue: path.join("homedir", "Downloads", "mediaserver"),

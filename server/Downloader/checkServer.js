@@ -1,16 +1,12 @@
 import fs from "fs-extra";
 import { findFolder, getDb } from "./db-worker.js";
 
-import { filterManga, removeRaw, sendMessage } from "./utils.js";
+import { delay, filterManga, removeRaw, sendMessage } from "./utils.js";
 import { createPage } from "./Crawler.js";
 import { downloadLink } from "./link-downloader.js";
 import { getProgress } from "../utils.js";
 
 const evalServer = async (query) => {
-  try {
-    document.querySelector("#navigation-ajax")?.click();
-  } catch (error) {}
-
   return [...document.querySelectorAll(query.HomeQuery)].map((e) => {
     const manga = e.querySelector(".post-title, .bigor-manga h3");
     const Url = e.querySelector(".post-title a")?.href;
@@ -71,6 +67,13 @@ const evalServer = async (query) => {
       })
       .reverse();
 
+    let Unc = /Uncensored/i.test(Name);
+    if (Unc) {
+      for (let d of chaps) {
+        d.name = d.name + " unc";
+      }
+    }
+
     return { Name: Name.replace(/ raw$/i, ""), Url, chaps };
   });
 };
@@ -107,9 +110,12 @@ export const downloadFromPage = async (Id, state) => {
       page.goto(`https:\\${Server.Name}`, { waitUntil: "domcontentloaded" });
       await page.waitForSelector(Server.HomeQuery);
 
-      try {
-        await page.click("#navigation-ajax");
-      } catch (error) {}
+      if (/"mangaread/i.test(Server.Name)) {
+        try {
+          await page.click("#navigation-ajax");
+          await delay(3000);
+        } catch (error) {}
+      }
 
       const data = await page.evaluate(evalServer, Server.dataValues);
 

@@ -72,6 +72,10 @@ export const filterManga = (files) => (d) => {
         return false;
       }
 
+      if (/ unc$/i.test(d.name) && !/ unc\.zip$/i.test(f)) {
+        return false;
+      }
+
       return num[0] === num2[0];
     }
 
