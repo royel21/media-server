@@ -231,6 +231,12 @@
     max-height: 180px;
     max-width: 180px;
   }
+  .f-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 180px;
+  }
   .f-count {
     display: flex;
     flex-direction: column;
