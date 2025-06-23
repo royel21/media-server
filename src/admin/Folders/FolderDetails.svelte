@@ -22,7 +22,6 @@
   let imageData = { Id: "", Url: "", file: "" };
   let transfer = false;
   let isModified;
-  let image = "";
 
   const regx = /:|\?/g;
 
@@ -42,10 +41,10 @@
       delete data.dirs;
       folder = { ...folder, ...data };
       old = { ...folder };
+      delete old.image;
       tags = data.tags.filter((g) => !g.IsRemove).map((g) => g.Name);
       removeTags = data.tags.filter((g) => g.IsRemove).map((g) => g.Name);
     }
-    console.log(data);
     transfer = false;
     hasChanges = false;
   };
@@ -103,7 +102,7 @@
   };
 
   const cancel = () => {
-    folder = { ...old };
+    folder = { ...folder, ...old };
     imageData = {};
     hasChanges = false;
   };
@@ -156,10 +155,7 @@
   <div class="error">{error || ""}</div>
   <div class="header">
     <div class="f-image">
-      <img
-        src={`/Folder/${folder.FilesType}/${encodeURIComponent(folder?.Name)}.jpg?v=${new Date().getTime()}`}
-        alt="Not Found"
-      />
+      <img src={`data:img/jpeg;base64, ${folder.image || ""}`} alt="Not Found" />
     </div>
     <div class="f-count">
       <span class="ccount"><strong>Total:</strong> <span>{folder.Total || 0}</span></span>
@@ -224,18 +220,20 @@
     margin: 5px 0;
     background-color: #0db9d8;
     border-radius: 0.25rem;
-    height: 180px;
+    height: 240px;
     overflow: hidden;
   }
   .header img {
-    max-height: 180px;
-    max-width: 180px;
+    max-height: 100%;
+    max-width: 100%;
   }
   .f-image {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-width: 180px;
+    min-width: 175px;
+    padding: 2px;
+    background-color: black;
   }
   .f-count {
     display: flex;
