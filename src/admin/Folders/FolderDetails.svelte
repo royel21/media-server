@@ -22,6 +22,7 @@
   let imageData = { Id: "", Url: "", file: "" };
   let transfer = false;
   let isModified;
+  let image = "";
 
   const regx = /:|\?/g;
 
@@ -38,13 +39,13 @@
 
     if (data.dirs) {
       imageData.Id = Id;
-
       delete data.dirs;
       folder = { ...folder, ...data };
       old = { ...folder };
       tags = data.tags.filter((g) => !g.IsRemove).map((g) => g.Name);
       removeTags = data.tags.filter((g) => g.IsRemove).map((g) => g.Name);
     }
+    console.log(data);
     transfer = false;
     hasChanges = false;
   };
@@ -153,11 +154,19 @@
 
 <div class="detail" class:change={isModified}>
   <div class="error">{error || ""}</div>
-  <div class="f-count">
-    <span class="ccount">Total: {folder.Total || 0}</span>
-    <span class="ccount">Size: {formatSize(folder.Size || 0)}</span>
+  <div class="header">
+    <div class="f-image">
+      <img
+        src={`/Folder/${folder.FilesType}/${encodeURIComponent(folder?.Name)}.jpg?v=${new Date().getTime()}`}
+        alt="Not Found"
+      />
+    </div>
+    <div class="f-count">
+      <span class="ccount"><strong>Total:</strong> <span>{folder.Total || 0}</span></span>
+      <span class="ccount"><strong>Size:</strong> <span>{formatSize(folder.Size || 0)}</span></span>
+      <span class="ccount"><strong>Last Chapter: </strong><span> {folder.Last || "N/A"}</span></span>
+    </div>
   </div>
-  <div class="last-file"><strong>Last Chapter: </strong><span> {folder.Last || "N/A"}</span></div>
   <div class="d-content">
     <TextAreaInput file={folder} key="Name" style="margin-bottom: 5px" rows="3" {onChange}>
       <span class="pre-paste" slot="btn-left" on:click={copyName} title="Copy Name">
@@ -208,18 +217,25 @@
   .detail.change {
     height: calc(100% - 90px);
   }
-  .f-count {
+  .header {
     display: flex;
-    font-size: 0.9rem;
+    flex-direction: row;
+    width: 100%;
     margin: 5px 0;
     background-color: #0db9d8;
     border-radius: 0.25rem;
+  }
+  .header img {
+    max-height: 180px;
+    max-width: 180px;
+  }
+  .f-count {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.9rem;
     color: black;
     font-weight: 600;
-  }
-
-  .f-count span {
-    width: 50%;
+    padding-left: 5px;
   }
   .detail :global(.input-label) {
     min-width: 120px;
@@ -233,11 +249,6 @@
   }
   .d-buttons .btn:not(:last-child) {
     margin-right: 15px;
-  }
-  .f-count .ccount {
-    min-width: 85px;
-    text-align: center;
-    border-right: 1px solid white;
   }
   .pre-paste {
     position: absolute;

@@ -167,6 +167,7 @@ routes.get("/folder/:folderId?", async (req, res) => {
     Size: folder.dataValues.Size || 0,
     Last: files.length > 0 ? files[files.length - 1] : "N/A",
     Total: files.length > 0 ? files.length : 0,
+    FilesType: folder.FilesType,
     dirs,
     tags: await getTags(),
   });
