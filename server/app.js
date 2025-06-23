@@ -10,6 +10,7 @@ import fileUpload from "express-fileupload";
 import passportConfig from "./passport.js";
 import websocketConfig from "./websocket/socketio-server.js";
 import { fileURLToPath } from "url";
+import fs from "fs-extra";
 
 config();
 
@@ -70,8 +71,11 @@ app.use(async (req, res, next) => {
   if (/\.(jpg|jpeg|webp|png)/.test(req.url)) {
     const appConfig = await db.AppConfig.findOne();
     const imgPath = path.join(appConfig.ImagesPath, decodeURIComponent(req.url.split("?v")[0]));
-
-    res.sendFile(imgPath);
+    if (fs.existsSync(imgPath)) {
+      res.sendFile(imgPath);
+    } else {
+      res.redirect(301, "/notfound.jpg");
+    }
   } else {
     next();
   }

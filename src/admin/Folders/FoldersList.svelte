@@ -285,35 +285,11 @@
   </span>
 </ItemList>
 
-{#if showImage && totalItems}
-  <div class="thumbnail">
-    <img
-      src={`/Folder/${showImage.FilesType}/${encodeURIComponent(showImage?.Name)}.jpg?v=${new Date().getTime()}`}
-      alt="Cover Not Found"
-    />
-  </div>
-{/if}
-
 <style>
   .create-folder :global(svg) {
     height: 32px;
     width: 43px;
     top: 3px;
-  }
-  .thumbnail {
-    position: absolute;
-    right: 10px;
-    top: 95px;
-    z-index: 99;
-    pointer-events: none;
-    padding: 0px 1px;
-    border-radius: 0.25rem;
-    border: 1px solid black;
-    background-color: black;
-  }
-  .thumbnail img {
-    max-width: 200px;
-    object-fit: contain;
   }
 
   .dir-list {
@@ -331,10 +307,6 @@
     height: 27px;
   }
   @media screen and (max-width: 600px) {
-    .thumbnail {
-      right: 11px;
-    }
-
     .dir-list select {
       font-size: 0.8rem;
     }

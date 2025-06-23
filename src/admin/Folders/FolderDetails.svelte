@@ -224,6 +224,8 @@
     margin: 5px 0;
     background-color: #0db9d8;
     border-radius: 0.25rem;
+    height: 180px;
+    overflow: hidden;
   }
   .header img {
     max-height: 180px;
