@@ -55,7 +55,7 @@
     const { UserPassword, AdminPassword } = config;
     const cfg = { ...config, UserPassword: btoa(UserPassword), AdminPassword: btoa(AdminPassword) };
 
-    const result = await apiUtils.post("/admin/app-config/save", cfg);
+    const result = await apiUtils.post("admin/app-config/save", cfg);
 
     if (result.valid) {
       return setMessage({ msg: `${formatDate(new Date())} App Config Save` });

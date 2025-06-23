@@ -4,7 +4,9 @@ export const post = async (route, params, key = "post") => {
   controller[key]?.abort();
   controller[key] = new AbortController();
   try {
-    return await fetch(`/api/${route}`, {
+    const url = `/api/${route}`.replace(/(\/)+/g, "/");
+
+    return await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

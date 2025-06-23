@@ -6,17 +6,19 @@
   import { FilesStore, MangaRegex } from "../Store/FilesStore";
   import { setfullscreen } from "src/user/Pages/pagesUtils";
   import { map } from "../Utils";
+  import { onStart, onMove, onEnd, events } from "./touchControl";
+  import { isMobile } from "src/utils";
 
   const CLOSE = 88;
   const PREV_FILE = 37;
   const NEXT_FILE = 39;
   const FULLSCREEN = 13;
+  const TOGGLEBOTTOMBAR = 86;
   const socket = getContext("socket");
 
   let file = {};
   let files = [];
 
-  let error = "";
   let current = files.findIndex((f) => f.Id === file.Id);
   let indices = [];
   let currentImg = 0;
@@ -28,6 +30,9 @@
   let imgs = [];
   let jumping = false;
   let mangaDir = true;
+  let nameRef;
+  let bottomBarRef;
+  let toggleControls = true;
 
   let state = {
     jumping: false,
@@ -44,6 +49,9 @@
   });
 
   const hide = () => {
+    if (isFullScreen) {
+      toggleFullScreen();
+    }
     FilesStore.set({ file: {}, files: [] });
     file = {};
     files = [];
@@ -169,7 +177,10 @@
     }
 
     if (keyCode === FULLSCREEN) {
-      onFullScreen();
+      toggleFullScreen();
+    }
+    if (keyCode === TOGGLEBOTTOMBAR) {
+      events.bottomCenter();
     }
   };
 
@@ -191,10 +202,10 @@
     }
   };
 
-  const onFullScreen = () => {
+  const toggleFullScreen = () => {
     state.pageObserver?.disconnect();
     isLoading = true;
-    isFullScreen = setfullscreen(modalRef);
+    setfullscreen(modalRef);
     setTimeout(() => {
       PageObserver(true);
     }, 150);
@@ -202,9 +213,57 @@
     container.focus();
   };
 
+  let nameTimeout;
+  const toggleName = () => {
+    if (isFullScreen && nameRef) {
+      nameRef.style.opacity = 1;
+      nameRef.style.transition = "";
+      clearTimeout(nameTimeout);
+      nameTimeout = setTimeout(() => {
+        nameRef.style.transition = "3.5s opacity";
+        nameRef.style.opacity = 0;
+      }, 3000);
+    }
+  };
+
   const onDisconnect = () => {
     isLoading = false;
     jumping = false;
+  };
+
+  events.topLeft = () => changePage(0);
+  events.topRight = () => changePage(data.total - 1);
+  events.centerRight = () => changePage(currentImg + 1, 1);
+  events.centerLeft = events.centerRight;
+  events.dragLeftToRight = events.centerRight;
+  events.dragRightToLeft = () => changePage(currentImg - 1, -1);
+  events.center = toggleFullScreen;
+  events.bottomLeft = () => changeFile(-1);
+  events.bottomRight = () => changeFile(1);
+  events.bottomCenter = () => {
+    if (isFullScreen) {
+      if (bottomBarRef) {
+        bottomBarRef.style.transition = ".3s bottom";
+        if (toggleControls) {
+          bottomBarRef.style.bottom = "-36px";
+        } else {
+          bottomBarRef.style.bottom = "0px";
+        }
+
+        toggleControls = !toggleControls;
+      }
+    }
+  };
+
+  const onToggleFullscreen = () => {
+    isFullScreen = !isFullScreen;
+
+    if (!isFullScreen) {
+      nameRef.style.opacity = 1;
+      nameRef.style.transition = "";
+      bottomBarRef.style.bottom = "0px";
+      toggleControls = true;
+    }
   };
 
   onMount(() => {
@@ -212,7 +271,14 @@
     socket.on("image-loaded", onImageData);
     socket.on("disconnect", onDisconnect);
 
+    document.addEventListener("fullscreenchange", onToggleFullscreen);
+
+    container.addEventListener(isMobile() ? "touchstart" : "mousedown", onStart, { passive: true });
+    container.addEventListener(isMobile() ? "touchmove" : "mousemove", onMove, { passive: true });
+    container.addEventListener(isMobile() ? "touchend" : "mouseup", onEnd, { passive: true });
+
     return () => {
+      document.removeEventListener("fullscreenchange", onToggleFullscreen);
       socket.off("disconnect", onDisconnect);
       socket.off("zip-data", onImageCount);
       socket.off("image-loaded", onImageData);
@@ -238,12 +304,13 @@
       PageObserver(true, 100);
     }, 100);
   }
+  $: toggleName(isFullScreen && file.Id);
 </script>
 
 <div class="viewer" class:hidden={!files.length} class:isFullScreen class:webtoon={!mangaDir}>
   <Dialog bind:ref={modalRef} cancel={hide} btnOk="" btnCancer="" keydown={onkeydown} canDrag={true}>
-    <span slot="modal-header" class="f-name"><span>{file.Name}</span></span>
-    <div class="manga-container" bind:this={container} tabindex="-1">
+    <span bind:this={nameRef} slot="modal-header" class="f-name"><span>{file.Name}</span></span>
+    <div bind:this={container} class="manga-container" tabindex="-1">
       {#if mangaDir}
         {#each Array(data.total).fill(null) as _, i}
           <img
@@ -264,11 +331,18 @@
         <Icons name="sync" box="0 0 512 512" />
       </span>
     </div>
-    <div class="error">{error}</div>
-    <div class="time-progress" on:mousedown|stopPropagation on:touchstart|passive|stopPropagation>
-      {#if files.length > 1}
-        <span class="files-count">{`${current + 1}/${files.length}`}</span>
-      {/if}
+    {#if files.length > 1}
+      <span class="files-count">{`${current + 1}/${files.length}`}</span>
+    {/if}
+    {#if isFullScreen}
+      <span class="current-page">{currentImg + 1}/{data.total}</span>
+    {/if}
+    <div
+      bind:this={bottomBarRef}
+      class="time-progress"
+      on:mousedown|stopPropagation
+      on:touchstart|passive|stopPropagation
+    >
       <span class="manga-dir btn-play" class:rotate={!mangaDir} on:click={changeMangaDir}>
         Read <Icons name="arrowupdown" box="0 0 320 512" />
       </span>
@@ -291,7 +365,7 @@
       <span id="next" class="btn-play" on:click={onChangeFile}>
         <Icons name="arrowcircleright" box="0 0 512 512" />
       </span>
-      <span class="btn-fullscreen btn-play" on:click={onFullScreen}>
+      <span class="btn-fullscreen btn-play" on:click={toggleFullScreen}>
         <Icons name="expandarrow" box="0 0 512 512" />
       </span>
       <span class="close btn-play" on:click={() => hide()}>
@@ -302,6 +376,9 @@
 </div>
 
 <style>
+  .viewer {
+    position: relative;
+  }
   .viewer :global(.modal) {
     height: 640px;
     width: 460px;
@@ -320,11 +397,32 @@
     overflow: hidden;
     padding: 0 5px;
   }
+
+  .viewer.isFullScreen .f-name {
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 5px 10px;
+    border-radius: 0.25rem;
+    pointer-events: none;
+  }
+
   .viewer :global(form) {
+    height: calc(100% - 33px);
+  }
+
+  .current-page {
+    position: absolute;
+    right: 5px;
+    bottom: 2px;
+    background-color: #000000a8;
+    padding: 1px 4px;
+    border-radius: 0.25rem;
+  }
+
+  .viewer.isFullScreen :global(form) {
     height: 100%;
   }
   .viewer :global(.modal-body) {
-    height: calc(100% - 33px);
+    height: 100%;
   }
   .manga-container {
     position: relative;
@@ -337,6 +435,10 @@
     overflow: auto;
     overflow-x: hidden;
     user-select: none;
+  }
+
+  .viewer.isFullScreen .manga-container {
+    height: 100%;
   }
 
   .webtoon .manga-container {
@@ -387,9 +489,6 @@
     content: attr(alt);
     border-bottom: 1px solid;
   }
-  .error {
-    position: absolute;
-  }
 
   .viewer :global(.modal-footer) {
     display: none;
@@ -407,17 +506,35 @@
     align-items: center;
     height: 28px;
     border-top: 1px solid;
+    background-color: black;
+  }
+
+  .viewer.isFullScreen :global(.modal-header) {
+    position: absolute;
+    top: 5px;
+    width: 100%;
+    z-index: 99;
+    margin: 0 auto;
+    border-bottom: 0;
+    text-align: center;
+  }
+
+  .viewer.isFullScreen .time-progress {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
   }
 
   .files-count {
     position: absolute;
-    top: 1px;
+    bottom: 2px;
     left: 4px;
     display: inline-block;
     border-radius: 0.25rem;
     padding: 0 5px;
     background-color: rgba(0, 0, 0, 0.2);
     user-select: none;
+    z-index: 99;
   }
 
   .time-progress :global(svg) {
@@ -426,18 +543,19 @@
 
   .time-progress .btn-play {
     margin: 0 10px;
+    cursor: pointer;
   }
 
   .btn-play :global(svg) {
     top: 3px;
-    cursor: pointer;
+    pointer-events: none;
   }
   .close,
   .btn-fullscreen {
     position: absolute;
   }
   .btn-fullscreen {
-    right: 30px;
+    right: 35px;
   }
   .close {
     right: 0px;
@@ -527,10 +645,6 @@
     .btn-play :global(svg) {
       width: 20px;
       height: 20px;
-    }
-
-    .files-count {
-      top: 5px;
     }
 
     .img-selector {

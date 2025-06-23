@@ -4,8 +4,8 @@ const FilesStore = writable({ file: {}, files: [] });
 const videoRegex = /\.(mp4|mkv|webm|ogg)$/i;
 const MangaRegex = /\.zip$/i;
 const ImageRegex = /\.(jpg|jpeg|png|webp)$/i;
-const textRegex = ".(txt|srt|ass|js|svelte|jsx|css|html|htmx|json|md|bat|sh|manifest|ini";
-const textRegex2 = textRegex + "|py|cpp|c|h|hpp|lua|glsl|inl|in|log)";
+const textRegex = "\\.(txt|srt|ass|js|svelte|jsx|css|html|htmx|json|md|bat|sh|manifest|ini";
+const textRegex2 = textRegex + "|py|cpp|c|h|hpp|lua|glsl|inl|in|log)$";
 const TextRex = new RegExp(textRegex2, "i");
 
 const setFiles = (data) => {

@@ -11,6 +11,12 @@ import defaultConfig from "../default-config.js";
 
 createDir(defaultConfig.ImagesDir);
 
+const fileExist = (filePath) => {
+  if (fs.existsSync(filePath)) return true;
+  if (fs.existsSync(filePath.replace(".zip", " unc.zip"))) return true;
+  if (fs.existsSync(filePath.replace(".zip", " raw.zip"))) return true;
+};
+
 export const downloadLink = async ({ d, page, Server, folder, count, state }) => {
   const mangaDir = folder.Path;
   const imgDir = path.join(defaultConfig.ImagesDir, "Manga", folder.Name);
@@ -31,7 +37,8 @@ export const downloadLink = async ({ d, page, Server, folder, count, state }) =>
     await destroy({ where: { Name: d.name.replace(" unc", ".zip"), FolderId: folder.Id } });
   }
 
-  if (fs.existsSync(dir + ".zip") || fs.existsSync(dir.replace(" raw", "") + ".zip")) {
+  const destZip = dir + ".zip";
+  if (fileExist(destZip)) {
     return;
   }
 
@@ -55,7 +62,6 @@ export const downloadLink = async ({ d, page, Server, folder, count, state }) =>
   const links = await page.evaluate(evaleLinks, Server.dataValues);
   sendMessage({ text: `Dwn: ${count} ch:${d.name} ~ img: ${links.length} ~ ${folder.Name}`, url: d.url });
 
-  const destZip = dir + ".zip";
   const imgPath = path.join(imgDir, d.name + ".zip.jpg");
   const result = await downloadAllIMages(page, links, state, imgPath, folder.Name + "/" + d.name, destZip);
 

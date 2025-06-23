@@ -9,6 +9,6 @@ DATE=$(date +"%Y-%m-%d")
 DB_NAME="mediaserverdb"
 #dump the database to a file
 # The -u option specifies the MySQL user, -p specifies the password, and the database name is provided at the end
-mysqldump --defaults-extra-file="$HOME/.secret.cnf" $DB_NAME > "${BACKUP_DIR}/${DB_NAME}_${DATE}.sql"
+mysqldump --defaults-extra-file="/home/.secret.cnf" $DB_NAME > "${BACKUP_DIR}/${DB_NAME}_${DATE}.sql"
 # Clean up backups older than 30 days (optional)
 find $BACKUP_DIR -type f -name "*.sql" -mtime +30 -exec rm -f {} \;

@@ -1,8 +1,8 @@
 <script>
+  import { onMount } from "svelte";
   import Dialog from "src/ShareComponent/Dialog.svelte";
   import { setGesture } from "src/ShareComponent/VideoTouch.js";
   import { formatTime } from "./util";
-  import { afterUpdate, onMount, setContext } from "svelte";
   import { map } from "../Utils";
   import Icons from "src/icons/Icons.svelte";
   import Slider from "src/ShareComponent/Slider.svelte";

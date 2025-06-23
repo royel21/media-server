@@ -29,24 +29,26 @@ export const PageTitles = {
 let lastEl = null;
 export const setfullscreen = (element) => {
   try {
-    if (lastEl && element.tagName !== "BODY") {
-      if (document.fullscreenElement.tagName === "BODY") {
-        document.exitFullscreen().then(() => {
+    if (element) {
+      if (lastEl && element.tagName !== "BODY") {
+        if (document.fullscreenElement.tagName === "BODY") {
+          document.exitFullscreen().then(() => {
+            element.requestFullscreen();
+          });
+        } else {
+          document.exitFullscreen().then(() => {
+            lastEl.requestFullscreen();
+          });
+        }
+      } else {
+        if (!document.fullscreenElement) {
           element.requestFullscreen();
-        });
-      } else {
-        document.exitFullscreen().then(() => {
-          lastEl.requestFullscreen();
-        });
-      }
-    } else {
-      if (!document.fullscreenElement) {
-        element.requestFullscreen();
-        if (element.tagName === "BODY") lastEl = element;
-      } else {
-        document.exitFullscreen();
-        lastEl = null;
-        return false;
+          if (element.tagName === "BODY") lastEl = element;
+        } else {
+          document.exitFullscreen();
+          lastEl = null;
+          return false;
+        }
       }
     }
   } catch (err) {
