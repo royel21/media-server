@@ -122,7 +122,7 @@
             <span on:click={onRemove}><Icons name="trash" /></span>
             <span on:click={() => (showEdit = file)}><Icons name="edit" /></span>
             <FileTypeIcon {file} files={items} />
-            <strong>{formatSize(file.Size)}GB</strong>
+            <strong>{formatSize(file.Size)}</strong>
             <span>{file.Name}</span>
           </li>
         {/each}
@@ -225,6 +225,7 @@
     justify-content: center;
   }
   strong {
+    min-width: 72px;
     margin-right: 5px;
   }
 </style>

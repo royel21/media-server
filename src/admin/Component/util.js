@@ -36,7 +36,27 @@ export const handlerPaste = async (item, key, sept, ref) => {
   }
 };
 
-export const formatSize = (size) => (size / 1024 / 1024 / 1024).toFixed(3);
+export const formatSize = (size) => {
+  let Size = (size / 1024 / 1024 / 1024).toFixed(3);
+
+  if (Size < 1) {
+    Size = (size / 1024 / 1024).toFixed(0);
+    if (Size < 1000) {
+      Size = (size / 1024 / 1024).toFixed(1);
+    }
+    if (Size < 100) {
+      Size = (size / 1024 / 1024).toFixed(2);
+    }
+    if (Size < 10) {
+      Size = (size / 1024 / 1024).toFixed(3);
+    }
+    Size = Size + " MB";
+  } else {
+    Size = Size + " GB";
+  }
+
+  return Size;
+};
 
 export function formatTime(time) {
   if (time === 0) return "00:00";

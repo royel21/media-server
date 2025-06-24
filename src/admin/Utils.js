@@ -33,3 +33,51 @@ export const formatSize = (size) => {
 
 export const loadObject = (key) => JSON.parse(localStorage.getItem(key));
 export const saveObject = (key, value) => localStorage.setItem(key, JSON.stringify(value));
+
+export const getSize2 = (file) => {
+  let size = file.Size / 1024;
+  let type = "KB";
+
+  if (size > 1000) {
+    type = "MB";
+    size = file.Size / 1024 / 1024;
+  }
+
+  if (size > 1000) {
+    size = file.Size / 1024 / 1024 / 1024;
+    type = "GB";
+  }
+
+  if (size < 10) {
+    size = size.toFixed(2);
+  } else if (size < 100) {
+    size = size.toFixed(1);
+  } else {
+    size = parseInt(size);
+  }
+  return size + type;
+};
+
+export const getSize3 = (file) => {
+  let size = file.Size;
+  let type = " KB";
+
+  if (size > 1000) {
+    type = " MB";
+    size = file.Size / 1024;
+  }
+
+  if (size > 1000) {
+    size = file.Size / 1024 / 1024;
+    type = " GB";
+  }
+
+  if (size < 10) {
+    size = size.toFixed(3);
+  } else if (size < 100) {
+    size = size.toFixed(2);
+  } else {
+    size = parseInt(size);
+  }
+  return size + type;
+};

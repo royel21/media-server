@@ -6,7 +6,7 @@
   import TextAreaInput from "../../ShareComponent/TextAreaInput.svelte";
   import Input from "../Component/Input.svelte";
   import Icons from "src/icons/Icons.svelte";
-  import { isDiff, formatSize } from "../Utils";
+  import { isDiff, getSize3 } from "../Utils";
   import { setMessage } from "../Store/MessageStore";
   import { capitalize, validAltName, validateAuthor, validGenres } from "@share/utils";
 
@@ -159,7 +159,7 @@
     </div>
     <div class="f-count">
       <span class="ccount"><strong>Total:</strong> <span>{folder.Total || 0}</span></span>
-      <span class="ccount"><strong>Size:</strong> <span>{formatSize(folder.Size || 0)}</span></span>
+      <span class="ccount"><strong>Size:</strong> <span>{getSize3(folder)}</span></span>
       <span class="ccount"><strong>Last Chapter: </strong><span> {folder.Last || "N/A"}</span></span>
     </div>
   </div>
@@ -218,9 +218,9 @@
     flex-direction: row;
     width: 100%;
     margin: 5px 0;
-    background-color: #0db9d8;
+    background-color: black;
     border-radius: 0.25rem;
-    height: 240px;
+    height: 244px;
     overflow: hidden;
   }
   .header img {
@@ -233,16 +233,32 @@
     align-items: center;
     min-width: 175px;
     padding: 2px;
-    background-color: black;
   }
   .f-count {
     display: flex;
     flex-direction: column;
     font-size: 0.9rem;
-    color: black;
+    color: white;
     font-weight: 600;
-    padding-left: 5px;
+    width: 100%;
   }
+
+  .f-count > span {
+    display: inline-block;
+    width: 100%;
+    padding: 4px 3px;
+  }
+
+  .f-count span:not(:last-child) {
+    border-bottom: 2px solid rgba(66, 66, 66, 0.4);
+  }
+
+  .f-count strong {
+    display: inline-block;
+    margin-right: 5px;
+    min-width: 40px;
+  }
+
   .detail :global(.input-label) {
     min-width: 120px;
   }
