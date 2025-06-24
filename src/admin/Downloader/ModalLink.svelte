@@ -7,7 +7,6 @@
   import Icons from "src/icons/Icons.svelte";
 
   export let hide;
-  export let servers = [];
 
   let link = { Name: "", AltName: "", Url: "", Raw: false };
   let errors = [];
@@ -22,23 +21,6 @@
       errors = result.error;
     }
     if (result.valid) hide(result);
-  };
-
-  const handle = ({ target: { name } }) => {
-    if (name === "Url") {
-      if (!link.IsAdult && servers) {
-        const linkParts = link.Url.split("/");
-        if (linkParts.length > 1) {
-          let serv = linkParts[2].replace(/www\.|\.html/i, "");
-          for (const id in servers) {
-            if (servers[id].Name === serv) {
-              link.IsAdult = servers[id].Type === "Adult";
-              break;
-            }
-          }
-        }
-      }
-    }
   };
 
   const joinPaste = async () => {
@@ -60,13 +42,13 @@
 <Dialog id="new-link" cancel={hide} confirm={submit} {errors}>
   <h4 slot="modal-header">New Link</h4>
   <svelte:fragment slot="modal-body">
-    <TextAreaInput key="Name" file={link} onChange={handle} />
-    <TextAreaInput key="Url" file={link} onChange={handle}>
+    <TextAreaInput key="Name" file={link} />
+    <TextAreaInput key="Url" file={link}>
       <span class="pre-paste" slot="btn-left" on:click={joinPaste} title="Paste To The Right">
         <Icons name="paste" color="black" />
       </span>
     </TextAreaInput>
-    <TextAreaInput key="AltName" sept="; " file={link} onChange={handle} />
+    <TextAreaInput key="AltName" sept="; " file={link} />
     <CheckBox label="Is Adult" key="IsAdult" item={link} />
     <CheckBox label="Is Raw" key="Raw" item={link} />
   </svelte:fragment>

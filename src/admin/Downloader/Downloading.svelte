@@ -8,7 +8,6 @@
   import LinkTable from "./LinkTable.svelte";
 
   let showDownList = false;
-  let servers = [];
   let isMounted = true;
 
   const socket = getContext("socket");
@@ -39,7 +38,6 @@
     });
 
     if (result.links && isMounted) {
-      servers = result.servers;
       datas.links = result.links;
       datas.totalPages = result.totalPages;
       datas.totalItems = result.totalItems;
@@ -129,7 +127,7 @@
     <LinkPager {loadItems} {datas} />
   </div>
 
-  <LinkTable {datas} {socket} {updateDatas} {removeLink} {servers} IsDownloading={true} {loadItems} />
+  <LinkTable {datas} {socket} {updateDatas} {removeLink} servers={true} IsDownloading={true} {loadItems} />
 </div>
 
 <style>

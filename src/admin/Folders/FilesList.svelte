@@ -26,12 +26,13 @@
   let modalType = {};
   let removeList = [];
   let isChecked = false;
+  let rows = 0;
 
   const dateFormat = { year: "numeric", month: "short", day: "numeric" };
 
   const loadFiles = async (pg) => {
     if (folderId) {
-      let rows = calRows("#l-files");
+      rows = calRows("#l-files");
       let data = await apiUtils.admin(["folders", "files", folderId, pg, rows, filter]);
 
       if (data.items) {
@@ -162,11 +163,24 @@
     showFileinfo = type === "mouseenter";
   };
 
+  let timeout;
+  const onResize = () => {
+    const newRows = calRows();
+    if (rows !== newRows) {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        loadFiles(page);
+      }, 300);
+    }
+  };
+
   onMount(async () => {
     loadFiles(1);
+    window.addEventListener("resize", onResize);
     socketEvent.forEach(({ name, event }) => socket.on(name, event));
     mounted = true;
     return () => {
+      window.removeEventListener("resize", onResize);
       socketEvent.forEach(({ name, event }) => socket.off(name, event));
     };
   });

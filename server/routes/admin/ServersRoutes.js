@@ -1,5 +1,10 @@
 import db from "#server/models/index";
 
+const getServer = async (req, res) => {
+  const { Id } = req.params;
+  const server = await db.Server.findOne({ where: { Id } });
+  res.send(server.dataValues);
+};
 const getServers = async (req, res) => {
   const servers = await db.Server.findAll({ order: ["Name"] });
   res.send({
@@ -30,6 +35,7 @@ const removeServer = async (req, res) => {
 };
 
 export default {
+  getServer,
   getServers,
   changeState,
   removeServer,

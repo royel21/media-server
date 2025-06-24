@@ -4,7 +4,8 @@
   import CheckBox from "src/admin/Component/CheckBox.svelte";
   import TextAreaInput from "src/ShareComponent/TextAreaInput.svelte";
   import apiUtils from "src/apiUtils";
-  import Dialog from "../../ShareComponent/Dialog.svelte";
+  import Dialog from "src/ShareComponent/Dialog.svelte";
+  import { onMount } from "svelte";
 
   export let server = "";
   export let link = "";
@@ -26,6 +27,15 @@
   const onChange = ({ target: { value } }) => {
     server.Type = value;
   };
+
+  onMount(async () => {
+    if (server && !server.Title) {
+      const result = await apiUtils.get(["admin", "downloader", "server", server.Id], "m-server");
+      if (!result.valid) {
+        server = result;
+      }
+    }
+  });
 </script>
 
 <div class="server">

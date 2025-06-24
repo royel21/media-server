@@ -39,36 +39,27 @@ routes.get("/remove-link/:Id", async ({ params }, res) => {
   res.send({ valid: false });
 });
 
-const getServers = async () => {
-  const servers = await db.Server.findAll({ order: ["Name"] });
-  const datas = {};
-
-  servers.forEach((srv) => {
-    datas[srv.Id] = srv;
-  });
-  return datas;
-};
-
 routes.post("/links", async ({ body }, res) => {
   const { page = 1, items, filter = "", IsDownloading, first, ServerId } = body;
   let limit = +items || 10;
   let offset = (page - 1) * limit || 0;
 
-  const qfilter = getFilter(filter);
-  const order = "Date";
-
   const query = {
-    where: { [Op.or]: { Name: qfilter, AltName: qfilter, "$Server.Name$": qfilter, Url: qfilter } },
+    where: {},
     limit,
     offset,
     include: { model: db.Server, Attributes: ["Id", "Name"], required: true },
     order: [
-      [literal(`Links.LastChapter = ""`), "DESC"],
-      [order, "DESC"],
+      ["DATE", "DESC"],
       [literal(`Links.LastChapter`), "DESC"],
       ["Name", "DESC"],
     ],
   };
+
+  if (filter) {
+    const qfilter = getFilter(filter);
+    query.where = { [Op.or]: { Name: qfilter, AltName: qfilter, "$Server.Name$": qfilter, Url: qfilter } };
+  }
 
   if (IsDownloading) {
     query.where.IsDownloading = 1;
@@ -80,14 +71,10 @@ routes.post("/links", async ({ body }, res) => {
 
   let servers;
 
-  if (first) {
-    if (ServerId) {
-      servers = await db.Server.findAll({ order: ["Name"] });
-      const srv = servers.find((sv) => sv.Id === +ServerId) || servers[0];
-      query.where.ServerId = srv.Id;
-    } else {
-      servers = await getServers();
-    }
+  if (first && ServerId) {
+    servers = await db.Server.findAll({ order: ["Name"] });
+    const srv = servers.find((sv) => sv.Id === +ServerId) || servers[0];
+    query.where.ServerId = srv.Id;
   }
 
   if (ServerId && !query.where.ServerId) query.where.ServerId = +ServerId;
@@ -104,7 +91,7 @@ routes.post("/links", async ({ body }, res) => {
     totalPages: Math.ceil(datas.count / limit),
     links: datas.rows.map((lnk) => {
       const serv = lnk.dataValues.Server;
-      return { ...lnk.dataValues, Server: { Id: serv.Id, Name: serv.Name } };
+      return { ...lnk.dataValues, Server: { Id: serv?.Id, Name: serv?.Name } };
     }),
   });
 });
@@ -257,6 +244,7 @@ routes.get("/exclude-list/:Id", ExcludeChapRoutes.excludeChapList);
 routes.post("/add-exclude", ExcludeChapRoutes.addExcludeChap);
 routes.get("/remove-exclude/:Id", ExcludeChapRoutes.removeExcludeChap);
 
+routes.get("/server/:Id", ServersRoutes.getServer);
 routes.get("/servers-list/change/:Id", ServersRoutes.changeState);
 routes.get("/servers-list/delete/:Id", ServersRoutes.removeServer);
 routes.get("/servers-list/", ServersRoutes.getServers);

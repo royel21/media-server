@@ -11,7 +11,6 @@
   import LinkPager from "./LinkPager.svelte";
 
   let editor = { show: false };
-  let servers = {};
   let showLinkModal = false;
   let showRenamer = false;
   let showExcludeChapModal;
@@ -48,8 +47,6 @@
     );
 
     if (isMounted) {
-      if (result.servers) servers = result.servers;
-
       if (result.links) {
         datas.links = result.links;
         datas.totalPages = result.totalPages;
@@ -104,7 +101,7 @@
 {/if}
 
 {#if showLinkModal}
-  <ModalLink hide={onNewlink} {servers} />
+  <ModalLink hide={onNewlink} />
 {/if}
 
 {#if showRenamer}
@@ -142,7 +139,7 @@
     </div>
     <LinkPager {loadItems} {datas} />
   </div>
-  <LinkTable {datas} {socket} {updateDatas} {removeLink} {servers} {loadItems} />
+  <LinkTable {datas} {socket} {updateDatas} {removeLink} servers={true} {loadItems} />
 </div>
 
 <style>

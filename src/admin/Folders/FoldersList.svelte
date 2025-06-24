@@ -34,6 +34,7 @@
   let createFolder;
   let showGenres = false;
   let showReplace = false;
+  let rows = 0;
 
   let isMounted = true;
 
@@ -47,6 +48,7 @@
   };
 
   const loadFolders = async (pg, dir) => {
+    rows = calRows();
     let flt = filter?.replace(/|:|\?|\^|"|\*|<|>|\t|\n/gi, "") || "";
     let data = await apiUtils.admin(["folders", dir || currentDir || "all", pg, calRows(), flt]);
 
@@ -200,6 +202,16 @@
       setMessage({ msg: `Scanning Finish: ${found}`, textColor: "cyan" });
     }
   };
+  let timeout;
+  const onResize = () => {
+    const newRows = calRows();
+    if (rows !== newRows) {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        loadFolders(page);
+      }, 300);
+    }
+  };
 
   const socketEvents = [
     { name: "folder-renamed", handler: onFolderRename },
@@ -210,6 +222,8 @@
 
   onMount(async () => {
     document.body.addEventListener("keydown", handlerKeydown);
+    window.addEventListener("resize", onResize);
+
     await loadFolders(page);
     await loadDir();
     socketEvents.forEach((e) => socket.on(e.name, e.handler));
@@ -219,6 +233,7 @@
     isMounted = false;
     apiUtils.cancelQuery();
     document.body.removeEventListener("keydown", handlerKeydown);
+    window.removeEventListener("resize", onResize);
     socketEvents.forEach((e) => socket.off(e.name, e.handler));
   });
 

@@ -55,7 +55,7 @@
   const editServer = ({ target }) => {
     const link = getLink(target);
     if (link) {
-      editor = { show: true, server: servers[link.ServerId] };
+      editor = { show: true, server: link.Server };
     }
   };
 

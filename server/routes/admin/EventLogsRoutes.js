@@ -1,6 +1,6 @@
 import db from "#server/models/index";
 
-const MAX_EVENTS = 300;
+const MAX_EVENTS = 200;
 
 export const allEvents = async (req, res) => {
   const eventCount = await db.eventLog.count();

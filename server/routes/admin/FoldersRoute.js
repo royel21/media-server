@@ -154,7 +154,11 @@ routes.get("/folder/:folderId?", async (req, res) => {
   }
   const appConfig = await db.AppConfig.findOne();
   const imagePath = path.join(appConfig.ImagesPath, "Folder", folder.FilesType, folder.Name + ".jpg");
-  const image = fs.readFileSync(imagePath).toString("base64");
+  let image = "";
+
+  if (fs.existsSync(imagePath)) {
+    image = fs.readFileSync(imagePath).toString("base64");
+  }
 
   res.send({
     Name: folder.Name,
