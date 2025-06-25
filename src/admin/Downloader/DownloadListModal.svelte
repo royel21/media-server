@@ -171,12 +171,17 @@
     display: flex;
     padding: 5px;
   }
+  :global(#server-modal .modal-body) {
+    padding: 2px;
+  }
   .modal-body {
     display: flex;
     flex-direction: column;
   }
   .modal-footer {
     border-top: 1px solid;
+    padding: 5px;
+    text-align: center;
   }
 
   a:hover {
