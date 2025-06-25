@@ -276,12 +276,8 @@
     <span class="h-p popup-msg" on:click={returnTo} data-title="Close">
       <Icons name="timescircle" />
     </span>
-    <span class="web-toon">
-      <input type="checkbox" name="webtoon" id="webtoon" bind:checked={webtoon} />
-      <label for="webtoon">
-        {webtoon ? "List" : "Pages"}
-        <Icons name="eye" />
-      </label>
+    <span class="web-toon" on:click={() => (webtoon = !webtoon)}>
+      Read <Icons name={webtoon ? "arrowdown" : "arrowright"} color="black" />
     </span>
     <span class="prev-page" on:click={prevPage}>
       <Icons name="arrowcircleleft" />
@@ -344,12 +340,10 @@
     z-index: 4;
   }
 
-  #webtoon {
-    display: none;
-  }
-
-  #webtoon + label {
-    display: inline-block;
+  #manga-viewer .controls .web-toon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: relative;
     cursor: pointer;
     color: black;
@@ -358,10 +352,17 @@
     margin: 0;
     background-color: white;
     border-radius: 0.25rem;
-    padding: 6px 25px 6px 5px;
+    padding: 0;
+    margin-top: 3px;
     line-height: 0.9;
-    width: 76px;
-    height: 26px;
+    width: 75px;
+    height: 28px;
+  }
+
+  .controls .web-toon :global(svg) {
+    top: 0;
+    height: 23px;
+    width: 30px;
   }
 
   .config {

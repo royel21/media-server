@@ -331,11 +331,11 @@
         <Icons name="sync" box="0 0 512 512" />
       </span>
     </div>
-    {#if files.length > 1}
-      <span class="files-count">{`${current + 1}/${files.length}`}</span>
-    {/if}
     {#if isFullScreen}
       <span class="current-page">{currentImg + 1}/{data.total}</span>
+    {/if}
+    {#if files.length > 1}
+      <span class="files-count">{`${current + 1}/${files.length}`}</span>
     {/if}
     <div
       bind:this={bottomBarRef}
@@ -343,8 +343,8 @@
       on:mousedown|stopPropagation
       on:touchstart|passive|stopPropagation
     >
-      <span class="manga-dir btn-play" class:rotate={!mangaDir} on:click={changeMangaDir}>
-        Read <Icons name="arrowupdown" box="0 0 320 512" />
+      <span class="manga-dir btn-play" on:click={changeMangaDir}>
+        Read <Icons name={mangaDir ? "arrowdown" : "arrowright"} color="black" />
       </span>
       <span id="prev" class="btn-play" on:click={onChangeFile}>
         <Icons name="arrowcircleleft" box="0 0 512 512" />
@@ -407,15 +407,6 @@
 
   .viewer :global(form) {
     height: calc(100% - 33px);
-  }
-
-  .current-page {
-    position: absolute;
-    right: 5px;
-    bottom: 2px;
-    background-color: #000000a8;
-    padding: 1px 4px;
-    border-radius: 0.25rem;
   }
 
   .viewer.isFullScreen :global(form) {
@@ -592,6 +583,31 @@
   }
 
   .manga-dir {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    color: black;
+    font-weight: bold;
+    transition: all 0.2s;
+    margin: 0;
+    background-color: white;
+    border-radius: 0.25rem;
+    padding: 0;
+    margin-top: 3px;
+    line-height: 0.9;
+    width: 75px;
+    height: 22px;
+  }
+
+  .manga-dir :global(svg) {
+    top: 0;
+    height: 23px;
+    width: 30px;
+  }
+
+  .manga-dir {
     width: 64px;
     line-height: 1.6;
     cursor: pointer;
@@ -602,8 +618,15 @@
     width: 15px;
     margin-left: 2px;
   }
-  .rotate :global(svg) {
-    transform: rotate(90deg);
+
+  .current-page {
+    position: absolute;
+    left: 49%;
+    bottom: 2px;
+    background-color: #000000a8;
+    padding: 1px 4px;
+    border-radius: 0.25rem;
+    pointer-events: none;
   }
 
   @keyframes rotate {
