@@ -68,7 +68,7 @@ app.use("/api/users", userRoutes);
 app.use((req, res, next) => (req.user ? next() : res.redirect("/login")));
 
 app.use(async (req, res, next) => {
-  if (/\.(jpg|jpeg|webp|png)/.test(req.url)) {
+  if (/^\/(Folder|Manga|Video)\/.*\.(jpg|jpeg|webp|png)/.test(req.url)) {
     const appConfig = await db.AppConfig.findOne();
     const imgPath = path.join(appConfig.ImagesPath, decodeURIComponent(req.url.split("?v")[0]));
     if (fs.existsSync(imgPath)) {

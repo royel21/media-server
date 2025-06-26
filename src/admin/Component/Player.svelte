@@ -7,6 +7,8 @@
   import Icons from "src/icons/Icons.svelte";
   import Slider from "src/ShareComponent/Slider.svelte";
   import { FilesStore, videoRegex } from "../Store/FilesStore";
+  import { setfullscreen } from "src/user/Pages/pagesUtils";
+  import { isMobile } from "src/utils";
 
   const VOLKEY = "admin-vol";
   const SEEKLEFT = 37;
@@ -21,13 +23,16 @@
 
   let duration = 0;
   let player;
+  let containerRef;
   let time = 0;
   let vol = localStorage.getItem(VOLKEY) || 0.05;
   let mute = false;
-  let ojectFit = "contain";
+  let ojectFit = "fill";
   let paused = true;
   let error = "";
   let current = files.findIndex((f) => f.Id === file.Id);
+  let isFullscreen;
+  let controls;
 
   FilesStore.subscribe((data) => {
     if (videoRegex.test(data.file.Name)) {
@@ -42,11 +47,14 @@
     files = [];
   };
 
-  const onPlay = (e) => {
-    if (paused) {
-      player.play().catch((err) => console.log(err));
-    } else {
-      player.pause();
+  const onPlay = () => {
+    if (player) {
+      if (paused) {
+        player.play().catch((err) => console.log(err));
+        hideControls();
+      } else {
+        player.pause();
+      }
     }
   };
 
@@ -81,6 +89,8 @@
     if (keyCode === CLOSE) hide();
   };
 
+  const toggleFullScreen = () => setfullscreen(containerRef);
+
   const changeFit = () => {
     ojectFit = ojectFit.includes("fill") ? "contain" : "fill";
   };
@@ -97,7 +107,45 @@
     vol = volume < 0 ? 0 : volume > 1 ? 1 : volume;
   };
 
-  onMount(() => {});
+  const onToggleFullscreen = async () => {
+    isFullscreen = document.fullscreenElement !== null;
+    if (isFullscreen) {
+      hideControls();
+      if (isMobile()) {
+        await window.screen.orientation?.lock("landscape");
+      }
+    } else if (controls) {
+      controls.style.bottom = 0;
+    }
+  };
+
+  let tout;
+  const hideControls = () => {
+    if (isFullscreen) {
+      controls.style.bottom = 0;
+      clearTimeout(tout);
+      tout = setTimeout(() => {
+        controls.style.bottom = -controls.offsetHeight + "px";
+      }, 2500);
+    }
+  };
+
+  const toggleControls = ({ pageY }) => {
+    if (isFullscreen) {
+      if (pageY > window.innerHeight - controls.offsetHeight) {
+        controls.style.bottom = 0;
+      } else {
+        hideControls();
+      }
+    }
+  };
+
+  onMount(() => {
+    document.addEventListener("fullscreenchange", onToggleFullscreen);
+    return () => {
+      document.removeEventListener("fullscreenchange", onToggleFullscreen);
+    };
+  });
 
   const getTimes = (time, duration) => {
     return duration ? `${formatTime(time)}/${formatTime(duration)}` : "00:00/00:00";
@@ -109,68 +157,77 @@
     error = "";
   }
 
-  onMount(() => {
-    stop = setGesture(player, onPlay, { seekRate: 5 });
+  let stop;
+  $: current = files.findIndex((f) => f.Id === file.Id);
+  $: if (player) {
     player.onerror = (err) => {
       error = `No Supported Sources ${file.Name}`;
     };
-
-    return stop;
-  });
-
-  $: current = files.findIndex((f) => f.Id === file.Id);
+    stop = setGesture(player, onPlay, { seekRate: 5 });
+  } else if (stop) {
+    stop();
+  }
 </script>
 
-<div class="player" on:wheel|passive={onWheel} class:hidden={!files.length}>
-  <Dialog cancel={hide} btnOk="" btnCancer="" keydown={onkeydown} canDrag={true} background={false}>
-    <span slot="modal-header" class="f-name">{file.Name}</span>
-    <div class="video-container">
-      <div class="error">{error}</div>
-      <video
-        autoplay={true}
-        bind:this={player}
-        bind:currentTime={time}
-        bind:duration
-        bind:volume={vol}
-        bind:muted={mute}
-        bind:paused
-        tabindex="-1"
-        src={`/api/admin/directories/video/${encodeURIComponent(file.Path)}`}
-        style={`object-fit: ${ojectFit};`}
-      />
-    </div>
-    <div class="v-seeker">
-      <span class="time">{timeProgress}</span>
-      <Slider min={0} max={duration} value={time} onChange={onSeek} preview={true} let:value>
-        {formatTime(value)}
-      </Slider>
-    </div>
-    <div class="time-progress" on:mousedown|stopPropagation on:touchstart|passive|stopPropagation>
-      {#if files.length > 1}
-        <span class="files-count">{`${current + 1}/${files.length}`}</span>
-      {/if}
-      <span class="admin-vol" on:click={onMute}>
-        <Icons name={mute ? "volumemute" : "volume"} />
-        <span>{parseInt(vol * 100)}%</span>
-      </span>
-      <span id="prev" class="btn-play" on:click={changeFile}>
-        <Icons name="arrowcircleleft" />
-      </span>
-      <span class="btn-play play" on:click={onPlay}>
-        <Icons name={paused ? "playcircle" : "pausecircle"} />
-      </span>
-      <span id="next" class="btn-play" on:click={changeFile}>
-        <Icons name="arrowcircleright" />
-      </span>
-      <span class="close btn-play" on:click={() => hide()}>
-        <Icons name="timescircle" />
-      </span>
-      <span class="fit" on:click={changeFit}>
-        <Icons name="expandarrow" />
-      </span>
-    </div>
-  </Dialog>
-</div>
+{#if file.Path}
+  <div class="player" class:isFullscreen on:wheel|passive={onWheel} on:mousemove={toggleControls}>
+    <Dialog bind:ref={containerRef} btnOk="" btnCancer="" keydown={onkeydown} canDrag={true} background={false}>
+      <svelte:fragment slot="modal-header">
+        <div class="v-name"><span class="f-name">{file.Name}</span></div>
+      </svelte:fragment>
+      <div class="video-container" tabindex="-1">
+        <div class="error">{error}</div>
+        <video
+          autoplay={true}
+          bind:this={player}
+          bind:currentTime={time}
+          bind:duration
+          bind:volume={vol}
+          bind:muted={mute}
+          bind:paused
+          src={`/api/admin/directories/video/${encodeURIComponent(file.Path)}`}
+          style={`object-fit: ${ojectFit};`}
+        />
+      </div>
+      <div bind:this={controls} class="v-controls" on:mousedown|stopPropagation on:touchstart|passive|stopPropagation>
+        <div class="v-seeker">
+          <span class="time">{timeProgress}</span>
+          <Slider min={0} max={duration} value={time} onChange={onSeek} preview={true} let:value>
+            {formatTime(value)}
+          </Slider>
+        </div>
+        <div class="time-progress">
+          {#if files.length > 1}
+            <span class="files-count">{`${current + 1}/${files.length}`}</span>
+          {/if}
+          <span class="admin-vol" on:click={onMute}>
+            <Icons name={mute ? "volumemute" : "volume"} />
+            <span>{parseInt(vol * 100)}%</span>
+          </span>
+          <span id="prev" class="btn-play" on:click={changeFile}>
+            <Icons name="arrowcircleleft" />
+          </span>
+          <span class="btn-play play" on:click={onPlay}>
+            <Icons name={paused ? "playcircle" : "pausecircle"} />
+          </span>
+          <span id="next" class="btn-play" on:click={changeFile}>
+            <Icons name="arrowcircleright" />
+          </span>
+          <span class="close btn-play" on:click={() => hide()}>
+            <Icons name="timescircle" />
+          </span>
+
+          <span class="fit v-fit" on:click={changeFit}>
+            <Icons name="arrows" box="0 0 512 512" />
+          </span>
+          <span class="fit" on:click={toggleFullScreen}>
+            <Icons name="expandarrow" />
+          </span>
+        </div>
+      </div>
+    </Dialog>
+  </div>
+{/if}
 
 <style>
   .video-container {
@@ -204,6 +261,12 @@
     min-height: 345px;
     object-fit: fill;
     pointer-events: none;
+  }
+  .v-controls {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: black;
   }
   .time-progress {
     position: relative;
@@ -257,6 +320,10 @@
     right: 65px;
   }
 
+  .v-fit {
+    right: 100px;
+  }
+
   .v-seeker {
     display: flex;
     align-items: center;
@@ -268,6 +335,53 @@
     padding-left: 10px;
     line-height: 1.8;
   }
+  /* Full screen style */
+  .isFullscreen :global(.modal) {
+    border: none;
+    border-radius: 0;
+  }
+  .isFullscreen :global(.modal-body) {
+    height: 100%;
+    width: 100%;
+  }
+  .isFullscreen :global(.modal-header) {
+    border-bottom: none;
+    padding: 0;
+  }
+
+  .isFullscreen .video-container {
+    width: 100%;
+    height: 100%;
+  }
+  .isFullscreen :global(video) {
+    min-height: 100%;
+    max-height: 100%;
+  }
+  .v-name {
+    text-align: center;
+  }
+
+  .isFullscreen .v-name {
+    position: absolute;
+    top: 4px;
+    width: 100%;
+    z-index: 99;
+    border-bottom: none;
+  }
+
+  .v-name span {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 3px 6px;
+    border-radius: 0.25rem;
+  }
+
+  .isFullscreen .v-controls {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    transition: 0.3s bottom;
+  }
 
   @media screen and (max-width: 600px) {
     .player :global(.modal-container .modal) {
@@ -277,7 +391,8 @@
     .player video {
       min-width: initial;
       max-width: 100%;
-      max-height: 400px;
+      max-height: 350px;
+      min-height: initial;
       object-fit: fill;
     }
   }

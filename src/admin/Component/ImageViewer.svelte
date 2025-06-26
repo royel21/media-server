@@ -57,7 +57,7 @@
     width: 600px;
   }
   :global(#img-viewer form) {
-    height: 100%;
+    display: none;
   }
   :global(#img-viewer .modal-header) {
     display: flex;

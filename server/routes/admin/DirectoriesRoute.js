@@ -112,7 +112,7 @@ routes.post("/get-dirs", (req, res) => {
 
   if (next && Path) Path = path.join(Path, next);
 
-  if (back && Path !== homeDir) {
+  if (back && Path !== homeDir && !/\/|c:\\users/.test(Path)) {
     Path = path.dirname(Path);
   }
 

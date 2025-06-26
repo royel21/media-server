@@ -53,7 +53,6 @@
 
     setContext("socket", socket);
     setContext("User", user);
-    socket.emit("user-info", { width: window.innerWidth, height: window.innerHeight });
   }
 </script>
 

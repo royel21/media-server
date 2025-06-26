@@ -17,7 +17,6 @@ let gesture = false;
 
 export const setGesture = (player, onPlay, mConfig) => {
   const container = player.parentElement;
-
   const onStart = (e) => {
     touching = true;
     time = e.timeStamp;
@@ -63,14 +62,16 @@ export const setGesture = (player, onPlay, mConfig) => {
     if (touching) {
       touchData = { ...initialData };
       gestureDir = 0;
-      if (!gesture) {
-        onPlay(e);
-      }
+    }
+
+    if (!gesture && e.target === container) {
+      onPlay(e);
     }
     gesture = false;
     touching = false;
   };
   if (player) {
+    document.body.removeEventListener(isMobile() ? "touchend" : "mouseup", onEnd);
     container.addEventListener(isMobile() ? "touchstart" : "mousedown", onStart, { passive: true });
     container.addEventListener(isMobile() ? "touchmove" : "mousemove", onMove, { passive: true });
     document.body.addEventListener(isMobile() ? "touchend" : "mouseup", onEnd, { passive: true });
