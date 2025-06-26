@@ -144,7 +144,7 @@
   #tag-list {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: 99.5%;
     padding: 5px;
     padding-bottom: 0px;
   }
@@ -225,7 +225,7 @@
     justify-content: center;
   }
   strong {
-    min-width: 72px;
+    min-width: 78px;
     margin-right: 5px;
   }
 </style>
