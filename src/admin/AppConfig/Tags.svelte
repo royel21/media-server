@@ -195,6 +195,8 @@
     padding: 5px;
   }
   #tag-list .bagde {
+    text-align: center;
+    min-width: 25px;
     height: 30px;
     line-height: 1.1;
     margin-left: 5px;

@@ -16,7 +16,7 @@
   let showWatchList = false;
   let showEdit = "";
   let ref;
-  let pager = { page: 1, totalPages: 0, totalitems: 0, items: window.localStorage.getItem("w-items") || 100 };
+  let pager = { page: 1, totalPages: 0, totalItems: 0, items: window.localStorage.getItem("w-items") || 100 };
 
   const applyFilter = async ({ detail }) => {
     filter = detail;
@@ -209,6 +209,8 @@
     max-width: initial;
   }
   #tag-list .bagde {
+    text-align: center;
+    min-width: 25px;
     margin-left: 5px;
     padding: 3px;
     border-radius: 0.25rem;

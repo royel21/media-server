@@ -80,7 +80,7 @@ input::-webkit-inner-spin-button {
 
 .disk-controls .nav {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   max-width: 300px;
   margin: 0 auto;
 }

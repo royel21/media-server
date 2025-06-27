@@ -155,7 +155,9 @@
   <div class="error">{error || ""}</div>
   <div class="header">
     <div class="f-image">
-      <img src={`data:img/jpeg;base64, ${folder.image || ""}`} alt="Not Found" />
+      <div>
+        <img src={`data:img/jpeg;base64, ${folder.image || ""}`} alt="Not Found" />
+      </div>
     </div>
     <div class="f-count">
       <span class="ccount"><strong>Total:</strong> <span>{folder.Total || 0}</span></span>
@@ -228,11 +230,17 @@
     max-width: 100%;
   }
   .f-image {
+    min-width: 175px;
+    padding: 4px;
+  }
+  .f-image div {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-width: 175px;
-    padding: 2px;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 0.3rem;
   }
   .f-count {
     display: flex;

@@ -75,6 +75,19 @@
   .tabs .disk-controls {
     border-bottom: 1px solid;
   }
+
+  .nav-item {
+    overflow: hidden;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+  }
+
+  .tabs label {
+    text-align: center;
+    min-width: 60px;
+    padding: 0;
+  }
+
   .tabs label span {
     display: none;
   }
@@ -110,8 +123,14 @@
     top: -4px;
     font-size: 14px;
   }
-  .tabs .nav input[type="radio"]:not(:checked) label:hover {
-    background-color: #007bff27;
+  .tabs .nav-item:hover label {
+    position: relative;
+    font-weight: 600;
+    border-right: 1px solid;
+    border-left: 1px solid;
+    border-top: 1px solid;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
   }
   .tabs .nav input[type="radio"]:checked + label:hover,
   .tabs .nav input[type="radio"]:checked + label {

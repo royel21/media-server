@@ -1,4 +1,4 @@
-*:active>svg {
+*:active > svg {
   transform: scale(1.15);
   transition: 0.2s;
 }
@@ -59,7 +59,7 @@ button:active {
 .badge {
   color: #fff;
   background-color: #007bff;
-  padding: 0.20em 0.3em;
+  padding: 0.2em 0.3em;
   font-size: 1rem;
   font-weight: 700;
   border-radius: 0.25rem;
@@ -74,7 +74,7 @@ button:active {
   height: 390px;
   width: 265px;
   min-width: 195px;
-  transition: .2s all;
+  transition: 0.2s all;
   margin: 10px 0px;
 }
 
@@ -95,8 +95,8 @@ button:active {
   align-items: center;
   height: 300px;
   overflow: hidden;
-  border-top-right-radius: .25rem;
-  border-top-left-radius: .25rem;
+  border-top-right-radius: 0.25rem;
+  border-top-left-radius: 0.25rem;
   background-color: #a9a9a9;
 }
 
@@ -120,7 +120,6 @@ button:active {
 .file:hover {
   z-index: 3;
 }
-
 
 .file-progress {
   font-size: 14px;
@@ -153,7 +152,7 @@ button:active {
   position: relative;
 }
 
-.file-cover>span {
+.file-cover > span {
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -172,9 +171,9 @@ button:active {
   right: 0;
   top: 0;
   bottom: initial;
-  border-radius: 0.25rem 0 0 .25rem;
+  border-radius: 0.25rem 0 0 0.25rem;
   background-color: #05a100;
-  font-size: .85rem;
+  font-size: 0.85rem;
 }
 
 .file-cover .f-date,
@@ -182,7 +181,7 @@ button:active {
   left: 0;
   width: initial;
   border-top-left-radius: 0.25rem;
-  font-size: .85rem;
+  font-size: 0.85rem;
 }
 
 .file-cover .completed {
@@ -197,8 +196,8 @@ button:active {
   top: 0;
   bottom: initial;
   background-color: red;
-  border-bottom-right-radius: .25rem;
-  font-size: .85rem;
+  border-bottom-right-radius: 0.25rem;
+  font-size: 0.85rem;
 }
 
 .file .file-cover .hidden {
@@ -209,31 +208,8 @@ button:active {
   width: max-content;
   right: 0;
   left: initial;
-  border-radius: 0 0 0 .25rem;
-  font-size: .85rem;
-}
-
-img {
-  position: relative;
-  color: transparent;
-}
-
-img[alt] {
-  font-size: 16px;
-}
-
-img[alt]:after {
-  position: absolute;
-  top: -3px;
-  left: -1px;
-  background-color: rgba(52, 58, 64, 0.99);
-  font-family: "Helvetica";
-  font-weight: 300;
-  content: attr(alt);
-  border-radius: 5px;
-  padding: 2px 5px;
-  min-width: 101%;
-  color: white;
+  border-radius: 0 0 0 0.25rem;
+  font-size: 0.85rem;
 }
 
 .file-name {
@@ -255,7 +231,7 @@ img[alt]:after {
   z-index: 99;
 }
 
-.first-controls input[type="checkbox"]:not(:checked)+div {
+.first-controls input[type="checkbox"]:not(:checked) + div {
   visibility: hidden;
   opacity: 0;
   pointer-events: none;
@@ -265,7 +241,7 @@ img[alt]:after {
   font-size: 30px;
 }
 
-.first-controls+div {
+.first-controls + div {
   margin-left: 40px;
 }
 
@@ -343,7 +319,6 @@ input[type="range"]::-moz-range-track {
 :fullscreen #play-list.move {
   top: 0;
 }
-
 
 @media screen and (max-width: 640px) {
   .scroll-container {

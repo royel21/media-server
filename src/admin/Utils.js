@@ -59,6 +59,8 @@ export const getSize2 = (file) => {
 };
 
 export const getSize3 = (file) => {
+  if (!file.Size) return "N/A";
+
   let size = file.Size;
   let type = " KB";
 
