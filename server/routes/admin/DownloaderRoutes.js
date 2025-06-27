@@ -50,6 +50,7 @@ routes.post("/links", async ({ body }, res) => {
     offset,
     include: { model: db.Server, Attributes: ["Id", "Name"], required: true },
     order: [
+      [literal(`Links.LastChapter = ""`), "DESC"],
       ["DATE", "DESC"],
       [literal(`Links.LastChapter`), "DESC"],
       ["Name", "DESC"],
