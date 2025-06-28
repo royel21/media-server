@@ -35,6 +35,6 @@
     max-height: 100%;
     min-width: 100%;
     font-size: 16px;
-    object-fit: contain;
+    height: initial;
   }
 </style>

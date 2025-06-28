@@ -130,11 +130,11 @@
       {#each dirs as { Id, IsLoading, Name, FullPath, Type, FolderCount, TotalFiles, IsAdult, FirstInList }}
         <tr id={Id} key={Id}>
           <td>
-            <span class="dir-sync" on:click={rescan}>
-              <Icons name="sync" class={IsLoading ? "icon-spin" : ""} box="0 0 512 512" />
-            </span>
             <span class="dir-remove ml-2" on:click={showConfirm}>
               <Icons name="trash" />
+            </span>
+            <span class="dir-sync" on:click={rescan}>
+              <Icons name="sync" class={IsLoading ? "icon-spin" : ""} box="0 0 512 512" />
             </span>
           </td>
           <td class="f-name" title={FullPath}>
@@ -237,6 +237,9 @@
   }
   td {
     white-space: nowrap;
+  }
+  .table td:first-child :global(.icon-trash) {
+    margin-right: 2px;
   }
 
   @media screen and (max-width: 700px) {

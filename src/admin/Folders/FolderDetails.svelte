@@ -226,8 +226,39 @@
     overflow: hidden;
   }
   .header img {
+    object-fit: contain;
     max-height: 100%;
     max-width: 100%;
+  }
+
+  img {
+    position: relative;
+    color: transparent;
+  }
+
+  img[alt] {
+    height: 100%;
+    width: 100%;
+    font-size: 16px;
+  }
+
+  img[alt]:after {
+    position: absolute;
+    left: -1px;
+    background-color: rgba(52, 58, 64, 0.99);
+    font-family: "Helvetica";
+    font-weight: 300;
+    content: " ";
+    height: 100%;
+    width: 100%;
+  }
+  img[alt]::before {
+    content: attr(alt);
+    position: absolute;
+    top: 45%;
+    left: 25%;
+    color: white;
+    z-index: 9;
   }
   .f-image {
     min-width: 175px;
@@ -241,6 +272,9 @@
     width: 100%;
     overflow: hidden;
     border-radius: 0.3rem;
+  }
+  .f-image {
+    object-fit: contain;
   }
   .f-count {
     display: flex;

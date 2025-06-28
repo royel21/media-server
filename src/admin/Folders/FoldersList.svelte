@@ -59,7 +59,9 @@
       totalPages = data.totalPages;
       totalItems = data.totalItems;
       page = pg;
-      dispatch("folderid", tmp);
+      if (tmp.Id !== folderId) {
+        dispatch("folderid", tmp);
+      }
       navigate(`/admin/folders/${currentDir}/${pg}/${flt || ""}`);
       showImage = "";
     }

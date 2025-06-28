@@ -90,6 +90,7 @@ button:active {
 }
 
 .file-cover {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -97,7 +98,7 @@ button:active {
   overflow: hidden;
   border-top-right-radius: 0.25rem;
   border-top-left-radius: 0.25rem;
-  background-color: #a9a9a9;
+  background-color: #2f2f2f;
 }
 
 .file-btns {
@@ -148,10 +149,6 @@ button:active {
   position: relative;
 }
 
-.file-cover {
-  position: relative;
-}
-
 .file-cover > span {
   display: flex;
   justify-content: space-between;
@@ -162,7 +159,7 @@ button:active {
   font-size: 1rem;
   font-weight: 600;
   padding: 0 4px;
-  background-color: #303030ba;
+  background-color: #2f2f2f;
 }
 
 .file-cover .f-status {
