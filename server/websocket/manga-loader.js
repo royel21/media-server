@@ -2,10 +2,16 @@ import StreamZip from "node-stream-zip";
 import db from "#server/models/index";
 import { Op } from "sequelize";
 import fs from "fs-extra";
+import os from "os";
+import path from "path";
+
+const homedir = os.homedir();
 
 const loadZipImages = async (data, socket, user) => {
   let { Id, indices, Path, imageCount } = data;
   let file;
+
+  let originalPath = Path;
 
   if (!Path && Id) {
     file = await db.file.findOne({
@@ -13,12 +19,15 @@ const loadZipImages = async (data, socket, user) => {
       where: { Id },
       include: { model: db.folder, where: { IsAdult: { [Op.lte]: user.AdultPass } }, required: true },
     });
+    originalPath = file.Path;
   }
 
-  if (fs.existsSync(file?.Path || Path)) {
+  Path = originalPath.replace("homedir", homedir).split(/\/|\\/).join(path.sep);
+
+  if (fs.existsSync(Path)) {
     try {
       const zip = new StreamZip.async({
-        file: file?.Path || Path,
+        file: Path,
         storeEntries: true,
       });
 
@@ -49,7 +58,7 @@ const loadZipImages = async (data, socket, user) => {
       console.log(error);
     }
   } else {
-    socket.emit("manga-error", { error: `File ${file?.Name || Path} Not Found in server`, Id: Id });
+    socket.emit("manga-error", { error: `File ${file?.Name || originalPath} Not Found in server`, Id: Id });
   }
 };
 

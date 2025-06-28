@@ -5,18 +5,19 @@ import { capitalize } from "#server/Downloader/utils";
 import { getProgress, sendMessage } from "../utils.js";
 
 export const moveFiles = async ({ files, Path, overwrite, NewFolder }) => {
+  const originalPath = Path;
   if (/^homedir/.test(Path)) {
     Path = Path.replace("homedir", os.homedir());
   }
 
   if (!fs.existsSync(Path)) {
-    return await sendMessage({ error: `The specified path does not exist: ${Path}` }, "files-info");
+    return await sendMessage({ error: `The specified path does not exist: ${originalPath}` }, "files-info");
   }
   const count = files.length;
 
   const fileTxt = count > 1 ? "Files" : "File";
 
-  await sendMessage({ text: `Moving ${count} ${fileTxt} to ${Path} Please Wait` });
+  await sendMessage({ text: `Moving ${count} ${fileTxt} to ${originalPath} Please Wait` });
 
   if (NewFolder) {
     Path = path.join(Path, NewFolder);
@@ -32,7 +33,7 @@ export const moveFiles = async ({ files, Path, overwrite, NewFolder }) => {
       await sendMessage({ text: `Error moving: ${file.Name}`, error: error.toString() });
     }
   }
-  await sendMessage({ text: `Finish Moving ${count} ${fileTxt} to ${Path}` });
+  await sendMessage({ text: `Finish Moving ${count} ${fileTxt} to ${originalPath}` });
 };
 
 export const removeFiles = async ({ files }) => {
@@ -83,7 +84,7 @@ export const createFolder = async ({ file, Name }) => {
     return await sendMessage(data, "folder-create");
   }
   data.error = true;
-  data.msg = `Path: ${file?.Path} was not found`;
+  data.msg = `Path: ${file?.Name} was not found`;
   await sendMessage(data, "folder-create");
 };
 

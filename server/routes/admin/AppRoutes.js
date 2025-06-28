@@ -9,23 +9,24 @@ import { createDefaultImageDirs } from "#server/utils";
 const routes = Router();
 const Names = ["Mangas", "Webtoons"];
 const AdultNames = [...Names, "Mangas Raw", "Webtoons Raw"];
+const homedir = os.homedir();
 
 const createDirs = async (BasePath, names, IsAdult = false) => {
   const adultDirs = await db.directory.findAll({ where: { Name: names, IsAdult } });
 
   for (let Name of names) {
-    const FullPath = IsAdult ? path.join(BasePath, "R18", Name) : path.join(BasePath, Name);
+    let FullPath = IsAdult ? path.join(BasePath, "R18", Name) : path.join(BasePath, Name);
 
     if (!fs.existsSync(FullPath)) {
       fs.mkdirpSync(FullPath);
     }
 
+    FullPath = FullPath.replace("homedir", homedir);
     if (!adultDirs.find((d) => d.FullPath === FullPath)) {
       await db.directory.create({ Name, FullPath, IsAdult, Type: "Mangas" });
     }
   }
 };
-
 routes.post("/save", async (req, res) => {
   const data = await db.AppConfig.findOne();
   const body = req.body;
@@ -38,8 +39,8 @@ routes.post("/save", async (req, res) => {
 
       createDefaultImageDirs(data.ImagesPath);
 
-      await createDirs(body.MangaPath.replace("homedir", os.homedir()), Names);
-      await createDirs(body.AdultPath.replace("homedir", os.homedir()), AdultNames, true);
+      await createDirs(body.MangaPath, Names);
+      await createDirs(body.AdultPath, AdultNames, true);
 
       return res.send({ valid: true });
     } catch (error) {

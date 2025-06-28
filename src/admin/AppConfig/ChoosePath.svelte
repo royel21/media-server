@@ -102,7 +102,7 @@
   });
 </script>
 
-<Dialog id="def-folder" cancel={props.hide} confirm={onConfirm} {errors} btnOk="Acept" canDrag={true}>
+<Dialog id="def-folder" cancel={props.hide} confirm={onConfirm} {errors} btnOk="Select" canDrag={true}>
   <h4 slot="modal-header">Choose {props.label} Path</h4>
   <div class="dir-list" slot="modal-body">
     <Select item={ditem} label="Root" key="Path" options={content.map((d) => ({ ...d, Id: d.Path }))} {onChange} />

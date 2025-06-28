@@ -1,7 +1,10 @@
+import os from "os";
 import path from "path";
 import fs from "fs-extra";
 import { nanoid } from "nanoid";
 import { DataTypes } from "sequelize";
+
+const homedir = os.homedir();
 
 export default (sequelize, db) => {
   const genImgPath = async (type, fname, name) => {
@@ -88,8 +91,9 @@ export default (sequelize, db) => {
           if (item.Name !== oldName) {
             const folder = await item.getFolder();
             if (folder) {
-              const fromFile = path.join(folder.Path, oldName);
-              const toFile = path.join(folder.Path, item.Name);
+              const Path = folder.Path.replace("homedir", homedir);
+              const fromFile = path.join(Path, oldName);
+              const toFile = path.join(Path, item.Name);
               if (fs.existsSync(fromFile) && !fs.existsSync(toFile)) {
                 fs.moveSync(fromFile, toFile);
               }
@@ -108,7 +112,7 @@ export default (sequelize, db) => {
               const folder = await item.getFolder();
               if (folder) {
                 //Delete File
-                const fPath = path.join(folder.Path, item.Name);
+                const fPath = path.join(folder.Path.replace("homedir", homedir), item.Name);
 
                 if (fs.existsSync(fPath)) {
                   fs.removeSync(fPath);

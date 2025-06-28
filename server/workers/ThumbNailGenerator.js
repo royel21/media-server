@@ -1,8 +1,11 @@
 import { join } from "path";
+import os from "os";
 import db from "#server/models/index";
 import { existsSync, mkdirSync, readdirSync } from "fs";
 import { getVideoThumnail, ZipCover } from "./ThumbnailUtils.js";
 import { getFileType } from "#server/Downloader/utils";
+
+const homedir = os.homedir();
 
 export const genFileThumbnails = async (folders, sendMessage) => {
   const { ImagesPath } = await db.AppConfig.findOne();
@@ -16,7 +19,7 @@ export const genFileThumbnails = async (folders, sendMessage) => {
     if (!folder.FilesType) continue;
 
     sendMessage(`${parseFloat((i / (total || 1)) * 100).toFixed(2)}% - ${folder.Name}: ${folder.Files.length} files`);
-
+    folder.Path = folder.Path.replace("homedir", homedir);
     if (existsSync(folder.Path)) {
       let files = [];
 

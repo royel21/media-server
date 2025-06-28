@@ -8,11 +8,13 @@ import fs from "fs-extra";
 import sharp from "sharp";
 import WinDrive from "win-explorer";
 import db from "#server/models/index";
+import os from "os";
 
 import { getFileType } from "#server/Downloader/utils";
 import { createDefaultImageDirs } from "../utils.js";
 
 let folders = [];
+const homedir = os.homedir();
 
 Date.prototype.Compare = function (d) {
   d = new Date(d);
@@ -93,7 +95,7 @@ const createFolderThumbnail = async (folder, files, isFolder) => {
         await sharp(imgPath).jpeg().resize({ width: 340 }).toFile(coverPath);
       } else {
         //else push to list of folder for later process of thumbnail from first file
-        const filePath = path.join(folder.Path, files[0].Name);
+        const filePath = path.join(folder.Path.replace("homedir", homedir), files[0].Name);
         foldersPendingCover.push({ coverPath, filePath });
       }
     }
@@ -108,7 +110,7 @@ const createFolder = async ({ Name, Path, LastModified }, files) => {
   const dir = await db.directory.findOne({ where: { Id: DirectoryId } });
   return db.folder.create({
     Name,
-    Path,
+    Path: Path.replace(homedir, "homedir"),
     FileCount,
     DirectoryId,
     IsAdult: dir.IsAdult,
@@ -120,7 +122,7 @@ const createFolder = async ({ Name, Path, LastModified }, files) => {
 const scanFolder = async (curfolder, files, isFolder) => {
   let isNoNewFolder = true;
 
-  let folder = folders.find((fd) => fd.Path === curfolder.Path);
+  let folder = folders.find((fd) => fd.Path === curfolder.Path.replace(homedir, "homedir"));
 
   let folderFiles = [];
 
@@ -220,20 +222,21 @@ const scanDirectory = async ({ id, dir, isFolder }) => {
 
   DirectoryId = id;
   try {
-    if (fs.existsSync(dir)) {
+    const nativePath = dir.replace("homedir", homedir);
+    if (fs.existsSync(nativePath)) {
       sendMessage("Listing files");
 
       console.log("list-files");
 
       console.time("list-files");
-      const fis = WinDrive.ListFilesRO(dir);
+      const fis = WinDrive.ListFilesRO(nativePath);
 
       if (fis.length === 0) {
         return sendMessage("Folder is Empty");
       }
 
-      const folder = WinDrive.ListFiles(dir, { oneFile: true });
-      folder.Path = dir;
+      const folder = WinDrive.ListFiles(nativePath, { oneFile: true });
+      folder.Path = nativePath;
 
       folders = await getFolders(id, isFolder);
 

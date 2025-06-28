@@ -163,16 +163,16 @@ const resetRecent = async (data, user) => {
   io.sockets.emit("reload", { Id: data.Id, user: user.Id });
 };
 
+const homedir = os.homedir();
 //Scan all files of a direcotry
 const scanDir = async ({ Id, Path, Type, isFolder, IsAdult }, user) => {
   //If is it root of disk return;
   if (!Id && !Path) return io.sockets.emit("scan-info", "Id And Path both can't be null");
   if (/^([a-z]:\\|^\/)$/gi.test(path)) return io.sockets.emit("scan-info", "Can't add root of a disk");
-
   let msg;
+
   try {
     let model;
-
     if (Id) {
       if (isFolder) {
         model = await db.folder.findOne({ where: { Id } });
@@ -180,7 +180,7 @@ const scanDir = async ({ Id, Path, Type, isFolder, IsAdult }, user) => {
         model = await db.directory.findOne({ where: { Id } });
       }
     } else {
-      const dirInfo = winEx.ListFiles(Path || "", { oneFile: true });
+      const dirInfo = winEx.ListFiles(Path.replace("homedir", homedir) || "", { oneFile: true });
 
       if (dirInfo) {
         model = await db.directory.create({

@@ -1,5 +1,6 @@
 import path from "path";
 import fs from "fs-extra";
+import os from "os";
 import winex from "win-explorer";
 import { db } from "#server/watch-models/index";
 import { sendMessage } from "../utils.js";
@@ -32,17 +33,19 @@ const AddFiles = async (files, DirectoryId) => {
 export const dirScan = async ({ Path }) => {
   try {
     await db.init();
-    let dir = await db.Directory.findOrCreate({ where: { Name: path.basename(Path), Path } });
+    let dir = await db.Directory.findOrCreate({
+      where: { Name: path.basename(Path), Path },
+    });
 
     if (dir[0]) {
-      const { Path } = dir[0];
-      if (!fs.existsSync(Path)) {
+      const nativePath = Path.replace("homedir", os.homedir());
+      if (!fs.existsSync(nativePath)) {
         return await sendMessage({ text: `Path: ${Path} not found`, error: true });
       }
 
       await sendMessage({ text: `Scanning: ${Path}` });
       await db.File.destroy({ where: { DirectoryId: dir[0].Id } });
-      const files = winex.ListFilesRO(Path);
+      const files = winex.ListFilesRO(nativePath);
       await AddFiles(files, dir[0].Id);
       await sendMessage({ text: `Finish Scanning: ${Path}` });
     }

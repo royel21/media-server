@@ -4,6 +4,9 @@ import { nanoid } from "nanoid";
 import { DataTypes } from "sequelize";
 import { getFileType } from "../Downloader/utils.js";
 
+import os from "os";
+const homedir = os.homedir();
+
 export default (sequelize, db) => {
   const getCoverPath = async (basePath, name, type) => {
     return path.join(basePath, "Folder", type, name + ".jpg");
@@ -118,6 +121,8 @@ export default (sequelize, db) => {
           let { Path, Name } = item._previousDataValues;
           if (Name !== item.Name && fs.existsSync(Path)) {
             const getFileType = ({ FilesType }) => (FilesType === "mangas" ? "Manga" : "Video");
+            Path = Path.replace("homedir", homedir);
+            item.Path = item.Path.replace("homedir", homedir);
 
             if (!opt.Transfer) {
               //rename folder
@@ -155,6 +160,7 @@ export default (sequelize, db) => {
             if (fs.existsSync(imagesFolder)) fs.removeSync(imagesFolder);
 
             //Remove folder from disk
+            item.Path = item.Path.replace("homedir", homedir);
             if (fs.existsSync(item.Path)) fs.removeSync(item.Path);
           }
         },

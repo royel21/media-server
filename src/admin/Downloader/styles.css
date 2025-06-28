@@ -126,6 +126,7 @@
 
 .d-table div > .col-serv {
   display: flex;
+  align-items: center;
   width: 100px;
   cursor: pointer;
   overflow: hidden;

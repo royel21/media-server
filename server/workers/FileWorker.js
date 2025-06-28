@@ -7,6 +7,9 @@ import { createDir } from "#server/Downloader/utils";
 import defaultConfig from "#server/default-config";
 import { dirScan } from "./FolderWatcher.js";
 import { sendMessage } from "#server/utils";
+import os from "os";
+
+const homedir = os.homedir();
 
 const renameDBFolder = async (datas) => {
   const {
@@ -59,8 +62,10 @@ const renameDBFolder = async (datas) => {
 
           msg = `Transfering: ${folder.Name} ${moveMsg} this may take some time please wait until completed message`;
           await sendMessage({ msg }, EVENT);
+          const src = folder.Path.replace("homedir", homedir);
+          const dest = data.Path.replace("homedir", homedir);
+          const result = await transferFiles(src, dest);
 
-          const result = await transferFiles(folder.Path, data.Path);
           if (!result.success) {
             return await sendMessage({ success: false, msg: "Transfer folder fail" }, EVENT);
           }

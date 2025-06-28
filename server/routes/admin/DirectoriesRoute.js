@@ -37,12 +37,10 @@ routes.post("/content", (req, res) => {
   try {
     let { Id, Path } = req.body;
 
-    if (Path.includes("homedir")) {
-      Path = Path.replace("homedir", homeDir);
-    }
+    const nativePath = Path.replace("homedir", homeDir);
 
-    if (fs.existsSync(Path)) {
-      let dirs = ListFiles(Path, { hidden: true });
+    if (fs.existsSync(nativePath)) {
+      let dirs = ListFiles(nativePath, { hidden: true });
       let tdata = [];
       for (let d of dirs) {
         if (d.Name === "lost+found") continue;
@@ -70,7 +68,7 @@ routes.post("/content", (req, res) => {
 routes.post("/remove-file", async (req, res) => {
   const { body } = req;
   try {
-    fs.removeSync(body.Path);
+    fs.removeSync(body.Path.replace("homedir", homeDir));
     res.send({ success: true });
   } catch (error) {
     res.send({ success: false });
@@ -85,7 +83,7 @@ routes.post("/update", async (req, res) => {
   if (dir) {
     try {
       if (body.FullPath) {
-        if (!fs.existsSync(body.FullPath)) {
+        if (!fs.existsSync(body.FullPath.replace("homedir", homeDir))) {
           return res.send({ error: `Directory ${body.FullPath} don't exist` });
         }
 
@@ -103,17 +101,23 @@ routes.post("/update", async (req, res) => {
 });
 
 routes.post("/get-dirs", (req, res) => {
-  const { dir, next, back } = req.body;
+  let { dir, next, back } = req.body;
   let Path = dir || "";
 
   if (Path.includes("homedir")) {
-    Path = Path.replace("homedir", homeDir);
+    dir = Path.replace("homedir", homeDir);
+    Path = dir;
   }
 
   if (next && Path) Path = path.join(Path, next);
 
-  if (back && Path !== homeDir && !/\/|c:\\users/.test(Path)) {
-    Path = path.dirname(Path);
+  const backPath = path.dirname(Path);
+  if (back) {
+    Path = backPath;
+  }
+
+  if (/^(\/|\/home(\/|)|c\:(\\|\/)users(\\|\/|))(\.|)$/i.test(backPath)) {
+    Path = dir;
   }
 
   if (fs.existsSync(Path)) {
@@ -135,7 +139,7 @@ routes.post("/create-path", async (req, res) => {
   let { Path, NewFolder } = req.body;
 
   if (NewFolder) {
-    Path = path.join(Path, NewFolder);
+    Path = path.join(Path.replace("homedir", homeDir), NewFolder);
     fs.mkdirpSync(Path);
   }
 
@@ -143,8 +147,9 @@ routes.post("/create-path", async (req, res) => {
 });
 
 routes.get("/video/:path?", async (req, res) => {
-  const { path } = req.params;
+  let { path } = req.params;
   if (path && fs.existsSync(path)) {
+    path = path.replace("homedir", homeDir);
     streaming({ Path: path }, req, res);
   } else {
     res.send("Error File Not Found");

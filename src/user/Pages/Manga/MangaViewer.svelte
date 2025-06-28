@@ -155,6 +155,7 @@
     images = [];
     indices = [];
     loadImages(file.CurrentPos - 1, 8);
+    console.log(file);
   }
 
   afterUpdate(() => {

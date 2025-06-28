@@ -29,3 +29,12 @@
 </script>
 
 <img {src} alt="No Cover Found" bind:this={ref} />
+
+<style>
+  img {
+    max-height: 100%;
+    min-width: 100%;
+    font-size: 16px;
+    object-fit: contain;
+  }
+</style>
