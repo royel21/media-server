@@ -24,26 +24,47 @@
   let toastRef;
 
   const navItems = [
-    { title: "Users", path: "/admin/", class: "users", color: "rgb(37, 140, 209)" },
-    { title: "Files", path: "/admin/files", class: "file", color: "rgba(248, 224, 6, 0.952)" },
-    { title: "Folders", path: "/admin/folders", class: "folder", color: "rgb(250, 183, 15)" },
+    {
+      title: "Users",
+      path: "/admin/",
+      class: "users",
+      color: "rgb(37, 140, 209)",
+      box: " 0 0 640 512",
+    },
+    {
+      title: "Files",
+      path: "/admin/files",
+      class: "file",
+      color: "rgba(248, 224, 6, 0.952)",
+      box: "0 0 384 512",
+    },
+    {
+      title: "Folders",
+      path: "/admin/folders",
+      class: "folder",
+      color: "rgb(250, 183, 15)",
+      box: "0 0 512 512",
+    },
     {
       title: "Downloads",
       path: "/admin/downloads",
       class: "download",
       color: "grey",
+      box: " 0 0 512 512",
     },
     {
       title: "Manager",
       path: "/admin/content-manager",
       class: "sitemap",
       color: "#80bdff",
+      box: " 0 0 640 512",
     },
     {
       title: "Configs",
       path: "/admin/configs",
       class: "cog",
       color: "deepskyblue",
+      box: " 0 0 512 512",
     },
   ];
 
@@ -159,17 +180,20 @@
   :global(span:active > .icon-sync) {
     transform: scale(1.2);
   }
+  :global(#menu li .icon-users) {
+    width: 28px;
+    height: 22px;
+  }
+  :global(#menu li .icon-file) {
+    width: 20px;
+    height: 22px;
+  }
+  :global(#menu li span) {
+    margin-left: 2px;
+  }
   @media screen and (max-width: 790px) {
     .toast {
       max-width: 390px;
-    }
-    :global(#menu li .active .icon-users),
-    :global(#menu li .active .icon-download),
-    :global(#menu li .active .icon-sitemap) {
-      margin-right: 5px;
-    }
-    :global(#menu li .active .icon-sitemap) {
-      margin-right: 7px;
     }
   }
 

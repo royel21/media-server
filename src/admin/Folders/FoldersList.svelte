@@ -54,7 +54,6 @@
 
     if (data.items && isMounted) {
       let tmp = data.items[0];
-      folderId = tmp?.Id;
       items = data.items.map((d) => ({ ...d, Name: d.Path.split(/\/|\\/g).pop() }));
       totalPages = data.totalPages;
       totalItems = data.totalItems;

@@ -100,7 +100,13 @@
       {:else}
         <li class="nav-item">
           <Link to={item.path} {getProps}>
-            <Icons name={item.class} height="22px" color={item.color} class={item.class} />
+            <Icons
+              name={item.class}
+              height="22px"
+              color={item.color}
+              class={item.class}
+              box={item.box || "0 0 640 512"}
+            />
             <span class="nav-title">{item.title}</span>
           </Link>
         </li>
@@ -131,7 +137,6 @@
     display: flex;
     justify-content: left;
   }
-  .nav-item :global(a:focus),
   .nav-item:hover {
     background-color: rgb(2 177 242);
   }

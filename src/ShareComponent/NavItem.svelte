@@ -103,6 +103,7 @@
       li.parentElement.closest("li").classList.add("selected");
     }
   });
+  console.log(item);
 </script>
 
 <li
@@ -115,7 +116,7 @@
   tabindex="-1"
 >
   <Link to={getPath()} {getProps}>
-    <Icons name={item.class} height="22px" color={item.color} />
+    <Icons name={item.class} height="22px" color={item.color} box={item.box} />
     <span class="nav-title">{item.title}</span>
     <ul class="down-list">
       {#if !isFav && dirs[title]?.length > 1}
