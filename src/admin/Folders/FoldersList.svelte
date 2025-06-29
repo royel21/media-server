@@ -47,7 +47,7 @@
     }
   };
 
-  const loadFolders = async (pg, dir) => {
+  const loadFolders = async (pg, dir, isResize) => {
     rows = calRows();
     let flt = filter?.replace(/|:|\?|\^|"|\*|<|>|\t|\n/gi, "") || "";
     let data = await apiUtils.admin(["folders", dir || currentDir || "all", pg, calRows(), flt]);
@@ -58,10 +58,10 @@
       totalPages = data.totalPages;
       totalItems = data.totalItems;
       page = pg;
-      if (tmp.Id !== folderId) {
+      if (tmp && !isResize) {
         dispatch("folderid", tmp);
+        navigate(`/admin/folders/${currentDir}/${pg}/${flt || ""}`);
       }
-      navigate(`/admin/folders/${currentDir}/${pg}/${flt || ""}`);
       showImage = "";
     }
   };
@@ -209,7 +209,7 @@
     if (rows !== newRows) {
       clearTimeout(timeout);
       timeout = setTimeout(() => {
-        loadFolders(page);
+        loadFolders(page, null, true);
       }, 300);
     }
   };

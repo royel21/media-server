@@ -153,24 +153,26 @@
 
 <div class="detail" class:change={isModified}>
   <div class="error">{error || ""}</div>
-  <div class="header">
-    <div class="f-image">
-      <div>
-        <img src={`data:img/jpeg;base64, ${folder.image || ""}`} alt="Not Found" />
-      </div>
-    </div>
-    <div class="f-count">
-      <span class="ccount"><strong>Total:</strong> <span>{folder.Total || 0}</span></span>
-      <span class="ccount"><strong>Size:</strong> <span>{getSize3(folder)}</span></span>
-      <span class="ccount"><strong>Last Chapter: </strong><span> {folder.Last || "N/A"}</span></span>
-    </div>
-  </div>
-  <div class="d-content">
+  <div class="file-header">
     <TextAreaInput file={folder} key="Name" style="margin-bottom: 5px" rows="3" {onChange}>
       <span class="pre-paste" slot="btn-left" on:click={copyName} title="Copy Name">
         <Icons name="copy" color="#045cba" />
       </span>
     </TextAreaInput>
+    <div class="header">
+      <div class="f-image">
+        <div>
+          <img src={`data:img/jpeg;base64, ${folder.image || ""}`} alt="Not Found" />
+        </div>
+      </div>
+      <div class="f-count">
+        <span class="ccount"><strong>Size:</strong> <span>{getSize3(folder)}</span></span>
+        <span class="ccount"><strong>Total:</strong> <span>{folder.Total || 0}</span></span>
+        <span class="ccount"><strong>Last Chapter: </strong><span> {folder.Last || "N/A"}</span></span>
+      </div>
+    </div>
+  </div>
+  <div class="d-content">
     <TextAreaInput file={folder} key="AltName" style="margin-bottom: 5px" sept="; " rows="3" {onChange}>
       <span class="pre-paste" slot="btn-left" on:click={prePaste} title="Paste To The Left">
         <Icons name="paste" color="black" />
@@ -328,9 +330,26 @@
     top: -1px;
     right: -4px;
   }
+  .file-header {
+    display: flex;
+    flex-direction: column-reverse;
+  }
   @media screen and (max-height: 810px) {
     .detail {
       padding-bottom: 15px;
+    }
+  }
+  @media screen and (min-width: 1100px) {
+    .file-header {
+      flex-direction: row;
+    }
+    .file-header :global(.input-control) {
+      height: 100%;
+      width: 70%;
+      padding: 4px;
+    }
+    .detail .file-header :global(textarea) {
+      height: 211px;
     }
   }
 </style>
