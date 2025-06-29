@@ -493,16 +493,12 @@ body .navbar .icon-folder {
     width: fit-content;
   }
 
-  menu a.active .nav-title {
-    display: initial;
-  }
-
   #menu li svg {
     transform: scale(1.2);
   }
 
   #menu a.active .nav-title {
-    display: initial;
+    display: inline-block;
   }
 
   #menu .icon-folder {

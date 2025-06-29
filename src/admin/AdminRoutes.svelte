@@ -195,6 +195,19 @@
     .toast {
       max-width: 390px;
     }
+    :global(#menu a.active) {
+      width: initial;
+    }
+    :global(body #menu li svg) {
+      transform: scale(1.05);
+    }
+    :global(#menu li span) {
+      margin-left: 7px;
+    }
+    #admin-label :global(svg) {
+      transform: scale(1.2);
+      width: 45px;
+    }
   }
 
   @media (max-width: 600px) and (pointer: none), (pointer: coarse) {
@@ -209,6 +222,10 @@
     }
     #admin-label {
       width: 32px;
+    }
+    :global(body #menu li svg) {
+      transform: scale(1.05);
+      min-width: initial;
     }
   }
 </style>
