@@ -119,6 +119,14 @@
     }
   };
 
+  const loadFromDisk = async () => {
+    const data = await apiUtils.admin(["folders", "file-info", folderId], "fd-info");
+
+    if (data.Last) {
+      folder = { ...folder, ...data };
+    }
+  };
+
   socket.off("cover-update", onCoverUpdate);
   socket.on("cover-update", onCoverUpdate);
 
@@ -167,7 +175,10 @@
       </div>
       <div class="f-count">
         <span class="ccount"><strong>Size:</strong> <span>{getSize3(folder)}</span></span>
-        <span class="ccount"><strong>Total:</strong> <span>{folder.Total || 0}</span></span>
+        <div class="sept">Info From Disk</div>
+        <span class="ccount" on:click={loadFromDisk}>
+          <strong>Total:</strong> <span>{folder.Total || "Click to load"}</span>
+        </span>
         <span class="ccount"><strong>Last Chapter: </strong><span> {folder.Last || "N/A"}</span></span>
       </div>
     </div>
@@ -286,7 +297,14 @@
     font-weight: 600;
     width: 100%;
   }
-
+  .sept {
+    text-align: center;
+    font-weight: bold;
+    border-bottom: 2px solid white;
+  }
+  .sept + .ccount {
+    cursor: pointer;
+  }
   .f-count > span {
     display: inline-block;
     width: 100%;

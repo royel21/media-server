@@ -9,6 +9,7 @@ import { Op, literal } from "sequelize";
 import { getFilter, getFilter2 } from "../utils.js";
 import { createDir } from "#server/Downloader/utils";
 import { cleanText } from "#server/utils";
+import { homedir } from "node:os";
 
 const routes = Router();
 
@@ -140,6 +141,23 @@ routes.post("/folder-create", async (req, res) => {
   }
 });
 
+routes.get("/file-info/:folderId?", async (req, res) => {
+  const folder = await db.folder.findOne({ where: { Id: req.params.folderId } });
+
+  let files = [];
+
+  if (fs.existsSync(folder.Path)) {
+    files = fs
+      .readdirSync(folder.Path.replace("homedir", homedir()))
+      .filter((f) => !/\.(webp|jpg|png|gif|jpeg)/.test(f));
+  }
+
+  return res.send({
+    Last: files.length > 0 ? files[files.length - 1] : "N/A",
+    Total: files.length > 0 ? files.length : 0,
+  });
+});
+
 routes.get("/folder/:folderId?", async (req, res) => {
   const folder = await db.folder.findOne({
     attributes: {
@@ -151,12 +169,6 @@ routes.get("/folder/:folderId?", async (req, res) => {
   if (!folder) return res.send({});
 
   const dirs = await db.directory.findAll({ order: ["Name"] });
-
-  let files = [];
-
-  // if (fs.existsSync(folder.Path)) {
-  //   files = fs.readdirSync(folder.Path).filter((f) => !/\.(webp|jpg|png|gif|jpeg)/.test(f));
-  // }
 
   const appConfig = await db.AppConfig.findOne();
   const imagePath = path.join(appConfig.ImagesPath, "Folder", folder.FilesType, folder.Name + ".jpg");
@@ -178,8 +190,6 @@ routes.get("/folder/:folderId?", async (req, res) => {
     Server: folder.Server,
     EmissionDate: folder.EmissionDate,
     Size: folder.dataValues.Size || 0,
-    Last: files.length > 0 ? files[files.length - 1] : "N/A",
-    Total: files.length > 0 ? files.length : 0,
     image,
     dirs,
     tags: await getTags(),

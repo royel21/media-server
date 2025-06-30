@@ -74,7 +74,7 @@ const evalServer = async (query) => {
       }
     }
 
-    return { Name: Name.replace(/ raw$/i, ""), Url, chaps };
+    return { Name: Name.replace(/ raw$/i, ""), Raw: / raw$/i.test(Name), Url, chaps };
   });
 };
 
@@ -103,6 +103,7 @@ export const downloadFromPage = async (Id, state) => {
   const db = getDb();
 
   const Server = await db.Server.findOne({ where: { Id: Id } });
+
   if (Server && Server?.HomeQuery && page) {
     try {
       sendMessage({ text: `** ${formatAMPM(new Date())} ${Server.Name} **`, important: true });
@@ -121,9 +122,9 @@ export const downloadFromPage = async (Id, state) => {
 
       const linkData = [];
 
-      for (let { Name, chaps, Url } of data) {
+      for (let { Name, chaps, Url, Raw } of data) {
         const query = {
-          where: { Url, ServerId: Id },
+          where: { [db.Op.Or]: { Url, Name }, Raw, ServerId: Id },
           include: ["Server"],
         };
 
