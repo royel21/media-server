@@ -124,7 +124,7 @@ export const downloadFromPage = async (Id, state) => {
 
       for (let { Name, chaps, Url, Raw } of data) {
         const query = {
-          where: { [db.Op.Or]: { Url, Name }, Raw, ServerId: Id },
+          where: { [db.Op.Or]: { Url: Url || "", Name }, Raw, ServerId: Id },
           include: ["Server"],
         };
 
