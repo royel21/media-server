@@ -5,6 +5,7 @@ import db from "#server/models/index";
 import { Op } from "sequelize";
 import { getFilter } from "../utils.js";
 import { getWatchedDirs, getWatchFiles, removeWatchedDir, removeWatchedFile, renameWatchedFile } from "./Watcher.js";
+import { cleanText } from "#server/utils";
 
 const routes = Router();
 
@@ -85,9 +86,12 @@ routes.get("/:page/:items/:filter?", async (req, res) => {
   };
 
   if (filter) {
+    const appConfig = await db.AppConfig.findOne();
+    const filters = getFilter(cleanText(filter, appConfig));
+
     const FolderId = await db.folder.findAll({
       attributes: ["Id", "Path"],
-      where: { Path: getFilter(filter) },
+      where: { Path: filters },
     });
     query.where[Op.or] = [{ Name: getFilter(filter) }, { FolderId: FolderId.map((fd) => fd.Id) }];
   }

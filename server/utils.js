@@ -84,3 +84,23 @@ export const createDefaultImageDirs = (CoverPath) => {
   createDir(path.join(CoverPath, "Manga"));
   createDir(path.join(CoverPath, "Video"));
 };
+
+function escapeRegExp(string) {
+  return string.replace(/([^a-zA-Z0-9])/g, "\\$1"); // $& means the whole matched string
+}
+
+export const cleanText = (text, appConfig) => {
+  if (!text) return "";
+  const parts = appConfig.RemoveInName.split(";");
+
+  for (const part of parts) {
+    try {
+      const regex = new RegExp(escapeRegExp(part), "i");
+      text = text.replace(regex, "").trim();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  return text;
+};

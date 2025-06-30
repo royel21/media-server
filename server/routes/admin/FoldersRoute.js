@@ -8,6 +8,7 @@ import { Router } from "express";
 import { Op, literal } from "sequelize";
 import { getFilter, getFilter2 } from "../utils.js";
 import { createDir } from "#server/Downloader/utils";
+import { cleanText } from "#server/utils";
 
 const routes = Router();
 
@@ -26,7 +27,8 @@ const getData = async (req, res) => {
   };
 
   let result;
-  let filters = getFilter(filter || "");
+  const appConfig = await db.AppConfig.findOne();
+  const filters = getFilter(cleanText(filter || "", appConfig));
 
   // if contain folderId this is a file query we will need the folderId
   if (folderId) {
@@ -40,7 +42,10 @@ const getData = async (req, res) => {
       query.where.DirectoryId = dirId;
     }
     query.attributes = [...query.attributes, "Path", "Status", "FilesType", "Scanning"];
-    const filters2 = getFilter2(filter, ["AltName", "Name", "Genres", "Author", "Server"]);
+
+    const appConfig = await db.AppConfig.findOne();
+    const text = cleanText(filter, appConfig);
+    const filters2 = getFilter2(text, ["AltName", "Name", "Genres", "Author", "Server"]);
     query.where[Op.or] = filters2;
     result = await db.folder.findAndCountAll(query);
 
@@ -149,9 +154,10 @@ routes.get("/folder/:folderId?", async (req, res) => {
 
   let files = [];
 
-  if (fs.existsSync(folder.Path)) {
-    files = fs.readdirSync(folder.Path).filter((f) => !/\.(webp|jpg|png|gif|jpeg)/.test(f));
-  }
+  // if (fs.existsSync(folder.Path)) {
+  //   files = fs.readdirSync(folder.Path).filter((f) => !/\.(webp|jpg|png|gif|jpeg)/.test(f));
+  // }
+
   const appConfig = await db.AppConfig.findOne();
   const imagePath = path.join(appConfig.ImagesPath, "Folder", folder.FilesType, folder.Name + ".jpg");
   let image = "";

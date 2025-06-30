@@ -47,3 +47,6 @@ rsync -avu --del --exclude='[0-9]*.jpg' --prune-empty-dirs "/<src>" "/<dest>"
 #mount remote folder ".smbcredentials" contain the username and password
 sudo mount -t cifs -o credentials=/home/.smbcredentials //10.0.0.4/e /mnt/MSI-8TBHDD
 sudo mount -t cifs -o credentials=/home/.smbcredentials //10.0.0.4/g /mnt/MSI-GHDD
+
+#to before running brave
+sudo chmod 1777 /dev/shm

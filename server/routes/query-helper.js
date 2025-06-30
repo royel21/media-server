@@ -2,6 +2,7 @@ import { Op, literal } from "sequelize";
 import db from "#server/models/index";
 
 import { clamp, getFilter2 } from "./utils.js";
+import { cleanText } from "#server/utils";
 
 export const qryCurrentPos = (user, table) => [
   literal(`IFNULL((Select LastPos from RecentFiles where FileId = ${table}.Id and UserId = '${user.Id}'), 0)`),
@@ -120,7 +121,9 @@ export const getFolders = async (req, res) => {
 
   let limit = +items || 16;
 
-  let filters = getFilter2(search, ["AltName", "Name", "Genres", "Author", "Server", "EmissionDate", "Status"]);
+  const appConfig = await db.AppConfig.findOne();
+  const text = cleanText(search, appConfig);
+  let filters = getFilter2(text, ["AltName", "Name", "Genres", "Author", "Server", "EmissionDate", "Status"]);
 
   const Size = `(Select SUM(Size) from Files where FolderId = Folders.Id)`;
 

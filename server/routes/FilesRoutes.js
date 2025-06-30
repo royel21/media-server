@@ -5,6 +5,7 @@ import { getFiles, getFolders } from "./query-helper.js";
 
 import { clamp, getFilter } from "./utils.js";
 import { Op, literal } from "sequelize";
+import { cleanText } from "#server/utils";
 
 const routes = Router();
 
@@ -44,7 +45,8 @@ routes.get("/recents/:items/:page?/:filter?", async (req, res) => {
     offset = 0;
   }
 
-  const filters = getFilter(filter);
+  const appConfig = await db.AppConfig.findOne();
+  const filters = getFilter(cleanText(filter, appConfig));
 
   const query = {
     order: [["LastRead", "DESC"]],

@@ -345,6 +345,7 @@
     }
     .file-header :global(.input-control) {
       height: 100%;
+      max-width: 300px;
       width: 70%;
       padding: 4px;
     }

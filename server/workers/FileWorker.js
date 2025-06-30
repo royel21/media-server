@@ -191,18 +191,6 @@ const createFolderThumb = async ({ folderId, file }) => {
     console.log(error);
   }
 };
-const getFilesSize = (files) => {
-  let size = 0;
-  for (let file of files) {
-    if (file.isDirectory) {
-      size += getFilesSize(file.Files);
-    } else {
-      size += file.Size;
-    }
-  }
-
-  return size;
-};
 
 const actions = {
   renameDBFile,

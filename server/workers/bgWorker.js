@@ -2,6 +2,7 @@ import winExplorer from "win-explorer";
 import { zipImgFolder, unZip } from "./zipHelper.js";
 import { convertVideo, extractSubVideo, mergeVideos } from "./videoConvert.js";
 import { sendMessage } from "../utils.js";
+import { homedir } from "node:os";
 
 const state = {
   stop: false,
@@ -21,6 +22,7 @@ const getFilesSize = (files) => {
 };
 
 const folderSize = ({ Name, Path }) => {
+  Path = Path.replace("homedir", homedir());
   const files = winExplorer.ListFilesRO(Path);
   let Size = (getFilesSize(files) / 1024 / 1024 / 1024).toFixed(2) + "GB";
   sendMessage({ Name, Path, Size }, "folder-size");

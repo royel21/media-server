@@ -11,17 +11,13 @@ import { startBrowser, createPage, delay } from "./Crawler.js";
 import { downloadLink } from "./link-downloader.js";
 import { downloadFromPage } from "./checkServer.js";
 import { downloadNHentais } from "./nhentai.js";
-import { getProgress } from "../utils.js";
+import { cleanText, getProgress } from "../utils.js";
 import { validAltName } from "#server/share/utils";
 
 // add stealth plugin and use defaults (all evasion techniques)
 const state = { links: [], running: false, size: 0, checkServer: false, nhentais: [], hrunning: false, hsize: 0 };
 
 const db = getDb();
-
-function escapeRegExp(string) {
-  return string.replace(/([^a-zA-Z0-9])/g, "\\$1"); // $& means the whole matched string
-}
 
 const validateName = async (manga, link) => {
   let tname = await db.NameList.findOne({ where: { Name: manga.Name } });
@@ -86,14 +82,8 @@ const downloadLinks = async (link, page) => {
     ...Server.dataValues,
     link,
   });
-  const parts = appConfig.RemoveInName.split(";");
 
-  for (const part of parts) {
-    try {
-      const regex = new RegExp(escapeRegExp(part), "i");
-      manga.Name = manga.Name.replace(regex, "").trim();
-    } catch (error) {}
-  }
+  manga.Name = cleanText(manga.Name, appConfig);
 
   const { Name } = manga;
 

@@ -6,6 +6,7 @@ import ExcludeChapRoutes from "./ExcludeChapRoutes.js";
 import EventLogsRoutes from "./EventLogsRoutes.js";
 import ServersRoutes from "./ServersRoutes.js";
 import db from "#server/models/index";
+import { cleanText } from "#server/utils";
 
 const routes = Router();
 
@@ -56,9 +57,9 @@ routes.post("/links", async ({ body }, res) => {
       ["Name", "DESC"],
     ],
   };
-
   if (filter) {
-    const qfilter = getFilter(filter);
+    const appConfig = await db.AppConfig.findOne();
+    const qfilter = getFilter(cleanText(filter, appConfig));
     query.where = { [Op.or]: { Name: qfilter, AltName: qfilter, "$Server.Name$": qfilter, Url: qfilter } };
   }
 
