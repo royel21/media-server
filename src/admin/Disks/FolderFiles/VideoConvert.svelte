@@ -19,7 +19,7 @@
       videoBitrate: 832,
     },
     Film: {
-      videoBitrate: 1088,
+      videoBitrate: 800,
     },
   };
 
@@ -35,8 +35,8 @@
     audioBitrate: 128,
     Subtitles: "eng|spa",
     Audio: "jap|spa|es|eng",
-    Width: 1280,
-    Height: -1,
+    Width: 852,
+    Height: 478,
     Remove: false,
     Debug: false,
   };

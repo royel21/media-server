@@ -68,6 +68,7 @@ export const convertVideo = async (
         `-b:a ${audioBitrate}k`,
         "-movflags +faststart",
         "-map_chapters -1",
+        '-vf "fps=30000/1001"',
       ];
       // add hardware acceleration
       if (os.platform() === "linux") {
