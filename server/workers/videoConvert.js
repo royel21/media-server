@@ -85,7 +85,7 @@ export const convertVideo = async (
         if (streams.length > 0) {
           //select subtitle by order
           for (const sub of list.split("|")) {
-            strIndex = streams.findIndex((st) => st.tags.language.includes(sub));
+            strIndex = streams.findIndex((st) => st.tags.language?.includes(sub));
             if (strIndex > -1) break;
           }
         }

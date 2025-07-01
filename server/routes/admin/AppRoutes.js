@@ -33,7 +33,7 @@ routes.post("/save", async (req, res) => {
 
   if (data) {
     try {
-      body.RemoveInName = [...new Set(bodyRemoveInName.split(";"))].join(";");
+      body.RemoveInName = [...new Set(body.RemoveInName.split(";"))].join(";");
       await data.update(body);
       await data.reload();
 

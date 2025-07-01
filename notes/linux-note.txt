@@ -23,10 +23,10 @@ rsync -avu --del --exclude='[0-9]*.jpg' --prune-empty-dirs "/<src>" "/<dest>"
     git clone https://github.com/ffmpeg/ffmpeg
     cd ffmpeg
 
-    ./configure --arch=x86_64 --disable-yasm --enable-vaapi --enable-libmfx
+    ./configure --arch=x86_64 --enable-vaapi --enable-libmfx --enable-libfreetype --enable-libass --enable-gpl --enable-nonfree --enable-libharfbuzz
     make
 
-    make install
+    sudo make install
 
     #Sample cmd for ffmpeg
     ffmpeg -hwaccel qsv -c:v h264_qsv -i input_video output_video 
