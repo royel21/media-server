@@ -156,7 +156,7 @@ export const downloadFromPage = async (Id, state) => {
 
             let updateFolder = false;
 
-            let chaptCount = 0;
+            let chaptCount = 1;
             for (let chap of d.chaps) {
               if (state.stopped) break;
               const count = `${getProgress(chaptCount++, d.chaps.length)}`;
