@@ -58,7 +58,7 @@
       totalPages = data.totalPages;
       totalItems = data.totalItems;
       page = pg;
-      if (tmp && !isResize) {
+      if (!isResize) {
         dispatch("folderid", tmp);
         navigate(`/admin/folders/${currentDir}/${pg}/${flt || ""}`);
       }
