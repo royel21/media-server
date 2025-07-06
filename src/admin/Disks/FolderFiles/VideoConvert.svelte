@@ -17,9 +17,13 @@
   let defaults = {
     Anime: {
       videoBitrate: 832,
+      Width: 1280,
+      Height: -1,
     },
     Film: {
       videoBitrate: 800,
+      Width: 852,
+      Height: 478,
     },
   };
 
@@ -35,8 +39,6 @@
     audioBitrate: 128,
     Subtitles: "eng|spa",
     Audio: "jap|spa|es|eng",
-    Width: 852,
-    Height: 478,
     Remove: false,
     Debug: false,
   };

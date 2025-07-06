@@ -30,7 +30,6 @@
   };
 
   $: show = selectedList.filter((f) => !videoRegex.test(f.Name)).length === 0;
-  $: count = selectedList.filter((f) => videoRegex.test(f.Name)).length;
 </script>
 
 {#if showConfirm}

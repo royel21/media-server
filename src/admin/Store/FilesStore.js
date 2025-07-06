@@ -1,7 +1,7 @@
 import { writable } from "svelte/store";
 
 const FilesStore = writable({ file: {}, files: [] });
-const videoRegex = /\.(mp4|mkv|webm|ogg)$/i;
+const videoRegex = /\.(mp4|mkv|webm|ogg|avi)$/i;
 const MangaRegex = /\.zip$/i;
 const ImageRegex = /\.(jpg|jpeg|png|webp)$/i;
 const textRegex = "\\.(txt|srt|ass|js|svelte|jsx|css|html|htmx|json|md|bat|sh|manifest|ini";

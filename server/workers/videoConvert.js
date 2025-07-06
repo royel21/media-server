@@ -128,8 +128,6 @@ export const convertVideo = async (
         outOptions.push(`-vf scale=${sizeOption}`);
       }
 
-      await sendMessage({ text: `[${current} ~ ${getime()} ~ ${stream.width}x${stream.height} ~ ${file.Name}]` });
-
       let duration = 0;
       let elapse = 0;
 
@@ -141,8 +139,11 @@ export const convertVideo = async (
             console.log(`\n${cmd}\n`);
           }
         })
-        .on("codecData", function (data) {
+        .on("codecData", async function (data) {
           duration = data.duration.split(".")[0];
+          await sendMessage({
+            text: `[${current} ~ ${getime()} ~  ${duration}-${stream.width}x${stream.height} ~ ${file.Name}]`,
+          });
         })
         .on("progress", (p) => {
           if (state.stop) {
@@ -171,6 +172,9 @@ export const convertVideo = async (
             fs.removeSync(file.Path);
           }
           resolve(true);
+          try {
+            videoProcess.kill("SIGINT");
+          } catch (error) {}
         })
         .on("error", (error) => {
           error = error.toString();
@@ -178,10 +182,9 @@ export const convertVideo = async (
           resolve(true);
         });
     });
-
     i++;
   }
-  await sendMessage({ convert: true, msg: "Finish Converting Videos" }, "files-info");
+  await sendMessage({ convert: true, End: true, msg: "Finish Converting Videos" }, "files-info");
 };
 
 export const mergeVideos = async ({ files }) => {

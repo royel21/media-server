@@ -328,9 +328,7 @@
                 <Icons name="zip" box="0 0 384 512" color="darkgray" />
               </span>
             {/if}
-            {#if !bgWorking}
-              <VideoControl bind:showConvertVideo bind:showVideoSubTract {selectedList} {socket} />
-            {/if}
+            <VideoControl bind:showConvertVideo bind:showVideoSubTract {selectedList} {socket} />
             <span on:click={() => (showBulkRename = true)}><Icons name="edit" /></span>
             <span on:click={onTransfer}><Icons name="right-left" /></span>
             {#if selectedList.length === 1}
