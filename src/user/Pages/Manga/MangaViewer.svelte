@@ -1,9 +1,8 @@
 <script>
-  import { getContext, createEventDispatcher, afterUpdate, onMount } from "svelte";
+  import { getContext, createEventDispatcher, onMount } from "svelte";
   import { clamp } from "@share/utils";
   import { setfullscreen } from "../pagesUtils";
   import { scrollInView, getEmptyIndex } from "./mangaUtils";
-  import { disconnectObvrs, PageObserver, scrollImageLoader } from "./Observers";
   import { onTouchStart, onTouchEnd, onTouchMove, default as controls } from "./MangaTouch";
 
   import { ToggleMenu, updateToggleMenu } from "src/ShareComponent/ToggleMenu";
@@ -14,7 +13,6 @@
   export let file;
   export let KeyMap;
   export let viewer;
-  export let changePages;
   export let removeFile;
   export let isManhwa;
 
@@ -37,9 +35,49 @@
     jumping: false,
     lastId: file?.Id,
   };
+
+  let observerTimeOut;
+
+  const PageObserver = (scroll = false, time = 100) => {
+    if (webtoon) {
+      viewerState.pageObserver?.disconnect();
+      const imgs = viewer.querySelectorAll("img");
+
+      if (scroll) {
+        imgs[file.CurrentPos]?.scrollIntoView();
+      }
+      clearTimeout(observerTimeOut);
+      observerTimeOut = setTimeout(() => {
+        viewerState.pageObserver = new IntersectionObserver(
+          (entries) => {
+            if (viewerState.changingPage) {
+              return (viewerState.changingPage = false);
+            }
+
+            if (imgs.length) {
+              for (let entry of entries) {
+                if (entry.isIntersecting) {
+                  const page = +entry.target.id;
+                  const dir = page - file.CurrentPos;
+                  file.CurrentPos = page;
+                  if (!viewerState.loading && !images[page + 5 * dir]) loadImages(file.CurrentPos, 5, dir);
+                }
+              }
+            }
+          },
+          { root: viewer, threshold: 0.01 }
+        );
+        imgs.forEach((lazyImg) => {
+          viewerState.pageObserver.observe(lazyImg);
+        });
+      }, time);
+    }
+
+    return viewerState.pageObserver;
+  };
   //emptyImage observer
   const loadImages = (pg, toPage, dir = 1) => {
-    if (!viewerState.loading && file.Id && !isNaN(pg) && !isNaN(toPage)) {
+    if (!viewerState.loading && file.Id) {
       const founds = getEmptyIndex(images, pg, toPage, dir || 1, file.Duration).filter((fi) => !indices.includes(fi));
       if (founds.length) {
         viewerState.loading = true;
@@ -52,12 +90,13 @@
     const pg = file.CurrentPos + dir;
     if (pg > -1 && pg < file.Duration) {
       if (webtoon) {
-        scrollInView(pg);
+        viewerState.changingPage = true;
+        PageObserver(true);
       }
       if (!viewerState.loading && !images[pg + 5 * dir]) {
         loadImages(pg, 10, dir);
       }
-      changePages(pg);
+      file.CurrentPos = pg;
     } else {
       viewerState.jumping = webtoon;
       if (action) action();
@@ -70,14 +109,14 @@
   const jumpTo = (val) => {
     val = clamp(val, 1, file.Duration) - 1;
 
-    changePages(val);
+    file.CurrentPos = val;
     if (webtoon) {
-      scrollInView(val);
+      viewerState.changingPage = true;
+      PageObserver(true);
     }
 
     viewerState.jumping = webtoon;
     loadImages(val - 5, 10);
-    scrollInView(val);
   };
 
   //Replace Placeholder with current page on focus
@@ -95,21 +134,13 @@
 
   const returnTo = () => dispatch("returnBack");
 
-  let tout1;
-  let connectObservers = (delay = 0) => {
-    clearTimeout(tout1);
-    tout1 = setTimeout(() => {
-      scrollInView(file.CurrentPos);
-      scrollImageLoader(loadImages, viewer);
-      viewerState.jumping = false;
-    }, delay);
-  };
-
   const onFullScreen = () => {
     if (webtoon) {
-      disconnectObvrs(viewer);
+      viewerState.pageObserver?.disconnect();
       isFullscreen = setfullscreen(viewer);
-      connectObservers(100);
+      setTimeout(() => {
+        PageObserver(true);
+      }, 150);
     } else {
       isFullscreen = setfullscreen(viewer);
     }
@@ -124,11 +155,10 @@
         indices.push(data.page);
         images[data.page] = data.img;
       } else {
-        if (viewerState.jumping) {
-          scrollImageLoader(loadImages, viewer);
-        }
-        viewerState.jumping = false;
-        viewerState.loading = false;
+        setTimeout(() => {
+          viewerState.jumping = false;
+          viewerState.loading = false;
+        }, 100);
       }
     }
   };
@@ -143,29 +173,29 @@
 
   $: progress = file.Duration ? `${+file.CurrentPos + 1}/${file.Duration}` : "Loading";
 
-  $: if (!webtoon) {
-    disconnectObvrs(viewer);
-  }
+  let changeDirTimeOut;
+  const changeMangaDir = () => {
+    webtoon = !webtoon;
+    if (webtoon) {
+      clearTimeout(changeDirTimeOut);
+      changeDirTimeOut = setTimeout(() => {
+        PageObserver(true, 100);
+      }, 100);
+    } else {
+      viewerState.pageObserver.disconnect();
+    }
+  };
 
   //reload on file change
-  $: if (file.Id && file.Id !== viewerState.lastfId) {
+  $: if (file.Id !== viewerState.lastfId) {
+    viewerState.lastfId = file.Id;
     controls.file = file;
     viewerState.jumping = webtoon;
     viewerState.loading = false;
     images = [];
     indices = [];
     loadImages(file.CurrentPos - 1, 8);
-    console.log(file);
   }
-
-  afterUpdate(() => {
-    if (file.Id !== viewerState.lastfId) {
-      viewerState.lastfId = file.Id;
-      scrollInView(file.CurrentPos);
-      PageObserver(changePages, viewer);
-      onShow();
-    }
-  });
 
   let elements = [];
   const changeOpacity = (op) => elements.forEach((el) => (el.style.opacity = op));
@@ -180,8 +210,6 @@
   const onConnect = () => loadImages(file.CurrentPos - 1, 8);
   const onDisconnect = () => {
     viewerState.loading = false;
-    scrollImageLoader(loadImages, viewer);
-    PageObserver(changePages, viewer);
   };
 
   const onError = ({ Id, error: err }) => {
@@ -277,7 +305,7 @@
     <span class="h-p popup-msg" on:click={returnTo} data-title="Close">
       <Icons name="timescircle" />
     </span>
-    <span class="web-toon" on:click={() => (webtoon = !webtoon)}>
+    <span class="web-toon" on:click={changeMangaDir}>
       Read <Icons name={webtoon ? "arrowdown" : "arrowright"} color="black" />
     </span>
     <span class="prev-page" on:click={prevPage}>
