@@ -113,7 +113,7 @@ export const convertVideo = async (
         outOptions.push(`-pix_fmt ${pix_fmt}`);
       }
 
-      let sizeOption = `-1:-1`;
+      let sizeOption = `${stream.width}:-1`;
       //resize to keep under maximun width
       if (Width && stream.width > +Width) {
         sizeOption = sizeOption.replace(/^-1/, Width);
