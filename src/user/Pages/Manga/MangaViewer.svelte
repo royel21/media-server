@@ -195,6 +195,10 @@
     images = [];
     indices = [];
     loadImages(file.CurrentPos - 1, 8);
+
+    setTimeout(() => {
+      PageObserver(true, 100);
+    }, 100);
   }
 
   let elements = [];
