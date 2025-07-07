@@ -50,3 +50,5 @@ sudo mount -t cifs -o credentials=/home/.smbcredentials //10.0.0.4/g /mnt/MSI-GH
 
 #to before running brave
 sudo chmod 1777 /dev/shm
+//Fix video slow Startup 
+ffmpeg -i ".mp4" -c:a copy -c:v copy -movflags +faststart output.mp4 
