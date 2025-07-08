@@ -495,6 +495,7 @@
     content: attr(alt);
     position: absolute;
     top: 46%;
+    left: calc(50% - 120px);
     font-size: 30px;
     z-index: 2;
   }
