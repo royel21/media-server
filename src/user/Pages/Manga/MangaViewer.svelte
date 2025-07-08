@@ -475,6 +475,9 @@
     min-height: 100%;
     min-width: 400px;
   }
+  .empty-img:not(:last-child) {
+    border-bottom: 1px solid black;
+  }
 
   #manga-viewer .empty-img:before {
     display: inline-block;
@@ -489,6 +492,7 @@
   }
 
   #manga-viewer .empty-img:after {
+    content: attr(alt);
     position: absolute;
     top: 46%;
     font-size: 30px;
@@ -523,10 +527,6 @@
   :fullscreen #manga-viewer.hide .controls span {
     transform: translateY(34px);
     transition: 0.3s all;
-  }
-  img[alt]:after {
-    text-align: center;
-    top: 50%;
   }
 
   #manga-viewer.hide .controls {
