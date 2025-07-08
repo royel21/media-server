@@ -44,7 +44,7 @@
       const imgs = viewer.querySelectorAll("img");
 
       if (scroll) {
-        imgs[file.CurrentPos]?.scrollIntoView();
+        imgs[file.CurrentPos || 0]?.scrollIntoView();
       }
       clearTimeout(observerTimeOut);
       observerTimeOut = setTimeout(() => {
@@ -194,7 +194,8 @@
     viewerState.loading = false;
     images = [];
     indices = [];
-    loadImages(file.CurrentPos - 1, 8);
+    const from = (file.CurrentPos || 0) - 1;
+    loadImages(from, 8);
 
     setTimeout(() => {
       PageObserver(true, 100);
