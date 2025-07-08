@@ -29,6 +29,7 @@
   let isFullscreen = false;
   let error;
   let indices = [];
+  let imgs = [];
 
   let viewerState = {
     loading: false,
@@ -41,35 +42,36 @@
   const PageObserver = (scroll = false, time = 100) => {
     if (webtoon) {
       viewerState.pageObserver?.disconnect();
-      const imgs = viewer.querySelectorAll("img");
+      imgs = viewer.querySelectorAll(".viewer img");
+      viewerState.pageObserver = new IntersectionObserver(
+        (entries) => {
+          if (viewerState.changingPage) {
+            return (viewerState.changingPage = false);
+          }
 
-      if (scroll) {
-        imgs[file.CurrentPos || 0]?.scrollIntoView();
-      }
-      clearTimeout(observerTimeOut);
-      observerTimeOut = setTimeout(() => {
-        viewerState.pageObserver = new IntersectionObserver(
-          (entries) => {
-            if (viewerState.changingPage) {
-              return (viewerState.changingPage = false);
-            }
-
-            if (imgs.length) {
-              for (let entry of entries) {
-                if (entry.isIntersecting) {
-                  const page = +entry.target.id;
-                  const dir = page - file.CurrentPos;
-                  file.CurrentPos = page;
-                  if (!viewerState.loading && !images[page + 5 * dir]) loadImages(file.CurrentPos, 5, dir);
-                }
+          if (imgs.length) {
+            for (let entry of entries) {
+              if (entry.isIntersecting) {
+                const page = +entry.target.id;
+                const dir = page - file.CurrentPos;
+                file.CurrentPos = page;
+                if (!viewerState.loading && !images[page + 5 * dir]) loadImages(file.CurrentPos, 5, dir);
               }
             }
-          },
-          { root: viewer, threshold: 0.01 }
-        );
-        imgs.forEach((lazyImg) => {
-          viewerState.pageObserver.observe(lazyImg);
-        });
+          }
+        },
+        { root: viewer, threshold: 0.01 }
+      );
+      imgs.forEach((lazyImg) => {
+        viewerState.pageObserver.observe(lazyImg);
+      });
+
+      clearTimeout(observerTimeOut);
+
+      observerTimeOut = setTimeout(() => {
+        if (scroll) {
+          imgs[file.CurrentPos || 0]?.scrollIntoView();
+        }
       }, time);
     }
 
@@ -91,7 +93,7 @@
     if (pg > -1 && pg < file.Duration) {
       if (webtoon) {
         viewerState.changingPage = true;
-        PageObserver(true);
+        imgs[pg]?.scrollIntoView();
       }
       if (!viewerState.loading && !images[pg + 5 * dir]) {
         loadImages(pg, 10, dir);
@@ -138,9 +140,8 @@
     if (webtoon) {
       viewerState.pageObserver?.disconnect();
       isFullscreen = setfullscreen(viewer);
-      setTimeout(() => {
-        PageObserver(true);
-      }, 150);
+
+      PageObserver(true, 250);
     } else {
       isFullscreen = setfullscreen(viewer);
     }
@@ -173,14 +174,12 @@
 
   $: progress = file.Duration ? `${+file.CurrentPos + 1}/${file.Duration}` : "Loading";
 
-  let changeDirTimeOut;
   const changeMangaDir = () => {
     webtoon = !webtoon;
     if (webtoon) {
-      clearTimeout(changeDirTimeOut);
-      changeDirTimeOut = setTimeout(() => {
-        PageObserver(true, 100);
-      }, 100);
+      setTimeout(() => {
+        PageObserver(true, 250);
+      }, 150);
     } else {
       viewerState.pageObserver.disconnect();
     }
@@ -194,12 +193,9 @@
     viewerState.loading = false;
     images = [];
     indices = [];
-    const from = (file.CurrentPos || 0) - 1;
-    loadImages(from, 8);
+    loadImages(file.CurrentPos - 1, 8);
 
-    setTimeout(() => {
-      PageObserver(true, 100);
-    }, 100);
+    PageObserver(true, 250);
   }
 
   let elements = [];

@@ -65,7 +65,7 @@
       imgs = container.querySelectorAll("img");
 
       if (scroll) {
-        imgs[file.CurrentPos || 0]?.scrollIntoView();
+        imgs[currentImg]?.scrollIntoView();
       }
       clearTimeout(observerTimeOut);
       observerTimeOut = setTimeout(() => {
