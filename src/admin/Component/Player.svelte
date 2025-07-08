@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from "svelte";
+  import { afterUpdate, onMount } from "svelte";
   import Dialog from "src/ShareComponent/Dialog.svelte";
   import { setGesture } from "src/ShareComponent/VideoTouch.js";
   import { formatTime } from "./util";
@@ -156,6 +156,10 @@
   $: if (file.Path !== player?.src) {
     error = "";
   }
+
+  afterUpdate(() => {
+    player?.focus();
+  });
 
   let stop;
   $: current = files.findIndex((f) => f.Id === file.Id);

@@ -33,10 +33,8 @@ export const setGesture = (player, onPlay, mConfig) => {
 
       if (gestureDir === 0 && (deltaX > 10 || deltaX < -10)) {
         gestureDir = 1;
-        gesture = true;
       } else if (gestureDir === 0 && (deltaY > 10 || deltaY < -10)) {
         gestureDir = 2;
-        gesture = true;
       }
 
       if (gestureDir === 1) {
@@ -45,16 +43,15 @@ export const setGesture = (player, onPlay, mConfig) => {
           let seek = currentTime + (deltaX > 0 ? +mConfig.seekRate : -mConfig.seekRate);
           player.currentTime = seek < 0 ? 0 : seek > duration ? duration : seek;
           touchData = { time: e.timeStamp, startX: pageX, startY: pageY };
-          gesture = true;
         }
       } else if (gestureDir === 2) {
         if (deltaY > 2 || deltaY < -2) {
           let vol = player.volume + (deltaY < 0 ? 0.01 : -0.01);
           player.volume = vol < 0 ? 0 : vol > 1 ? 1 : vol;
           touchData = { time: e.timeStamp, startX: pageX, startY: pageY };
-          gesture = true;
         }
       }
+      gesture = true;
     }
   };
 
@@ -70,14 +67,12 @@ export const setGesture = (player, onPlay, mConfig) => {
     gesture = false;
     touching = false;
   };
+
   if (player) {
     document.body.removeEventListener(isMobile() ? "touchend" : "mouseup", onEnd);
     container.addEventListener(isMobile() ? "touchstart" : "mousedown", onStart, { passive: true });
     container.addEventListener(isMobile() ? "touchmove" : "mousemove", onMove, { passive: true });
     document.body.addEventListener(isMobile() ? "touchend" : "mouseup", onEnd, { passive: true });
-    setTimeout(() => {
-      player.focus();
-    }, 1000);
   }
 
   return () => {
