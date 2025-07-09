@@ -102,6 +102,10 @@
     window.removeEventListener("fullscreenchange", onFullScreen);
   });
 
+  const changePages = (page) => {
+    file.CurrentPos = page;
+  };
+
   const removeFile = async () => {
     socket.emit("file-work", { action: "removeDBFile", data: { Id: [fileId], Del: true, viewer: true } });
   };
@@ -197,6 +201,7 @@
       {isManhwa}
       on:changefile={changeFile}
       on:returnBack={returnBack}
+      {changePages}
       {KeyMap}
       {removeFile}
     />
