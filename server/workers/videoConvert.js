@@ -76,7 +76,8 @@ export const convertVideo = async (
         inputOptions.unshift("-hwaccel_output_format qsv");
         outOptions[0] = "-c:v h264_qsv";
       } else {
-        inputOptions.push("-hwaccel auto");
+        inputOptions.push("-hwaccel qsv");
+        outOptions[0] = "-c:v h264_qsv";
       }
 
       const getStreamIndexByLang = (list = [], type = "audio") => {
@@ -113,7 +114,7 @@ export const convertVideo = async (
         outOptions.push(`-pix_fmt ${pix_fmt}`);
       }
 
-      let sizeOption = `${stream.width}:-1`;
+      let sizeOption = `${Width || stream.width}:-1`;
       //resize to keep under maximun width
       if (Width && stream.width > +Width) {
         sizeOption = sizeOption.replace(/^-1/, Width);
