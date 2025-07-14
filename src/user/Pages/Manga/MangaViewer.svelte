@@ -155,7 +155,6 @@
     images = [];
     indices = [];
     loadImages(file.CurrentPos - 1, 8);
-    console.log(file);
   }
 
   afterUpdate(() => {
@@ -180,8 +179,10 @@
   const onConnect = () => loadImages(file.CurrentPos - 1, 8);
   const onDisconnect = () => {
     viewerState.loading = false;
-    scrollImageLoader(loadImages, viewer);
-    PageObserver(changePages, viewer);
+    if (webtoon) {
+      scrollImageLoader(loadImages, viewer);
+      PageObserver(changePages, viewer);
+    }
   };
 
   const onError = ({ Id, error: err }) => {
