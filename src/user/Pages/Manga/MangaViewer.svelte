@@ -54,7 +54,7 @@
       if (webtoon) {
         scrollInView(pg);
       }
-      if (!viewerState.loading && !images[pg + 5 * dir]) {
+      if (webtoon && !viewerState.loading && !images[pg + 5 * dir]) {
         loadImages(pg, 10, dir);
       }
       changePages(pg);
@@ -124,7 +124,7 @@
         indices.push(data.page);
         images[data.page] = data.img;
       } else {
-        if (viewerState.jumping) {
+        if (webtoon && viewerState.jumping) {
           scrollImageLoader(loadImages, viewer);
         }
         viewerState.jumping = false;
