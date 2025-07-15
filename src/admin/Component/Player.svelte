@@ -13,9 +13,9 @@
   const VOLKEY = "admin-vol";
   const SEEKLEFT = 37;
   const SEEKRIGHT = 39;
-  const VOLUMEUP = 37;
+  const VOLUMEUP = 38;
   const VOLUMEDOWN = 40;
-  const PLAY = 37;
+  const PLAY = 13;
   const CLOSE = 88;
 
   let file = {};
