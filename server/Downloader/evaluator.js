@@ -1,6 +1,6 @@
 export const evaluetePage = async (query) => {
   const cleanNameRegx =
-    /18\+|\nEND| Webtoon|ONGOING|NEW|HOT\n|manga|\nNew shoujo Manhwa| – Mangagreat| - mangagreat| Manga| Comics$|^Hot /g;
+    /18\+|\nEND| Webtoon|ONGOING|ON-GOING|NEW|HOT\n|manga|\nNew shoujo Manhwa| – Mangagreat| - mangagreat| Manga| Comics$|^Hot /g;
 
   let originalName = document.querySelector(query.Title).textContent.replace(cleanNameRegx, "").trim();
 
@@ -129,7 +129,7 @@ export const adultEvalPage = async (query) => {
     .replace(/:|\?|\*|<|>|"| Webtoon| \(Acera\)\n|\n|\t|“|^,|\//gi, "")
     .replace(/(\.)+$/, "")
     .replace(/”( |)/g, ", ")
-    .replace(/^(18\+|(ENDED|END)(\.|)+|ONGOING|ON GOING|HOT|NEW)/, "")
+    .replace(/^(18\+|(ENDED|END)(\.|)+|ONGOING|ON GOING|ON-GOING|HOT|NEW)/, "")
     .replace(/’/g, "'")
     .replace(/ (\(|\[)official( \& Uncensored|)(\)|\])$/i, "")
     .replace(/( )+/g, " ");
@@ -212,8 +212,10 @@ export const adultEvalPage = async (query) => {
   let AltName = "";
   const genreRegex = /genre((\(|)(s|)(\)|( |):(\n|)|))|Género(( |):|)/gi;
   const authorRegex = /(author|Autor)((\(|)s(\)|)|)( |)(:|)( |)/i;
+  const year = /release|Year of Release|Year/i;
   let Author = "";
   let items = document.querySelectorAll(query.AltTitle);
+  let EmissionDate = "";
   if (items.length > 1) {
     for (let item of items) {
       let text = item?.textContent.trim();
@@ -242,6 +244,13 @@ export const adultEvalPage = async (query) => {
 
         if (genreRegex.test(text)) {
           Genres = formatGenres(text.replace(genreRegex, "").trim());
+        }
+
+        if (year.test(text)) {
+          const found = text.replace(year, "").trim();
+          if (/\d+/.test(found)) {
+            EmissionDate = `1/1/${+found}`;
+          }
         }
 
         if (/manhwa|manhua/i.test(text)) {
@@ -376,7 +385,7 @@ export const adultEvalPage = async (query) => {
     }
   }
 
-  return { Name, data, poster, Description, Status, posterData, Genres, AltName, title, Author };
+  return { Name, data, poster, Description, Status, posterData, Genres, AltName, title, Author, EmissionDate };
 };
 
 export const evaleLinks = async (query) => {

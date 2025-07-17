@@ -20,7 +20,7 @@ export const findFolder = async (Name) => {
 };
 
 export const findOrCreateFolder = async (manga, IsAdult, isRaw) => {
-  let { Name, Description, Genres, AltName, Status, Server, Author } = manga;
+  let { Name, Description, Genres, AltName, Status, Server, Author, EmissionDate } = manga;
 
   const genres = await db.Genres.findAll();
 
@@ -37,6 +37,11 @@ export const findOrCreateFolder = async (manga, IsAdult, isRaw) => {
     AltName = AltName.replace(regx, "");
   }
 
+  if (EmissionDate) {
+    try {
+      EmissionDate = new Date(EmissionDate);
+    } catch (error) {}
+  }
   try {
     let folder = await db.folder.findOne({
       where: { Name, FilesType },
@@ -67,6 +72,7 @@ export const findOrCreateFolder = async (manga, IsAdult, isRaw) => {
         Status,
         Server,
         Author,
+        EmissionDate,
       });
     } else {
       if (!folder.Description && Description) {
@@ -87,6 +93,10 @@ export const findOrCreateFolder = async (manga, IsAdult, isRaw) => {
 
       if (!folder.Author && Author) {
         await folder.update({ Author });
+      }
+
+      if (!folder.EmissionDate) {
+        await folder.update({ EmissionDate });
       }
 
       await folder.update({ Status });
