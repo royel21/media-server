@@ -57,6 +57,7 @@ routes.post("/links", async ({ body }, res) => {
       ["Name", "DESC"],
     ],
   };
+
   if (filter) {
     const appConfig = await db.AppConfig.findOne();
     const qfilter = getFilter(cleanText(filter, appConfig));
@@ -83,6 +84,7 @@ routes.post("/links", async ({ body }, res) => {
 
   if (!ServerId && !IsDownloading) {
     query.include.where = { Enable: true };
+    query.where.Exclude = false;
   }
 
   const datas = await db.Link.findAndCountAll(query);
