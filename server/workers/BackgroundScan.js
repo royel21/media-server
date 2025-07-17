@@ -151,7 +151,7 @@ const scanFolder = async (curfolder, files, isFolder) => {
   }
 
   if (filteredFiles.length) {
-    await createFolderThumbnail(folder, files, isFolder);
+    // await createFolderThumbnail(folder, files, isFolder);
   }
 
   let tempFiles = [];
