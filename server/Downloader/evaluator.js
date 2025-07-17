@@ -215,7 +215,7 @@ export const adultEvalPage = async (query) => {
   const year = /release|Year of Release|Year/i;
   let Author = "";
   let items = document.querySelectorAll(query.AltTitle);
-  let EmissionDate = "";
+  let EmissionDate;
   if (items.length > 1) {
     for (let item of items) {
       let text = item?.textContent.trim();
