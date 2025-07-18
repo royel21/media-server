@@ -149,6 +149,11 @@ export const downloadFromPage = async (Id, state) => {
               url: d.link.Url,
               color: "red",
             });
+
+            if (!fs.existsSync(folder.Path)) {
+              fs.mkdirpSync(folder.Path);
+            }
+
             const files = fs.readdirSync(folder.Path);
 
             d.chaps = d.chaps.filter(removeRaw(d.chaps)).filter(filterManga(files));
