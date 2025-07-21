@@ -124,9 +124,6 @@
         indices.push(data.page);
         images[data.page] = data.img;
       } else {
-        if (webtoon && viewerState.jumping) {
-          scrollImageLoader(loadImages, viewer);
-        }
         viewerState.jumping = false;
         viewerState.loading = false;
       }
@@ -164,6 +161,7 @@
       PageObserver(changePages, viewer);
       onShow();
     }
+    if (webtoon) scrollImageLoader(loadImages, viewer);
   });
 
   let elements = [];

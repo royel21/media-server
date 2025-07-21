@@ -71,7 +71,7 @@ const downloadImg = async (url, page, name = "", isCover) => {
       if (/%20$/.test(url)) {
         const { data } = await axios(url, { responseType: "arraybuffer" });
         buff = data;
-      } else if (url.includes("wordpress.com")) {
+      } else if (url.includes("wordpress.com") || url.includes("imgur.com")) {
         await page.goto(url.trim());
         const result = await page.evaluate(evalWorpressImage);
         const { buffer } = parseDataUrl(result);
@@ -80,7 +80,7 @@ const downloadImg = async (url, page, name = "", isCover) => {
         let retry = 2;
         while (retry-- && (buff.length === 0 || !buff?.includes("<html>"))) {
           try {
-            let viewSource = await page.goto(url.trim());
+            let viewSource = await page.goto(url.trim(), { timeout: 30000 });
             buff = await viewSource.buffer();
           } catch (error) {
             if (!error.toString().includes("net::ERR_CONNECTION_CLOSED")) {

@@ -36,7 +36,6 @@ export const findOrCreateFolder = async (manga, IsAdult, isRaw) => {
     const regx = new RegExp(`(; |)${Name}( ;|)`, "i");
     AltName = AltName.replace(regx, "");
   }
-
   if (EmissionDate) {
     try {
       EmissionDate = new Date(EmissionDate);

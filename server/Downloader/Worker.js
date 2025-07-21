@@ -178,7 +178,7 @@ const cleanUp = async (error) => {
     await sendMessage({ text: "Process Stopped - Internal Error:" + error.toString(), color: "red", error });
   }
 
-  if (!state.running && !state.hrunning && !state.checkServer) {
+  if ((!state.running && !state.hrunning && !state.checkServer) || state.stopped) {
     if (state.browser) {
       await state.browser.close();
     }

@@ -190,6 +190,7 @@ routes.get("/folder/:folderId?", async (req, res) => {
     Server: folder.Server,
     EmissionDate: folder.EmissionDate,
     Size: folder.dataValues.Size || 0,
+    FileCount: folder.FileCount,
     image,
     dirs,
     tags: await getTags(),

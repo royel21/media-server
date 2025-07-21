@@ -61,43 +61,47 @@ const onmouseup = (e) => {
 
 let tout;
 let load = false;
+let imgCount = 0;
 export const scrollImageLoader = (loadImages, container) => {
   const imgs = container.querySelectorAll("img");
-  container.onmouseup = onmouseup;
-  container.onmousedown = onmousedown;
-  imgObserver?.disconnect();
+  if (!imgObserver || imgCount !== imgs.length) {
+    imgCount = imgs.length;
+    container.onmouseup = onmouseup;
+    container.onmousedown = onmousedown;
+    imgObserver?.disconnect();
 
-  imgObserver = new IntersectionObserver(
-    (entries) => {
-      if (!mDown) {
-        if (entries.length < imgs.length) {
-          let nextPg;
-          for (let entry of entries) {
-            if (entry.isIntersecting) {
-              const pg = +entry.target.id;
-              nextPg = pg + 4 * scrollDir;
+    imgObserver = new IntersectionObserver(
+      (entries) => {
+        if (!mDown) {
+          if (entries.length < imgs.length) {
+            let nextPg;
+            for (let entry of entries) {
+              if (entry.isIntersecting) {
+                const pg = +entry.target.id;
+                nextPg = pg + 4 * scrollDir;
 
-              if (!imgs[pg]?.src.includes("data:img")) {
-                load = true;
-                nextPg = pg;
-              } else if (!imgs[nextPg]?.src.includes("data:img")) {
-                load = true;
+                if (!imgs[pg]?.src.includes("data:img")) {
+                  load = true;
+                  nextPg = pg;
+                } else if (!imgs[nextPg]?.src.includes("data:img")) {
+                  load = true;
+                }
               }
             }
-          }
-          if (load) {
-            load = false;
-            loadImages(nextPg, 4, scrollDir);
+            if (load) {
+              load = false;
+              loadImages(nextPg, 4, scrollDir);
+            }
           }
         }
-      }
-    },
-    { root: container, threshold: 0.01 }
-  );
+      },
+      { root: container, threshold: 0.01 }
+    );
 
-  imgs.forEach((lazyImg) => {
-    imgObserver.observe(lazyImg);
-  });
+    imgs.forEach((lazyImg) => {
+      imgObserver.observe(lazyImg);
+    });
+  }
 };
 
 export const disconnectObvrs = (container) => {

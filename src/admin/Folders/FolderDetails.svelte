@@ -44,6 +44,8 @@
       delete old.image;
       tags = data.tags.filter((g) => !g.IsRemove).map((g) => g.Name);
       removeTags = data.tags.filter((g) => g.IsRemove).map((g) => g.Name);
+
+      await loadFromDisk();
     }
     transfer = false;
     hasChanges = false;
@@ -173,11 +175,14 @@
           <img src={`data:img/jpeg;base64, ${folder.image || ""}`} alt="Not Found" />
         </div>
       </div>
-      <div class="f-count">
+      <div class="f-count" on:click={loadFromDisk}>
         <span class="ccount"><strong>Size:</strong> <span>{getSize3(folder)}</span></span>
         <div class="sept">Info From Disk</div>
-        <span class="ccount" on:click={loadFromDisk}>
-          <strong>Total:</strong> <span>{folder.Total || "Click to load"}</span>
+        <span class="ccount">
+          <strong>Files Count:</strong> <span>{folder.FileCount || 0}</span>
+        </span>
+        <span class="ccount">
+          <strong>Total In Disk:</strong> <span>{folder.Total || "Click to Reload"}</span>
         </span>
         <span class="ccount"><strong>Last Chapter: </strong><span> {folder.Last || "N/A"}</span></span>
       </div>
@@ -196,7 +201,7 @@
       <span slot="icon" class="server-link">
         Server
         {#if /^http/.test(folder.Server)}
-          <a href={folder.Server} target="_blank">
+          <a href={folder.Server} target="_blank" on:click|stopPropagation>
             <Icons name="world" color="black" />
           </a>
         {/if}
