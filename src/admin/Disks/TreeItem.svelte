@@ -1,5 +1,5 @@
 <script>
-  import { getContext, onDestroy, onMount } from "svelte";
+  import { afterUpdate, getContext, onDestroy, onMount } from "svelte";
   import Icons from "src/icons/Icons.svelte";
   import apiUtils from "src/apiUtils";
   import { setMessage } from "../Store/MessageStore";
@@ -13,6 +13,7 @@
   export let current;
   export let onMenu;
   export let showHidden = false;
+  export let sortBy;
 
   let item = {};
   let offsetNext = offset + 1;
@@ -20,19 +21,14 @@
 
   const socket = getContext("socket");
 
-  const expandFolder = async (event) => {
-    let li = event.target.closest("li");
-    item = items.find((d) => d.Id.toString() === li.id);
+  const expandFolder = async (event, id) => {
+    let li = event?.target.closest("li");
+    item = items.find((d) => d.Id.toString() === li.id || id);
     if (item.Type !== "file") {
       if (item.Content.length === 0) {
         const data = await apiUtils.post("admin/directories/Content", { Path: item.Path });
         if (data.data) {
-          item.Content = data.data.filter((it) => {
-            if (!showHidden && /^(\.|$)/.test(it?.Name)) {
-              return false;
-            }
-            return it.Type !== "file";
-          });
+          item.Content = data.data.filter((it) => it.Type !== "file");
           items = items;
           const files = data.data.filter((it) => it.Type === "file");
           hasFiles = files.length;
@@ -131,9 +127,31 @@
 
     if (content.length) return `top: ${offset * 27 + 1}px; z-index: ${zIndex--}`;
   };
+
+  const sortItems = {
+    Name: (a, b) => a.Name.localeCompare(b.Name),
+    Date: (a, b) => new Date(b.LastModified) - new Date(a.LastModified),
+  };
+
+  afterUpdate(() => {
+    if (items.length) {
+    }
+  });
+
+  $: sortedItems = items.sort(sortItems[sortBy]).filter((it) => {
+    if (!showHidden) {
+      if (/^(\.|$)/.test(it?.Name)) {
+        return false;
+      }
+
+      if (it.isHidden) return false;
+    }
+
+    return true;
+  });
 </script>
 
-{#each items as { Content, Id, Name, Type }}
+{#each sortedItems as { Content, Id, Name, Type }}
   <li id={Id} class={`tree-item ${Type}`} on:contextmenu|preventDefault|stopPropagation={onShowMenu}>
     <span
       class="caret"
@@ -165,6 +183,8 @@
           {setFiles}
           {current}
           {onMenu}
+          {sortBy}
+          {showHidden}
         />
       </ul>
     {/if}

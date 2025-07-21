@@ -54,6 +54,7 @@ routes.post("/content", (req, res) => {
             Type: d.isDirectory ? "folder" : "file",
             Size: d.Size,
             LastModified: d.LastModified,
+            isHidden: d.isHidden,
           });
         }
       }

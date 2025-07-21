@@ -20,6 +20,7 @@
   let current = {};
   let showMenu = false;
   let showHidden = false;
+  let sortBy = "Name";
 
   const scanDir = (data) => {
     item = data;
@@ -84,17 +85,37 @@
     <Loading />
   </div>
 {:else}
-  <span class="show-hidden" on:click|stopPropagation={() => (showHidden = !showHidden)}>
-    Hidden <Icons name={showHidden ? "eye" : "eyeslash"} />
-  </span>
   <div class="d-content" class:expanded={files.length}>
     <div class="rows">
       <div class="col" class:no-files={files.length === 0}>
         <div class="tree" bind:this={treeRef}>
-          <Icons name="hdd" color="black" />
-          <span class="tree-name">Server</span>
+          <div class="tree-controls">
+            <Icons name="hdd" color="black" />
+            <span class="tree-name">Server</span>
+            <span class="show-hidden" on:click|stopPropagation={() => (showHidden = !showHidden)}>
+              <strong>Hidden</strong>
+              <Icons name={showHidden ? "eye" : "eyeslash"} />
+            </span>
+            <span class="sort-folder">
+              <strong>Sort</strong>
+              <select bind:value={sortBy}>
+                <option value="Name">Name</option>
+                <option value="Date">Date</option>
+              </select>
+            </span>
+          </div>
           <ul class="tree-view usn">
-            <TreeItem type="hdd" items={content} {offset} {zIndex} {setFiles} {current} {onMenu} {showHidden} />
+            <TreeItem
+              type="hdd"
+              items={content}
+              {offset}
+              {zIndex}
+              {setFiles}
+              {current}
+              {onMenu}
+              {showHidden}
+              {sortBy}
+            />
           </ul>
         </div>
       </div>
@@ -113,20 +134,37 @@
   .d-content.expanded {
     min-width: 760px;
   }
+  .tree-controls {
+    user-select: none;
+    position: relative;
+  }
   .show-hidden {
     display: flex;
     justify-content: center;
     align-items: center;
-    position: fixed;
-    top: 65px;
-    left: 10px;
+    position: absolute;
+    top: 4px;
+    right: 110px;
     font-size: 13px;
-    background-color: #202020bf;
-    padding: 2px 3px;
+    padding: 1px 3px;
     border-radius: 0.25rem;
     cursor: pointer;
     user-select: none;
     z-index: 102;
+  }
+
+  .show-hidden strong {
+    margin-right: 2px;
+  }
+
+  .sort-folder {
+    position: absolute;
+    top: 2px;
+    right: 5px;
+  }
+
+  select {
+    border-radius: 0.25rem;
   }
   .show-hidden :global(svg) {
     top: 0px;

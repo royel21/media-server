@@ -212,7 +212,7 @@ export const adultEvalPage = async (query) => {
   let AltName = "";
   const genreRegex = /genre((\(|)(s|)(\)|( |):(\n|)|))|Género(( |):|)/gi;
   const authorRegex = /(author|Autor)((\(|)s(\)|)|)( |)(:|)( |)/i;
-  const year = /release|Year of Release|Year/i;
+  const year = /Year of Release|Year|Release/i;
   let Author = "";
   let items = document.querySelectorAll(query.AltTitle);
   let EmissionDate;
