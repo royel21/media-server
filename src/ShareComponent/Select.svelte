@@ -19,4 +19,9 @@
   span {
     user-select: none;
   }
+  @media screen and (max-width: 600px) {
+    select option {
+      font-size: 12px;
+    }
+  }
 </style>
