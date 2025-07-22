@@ -14,6 +14,8 @@
   let ref;
   let filter = "";
   let newNames = 0;
+  let height = 0;
+  let containerRef;
 
   const addRename = () => {
     if (!nameList.find((f) => !f.Name || !f.AltName)) {
@@ -58,9 +60,21 @@
     if (found) found.updated = true;
   };
 
+  const onResize = () => {
+    console.log(containerRef.offsetHeight);
+    height = containerRef.offsetHeight;
+  };
+
+  window.removeEventListener("resize", onResize);
+
   onMount(async () => {
     ref?.focus();
     loadItems();
+    height = containerRef?.offsetHeight;
+    window.addEventListener("resize", onResize, { passive: true });
+    return () => {
+      window.removeEventListener("resize", onResize);
+    };
   });
 
   $: {
@@ -78,8 +92,8 @@
         </span>
       </Filter>
     </div>
-    <div slot="modal-body">
-      <VirtualList height={438} width="auto" itemSize={70} itemCount={filteredList.length}>
+    <div class="container" slot="modal-body" bind:this={containerRef}>
+      <VirtualList {height} width="auto" itemSize={70} itemCount={filteredList.length}>
         <div slot="item" let:index let:style {style} class="name-item" id={filteredList[index].Id}>
           <span>
             <Input key="Name" item={filteredList[index]} {onChange} />
@@ -112,6 +126,9 @@
   .r-names :global(.c-filter) {
     height: initial;
     max-width: 100%;
+  }
+  .container {
+    height: 100%;
   }
 
   .r-names :global(.icon-squareplus) {
