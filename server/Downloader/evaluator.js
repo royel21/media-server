@@ -248,7 +248,7 @@ export const adultEvalPage = async (query) => {
 
         if (year.test(text)) {
           const found = text.replace(year, "").trim();
-          if (/\d+/.test(found)) {
+          if (/^\d+$/.test(found)) {
             EmissionDate = `1/1/${+found}`;
           }
         }
@@ -333,7 +333,7 @@ export const adultEvalPage = async (query) => {
     const endRegex = / (- |-|)(\[|)end(\]|)/gi;
 
     if (i === as.length - 1 && endRegex.test(text)) {
-      fileName = fileName.replace(endRegex, "") + " - End";
+      fileName = fileName.replace(endRegex, "") + " End";
     }
 
     if (data.find((f) => f.name === fileName) && /volume \d+/i.test(text)) {
