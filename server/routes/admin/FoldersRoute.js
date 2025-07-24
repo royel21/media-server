@@ -170,14 +170,6 @@ routes.get("/folder/:folderId?", async (req, res) => {
 
   const dirs = await db.directory.findAll({ order: ["Name"] });
 
-  const appConfig = await db.AppConfig.findOne();
-  const imagePath = path.join(appConfig.ImagesPath, "Folder", folder.FilesType, folder.Name + ".jpg");
-  let image = "";
-
-  if (fs.existsSync(imagePath)) {
-    image = fs.readFileSync(imagePath).toString("base64");
-  }
-
   res.send({
     Name: folder.Name,
     Description: folder.Description,
@@ -191,7 +183,7 @@ routes.get("/folder/:folderId?", async (req, res) => {
     EmissionDate: folder.EmissionDate,
     Size: folder.dataValues.Size || 0,
     FileCount: folder.FileCount,
-    image,
+    FilesType: folder.FilesType,
     dirs,
     tags: await getTags(),
   });

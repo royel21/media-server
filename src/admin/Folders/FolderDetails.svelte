@@ -22,6 +22,7 @@
   let imageData = { Id: "", Url: "", file: "" };
   let transfer = false;
   let isModified;
+  let time = new Date().getTime();
 
   const regx = /:|\?/g;
 
@@ -115,6 +116,7 @@
         imageData.Url = "";
         imageData.file = "";
         setMessage({ msg: `Cover for: ${folder.Name} was updated` });
+        time = new Date().getTime();
       } else {
         setMessage({ error: true, msg: `Could't get the image from Url: ${imageData.Url}` });
       }
@@ -172,7 +174,7 @@
     <div class="header">
       <div class="f-image">
         <div>
-          <img src={`data:img/jpeg;base64, ${folder.image || ""}`} alt="Not Found" />
+          <img src={`${encodeURI(`/Folder/${folder.FilesType}/${folder.Name}.jpg?v=${time}`)}`} alt="Not Found" />
         </div>
       </div>
       <div class="f-count" on:click={loadFromDisk}>
