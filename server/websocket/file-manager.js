@@ -140,7 +140,16 @@ const diskLoader = async () => {
     }
   }
 
-  disks.sort((a, b) => a.Name.localeCompare(b.Name));
+  disks.sort((a, b) => {
+    const num1 = a.Name.match(/\d+/);
+    const num2 = b.Name.match(/\d+/);
+
+    if (num1 && num2) {
+      return +num[0] - +num2[0];
+    }
+
+    return a.Name.localeCompare(b.Name);
+  });
   const hdata = await diskusage.check(os.platform() === "win32" ? "C:\\" : "/");
   disks.unshift({
     Id: nanoid(5),
