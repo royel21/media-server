@@ -34,8 +34,6 @@
       return;
     }
 
-    console.log(item.End, formatValitator.test(item.End));
-
     if (!formatValitator.test(item.End)) {
       errors = [`End: ${item.End} Format not valid`];
       return;

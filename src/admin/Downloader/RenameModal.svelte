@@ -61,8 +61,9 @@
   };
 
   const onResize = () => {
-    console.log(containerRef.offsetHeight);
-    height = containerRef.offsetHeight;
+    if (containerRef) {
+      height = containerRef.offsetHeight;
+    }
   };
 
   window.removeEventListener("resize", onResize);

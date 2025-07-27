@@ -66,7 +66,7 @@ export const onEnd = ({ currentTarget }) => {
   } else {
     let ww = currentTarget.offsetWidth;
     let wh = currentTarget.offsetHeight;
-    // console.log(wh * 0.33, wh * 0.66);
+
     if (point.y < wh * 0.33) {
       if (point.x < ww * 0.33) {
         // top-left

@@ -145,7 +145,7 @@ const diskLoader = async () => {
     const num2 = b.Name.match(/\d+/);
 
     if (num1 && num2) {
-      return +num[0] - +num2[0];
+      return +num1[0] - +num2[0];
     }
 
     return a.Name.localeCompare(b.Name);
