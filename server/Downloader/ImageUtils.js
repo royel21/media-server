@@ -82,6 +82,7 @@ const downloadImg = async (url, page, name = "", isCover) => {
           try {
             let viewSource = await page.goto(url.trim(), { timeout: 30000 });
             buff = await viewSource.buffer();
+            await delay(250);
           } catch (error) {
             if (!error.toString().includes("net::ERR_CONNECTION_CLOSED")) {
               break;
