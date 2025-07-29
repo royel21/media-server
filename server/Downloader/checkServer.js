@@ -107,8 +107,13 @@ export const downloadFromPage = async (Id, state) => {
   if (Server && Server?.HomeQuery && page) {
     try {
       sendMessage({ text: `** ${formatAMPM(new Date())} ${Server.Name} **`, important: true });
+      let url = `https:\\${Server.Name}`;
 
-      page.goto(`https:\\${Server.Name}`, { waitUntil: "domcontentloaded" });
+      if (/mangahentai|manytoon|hentaiwebtoon/.test(server.Name)) {
+        url = `${url}\\home`;
+      }
+      page.goto(url, { waitUntil: "domcontentloaded" });
+
       await page.waitForSelector(Server.HomeQuery);
 
       if (/"mangaread/i.test(Server.Name)) {
