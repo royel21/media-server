@@ -109,7 +109,7 @@ export const downloadFromPage = async (Id, state) => {
       sendMessage({ text: `** ${formatAMPM(new Date())} ${Server.Name} **`, important: true });
       let url = `https:\\${Server.Name}`;
 
-      if (/mangahentai|manytoon|hentaiwebtoon/.test(server.Name)) {
+      if (/mangahentai|manytoon|hentaiwebtoon/.test(Server.Name)) {
         url = `${url}\\home`;
       }
       page.goto(url, { waitUntil: "domcontentloaded" });
@@ -119,7 +119,7 @@ export const downloadFromPage = async (Id, state) => {
       if (/"mangaread/i.test(Server.Name)) {
         try {
           await page.click("#navigation-ajax");
-          await delay(3000);
+          await delay(6000);
         } catch (error) {}
       }
 
