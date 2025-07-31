@@ -110,7 +110,7 @@
   $: filter, (filtered = downloads.filter(filterDownloads));
 </script>
 
-<Dialog id="server-modal">
+<Dialog id="server-modal" canDrag={true} background={false}>
   <div class="modal-header" slot="modal-header">
     <h3>Saved Download List <strong>- {downloads.length}</strong></h3>
     <div class="m-controls">
