@@ -269,6 +269,7 @@ const loadLinks = async (Id, bypass) => {
       state.size++;
       await found.update({ IsDownloading: true });
     }
+    await sendMessage({ link: found, downloading: true }, "link-update");
   }
 
   state.links = [...state.links, ...temps];
