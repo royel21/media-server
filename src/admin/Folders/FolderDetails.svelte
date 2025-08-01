@@ -209,7 +209,7 @@
         {/if}
       </span>
     </Input>
-    <Input label="Emission Date" type="date" key="EmissionDate" item={folder} {onChange} />
+    <Input label="Emission Date" type="date" key="EmissionDate" item={folder} {onChange} paste={true} />
     <CheckBox label="Completed" key="Status" item={folder} {onChange} />
     <CheckBox label="Is Adult" key="IsAdult" item={folder} {onChange} />
     <CheckBox key="transfer" item={{ transfer }} onChange={() => (transfer = !transfer)} />

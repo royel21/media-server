@@ -17,7 +17,11 @@
   let ref;
   const handler = async () => {
     if (paste) {
-      handlerPaste(item, key, sept, ref);
+      const text = await handlerPaste(item, key, sept, ref);
+      if (type === "date" && /\d+/.test(text)) {
+        ref.value = `${text}-01-01`;
+        ref.dispatchEvent(new Event("change"));
+      }
     }
   };
   const clear = () => {
