@@ -165,7 +165,7 @@
             </div>
             <div class="genres-list">
               <div>
-                <span class="gen-tag">Author(s): </span>
+                <span class="gen-tag">Author(s)/Artist(s): </span>
                 <Condition data={folderinfo?.Author} split=", " on:click={onGenres} />
               </div>
               {#if User.role.includes("Manager")}

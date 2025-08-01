@@ -198,7 +198,7 @@
     </TextAreaInput>
     <TextAreaInput file={folder} key="Genres" style="margin-bottom: 5px" rows="2" sept="," {onChange} />
     <TextAreaInput file={folder} key="Description" rows="4" {onChange} />
-    <Input key="Author" item={folder} {onChange} sept=", " />
+    <Input label="Author(s)/Artist(s)" key="Author" item={folder} {onChange} sept=", " />
     <Input key="Server" item={folder} {onChange}>
       <span slot="icon" class="server-link">
         Server
