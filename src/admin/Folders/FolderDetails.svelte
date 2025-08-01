@@ -329,7 +329,7 @@
   }
 
   .detail :global(.input-label) {
-    min-width: 120px;
+    min-width: 150px;
   }
   .d-buttons {
     position: absolute;
