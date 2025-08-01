@@ -85,7 +85,7 @@
 </script>
 
 <div class="r-names">
-  <Dialog confirm={submit} errors={[error]} btnOk="Ok" cancel={hide}>
+  <Dialog confirm={submit} errors={[error]} btnOk="Ok" cancel={hide} canDrag={true} background={false}>
     <div slot="modal-header">
       <Filter on:change={onFilter}>
         <span class="btn-add" slot="pre-btn" on:click={addRename} on:keydown>
