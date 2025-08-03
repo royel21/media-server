@@ -15,7 +15,7 @@ const createDirs = async (BasePath, names, IsAdult = false) => {
   const adultDirs = await db.directory.findAll({ where: { Name: names, IsAdult } });
 
   for (let Name of names) {
-    let FullPath = IsAdult ? path.join(BasePath, "R18", Name) : path.join(BasePath, Name);
+    let FullPath = path.join(BasePath, Name);
 
     if (!fs.existsSync(FullPath)) {
       fs.mkdirpSync(FullPath);
