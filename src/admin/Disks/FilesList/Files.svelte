@@ -210,7 +210,7 @@
   }
   #tag-list .bagde {
     text-align: center;
-    min-width: 25px;
+    min-width: max-content;
     margin-left: 5px;
     padding: 3px;
     border-radius: 0.25rem;
