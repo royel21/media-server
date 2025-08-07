@@ -191,6 +191,7 @@
     </div>
   </div>
   <div class="d-content">
+    <Input label="Emission Date" type="date" key="EmissionDate" item={folder} {onChange} paste={true} />
     <TextAreaInput file={folder} key="AltName" style="margin-bottom: 5px" sept="; " rows="3" {onChange}>
       <span class="pre-paste" slot="btn-left" on:click={prePaste} title="Paste To The Left">
         <Icons name="paste" color="black" />
@@ -209,7 +210,6 @@
         {/if}
       </span>
     </Input>
-    <Input label="Emission Date" type="date" key="EmissionDate" item={folder} {onChange} paste={true} />
     <CheckBox label="Completed" key="Status" item={folder} {onChange} />
     <CheckBox label="Is Adult" key="IsAdult" item={folder} {onChange} />
     <CheckBox key="transfer" item={{ transfer }} onChange={() => (transfer = !transfer)} />
