@@ -38,12 +38,18 @@
 
   const onChanges = ({ target: { checked } }) => (deleteFromSys = checked);
 
+  const onEnd = () => {
+    if (!/ end$/i.test(tempFile.Name)) {
+      tempFile.Name += " End";
+    }
+  };
+
   if (file?.Name && !modalType.Del) loadTemp(file);
 </script>
 
-<Dialog class="del-modal" on:keydown={onKeyDown} confirm={submit} cancel={hide}>
+<Dialog class="del-modal" confirm={submit} cancel={hide}>
   <h4 slot="modal-header">{modalType.title}</h4>
-  <div id="fol-diag" slot="modal-body">
+  <div id="fol-diag" slot="modal-body" on:keydown={onKeyDown}>
     {#if modalType.Del}
       <p>Are you sure you want to remove <strong>{file.Name}</strong></p>
       <div class="input-group">
@@ -56,7 +62,9 @@
         </label>
       </div>
     {:else}
-      <TextAreaInput file={tempFile} key="Name" style="margin-bottom: 5px" rows="3" focus={true} />
+      <TextAreaInput file={tempFile} key="Name" style="margin-bottom: 5px" rows="3" focus={true}>
+        <span class="pre-paste badge" slot="btn-left" on:click={onEnd} title="Paste To The Left"> End </span>
+      </TextAreaInput>
     {/if}
   </div>
 </Dialog>
@@ -83,5 +91,16 @@
   }
   input[type="checkbox"] {
     display: none;
+  }
+  .pre-paste {
+    position: absolute;
+    top: 4px;
+    right: 5px;
+    color: black;
+    font-size: 14px;
+    line-height: 1.3;
+    height: 22px;
+    cursor: pointer;
+    user-select: none;
   }
 </style>
