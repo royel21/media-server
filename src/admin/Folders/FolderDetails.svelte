@@ -134,6 +134,11 @@
   socket.off("cover-update", onCoverUpdate);
   socket.on("cover-update", onCoverUpdate);
 
+  const onChangeStatus = () => {
+    folder.Status = folder.Status ? null : true;
+    hasChanges = isDiff(old, folder);
+  };
+
   const save = async () => {
     if (hasChanges) {
       if (!folder.Name) {
@@ -187,6 +192,9 @@
           <strong>Total In Disk:</strong> <span>{folder.Total || "Click to Reload"}</span>
         </span>
         <span class="ccount"><strong>Last Chapter: </strong><span> {folder.Last || "N/A"}</span></span>
+        <span class="status" on:click={onChangeStatus}>
+          Status: <strong class:completed={folder.Status}>{folder.Status ? "Completed" : "On-Going"}</strong>
+        </span>
       </div>
     </div>
   </div>
@@ -210,7 +218,6 @@
         {/if}
       </span>
     </Input>
-    <CheckBox label="Completed" key="Status" item={folder} {onChange} />
     <CheckBox label="Is Adult" key="IsAdult" item={folder} {onChange} />
     <CheckBox key="transfer" item={{ transfer }} onChange={() => (transfer = !transfer)} />
     {#if transfer}
@@ -236,6 +243,7 @@
     height: calc(100% - 90px);
   }
   .header {
+    position: relative;
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -358,6 +366,19 @@
   .file-header {
     display: flex;
     flex-direction: column-reverse;
+  }
+  .status {
+    position: absolute;
+    bottom: 0;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .status strong {
+    color: green;
+  }
+  strong.completed {
+    color: red;
   }
   @media screen and (max-height: 810px) {
     .detail {
