@@ -56,15 +56,6 @@ button:active {
 
 /***************File Style****************************/
 
-.badge {
-  color: #fff;
-  background-color: #007bff;
-  padding: 0.2em 0.3em;
-  font-size: 1rem;
-  font-weight: 700;
-  border-radius: 0.25rem;
-}
-
 .file {
   position: relative;
   display: flex;

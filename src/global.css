@@ -456,6 +456,14 @@ body .navbar .icon-folder {
   right: -4px;
 }
 
+.badge {
+  color: #fff;
+  background-color: #007bff;
+  padding: 0.2em 0.3em;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 0.25rem;
+}
 /*************************Scrollbar Style********************************/
 
 ::-webkit-scrollbar {
