@@ -14,7 +14,7 @@
       text = text
         .replace("’", "'")
         .replace("–", "-")
-        .replace(/:|\?|\"| Raw$/gi, "")
+        .replace(/:|\?|\"|“|”| Raw|$/gi, "")
         .replace(/ (\[|\(|)official(\]|\)|)$/i, "")
         .trim();
     }
