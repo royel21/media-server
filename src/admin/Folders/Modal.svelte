@@ -95,7 +95,7 @@
   .pre-paste {
     position: absolute;
     top: 4px;
-    right: 5px;
+    left: 5px;
     color: black;
     font-size: 14px;
     line-height: 1.3;

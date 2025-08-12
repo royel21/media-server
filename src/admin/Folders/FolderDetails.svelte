@@ -168,7 +168,7 @@
   $: isModified = hasChanges || imageData.Url || imageData.file;
 </script>
 
-<div class="detail" class:change={isModified}>
+<div class="detail">
   <div class="error">{error || ""}</div>
   <div class="file-header">
     <TextAreaInput file={folder} key="Name" style="margin-bottom: 5px" rows="3" {onChange}>
@@ -192,9 +192,15 @@
           <strong>Total In Disk:</strong> <span>{folder.Total || "Click to Reload"}</span>
         </span>
         <span class="ccount"><strong>Last Chapter: </strong><span> {folder.Last || "N/A"}</span></span>
-        <span class="status" on:click={onChangeStatus}>
+        <span class="ccount status" on:click={onChangeStatus}>
           Status: <strong class:completed={folder.Status}>{folder.Status ? "Completed" : "On-Going"}</strong>
         </span>
+        {#if isModified}
+          <div class="d-buttons">
+            <button type="button" class="btn primary" on:click={save}>Save</button>
+            <button type="button" class="btn" on:click={cancel}>Cancel</button>
+          </div>
+        {/if}
       </div>
     </div>
   </div>
@@ -226,21 +232,12 @@
     <Input key="Url" item={imageData} onChange={onUrl} />
   </div>
 </div>
-{#if isModified}
-  <div class="d-buttons">
-    <button type="button" class="btn primary" on:click={save}>Save</button>
-    <button type="button" class="btn" on:click={cancel}>Cancel</button>
-  </div>
-{/if}
 
 <style>
   .detail {
     position: relative;
     height: calc(100% - 50px);
     overflow-y: auto;
-  }
-  .detail.change {
-    height: calc(100% - 90px);
   }
   .header {
     position: relative;
@@ -367,13 +364,11 @@
     display: flex;
     flex-direction: column-reverse;
   }
+
   .status {
-    position: absolute;
-    bottom: 0;
     cursor: pointer;
     user-select: none;
   }
-
   .status strong {
     color: green;
   }
