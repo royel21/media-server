@@ -1,6 +1,6 @@
 import { createFile, getDb } from "./db-worker.js";
 import path from "node:path";
-import { createDir, sendMessage } from "./utils.js";
+import { createDir, delay, sendMessage } from "./utils.js";
 import { getImgNh } from "./ImageUtils.js";
 import defaultConfig from "../default-config.js";
 import fs from "fs-extra";
@@ -67,9 +67,9 @@ const download = async (link, page, server, state) => {
 
   let data = await page.evaluate((server) => {
     try {
-      let url = document.querySelector(".gallerythumb").href;
+      let url = document.querySelector(".gallerythumb, .gallery_thumbs a").href;
 
-      let textContent = document.querySelector(".title").textContent;
+      let textContent = document.querySelector(".title, .info h1").textContent;
 
       const formatName = (val) => {
         const splitP = / ⎮|\| /g;
@@ -94,7 +94,7 @@ const download = async (link, page, server, state) => {
       let name = formatName(textContent.replace(/\//g, "-").replace(/\(([^)]+)\) /i, "")).trim();
 
       let showMore = document.querySelector("#show-all-images-button");
-      const tagsDatas = document.querySelectorAll(".tags .tag > span:first-child");
+      const tagsDatas = document.querySelectorAll(".tags .tag > span:first-child, .tags .tag_btn span:first-child");
 
       let tags = "";
       for (let tag of tagsDatas) {
@@ -111,8 +111,13 @@ const download = async (link, page, server, state) => {
       if (server.Name.includes("nhentai.net")) {
         let tags = document.querySelectorAll(".tags .tag");
         total = +tags[tags.length - 1].textContent;
-      } else if (server.Name.includes("nhentai.com")) {
-        total = +document.querySelector(server.Imgs).textContent.match(/\d+/)[0];
+      } else {
+        const contents = document.querySelectorAll(".info ul li");
+        for (let c of contents) {
+          if (/Pages/.test(c.textContent)) {
+            total = +c.textContent.trim().replace("Pages:", "").trim();
+          }
+        }
       }
       name = name
         .replace(/:|\?|\*|<|>|#|  "/gi, "")
@@ -155,10 +160,13 @@ const download = async (link, page, server, state) => {
   if (download && !fs.existsSync(filePath + ".zip")) {
     await page.goto(data.url, { waitUntil: "domcontentloaded" });
     let initalUrl = await page.evaluate(() => {
-      return document.querySelector("#image-container img")?.src;
+      const img = document.querySelector("#image-container img, #fimg");
+      return img.dataset.src || img?.src;
     });
 
-    if (initalUrl) {
+    console.log(initalUrl);
+
+    if (initalUrl && /^http/.test(initalUrl)) {
       let ex = initalUrl.split(".").pop();
       let f = 0;
       let newEX = ex;
