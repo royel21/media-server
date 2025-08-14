@@ -37,18 +37,21 @@ export const isValidKey = (e, k) => {
   return e.keyCode === k.Key && e.altKey === k.AltKey && e.shiftKey === k.ShiftKey && e.ctrlKey === k.CtrlKey;
 };
 
+const toUpperWord = (word) => word.charAt(0).toUpperCase() + word.slice(1).toLocaleLowerCase();
+
 export const validateAuthor = (auth) => {
   if (!auth && auth === "N/A") return auth;
-
+  // Ruka kirato / Kirato ruka
   auth = auth
-    .split(", ")
+    .trim()
+    .split(" ")
+    .map(toUpperWord)
+    .join(" ")
+    .split(/,|\//)
     .map((a) => a.trim())
     .filter((a) => a);
-  auth = [...new Set([...auth])].join(", ");
-  return auth
-    .split(" ")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLocaleLowerCase())
-    .join(" ");
+
+  return [...new Set(auth)].join(", ");
 };
 
 const toLowerList = /^(For|No|It|Of|And|In|X|Du|Or|A|Wa|wo|na|to|ni|de|o|by)$/i;
