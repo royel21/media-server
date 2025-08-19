@@ -37,6 +37,7 @@
     border-left: 1px solid;
     width: 50%;
     height: 100%;
+    min-width: 350px;
   }
 
   #folder-data :global(.file-list) {

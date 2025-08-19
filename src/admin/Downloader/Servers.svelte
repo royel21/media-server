@@ -40,6 +40,7 @@
         page,
         filter: decodeURIComponent(filter).replace(/http(s|)\/\//i, ""),
         ServerId: server.Id || true,
+        Exclude: server.Exclude,
         first,
       },
       "server"
@@ -62,7 +63,10 @@
   const onChange = () => loadItems();
 
   const onShowServerEdit = () => (showServerEditor = true);
-  const onhideServerEdit = () => (showServerEditor = false);
+  const onhideServerEdit = () => {
+    showServerEditor = false;
+    loadItems();
+  };
 
   const onRemoveServer = async () => {
     const result = await apiUtils.admin(["downloader", "servers-list", "delete", server.Id]);

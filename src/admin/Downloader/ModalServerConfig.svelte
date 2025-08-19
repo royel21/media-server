@@ -62,8 +62,7 @@
         <Input key="Delay" item={server} />
         <Input label="Home Query" key="HomeQuery" item={server} />
         <CheckBox label="Raw" key="Raw" item={server} />
-        <CheckBox label="Local Images" key="LocalImages" item={server} />
-        <CheckBox label="Is Mobile" key="isMobile" item={server} />
+        <CheckBox label="Exclude" key="Exclude" item={server} />
       {/if}
     </svelte:fragment>
   </Dialog>

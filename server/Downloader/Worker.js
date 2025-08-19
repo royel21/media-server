@@ -64,10 +64,6 @@ const downloadLinks = async (link, page) => {
   const { Server } = link;
   let isAdult = link.IsAdult;
 
-  if (Server.isMobile) {
-    await page.setViewport({ width: 480, height: 840, deviceScaleFactor: 1 });
-  }
-
   try {
     await page.goto(link.Url, { waitUntil: "domcontentloaded" });
     await page.waitForSelector(Server.Chapters, { timeout: 60000 });

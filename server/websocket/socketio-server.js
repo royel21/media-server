@@ -8,7 +8,7 @@ import { download } from "./downloader.js";
 import { exec } from "node:child_process";
 
 export default async (server, sessionMeddle) => {
-  const io = new Server(server, { serveClient: false, cookie: true });
+  const io = new Server(server, { serveClient: false, cookie: true, maxHttpBufferSize: 1e7 });
   global.io = io;
   io.use((socket, next) => sessionMeddle(socket.request, {}, next));
 

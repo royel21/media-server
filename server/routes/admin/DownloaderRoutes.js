@@ -41,7 +41,7 @@ routes.get("/remove-link/:Id", async ({ params }, res) => {
 });
 
 routes.post("/links", async ({ body }, res) => {
-  const { page = 1, items, filter = "", IsDownloading, first, ServerId } = body;
+  const { page = 1, items, filter = "", IsDownloading, first, ServerId, Exclude } = body;
   let limit = +items || 10;
   let offset = (page - 1) * limit || 0;
 
@@ -57,6 +57,10 @@ routes.post("/links", async ({ body }, res) => {
       ["Name", "DESC"],
     ],
   };
+
+  if (Exclude === false) {
+    query.where.Exclude = false;
+  }
 
   if (filter) {
     const appConfig = await db.AppConfig.findOne();
@@ -78,6 +82,7 @@ routes.post("/links", async ({ body }, res) => {
     servers = await db.Server.findAll({ order: ["Name"] });
     const srv = servers.find((sv) => sv.Id === +ServerId) || servers[0];
     query.where.ServerId = srv.Id;
+    query.where.Exclude = srv.Exclude;
   }
 
   if (ServerId && !query.where.ServerId) query.where.ServerId = +ServerId;

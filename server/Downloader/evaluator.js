@@ -1,6 +1,5 @@
 export const evaluetePage = async (query) => {
-  const cleanNameRegx =
-    /18\+|\nEND| Webtoon|ONGOING|ON-GOING|NEW|HOT\n|manga|\nNew shoujo Manhwa| – Mangagreat| - mangagreat| Manga| Comics$|^Hot /g;
+  const cleanNameRegx = /18\+|\nEND| Webtoon|ONGOING|ON-GOING|NEW|HOT\n|^Hot /g;
 
   let originalName = document.querySelector(query.Title).textContent.replace(cleanNameRegx, "").trim();
 
@@ -126,7 +125,7 @@ export const adultEvalPage = async (query) => {
   let title = document.querySelector(query.Title).innerText.trim();
   let Name = title
     .replace("( Renta black and white comic Version)", "")
-    .replace(/:|\?|\*|<|>|"| Webtoon| \(Acera\)\n|\n|\t|“|^,|\//gi, "")
+    .replace(/:|\?|\*|<|>|"\n|\t|“|^,|\//gi, "")
     .replace(/(\.)+$/, "")
     .replace(/”( |)/g, ", ")
     .replace(/^(18\+|(ENDED|END)(\.|)+|ONGOING|ON GOING|ON-GOING|HOT|NEW)/, "")

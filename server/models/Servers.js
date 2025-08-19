@@ -75,7 +75,7 @@ export default (sequelize) => {
       type: INTEGER,
       defaultValue: 100,
     },
-    isMobile: {
+    Exclude: {
       type: BOOLEAN,
       defaultValue: false,
       allowNull: false,

@@ -36,7 +36,7 @@ export const findOrCreateFolder = async (manga, IsAdult, isRaw) => {
     const regx = new RegExp(`(; |)${Name}( ;|)`, "i");
     AltName = AltName.replace(regx, "");
   }
-  console.log("EmissionDate: ", EmissionDate);
+
   if (EmissionDate) {
     try {
       EmissionDate = new Date(EmissionDate);
@@ -98,8 +98,9 @@ export const findOrCreateFolder = async (manga, IsAdult, isRaw) => {
       if (!folder.EmissionDate) {
         await folder.update({ EmissionDate });
       }
-
-      await folder.update({ Status });
+      if (!folder.Status && Status) {
+        await folder.update({ Status });
+      }
     }
 
     return folder;

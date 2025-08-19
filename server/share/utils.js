@@ -140,7 +140,7 @@ const fixAltName = (AltName) => {
 export const validAltName = (v) => {
   const result = v.replace(/( |)(•|\/ )( |)/g, "; ").trim();
   const altnames = capitalize(result);
-  let parts = altnames.split("; ");
+  let parts = altnames.split(/; |\n/);
 
   for (let i = 0; i < parts.length; i++) {
     const part = parts[i];

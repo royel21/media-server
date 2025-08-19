@@ -37,4 +37,25 @@
   .card.has-files {
     min-width: 790px;
   }
+
+  @media screen and (max-height: 600px) {
+    .card.has-files {
+      min-width: initial;
+    }
+  }
+
+  @media screen and (max-width: 900px) {
+    .card :global(#last-page),
+    .card :global(#first-page) {
+      display: none;
+    }
+    .card.has-files :global(#next-page) {
+      border-top-right-radius: 0.25rem;
+      border-bottom-right-radius: 0.25rem;
+    }
+    .card.has-files :global(#prev-page) {
+      border-top-left-radius: 0.25rem;
+      border-bottom-left-radius: 0.25rem;
+    }
+  }
 </style>

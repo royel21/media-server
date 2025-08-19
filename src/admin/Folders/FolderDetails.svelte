@@ -62,6 +62,9 @@
     }
 
     if (name === "AltName") {
+      if (value.includes("N/A; ")) {
+        value = value.replace("N/A; ", "");
+      }
       value = validAltName(value);
     }
 
