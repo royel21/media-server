@@ -4,11 +4,12 @@ import { config } from "dotenv";
 import { fileURLToPath } from "url";
 
 config();
-const { VITE_PORT, VITE_HOST, PORT, DEV_PORT, USE_DEV } = process.env;
+const { VITE_PORT, VITE_HOST, PORT, DEV_HOST, DEV_PORT, HOST, USE_DEV } = process.env;
 const host = VITE_HOST;
 const port = VITE_PORT;
 
 const serverPort = USE_DEV ? DEV_PORT : PORT;
+const serverHost = USE_DEV ? DEV_HOST : HOST;
 
 const warings = [
   "a11y-click-events-have-key-events",
@@ -53,13 +54,13 @@ export default defineConfig({
     port,
     proxy: {
       "^/(api|Folder|Manga|Video|css|webfonts)/": {
-        target: `http://${host}:${serverPort}`,
+        target: `http://${serverHost}:${serverPort}`,
       },
       "^/(serviceWorker.js|manifest.json|home.png|favicon.png)": {
-        target: `http://${host}:${serverPort}`,
+        target: `http://${serverHost}:${serverPort}`,
       },
       "/socket.io": {
-        target: `ws://${host}:${serverPort}`,
+        target: `ws://${serverHost}:${serverPort}`,
         ws: true,
       },
     },

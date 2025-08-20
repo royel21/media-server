@@ -78,8 +78,6 @@
       }
     }
 
-    console.log(link, links);
-
     if (key === "running") {
       datas.running = d;
     }

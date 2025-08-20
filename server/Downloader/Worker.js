@@ -230,7 +230,7 @@ const onDownload = async (bypass) => {
 
         await link.update({ IsDownloading: false });
         await link.reload();
-        sendMessage({ link }, "link-update");
+        sendMessage({ link: { ...d.link.dataValues, remove: true } }, "link-update");
       } else {
         await sendMessage({ text: `Link ${link.Name} was checked recently`, color: "red" });
       }
