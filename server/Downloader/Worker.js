@@ -202,37 +202,41 @@ const onDownload = async (bypass) => {
       if (state.stopped) break;
 
       const link = state.links.shift();
-
       try {
-        await link.reload();
-      } catch (error) {
-        console.log(error);
-        continue;
-      }
-
-      //Exclude link from download
-      if (link.Exclude) {
-        await sendMessage({ text: `Link ${link.AltName} Is Exclude From Download`, color: "red" });
-        continue;
-      }
-
-      if (bypass || !link.Date || dateDiff(new Date(), link.Date) > 3) {
-        const count = state.size - state.links.length;
-        await sendMessage({
-          text: `\u001b[1;31m ${getProgress(count, state.size)} - ${link.Name || link.Url} \u001b[0m`,
-          url: link.Url,
-        });
         try {
-          await downloadLinks(link, page, link.Server, link.IsAdult);
+          await link.reload();
         } catch (error) {
-          await sendMessage({ text: `Error ${link.Url} was no properly downloaded`, color: "red", error });
+          console.log(error);
+          continue;
         }
 
-        await link.update({ IsDownloading: false });
-        await link.reload();
-        sendMessage({ link: { ...d.link.dataValues, remove: true } }, "link-update");
-      } else {
-        await sendMessage({ text: `Link ${link.Name} was checked recently`, color: "red" });
+        //Exclude link from download
+        if (link.Exclude) {
+          await sendMessage({ text: `Link ${link.AltName} Is Exclude From Download`, color: "red" });
+          continue;
+        }
+
+        if (bypass || !link.Date || dateDiff(new Date(), link.Date) > 3) {
+          const count = state.size - state.links.length;
+          await sendMessage({
+            text: `\u001b[1;31m ${getProgress(count, state.size)} - ${link.Name || link.Url} \u001b[0m`,
+            url: link.Url,
+          });
+          try {
+            await downloadLinks(link, page, link.Server, link.IsAdult);
+          } catch (error) {
+            await sendMessage({ text: `Error ${link.Url} was no properly downloaded`, color: "red", error });
+          }
+
+          await link.update({ IsDownloading: false });
+          await link.reload();
+          sendMessage({ link: { ...link.dataValues, remove: true } }, "link-update");
+        } else {
+          await sendMessage({ text: `Link ${link.Name} was checked recently`, color: "red" });
+        }
+      } catch (err) {
+        console.log(err);
+        sendMessage({ text: `Error While Downloading ${link.Name} Check Log`, color: red, error });
       }
     }
 
