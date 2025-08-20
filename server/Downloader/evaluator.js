@@ -258,7 +258,11 @@ export const adultEvalPage = async (query) => {
       }
     }
   } else {
-    AltName = AltName = getAltName(items[0]?.textContent || "");
+    AltName = getAltName(items[0]?.textContent || "");
+  }
+
+  if (query.Name.includes("bato")) {
+    AltName = getAltName(document.querySelector(".alias-set")?.textContent || "");
   }
 
   if (Genres === "") {
