@@ -92,7 +92,6 @@ export const cleanText = (text, appConfig) => {
   for (const part of parts) {
     try {
       const regex = new RegExp(part, "i");
-      console.log(regex, part);
       text = text.replace(regex, "").trim();
     } catch (error) {
       console.log(error);
