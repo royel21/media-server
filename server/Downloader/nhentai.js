@@ -161,7 +161,7 @@ const download = async (link, page, server, state) => {
     await page.goto(data.url, { waitUntil: "domcontentloaded" });
     let initalUrl = await page.evaluate(() => {
       const img = document.querySelector("#image-container img, #fimg");
-      return img.dataset.src || img?.src;
+      return img.dataset?.src || img?.src;
     });
 
     console.log(initalUrl);
@@ -185,8 +185,11 @@ const download = async (link, page, server, state) => {
         const url = initalUrl.replace(`/1.${ex}`, `/${i}.${newEX}`);
 
         if (f > 4) {
+          f = 0;
+          i++;
           await sendMessage({ text: `FormatError: ${f} unkown: ${url}`, color: "red" });
-          break;
+          continue;
+          // break;
         }
 
         try {

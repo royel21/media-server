@@ -11,6 +11,7 @@
   let totalUsed;
 
   const onDiskdata = (data) => {
+    console.log(data);
     diskData = data;
   };
 
