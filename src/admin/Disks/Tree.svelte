@@ -41,7 +41,6 @@
   };
   const onDiskdata = (data) => {
     if (loading) {
-      console.log(data);
       content = data;
       loading = false;
     }
