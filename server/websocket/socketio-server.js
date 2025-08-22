@@ -39,7 +39,7 @@ export default async (server, sessionMeddle) => {
       socket.on("loadzip-image", (data) => mloader.loadZipImages(data, socket, user.dataValues));
 
       if (user.Role.includes("Administrator")) {
-        socket.on("load-disks", FileManager.diskLoader);
+        socket.on("load-disks", FileManager.hddLoader);
 
         socket.on("file-work", FileManager.fileWork);
         socket.on("bg-work", FileManager.bgWork);

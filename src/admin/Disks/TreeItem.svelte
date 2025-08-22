@@ -1,5 +1,5 @@
 <script>
-  import { afterUpdate, getContext, onDestroy, onMount } from "svelte";
+  import { getContext, onDestroy, onMount } from "svelte";
   import Icons from "src/icons/Icons.svelte";
   import apiUtils from "src/apiUtils";
   import { setMessage } from "../Store/MessageStore";
@@ -14,6 +14,9 @@
   export let onMenu;
   export let showHidden = false;
   export let sortBy;
+  export let sort = false;
+
+  let sortedItems = items;
 
   let item = {};
   let offsetNext = offset + 1;
@@ -97,7 +100,7 @@
     }
   };
 
-  const onFolderRemove = ({ error, msg, folder }) => {
+  const onFolderRemove = ({ folder }) => {
     if (item.Content?.find((f) => f.Id === folder.Id)) {
       item.Content = item.Content.filter((f) => f.Id !== folder.Id);
       items = items;
@@ -129,26 +132,25 @@
   };
 
   const sortItems = {
-    Name: (a, b) => a.Name.localeCompare(b.Name),
+    Name: sortByName,
     Date: (a, b) => new Date(b.LastModified) - new Date(a.LastModified),
   };
 
-  afterUpdate(() => {
-    if (items.length) {
-    }
-  });
+  $: if (sort) {
+    sortedItems = items.sort(sortItems[sortBy]).filter((it) => {
+      if (it.Name === "Home") return true;
 
-  $: sortedItems = items.sort(sortItems[sortBy]).filter((it) => {
-    if (!showHidden) {
-      if (/^(\.|$)/.test(it?.Name)) {
-        return false;
+      if (!showHidden) {
+        if (/^(\.|$)/.test(it?.Name)) {
+          return false;
+        }
+
+        if (it.isHidden) return false;
       }
 
-      if (it.isHidden) return false;
-    }
-
-    return true;
-  });
+      return true;
+    });
+  }
 </script>
 
 {#each sortedItems as { Content, Id, Name, Type }}
@@ -185,6 +187,7 @@
           {onMenu}
           {sortBy}
           {showHidden}
+          sort={true}
         />
       </ul>
     {/if}
