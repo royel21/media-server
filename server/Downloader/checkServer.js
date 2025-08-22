@@ -128,8 +128,10 @@ export const downloadFromPage = async (Id, state) => {
       const linkData = [];
 
       for (let { Name, chaps, Url, Raw } of data) {
+        let tname = await db.NameList.findOne({ where: { Name: Name.replace(" Raw") } });
+
         const query = {
-          where: { [db.Op.or]: { Url: Url || "", Name }, Raw, ServerId: Server.Id },
+          where: { [db.Op.or]: { Url: Url || "", Name: tname.AltName || "" }, Raw, ServerId: Server.Id },
           include: ["Server"],
         };
 
