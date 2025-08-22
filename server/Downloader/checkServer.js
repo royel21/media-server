@@ -131,7 +131,7 @@ export const downloadFromPage = async (Id, state) => {
         let tname = await db.NameList.findOne({ where: { Name: Name.replace(" Raw") } });
 
         const query = {
-          where: { [db.Op.or]: { Url: Url || "", Name: tname.AltName || "" }, Raw, ServerId: Server.Id },
+          where: { [db.Op.or]: { Url: Url || "", Name: tname?.AltName || "" }, Raw, ServerId: Server.Id },
           include: ["Server"],
         };
 
