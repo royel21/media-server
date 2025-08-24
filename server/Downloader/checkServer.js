@@ -9,7 +9,7 @@ import { getProgress } from "../utils.js";
 const evalServer = async (query) => {
   return [...document.querySelectorAll(query.HomeQuery)].map((e) => {
     const manga = e.querySelector(".post-title, .bigor-manga h3");
-    const Url = e.querySelector(".post-title a")?.href.replace(/\/$/, "");
+    const Url = e.querySelector(".post-title a, .thumb-manga > a")?.href.replace(/\/$/, "");
 
     const Name = manga.textContent
       .replace("( Renta black and white comic Version)", "")
@@ -129,6 +129,7 @@ export const downloadFromPage = async (Id, state) => {
 
       for (let { Name, chaps, Url, Raw } of data) {
         let tname = await db.NameList.findOne({ where: { Name: Name.replace(" Raw") } });
+        console.log(Url, tname?.AltName || "", Raw, Server.Id);
 
         const query = {
           where: { [db.Op.or]: { Url: Url || "", Name: tname?.AltName || "" }, Raw, ServerId: Server.Id },

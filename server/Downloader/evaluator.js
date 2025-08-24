@@ -116,6 +116,9 @@ export const evaluetePage = async (query) => {
 
   data = data.filter((d) => d);
 
+  if (query.Name.includes("likemanga.in")) {
+    Status = false;
+  }
   return { Name, data, poster, AltName, Description, Genres, Status, Author, maxNum };
 };
 
@@ -287,6 +290,10 @@ export const adultEvalPage = async (query) => {
   as.reverse().forEach((a, i) => {
     let text = (a.querySelector("strong,b,san,.chapter-name") || a).textContent?.trim();
 
+    if (query.Name.includes("mangadistrict") && /Chapter \d+ - Episode \d+/.test(text)) {
+      text = text.replace(/Chapter \d+ -/, "");
+    }
+
     let fileName = text
       .replace("  ", " ")
       .trim()
@@ -418,15 +425,10 @@ export const evaleLinks = async (query) => {
   }
 
   let data = [];
-  let imgs = document.querySelectorAll(query.Imgs);
+  imgs = [...document.querySelectorAll(query.Imgs)];
 
-  if (query.Name.includes("mangas.in")) {
-    for (let img of imgs) {
-      while (/aHR0cHMl|loading.gif/.test(img.src)) {
-        img?.scrollIntoView();
-        await delay(100);
-      }
-    }
+  if (query.Name.includes("mangadistrict")) {
+    imgs.shift();
   }
 
   for (let img of imgs) {
@@ -445,8 +447,6 @@ export const evaleLinks = async (query) => {
       if (nSrc.includes("mangaclash")) {
         data.push(nSrc);
       }
-    } else if (query.Name.includes("mangas.in")) {
-      data.push(src);
     } else {
       data.push(nSrc);
     }
