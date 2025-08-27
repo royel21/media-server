@@ -209,7 +209,6 @@ export default {
   cleanImagesDir,
   scanDir,
   resetRecent,
-  diskLoader,
   setSocket,
   hddLoader,
 };

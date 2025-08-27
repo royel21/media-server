@@ -8,8 +8,8 @@ import { getProgress } from "../utils.js";
 
 const evalServer = async (query) => {
   return [...document.querySelectorAll(query.HomeQuery)].map((e) => {
-    const manga = e.querySelector(".post-title, .bigor-manga h3");
-    const Url = e.querySelector(".post-title a, .thumb-manga > a")?.href.replace(/\/$/, "");
+    const manga = e.querySelector(".post-title a, .post-title, .bigor-manga h3");
+    const Url = manga.querySelector(".post-title a, .thumb-manga > a")?.href.replace(/\/$/, "");
 
     const Name = manga.textContent
       .replace("( Renta black and white comic Version)", "")
@@ -114,7 +114,7 @@ export const downloadFromPage = async (Id, state) => {
       }
       page.goto(url, { waitUntil: "domcontentloaded" });
 
-      await page.waitForSelector(Server.HomeQuery);
+      await page.waitForSelector(Server.HomeQuery, { timeout: 60000 });
 
       if (/"mangaread/i.test(Server.Name)) {
         try {
@@ -128,11 +128,12 @@ export const downloadFromPage = async (Id, state) => {
       const linkData = [];
 
       for (let { Name, chaps, Url, Raw } of data) {
-        let tname = await db.NameList.findOne({ where: { Name: Name.replace(" Raw") } });
-        console.log(Url, tname?.AltName || "", Raw, Server.Id);
+        Name = Name.replace(" Raw");
+        let tname = await db.NameList.findOne({ where: { Name } });
+        console.log(Url, tname?.AltName || Name || "", Raw, Server.Id);
 
         const query = {
-          where: { [db.Op.or]: { Url: Url || "", Name: tname?.AltName || "" }, Raw, ServerId: Server.Id },
+          where: { [db.Op.or]: { Url: Url || "", Name: tname?.AltName || Name || "" }, Raw, ServerId: Server.Id },
           include: ["Server"],
         };
 

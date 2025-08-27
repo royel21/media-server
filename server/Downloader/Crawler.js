@@ -1,9 +1,15 @@
 import puppeteer from "puppeteer-extra";
 import os from "node:os";
-import UserAgent from "user-agents";
 
 import addBlocker from "puppeteer-extra-plugin-adblocker";
+import StealthPlugin from "puppeteer-extra-plugin-stealth";
+// import UserAgent from "user-agents";
+const stealth = StealthPlugin();
+stealth.enabledEvasions.delete("iframe.contentWindow");
+stealth.enabledEvasions.delete("media.codecs");
+stealth.enabledEvasions.delete("user-agent-override");
 
+puppeteer.use(stealth);
 puppeteer.use(addBlocker());
 
 export const delay = (ms) => {
@@ -15,15 +21,17 @@ export const delay = (ms) => {
 let pupeteer;
 
 export const startBrowser = async (config) => {
-  config.args = [...(config.args || []), "--no-sandbox", "--disable-gpu"];
+  config.args = [];
   config.userDataDir = "./user-data/puppeteer";
+  // config.targetFilter = (target) => !!target.url();
 
   if (os.platform() === "win32") {
     config.executablePath = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
   } else {
     config.args.push(`--display=${":1"}`); // fix for LXDE desktops)
-    config.executablePath = "/usr/bin/brave-browser";
+    config.executablePath = "/usr/bin/microsoft-edge";
     //microsoft-edge
+    //brave-browser
     //google-chrome
     //google-chrome-stable
   }
@@ -44,7 +52,7 @@ export const createPage = async (browser, timeout = 180000) => {
       maxResourceBufferSize: 1024 * 1024 * 400,
       maxTotalBufferSize: 1024 * 1204 * 400,
     });
-    const userAgent = new UserAgent().random().toString();
+
     await page.evaluateOnNewDocument(() => {
       const toLowerList = /^(For|No|It|Of|And|In|X|Du|Or|A|Wa|wo|na|to|ni|de|o|by)$/i;
 
@@ -89,7 +97,9 @@ export const createPage = async (browser, timeout = 180000) => {
         return result;
       };
     });
-    await page.setUserAgent(userAgent);
+
+    // const userAgent = new UserAgent().random().toString();
+    // await page.setUserAgent(userAgent);
     return page;
   } catch (error) {
     console.log(error);
