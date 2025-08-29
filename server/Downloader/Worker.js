@@ -326,6 +326,7 @@ let loadingBroser = false;
 process.on("message", async ({ action, datas, remove, bypass, server }) => {
   if (action === "Exit") {
     state.stopped = true;
+    await cleanUp();
   }
 
   while (loadingBroser) {

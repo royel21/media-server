@@ -148,7 +148,7 @@
   }
   $: showConsoleStore.set(canShow && $ConsoleStore.length && toggle);
   $: props = { height: height - 10, width: "auto", itemSize: 22 };
-  $: props2 = { itemCount: $ConsoleStore.length, scrollToIndex, stickyIndices: getStycky() };
+  $: props2 = { itemCount: $ConsoleStore.length, scrollToIndex }; //, stickyIndices: getStycky()
 </script>
 
 <label on:keydown on:click={toggleConsole} class:toggle class:hidden={!canShow}>
