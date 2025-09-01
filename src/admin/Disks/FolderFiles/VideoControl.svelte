@@ -22,6 +22,17 @@
     socket.emit("bg-work", { action: "mergeVideos", data: { files: selectedList } });
   };
 
+  const confirmVideoFix = () => {
+    socket.emit("bg-work", { action: "fixVideo", data: { files: selectedList } });
+  };
+
+  const onVideoFix = () => {
+    showConfirm = {
+      acept: confirmVideoFix,
+      text: "Video Fix",
+    };
+  };
+
   const onMergeVideo = () => {
     showConfirm = {
       acept: confirmMerge,
@@ -45,6 +56,10 @@
   <span id="film2" on:click={onConvertVideos} title="Convert Videos">
     <Icons name="film2" box="0 0 512 512" color="deepskyblue" />
   </span>
+  <span id="video-fix" on:click={onVideoFix} title="Convert Videos">
+    <Icons name="videofix" box="0 0 640 512" color="deepskyblue" />
+    <Icons name="wrench" box="0 0 640 512" color="black" />
+  </span>
   <span on:click={onShowExtractSubVideos} title="Extra Sub Video">
     <Icons name="videocut" box="0 0 640 512" color="deepskyblue" />
   </span>
@@ -57,6 +72,37 @@
   #film2 :global(.icon-film2) {
     width: 21px;
     top: 5px;
+    left: -4px;
+  }
+  #video-fix {
+    position: relative;
+  }
+  #video-fix :global(.icon-videofix) {
+    width: 30px;
+    height: 25px;
+    top: 0px;
+    left: -8px;
+  }
+
+  #video-fix :global(.icon-wrench) {
+    position: absolute;
+    width: 16px;
+    left: 1px;
+  }
+  #film2 {
+    position: relative;
+  }
+  #film2 :global(.icon-videofix) {
+    width: 30px;
+    height: 25px;
+    top: 0px;
+    left: -8px;
+  }
+
+  #film2 :global(.icon-wrench) {
+    position: absolute;
+    width: 16px;
+    left: 1px;
   }
 
   #merge :global(.icon-merge) {

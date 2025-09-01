@@ -271,3 +271,30 @@ export const extractSubVideo = async ({ files, Start, End }) => {
 
   await sendMessage({ convert: true, msg: `Finish Extrating Files`, End: true }, "files-info");
 };
+
+export const fixVideo = async ({ files }, state) => {
+  const basePath = path.dirname(files[0].Path);
+  let i = 1;
+  for (const file of files) {
+    if (state.stop) {
+      break;
+    }
+
+    const extension = path.extname(files[0].Name);
+    const name = files[0].Name.replace(extension, "");
+
+    const outFile = path.join(basePath, name + "-fix" + extension);
+
+    sendMessage({ text: `Fixing ${i++}/${files.length}: ${outFile}` });
+
+    await new Promise(async (resolve) => {
+      //ffmpeg -i ".mp4" -c:a copy -c:v copy -movflags +faststart
+      exec(`ffmpeg -i "${file.Path}" -c:a copy -c:v copy -movflags +faststart "${outFile}"`, async (error) => {
+        if (error) {
+          await sendMessage({ text: `Error Fixing ${outFile}`, error: error.toString() });
+        }
+        resolve();
+      });
+    });
+  }
+};

@@ -487,7 +487,7 @@
     flex-direction: row;
   }
   .filter span > a,
-  .filter span > span {
+  .filter span > span:not(.input-label) {
     position: relative;
     display: inline-block;
     width: 30px;

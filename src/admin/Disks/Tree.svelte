@@ -178,21 +178,25 @@
   }
   .tree {
     height: 100%;
-    overflow-y: auto;
     padding: 0 5px;
+  }
+  .tree-view {
+    height: calc(100% - 32px);
+    overflow-y: auto;
     overflow-x: hidden;
   }
   :global(.d-content .col) {
     height: 100%;
     background-color: #535353;
     border-radius: 0.3rem;
-    width: 50%;
+    width: 55%;
     overflow: hidden;
     z-index: 99;
   }
   .col:first-child {
     position: relative;
     margin-right: 5px;
+    width: 45%;
   }
   .d-content .no-files {
     width: 100%;
