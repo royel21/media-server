@@ -1,6 +1,7 @@
 import { Router } from "express";
 import fs from "fs-extra";
 import db from "#server/models/index";
+import os from "node:os";
 
 import { Op } from "sequelize";
 import { getFilter } from "../utils.js";
@@ -8,6 +9,7 @@ import { getWatchedDirs, getWatchFiles, removeWatchedDir, removeWatchedFile, ren
 import { cleanText } from "#server/utils";
 
 const routes = Router();
+const homedir = os.homedir();
 
 routes.get("/get-watched-dirs", getWatchedDirs);
 routes.get("/remove-watched-dir/:Id", removeWatchedDir);
@@ -15,6 +17,14 @@ routes.get("/remove-watched-dir/:Id", removeWatchedDir);
 routes.post("/rename-watched-file", renameWatchedFile);
 routes.get("/remove-watched-file/:Id", removeWatchedFile);
 routes.get("/get-watched-files/:page/:items/:filter?", getWatchFiles);
+
+const tranformPath = (Path) => {
+  if (Path.includes("homedir")) {
+    Path = Path.replace("homedir", homedir);
+  }
+
+  return Path;
+};
 
 const isValidFile = (Path, size = true) => {
   if (!fs.existsSync(Path)) {
@@ -36,7 +46,9 @@ routes.get("/text-file/:Path", (req, res) => {
 });
 
 routes.post("/save-text", (req, res) => {
-  const { Path, Text } = req.body;
+  let { Path, Text } = req.body;
+
+  Path = tranformPath(Path);
 
   let error = isValidFile(Path);
   if (error) return res.send({ error });
@@ -47,7 +59,10 @@ routes.post("/save-text", (req, res) => {
 });
 
 routes.get("/image/:Path", (req, res) => {
-  const { Path } = req.params;
+  let { Path } = req.params;
+
+  Path = tranformPath(Path);
+
   let error = isValidFile(Path, false);
   if (error) return res.send({ error });
 
@@ -57,7 +72,10 @@ routes.get("/image/:Path", (req, res) => {
 });
 
 routes.get("/download/:Path", (req, res) => {
-  const { Path } = req.params;
+  let { Path } = req.params;
+
+  Path = tranformPath(Path);
+
   if (fs.existsSync(Path)) {
     console.log("send-file");
     return res.sendFile(Path);
