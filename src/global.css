@@ -14,7 +14,7 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  height: dvh;
+  height: 100%;
   overflow: hidden;
   background: radial-gradient(ellipse at center, #14243d 0, #030611 100%);
   color: white;
