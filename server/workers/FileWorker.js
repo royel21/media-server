@@ -1,7 +1,15 @@
 import path from "path";
 import Sharp from "sharp";
 import db from "#server/models/index";
-import { createFolder, removeFiles, renameFile, bulkRename, moveFiles, transferFiles } from "./fileHelpers.js";
+import {
+  createFolder,
+  removeFiles,
+  renameFile,
+  bulkRename,
+  moveFiles,
+  transferFiles,
+  formatName,
+} from "./fileHelpers.js";
 import { renameFolder, removeDFolder, workVideos } from "./videoHelper.js";
 import { createDir } from "#server/Downloader/utils";
 import defaultConfig from "#server/default-config";
@@ -57,6 +65,7 @@ const renameDBFolder = async (datas) => {
           const newPath = Path.replace(folder.Directory.FullPath, dir.FullPath);
           data.DirectoryId = DirectoryId;
           data.Path = newPath;
+          console.log(folder.Directory.FullPath, dir.FullPath);
 
           const moveMsg = `from ${folder.Directory.FullPath} to ${dir.FullPath}`;
 
@@ -64,6 +73,7 @@ const renameDBFolder = async (datas) => {
           await sendMessage({ msg }, EVENT);
           const src = folder.Path.replace("homedir", homedir);
           const dest = data.Path.replace("homedir", homedir);
+          console.log(src, dest);
           const result = await transferFiles(src, dest);
 
           if (!result.success) {
@@ -116,6 +126,22 @@ const renameDBFile = async ({ Id, Name }) => {
     msg = "File not found on db";
   }
   await sendMessage({ success, msg, Name }, "file-renamed");
+};
+
+const renameDBFiles = async ({ Id, params }) => {
+  let files = await db.file.findAll({
+    where: { Id },
+    include: { model: db.folder },
+  });
+
+  for (let file of files) {
+    const Name = await formatName(file.Name, params);
+    try {
+      await file.update({ Name });
+    } catch (error) {}
+  }
+
+  await sendMessage({ renFinish: true });
 };
 /************ Remove file from db and system ***********************/
 
@@ -194,6 +220,7 @@ const createFolderThumb = async ({ folderId, file }) => {
 
 const actions = {
   renameDBFile,
+  renameDBFiles,
   removeDBFile,
   renameDBFolder,
   removeDFolder,

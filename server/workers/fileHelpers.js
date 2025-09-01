@@ -3,6 +3,7 @@ import path from "path";
 import os from "os";
 import { capitalize } from "#server/Downloader/utils";
 import { getProgress, sendMessage } from "../utils.js";
+import file from "#server/models/file";
 
 export const moveFiles = async ({ files, Path, overwrite, NewFolder }) => {
   const originalPath = Path;
@@ -133,95 +134,107 @@ export const transferFiles = async (src, dest) => {
   return { success: false };
 };
 
-export const bulkRename = async ({
-  files = [],
-  ZeroPad = 0,
-  Regex = "",
-  Replace = "",
-  With = "",
-  Case = "",
-  PreAdd = "",
-  PostAdd = "",
-  Secuence = 0,
-  After = "",
-  Extension = "",
-  Preserve = true,
-}) => {
-  let regex;
+export const formatName = async (
+  fileName,
+  {
+    ZeroPad = 0,
+    Regex = "",
+    Replace = "",
+    With = "",
+    Case = "",
+    PreAdd = "",
+    PostAdd = "",
+    Secuence = 0,
+    After = "",
+    Extension = "",
+    Preserve = true,
+  }
+) => {
+  let regex = "";
   Secuence = +Secuence;
 
   try {
     regex = new RegExp(Regex, "gi");
   } catch (error) {
-    return await sendMessage({ error: `Regex: ${error.toString()}` });
+    await sendMessage({ error: `Regex: ${error.toString()}` });
   }
 
+  const ext = path.extname(fileName);
+  let name = fileName.replace(ext, "");
+
+  if (Replace) {
+    const withs = With.split("|");
+    const reps = Replace.split("|");
+    for (const [index, rep] of Replace.split("|").entries()) {
+      name = name.replaceAll(rep, withs[index] || "");
+    }
+  }
+
+  if (Regex) {
+    name = name.replace(regex, "");
+  }
+
+  if (Case === "Camel") {
+    name = capitalize(name, " ", Preserve);
+    name = capitalize(name, "-");
+    name = capitalize(name, "_");
+  }
+
+  name = name.trim();
+
+  if (Case === "Upper") {
+    name = name.toLocaleUpperCase();
+  }
+
+  if (Case === "Lower") {
+    name = name.toLocaleLowerCase();
+  }
+
+  if (PreAdd) {
+    name = PreAdd + name;
+  }
+  if (PostAdd) {
+    name += PostAdd;
+  }
+
+  if (Secuence) {
+    const secNumber = Secuence.toString().padStart(ZeroPad, "0");
+    if (After) {
+      name = name.replace(After, `${After}${secNumber} `);
+    } else {
+      name = name + Secuence.toString().padStart(ZeroPad, "0");
+    }
+    Secuence++;
+  }
+
+  const num = name.match(/\d+/);
+  if (ZeroPad && num && num[0]) {
+    const number = +num[0];
+    name = name.replace(num[0], number.toString().padStart(ZeroPad, "0"));
+  }
+
+  //format date
+  const date = name.match(/\d+-\d+/);
+  if (date) {
+    const parts = date[0].split("-");
+    if (parts[0].length === 4) {
+      parts[1] = parts[1].padStart(2, "0");
+      name = name.replace(date, parts.join("-"));
+    }
+  }
+
+  name += Extension ? "." + Extension.replace(".", "") : ext;
+
+  return name;
+};
+
+export const bulkRename = async (params) => {
+  const { files } = params;
+
   for (const [i, file] of files.entries()) {
-    const ext = path.extname(file.Name);
-    let name = file.Name.replace(ext, "");
-
-    if (Replace) {
-      const withs = With.split("|");
-      for (const [index, rep] of Replace.split("|").entries()) {
-        name = name.replaceAll(rep, withs[index] || "");
-      }
-    }
-
-    if (Regex) {
-      name = name.replace(regex, "");
-    }
-
-    if (Case === "Camel") {
-      name = capitalize(name, " ", Preserve);
-      name = capitalize(name, "-");
-      name = capitalize(name, "_");
-    }
-
-    name = name.trim();
-
-    if (Case === "Upper") {
-      name = name.toLocaleUpperCase();
-    }
-
-    if (Case === "Lower") {
-      name = name.toLocaleLowerCase();
-    }
-
-    if (PreAdd) {
-      name = PreAdd + name;
-    }
-    if (PostAdd) {
-      name += PostAdd;
-    }
-
-    if (Secuence) {
-      const secNumber = Secuence.toString().padStart(ZeroPad, "0");
-      if (After) {
-        name = name.replace(After, `${After}${secNumber} `);
-      } else {
-        name = name + Secuence.toString().padStart(ZeroPad, "0");
-      }
-      Secuence++;
-    }
-
-    const num = name.match(/\d+/);
-    if (ZeroPad && num && num[0]) {
-      const number = +num[0];
-      name = name.replace(num[0], number.toString().padStart(ZeroPad, "0"));
-    }
-
-    //format date
-    const date = name.match(/\d+-\d+/);
-    if (date) {
-      const parts = date[0].split("-");
-      if (parts[0].length === 4) {
-        parts[1] = parts[1].padStart(2, "0");
-        name = name.replace(date, parts.join("-"));
-      }
-    }
+    const name = await formatName(file.Name, params);
 
     try {
-      name += Extension ? "." + Extension.replace(".", "") : ext;
       const src = file.Path;
       const dest = file.Path.replace(file.Name, name);
       if (src !== dest) {

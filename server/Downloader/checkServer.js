@@ -107,7 +107,7 @@ export const downloadFromPage = async (Id, state) => {
   if (Server && Server?.HomeQuery && page) {
     try {
       sendMessage({ text: `** ${formatAMPM(new Date())} ${Server.Name} **`, important: true });
-      let url = "https://www.google.com/"; // `https:\\${Server.Name}`;
+      let url = `https:\\${Server.Name}`;
 
       if (/mangahentai|manytoon|hentaiwebtoon/.test(Server.Name)) {
         url = `${url}\\home`;

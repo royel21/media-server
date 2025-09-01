@@ -128,7 +128,7 @@ export const adultEvalPage = async (query) => {
   let title = document.querySelector(query.Title).innerText.trim();
   let Name = title
     .replace("( Renta black and white comic Version)", "")
-    .replace(/:|\?|\*|<|>|"\n|\t|“|^,|\//gi, "")
+    .replace(/:|\?|\*|<|>|"\n|\t|“|\"|^,|\//gi, "")
     .replace(/(\.)+$/, "")
     .replace(/”( |)/g, ", ")
     .replace(/^(18\+|(ENDED|END)(\.|)+|ONGOING|ON GOING|ON-GOING|HOT|NEW)/, "")

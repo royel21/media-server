@@ -16,11 +16,11 @@
 
   import VideoControl from "./VideoControl.svelte";
   import apiUtils from "src/apiUtils";
-  import BulkEdit from "./BulkEdit.svelte";
 
   import { formatSize } from "src/utils";
   import VideoConvert from "./VideoConvert.svelte";
   import SubVideoExtration from "./SubVideoExtration.svelte";
+  import BulkEdit from "src/admin/Component/BulkEdit.svelte";
 
   export let files = [];
   export let socket;
@@ -306,7 +306,7 @@
   {#if selectedList.length === 1}
     <RenameModal data={selectedList[0]} acept={renameFile} hide={hideRename} title="File" />
   {:else}
-    <BulkEdit files={selectedList} hide={hideBulkRename} acept={onBulkRename} />
+    <BulkEdit length={selectedList.length} hide={hideBulkRename} acept={onBulkRename} />
   {/if}
 {/if}
 

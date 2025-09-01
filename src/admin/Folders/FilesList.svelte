@@ -8,6 +8,8 @@
   import { clamp } from "@share/utils";
   import Icons from "src/icons/Icons.svelte";
   import CCheckbox from "../Component/CCheckbox.svelte";
+  import BulkEdit from "../Component/BulkEdit.svelte";
+  import { setMessage } from "../Store/MessageStore";
 
   const socket = getContext("socket");
 
@@ -23,6 +25,7 @@
   let file = {};
   let showModal = false;
   let showFileinfo = false;
+  let showEdit = false;
   let modalType = {};
   let removeList = [];
   let isChecked = false;
@@ -60,6 +63,13 @@
     }
   };
 
+  const onRenameFinish = async ({ renFinish }) => {
+    if (renFinish) {
+      await loadFiles(page);
+      setMessage({ msg: "Files Renamed Successfully", color: "green" });
+    }
+  };
+
   const onFileRemove = (data) => {
     if (data.success) {
       if (items.length === 1 && totalPages > 1) {
@@ -75,6 +85,8 @@
     }
   };
 
+  const onBulkEdit = () => (showEdit = true);
+
   const scanFinish = (data) => {
     if (data.Id === folderId) {
       loadFiles(1);
@@ -85,6 +97,7 @@
     { name: "file-renamed", event: onFileRename },
     { name: "file-removed", event: onFileRemove },
     { name: "reload", event: scanFinish },
+    { name: "info", event: onRenameFinish },
   ];
 
   const onFilter = (event) => {
@@ -126,6 +139,14 @@
       socket.emit("file-work", { action: "renameDBFile", data: { Id: file.Id, Name: file.Name } });
     }
     showModal = false;
+  };
+
+  const hideBulkRename = () => (showEdit = false);
+
+  const onBulkRename = (params) => {
+    socket.emit("file-work", { action: "renameDBFiles", data: { Id: removeList, params } });
+    removeList = [];
+    hideBulkRename();
   };
 
   const onCheck = ({ target }) => {
@@ -197,6 +218,10 @@
   <Modal {file} {modalType} {acept} hide={hideModal} />
 {/if}
 
+{#if showEdit}
+  <BulkEdit length={items.length} hide={hideBulkRename} acept={onBulkRename} />
+{/if}
+
 <ItemList
   title="Files"
   id="l-files"
@@ -217,6 +242,9 @@
   <span id="del-files" slot="btn-controls">
     <CCheckbox on:change={onCheckAll} {isChecked} title="Select All Files" />
     {#if removeList.length}
+      <span on:click={onBulkEdit}>
+        <Icons name="edit" />
+      </span>
       <span on:click={onRemoveSelected}>
         <Icons name="trash" box="0 0 420 512" />
       </span>
@@ -246,5 +274,12 @@
     display: inline-block;
     min-width: fit-content;
     margin: 0 5px;
+  }
+
+  #del-files span:not(:first-child) {
+    margin: 0 5px;
+  }
+  #del-files span:nth-child(2) {
+    margin-right: 0px;
   }
 </style>

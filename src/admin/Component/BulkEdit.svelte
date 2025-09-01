@@ -1,10 +1,10 @@
 <script>
-  import Dialog from "../../../ShareComponent/Dialog.svelte";
-  import CheckBox from "../../Component/CheckBox.svelte";
-  import Input from "../../Component/Input.svelte";
+  import Dialog from "../../ShareComponent/Dialog.svelte";
+  import CheckBox from "../Component/CheckBox.svelte";
+  import Input from "../Component/Input.svelte";
 
   export let hide;
-  export let files;
+  export let length;
   export let acept;
 
   let item = {
@@ -34,7 +34,7 @@
 
 <div id="b-edit">
   <Dialog class="bulk-edit" cancel={hide} confirm={onConfirm} {errors}>
-    <h4 slot="modal-header">Edit Name for: <span>{files.length}</span> {files.length > 1 ? "Files" : "File"}</h4>
+    <h4 slot="modal-header">Edit Name for <span>{length}</span> Files</h4>
     <div class="dir-list" slot="modal-body">
       <Input key="Replace" {item} on:keydown={onKeydown} />
       <Input key="With" {item} on:keydown={onKeydown} />
