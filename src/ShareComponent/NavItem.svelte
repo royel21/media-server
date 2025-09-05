@@ -103,7 +103,6 @@
       li.parentElement.closest("li").classList.add("selected");
     }
   });
-  console.log(item);
 </script>
 
 <li

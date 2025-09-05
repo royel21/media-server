@@ -44,7 +44,7 @@
     send(curFilter, "change");
   };
 
-  $: filter = curFilter;
+  $: curFilter = /%/.test(filter) ? decodeURIComponent(filter) : filter;
   const box = "0 0 512 512";
 </script>
 
@@ -63,7 +63,7 @@
     enterkeyhint="done"
     autocomplete="off"
     bind:value={curFilter}
-    on:keydown={submitFilter}
+    on:keydown|stopPropagation={submitFilter}
     on:input={onChanges}
   />
   <span id="clear-filter" on:click={ClearFilter}>

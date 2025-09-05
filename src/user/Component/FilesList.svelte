@@ -16,6 +16,7 @@
   import { getDate, getLastChap } from "./fileUtils";
   import UserStore from "../Stores/UserStore";
   import { formatSize, isMobile } from "src/utils";
+  import { isValidKey } from "@share/utils";
 
   export let id = "";
   export let page = 1;
@@ -35,6 +36,9 @@
   const socket = getContext("socket");
   const user = getContext("User");
   const baseData = { files: [], totalPages: 0, totalFiles: 0 };
+  const hotkeys = getContext("User").hotkeys;
+  const KeyExit = hotkeys.find((key) => key.Name === "Exit");
+
   let pageData = baseData;
 
   const loadContent = async (folderId, pg = 1, flt) => {
@@ -73,7 +77,13 @@
 
   const fileFilter = ({ detail }) => navigate(`/${type}/${1}/${detail || ""}`);
 
-  const handleKeydown = (e) => fileKeypress(e, page, goToPage, title);
+  const handlerKey = (e) => {
+    if (isValidKey(e, KeyExit)) {
+      navigate(`/${type}/${1}/`);
+    }
+  };
+
+  const handleKeydown = (e) => fileKeypress(e, page, goToPage, title, "");
 
   const openFile = (e) => {
     if (onOpen) onOpen(e);
@@ -152,11 +162,12 @@
   $: {
     config = $UserStore.sortTabs.find((st) => st.Name === title);
     loadContent(id, page, filter || "");
+    console.log("filter: ", filter);
   }
   let isContent = location.pathname.includes("content");
 </script>
 
-<div class="scroll-container" class:r-content={isContent}>
+<div class="scroll-container" class:r-content={isContent} on:keydown={handlerKey} tabindex="0">
   <slot name="header" />
   <div class="files-list" on:keydown={handleKeydown} on:click={favClick} tabindex="0">
     {#each pageData.files as { Id, Name, Type, CurrentPos, Duration, isFav, FilesType, FileCount, LastChapter, Status, CreatedAt, Size, isRaw, EmissionDate }}
