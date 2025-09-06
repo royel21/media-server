@@ -109,7 +109,7 @@
 <div id="tag-list" class="file-list">
   <div class="controls">
     <span class="show-list" on:click={() => (showWatchList = true)}><Icons name="list" box="0 0 512 512" /></span>
-    <Filter {filter} on:filter={applyFilter} />
+    <Filter on:filter={applyFilter} />
     <span class="bagde">{pager.totalItems}</span>
   </div>
   <div class="list-container" bind:this={ref}>

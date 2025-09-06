@@ -266,6 +266,8 @@
 
   $: isChecked = filtered.length && selectedList.length === filtered.length;
 
+  const applyFilter = ({ detail }) => (filter = detail);
+
   $: {
     filtered = files.filter(filterFunc(filter)).sort(sorter[sortBy]);
   }
@@ -341,7 +343,7 @@
             <span class="btn-sync" on:click={reload} title="Reload Files"><Icons name="sync" /></span>
           {/if}
         </span>
-        <Filter id="file-filter" bind:filter />
+        <Filter id="file-filter" on:change={applyFilter} />
         {#if selectedList.length === 0}
           <span class="input-control">
             <span class="input-label">
