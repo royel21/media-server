@@ -33,7 +33,6 @@
     if (!result.fail) {
       dispatch("updateusers", result.user);
     } else {
-      console.log(result.msg);
       return (errors = [result.msg]);
     }
   };

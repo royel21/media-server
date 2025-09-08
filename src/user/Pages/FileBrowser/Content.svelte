@@ -97,7 +97,7 @@
       e.preventDefault();
     }
 
-    if (isValidKey(e, KeyExit)) {
+    if (e.target.tagName !== "INPUT" && isValidKey(e, KeyExit)) {
       exitFolder();
     }
 

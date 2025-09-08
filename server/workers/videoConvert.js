@@ -280,21 +280,29 @@ export const fixVideo = async ({ files }, state) => {
       break;
     }
 
-    const extension = path.extname(files[0].Name);
-    const name = files[0].Name.replace(extension, "");
+    const extension = path.extname(file.Name);
+    const name = file.Name.replace(extension, "");
 
     const outFile = path.join(basePath, name + "-fix" + extension);
+    const count = files.length.toString();
 
-    sendMessage({ text: `Fixing ${i++}/${files.length}: ${outFile}` });
+    const current = (i++).toString().padStart(count.length, "0");
+
+    await sendMessage({ text: `${current}/${count}: Fixing ${outFile}`, color: "red" });
 
     await new Promise(async (resolve) => {
       //ffmpeg -i ".mp4" -c:a copy -c:v copy -movflags +faststart
-      exec(`ffmpeg -i "${file.Path}" -c:a copy -c:v copy -movflags +faststart "${outFile}"`, async (error) => {
+      exec(`ffmpeg -i "${file.Path}" -c:a copy -c:v copy -movflags +faststart "${outFile}" -y`, async (error) => {
         if (error) {
           await sendMessage({ text: `Error Fixing ${outFile}`, error: error.toString() });
         }
         resolve();
+        file.Id = i + "fixed";
+        file.Path = outFile;
+        file.Name = name + "-fix" + extension;
+        await sendMessage({ text: `${current}/${count}: Fixed ${name}`, convert: true, file }, "files-info");
       });
     });
   }
+  await sendMessage({ text: "All Video Fixed", convert: true, End: true }, "files-info");
 };

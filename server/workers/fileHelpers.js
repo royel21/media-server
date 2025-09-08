@@ -245,7 +245,7 @@ export const bulkRename = async (params) => {
         files[i] = file;
       }
     } catch (error) {
-      await sendMessage({ text: `Can't Rename ${file.Name}, ${error.toString()}` });
+      await sendMessage({ text: `Can't Rename ${file.Name}, ${error.toString()}`, color: "red" });
     }
   }
 

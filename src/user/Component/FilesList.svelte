@@ -162,7 +162,6 @@
   $: {
     config = $UserStore.sortTabs.find((st) => st.Name === title);
     loadContent(id, page, filter || "");
-    console.log("filter: ", filter);
   }
   let isContent = location.pathname.includes("content");
 </script>

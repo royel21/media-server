@@ -97,6 +97,7 @@
   };
 
   const fileUnZip = () => {
+    bgWorking = true;
     socket.emit("bg-work", { action: "unZip", data: { files: selectedList } });
   };
 
@@ -153,7 +154,6 @@
     if (convert) {
       if (End) {
         bgWorking = false;
-        selectedList = [];
         reload();
       } else if (file) {
         files = [...files, file].sort(sorter[sortBy]);
@@ -272,11 +272,6 @@
     filtered = files.filter(filterFunc(filter)).sort(sorter[sortBy]);
   }
 
-  $: if (files.length !== length) {
-    selectedList = [];
-    length = files.length;
-  }
-
   let virtual = true;
   $: list = selectedList.length ? selectedList : filtered;
   $: height = itemContainerRef?.offsetHeight || 0;
@@ -330,7 +325,7 @@
                 <Icons name="zip" box="0 0 384 512" color="darkgray" />
               </span>
             {/if}
-            <VideoControl bind:showConvertVideo bind:showVideoSubTract {selectedList} {socket} />
+            <VideoControl bind:showConvertVideo bind:bgWorking bind:showVideoSubTract {selectedList} {socket} />
             <span on:click={() => (showBulkRename = true)}><Icons name="edit" /></span>
             <span on:click={onTransfer}><Icons name="right-left" /></span>
             {#if selectedList.length === 1}

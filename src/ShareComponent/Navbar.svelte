@@ -23,8 +23,15 @@
   ToggleMenu.subscribe((value) => (menuToggle = value));
 
   const onChangeTab = (e) => {
+    if (isValidKey(e, logoutKey) && !/content|viewer/i.test(location.pathname)) {
+      logout();
+    }
+
     const found = document.querySelector(".b-content, .viewer");
-    if (!found && [nextTab.Key, prevTab.Key].includes(e.keyCode)) {
+
+    if (found) return e;
+
+    if ([nextTab.Key, prevTab.Key].includes(e.keyCode)) {
       const tab = document.querySelector("#menu .tabs a.active").parentElement;
       let item;
       if (isValidKey(e, prevTab)) {
@@ -40,22 +47,19 @@
       }
       e.preventDefault();
     }
-
-    if (isValidKey(e, logoutKey) && !/content|viewer/i.test(location.pathname)) {
-      logout();
-    }
-
-    if (e.keyCode === 9 && !found && !location.pathname.includes("admin")) {
+    if (e.keyCode === 9 && !location.pathname.includes("admin")) {
       e.preventDefault();
       e.stopPropagation();
-      let i = 0;
-      const elements = [...document.querySelectorAll("a.active, .files-list, #filter-input")];
+      const elements = [...document.querySelectorAll(".navbar-nav a.active, .files-list, #filter-input")];
 
+      console.log(elements);
+      let i = 0;
       for (let el of elements) {
         i++;
         if (el === document.activeElement) {
-          elements[i % elements.length].focus();
           i = i % elements.length;
+          elements[i].focus();
+          console.log("focus", elements[i]);
           break;
         }
       }

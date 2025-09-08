@@ -3,14 +3,17 @@
   import Confirm from "src/admin/Component/Confirm.svelte";
 
   import { videoRegex } from "src/admin/Store/FilesStore";
+  import { onMount } from "svelte";
 
   export let socket;
   export let selectedList;
+  export let bgWorking;
 
-  export let showConvertVideo;
-  export let showVideoSubTract;
+  export let showConvertVideo = false;
+  export let showVideoSubTract = false;
 
   let showConfirm = false;
+  let menuCheck;
 
   let show = false;
 
@@ -19,10 +22,12 @@
   const onShowExtractSubVideos = () => (showVideoSubTract = true);
 
   const confirmMerge = () => {
+    bgWorking = true;
     socket.emit("bg-work", { action: "mergeVideos", data: { files: selectedList } });
   };
 
   const confirmVideoFix = () => {
+    bgWorking = true;
     socket.emit("bg-work", { action: "fixVideo", data: { files: selectedList } });
   };
 
@@ -40,6 +45,20 @@
     };
   };
 
+  const onHideMenu = ({ target }) => {
+    if (menuCheck && target !== menuCheck) {
+      menuCheck.checked = false;
+    }
+  };
+
+  onMount(() => {
+    document.body.addEventListener("click", onHideMenu);
+
+    return () => {
+      document.body.removeEventListener("click", onHideMenu);
+    };
+  });
+
   $: show = selectedList.filter((f) => !videoRegex.test(f.Name)).length === 0;
 </script>
 
@@ -53,22 +72,56 @@
 {/if}
 
 {#if show}
-  <span id="film2" on:click={onConvertVideos} title="Convert Videos">
+  <label for="video-menu">
     <Icons name="film2" box="0 0 512 512" color="deepskyblue" />
-  </span>
-  <span id="video-fix" on:click={onVideoFix} title="Convert Videos">
-    <Icons name="videofix" box="0 0 640 512" color="deepskyblue" />
-    <Icons name="wrench" box="0 0 640 512" color="black" />
-  </span>
-  <span on:click={onShowExtractSubVideos} title="Extra Sub Video">
-    <Icons name="videocut" box="0 0 640 512" color="deepskyblue" />
-  </span>
-  <span id="merge" on:click={onMergeVideo} title="Merge Videos">
-    <Icons name="merge" box="0 0 576 512" color="deepskyblue" />
-  </span>
+    <input type="checkbox" id="video-menu" bind:this={menuCheck} />
+    <div class="v-menu">
+      <div id="film2" on:click={onConvertVideos}>Convert Videos</div>
+      <div id="video-fix" on:click={onVideoFix}>Fix Videos</div>
+      <div on:click={onShowExtractSubVideos}>Extra Sub Video</div>
+      <div id="merge" on:click={onMergeVideo}>Merge Videos</div>
+    </div>
+  </label>
 {/if}
 
 <style>
+  label {
+    position: relative;
+  }
+  .v-menu {
+    display: none;
+    position: absolute;
+    top: 35px;
+    background-color: rgb(58, 58, 58);
+    min-width: max-content;
+    z-index: 99;
+    text-align: left;
+    border-radius: 0.3rem;
+    overflow: hidden;
+  }
+  .v-menu:after {
+    position: absolute;
+    top: -10px;
+    left: -50px;
+    width: 10;
+    height: 10;
+    transform: rotate(90deg);
+    z-index: 100;
+  }
+  .v-menu div {
+    padding: 4px 8px;
+  }
+  .v-menu div:hover {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  input {
+    display: none;
+  }
+  input:checked + .v-menu {
+    display: flex;
+    flex-direction: column;
+  }
   #film2 :global(.icon-film2) {
     width: 21px;
     top: 5px;
@@ -108,12 +161,5 @@
   #merge :global(.icon-merge) {
     width: 21px;
     top: 5px;
-  }
-  span {
-    position: relative;
-    display: inline-block;
-    width: 30px;
-    padding: 0 5px;
-    text-align: center;
   }
 </style>

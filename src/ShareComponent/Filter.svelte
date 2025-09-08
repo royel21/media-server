@@ -63,7 +63,7 @@
     enterkeyhint="done"
     autocomplete="off"
     bind:value={curFilter}
-    on:keydown|stopPropagation={submitFilter}
+    on:keydown={submitFilter}
     on:input={onChanges}
   />
   <span id="clear-filter" on:click={ClearFilter}>
