@@ -1,6 +1,7 @@
 import fs from "fs-extra";
 import path from "path";
 import AdmZip from "adm-zip";
+import StreamZip from "node-stream-zip";
 import sharp from "sharp";
 import { getProgress, sendMessage } from "../utils.js";
 
@@ -68,4 +69,36 @@ export const unZip = async ({ files }) => {
     }
   }
   await sendMessage({ text: `Finish Extrating ${files.length} ${files.length === 1 ? "File" : "Files"}` });
+};
+
+const sortByName = (a, b) => String(a.name).localeCompare(String(b.name));
+
+export const combinedZip = async ({ files }) => {
+  if (!files?.length) {
+    return;
+  }
+
+  const basePath = path.dirname(files[0].Path);
+  const name = path.basename(files[0].Path).replace(".zip", "");
+
+  await sendMessage({ text: `Combining Files ${files.length} - ${basePath}` });
+
+  let zip = new AdmZip();
+  let i = 0;
+
+  for (const file of files) {
+    const zipfile = new StreamZip.async({ file: file.Path });
+
+    const entries = Object.values(await zipfile.entries()).sort(sortByName);
+
+    for (const entry of entries) {
+      const buff = await zipfile.entryData(entry);
+      await zip.addFile(i.toString().padStart(3, "0") + ".jpg", buff);
+      i++;
+    }
+    await zipfile.close();
+  }
+  zip.writeZip(path.join(basePath, name + "-combined.zip"));
+  await sendMessage({ text: `Finish Combining - ${basePath}`, combining: true });
+  await sendMessage({ combining: true }, "files-info");
 };

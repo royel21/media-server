@@ -21,6 +21,7 @@
   import VideoConvert from "./VideoConvert.svelte";
   import SubVideoExtration from "./SubVideoExtration.svelte";
   import BulkEdit from "src/admin/Component/BulkEdit.svelte";
+  import ZipControls from "./ZipControls.svelte";
 
   export let files = [];
   export let socket;
@@ -96,18 +97,6 @@
     };
   };
 
-  const fileUnZip = () => {
-    bgWorking = true;
-    socket.emit("bg-work", { action: "unZip", data: { files: selectedList } });
-  };
-
-  const onShowUnZipConfirm = () => {
-    showConfirm = {
-      acept: fileUnZip,
-      text: "Unzip",
-    };
-  };
-
   const onTransfer = () => {
     showMoveDialog = { files: selectedList };
   };
@@ -117,7 +106,8 @@
     socket.emit("file-work", { action: "moveFiles", data });
   };
 
-  const onFileInfo = ({ msg, items, bulk, error, ren, file, convert, progress, Path, End }) => {
+  const onFileInfo = (data) => {
+    const { msg, items, bulk, error, ren, file, convert, progress, Path, End, combining } = data;
     if (msg || error) {
       updateConsole({ text: msg, error });
     }
@@ -158,6 +148,12 @@
       } else if (file) {
         files = [...files, file].sort(sorter[sortBy]);
       }
+    }
+
+    if (combining) {
+      bgWorking = false;
+      selectedList = [];
+      reload();
     }
   };
 
@@ -320,11 +316,7 @@
             </span>
           {/if}
           {#if selectedList.length}
-            {#if selectedList.filter((f) => !/\.zip$/i.test(f.Name)).length === 0}
-              <span on:click={onShowUnZipConfirm} title="Extract Zip">
-                <Icons name="zip" box="0 0 384 512" color="darkgray" />
-              </span>
-            {/if}
+            <ZipControls bind:showConvertVideo bind:bgWorking bind:showVideoSubTract {selectedList} {socket} />
             <VideoControl bind:showConvertVideo bind:bgWorking bind:showVideoSubTract {selectedList} {socket} />
             <span on:click={() => (showBulkRename = true)}><Icons name="edit" /></span>
             <span on:click={onTransfer}><Icons name="right-left" /></span>
