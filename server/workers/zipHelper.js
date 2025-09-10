@@ -136,6 +136,7 @@ export const cropImageInZip = async ({ files, image, top, left, width, height })
   if (height === 0 || width === 0) {
     return await sendMessage({ text: `Width or Height can't be 0` });
   }
+  const basePath = path.dirname(files[0].Path);
 
   await sendMessage({ text: `Cropping ${files.length} Files` });
   for (const file of files) {
@@ -168,7 +169,10 @@ export const cropImageInZip = async ({ files, image, top, left, width, height })
     });
 
     zip.addFile(entry.name, await img.toBuffer());
-    zip.writeZip(file.Path);
+
+    const name = path.basename(file.Name).replace(".zip", "");
+    zip.writeZip(path.join(basePath, name + "-crop.zip"));
   }
   await sendMessage({ text: `Finish Cropping ${files.length} Files` });
+  await sendMessage({ combining: true }, "files-info");
 };

@@ -8,7 +8,10 @@
 
   const temp = { image: 0, top: 0, left: 0, width: -1, height: -1 };
 
-  const confirm = () => acept({ files, ...temp });
+  const confirm = () => {
+    hide();
+    acept({ files, ...temp });
+  };
 </script>
 
 <Dialog id="crop-modal" cancel={hide} {confirm} canDrag={true}>
