@@ -102,3 +102,30 @@ export const combinedZip = async ({ files }) => {
   await sendMessage({ text: `Finish Combining - ${basePath}`, combining: true });
   await sendMessage({ combining: true }, "files-info");
 };
+
+const sortEntries = (a, b) => String(a.entryName).localeCompare(String(b.entryName));
+export const delImageZip = async ({ files, removeList }) => {
+  if (!files?.length) {
+    return;
+  }
+
+  await sendMessage({ text: `Removing Images From Zip` });
+
+  for (const file of files) {
+    const zip = new AdmZip(file.Path);
+
+    let zipEntries = [...zip.getEntries().sort(sortEntries)];
+    let toRemove = (file.removeList || removeList).split(",");
+
+    for (const i of toRemove) {
+      const entry = zipEntries[+i];
+      if (entry) {
+        zip.deleteFile(entry);
+      }
+    }
+
+    zip.writeZip(file.Path);
+  }
+
+  await sendMessage({ text: `Finish Removing Images From Zip` });
+};

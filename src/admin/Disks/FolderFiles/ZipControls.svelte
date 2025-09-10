@@ -4,12 +4,15 @@
 
   import { videoRegex } from "src/admin/Store/FilesStore";
   import { onMount } from "svelte";
+  import DelImagesModal from "./DelImagesModal.svelte";
 
   export let socket;
   export let selectedList;
   export let bgWorking;
 
   let showConfirm = false;
+  let showDelImageModal = false;
+
   let menuCheck;
 
   let show = false;
@@ -31,6 +34,11 @@
     socket.emit("bg-work", { action: "combinedZip", data: { files: selectedList } });
   };
 
+  const aceptRemoveImage = (data) => {
+    bgWorking = true;
+    socket.emit("bg-work", { action: "delImageZip", data });
+  };
+
   const onCombined = () => {
     showConfirm = {
       acept: confirmCombined,
@@ -43,6 +51,8 @@
       menuCheck.checked = false;
     }
   };
+
+  const onShowDelImages = () => (showDelImageModal = !showDelImageModal);
 
   onMount(() => {
     document.body.addEventListener("click", onHideMenu);
@@ -64,6 +74,10 @@
   />
 {/if}
 
+{#if showDelImageModal}
+  <DelImagesModal hide={onShowDelImages} acept={aceptRemoveImage} files={selectedList} />
+{/if}
+
 {#if show}
   <label for="check-menu">
     <Icons name="zip" box="0 0 384 512" color="darkgray" />
@@ -71,6 +85,7 @@
     <div class="v-menu">
       <div id="film2" on:click={onExtraZip}>Extract Zip</div>
       <div id="video-fix" on:click={onCombined}>Combined Zip</div>
+      <div id="video-fix" on:click={onShowDelImages}>Del Image From Zip</div>
     </div>
   </label>
 {/if}

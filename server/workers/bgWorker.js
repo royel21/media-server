@@ -1,5 +1,5 @@
 import winExplorer from "win-explorer";
-import { zipImgFolder, unZip, combinedZip } from "./zipHelper.js";
+import { zipImgFolder, unZip, combinedZip, delImageZip } from "./zipHelper.js";
 import { convertVideo, extractSubVideo, fixVideo, mergeVideos } from "./videoConvert.js";
 import { sendMessage } from "../utils.js";
 import { homedir } from "node:os";
@@ -37,6 +37,7 @@ const actions = {
   mergeVideos,
   fixVideo,
   combinedZip,
+  delImageZip,
 };
 
 const works = {
