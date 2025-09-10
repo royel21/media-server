@@ -5,6 +5,7 @@
   import { videoRegex } from "src/admin/Store/FilesStore";
   import { onMount } from "svelte";
   import DelImagesModal from "./DelImagesModal.svelte";
+  import CropImagesModal from "./CropImagesModal.svelte";
 
   export let socket;
   export let selectedList;
@@ -12,6 +13,7 @@
 
   let showConfirm = false;
   let showDelImageModal = false;
+  let showCropModal = false;
 
   let menuCheck;
 
@@ -38,6 +40,10 @@
     bgWorking = true;
     socket.emit("bg-work", { action: "delImageZip", data });
   };
+  const aceptCropImage = (data) => {
+    bgWorking = true;
+    socket.emit("bg-work", { action: "cropImageInZip", data });
+  };
 
   const onCombined = () => {
     showConfirm = {
@@ -53,6 +59,7 @@
   };
 
   const onShowDelImages = () => (showDelImageModal = !showDelImageModal);
+  const onShowCropImages = () => (showCropModal = !showCropModal);
 
   onMount(() => {
     document.body.addEventListener("click", onHideMenu);
@@ -78,6 +85,10 @@
   <DelImagesModal hide={onShowDelImages} acept={aceptRemoveImage} files={selectedList} />
 {/if}
 
+{#if showCropModal}
+  <CropImagesModal files={selectedList} hide={onShowCropImages} acept={aceptCropImage} />
+{/if}
+
 {#if show}
   <label for="check-menu">
     <Icons name="zip" box="0 0 384 512" color="darkgray" />
@@ -86,6 +97,7 @@
       <div id="film2" on:click={onExtraZip}>Extract Zip</div>
       <div id="video-fix" on:click={onCombined}>Combined Zip</div>
       <div id="video-fix" on:click={onShowDelImages}>Del Image From Zip</div>
+      <div id="video-fix" on:click={onShowCropImages}>Crop Image From Zip</div>
     </div>
   </label>
 {/if}

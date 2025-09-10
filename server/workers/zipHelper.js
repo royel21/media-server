@@ -129,3 +129,46 @@ export const delImageZip = async ({ files, removeList }) => {
 
   await sendMessage({ text: `Finish Removing Images From Zip` });
 };
+
+export const cropImageInZip = async ({ files, image, top, left, width, height }) => {
+  if (!files.length) return;
+
+  if (height === 0 || width === 0) {
+    return await sendMessage({ text: `Width or Height can't be 0` });
+  }
+
+  await sendMessage({ text: `Cropping ${files.length} Files` });
+  for (const file of files) {
+    const zip = new AdmZip(file.Path);
+
+    await sendMessage({ text: `Croping ${file.Path}` });
+
+    let zipEntries = [...zip.getEntries().sort(sortEntries)];
+
+    const entry = zipEntries[image];
+
+    let img = await sharp(entry.getData());
+
+    const meta = await img.metadata();
+    let w = width;
+    if (+width < 0) {
+      w = meta.width - left;
+    }
+
+    let h = height;
+    if (+height < 0) {
+      h = meta.height - top;
+    }
+
+    img = await img.extract({
+      top: top,
+      left: left,
+      width: w,
+      height: h,
+    });
+
+    zip.addFile(entry.name, await img.toBuffer());
+    zip.writeZip(file.Path);
+  }
+  await sendMessage({ text: `Finish Cropping ${files.length} Files` });
+};
