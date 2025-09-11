@@ -151,6 +151,4 @@ export const validAltName = (v) => {
 
   return fixAltName(parts);
 };
-
-export const getEvent = (e) => (e.touches ? e.touches[0] : e);
 //–

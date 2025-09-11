@@ -1,4 +1,4 @@
-import { getEvent } from "@share/utils";
+import { getEvent } from "src/utils";
 
 let drag = false;
 let touching = false;
@@ -48,7 +48,6 @@ export const onMove = (e) => {
     moveY.dir = pageY - top - point.y;
     moveY.dis = Math.abs(moveY.dir);
     moveX.dis = Math.abs(moveX.dir);
-
     drag = true;
   }
 };

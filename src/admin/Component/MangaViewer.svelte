@@ -33,6 +33,8 @@
   let nameRef;
   let bottomBarRef;
   let toggleControls = true;
+  let touchEvent = true;
+  let touchPoint = { x: 0, y: 0 };
 
   let state = {
     jumping: false,
@@ -213,19 +215,6 @@
     container.focus();
   };
 
-  let nameTimeout;
-  const toggleName = () => {
-    if (isFullScreen && nameRef) {
-      nameRef.style.opacity = 1;
-      nameRef.style.transition = "";
-      clearTimeout(nameTimeout);
-      nameTimeout = setTimeout(() => {
-        nameRef.style.transition = "3.5s opacity";
-        nameRef.style.opacity = 0;
-      }, 3000);
-    }
-  };
-
   const onDisconnect = () => {
     isLoading = false;
     jumping = false;
@@ -255,6 +244,21 @@
     }
   };
 
+  let nameTimeout;
+  const toggleName = () => {
+    if (isFullScreen && nameRef) {
+      nameRef.style.opacity = 1;
+      nameRef.style.transition = "";
+      clearTimeout(nameTimeout);
+      nameTimeout = setTimeout(() => {
+        if (isFullScreen) {
+          nameRef.style.transition = "3.5s opacity";
+          nameRef.style.opacity = 0;
+        }
+      }, 3000);
+    }
+  };
+
   const onToggleFullscreen = () => {
     isFullScreen = !isFullScreen;
 
@@ -264,6 +268,49 @@
       bottomBarRef.style.bottom = "0px";
       toggleControls = true;
     }
+
+    toggleName();
+  };
+
+  export const onEventEnd = (e) => {
+    const img = e.target.querySelector("img:first-child");
+    if (img) {
+      const rect = e.target.getBoundingClientRect();
+
+      // Calculate X coordinate relative to the scroll area's content
+      const x = e.clientX - rect.left;
+
+      // Calculate Y coordinate relative to the scroll area's content
+      const y = e.clientY - rect.top;
+
+      touchPoint.y = parseInt(((y + e.target.scrollTop) / img.offsetHeight) * img.naturalHeight);
+      touchPoint.x = parseInt(((x + e.target.scrollLeft) / img.offsetWidth) * img.naturalWidth);
+    }
+  };
+
+  const touchEventEnabler = () => (touchEvent = !touchEvent);
+
+  const touchEventHandler = (e) => {
+    if (touchEvent) {
+      onEnd(e);
+    }
+  };
+
+  const eventList = [
+    { name: isMobile() ? "touchstart" : "mousedown", action: onStart },
+    { name: isMobile() ? "touchmove" : "mousemove", action: onMove },
+    { name: isMobile() ? "touchend" : "mouseup", action: touchEventHandler },
+  ];
+
+  const onEvents = () => {
+    for (let env of eventList) {
+      container.addEventListener(env.name, env.action);
+    }
+  };
+  const offEvents = () => {
+    for (let env of eventList) {
+      container.removeEventListener(env.name, env.action);
+    }
   };
 
   onMount(() => {
@@ -272,13 +319,12 @@
     socket.on("disconnect", onDisconnect);
 
     document.addEventListener("fullscreenchange", onToggleFullscreen);
-
-    container.addEventListener(isMobile() ? "touchstart" : "mousedown", onStart, { passive: true });
-    container.addEventListener(isMobile() ? "touchmove" : "mousemove", onMove, { passive: true });
-    container.addEventListener(isMobile() ? "touchend" : "mouseup", onEnd, { passive: true });
+    offEvents();
+    onEvents();
 
     return () => {
       document.removeEventListener("fullscreenchange", onToggleFullscreen);
+      offEvents();
       socket.off("disconnect", onDisconnect);
       socket.off("zip-data", onImageCount);
       socket.off("image-loaded", onImageData);
@@ -304,13 +350,17 @@
       PageObserver(true, 100);
     }, 100);
   }
-  $: toggleName(isFullScreen && file.Id);
+  $: toggleName(file.Id);
 </script>
 
 <div class="viewer" class:hidden={!files.length} class:isFullScreen class:webtoon={!mangaDir}>
   <Dialog bind:ref={modalRef} cancel={hide} btnOk="" btnCancer="" keydown={onkeydown} canDrag={true}>
-    <span bind:this={nameRef} slot="modal-header" class="f-name"><span>{file.Name}</span></span>
-    <div bind:this={container} class="manga-container" tabindex="-1">
+    <span bind:this={nameRef} slot="modal-header" class="f-name">
+      <span class="touch-icon" on:click={touchEventEnabler}>&#x1F447;</span>
+      <span>{file.Name}</span>
+      <span class="touch-pos">{touchPoint.x}x{touchPoint.y}</span>
+    </span>
+    <div bind:this={container} class="manga-container" tabindex="-1" on:click={onEventEnd}>
       {#if mangaDir}
         {#each Array(data.total).fill(null) as _, i}
           <img
@@ -396,6 +446,21 @@
     white-space: nowrap;
     overflow: hidden;
     padding: 0 5px;
+  }
+  .touch-icon {
+    position: absolute;
+    left: 0px;
+    width: 35px;
+    cursor: pointer;
+  }
+  .touch-pos {
+    position: absolute;
+    right: 5px;
+    background-color: black;
+    padding: 0 5px;
+  }
+  .touch-icon:active {
+    font-size: 1.1rem;
   }
 
   .viewer.isFullScreen .f-name {
@@ -643,8 +708,8 @@
   }
   @media screen and (max-width: 600px) {
     .viewer :global(.modal) {
-      height: 490px;
-      width: 340px;
+      height: 580px;
+      width: calc(100% - 10px);
     }
     .close,
     .btn-fullscreen {

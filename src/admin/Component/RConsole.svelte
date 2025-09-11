@@ -5,9 +5,8 @@
   import apiUtils from "src/apiUtils";
   import VirtualList from "svelte-tiny-virtual-list";
   import { MessageStore } from "../Store/MessageStore";
-  import { getEvent } from "@share/utils";
+  import { getEvent } from "src/utils";
 
-  let ref;
   let items = [];
   let toggle = true;
   let update = false;

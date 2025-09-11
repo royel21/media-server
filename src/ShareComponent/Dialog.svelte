@@ -1,7 +1,7 @@
 <script>
+  import { getEvent } from "src/utils";
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
-  import { getEvent } from "@share/utils";
 
   const func = () => {};
 

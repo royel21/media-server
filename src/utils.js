@@ -9,3 +9,5 @@ export const formatSize = (size) => {
 
   return (size / 1024 / 1024).toFixed(2) + "GB";
 };
+
+export const getEvent = (e) => (e.touches ? e.touches[0] : e) || {};

@@ -121,11 +121,13 @@
 
   let tout;
   const hideControls = () => {
-    if (isFullscreen) {
+    if (isFullscreen && controls) {
       controls.style.bottom = 0;
       clearTimeout(tout);
       tout = setTimeout(() => {
-        controls.style.bottom = -controls.offsetHeight + "px";
+        if (isFullscreen) {
+          controls.style.bottom = -controls.offsetHeight + "px";
+        }
       }, 2500);
     }
   };
