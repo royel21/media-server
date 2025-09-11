@@ -115,7 +115,6 @@ export const delImageZip = async ({ files, removeList }) => {
     const zip = new AdmZip(file.Path);
 
     const list = file.removeList || removeList;
-    console.log(list);
     if (!list) {
       console.log("continue");
       continue;

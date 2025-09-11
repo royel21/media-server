@@ -354,7 +354,7 @@
 </script>
 
 <div class="viewer" class:hidden={!files.length} class:isFullScreen class:webtoon={!mangaDir}>
-  <Dialog bind:ref={modalRef} cancel={hide} btnOk="" btnCancer="" keydown={onkeydown} canDrag={true}>
+  <Dialog bind:ref={modalRef} cancel={hide} btnOk="" btnCancer="" background={false} keydown={onkeydown} canDrag={true}>
     <span bind:this={nameRef} slot="modal-header" class="f-name">
       <span class="touch-icon" on:click={touchEventEnabler}>&#x1F447;</span>
       <span>{file.Name}</span>
