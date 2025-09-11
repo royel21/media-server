@@ -6,14 +6,18 @@
   export let hide;
   export let files;
 
-  let item = { removeList: [], files: files.map((f) => ({ ...f })) };
-  const confirm = () => acept(item);
+  let item = { removeList: "", files: files.map((f) => ({ ...f })) };
+  const confirm = () => {
+    hide();
+    acept(item);
+  };
+  const style = "text-align: center;";
 </script>
 
 <Dialog cancel={hide} {confirm} canDrag={true}>
   <h4 slot="modal-header">Delete Images From Selected Zips</h4>
   <div class="dir-list" slot="modal-body">
-    <TextAreaInput label="Remove List For All Files" key="removeList" {item} rows={1} paste={false} />
+    <TextAreaInput label="Remove List For All Files" key="removeList" {item} rows={1} paste={false} {style} />
     <h4>Remove Per File</h4>
     <div class="file-list">
       <ul class="list">

@@ -114,8 +114,15 @@ export const delImageZip = async ({ files, removeList }) => {
   for (const file of files) {
     const zip = new AdmZip(file.Path);
 
+    const list = file.removeList || removeList;
+    console.log(list);
+    if (!list) {
+      console.log("continue");
+      continue;
+    }
+
     let zipEntries = [...zip.getEntries().sort(sortEntries)];
-    let toRemove = (file.removeList || removeList).split(",");
+    let toRemove = list.split(",");
 
     for (const i of toRemove) {
       const entry = zipEntries[+i];
@@ -171,7 +178,7 @@ export const cropImageInZip = async ({ files, image, top, left, width, height })
     zip.addFile(entry.name, await img.toBuffer());
 
     const name = path.basename(file.Name).replace(".zip", "");
-    zip.writeZip(path.join(basePath, name + "-crop.zip"));
+    zip.writeZip(path.join(basePath, name + "-cropped.zip"));
   }
   await sendMessage({ text: `Finish Cropping ${files.length} Files` });
   await sendMessage({ combining: true }, "files-info");

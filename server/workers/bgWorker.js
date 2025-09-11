@@ -71,3 +71,8 @@ process.on("message", (work) => {
   works.pendding.push(work);
   if (!works.isWorking) startToWork();
 });
+
+process.on("uncaughtException", async (error) => {
+  await sendMessage({ isWorking: false }, "bg-worker-state");
+  process.exit();
+});

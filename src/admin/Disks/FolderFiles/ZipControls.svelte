@@ -2,7 +2,6 @@
   import Icons from "src/icons/Icons.svelte";
   import Confirm from "src/admin/Component/Confirm.svelte";
 
-  import { videoRegex } from "src/admin/Store/FilesStore";
   import { onMount } from "svelte";
   import DelImagesModal from "./DelImagesModal.svelte";
   import CropImagesModal from "./CropImagesModal.svelte";

@@ -12,6 +12,8 @@ import os from "os";
 
 import { getFileType } from "#server/Downloader/utils";
 import { createDefaultImageDirs } from "../utils.js";
+import { ZipCover } from "./ThumbnailUtils.js";
+import file from "#server/models/file";
 
 let folders = [];
 const homedir = os.homedir();
@@ -19,7 +21,7 @@ const homedir = os.homedir();
 Date.prototype.Compare = function (d) {
   d = new Date(d);
   if (d instanceof Date) {
-    return this.getTime() == d.getTime();
+    return this.toString() === d.toString();
   }
 };
 
@@ -139,7 +141,7 @@ const scanFolder = async (curfolder, files, isFolder) => {
       await folder.update({ CreatedAt: new Date(LastModified) });
     }
 
-    folderFiles = await folder.Files;
+    folderFiles = folder.Files;
   } else if (filteredFiles.length) {
     try {
       folder = await createFolder(curfolder, filteredFiles);
@@ -172,8 +174,12 @@ const scanFolder = async (curfolder, files, isFolder) => {
           Size,
           CreatedAt: f.LastModified,
         });
-      } else if (found && found.Size !== Size) {
-        await found.update({ Size });
+      } else if (found && !found.CreatedAt.Compare(f.LastModified)) {
+        const thumbPath = path.join(CoverPath, getFileType(folder), folder.Name);
+        const coverPath = path.join(thumbPath, found.Name + ".jpg");
+        const Duration = await ZipCover(path.join(folder.Path, found.Name), coverPath);
+
+        await found.update({ Size, Duration, CreatedAt: f.LastModified });
       }
     }
   }
@@ -207,7 +213,7 @@ const getFolders = async (id, isFolder) => {
     order: ["Path"],
     attributes: ["Id", "Name", "FileCount", "CreatedAt", "FilesType", "Path", "Scanning", "Type"],
     where: isFolder ? { Id: id } : { DirectoryId: id },
-    include: { model: db.file, attributes: ["Id", "Name", "Type", "Duration", "FolderId"] },
+    include: { model: db.file, attributes: ["Id", "Name", "Type", "Duration", "FolderId", "Size", "CreatedAt"] },
   });
 };
 
