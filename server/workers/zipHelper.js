@@ -116,7 +116,6 @@ export const delImageZip = async ({ files, removeList }) => {
 
     const list = file.removeList || removeList;
     if (!list) {
-      console.log("continue");
       continue;
     }
 
@@ -124,7 +123,7 @@ export const delImageZip = async ({ files, removeList }) => {
     let toRemove = list.split(",");
 
     for (const i of toRemove) {
-      const entry = zipEntries[+i];
+      const entry = zipEntries[+i - 1];
       if (entry) {
         zip.deleteFile(entry);
       }
@@ -146,38 +145,47 @@ export const cropImageInZip = async ({ files, image, top, left, width, height })
 
   await sendMessage({ text: `Cropping ${files.length} Files` });
   for (const file of files) {
-    const zip = new AdmZip(file.Path);
+    try {
+      const zip = new AdmZip(file.Path);
 
-    await sendMessage({ text: `Croping ${file.Path}` });
+      await sendMessage({ text: `Croping ${file.Path}` });
 
-    let zipEntries = [...zip.getEntries().sort(sortEntries)];
+      let zipEntries = [...zip.getEntries().sort(sortEntries)];
 
-    const entry = zipEntries[image];
+      const entry = zipEntries[image];
 
-    let img = await sharp(entry.getData());
+      let img = await sharp(entry.getData());
 
-    const meta = await img.metadata();
-    let w = width;
-    if (+width < 0) {
-      w = meta.width - left;
+      const meta = await img.metadata();
+      let w = width;
+      if (+width < 0) {
+        w = meta.width - left;
+      }
+
+      let h = height;
+      if (+height < 0) {
+        h = meta.height - top;
+      }
+
+      if (h < 0) {
+        await sendMessage({ text: `Error Cropping Height ${h} can't be negative`, color: "red" });
+        continue;
+      }
+
+      img = await img.extract({
+        top: top,
+        left: left,
+        width: w,
+        height: h,
+      });
+
+      zip.addFile(entry.name, await img.toBuffer());
+
+      const name = path.basename(file.Name).replace(".zip", "");
+      zip.writeZip(path.join(basePath, name + "-cropped.zip"));
+    } catch (error) {
+      await sendMessage({ text: `Error Cropping ${file.Name} ${error.toString()}` });
     }
-
-    let h = height;
-    if (+height < 0) {
-      h = meta.height - top;
-    }
-
-    img = await img.extract({
-      top: top,
-      left: left,
-      width: w,
-      height: h,
-    });
-
-    zip.addFile(entry.name, await img.toBuffer());
-
-    const name = path.basename(file.Name).replace(".zip", "");
-    zip.writeZip(path.join(basePath, name + "-cropped.zip"));
   }
   await sendMessage({ text: `Finish Cropping ${files.length} Files` });
   await sendMessage({ combining: true }, "files-info");
