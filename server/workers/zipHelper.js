@@ -152,7 +152,7 @@ export const cropImageInZip = async ({ files, image, top, left, width, height })
 
       let zipEntries = [...zip.getEntries().sort(sortEntries)];
 
-      const entry = zipEntries[image];
+      const entry = zipEntries[+image - 1];
 
       let img = await sharp(entry.getData());
 
