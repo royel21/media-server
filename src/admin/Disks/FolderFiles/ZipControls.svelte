@@ -93,10 +93,10 @@
     <Icons name="zip" box="0 0 384 512" color="darkgray" />
     <input type="checkbox" id="check-menu" bind:this={menuCheck} />
     <div class="v-menu">
-      <div id="film2" on:click={onExtraZip}>Extract Zip</div>
-      <div id="video-fix" on:click={onCombined}>Combined Zip</div>
-      <div id="video-fix" on:click={onShowDelImages}>Del Image From Zip</div>
-      <div id="video-fix" on:click={onShowCropImages}>Crop Image From Zip</div>
+      <div id="film2" on:click={onExtraZip}>Extract</div>
+      <div id="video-fix" on:click={onCombined}>Combined</div>
+      <div id="video-fix" on:click={onShowCropImages}>Crop Image</div>
+      <div id="video-fix" on:click={onShowDelImages}>Delete Image</div>
     </div>
   </label>
 {/if}

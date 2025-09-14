@@ -2,7 +2,7 @@
   import { afterUpdate, onMount } from "svelte";
   import Dialog from "src/ShareComponent/Dialog.svelte";
   import { setGesture } from "src/ShareComponent/VideoTouch.js";
-  import { formatTime } from "./util";
+  import { formatTime, lockScreen, unlockScreen } from "./util";
   import { map } from "../Utils";
   import Icons from "src/icons/Icons.svelte";
   import Slider from "src/ShareComponent/Slider.svelte";
@@ -108,14 +108,15 @@
   };
 
   const onToggleFullscreen = async () => {
-    isFullscreen = document.fullscreenElement !== null;
-    if (isFullscreen) {
-      hideControls();
-      if (isMobile()) {
-        await window.screen.orientation?.lock("landscape");
+    if (file.Id) {
+      isFullscreen = document.fullscreenElement !== null;
+      if (isFullscreen) {
+        hideControls();
+        lockScreen("landscape");
+      } else if (controls) {
+        controls.style.bottom = 0;
+        unlockScreen("landscape");
       }
-    } else if (controls) {
-      controls.style.bottom = 0;
     }
   };
 

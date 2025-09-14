@@ -5,15 +5,13 @@
   import DiskInfo from "./DiskInfo.svelte";
   import Tabs from "src/ShareComponent/Tabs.svelte";
   import { showConsoleStore } from "../Store/ConsoleStore";
-  import Files from "./FilesList/Files.svelte";
 
   export let tab = "tab-1";
 
   const tabs = [
     { id: "tab-1", name: "Directories", icon: "folder", component: Directories },
     { id: "tab-2", name: "Server", icon: "pc", component: Tree },
-    { id: "tab-3", name: "Files", icon: "files", component: Files },
-    { id: "tab-4", name: "Disk Info", icon: "hdd", component: DiskInfo },
+    { id: "tab-3", name: "Disk Info", icon: "hdd", component: DiskInfo },
   ];
 
   $: {

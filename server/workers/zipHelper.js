@@ -98,7 +98,7 @@ export const combinedZip = async ({ files }) => {
     }
     await zipfile.close();
   }
-  zip.writeZip(path.join(basePath, name + "-combined.zip"));
+  zip.writeZip(path.join(basePath, name + "-cmb.zip"));
   await sendMessage({ text: `Finish Combining - ${basePath}`, combining: true });
   await sendMessage({ combining: true }, "files-info");
 };
@@ -112,24 +112,38 @@ export const delImageZip = async ({ files, removeList }) => {
   await sendMessage({ text: `Removing Images From Zip` });
 
   for (const file of files) {
-    const zip = new AdmZip(file.Path);
+    try {
+      const zip = new AdmZip(file.Path);
 
-    const list = file.removeList || removeList;
-    if (!list) {
-      continue;
-    }
-
-    let zipEntries = [...zip.getEntries().sort(sortEntries)];
-    let toRemove = list.split(",");
-
-    for (const i of toRemove) {
-      const entry = zipEntries[+i - 1];
-      if (entry) {
-        zip.deleteFile(entry);
+      const list = file?.removeList || removeList;
+      console.log(list);
+      if (!list?.length) {
+        continue;
       }
-    }
 
-    zip.writeZip(file.Path);
+      let zipEntries = [...zip.getEntries().sort(sortEntries)];
+      let toRemove = list.split(",");
+
+      for (const i of toRemove) {
+        let index = parseInt(i);
+
+        if (index > 0) {
+          index = index - 1;
+        }
+
+        let entry = zipEntries[index];
+        if (+i === -1) {
+          entry = zipEntries[zipEntries.length + index];
+        }
+        if (entry) {
+          zip.deleteFile(entry);
+        }
+      }
+
+      zip.writeZip(file.Path);
+    } catch (error) {
+      await sendMessage({ text: `Error While Removing Images From Zip ${error.toString()}`, color: "red" });
+    }
   }
 
   await sendMessage({ text: `Finish Removing Images From Zip` });
@@ -179,12 +193,15 @@ export const cropImageInZip = async ({ files, image, top, left, width, height })
         height: h,
       });
 
+      await img.toFile("./0.jpg");
+
       zip.addFile(entry.name, await img.toBuffer());
 
       const name = path.basename(file.Name).replace(".zip", "");
-      zip.writeZip(path.join(basePath, name + "-cropped.zip"));
+      zip.writeZip(path.join(basePath, name + "-c.zip"));
     } catch (error) {
-      await sendMessage({ text: `Error Cropping ${file.Name} ${error.toString()}` });
+      console.log(error);
+      await sendMessage({ text: `Error Cropping ${file.Name} ${error.toString()}`, color: "red" });
     }
   }
   await sendMessage({ text: `Finish Cropping ${files.length} Files` });

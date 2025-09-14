@@ -14,7 +14,8 @@
   export let onChange = (e) => {};
   export let min = Number.MIN_SAFE_INTEGER;
   export let max = Number.MAX_SAFE_INTEGER;
-  let ref;
+  export let ref;
+
   const handler = async () => {
     if (paste) {
       const text = await handlerPaste(item, key, sept, ref);

@@ -1,3 +1,5 @@
+import { isMobile } from "src/utils";
+
 const getImage = async () => {
   const item_list = await navigator.clipboard?.read();
   for (const item of item_list || []) {
@@ -69,4 +71,19 @@ export function formatTime(time) {
 
 export const getSecuences = (from, to) => {
   return [...Array(to - from + 1).keys()].map((a) => a + from);
+};
+
+//can be portrait or landscape
+export const lockScreen = async (type = "portrait") => {
+  if (isMobile() && document.fullscreenElement) {
+    try {
+      await window.screen.orientation?.lock("landscape");
+    } catch (error) {}
+  }
+};
+
+export const unlockScreen = async () => {
+  try {
+    await window.screen.orientation?.unlock();
+  } catch (error) {}
 };

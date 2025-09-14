@@ -154,8 +154,11 @@
     target.value = currentImg + 1;
   };
 
-  const jumpTop = ({ target }) => {
-    changePage(map(target.value - 1, 0, data.total - 1));
+  const jumpTop = ({ target, keyCode }) => {
+    console.log(keyCode);
+    if (keyCode === 13 && target.value) {
+      changePage(map(target.value - 1, 0, data.total - 1));
+    }
   };
 
   const onChangeFile = ({ target: { id } }) => {
@@ -273,18 +276,19 @@
   };
 
   export const onEventEnd = (e) => {
-    const img = e.target.querySelector("img:first-child");
+    const img = e.target.querySelectorAll("img")[currentImg];
     if (img) {
       const rect = e.target.getBoundingClientRect();
+      const imgRect = img.getBoundingClientRect();
 
-      // Calculate X coordinate relative to the scroll area's content
-      const x = e.clientX - rect.left;
+      // Calculate X coordinate relative to the element and scroll area's content
+      const x = e.clientX - rect.left + (rect.left - imgRect.left);
 
-      // Calculate Y coordinate relative to the scroll area's content
-      const y = e.clientY - rect.top;
+      // Calculate Y coordinate relative to the element and scroll area's content
+      const y = e.clientY - rect.top + (rect.top - imgRect.top);
 
-      touchPoint.y = parseInt(((y + e.target.scrollTop) / img.offsetHeight) * img.naturalHeight);
-      touchPoint.x = parseInt(((x + e.target.scrollLeft) / img.offsetWidth) * img.naturalWidth);
+      touchPoint.y = parseInt((y / img.offsetHeight) * img.naturalHeight);
+      touchPoint.x = parseInt((x / img.offsetWidth) * img.naturalWidth);
     }
   };
 
@@ -401,15 +405,14 @@
       </span>
       <span class="img-selector btn-play">
         <input
-          class="input"
+          class="form-control"
           type="number"
           min="1"
           max={data.total}
-          on:change={jumpTop}
           placeholder="{currentImg + 1}/{data.total}"
           on:focus={onSelectImg}
           on:blur={({ target }) => (target.value = "")}
-          on:keydown|stopPropagation
+          on:keydown|stopPropagation={jumpTop}
         />
       </span>
       <span id="next" class="btn-play" on:click={onChangeFile}>
@@ -640,9 +643,10 @@
   }
   .img-selector {
     position: relative;
-    top: -2px;
+    top: 1px;
+    height: 95%;
   }
-  .img-selector .input {
+  .img-selector .form-control {
     text-align: center;
     height: 92%;
   }

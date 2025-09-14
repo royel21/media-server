@@ -16,6 +16,7 @@
   import MangaViewer from "./Component/MangaViewer.svelte";
   import TextEditor from "./Component/TextEditor.svelte";
   import ImageViewer from "./Component/ImageViewer.svelte";
+  import LocalFileList from "./Component/LocalFileList.svelte";
 
   let logout = getContext("logout");
   let user = getContext("User");
@@ -112,6 +113,7 @@
     </span>
   </Navbar>
   <div class="content">
+    <LocalFileList />
     <Route path="/admin/folders/:dirid/:page/:filter" component={Folders} />
     <Route path="/admin/content-manager/:tab" component={DiskManager} />
     <Route path="/admin/downloads/:tab" component={DownloadManager} />
@@ -200,13 +202,16 @@
     }
     :global(body #menu li svg) {
       transform: scale(1.05);
+      right: 0;
     }
     :global(#menu li span) {
       margin-left: 7px;
     }
     #admin-label :global(svg) {
       transform: scale(1.2);
-      width: 45px;
+    }
+    :global(#menu li .icon-file) {
+      left: 0px;
     }
   }
 

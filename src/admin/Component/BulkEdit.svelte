@@ -7,6 +7,8 @@
   export let length;
   export let acept;
 
+  let firstInput;
+
   let item = {
     Regex: "",
     Replace: "",
@@ -25,9 +27,9 @@
   const onConfirm = () => acept(item);
 
   const onKeydown = (e) => {
-    if (e.keyCode === 13) {
-      e.stopPropagation();
+    if (e.keyCode === 9 && e.target.type === "radio") {
       e.preventDefault();
+      firstInput?.focus();
     }
   };
 </script>
@@ -35,20 +37,20 @@
 <div id="b-edit">
   <Dialog class="bulk-edit" cancel={hide} confirm={onConfirm} {errors}>
     <h4 slot="modal-header">Edit Name for <span>{length}</span> Files</h4>
-    <div class="dir-list" slot="modal-body">
-      <Input key="Replace" {item} on:keydown={onKeydown} />
-      <Input key="With" {item} on:keydown={onKeydown} />
+    <div class="dir-list" slot="modal-body" on:keydown={onKeydown}>
+      <Input bind:ref={firstInput} key="Replace" {item} focus={true} />
+      <Input key="With" {item} />
       <div class="input-control-group">
-        <Input label="Pre Add" key="PreAdd" {item} on:keydown={onKeydown} />
-        <Input label="Post Add" key="PostAdd" {item} on:keydown={onKeydown} />
+        <Input label="Pre Add" key="PreAdd" {item} />
+        <Input label="Post Add" key="PostAdd" {item} />
       </div>
       <div class="input-control-group">
-        <Input key="Secuence" {item} type="number" min="0" on:keydown={onKeydown} />
-        <Input key="After" {item} on:keydown={onKeydown} />
+        <Input key="Secuence" {item} type="number" min="0" />
+        <Input key="After" {item} />
       </div>
-      <Input key="Extension" {item} on:keydown={onKeydown} />
-      <Input key="ZeroPad" {item} on:keydown={onKeydown} />
-      <Input key="Regex" {item} on:keydown={onKeydown} />
+      <Input key="Extension" {item} />
+      <Input key="ZeroPad" {item} />
+      <Input key="Regex" {item} />
       <CheckBox key="Preserve" {item} />
       <div class="input-control">
         <div id="t-label" class="input-label">Case Type</div>
@@ -110,6 +112,24 @@
   .input input {
     margin-right: 5px;
   }
+
+  input[type="radio"] {
+    position: relative;
+  }
+
+  input[type="radio"]:focus:after {
+    position: absolute;
+    top: 5px;
+    left: 0;
+    content: " ";
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 2px 1px #22deff;
+  }
+
   @media screen and (max-width: 600px) {
     #b-edit :global(.modal-container .modal) {
       min-width: initial;

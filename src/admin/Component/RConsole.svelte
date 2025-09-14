@@ -78,13 +78,6 @@
     state.height = rconsole.offsetHeight;
   };
 
-  let getStycky = () => {
-    let styckies = [];
-    items.forEach((el, i) => {
-      if (el.important) styckies.push(i);
-    });
-  };
-
   const resetState = (e) => (state.dragge = false);
   const onMouseMove = (e) => {
     if (state.dragge) {

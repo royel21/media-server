@@ -6,7 +6,7 @@
   export let hide;
   export let files;
 
-  const temp = { image: 0, top: 0, left: 0, width: -1, height: -1 };
+  const temp = { image: 1, top: 0, left: 0, width: -1, height: -1 };
 
   const confirm = () => {
     hide();
@@ -15,7 +15,7 @@
 </script>
 
 <Dialog id="crop-modal" cancel={hide} {confirm} canDrag={true}>
-  <h4 slot="modal-header">Crop Image In Selected Zips</h4>
+  <h4 slot="modal-header">Crop Image In Selected Zip</h4>
   <div class="dir-list" slot="modal-body">
     <Input label="Img #" key="image" type="number" item={temp} paste={false} />
     <Input key="top" item={temp} type="number" paste={false} />

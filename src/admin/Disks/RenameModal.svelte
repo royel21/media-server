@@ -13,7 +13,9 @@
 
   const onConfirm = () => {
     errors = [];
-    if (data.Name === item.Name) {
+    let Name = item.Name + (extension ? extension : "");
+
+    if (data.Name === Name) {
       return errors.push("Name Equal");
     }
 
@@ -21,8 +23,6 @@
       errors.push(`${title} Name should't not have any of those Simbols`);
       return errors.push('\\ / : * " ? < > |');
     }
-
-    let Name = item.Name + (extension ? extension : "");
     acept({ folder: data, Name });
   };
 
@@ -42,6 +42,13 @@
     }
   };
 
+  const handleKey = (e) => {
+    if (e.keyCode === 13) {
+      onConfirm();
+      e.preventDefault();
+    }
+  };
+
   if (item.Name) {
     const parts = item.Name.match(/\.(mp4|mkv|avi|ogg|zip)$/i);
     if (parts) {
@@ -53,8 +60,8 @@
 
 <Dialog cancel={hide} confirm={onConfirm} {errors}>
   <h4 slot="modal-header">Rename {title}</h4>
-  <span id="f-rename" slot="modal-body">
-    <TextAreaInput label="New Name" key="Name" {item} focus={true} bind:ref={areaRef}>
+  <div id="f-rename" slot="modal-body">
+    <TextAreaInput label="New Name" key="Name" {item} focus={true} bind:ref={areaRef} on:keydown={handleKey}>
       <span class="pre-paste" slot="btn-left" on:click={prePaste} title="Paste To The Left">
         <Icons name="paste" color="black" />
       </span>
@@ -62,7 +69,7 @@
         <Icons name="paste" color="black" />
       </span>
     </TextAreaInput>
-  </span>
+  </div>
 </Dialog>
 
 <style>

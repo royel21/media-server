@@ -11,11 +11,16 @@
     ref.checked = !item[key];
     ref.dispatchEvent(new Event("change"));
   };
+  const handlerKey = ({ keyCode }) => {
+    if (keyCode === 13 || keyCode === 32) {
+      onClick();
+    }
+  };
 </script>
 
 <div class={"check-box input-control " + key}>
   <span class="input-label" on:click={onClick}>{label || key}</span>
-  <label class="input">
+  <label class="input" tabindex="0" on:keydown={handlerKey}>
     <Icons name={item[key] ? "check" : "times"} color="black" />
     <input name={key} type="checkbox" bind:this={ref} bind:checked={item[key]} on:change={onChange} />
   </label>

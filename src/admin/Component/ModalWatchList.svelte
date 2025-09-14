@@ -1,6 +1,6 @@
 <script>
   import { getContext, onMount } from "svelte";
-  import Dialog from "../../../ShareComponent/Dialog.svelte";
+  import Dialog from "../../ShareComponent/Dialog.svelte";
   import apiUtils from "src/apiUtils";
   import Icons from "src/icons/Icons.svelte";
 

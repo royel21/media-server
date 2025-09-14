@@ -99,7 +99,6 @@
   let clazz = "";
   export { clazz as class };
 
-  let fill = color || "white";
   let icon = icons[name];
 
   $: icon = icons[name];

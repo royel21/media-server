@@ -38,6 +38,7 @@
     bind:value={file[key]}
     on:change={onChange}
     on:blur={onChange}
+    on:keydown
     {disabled}
     class:textwrap={!textwrap}
   />
