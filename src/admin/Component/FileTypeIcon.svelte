@@ -7,30 +7,23 @@
 
   const handleClick = () => {
     setFiles({ file, files });
+    console.log(file);
   };
 </script>
 
-{#if videoRegex.test(file.Name)}
-  <span class="f-play" on:click|stopPropagation={handleClick} title="Play Video">
+<span class="f-play" on:click|stopPropagation={handleClick} title="Open Viewer">
+  {#if videoRegex.test(file.Name)}
     <Icons name="play" box="0 0 512 512" color="deepskyblue" />
-  </span>
-{:else if MangaRegex.test(file.Name)}
-  <span class="f-play" on:click|stopPropagation={handleClick}>
+  {:else if MangaRegex.test(file.Name)}
     <Icons name="book" box="0 0 512 512" color="red" />
-  </span>
-{:else if TextRex.test(file.Name)}
-  <span class="f-play" on:click|stopPropagation={handleClick}>
+  {:else if TextRex.test(file.Name)}
     <Icons name="text" box="0 0 384 512" color="antiquewhite" />
-  </span>
-{:else if ImageRegex.test(file.Name)}
-  <span class="f-play" on:click|stopPropagation={handleClick}>
+  {:else if ImageRegex.test(file.Name)}
     <Icons name="image" box="0 0 512 512" color="cyan" />
-  </span>
-{:else}
-  <span class="f-play">
+  {:else}
     <Icons name="file" box="0 0 512 512" color={fileColor} />
-  </span>
-{/if}
+  {/if}
+</span>
 
 <style>
   .f-play {

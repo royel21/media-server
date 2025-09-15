@@ -1,6 +1,6 @@
 <script>
   import { onMount, getContext } from "svelte";
-  import { calRows, validateCheck } from "../Utils";
+  import { calRows, mapFilePath, validateCheck } from "../Utils";
 
   import ItemList from "./ItemList.svelte";
   import Modal from "./Modal.svelte";
@@ -14,6 +14,8 @@
   const socket = getContext("socket");
 
   export let folderId;
+  export let Path;
+
   let oldFolder;
   let mounted = false;
 
@@ -33,13 +35,21 @@
 
   const dateFormat = { year: "numeric", month: "short", day: "numeric" };
 
+  const mapItem = (item) => {
+    const sept = Path?.match(/\\|\//);
+    if (sept) {
+      item.Path = `${Path}${sept[0]}${item.Name}`;
+    }
+    return item;
+  };
+
   const loadFiles = async (pg) => {
     if (folderId) {
       rows = calRows("#l-files");
       let data = await apiUtils.admin(["folders", "files", folderId, pg, rows, filter]);
 
       if (data.items) {
-        items = data.items;
+        items = data.items.map(mapItem);
         totalPages = data.totalPages;
         totalItems = data.totalItems;
         page = pg;
@@ -214,12 +224,12 @@
   $: if (removeList && page) isChecked = validateCheck(removeList, items);
 </script>
 
-{#if showModal && file?.Name}
-  <Modal {file} {modalType} {acept} hide={hideModal} />
-{/if}
-
 {#if showEdit}
-  <BulkEdit length={items.length} hide={hideBulkRename} acept={onBulkRename} />
+  {#if items.length === 1}
+    <Modal file={items[0]} {modalType} {acept} hide={hideModal} />
+  {:else}
+    <BulkEdit length={items.length} hide={hideBulkRename} acept={onBulkRename} />
+  {/if}
 {/if}
 
 <ItemList

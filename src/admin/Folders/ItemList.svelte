@@ -4,6 +4,7 @@
   import Filter from "src/ShareComponent/Filter.svelte";
   import Pagination from "src/ShareComponent/Pagination.svelte";
   import CCheckbox from "../Component/CCheckbox.svelte";
+  import FileTypeIcon from "../Component/FileTypeIcon.svelte";
   export let id = "";
   export let filter;
   export let title;
@@ -44,7 +45,7 @@
       {#if items.length < 1}
         <li class="list-group-item empty-list">{`Not ${title} Found`}</li>
       {:else}
-        {#each items as { Id, Name, Type, Status, FilesType, Scanning }}
+        {#each items as { Id, Name, Type, Status, FilesType, Scanning, Path }}
           <li
             id={Id}
             class="list-group-item"
@@ -60,6 +61,7 @@
               <span class="sync" on:click={iconClick}>
                 <Icons name="sync" box="0 0 512 512" class={scanning.includes(Id) || Scanning ? "icon-spin" : ""} />
               </span>
+              <span class="trash" on:click={iconClick}><Icons name="trash" box="0 0 420 512" /></span>
               {#if showGenres}
                 <span class="g-list">
                   {#if /manga/.test(FilesType)}
@@ -78,9 +80,8 @@
               {/if}
             {:else}
               <CCheckbox on:change isChecked={removeList.includes(Id)} />
-              <span class="edit" on:click={iconClick}><Icons name="edit" /></span>
+              <FileTypeIcon file={{ Id, Name, Path }} files={items} />
             {/if}
-            <span class="trash" on:click={iconClick}><Icons name="trash" box="0 0 420 512" /></span>
             {Name}
             <slot name="item-slot" item={Id} />
           </li>

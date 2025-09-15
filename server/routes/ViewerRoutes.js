@@ -61,6 +61,11 @@ export const streaming = (file, req, res) => {
     const start = Number(range.replace(/\D/g, ""));
     const end = Math.min(start + CHUNK_SIZE, videoSize - 1);
     const contentLength = end - start + 1;
+
+    if (end < 0) {
+      return res.status(400).send("Video Ending Error");
+    }
+
     const headers = {
       "Content-Range": `bytes ${start}-${end}/${videoSize}`,
       "Accept-Ranges": "bytes",

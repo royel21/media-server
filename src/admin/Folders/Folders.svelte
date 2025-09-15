@@ -6,16 +6,18 @@
   export let filter;
   export let folderId = "";
   export let dirid;
+  let Path = "";
 
   const folderid = ({ detail }) => {
     folderId = detail?.Id || "";
+    Path = detail?.Path;
   };
 </script>
 
 <div class="card bg-dark admin-manager has-files">
   <div class="rows has-files">
     <FolderList on:folderid={folderid} page={parseInt(page) || 1} {dirid} {folderId} {filter} />
-    <FolderData {folderId} />
+    <FolderData {folderId} {Path} />
   </div>
 </div>
 

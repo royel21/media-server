@@ -9,6 +9,7 @@
   import Icons from "src/icons/Icons.svelte";
   import { formatSize } from "src/utils";
   import FileTypeIcon from "../Component/FileTypeIcon.svelte";
+  import { mapFilePath } from "../Utils";
 
   const socket = getContext("socket");
   export let page = 1;
@@ -25,11 +26,6 @@
   let rows;
   let isMounted = true;
 
-  const mapFile = (f) => {
-    let Path = `${f.Path}${/^\//.test(f.Path) ? "/" : "\\"}${f.Name}`;
-    return { ...f, Path };
-  };
-
   const calRows = () => {
     let container = document.querySelector(".list-container") || {};
     const tr = document.querySelector("tbody tr") || {};
@@ -42,7 +38,7 @@
 
     if (data.files && isMounted) {
       items = data.files;
-      files = data.files.map(mapFile);
+      files = data.files.map(mapFilePath);
       totalPages = data.totalPages || 0;
       totalItems = data.totalItems || 0;
       currentPage = +pg;
@@ -152,7 +148,7 @@
               <td>
                 <span><Icons name="edit" /></span>
                 <span><Icons name="trash" /></span>
-                <FileTypeIcon file={mapFile(file)} {files} />
+                <FileTypeIcon file={mapFilePath(file)} {files} />
               </td>
               <td>{file.Name}</td>
               <td>{file.Path}</td>

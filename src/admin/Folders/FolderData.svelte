@@ -5,6 +5,7 @@
 
   let tab = "tab-1";
   export let folderId;
+  export let Path;
 
   const components = {
     "tab-1": FolderDetails,
@@ -29,7 +30,7 @@
       </label>
     </div>
   </div>
-  <svelte:component this={components[tab]} {folderId} />
+  <svelte:component this={components[tab]} {folderId} {Path} />
 </div>
 
 <style>

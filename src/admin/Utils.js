@@ -83,3 +83,8 @@ export const getSize3 = (file) => {
   }
   return size + type;
 };
+
+export const mapFilePath = (f) => {
+  let Path = `${f.Path}${/^\//.test(f.Path) ? "/" : "\\"}${f.Name}`;
+  return { ...f, Path };
+};

@@ -8,7 +8,6 @@
   import Slider from "src/ShareComponent/Slider.svelte";
   import { FilesStore, videoRegex } from "../Store/FilesStore";
   import { setfullscreen } from "src/user/Pages/pagesUtils";
-  import { isMobile } from "src/utils";
 
   const VOLKEY = "admin-vol";
   const SEEKLEFT = 37;
@@ -223,7 +222,6 @@
           <span class="close btn-play" on:click={() => hide()}>
             <Icons name="timescircle" />
           </span>
-
           <span class="fit v-fit" on:click={changeFit}>
             <Icons name="arrows" box="0 0 512 512" />
           </span>
@@ -313,7 +311,7 @@
   .admin-vol {
     position: absolute;
     right: 5px;
-    bottom: 2px;
+    bottom: 6px;
     user-select: none;
   }
 
@@ -323,7 +321,7 @@
   }
   .fit {
     position: absolute;
-    bottom: 1px;
+    bottom: 4px;
     right: 65px;
   }
 
