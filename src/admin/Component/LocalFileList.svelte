@@ -136,13 +136,15 @@
       <div class="controls" slot="modal-header">
         <span class="show-list" on:click={() => (showWatchList = true)}><Icons name="list" box="0 0 512 512" /></span>
         <Filter on:filter={applyFilter} />
-        <span class="bagde">{pager.totalItems}</span>
-        <span class="hide-list" on:click={hide}>
-          <Icons name="times" color="white" />
-        </span>
+        <div class="right-controls">
+          <span class="bagde">{pager.totalItems}</span>
+          <span class="hide-list" on:click={hide}>
+            <Icons name="times" color="white" />
+          </span>
+        </div>
       </div>
       <div id="tag-list" class="file-list" slot="modal-footer">
-        <div class="list-container" class:full={!pager.totalPages}>
+        <div class="list-container" class:full={pager.totalPages < 2}>
           <ul class="list-group text-dark" on:mousemove={onShowPath} on:mouseleave={() => (showPath = null)}>
             {#if items.length < 1}
               <li class="list-group-item empty-list">Not Files Found</li>
@@ -174,8 +176,9 @@
 {/if}
 
 <style>
-  .diag-files :global(.modal-container) {
-    z-index: 100;
+  .diag-files {
+    position: relative;
+    z-index: 991;
   }
   .controls {
     position: relative;
@@ -186,6 +189,22 @@
   }
   .controls > span {
     margin: 0 4px;
+  }
+  .controls > span:first-child {
+    margin: 0 5px;
+    background: rgba(0, 123, 255, 0.95);
+    padding: 1px 3px;
+    border-radius: 0.25rem;
+  }
+  .controls :global(#filter-control) {
+    flex-grow: 1;
+    max-width: initial;
+  }
+  .right-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 5px;
   }
   .show-flist {
     position: absolute;
@@ -265,15 +284,11 @@
   #tag-list li :global(svg) {
     pointer-events: none;
   }
-  #tag-list :global(#filter-control) {
-    flex-grow: 1;
-    max-width: initial;
-  }
   .bagde {
     text-align: center;
     min-width: max-content;
     margin-left: 5px;
-    padding: 3px;
+    padding: 2px 3px;
     border-radius: 0.25rem;
     background-color: #2196f3;
     min-width: 30px;
