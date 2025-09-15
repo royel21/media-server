@@ -181,7 +181,7 @@
     min-height: 120px;
     max-height: calc(100% - 205px);
     background-color: transparent;
-    z-index: 1;
+    z-index: 998;
   }
 
   .hide-dragg {

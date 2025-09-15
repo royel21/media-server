@@ -389,7 +389,6 @@
   }
   .col {
     position: relative;
-    z-index: 110;
   }
   .col :global(.loading) {
     position: absolute;
