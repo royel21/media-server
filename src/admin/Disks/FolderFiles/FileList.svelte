@@ -262,7 +262,7 @@
 
   $: isChecked = filtered.length && selectedList.length === filtered.length;
 
-  const applyFilter = ({ detail }) => (filter = detail);
+  const applyFilter = ({ detail }) => (filter = decodeURIComponent(detail));
 
   $: {
     filtered = files.filter(filterFunc(filter)).sort(sorter[sortBy]);

@@ -7,7 +7,6 @@
 
   const handleClick = () => {
     setFiles({ file, files });
-    console.log(file);
   };
 </script>
 

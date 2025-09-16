@@ -32,6 +32,7 @@
   let removeList = [];
   let isChecked = false;
   let rows = 0;
+  let selectedList = [];
 
   const dateFormat = { year: "numeric", month: "short", day: "numeric" };
 
@@ -95,7 +96,16 @@
     }
   };
 
-  const onBulkEdit = () => (showEdit = true);
+  const onBulkEdit = () => {
+    selectedList = items.filter((i) => removeList.includes(i.Id));
+
+    if (removeList.length === 1) {
+      modalType = { title: "Edit File", Del: false, isFile: true };
+      showModal = true;
+    } else {
+      showEdit = true;
+    }
+  };
 
   const scanFinish = (data) => {
     if (data.Id === folderId) {
@@ -128,16 +138,7 @@
     if (el.tagName === "SPAN") {
       file = items.find((f) => f.Id === el.closest("li").id);
       if (file) {
-        let cList = el.classList.toString();
-        //Edit button was clicked
-        if (/edit/gi.test(cList)) {
-          modalType = { title: "Edit File", Del: false, isFile: true };
-        }
         //Delete button was clicked
-        if (/trash/gi.test(cList)) {
-          modalType = { title: "Remove File", Del: true, isFile: true };
-        }
-        showModal = true;
       }
     }
   };
@@ -148,6 +149,7 @@
     } else {
       socket.emit("file-work", { action: "renameDBFile", data: { Id: file.Id, Name: file.Name } });
     }
+    removeList = [];
     showModal = false;
   };
 
@@ -179,14 +181,13 @@
   };
 
   const onRemoveSelected = () => {
-    showModal = true;
     modalType = { title: "Remove Selected Files", Del: true, isFile: true };
-    file = { Name: "Selected Files" };
+    selectedList = items.filter((i) => removeList.includes(i.Id));
+    showModal = true;
   };
 
   const hideModal = () => {
     showModal = false;
-    file = {};
   };
 
   const onShowInfo = ({ type, target }) => {
@@ -225,11 +226,11 @@
 </script>
 
 {#if showEdit}
-  {#if items.length === 1}
-    <Modal file={items[0]} {modalType} {acept} hide={hideModal} />
-  {:else}
-    <BulkEdit length={items.length} hide={hideBulkRename} acept={onBulkRename} />
-  {/if}
+  <BulkEdit length={selectedList.length} hide={hideBulkRename} acept={onBulkRename} />
+{/if}
+
+{#if showModal}
+  <Modal file={selectedList[0]} {modalType} {acept} hide={hideModal} />
 {/if}
 
 <ItemList

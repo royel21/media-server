@@ -11,12 +11,18 @@
     hide();
     acept(item);
   };
+  const onKeydown = (e) => {
+    if (e.keyCode === 13) {
+      confirm();
+      e.preventDefault();
+    }
+  };
   const style = "text-align: center;";
 </script>
 
 <Dialog cancel={hide} {confirm} canDrag={true}>
   <h4 slot="modal-header">Delete Images From Selected Zips</h4>
-  <div class="dir-list" slot="modal-body">
+  <div class="dir-list" slot="modal-body" on:keydown={onKeydown}>
     <TextAreaInput label="Remove List For All Files" key="removeList" {item} rows={1} paste={false} {style} />
     <h4>Remove Per File</h4>
     <div class="file-list">

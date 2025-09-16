@@ -104,6 +104,20 @@ export const combinedZip = async ({ files }) => {
 };
 
 const sortEntries = (a, b) => String(a.entryName).localeCompare(String(b.entryName));
+
+const getEntry = (index, entries) => {
+  let i = parseInt(index);
+  if (index > 0) {
+    i = i - 1;
+  }
+
+  let entry = entries[i];
+
+  if (i === -1) {
+    entry = entries[entries.length + i];
+  }
+  return entry;
+};
 export const delImageZip = async ({ files, removeList }) => {
   if (!files?.length) {
     return;
@@ -116,7 +130,7 @@ export const delImageZip = async ({ files, removeList }) => {
       const zip = new AdmZip(file.Path);
 
       const list = file?.removeList || removeList;
-      console.log(list);
+
       if (!list?.length) {
         continue;
       }
@@ -125,16 +139,7 @@ export const delImageZip = async ({ files, removeList }) => {
       let toRemove = list.split(",");
 
       for (const i of toRemove) {
-        let index = parseInt(i);
-
-        if (index > 0) {
-          index = index - 1;
-        }
-
-        let entry = zipEntries[index];
-        if (+i === -1) {
-          entry = zipEntries[zipEntries.length + index];
-        }
+        let entry = getEntry(i, zipEntries);
         if (entry) {
           zip.deleteFile(entry);
         }
@@ -142,6 +147,7 @@ export const delImageZip = async ({ files, removeList }) => {
 
       zip.writeZip(file.Path);
     } catch (error) {
+      console.log(error);
       await sendMessage({ text: `Error While Removing Images From Zip ${error.toString()}`, color: "red" });
     }
   }
@@ -166,7 +172,7 @@ export const cropImageInZip = async ({ files, image, top, left, width, height })
 
       let zipEntries = [...zip.getEntries().sort(sortEntries)];
 
-      const entry = zipEntries[+image - 1];
+      let entry = getEntry(+image, zipEntries);
 
       let img = await sharp(entry.getData());
 
