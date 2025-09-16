@@ -199,8 +199,6 @@ export const cropImageInZip = async ({ files, image, top, left, width, height })
         height: h,
       });
 
-      await img.toFile("./0.jpg");
-
       zip.addFile(entry.name, await img.toBuffer());
 
       const name = path.basename(file.Name).replace(".zip", "");
