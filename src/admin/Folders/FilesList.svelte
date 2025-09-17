@@ -212,7 +212,13 @@
     oldFolder = folderId;
   }
   $: if (removeList && page) isChecked = validateCheck(removeList, items);
-  $: selectedList = items.filter((i) => removeList.includes(i.Id));
+  $: if (removeList.length) {
+    if (!removeList.length) {
+      selectedList = [];
+    }
+    selectedList.push(...items.filter((i) => removeList.includes(i.Id)));
+    console.log("selected", selectedList, removeList);
+  }
 </script>
 
 {#if showEdit}
