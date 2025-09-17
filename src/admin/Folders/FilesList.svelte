@@ -10,6 +10,8 @@
   import CCheckbox from "../Component/CCheckbox.svelte";
   import BulkEdit from "../Component/BulkEdit.svelte";
   import { setMessage } from "../Store/MessageStore";
+  import ZipControls from "../Disks/FolderFiles/ZipControls.svelte";
+  import VideoControl from "../Disks/FolderFiles/VideoControl.svelte";
 
   const socket = getContext("socket");
 
@@ -97,8 +99,6 @@
   };
 
   const onBulkEdit = () => {
-    selectedList = items.filter((i) => removeList.includes(i.Id));
-
     if (removeList.length === 1) {
       modalType = { title: "Edit File", Del: false, isFile: true };
       showModal = true;
@@ -129,17 +129,6 @@
     pg = clamp(+pg.detail, 1, totalPages);
     if (pg !== page) {
       loadFiles(pg);
-    }
-  };
-
-  const iconClick = (event) => {
-    let el = event.target;
-
-    if (el.tagName === "SPAN") {
-      file = items.find((f) => f.Id === el.closest("li").id);
-      if (file) {
-        //Delete button was clicked
-      }
     }
   };
 
@@ -223,6 +212,7 @@
     oldFolder = folderId;
   }
   $: if (removeList && page) isChecked = validateCheck(removeList, items);
+  $: selectedList = items.filter((i) => removeList.includes(i.Id));
 </script>
 
 {#if showEdit}
@@ -243,7 +233,6 @@
   {totalItems}
   {filter}
   {removeList}
-  {iconClick}
   on:filter={onFilter}
   on:gotopage={goToPage}
   on:mouseenter={onShowInfo}
@@ -256,6 +245,11 @@
       <span on:click={onBulkEdit}>
         <Icons name="edit" />
       </span>
+      {#if selectedList[0]?.Name.includes(".zip")}
+        <ZipControls {selectedList} {socket} />
+      {:else}
+        <VideoControl {selectedList} {socket} />
+      {/if}
       <span on:click={onRemoveSelected}>
         <Icons name="trash" box="0 0 420 512" />
       </span>

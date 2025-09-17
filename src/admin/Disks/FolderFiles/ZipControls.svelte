@@ -8,7 +8,7 @@
 
   export let socket;
   export let selectedList;
-  export let bgWorking;
+  export let bgWorking = false;
 
   let showConfirm = false;
   let showDelImageModal = false;
@@ -80,12 +80,12 @@
   />
 {/if}
 
-{#if showDelImageModal}
-  <DelImagesModal hide={onShowDelImages} acept={aceptRemoveImage} files={selectedList} />
-{/if}
-
 {#if showCropModal}
   <CropImagesModal files={selectedList} hide={onShowCropImages} acept={aceptCropImage} />
+{/if}
+
+{#if showDelImageModal}
+  <DelImagesModal hide={onShowDelImages} acept={aceptRemoveImage} files={selectedList} />
 {/if}
 
 {#if show}

@@ -15,7 +15,7 @@
   export let totalItems = 0;
   export let scanning = [];
   export let showGenres = false;
-  export let iconClick;
+  export let iconClick = () => {};
   export let removeList = [];
   let clazz = "";
   export { clazz as class };

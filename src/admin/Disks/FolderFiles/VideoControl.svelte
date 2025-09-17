@@ -4,13 +4,15 @@
 
   import { videoRegex } from "src/admin/Store/FilesStore";
   import { onMount } from "svelte";
+  import VideoConvert from "./VideoConvert.svelte";
+  import SubVideoExtration from "./SubVideoExtration.svelte";
 
   export let socket;
   export let selectedList;
   export let bgWorking;
 
-  export let showConvertVideo = false;
-  export let showVideoSubTract = false;
+  let showConvertVideo = false;
+  let showVideoSubTract = false;
 
   let showConfirm = false;
   let menuCheck;
@@ -69,6 +71,14 @@
     cancel={() => (showConfirm = false)}
     data={showConfirm.data}
   />
+{/if}
+
+{#if showConvertVideo}
+  <VideoConvert bind:showConvertVideo bind:bgWorking {socket} {selectedList} />
+{/if}
+
+{#if showVideoSubTract}
+  <SubVideoExtration bind:showVideoSubTract bind:bgWorking {socket} {selectedList} />
 {/if}
 
 {#if show}

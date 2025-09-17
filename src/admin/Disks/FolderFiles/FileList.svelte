@@ -32,7 +32,6 @@
 
   let filtered = files;
   let sortBy = "name";
-  let length = files.length;
 
   let selectedList = [];
   let isChecked = false;
@@ -268,7 +267,6 @@
     filtered = files.filter(filterFunc(filter)).sort(sorter[sortBy]);
   }
 
-  let virtual = true;
   $: list = selectedList.length ? selectedList : filtered;
   $: height = itemContainerRef?.offsetHeight || 0;
   $: props = { itemSize: 34, itemCount: filtered.length };
@@ -285,14 +283,6 @@
     cancel={() => (showConfirm = false)}
     data={showConfirm.data}
   />
-{/if}
-
-{#if showConvertVideo}
-  <VideoConvert bind:showConvertVideo bind:bgWorking {socket} {selectedList} />
-{/if}
-
-{#if showVideoSubTract}
-  <SubVideoExtration bind:showVideoSubTract bind:bgWorking {socket} {selectedList} />
 {/if}
 
 {#if showBulkRename}
@@ -316,8 +306,8 @@
             </span>
           {/if}
           {#if selectedList.length}
-            <ZipControls bind:showConvertVideo bind:bgWorking bind:showVideoSubTract {selectedList} {socket} />
-            <VideoControl bind:showConvertVideo bind:bgWorking bind:showVideoSubTract {selectedList} {socket} />
+            <ZipControls {selectedList} {socket} />
+            <VideoControl {selectedList} {socket} />
             <span on:click={() => (showBulkRename = true)}><Icons name="edit" /></span>
             <span on:click={onTransfer}><Icons name="right-left" /></span>
             {#if selectedList.length === 1}
