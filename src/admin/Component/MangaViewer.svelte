@@ -744,6 +744,15 @@
       position: relative;
       top: 0px;
     }
+
+    .viewer :global(.modal) {
+      height: 600px;
+      width: 420px;
+      max-width: 99%;
+      max-height: 90%;
+      background-color: black;
+      overflow: hidden;
+    }
   }
 
   @media screen and (min-width: 700px) {

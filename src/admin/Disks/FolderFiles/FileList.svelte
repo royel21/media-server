@@ -345,41 +345,22 @@
         {/if}
       </div>
     </div>
-    {#if virtual}
-      <div class="items" bind:this={itemContainerRef}>
-        <VirtualList {...props} {height}>
-          <li slot="item" let:index let:style {style} id={filtered[index].Id} title={getItemDate(filtered[index])}>
-            <CCheckbox on:change={onCheck} isChecked={selectedList.find((f) => f.Id === filtered[index].Id)} />
-            <span on:click={onCheck}>
-              <FileTypeIcon file={filtered[index]} {files} fileColor="white" />
-              <span class="size">{getSize2(filtered[index])}</span>
-              <span>{filtered[index].Name}</span>
-            </span>
-            <div class="progress-bar" class:show-progress={filtered[index].progress}>
-              <div class="progress" style={`width: ${filtered[index].progress}%`}></div>
-              <span>{filtered[index].progress}%</span>
-            </div>
-          </li>
-        </VirtualList>
-      </div>
-    {:else}
-      <ul>
-        {#each filtered as file}
-          <li id={file.Id} title={formatDate(new Date(file.LastModified))}>
-            <CCheckbox on:change={onCheck} isChecked={selectedList.find((f) => f.Id === file.Id)} />
-            <span on:click={onCheck}>
-              <FileTypeIcon {file} {files} fileColor="white" />
-              <span class="size">{getSize2(file)}</span>
-              <span>{file.Name}</span>
-            </span>
-            <div class="progress-bar" class:show-progress={file.progress}>
-              <div class="progress" style={`width: ${file.progress}%`}></div>
-              <span>{file.progress}%</span>
-            </div>
-          </li>
-        {/each}
-      </ul>
-    {/if}
+    <div class="items" bind:this={itemContainerRef}>
+      <VirtualList {...props} {height}>
+        <li slot="item" let:index let:style {style} id={filtered[index].Id} title={getItemDate(filtered[index])}>
+          <CCheckbox on:change={onCheck} isChecked={selectedList.find((f) => f.Id === filtered[index].Id)} />
+          <span on:click={onCheck}>
+            <FileTypeIcon file={filtered[index]} {files} fileColor="white" />
+            <span class="size">{getSize2(filtered[index])}</span>
+            <span>{filtered[index].Name}</span>
+          </span>
+          <div class="progress-bar" class:show-progress={filtered[index].progress}>
+            <div class="progress" style={`width: ${filtered[index].progress}%`}></div>
+            <span>{filtered[index].progress}%</span>
+          </div>
+        </li>
+      </VirtualList>
+    </div>
   </div>
 </div>
 
@@ -403,9 +384,11 @@
   .col :global(.loading h4) {
     font-size: 1.2rem;
   }
-
-  ul :global(.select-file) {
-    max-width: 22px;
+  .items li {
+    position: relative;
+  }
+  .items :global(.f-play) {
+    margin-left: 0;
   }
 
   .stop-bg :global(.icon-stopcircle) {
@@ -417,13 +400,6 @@
   .tree-files {
     height: 100%;
     padding: 0 5px;
-  }
-  .tree-files ul {
-    height: calc(100% - 81px);
-    width: 100%;
-    overflow: auto;
-    margin: 0;
-    padding-bottom: 5px;
   }
   .tree-files li {
     position: relative;
@@ -525,7 +501,7 @@
   .progress-bar {
     position: absolute;
     top: 8px;
-    right: 5px;
+    right: 35px;
     display: none;
     width: 80px;
     height: 20px;
