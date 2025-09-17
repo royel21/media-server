@@ -316,19 +316,21 @@
     width: 18px;
   }
   .item-filter {
-    display: inline-block;
-    position: relative;
-    top: -5px;
-    left: 25px;
-    width: 100%;
+    position: sticky;
+    top: 58px;
+    background-color: #535353;
+    z-index: 1;
+    margin-left: 25px;
+    width: 91%;
+    padding-bottom: 5px;
   }
   .item-filter input {
-    width: 92.5%;
+    width: 100%;
     height: 25px;
   }
   .clear {
     position: absolute;
     top: -3px;
-    right: 25px;
+    right: -6px;
   }
 </style>
