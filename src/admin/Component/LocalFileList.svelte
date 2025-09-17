@@ -125,8 +125,8 @@
     </span>
   </div>
 {/if}
-<!-- class:hidden={!canShow} -->
-<span class="show-flist" on:click={onShowList}>
+
+<span class="show-flist" on:click={onShowList} class:hidden={!canShow}>
   <Icons name="search" />
 </span>
 
