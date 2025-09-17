@@ -15,14 +15,17 @@
   export let showHidden = false;
   export let sortBy;
   export let sort = false;
-
-  let sortedItems = items;
+  export let filter = "";
 
   let item = {};
   let offsetNext = offset + 1;
   let hasFiles = false;
+  let showFilter = false;
+  let itemFilter = "";
 
   const socket = getContext("socket");
+
+  const onShowFilter = () => (showFilter = !showFilter);
 
   const expandFolder = async (event, id) => {
     let li = event?.target.closest("li");
@@ -107,6 +110,8 @@
     }
   };
 
+  const clearFilter = () => (itemFilter = "");
+
   const onInfo = ({ msg, error }) => setMessage({ error, msg });
 
   onMount(() => {
@@ -151,6 +156,10 @@
       return true;
     });
   }
+
+  $: sortedItems = items.filter((item) => {
+    return item.Name.toLocaleLowerCase().includes(filter.toLocaleLowerCase());
+  });
 </script>
 
 {#each sortedItems as { Content, Id, Name, Type }}
@@ -170,17 +179,27 @@
       title={Name}
       on:click={expandFolder}
     >
+      {#if Content?.length && type === "folder"}
+        <span class="item-filter-icon" on:click|stopPropagation={onShowFilter}><Icons name="search" /></span>
+      {/if}
       <Icons name={Type || type} color="black" />
-      <span class:selected={hasFiles && current.Id === Id}>{Name}</span>
+      <span class="item-name" class:selected={hasFiles && current.Id === Id}>{Name}</span>
       <span class:count={Content.length} class="f-count">Folders: {Content.length}</span>
     </span>
     {#if Content.length > 0}
+      {#if showFilter}
+        <div class="item-filter">
+          <input class="form-control" type="text" placeholder="filter" bind:value={itemFilter} />
+          <span class="clear" on:click={clearFilter}><Icons name="times"></Icons></span>
+        </div>
+      {/if}
       <ul class="tree-node usn">
         <svelte:self
           type="folder"
           items={Content}
           on:scanDir
           offset={offsetNext}
+          filter={itemFilter}
           {zIndex}
           {setFiles}
           {current}
@@ -230,7 +249,7 @@
   .dir .f-count {
     display: none;
   }
-  .dir:hover {
+  .dir:hover .item-name {
     text-decoration: underline;
     background-color: #696a6b;
   }
@@ -292,5 +311,24 @@
   }
   .current {
     background-color: rgb(156, 206, 223);
+  }
+  .item-filter-icon :global(svg) {
+    width: 18px;
+  }
+  .item-filter {
+    display: inline-block;
+    position: relative;
+    top: -5px;
+    left: 25px;
+    width: 100%;
+  }
+  .item-filter input {
+    width: 92.5%;
+    height: 25px;
+  }
+  .clear {
+    position: absolute;
+    top: -3px;
+    right: 25px;
   }
 </style>

@@ -1,15 +1,8 @@
 import path from "path";
 import Sharp from "sharp";
 import db from "#server/models/index";
-import {
-  createFolder,
-  removeFiles,
-  renameFile,
-  bulkRename,
-  moveFiles,
-  transferFiles,
-  formatName,
-} from "./fileHelpers.js";
+import { createFolder, removeFiles, renameFile, bulkRename } from "./fileHelpers.js";
+import { moveFiles, transferFiles, formatName } from "./fileHelpers.js";
 import { renameFolder, removeDFolder, workVideos } from "./videoHelper.js";
 import { createDir } from "#server/Downloader/utils";
 import defaultConfig from "#server/default-config";

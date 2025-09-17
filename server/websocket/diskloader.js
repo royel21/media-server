@@ -1,4 +1,3 @@
-import { sendMessage } from "#server/utils";
 import diskusage from "diskusage";
 import os from "node:os";
 import fs from "fs-extra";
@@ -8,7 +7,7 @@ import { nanoid } from "nanoid";
 
 const sizeInGB = (size) => (size / 1024 / 1024 / 1024).toFixed(1) + "GB";
 
-const loadDisk = async () => {
+export const loadDisk = async (socket) => {
   const drives = await drivelist.list();
   const disks = [];
   for (const drive of drives) {
@@ -77,34 +76,5 @@ const loadDisk = async () => {
     Size: sizeInGB(hdata.total),
   });
 
-  await sendMessage(disks, "disk-loaded", false);
+  socket.emit("disk-loaded", disks);
 };
-
-const actions = {
-  loadDisk,
-};
-
-const works = {
-  isWorking: false,
-  pendding: [],
-};
-
-const startToWork = async () => {
-  works.isWorking = true;
-  while (works.pendding.length) {
-    const work = works.pendding.shift();
-    if (actions[work.action]) {
-      const result = await actions[work.action](work.data);
-      if (result) {
-        await result();
-      }
-    }
-  }
-  console.log("Finish File Work");
-  process.exit();
-};
-
-process.on("message", (work) => {
-  works.pendding.push(work);
-  if (!works.isWorking) startToWork();
-});

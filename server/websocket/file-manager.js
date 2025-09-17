@@ -3,6 +3,7 @@ import path from "path";
 import winEx from "win-explorer";
 import db from "#server/models/index";
 import os from "node:os";
+import { loadDisk } from "./diskloader.js";
 let io;
 
 const setSocket = (_io) => (io = _io);
@@ -185,22 +186,7 @@ const bgWork = (data) => {
   bgWorker.send(data);
 };
 
-let diskWorker = null;
-const hddLoader = (data) => {
-  if (!diskWorker) {
-    diskWorker = fork(appPath + "/workers/DiskLoader.js");
-
-    diskWorker.on("message", ({ message }) => {
-      io.sockets.emit("disk-loaded", message);
-    });
-
-    diskWorker.on("exit", () => {
-      diskWorker = null;
-    });
-  }
-
-  diskWorker.send({ action: "loadDisk" });
-};
+const hddLoader = () => loadDisk(io.sockets);
 
 export default {
   fileWork,
