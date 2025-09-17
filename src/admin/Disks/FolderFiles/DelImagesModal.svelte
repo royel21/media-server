@@ -25,7 +25,7 @@
   <div class="dir-list" slot="modal-body" on:keydown={onKeydown}>
     <TextAreaInput label="Remove List For All Files" key="removeList" {item} rows={1} paste={false} {style} />
     <h4>Remove Per File</h4>
-    <div class="file-list">
+    <div class="del-file-list">
       <ul class="list">
         {#each item.files as file}
           <li class="list-item">
@@ -38,8 +38,8 @@
 </Dialog>
 
 <style>
-  .file-list {
-    height: 250px;
+  .del-file-list {
+    height: 300px;
     overflow-y: auto;
   }
   .list-item {
