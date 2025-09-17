@@ -217,7 +217,6 @@
       selectedList = [];
     }
     selectedList.push(...items.filter((i) => removeList.includes(i.Id)));
-    console.log("selected", selectedList, removeList);
   }
 </script>
 
