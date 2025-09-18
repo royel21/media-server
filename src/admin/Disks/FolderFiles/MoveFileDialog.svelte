@@ -84,7 +84,7 @@
   });
 </script>
 
-<Dialog cancel={hide} confirm={onConfirm} {errors}>
+<Dialog cancel={hide} confirm={onConfirm} {errors} canDrag={true}>
   <h4 slot="modal-header">Move <span>{files.length}</span> {files.length > 1 ? "Files" : "File"} to Path</h4>
   <div class="dir-list" slot="modal-body">
     <CheckBox label="Overwrite" key="overwrite" {item} />

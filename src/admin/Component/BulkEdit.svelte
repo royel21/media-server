@@ -35,7 +35,7 @@
 </script>
 
 <div id="b-edit">
-  <Dialog class="bulk-edit" cancel={hide} confirm={onConfirm} {errors}>
+  <Dialog class="bulk-edit" cancel={hide} confirm={onConfirm} {errors} canDrag={true}>
     <h4 slot="modal-header">Edit Name for <span>{length}</span> Files</h4>
     <div class="dir-list" slot="modal-body" on:keydown={onKeydown}>
       <Input bind:ref={firstInput} key="Replace" {item} focus={true} />

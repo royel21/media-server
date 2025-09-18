@@ -295,14 +295,15 @@ export const fixVideo = async ({ files }, state) => {
       exec(`ffmpeg -i "${file.Path}" -c:a copy -c:v copy -movflags +faststart "${outFile}" -y`, async (error) => {
         if (error) {
           await sendMessage({ text: `Error Fixing ${outFile}`, error: error.toString() });
+        } else {
+          file.Id = i + "fixed";
+          file.Path = outFile;
+          file.Name = name + "-fix" + extension;
+          await sendMessage({ text: `${current}/${count}: Fixed ${name}`, convert: true, file }, "files-info");
         }
         resolve();
-        file.Id = i + "fixed";
-        file.Path = outFile;
-        file.Name = name + "-fix" + extension;
-        await sendMessage({ text: `${current}/${count}: Fixed ${name}`, convert: true, file }, "files-info");
       });
     });
   }
-  await sendMessage({ text: "All Video Fixed", convert: true, End: true }, "files-info");
+  await sendMessage({ text: "All Video Fixed", End: true }, "files-info");
 };

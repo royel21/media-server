@@ -106,9 +106,9 @@
   };
 
   const onFileInfo = (data) => {
-    const { msg, items, bulk, error, ren, file, convert, progress, Path, End, combining } = data;
-    if (msg || error) {
-      updateConsole({ text: msg, error });
+    const { msg, text, items, bulk, error, ren, file, convert, progress, Path, End, combining } = data;
+    if (msg || text || error) {
+      updateConsole({ text: msg || text, error });
     }
 
     if (bulk) {
