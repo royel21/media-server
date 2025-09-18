@@ -213,10 +213,9 @@
   }
   $: if (removeList && page) isChecked = validateCheck(removeList, items);
   $: if (removeList.length) {
-    if (!removeList.length) {
-      selectedList = [];
-    }
     selectedList.push(...items.filter((i) => removeList.includes(i.Id)));
+  } else {
+    selectedList = [];
   }
 </script>
 
