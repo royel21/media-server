@@ -491,7 +491,7 @@
   .progress-bar {
     position: absolute;
     top: 8px;
-    right: 35px;
+    right: 5px;
     display: none;
     width: 80px;
     height: 20px;
