@@ -22,6 +22,7 @@
   let imageData = { Id: "", Url: "", file: "" };
   let transfer = false;
   let isModified;
+  let blurImg = true;
   let time = new Date().getTime();
 
   const regx = /:|\?/g;
@@ -41,6 +42,7 @@
       imageData.Id = Id;
       delete data.dirs;
       folder = { ...folder, ...data };
+      blurImg = folder.IsAdult;
       old = { ...folder };
       delete old.image;
       tags = data.tags.filter((g) => !g.IsRemove).map((g) => g.Name);
@@ -167,6 +169,8 @@
     }
   };
 
+  const unBlur = () => (blurImg = false);
+
   $: loadDetails(folderId);
   $: isModified = hasChanges || imageData.Url || imageData.file;
 </script>
@@ -180,7 +184,7 @@
       </span>
     </TextAreaInput>
     <div class="header">
-      <div class="f-image">
+      <div class="f-image" class:blur={blurImg} on:click={unBlur}>
         <div>
           <img src={`${encodeURI(`/Folder/${folder.FilesType}/${folder.Name}.jpg?v=${time}`)}`} alt="Not Found" />
         </div>
@@ -377,6 +381,9 @@
   }
   strong.completed {
     color: red;
+  }
+  .blur img {
+    filter: blur(14px);
   }
   @media screen and (max-height: 810px) {
     .detail {
