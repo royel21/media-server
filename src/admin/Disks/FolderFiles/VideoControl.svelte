@@ -9,7 +9,7 @@
 
   export let socket;
   export let selectedList;
-  export let bgWorking;
+  export let bgWorking = false;
 
   let showConvertVideo = false;
   let showVideoSubTract = false;
