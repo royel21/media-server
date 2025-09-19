@@ -37,12 +37,16 @@
     width: 100%;
   }
   .card.has-files {
-    min-width: 790px;
+    min-width: 950px;
   }
-
   @media screen and (max-height: 600px) {
     .card.has-files {
       min-width: initial;
+    }
+  }
+  @media screen and (max-width: 600px) {
+    .card.has-files {
+      min-width: 790px;
     }
   }
 

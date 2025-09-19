@@ -22,6 +22,7 @@
   let hasFiles = false;
   let showFilter = false;
   let itemFilter = "";
+  let sortedItems = [];
 
   const socket = getContext("socket");
 
@@ -141,25 +142,20 @@
     Date: (a, b) => new Date(b.LastModified) - new Date(a.LastModified),
   };
 
-  $: if (sort) {
-    sortedItems = items.sort(sortItems[sortBy]).filter((it) => {
-      if (it.Name === "Home") return true;
-
-      if (!showHidden) {
-        if (/^(\.|$)/.test(it?.Name)) {
-          return false;
-        }
-
-        if (it.isHidden) return false;
+  $: sortedItems = items.filter((item) => {
+    if (!showHidden) {
+      if (/^(\.|$)/.test(item?.Name)) {
+        return false;
       }
 
-      return true;
-    });
-  }
-
-  $: sortedItems = items.filter((item) => {
+      if (item.isHidden) return false;
+    }
     return item.Name.toLocaleLowerCase().includes(filter.toLocaleLowerCase());
   });
+
+  $: if (sort) {
+    sortedItems = sortedItems.sort(sortItems[sortBy]);
+  }
 </script>
 
 {#each sortedItems as { Content, Id, Name, Type }}
