@@ -23,6 +23,7 @@
   let duration = 0;
   let player;
   let containerRef;
+  let ref;
   let time = 0;
   let vol = localStorage.getItem(VOLKEY) || 0.05;
   let mute = false;
@@ -159,10 +160,6 @@
     error = "";
   }
 
-  afterUpdate(() => {
-    player?.focus();
-  });
-
   let stop;
   $: current = files.findIndex((f) => f.Id === file.Id);
   $: if (player) {
@@ -173,6 +170,7 @@
   } else if (stop) {
     stop();
   }
+  $: ref?.focus();
 </script>
 
 {#if file.Path}
@@ -181,7 +179,7 @@
       <svelte:fragment slot="modal-header">
         <div class="v-name"><span class="f-name">{file.Name}</span></div>
       </svelte:fragment>
-      <div class="video-container" tabindex="-1">
+      <div bind:this={ref} class="video-container" tabindex="-1">
         <div class="error">{error}</div>
         <video
           autoplay={true}
