@@ -132,10 +132,9 @@
     display: flex;
     flex-direction: column;
   }
-  #film2 :global(.icon-film2) {
+  label :global(.icon-film2) {
     width: 21px;
     top: 5px;
-    left: -4px;
   }
   #video-fix {
     position: relative;

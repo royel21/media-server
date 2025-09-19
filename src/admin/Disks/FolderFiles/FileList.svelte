@@ -308,8 +308,8 @@
           {#if selectedList.length}
             <ZipControls {selectedList} {socket} />
             <VideoControl {selectedList} {socket} />
-            <span on:click={() => (showBulkRename = true)}><Icons name="edit" /></span>
-            <span on:click={onTransfer}><Icons name="right-left" /></span>
+            <span class="file-edit" on:click={() => (showBulkRename = true)}><Icons name="edit" /></span>
+            <span class="file-transfer" on:click={onTransfer}><Icons name="right-left" /></span>
             {#if selectedList.length === 1}
               <a class="download" href={getDownloadUrl()} download={selectedList[0].Name}>
                 <Icons name="download" box="0 0 512 512" />
@@ -379,6 +379,12 @@
   }
   .items :global(.f-play) {
     margin-left: 0;
+  }
+  .file-edit :global(.icon-edit) {
+    right: -6px;
+  }
+  .file-transfer :global(.icon-right-left) {
+    right: -5px;
   }
 
   .stop-bg :global(.icon-stopcircle) {
