@@ -79,7 +79,7 @@
   });
 
   $: {
-    const regx = RegExp(filter, "ig");
+    const regx = RegExp(RegExp.escape(filter), "ig");
     filteredList = nameList.filter((f) => regx.test(f.AltName) || regx.test(f.Name));
   }
 </script>

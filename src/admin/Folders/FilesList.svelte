@@ -76,8 +76,8 @@
     }
   };
 
-  const onRenameFinish = async ({ renFinish }) => {
-    if (renFinish) {
+  const onRenameFinish = async (data) => {
+    if (data?.renFinish) {
       await loadFiles(page);
       setMessage({ msg: "Files Renamed Successfully", color: "green" });
     }
@@ -213,7 +213,7 @@
   }
   $: if (removeList && page) isChecked = validateCheck(removeList, items);
   $: if (removeList.length) {
-    selectedList.push(...items.filter((i) => removeList.includes(i.Id)));
+    selectedList.push(...items.filter((i) => removeList.includes(i.Id) && !selectedList.find((si) => si.Id === i.Id)));
   } else {
     selectedList = [];
   }

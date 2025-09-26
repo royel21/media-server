@@ -88,14 +88,17 @@
   };
 
   const onPlay = () => {
-    if (player.paused) {
-      controls.style.bottom = -controls.offsetHeight + "px";
-      player.play().catch(() => {});
-    } else {
-      if (isFullScreen) {
-        controls.style.bottom = 0;
+    if (player) {
+      console.log(player.paused, "play");
+      if (player.paused) {
+        controls.style.bottom = -controls.offsetHeight + "px";
+        player.play().catch(() => {});
+      } else {
+        if (isFullScreen) {
+          controls.style.bottom = 0;
+        }
+        player.pause();
       }
-      player.pause();
     }
   };
 

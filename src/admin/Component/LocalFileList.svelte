@@ -12,7 +12,7 @@
   import { setMessage } from "../Store/MessageStore";
 
   let show = false;
-  let update = false;
+  let listRef;
   let canShow = tabRex.test(location.pathname);
   const tabRex = /configs|downloads|content-manager/;
 
@@ -108,6 +108,9 @@
       navigation.removeEventListener("navigate", onNavigate);
     };
   });
+  $: if (pager.page && listRef) {
+    listRef?.scrollTo({ top: 0 });
+  }
 </script>
 
 {#if showEdit}
@@ -144,8 +147,13 @@
         </div>
       </div>
       <div id="tag-list" class="file-list" slot="modal-footer">
-        <div class="list-container" class:full={pager.totalPages < 2}>
-          <ul class="list-group text-dark" on:mousemove={onShowPath} on:mouseleave={() => (showPath = null)}>
+        <div class="list-container">
+          <ul
+            class="list-group text-dark"
+            bind:this={listRef}
+            on:mousemove={onShowPath}
+            on:mouseleave={() => (showPath = null)}
+          >
             {#if items.length < 1}
               <li class="list-group-item empty-list">Not Files Found</li>
             {:else}
@@ -161,15 +169,15 @@
             {/if}
           </ul>
         </div>
-        {#if pager.totalPages > 1}
-          <div class="w-pager">
-            <div class="input-group d-items">
-              <span id="d-items" class="input-group-text"><Icons name="list" color="black" box="0 0 512 512" /></span>
-              <input type="number" class="form-control" value={pager.items} on:change={changeItems} />
-            </div>
-            <Pagination page={pager.page} totalPages={pager.totalPages} on:gotopage={goToPage} full={true} />
+        <div class="w-pager">
+          <div class="input-group d-items">
+            <span id="d-items" class="input-group-text"><Icons name="list" color="black" box="0 0 512 512" /></span>
+            <input type="number" class="form-control" value={pager.items} on:change={changeItems} />
           </div>
-        {/if}
+          {#if pager.totalPages > 1}
+            <Pagination page={pager.page} totalPages={pager.totalPages} on:gotopage={goToPage} full={true} />
+          {/if}
+        </div>
       </div>
     </Dialog>
   </div>
@@ -251,9 +259,6 @@
     width: 100%;
     overflow: hidden;
   }
-  #tag-list .full {
-    max-height: calc(100% - 5px);
-  }
 
   #tag-list ul {
     height: 100%;
@@ -307,5 +312,10 @@
   strong {
     min-width: 78px;
     margin-right: 5px;
+  }
+  @media (pointer: none), (pointer: coarse) {
+    #tag-list li span:last-child {
+      overflow: initial;
+    }
   }
 </style>

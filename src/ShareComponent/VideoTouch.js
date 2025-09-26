@@ -60,7 +60,7 @@ export const setGesture = (player, onPlay, mConfig) => {
       gestureDir = 0;
     }
 
-    if (!gesture && e.target === container) {
+    if (!gesture && e.target === player) {
       onPlay(e);
     }
     gesture = false;
