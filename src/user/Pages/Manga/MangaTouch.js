@@ -19,7 +19,9 @@ let moveX = {
 };
 let scroller;
 
-let controls = { nextPage: "", prevPage: "", nextFile: "", prevFile: "" };
+let controls = { nextPage: "", prevPage: "", nextFile: "", prevFile: "", showLoop: "" };
+let showLoop = false;
+let loopTimeout;
 
 export const onTouchStart = (e) => {
   scroller = e.currentTarget;
@@ -27,7 +29,13 @@ export const onTouchStart = (e) => {
   let { pageX, pageY } = getEvent(e);
   point = { x: pageX, y: pageY };
 
-  touching = e.touches?.length === 1 || e.type === "mousedown";
+  touching = true;
+  console.log("touching");
+  loopTimeout = setTimeout(() => {
+    console.log("showLoop");
+    controls.showLoop(true, pageX, pageY);
+    showLoop = true;
+  }, 1500);
 };
 
 export const onTouchMove = (e) => {
@@ -38,10 +46,15 @@ export const onTouchMove = (e) => {
     moveY.dis = Math.abs(moveY.dir);
     moveX.dis = Math.abs(moveX.dir);
     drag = true;
+    if (showLoop) {
+      controls.showLoop(true, pageX, pageY);
+    }
   }
 };
 
 export const onTouchEnd = (e) => {
+  clearTimeout(loopTimeout);
+  if (controls.showLoop) controls.showLoop(false);
   if (!touching) return e;
 
   touching = false;

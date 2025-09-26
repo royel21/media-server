@@ -31,6 +31,7 @@
   let isFullscreen = false;
   let error;
   let indices = [];
+  let showLoop;
 
   let viewerState = {
     loading: false,
@@ -137,6 +138,7 @@
   controls.nextFile = NextFile.action;
   controls.prevFile = PrevFile.action;
   controls.file = file;
+  controls.showLoop = (show, x, y) => (showLoop = { show, x, y });
 
   $: progress = file.Duration ? `${+file.CurrentPos + 1}/${file.Duration}` : "Loading";
 
