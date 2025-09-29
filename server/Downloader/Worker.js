@@ -5,7 +5,7 @@ import { findOrCreateFolder, getDb } from "./db-worker.js";
 import { evaluetePage, adultEvalPage } from "./evaluator.js";
 
 import { createFolderCover } from "./ImageUtils.js";
-import { filterManga, dateDiff, removeRaw, sendMessage, createDir } from "./utils.js";
+import { filterManga, dateDiff, removeRaw, sendMessage, createDir, filterExclude } from "./utils.js";
 import { startBrowser, createPage, delay } from "./Crawler.js";
 
 import { downloadLink } from "./link-downloader.js";
@@ -92,9 +92,7 @@ const downloadLinks = async (link, page) => {
 
   const exclude = await db.Exclude.findAll({ where: { LinkName: folder.Name } });
 
-  manga.data = manga.data
-    .filter(removeRaw(manga.data))
-    .filter((f) => !exclude.find((ex) => f.name.includes(ex.Name)) || /( |\[)end(\]|)$/i.test(f.name));
+  manga.data = manga.data.filter(removeRaw(manga.data)).filter(filterExclude(exclude));
 
   await updateLastChapter(manga, link);
   manga.type = "mangas";

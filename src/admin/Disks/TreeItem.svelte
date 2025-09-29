@@ -23,6 +23,7 @@
   let showFilter = false;
   let itemFilter = "";
   let sortedItems = [];
+  let filterRef;
 
   const socket = getContext("socket");
 
@@ -141,6 +142,7 @@
     Name: sortByName,
     Date: (a, b) => new Date(b.LastModified) - new Date(a.LastModified),
   };
+  $: filterRef?.focus();
 
   $: sortedItems = items.filter((item) => {
     if (!showHidden) {
@@ -185,7 +187,7 @@
     {#if Content.length > 0}
       {#if showFilter}
         <div class="item-filter">
-          <input class="form-control" type="text" placeholder="filter" bind:value={itemFilter} />
+          <input bind:this={filterRef} class="form-control" type="text" placeholder="filter" bind:value={itemFilter} />
           <span class="clear" on:click={clearFilter}><Icons name="times"></Icons></span>
         </div>
       {/if}
@@ -309,7 +311,8 @@
     background-color: rgb(156, 206, 223);
   }
   .item-filter-icon :global(svg) {
-    width: 18px;
+    width: 20px;
+    left: 3px;
   }
   .item-filter {
     position: sticky;

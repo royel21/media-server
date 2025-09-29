@@ -1,7 +1,7 @@
 import fs from "fs-extra";
 import { findFolder, getDb } from "./db-worker.js";
 
-import { delay, filterManga, removeRaw, sendMessage } from "./utils.js";
+import { delay, filterExclude, filterManga, removeRaw, sendMessage } from "./utils.js";
 import { createPage } from "./Crawler.js";
 import { downloadLink } from "./link-downloader.js";
 import { getProgress } from "../utils.js";
@@ -9,7 +9,7 @@ import { getProgress } from "../utils.js";
 const evalServer = async (query) => {
   return [...document.querySelectorAll(query.HomeQuery)].map((e) => {
     const manga = e.querySelector(".post-title a, .post-title, .bigor-manga h3");
-    const Url = manga.querySelector(".post-title a, .thumb-manga > a")?.href.replace(/\/$/, "");
+    const Url = e.querySelector(".post-title a, .thumb-manga > a")?.href.replace(/\/$/, "");
 
     const Name = manga.textContent
       .replace("( Renta black and white comic Version)", "")
@@ -171,10 +171,10 @@ export const downloadFromPage = async (Id, state) => {
             let updateFolder = false;
 
             let chaptCount = 1;
-            for (let chap of d.chaps) {
+            for (let chap of d.chaps.filter(filterExclude(excludes))) {
               if (state.stopped) break;
               const count = `${getProgress(chaptCount++, d.chaps.length)}`;
-              if (chap.name && checkIfRaw(chap, folder) && !excludes.find((ex) => chap.name.includes(ex.Name))) {
+              if (chap.name && checkIfRaw(chap, folder)) {
                 try {
                   if (await downloadLink({ d: chap, page, Server, folder, count, state })) {
                     updateFolder = true;
