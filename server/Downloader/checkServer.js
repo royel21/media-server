@@ -97,125 +97,135 @@ const formatAMPM = (date) => {
   return strTime;
 };
 
-export const downloadFromPage = async (Id, state) => {
+export const downloadFromPage = async (state) => {
   const page = await createPage(state.browser);
 
   const db = getDb();
 
-  const Server = await db.Server.findOne({ where: { Id: Id } });
+  while (state.serverWork.length) {
+    if (state.stopped) {
+      state.checkServer = false;
+      await page?.close();
+      return;
+    }
 
-  if (Server && Server?.HomeQuery && page) {
-    try {
-      sendMessage({ text: `** ${formatAMPM(new Date())} ${Server.Name} **`, important: true });
-      let url = `https:\\${Server.Name}`;
+    const Id = state.serverWork.shift();
 
-      if (/mangahentai|manytoon|hentaiwebtoon/.test(Server.Name)) {
-        url = `${url}\\home`;
-      }
-      page.goto(url, { waitUntil: "domcontentloaded" });
+    const Server = await db.Server.findOne({ where: { Id } });
 
-      await page.waitForSelector(Server.HomeQuery, { timeout: 60000 });
+    if (Server && Server?.HomeQuery && page) {
+      try {
+        sendMessage({ text: `** ${formatAMPM(new Date())} ${Server.Name} **`, important: true });
+        let url = `https:\\${Server.Name}`;
 
-      if (/"mangaread/i.test(Server.Name)) {
-        try {
-          await page.click("#navigation-ajax");
-          await delay(6000);
-        } catch (error) {}
-      }
-
-      const data = await page.evaluate(evalServer, Server.dataValues);
-
-      const linkData = [];
-
-      for (let { Name, chaps, Url, Raw } of data) {
-        Name = Name.replace(" Raw");
-        let tname = await db.NameList.findOne({ where: { Name } });
-        console.log(Url, tname?.AltName || Name || "", Raw, Server.Id);
-
-        const query = {
-          where: { [db.Op.or]: { Url: Url || "", Name: tname?.AltName || Name || "" }, Raw, ServerId: Server.Id },
-          include: ["Server"],
-        };
-
-        const link = await db.Link.findOne(query);
-
-        if (link) {
-          await link.update({ IsDownloading: true });
-          linkData.push({ link, chaps });
+        if (/mangahentai|manytoon|hentaiwebtoon/.test(Server.Name)) {
+          url = `${url}\\home`;
         }
-      }
-      sendMessage({ links: linkData.map((d) => d.link) }, "link-update");
+        page.goto(url, { waitUntil: "domcontentloaded" });
 
-      if (linkData.length) {
-        let count = 1;
-        for (const d of linkData.reverse()) {
-          if (state.stopped) break;
+        await page.waitForSelector(Server.HomeQuery, { timeout: 60000 });
 
-          const folder = await findFolder(d.link.Name);
-          if (folder) {
-            sendMessage({
-              text: `\u001b[1;31m ${getProgress(count++, linkData.length)} ${folder.Name} \u001b[0m`,
-              url: d.link.Url,
-              color: "red",
-            });
+        if (/"mangaread/i.test(Server.Name)) {
+          try {
+            await page.click("#navigation-ajax");
+            await delay(6000);
+          } catch (error) {}
+        }
 
-            if (!fs.existsSync(folder.Path)) {
-              fs.mkdirpSync(folder.Path);
-            }
+        const data = await page.evaluate(evalServer, Server.dataValues);
 
-            const files = fs.readdirSync(folder.Path);
+        const linkData = [];
 
-            d.chaps = d.chaps.filter(removeRaw(d.chaps)).filter(filterManga(files));
-            const excludes = await db.Exclude.findAll({ where: { LinkName: d.link.Name } });
+        for (let { Name, chaps, Url, Raw } of data) {
+          Name = Name.replace(" Raw");
+          let tname = await db.NameList.findOne({ where: { Name } });
+          console.log(Url, tname?.AltName || Name || "", Raw, Server.Id);
 
-            let updateFolder = false;
+          const query = {
+            where: { [db.Op.or]: { Url: Url || "", Name: tname?.AltName || Name || "" }, Raw, ServerId: Server.Id },
+            include: ["Server"],
+          };
 
-            let chaptCount = 1;
-            for (let chap of d.chaps.filter(filterExclude(excludes))) {
-              if (state.stopped) break;
-              const count = `${getProgress(chaptCount++, d.chaps.length)}`;
-              if (chap.name && checkIfRaw(chap, folder)) {
-                try {
-                  if (await downloadLink({ d: chap, page, Server, folder, count, state })) {
-                    updateFolder = true;
-                  }
-                } catch (error) {
-                  if (!state.stopped) {
-                    sendMessage({ text: `chapter ${d.link.Name} - ${d.name} navigation error`, error });
+          const link = await db.Link.findOne(query);
+
+          if (link) {
+            await link.update({ IsDownloading: true });
+            linkData.push({ link, chaps });
+          }
+        }
+        sendMessage({ links: linkData.map((d) => d.link) }, "link-update");
+
+        if (linkData.length) {
+          let count = 1;
+          for (const d of linkData.reverse()) {
+            if (state.stopped) break;
+
+            const folder = await findFolder(d.link.Name);
+            if (folder) {
+              sendMessage({
+                text: `\u001b[1;31m ${getProgress(count++, linkData.length)} ${folder.Name} \u001b[0m`,
+                url: d.link.Url,
+                color: "red",
+              });
+
+              if (!fs.existsSync(folder.Path)) {
+                fs.mkdirpSync(folder.Path);
+              }
+
+              const files = fs.readdirSync(folder.Path);
+
+              d.chaps = d.chaps.filter(removeRaw(d.chaps)).filter(filterManga(files));
+              const excludes = await db.Exclude.findAll({ where: { LinkName: d.link.Name } });
+
+              let updateFolder = false;
+
+              let chaptCount = 1;
+              for (let chap of d.chaps.filter(filterExclude(excludes))) {
+                if (state.stopped) break;
+                const count = `${getProgress(chaptCount++, d.chaps.length)}`;
+                if (chap.name && checkIfRaw(chap, folder)) {
+                  try {
+                    if (await downloadLink({ d: chap, page, Server, folder, count, state })) {
+                      updateFolder = true;
+                    }
+                  } catch (error) {
+                    if (!state.stopped) {
+                      sendMessage({ text: `chapter ${d.link.Name} - ${d.name} navigation error`, error });
+                    }
                   }
                 }
               }
+
+              d.chaps.reverse();
+              if (d.chaps.length && d.chaps[0].name !== d.link.LastChapter) {
+                await d.link.update({ LastChapter: d.chaps[0].name });
+              }
+
+              if (updateFolder) {
+                let FileCount = fs.readdirSync(folder.Path).filter((f) => f.includes(".zip")).length;
+                await folder.update({ FileCount, CreatedAt: new Date() });
+
+                await d.link.reload();
+              }
+
+              sendMessage({ link: { ...d.link.dataValues, remove: true } }, "link-update");
+              await db.Link.update({ Date: new Date() }, { where: { Name: folder.Name } });
             }
-
-            d.chaps.reverse();
-            if (d.chaps.length && d.chaps[0].name !== d.link.LastChapter) {
-              await d.link.update({ LastChapter: d.chaps[0].name });
-            }
-
-            if (updateFolder) {
-              let FileCount = fs.readdirSync(folder.Path).filter((f) => f.includes(".zip")).length;
-              await folder.update({ FileCount, CreatedAt: new Date() });
-
-              await d.link.reload();
-            }
-
-            sendMessage({ link: { ...d.link.dataValues, remove: true } }, "link-update");
-            await db.Link.update({ Date: new Date() }, { where: { Name: folder.Name } });
+            await d.link.update({ IsDownloading: false });
           }
-          await d.link.update({ IsDownloading: false });
+        }
+      } catch (error) {
+        if (!state.stopped) {
+          console.log(error);
+          sendMessage({ text: `Error checking server ${Server?.Name}: Can't access page`, color: "red" });
         }
       }
-    } catch (error) {
-      if (!state.stopped) {
-        console.log(error);
-        sendMessage({ text: `Error checking server ${Server?.Name}: Can't access page`, color: "red" });
-      }
-    }
-    if (!state.stopped) {
-      sendMessage({ text: `Server finish ${Server?.Name}` });
     }
   }
 
+  if (!state.stopped) {
+    sendMessage({ text: `Server finish ${Server?.Name}` });
+  }
   state.checkServer = false;
   await page?.close();
 };

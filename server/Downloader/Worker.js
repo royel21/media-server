@@ -15,7 +15,16 @@ import { cleanText, getProgress } from "../utils.js";
 import { validAltName } from "#server/share/utils";
 
 // add stealth plugin and use defaults (all evasion techniques)
-const state = { links: [], running: false, size: 0, checkServer: false, nhentais: [], hrunning: false, hsize: 0 };
+const state = {
+  links: [],
+  nhentais: [],
+  serverWork: [],
+  running: false,
+  size: 0,
+  checkServer: false,
+  hrunning: false,
+  hsize: 0,
+};
 
 const db = getDb();
 
@@ -376,10 +385,10 @@ process.on("message", async ({ action, datas, remove, bypass, server }) => {
       break;
     }
     case "Check-Server": {
+      state.serverWork.push(server);
       if (!state.checkServer) {
         state.checkServer = true;
-        console.log("start-server");
-        downloadFromPage(server, state).then(cleanUp);
+        downloadFromPage(state).then(cleanUp);
       }
       break;
     }

@@ -77,7 +77,6 @@ routes.get("/download/:Path", (req, res) => {
   Path = tranformPath(Path);
 
   if (fs.existsSync(Path)) {
-    console.log("send-file");
     return res.sendFile(Path);
   }
 
