@@ -220,12 +220,13 @@ export const downloadFromPage = async (state) => {
           sendMessage({ text: `Error checking server ${Server?.Name}: Can't access page`, color: "red" });
         }
       }
+      if (!state.stopped) {
+        sendMessage({ text: `Server finish ${Server.Name}` });
+      }
     }
   }
 
-  if (!state.stopped) {
-    sendMessage({ text: `Server finish ${Server?.Name}` });
-  }
+  
   state.checkServer = false;
   await page?.close();
 };
