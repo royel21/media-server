@@ -395,7 +395,7 @@ export const adultEvalPage = async (query) => {
     }
   }
 
-  Name = Name.replace(/^ON-GOING|^(18\+|(ENDED|END)(\.|)+|ONGOING|ON GOING|HOT|NEW)/i, "");
+  Name = Name.replace(/^ON-GOING|^(18\+|(ENDED|END)(\.|)+|ONGOING|ON GOING|HOT|NEW)/, "");
 
   return { Name, data, poster, Description, Status, posterData, Genres, AltName, title, Author, EmissionDate };
 };
