@@ -50,6 +50,7 @@
   const loadFolders = async (pg, dir, isResize) => {
     rows = calRows();
     let flt = filter?.replace(/|:|\?|\^|"|\*|<|>|\t|\n/gi, "") || "";
+    flt = /% |%$/.test(flt) ? encodeURIComponent(flt) : flt;
     let data = await apiUtils.admin(["folders", dir || currentDir || "all", pg, calRows(), flt]);
 
     if (data.items && isMounted) {

@@ -6,7 +6,7 @@
 
   const dispatch = createEventDispatcher();
 
-  let curFilter = /%/.test(filter) ? decodeURIComponent(filter) : filter;
+  let curFilter = /%\d+/.test(filter) ? decodeURIComponent(filter) : filter;
 
   const send = (text = "", type = "filter") => {
     curFilter = text;
@@ -44,7 +44,7 @@
     send(curFilter, "change");
   };
 
-  $: curFilter = /%/.test(filter) ? decodeURIComponent(filter) : filter;
+  $: curFilter = /%\d+/.test(filter) ? decodeURIComponent(filter) : filter;
   const box = "0 0 512 512";
 </script>
 

@@ -13,12 +13,12 @@ export const getWatchFiles = async (req, res) => {
   const { page, items, filter } = req.params;
   const limit = items || 100;
   const offset = (page - 1) * limit;
-
+  const Path = getFilter(filter?.replace(/ \[digital\]$/i, ""));
   const query = {
     order: [[literal(`REPLACE(REPLACE(Name, "-", "0"), '[','0')`)]], // used for natural ordering
     limit,
     offset,
-    where: { Path: getFilter(filter.replace(/ \[digital\]$/i, "")) },
+    where: filter ? { Path } : {},
   };
 
   const data = await db.File.findAndCountAll(query);
