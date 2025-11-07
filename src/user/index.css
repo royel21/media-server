@@ -307,16 +307,10 @@ input[type="range"]::-moz-range-track {
 :fullscreen #play-list.move {
   top: 0;
 }
-
-@media screen and (max-width: 640px) {
-  .scroll-container {
-    height: calc(100% - 67px);
-    min-height: calc(100% - 67px);
-  }
-
+@media screen and (max-width: 800px) {
   .file {
     height: 335px;
-    width: 190px;
+    width: 240px;
   }
 
   .file-info {
@@ -327,9 +321,17 @@ input[type="range"]::-moz-range-track {
   .file-cover {
     height: 250px;
   }
+}
 
-  .file-info {
-    width: 185px;
+@media screen and (max-width: 640px) {
+  .scroll-container {
+    height: calc(100% - 67px);
+    min-height: calc(100% - 67px);
+  }
+
+  .file {
+    height: 335px;
+    width: 190px;
   }
 
   .show-list {
