@@ -516,7 +516,7 @@ body .navbar .icon-folder {
   }
 }
 
-@media (pointer: none), (pointer: coarse) and (max-width: 640px) {
+@media (pointer: none), (pointer: coarse) and (max-width: 800px) {
   ::-webkit-scrollbar {
     display: none;
   }
