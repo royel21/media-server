@@ -189,7 +189,7 @@
     height: 100%;
     background-color: #535353;
     border-radius: 0.3rem;
-    width: 50%;
+    width: 51%;
     overflow: hidden;
   }
   .col:first-child {
@@ -219,7 +219,7 @@
   .d-loading {
     height: 100%;
   }
-  @media (pointer: none), (pointer: coarse) and (max-width: 640px) {
+  @media (pointer: none), (pointer: coarse) and (max-width: 800px) {
     .d-content.expanded {
       min-width: calc(100% * 2 - 10px);
     }
