@@ -13,7 +13,6 @@ import os from "os";
 import { getFileType } from "#server/Downloader/utils";
 import { createDefaultImageDirs } from "../utils.js";
 import { ZipCover } from "./ThumbnailUtils.js";
-import file from "#server/models/file";
 
 let folders = [];
 const homedir = os.homedir();
@@ -174,7 +173,7 @@ const scanFolder = async (curfolder, files, isFolder) => {
           Size,
           CreatedAt: f.LastModified,
         });
-      } else if (found && !found.CreatedAt.Compare(f.LastModified)) {
+      } else if (found && !found.CreatedAt.Compare(f.LastModified) && found.Type === "Manga") {
         const thumbPath = path.join(CoverPath, getFileType(folder), folder.Name);
         const coverPath = path.join(thumbPath, found.Name + ".jpg");
         const Duration = await ZipCover(path.join(folder.Path, found.Name), coverPath);

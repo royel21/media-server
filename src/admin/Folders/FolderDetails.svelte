@@ -42,7 +42,6 @@
       imageData.Id = Id;
       delete data.dirs;
       folder = { ...folder, ...data };
-      blurImg = folder.IsAdult;
       old = { ...folder };
       delete old.image;
       tags = data.tags.filter((g) => !g.IsRemove).map((g) => g.Name);
@@ -169,7 +168,9 @@
     }
   };
 
-  const unBlur = () => (blurImg = false);
+  const unBlur = () => {
+    blurImg = !blurImg;
+  };
 
   $: loadDetails(folderId);
   $: isModified = hasChanges || imageData.Url || imageData.file;
@@ -184,7 +185,7 @@
       </span>
     </TextAreaInput>
     <div class="header">
-      <div class="f-image" class:blur={blurImg} on:click={unBlur}>
+      <div class="f-image" class:blur={blurImg && folder.IsAdult} on:click={unBlur}>
         <div>
           <img src={`${encodeURI(`/Folder/${folder.FilesType}/${folder.Name}.jpg?v=${time}`)}`} alt="Not Found" />
         </div>

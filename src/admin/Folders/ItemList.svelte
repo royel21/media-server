@@ -162,7 +162,7 @@
   .col-6 {
     flex-grow: 1;
     position: relative;
-    width: 50%;
+    width: 49%;
     padding: 0 10px;
     height: 100%;
   }

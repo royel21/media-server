@@ -44,9 +44,9 @@
       min-width: initial;
     }
   }
-  @media screen and (max-width: 600px) {
+  @media (pointer: none), (pointer: coarse) and (max-width: 800px) {
     .card.has-files {
-      min-width: 790px;
+      min-width: calc(100% * 2 - 10px);
     }
   }
 
