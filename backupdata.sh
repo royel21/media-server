@@ -1,5 +1,6 @@
 #!/bin/bash
 
+rsync -avu /mnt/2TBSSD2/Games /mnt/18TBHDD/2TBSSD2
 rsync -avu --delete ~/images /mnt/18TBHDD
 rsync -avu --delete /mnt/1TBSSD /mnt/18TBHDD/
 rsync -avu --delete /mnt/2TBSSD /mnt/18TBHDD/

@@ -571,7 +571,7 @@
     }
   }
 
-  @media screen and (max-width: 700px) {
+  @media screen and (max-width: 900px) {
     #manga-viewer .img-current {
       transform: initial;
       width: 100% !important;

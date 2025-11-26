@@ -29,7 +29,7 @@ export const startBrowser = async (config) => {
     config.executablePath = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
   } else {
     config.args.push(`--display=${":1"}`); // fix for LXDE desktops)
-    config.executablePath = "/usr/bin/brave-browser";
+    config.executablePath = "/usr/bin/microsoft-edge";
     //microsoft-edge
     //brave-browser
     //google-chrome

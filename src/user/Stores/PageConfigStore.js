@@ -1,7 +1,7 @@
 import { writable } from "svelte/store";
 
 const initConfig = {
-  Viewer: { manga: { imgAbjust: "fill", width: 65, webtoon: false } },
+  Viewer: { manga: { imgAbjust: "fill", width: isMobile() ? 100 : 65, webtoon: false } },
 };
 
 let ConfigStore;
