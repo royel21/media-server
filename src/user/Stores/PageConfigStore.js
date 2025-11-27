@@ -1,3 +1,4 @@
+import { isMobile } from "src/utils";
 import { writable } from "svelte/store";
 
 const initConfig = {
