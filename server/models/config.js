@@ -7,7 +7,7 @@ export default {
       min: 2,
     },
     define: {
-      charset: "utf8",
+      charset: "utf8mb4",
       collate: "utf8mb4_unicode_ci",
       timestamps: false,
     },

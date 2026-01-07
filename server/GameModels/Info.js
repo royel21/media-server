@@ -1,4 +1,4 @@
-module.exports = (sequelize, { DATE, STRING, TEXT }) => {
+export default (sequelize, { DATE, STRING, TEXT }) => {
   const Info = sequelize.define("Info", {
     Codes: { type: STRING, primaryKey: true },
     AltName: { type: TEXT },

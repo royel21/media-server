@@ -30,6 +30,7 @@ import FoldersRoute from "./routes/admin/FoldersRoute.js";
 import DownloaderRoutes from "./routes/admin/DownloaderRoutes.js";
 import defaultConfig from "./default-config.js";
 import AppRoutes from "./routes/admin/AppRoutes.js";
+import GameRoutes from "./routes/admin/Games.js";
 
 const app = express();
 const passport = passportConfig();
@@ -95,6 +96,7 @@ app.use("/api/admin/files", FilesManagerRoute);
 app.use("/api/admin/folders", FoldersRoute);
 app.use("/api/admin/downloader", DownloaderRoutes);
 app.use("/api/admin/app-config", AppRoutes);
+app.use("/api/admin/games", GameRoutes);
 
 const getPath = (type) => path.join(path.dirname(__filename), "public", type, "index.html");
 

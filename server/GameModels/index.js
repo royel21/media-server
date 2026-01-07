@@ -1,32 +1,27 @@
-const Sequelize = require("sequelize");
-const os = require("os");
-const path = require("path");
-const fs = require("fs-extra");
+import Sequelize from "sequelize";
 
-const baseDir = path.join(os.homedir(), ".rc-studio", "db-gamelist");
-
-if (!fs.existsSync(baseDir)) fs.mkdirsSync(baseDir);
-
-const storage = process.env.local ? "../gamelist.db" : path.join(baseDir, "gamelist.db");
+import Directory from "./Directory.js";
+import Games from "./Games.js";
+import Info from "./Info.js";
 
 const DataTypes = Sequelize.DataTypes;
 const sequelize = new Sequelize(null, null, null, {
   logging: false,
   dialect: "sqlite",
-  storage,
+  storage: "server/gamelist.db",
   define: {
     timestamps: false,
   },
 });
 
-const db = {};
+export const db = {};
 
 db.Op = Sequelize.Op;
 db.sqlze = sequelize;
 
-db.Directory = require("./Directory")(sequelize, DataTypes);
-db.Game = require("./Games")(sequelize, DataTypes);
-db.Info = require("./Info")(sequelize, DataTypes);
+db.Directory = Directory(sequelize, DataTypes);
+db.Game = Games(sequelize, DataTypes);
+db.Info = Info(sequelize, DataTypes);
 
 db.Directory.hasMany(db.Game, { foreignKey: "DirectoryId", onDelete: "CASCADE" });
 
@@ -41,4 +36,4 @@ db.init = async (force = false) => {
   await sequelize.sync({ force });
 };
 
-module.exports = db;
+db.init();

@@ -136,7 +136,7 @@ db.init = async (force) => {
         await db.user.create(
           {
             Name: "Administrator",
-            Password: appConfig.AdminPassword,
+            Password: atob(appConfig.AdminPassword),
             Role: "Administrator",
             AdultPass: 1,
             SortTabs: defSortTabs,

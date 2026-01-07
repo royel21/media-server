@@ -15,6 +15,8 @@
 
 # Server Configurations
 
+# Default Pass for administrator @Dmin123
+
 ### -> we need a .env file with the following Variables.
 
 - NODE_ENV=production **#Tell Nodejs we are in production**

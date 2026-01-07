@@ -17,6 +17,7 @@
   import TextEditor from "./Component/TextEditor.svelte";
   import ImageViewer from "./Component/ImageViewer.svelte";
   import LocalFileList from "./Component/LocalFileList.svelte";
+  import Games from "./Games/Games.svelte";
 
   let logout = getContext("logout");
   let user = getContext("User");
@@ -59,6 +60,13 @@
       class: "sitemap",
       color: "#80bdff",
       box: " 0 0 640 512",
+    },
+    {
+      title: "Games",
+      path: "/admin/games",
+      class: "games",
+      color: "#ff1717",
+      box: " 0 0 640 640",
     },
     {
       title: "Configs",
@@ -118,6 +126,7 @@
     <Route path="/admin/content-manager/:tab" component={DiskManager} />
     <Route path="/admin/downloads/:tab" component={DownloadManager} />
     <Route path="/admin/files/:page/:filter" component={Files} />
+    <Route path="/admin/games/:tab" component={Games} />
     <Route path="/admin/configs/:tab" component={Configs} />
     <Route path="/admin/" component={User} />
     <Route path="/"><Redirect to="/admin/" /></Route>
@@ -193,7 +202,14 @@
   :global(#menu li span) {
     margin-left: 2px;
   }
-  @media screen and (max-width: 790px) {
+
+  @media (max-width: 800px) {
+    :global(#menu li span) {
+      margin-left: 7px;
+    }
+  }
+
+  @media screen and (min-width: 600px) {
     .toast {
       max-width: 390px;
     }
@@ -203,9 +219,6 @@
     :global(body #menu li svg) {
       transform: scale(1.05);
       right: 0;
-    }
-    :global(#menu li span) {
-      margin-left: 7px;
     }
     #admin-label :global(svg) {
       transform: scale(1.2);
