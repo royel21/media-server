@@ -47,8 +47,14 @@ rsync -avu --del --exclude='[0-9]*.jpg' --prune-empty-dirs "/<src>" "/<dest>"
 #mount remote folder ".smbcredentials" contain the username and password
 sudo mount -t cifs -o credentials=/home/.smbcredentials //10.0.0.4/e /mnt/MSI-8TBHDD
 sudo mount -t cifs -o credentials=/home/.smbcredentials //10.0.0.4/g /mnt/MSI-GHDD
+sudo mount -t cifs -o credentials=/home/.smbcredentials //10.0.0.4/e /mnt/MSI-GHDD
+ 
+rsync -avu --progress /mnt/8TBHDD/H/JoiPlay /mnt/MSI-GHDD/H
+
 
 #to before running brave
 sudo chmod 1777 /dev/shm
 //Fix video slow Startup 
 ffmpeg -i ".mp4" -c:a copy -c:v copy -movflags +faststart output.mp4 
+
+UUID=AA31-8189 /mnt/exfat_drive exfat defaults,rw,uid=1000,gid=1000,umask=0002 0 0   

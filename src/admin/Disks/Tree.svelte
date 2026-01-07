@@ -219,6 +219,7 @@
   .d-loading {
     height: 100%;
   }
+
   @media (pointer: none), (pointer: coarse) and (max-width: 800px) {
     .d-content.expanded {
       min-width: calc(100% * 2 - 10px);
