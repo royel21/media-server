@@ -59,7 +59,10 @@ routes.get("/:page/:rows/:search?", async (req, res) => {
   }
 
   return res.send({
-    items: games.rows.map((g) => g.dataValues),
+    items: games.rows.map((g) => ({
+      ...g.dataValues,
+      Path: g.Path.replace(/\/\/\d+\.\d+\.\d+\.\d+\/sambashare\//, ""),
+    })),
     totalItems: games.count,
     totalPages: Math.ceil(games.count / 200),
   });
