@@ -118,6 +118,10 @@ export const downloadFromPage = async (state) => {
         sendMessage({ text: `** ${formatAMPM(new Date())} ${Server.Name} **`, important: true });
         let url = `https:\\${Server.Name}`;
 
+        if (Server.Name.includes("mangaread")) {
+          url = `https:\\www.${Server.Name}`;
+        }
+
         if (/mangahentai|manytoon|hentaiwebtoon/.test(Server.Name)) {
           url = `${url}\\home`;
         }
@@ -226,7 +230,6 @@ export const downloadFromPage = async (state) => {
     }
   }
 
-  
   state.checkServer = false;
   await page?.close();
 };

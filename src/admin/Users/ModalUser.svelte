@@ -25,10 +25,6 @@
       return errors.push("Name Can't be empty");
     }
 
-    if (!foundUser.Id && !foundUser.Password) {
-      return errors.push("Password Can't be empty");
-    }
-
     const result = await apiUtils.post("admin/users/create-update", foundUser);
     if (!result.fail) {
       dispatch("updateusers", result.user);
