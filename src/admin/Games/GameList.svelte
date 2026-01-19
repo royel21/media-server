@@ -16,12 +16,13 @@
   let GameId = "";
 
   const loadGames = async () => {
-    const data = await apiUtils.admin(["games", page, calRows(), filter]);
+    const data = await apiUtils.admin(["games", page, calRows(), filter], "g-list");
     items = data.items || [];
     totalItems = data.totalItems || 0;
     totalPages = data.totalPages || 0;
     setInfo({ detail: items[0] || {} });
     GameId = items[0]?.Id || "";
+    console.log(data);
   };
 
   const gotopage = async (newPage) => {
@@ -60,11 +61,10 @@
       e.preventDefault();
     }
   };
-
   onMount(loadGames);
 </script>
 
-<div class={"file-list col-6"} tabindex="-1">
+<div class={`file-list col-6 ${totalPages === 1 ? "full-list" : ""}`} tabindex="-1">
   <slot name="first-tag" />
   <div class="controls">
     <slot name="btn-controls" />
@@ -116,6 +116,10 @@
     height: calc(100% - 90px);
     overflow-y: hidden;
     background-color: white;
+    border-radius: 0.25rem;
+  }
+  .full-list .list-container {
+    height: calc(100% - 55px);
   }
   .controls {
     position: initial;
@@ -157,7 +161,7 @@
     pointer-events: none;
   }
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 700px) {
     .controls h4 strong {
       display: none;
     }

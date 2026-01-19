@@ -1,36 +1,127 @@
 <script>
+  import apiUtils from "src/apiUtils";
+  import { setMessage } from "../Store/MessageStore";
+  import { getImageFromNav } from "../Component/util";
+
   export let game = {};
 
-  $: info = game?.Info || {};
+  let data = {
+    Name: "",
+    Codes: "",
+    Company: "",
+    AltName: "",
+    Description: "",
+    Image: {},
+  };
+
+  let files;
+
+  const save = async () => {
+    const result = await apiUtils.post("admin/games/update-game-info", data, "up-data");
+    if (result.error) {
+      return setMessage({ msg: result.error });
+    }
+
+    if (!game.Info) {
+      game.Info = {};
+    }
+
+    data = { ...result, Image: data.Image };
+
+    game.Name = result.Name;
+    game.Path = result.Path;
+    game.Codes = result.Codes;
+    game.Info.Company = result.Company;
+    game.Info.AltName = result.AltName;
+    game.Info.Description = result.Description;
+
+    setMessage({ msg: "Game info saved." });
+  };
+
+  const getImage = async (Id) => {
+    const result = await apiUtils.post("admin/games/get-game-image", { Id }, "g-img");
+
+    data.Image.data = result.image || "";
+  };
+
+  const uploadFile = async (file) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const base64 = e.target.result.split(",")[1];
+      data.Image = { type: file.type, data: base64 };
+    };
+    reader.readAsDataURL(file);
+
+    await apiUtils.postFile("admin/games/upload-game-image", { file, Id: game.Id }, "u-img");
+  };
+
+  const onImageLoaded = async () => {
+    if (files && files.length > 0) {
+      const file = files[0];
+      uploadFile(file);
+    }
+  };
+
+  const handlerImg = async (e) => {
+    const image = await getImageFromNav();
+    if (image !== undefined) {
+      uploadFile(image);
+    }
+  };
+
+  $: if (game.Id !== data.Id) {
+    data = {
+      Id: game.Id,
+      Name: game.Name || "",
+      Path: game.Path || "",
+      Codes: game.Codes || "",
+      Company: game.Info?.Company || "",
+      AltName: game.Info?.AltName || "",
+      Description: game.Info?.Description || "",
+      Image: {},
+    };
+    getImage(game.Id);
+  }
 </script>
 
 <div id="folder-data" class="file-list col-6">
+  <div class="info-cover">
+    <label class={`${data.Image.data ? "" : "info-load-img"}`} on:contextmenu={handlerImg}>
+      {#if data.Image?.data}
+        <img src={`data:img/jpeg;base64, ${data.Image.data || ""}`} alt="" />
+      {:else}
+        <p>Left click to select image</p>
+        <p>Right click to paste image</p>
+      {/if}
+      <input id="single" type="file" accept="image/*" bind:files on:change={onImageLoaded} />
+    </label>
+  </div>
   <div class="info-item info-name">
     <span>Name</span>
-    <textarea class="form-control" name="Name" bind:value={game.Name}></textarea>
+    <textarea class="form-control" bind:value={data.Name}></textarea>
   </div>
   <div>
     <span>Codes</span>
-    <textarea class="form-control" name="Codes" bind:value={info.Codes}></textarea>
+    <textarea class="form-control" bind:value={data.Codes}></textarea>
   </div>
   <div>
     <span>Company</span>
-    <textarea class="form-control" name="Company" bind:value={info.Company}></textarea>
+    <textarea class="form-control" bind:value={data.Company}></textarea>
   </div>
   <div class="info-item info-altname">
     <span>Alt Name</span>
-    <textarea class="form-control" name="AltName" bind:value={info.AltName}></textarea>
+    <textarea class="form-control" rows="3" bind:value={data.AltName}></textarea>
   </div>
   <div class="info-item">
     <span>Description</span>
-    <textarea class="form-control" name="Description" bind:value={info.Description}></textarea>
+    <textarea class="form-control" bind:value={data.Description}></textarea>
   </div>
   <div class="info-item">
     <span>Path</span>
-    <textarea class="form-control" name="Description" bind:value={game.Path}></textarea>
+    <textarea class="form-control" bind:value={data.Path}></textarea>
   </div>
   <div class="info-controls">
-    <button class="btn">Save Info</button>
+    <button class="btn" on:click={save}>Save Info</button>
   </div>
 </div>
 
@@ -45,6 +136,32 @@
     padding: 0 5px;
   }
 
+  img {
+    height: 140px;
+    display: block;
+    margin: 0 auto 0px auto;
+  }
+
+  .info-load-img {
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed #ccc;
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  .info-cover input {
+    display: none;
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+  }
+
   #folder-data {
     display: flex;
     flex-direction: column;
@@ -53,7 +170,7 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 10px;
-    flex-grow: 1;
+    flex-grow: 10;
   }
   .info-controls,
   .info-item textarea {
@@ -75,6 +192,10 @@
     max-height: 100px;
   }
   .info-altname {
-    max-height: 150px;
+    max-height: 180px;
+  }
+
+  textarea {
+    line-height: 1.14;
   }
 </style>

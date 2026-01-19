@@ -25,7 +25,7 @@
 <style>
   #admin-manager {
     overflow: hidden;
-    max-width: 1200px;
+    max-width: 1500px;
     margin: 0 auto;
   }
   #admin-manager :global(#tabs-content) {

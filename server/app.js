@@ -30,7 +30,7 @@ import FoldersRoute from "./routes/admin/FoldersRoute.js";
 import DownloaderRoutes from "./routes/admin/DownloaderRoutes.js";
 import defaultConfig from "./default-config.js";
 import AppRoutes from "./routes/admin/AppRoutes.js";
-import GameRoutes from "./routes/admin/Games.js";
+import GamesRoutes from "./routes/admin/GamesRoutes.js";
 
 const app = express();
 const passport = passportConfig();
@@ -46,7 +46,7 @@ app.use(
     filter: function (req) {
       return !req.url.includes("viewer/video");
     },
-  })
+  }),
 );
 
 app.use(express.static(path.join(appPath, "public", "static"), { dotfiles: "allow" }));
@@ -87,7 +87,7 @@ app.use("/api/files", filesRoutes);
 app.use("/api/viewer", ViewerRoutes);
 
 app.use("/api/admin", ({ user }, res, next) =>
-  user.Role.includes("Administrator") ? next() : res.redirect("/notfound")
+  user.Role.includes("Administrator") ? next() : res.redirect("/notfound"),
 );
 
 app.use("/api/admin/users", UsersManagerRoute);
@@ -96,7 +96,7 @@ app.use("/api/admin/files", FilesManagerRoute);
 app.use("/api/admin/folders", FoldersRoute);
 app.use("/api/admin/downloader", DownloaderRoutes);
 app.use("/api/admin/app-config", AppRoutes);
-app.use("/api/admin/games", GameRoutes);
+app.use("/api/admin/games", GamesRoutes);
 
 const getPath = (type) => path.join(path.dirname(__filename), "public", type, "index.html");
 
@@ -104,11 +104,11 @@ const getPath = (type) => path.join(path.dirname(__filename), "public", type, "i
 app.get("/login/*", (_, res) => res.sendFile(getPath("/static/login")));
 
 app.get("/admin/*", ({ user }, res) =>
-  user.Role.includes("User") ? res.redirect("/user") : res.sendFile(getPath("admin"))
+  user.Role.includes("User") ? res.redirect("/user") : res.sendFile(getPath("admin")),
 );
 
 app.get("/*", ({ user }, res) =>
-  user.Role.includes("Admin") ? res.redirect("/admin/") : res.sendFile(getPath("user"))
+  user.Role.includes("Admin") ? res.redirect("/admin/") : res.sendFile(getPath("user")),
 );
 
 app.use((e, _, res, __) => {

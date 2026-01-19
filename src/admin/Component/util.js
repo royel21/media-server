@@ -1,6 +1,6 @@
 import { isMobile } from "src/utils";
 
-const getImage = async () => {
+export const getImageFromNav = async () => {
   const item_list = await navigator.clipboard?.read();
   for (const item of item_list || []) {
     const image_type = item.types.find((type) => /image\//.test(type));
@@ -12,7 +12,7 @@ const getImage = async () => {
 
 export const handlerPaste = async (item, key, sept, ref) => {
   try {
-    let image = await getImage();
+    let image = await getImageFromNav();
     if (image) {
       item.file = image;
       ref.value = "";
