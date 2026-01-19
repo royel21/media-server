@@ -85,21 +85,24 @@
 </script>
 
 <div id="folder-data" class="file-list col-6">
-  <div class="info-cover">
-    <label class={`${data.Image.data ? "" : "info-load-img"}`} on:contextmenu={handlerImg}>
-      {#if data.Image?.data}
-        <img src={`data:img/jpeg;base64, ${data.Image.data || ""}`} alt="" />
-      {:else}
-        <p>Left click to select image</p>
-        <p>Right click to paste image</p>
-      {/if}
-      <input id="single" type="file" accept="image/*" bind:files on:change={onImageLoaded} />
-    </label>
+  <div class="name-img">
+    <div class="info-cover">
+      <label class={`${data.Image.data ? "" : "info-load-img"}`} on:contextmenu={handlerImg}>
+        {#if data.Image?.data}
+          <img src={`data:img/jpeg;base64, ${data.Image.data || ""}`} alt="" />
+        {:else}
+          <p>Left click to select image</p>
+          <p>Right click to paste image</p>
+        {/if}
+        <input id="single" type="file" accept="image/*" bind:files on:change={onImageLoaded} />
+      </label>
+    </div>
+    <div class="info-item info-name">
+      <span>Name</span>
+      <textarea class="form-control" bind:value={data.Name}></textarea>
+    </div>
   </div>
-  <div class="info-item info-name">
-    <span>Name</span>
-    <textarea class="form-control" bind:value={data.Name}></textarea>
-  </div>
+
   <div>
     <span>Codes</span>
     <textarea class="form-control" bind:value={data.Codes}></textarea>
@@ -135,9 +138,12 @@
     min-width: 400px;
     padding: 0 5px;
   }
-
+  .name-img {
+    display: flex;
+    flex-direction: row;
+  }
   img {
-    height: 140px;
+    height: 210px;
     display: block;
     margin: 0 auto 0px auto;
   }
@@ -160,6 +166,7 @@
   label {
     display: flex;
     flex-direction: column;
+    margin-right: 5px;
   }
 
   #folder-data {
@@ -189,7 +196,7 @@
     padding-bottom: 5px;
   }
   .info-name {
-    max-height: 100px;
+    min-height: 100%;
   }
   .info-altname {
     max-height: 180px;
