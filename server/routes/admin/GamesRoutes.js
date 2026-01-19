@@ -38,31 +38,19 @@ const getFilters = (splt, filter) => {
 };
 
 const ListFiles = (dir) => {
-  const fileInfo = (dir, f) => {
-    let data = fs.statSync(dir);
-    return {
-      isDirectory: data.isDirectory(),
-      Name: f,
-      Size: data.size,
-      isHidden: f[0] == ".",
-      Extension: !data.isDirectory() ? f.split(".").pop() : "",
-      LastModified: data.mtime,
-      Path: dir,
-    };
-  };
-
-  let foundFiles = fs.readdirSync(dir);
-  let tempFiles = [];
   let i = 0;
-  for (let f of foundFiles) {
+  let tempFiles = [];
+  let foundFiles = fs.readdirSync(dir);
+
+  for (let Name of foundFiles) {
     if (["$"].includes(f[0]) || f.includes("System Volume Information")) continue;
-    const file = path.join(dir, f);
-    try {
-      tempFiles[i] = fileInfo(file, f);
-      i++;
-    } catch (error) {
-      console.log("error oppening file", file);
-    }
+
+    const Path = path.join(dir, f);
+
+    tempFiles[i] = {
+      Name,
+      Path,
+    };
   }
 
   return tempFiles;
@@ -84,7 +72,8 @@ const scanGames = async (dir) => {
     const Name = file.Name.replace(Codes, "").trim();
 
     if (list.find((g) => g.Name === Name && g.DirectoryId === dir.Id)) {
-      send("error", "Dup: " + Name);
+      console.log("dup:", file.Name);
+      continue;
     }
 
     list.push({ Codes, Name, DirectoryId: dir.Id, Path: file.Path });
