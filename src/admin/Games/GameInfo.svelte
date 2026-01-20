@@ -64,6 +64,10 @@
   };
 
   const handlerImg = async (e) => {
+    if (!game.Codes) {
+      return setMessage({ msg: "Error: Set Code First" });
+    }
+
     try {
       const image = await getImageFromNav();
       if (image !== undefined) {
