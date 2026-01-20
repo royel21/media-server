@@ -278,13 +278,14 @@ routes.post("/upload-game-image", async (req, res) => {
 
 routes.post("/get-game-image", async (req, res) => {
   const { Id } = req.body;
-  let game = await db.Game.findOne({ where: { Id } });
-  let imgPath = path.join(homeDir, "images", "games", `${game.Codes}.jpg`);
   let image = "";
-  if (fs.existsSync(imgPath)) {
-    image = fs.readFileSync(imgPath, { encoding: "base64" });
+  let game = await db.Game.findOne({ where: { Id } });
+  if (game) {
+    let imgPath = path.join(homeDir, "images", "games", `${game.Codes}.jpg`);
+    if (fs.existsSync(imgPath)) {
+      image = fs.readFileSync(imgPath, { encoding: "base64" });
+    }
   }
-  console.log(imgPath);
   return res.send({ image });
 });
 
