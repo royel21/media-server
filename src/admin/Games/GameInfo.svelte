@@ -107,11 +107,11 @@
 
   <div>
     <span>Codes</span>
-    <textarea class="form-control" bind:value={data.Codes}></textarea>
+    <input class="form-control" bind:value={data.Codes} />
   </div>
   <div>
     <span>Company</span>
-    <textarea class="form-control" bind:value={data.Company}></textarea>
+    <input class="form-control" bind:value={data.Company} />
   </div>
   <div class="info-item info-altname">
     <span>Alt Name</span>
@@ -191,7 +191,8 @@
     flex-grow: 10;
   }
   .info-controls,
-  .info-item textarea {
+  #folder-data textarea,
+  #folder-data input {
     flex-grow: 1;
     resize: none;
     padding: 0.25rem;
