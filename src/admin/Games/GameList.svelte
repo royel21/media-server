@@ -15,7 +15,10 @@
   let GameId = "";
 
   const loadGames = async () => {
-    const data = await apiUtils.admin(["games", page, calRows(), filter], "g-list");
+    const data = await apiUtils.admin(
+      ["games", page, calRows(), filter.replace(/ Free Download|\?|:/gi, "")],
+      "g-list",
+    );
     items = data.items || [];
     totalItems = data.totalItems || 0;
     totalPages = data.totalPages || 0;
