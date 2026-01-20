@@ -91,8 +91,8 @@
 
 <div id="folder-data" class="file-list col-6">
   <div class="name-img">
-    <div class="info-cover">
-      {#if data.Id}
+    {#if data.Id}
+      <div class="info-cover">
         <label class={`${data.Image.data ? "" : "info-load-img"}`} on:contextmenu={handlerImg}>
           {#if data.Image?.data}
             <img src={`data:img/jpeg;base64, ${data.Image.data || ""}`} alt="" />
@@ -102,8 +102,8 @@
           {/if}
           <input id="single" type="file" accept="image/*" bind:files on:change={onImageLoaded} />
         </label>
-      {/if}
-    </div>
+      </div>
+    {/if}
     <div class="info-item info-name">
       <span>Name</span>
       <textarea class="form-control" bind:value={data.Name}></textarea>
