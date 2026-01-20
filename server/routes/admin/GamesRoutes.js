@@ -284,6 +284,7 @@ routes.post("/get-game-image", async (req, res) => {
   if (fs.existsSync(imgPath)) {
     image = fs.readFileSync(imgPath, { encoding: "base64" });
   }
+  console.log(imgPath);
   return res.send({ image });
 });
 

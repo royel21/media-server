@@ -1,6 +1,5 @@
 <script>
   import apiUtils from "src/apiUtils";
-  import Icons from "src/icons/Icons.svelte";
   import Filter from "src/ShareComponent/Filter.svelte";
   import Pagination from "src/ShareComponent/Pagination.svelte";
   import { onMount } from "svelte";

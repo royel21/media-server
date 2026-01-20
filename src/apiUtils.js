@@ -1,27 +1,13 @@
 let controller = {};
 
-export const post = async (route, params, key = "p-data") => {
+const getController = (key) => {
   controller[key]?.abort();
   controller[key] = new AbortController();
-  try {
-    const url = `/api/${route}`.replace(/(\/)+/g, "/");
-
-    return await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(params),
-      signal: controller[key].signal,
-    }).then((res) => res.json());
-  } catch (error) {
-    return { error, valid: false };
-  }
 };
 
-export const postFile = async (route, data, key = "p-file") => {
-  controller[key]?.abort();
-  controller[key] = new AbortController();
+export const post = async (route = "", data = [], key = "p-data") => {
+  getController(key);
+
   let body = new FormData();
 
   for (const k in data) {
@@ -29,7 +15,9 @@ export const postFile = async (route, data, key = "p-file") => {
   }
 
   try {
-    return await fetch(`/api/${route}`, {
+    const url = `/api/${route}`.replace(/(\/)+/g, "/");
+
+    return await fetch(url, {
       method: "POST",
       body,
       signal: controller[key].signal,
@@ -40,8 +28,7 @@ export const postFile = async (route, data, key = "p-file") => {
 };
 
 export const get = async (route = [], key = "get") => {
-  controller[key]?.abort();
-  controller[key] = new AbortController();
+  getController(key);
   const url = ["/api", ...route].filter((p) => p).join("/");
   try {
     return await fetch(url, { signal: controller[key].signal }).then((res) => res.json());
@@ -65,8 +52,7 @@ const files = async (path = [], key = "get") => get(["files", ...path], key);
 
 export const getItemsList = async (url, key = "item-list") => {
   try {
-    controller[key]?.abort();
-    controller[key] = new AbortController();
+    getController(key);
 
     return await fetch(url, { signal: controller[key].signal }).then((res) => res.json());
   } catch (error) {
@@ -84,7 +70,6 @@ export default {
   admin,
   files,
   postFav,
-  postFile,
   cancelQuery,
   getStatic,
 };

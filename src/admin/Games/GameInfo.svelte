@@ -18,7 +18,6 @@
 
   const save = async () => {
     if (!data.Id) return setMessage("Not Game Selected");
-
     const result = await apiUtils.post("admin/games/update-game-info", data, "up-data");
     if (result.error) {
       return setMessage({ msg: result.error });
@@ -51,7 +50,7 @@
     reader.onload = async (e) => {
       const base64 = e.target.result.split(",")[1];
       data.Image = { type: file.type, data: base64 };
-      await apiUtils.postFile("admin/games/upload-game-image", { file, Id: data.Id }, "u-img");
+      await apiUtils.post("admin/games/upload-game-image", { file, Id: data.Id }, "u-img");
     };
     reader.readAsDataURL(file);
   };
