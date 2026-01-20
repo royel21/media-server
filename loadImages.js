@@ -2,6 +2,7 @@ import { createPage, getPages, startBrowser } from "#server/Downloader/Crawler";
 import path from "node:path";
 import { db } from "./server/GameModels/index.js";
 import os from "os";
+import fs from "fs-extra";
 
 const homedir = os.homedir();
 
@@ -27,6 +28,7 @@ const worker = async () => {
 
   for (let game of games) {
     if (game.Codes && /(r|v)\d+$/.test(game.Codes)) {
+      const imgPath = path.join(homedir, "game", `${game.Codes}.jpg`);
       await page.goto("vndb.org/" + games.Codes);
 
       const data = page.evaluate(async () => {
@@ -44,15 +46,14 @@ const worker = async () => {
 
         data.Image = document.querySelector(".vnimg img");
       });
-      if (data.Image) {
+      if (data.Image && fs) {
         let img = await downloadImg(data.Image, page);
         if (!img.badImg) {
-          const imgPath = path.join(homedir, "game", `${game.Codes}.jpg`);
           await img.reisze(300).toFile(imgPath);
         }
       }
 
-      if (game.Info) {
+      if (game.Info && !fs.existsSync(imgPath)) {
         game.Info.Company = data.Company;
       }
       await delay(3000);
