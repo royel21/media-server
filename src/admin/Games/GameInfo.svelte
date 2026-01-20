@@ -5,7 +5,7 @@
 
   export let game = {};
 
-  let data = {
+  let def = {
     Name: "",
     Codes: "",
     Company: "",
@@ -13,6 +13,7 @@
     Description: "",
     Image: {},
   };
+  let data = { ...def };
 
   let files;
 
@@ -72,16 +73,18 @@
   };
 
   $: if (game.Id !== data.Id) {
-    data = {
-      Id: game.Id,
-      Name: game.Name || "",
-      Path: game.Path || "",
-      Codes: game.Codes || "",
-      Company: game.Info?.Company || "",
-      AltName: game.Info?.AltName || "",
-      Description: game.Info?.Description || "",
-      Image: {},
-    };
+    data = game.Id
+      ? {
+          Id: game.Id,
+          Name: game.Name || "",
+          Path: game.Path || "",
+          Codes: game.Codes || "",
+          Company: game.Info?.Company || "",
+          AltName: game.Info?.AltName || "",
+          Description: game.Info?.Description || "",
+          Image: {},
+        }
+      : { ...def };
     getImage(data.Id);
   }
 </script>
@@ -89,15 +92,17 @@
 <div id="folder-data" class="file-list col-6">
   <div class="name-img">
     <div class="info-cover">
-      <label class={`${data.Image.data ? "" : "info-load-img"}`} on:contextmenu={handlerImg}>
-        {#if data.Image?.data}
-          <img src={`data:img/jpeg;base64, ${data.Image.data || ""}`} alt="" />
-        {:else}
-          <p>Left click to select image</p>
-          <p>Right click to paste image</p>
-        {/if}
-        <input id="single" type="file" accept="image/*" bind:files on:change={onImageLoaded} />
-      </label>
+      {#if data.Id}
+        <label class={`${data.Image.data ? "" : "info-load-img"}`} on:contextmenu={handlerImg}>
+          {#if data.Image?.data}
+            <img src={`data:img/jpeg;base64, ${data.Image.data || ""}`} alt="" />
+          {:else}
+            <p>Left click to select image</p>
+            <p>Right click to paste image</p>
+          {/if}
+          <input id="single" type="file" accept="image/*" bind:files on:change={onImageLoaded} />
+        </label>
+      {/if}
     </div>
     <div class="info-item info-name">
       <span>Name</span>
@@ -125,9 +130,11 @@
     <span>Path</span>
     <textarea class="form-control" bind:value={data.Path}></textarea>
   </div>
-  <div class="info-controls">
-    <button class="btn" on:click={save}>Save Info</button>
-  </div>
+  {#if data.Id}
+    <div class="info-controls">
+      <button class="btn" on:click={save}>Save Info</button>
+    </div>
+  {/if}
 </div>
 
 <style>
