@@ -102,7 +102,7 @@ const scanGames = async (dir) => {
 
 const getDirectories = async () => {
   let directories = [];
-  const sortByName = db.sqlze.literal(`REPLACE(REPLACE(REPLACE(Directories.Name, "@", "#"), "-", "#"), "[","#") ASC`);
+  const sortByName = db.sqlze.literal(`REPLACE(REPLACE(REPLACE(Directories.Path, "@", "#"), "-", "#"), "[","#") ASC`);
   try {
     directories = await db.Directory.findAll({
       attributes: [
