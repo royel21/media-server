@@ -111,7 +111,7 @@ const getDirectories = async () => {
         "Path",
         [db.sqlze.literal(`(SELECT COUNT(*) FROM Games WHERE Games.DirectoryId = Directories.Id)`), "Count"],
       ],
-      order: [sortByName],
+      order: [sortByName, ["Name", "ASC"]],
     });
   } catch (error) {
     console.log(error);
