@@ -17,6 +17,8 @@
   let files;
 
   const save = async () => {
+    if (!data.Id) return setMessage("Not Game Selected");
+
     const result = await apiUtils.post("admin/games/update-game-info", data, "up-data");
     if (result.error) {
       return setMessage({ msg: result.error });
@@ -44,15 +46,14 @@
     data.Image.data = result.image || "";
   };
 
-  const uploadFile = async (file) => {
+  const uploadFile = (file) => {
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = async (e) => {
       const base64 = e.target.result.split(",")[1];
       data.Image = { type: file.type, data: base64 };
+      await apiUtils.postFile("admin/games/upload-game-image", { file, Id: data.Id }, "u-img");
     };
     reader.readAsDataURL(file);
-
-    await apiUtils.postFile("admin/games/upload-game-image", { file, Id: game.Id }, "u-img");
   };
 
   const onImageLoaded = async () => {
@@ -63,10 +64,12 @@
   };
 
   const handlerImg = async (e) => {
-    const image = await getImageFromNav();
-    if (image !== undefined) {
-      uploadFile(image);
-    }
+    try {
+      const image = await getImageFromNav();
+      if (image !== undefined) {
+        uploadFile(image);
+      }
+    } catch (error) {}
   };
 
   $: if (game.Id !== data.Id) {
@@ -80,7 +83,7 @@
       Description: game.Info?.Description || "",
       Image: {},
     };
-    getImage(game.Id);
+    getImage(data.Id);
   }
 </script>
 
@@ -142,14 +145,23 @@
     display: flex;
     flex-direction: row;
   }
+  .info-cover {
+    max-width: 50%;
+    margin: 5px;
+  }
+  .info-cover label {
+    width: 100%;
+  }
   img {
-    height: 210px;
+    max-height: 250px;
+    max-width: 100%;
+    object-fit: contain;
     display: block;
     margin: 0 auto 0px auto;
   }
 
   .info-load-img {
-    height: 140px;
+    height: 180px;
     display: flex;
     align-items: center;
     justify-content: center;

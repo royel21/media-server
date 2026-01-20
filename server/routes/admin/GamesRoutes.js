@@ -8,6 +8,12 @@ import sharp from "sharp";
 
 const homeDir = os.homedir();
 
+const imgDir = path.join(homeDir, "images", "games");
+
+if (!fs.existsSync(imgDir)) {
+  fs.mkdirsSync(imgDir);
+}
+
 const routes = Router();
 
 const getFilters = (splt, filter) => {
@@ -38,19 +44,31 @@ const getFilters = (splt, filter) => {
 };
 
 const ListFiles = (dir) => {
-  let i = 0;
-  let tempFiles = [];
-  let foundFiles = fs.readdirSync(dir);
-
-  for (let Name of foundFiles) {
-    if (["$"].includes(f[0]) || f.includes("System Volume Information")) continue;
-
-    const Path = path.join(dir, f);
-
-    tempFiles[i] = {
-      Name,
-      Path,
+  const fileInfo = (dir, f) => {
+    let data = fs.statSync(dir);
+    return {
+      isDirectory: data.isDirectory(),
+      Name: f,
+      Size: data.size,
+      isHidden: f[0] == ".",
+      Extension: !data.isDirectory() ? f.split(".").pop() : "",
+      LastModified: data.mtime,
+      Path: dir,
     };
+  };
+
+  let foundFiles = fs.readdirSync(dir);
+  let tempFiles = [];
+  let i = 0;
+  for (let f of foundFiles) {
+    if (["$"].includes(f[0]) || f.includes("System Volume Information")) continue;
+    const file = path.join(dir, f);
+    try {
+      tempFiles[i] = fileInfo(file, f);
+      i++;
+    } catch (error) {
+      console.log("error oppening file", file);
+    }
   }
 
   return tempFiles;
@@ -198,7 +216,7 @@ routes.post("/update-game-info", async (req, res) => {
 
   game.Info = await db.Info.findOne({ where: { Codes: info.Codes } });
 
-  if (info.Codes === "") {
+  if (info.Codes) {
     if (game.Info == null) {
       game.Info = await db.Info.create(info);
     } else {
@@ -232,11 +250,6 @@ routes.post("/update-game-info", async (req, res) => {
 
   game.Path = data.Path;
 
-  if (imageBuffer) {
-    const imgPath = path.join(path.dirname(game.Path), "Cover.jpg");
-    await sharp(imageBuffer).resize(300).jpeg().toFile(imgPath);
-  }
-
   await game.save();
   await game.reload();
   return res.send({ ...game.dataValues, ...info });
@@ -246,14 +259,17 @@ routes.post("/upload-game-image", async (req, res) => {
   const { Id } = req.body;
   let game = await db.Game.findOne({ where: { Id } });
 
+  if (!game?.Codes) {
+    return res.send({ error: "Game Have No Codes to save image" });
+  }
+
   let imageBuffer;
   if (req.files.file) {
     imageBuffer = Buffer.from(req.files.file.data);
   }
 
-  if (imageBuffer) {
-    const imgPath = path.join(game.Path, "Cover.jpg");
-    console.log("image-save", imgPath);
+  if (imageBuffer && game?.Codes) {
+    const imgPath = path.join(homeDir, "images", "games", `${game.Codes}.jpg`);
     await sharp(imageBuffer).resize(300).jpeg().toFile(imgPath);
   }
 
@@ -263,8 +279,7 @@ routes.post("/upload-game-image", async (req, res) => {
 routes.post("/get-game-image", async (req, res) => {
   const { Id } = req.body;
   let game = await db.Game.findOne({ where: { Id } });
-  let imgPath = path.join(game.Path, "Cover.jpg");
-  console.log(imgPath);
+  let imgPath = path.join(homeDir, "images", "games", `${game.Codes}.jpg`);
   let image = "";
   if (fs.existsSync(imgPath)) {
     image = fs.readFileSync(imgPath, { encoding: "base64" });

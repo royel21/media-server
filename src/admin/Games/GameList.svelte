@@ -22,7 +22,6 @@
     totalPages = data.totalPages || 0;
     setInfo({ detail: items[0] || {} });
     GameId = items[0]?.Id || "";
-    console.log(data);
   };
 
   const gotopage = async (newPage) => {

@@ -1,6 +1,6 @@
 let controller = {};
 
-export const post = async (route, params, key = "post") => {
+export const post = async (route, params, key = "p-data") => {
   controller[key]?.abort();
   controller[key] = new AbortController();
   try {
@@ -19,14 +19,24 @@ export const post = async (route, params, key = "post") => {
   }
 };
 
-export const postFile = async (route, data) => {
+export const postFile = async (route, data, key = "p-file") => {
+  controller[key]?.abort();
+  controller[key] = new AbortController();
   let body = new FormData();
 
   for (const k in data) {
     body.append(k, data[k]);
   }
 
-  return await fetch(`/api/${route}`, { method: "POST", body }).then((res) => res.json());
+  try {
+    return await fetch(`/api/${route}`, {
+      method: "POST",
+      body,
+      signal: controller[key].signal,
+    }).then((res) => res.json());
+  } catch (error) {
+    return { error, valid: false };
+  }
 };
 
 export const get = async (route = [], key = "get") => {
