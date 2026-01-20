@@ -297,14 +297,13 @@ const onCreateCover = async ({ Id, imgUrl }) => {
   const page = await createPage(state.browser, 60000);
   if (/http/i.test(imgUrl)) {
     const folder = await db.folder.findOne({ where: { Id } });
-    console.log(Id, imgUrl, folder?.Name);
     if (folder) {
       createDir(folder.Path);
       const { result } = await createFolderCover(
         folder.Path,
         { poster: imgUrl, Name: folder.Name, type: folder.FilesType },
         page,
-        true
+        true,
       );
       sendMessage({ Id, valid: result }, "cover-update");
     }
