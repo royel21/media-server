@@ -3,6 +3,7 @@
   import { createEventDispatcher } from "svelte";
   export let filter = "";
   export let id = "filter-control";
+  export let excludes = [];
 
   const dispatch = createEventDispatcher();
 
@@ -17,6 +18,10 @@
         .replace(/:|\?|\"|“|”| Raw|$/gi, "")
         .replace(/ (\[|\(|)official(\]|\)|)$/i, "")
         .trim();
+    }
+
+    for (let ex of excludes) {
+      text = text.replace(ex, "");
     }
     let ftl = encodeURIComponent(text);
     dispatch(type, ftl);

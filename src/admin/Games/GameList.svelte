@@ -15,10 +15,8 @@
   let GameId = "";
 
   const loadGames = async () => {
-    const data = await apiUtils.admin(
-      ["games", page, calRows(), filter.replace(/ Free Download|\?|:/gi, "")],
-      "g-list",
-    );
+    const data = await apiUtils.admin(["games", page, calRows(), filter], "g-list");
+
     items = data.items || [];
     totalItems = data.totalItems || 0;
     totalPages = data.totalPages || 0;
@@ -70,7 +68,7 @@
   <div class="controls">
     <slot name="btn-controls" />
     <div on:keydown|stopPropagation class="filter">
-      <Filter on:filter={filterChange} {filter} />
+      <Filter on:filter={filterChange} {filter} excludes={[/ Free Download|\?|:/gi, ""]} />
     </div>
     <h4 class="text-center usn">{totalItems} <strong>- Games</strong></h4>
     <slot name="btn-ctr-last" />
