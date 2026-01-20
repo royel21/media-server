@@ -122,7 +122,7 @@
     <span>Alt Name</span>
     <textarea class="form-control" rows="3" bind:value={data.AltName}></textarea>
   </div>
-  <div class="info-item">
+  <div class="info-item info-desc">
     <span>Description</span>
     <textarea class="form-control" bind:value={data.Description}></textarea>
   </div>
@@ -144,6 +144,7 @@
     border-left: 1px solid;
     width: 50%;
     height: 100%;
+    overflow: auto;
     min-width: 400px;
     padding: 0 5px;
   }
@@ -202,7 +203,7 @@
   #folder-data input {
     flex-grow: 1;
     resize: none;
-    padding: 0.25rem;
+    padding: 0.15rem 0.25rem;
     font-size: 12px;
   }
   #folder-data .form-control {
@@ -219,6 +220,10 @@
   }
   .info-altname {
     max-height: 180px;
+  }
+  .info-altname,
+  .info-desc {
+    min-height: 60px;
   }
 
   textarea {
