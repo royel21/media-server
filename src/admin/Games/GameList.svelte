@@ -4,13 +4,14 @@
   import Pagination from "src/ShareComponent/Pagination.svelte";
   import { onMount } from "svelte";
   import { calRows } from "../Utils";
-  export let setInfo = () => {};
   import Games from "../Store/GameStore";
+
+  export let setInfo = () => {};
+  export let filter = "";
 
   let page = 1;
   let totalPages = 0;
   let totalItems = 0;
-  let filter = "";
   let GameId = "";
 
   const loadGames = async () => {

@@ -3,15 +3,17 @@
   import GameList from "./GameList.svelte";
 
   let game = {};
+  let filter = localStorage.getItem("gamelist-filter") || "";
 
   const setInfo = ({ detail }) => {
     game = detail;
   };
+  $: localStorage.setItem("gamelist-filter", filter);
 </script>
 
 <div class="admin-manager">
   <div class="rows">
-    <GameList {setInfo} />
+    <GameList {setInfo} bind:filter />
     <GameInfo bind:game />
   </div>
 </div>

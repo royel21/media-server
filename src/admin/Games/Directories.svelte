@@ -62,7 +62,7 @@
 {/if}
 
 <div class="game-directories">
-  <h4>Directory List</h4>
+  <h4>Directory List ~ Total {totalGames}</h4>
   <span class="add-dir" on:click={() => (showSelectDir = true)}><Icons name="squareplus" /></span>
   <div class="g-dirs">
     <table class="table table-dark table-hover table-bordered">
@@ -71,7 +71,7 @@
           <th>No.</th>
           <th>Name</th>
           <th>Path</th>
-          <th>Total {totalGames}</th>
+          <th>Count</th>
           <th>Action</th>
         </tr>
       </thead>

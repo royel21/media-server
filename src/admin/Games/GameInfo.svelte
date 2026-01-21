@@ -136,9 +136,9 @@
     <span>Description</span>
     <textarea class="form-control" bind:value={data.Description}></textarea>
   </div>
-  <div class="info-item">
+  <div class="info-item info-path">
     <span>Path</span>
-    <textarea class="form-control" bind:value={data.Path}></textarea>
+    <textarea class="form-control" rows="2" bind:value={data.Path}></textarea>
   </div>
   {#if data.Id}
     <div class="info-controls">
@@ -185,7 +185,7 @@
     border: 1px dashed #ccc;
     color: #888;
     font-size: 14px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     cursor: pointer;
   }
   .info-cover input {
@@ -234,6 +234,11 @@
   .info-altname,
   .info-desc {
     min-height: 60px;
+  }
+
+  .info-path {
+    flex-grow: 0;
+    height: 65px;
   }
 
   textarea {
