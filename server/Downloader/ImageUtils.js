@@ -64,7 +64,7 @@ const evalWorpressImage = async () => {
   }
 };
 
-const downloadImg = async (url, page, name = "", isCover) => {
+export const downloadImg = async (url, page, name = "", isCover) => {
   if (url) {
     let buff = [];
     try {

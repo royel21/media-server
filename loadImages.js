@@ -1,8 +1,9 @@
-import { createPage, getPages, startBrowser } from "#server/Downloader/Crawler";
+import { createPage, delay, startBrowser } from "#server/Downloader/Crawler";
 import path from "node:path";
 import { db } from "./server/GameModels/index.js";
 import os from "os";
 import fs from "fs-extra";
+import { downloadImg } from "#server/Downloader/ImageUtils";
 
 const homedir = os.homedir();
 
@@ -10,11 +11,7 @@ const worker = async () => {
   const browser = await startBrowser({ headless: false });
 
   const page = await createPage(browser);
-  const games = (games = await db.Game.findAndCountAll({
-    where: filters,
-    order: [sortByName],
-    offset,
-    limit: rows,
+  const games = await db.Game.findAll({
     include: [
       {
         model: db.Info,
@@ -24,14 +21,15 @@ const worker = async () => {
         },
       },
     ],
-  }));
+  });
 
   for (let game of games) {
-    if (game.Codes && /(r|v)\d+$/.test(game.Codes)) {
-      const imgPath = path.join(homedir, "game", `${game.Codes}.jpg`);
-      await page.goto("vndb.org/" + games.Codes);
+    if (game.Codes !== undefined && /(r|v)\d+$/.test(game.Codes)) {
+      const imgPath = path.join(homedir, "images", "games", `${game.Codes}.jpg`);
+      console.log("https://vndb.org/" + game.Codes);
+      await page.goto("https://vndb.org/" + game.Codes);
 
-      const data = page.evaluate(async () => {
+      const data = await page.evaluate(async () => {
         const data = {};
         let list = [...document.querySelectorAll(".vndetails td")];
         let index = 0;
@@ -44,23 +42,28 @@ const worker = async () => {
           data.Company = list[index].textContent.trim();
         }
 
-        data.Image = document.querySelector(".vnimg img");
+        data.Image = document.querySelector(".vnimg img")?.src;
+        return data;
       });
-      if (data.Image && fs) {
+
+      if (data.Image && !fs.existsSync(imgPath)) {
         let img = await downloadImg(data.Image, page);
         if (!img.badImg) {
-          await img.reisze(300).toFile(imgPath);
+          await img.resize({ width: 300 }).toFile(imgPath);
         }
       }
 
-      if (game.Info && !fs.existsSync(imgPath)) {
-        game.Info.Company = data.Company;
+      if (game.Info && !game.Info.Company) {
+        try {
+          game.Info.Company = data.Company;
+          await game.Info.save();
+        } catch (error) {}
       }
       await delay(3000);
     }
   }
-
+  await page.close();
   await browser.close();
 };
-
+//sudo certbot certonly --nginx
 worker();

@@ -11,7 +11,9 @@ export const post = async (route = "", data = [], key = "p-data") => {
   let body = new FormData();
 
   for (const k in data) {
-    body.append(k, data[k]);
+    if (data[k]) {
+      body.append(k, data[k]);
+    }
   }
 
   try {

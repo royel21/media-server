@@ -2,6 +2,7 @@
   import apiUtils from "src/apiUtils";
   import { setMessage } from "../Store/MessageStore";
   import { getImageFromNav } from "../Component/util";
+  import Games from "../Store/GameStore";
 
   export let game = {};
 
@@ -36,6 +37,11 @@
     game.Info.Company = result.Company;
     game.Info.AltName = result.AltName;
     game.Info.Description = result.Description;
+
+    const games = { ...$Games };
+    let index = games.findndex((g) => g.Id === game.Id);
+    games[index] = game;
+    Games.set(games);
 
     setMessage({ msg: "Game info saved." });
   };

@@ -12,7 +12,7 @@
 <div class="admin-manager">
   <div class="rows">
     <GameList {setInfo} />
-    <GameInfo {game} />
+    <GameInfo bind:game />
   </div>
 </div>
 

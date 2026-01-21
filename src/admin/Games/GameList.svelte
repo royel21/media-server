@@ -5,8 +5,7 @@
   import { onMount } from "svelte";
   import { calRows } from "../Utils";
   export let setInfo = () => {};
-
-  let items = [];
+  import Games from "../Store/GameStore";
 
   let page = 1;
   let totalPages = 0;
@@ -17,11 +16,11 @@
   const loadGames = async () => {
     const data = await apiUtils.admin(["games", page, calRows(), filter], "g-list");
 
-    items = data.items || [];
+    Games.set(data.items || []);
     totalItems = data.totalItems || 0;
     totalPages = data.totalPages || 0;
-    setInfo({ detail: items[0] || {} });
-    GameId = items[0]?.Id || "";
+    setInfo({ detail: $Games[0] || {} });
+    GameId = $Games[0]?.Id || "";
   };
 
   const gotopage = async (newPage) => {
@@ -37,7 +36,7 @@
 
   const selectItem = (Id) => {
     GameId = Id;
-    setInfo({ detail: items.find((g) => g.Id === Id) || {} });
+    setInfo({ detail: $Games.find((g) => g.Id === Id) || {} });
   };
 
   const handlerKeydown = (e) => {
@@ -49,8 +48,8 @@
       let next = keyCode === 40 ? index + 1 : index - 1;
 
       if (next > -1 && next <= items.length - 1) {
-        GameId = items[next]?.Id;
-        setInfo({ detail: items[next] || {} });
+        GameId = $Games[next]?.Id;
+        setInfo({ detail: $Games[next] || {} });
       }
     }
 
@@ -75,10 +74,10 @@
   </div>
   <div class="list-container" on:keydown={handlerKeydown}>
     <ul class="list-group text-dark">
-      {#if items.length < 1}
+      {#if $Games.length < 1}
         <li class="list-group-item empty-list">{`Not Game Found`}</li>
       {:else}
-        {#each items as { Id, Name }}
+        {#each $Games as { Id, Name }}
           <li
             id={Id}
             class="list-group-item"
