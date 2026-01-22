@@ -156,7 +156,7 @@
     <input class="form-control" bind:value={data.Codes} />
   </div>
   <div>
-    <span>Company</span>
+    <span>Publisher/Dev</span>
     <input class="form-control" bind:value={data.Company} />
   </div>
   <div class="info-item info-altname">
