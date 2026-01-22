@@ -40,6 +40,10 @@
   };
 
   const updateGame = (g) => {
+    if (g.Id === "new") {
+      return loadGames();
+    }
+
     let index = Games.findndex((g) => g.Id === game.Id);
     Games[index] = Games;
     Games = Games;
@@ -64,13 +68,21 @@
     game = Games[index > size ? size : index];
   };
 
+  const addGame = () => {
+    if (!Games.find((g) => g.Id === "new")) {
+      game = {
+        Id: "new",
+      };
+    }
+  };
+
   onMount(loadGames);
   $: localStorage.setItem("gamelist-filter", filter);
 </script>
 
 <div class="admin-manager">
   <div class="rows">
-    <GameList {Games} {game} {setInfo} {pageData} {filter} {gotopage} {filterChange} />
+    <GameList {Games} {game} {setInfo} {pageData} {filter} {gotopage} {filterChange} {addGame} />
     <GameInfo bind:game {updateGame} {removeGame} />
   </div>
 </div>

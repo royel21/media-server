@@ -184,10 +184,34 @@ routes.post("/update-directory", async (req, res) => {
   return res.send({ message: "Directory updated." });
 });
 
+const createGame = async (data, res) => {
+  const game = await db.Game.create({
+    Name: data.Name.trim(),
+    Codes: data.Codes.trim(),
+    Path: data.Path?.trim() || "",
+  });
+  const info = {
+    Codes: data.Codes,
+    AltName: data.AltName?.trim(),
+    Company: data.Company?.trim(),
+    Description: data.Description?.trim(),
+  };
+  game.Info = await db.Info.create(info);
+
+  res.send({ ...game.dataValues, ...info });
+};
+
 routes.post("/update-game-info", async (req, res) => {
   const data = req.body;
 
-  let game = await db.Game.findOne({ where: { Id: data.Id } });
+  let game = {};
+
+  if (data.Id === "new") {
+    delete data.Id;
+    return await createGame(data, res);
+  } else {
+    game = await db.Game.findOne({ where: { Id: data.Id } });
+  }
 
   if (/:|\?|\*|<|>|\/|\\|"/gi.test(data.Name)) {
     data.Name = data.Name.replace("/", " ")
@@ -279,11 +303,13 @@ routes.post("/upload-game-image", async (req, res) => {
 routes.post("/get-game-image", async (req, res) => {
   const { Id } = req.body;
   let image = "";
-  let game = await db.Game.findOne({ where: { Id } });
-  if (game) {
-    let imgPath = path.join(homeDir, "images", "games", `${game.Codes}.jpg`);
-    if (fs.existsSync(imgPath)) {
-      image = fs.readFileSync(imgPath, { encoding: "base64" });
+  if (Id) {
+    let game = await db.Game.findOne({ where: { Id } });
+    if (game) {
+      let imgPath = path.join(homeDir, "images", "games", `${game.Codes}.jpg`);
+      if (fs.existsSync(imgPath)) {
+        image = fs.readFileSync(imgPath, { encoding: "base64" });
+      }
     }
   }
   return res.send({ image });

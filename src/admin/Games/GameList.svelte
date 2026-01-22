@@ -1,6 +1,8 @@
 <script>
   import Filter from "src/ShareComponent/Filter.svelte";
   import Pagination from "src/ShareComponent/Pagination.svelte";
+  import { ConsoleStore } from "../Store/ConsoleStore";
+  import Icons from "src/icons/Icons.svelte";
 
   export let setInfo = () => {};
   export let Games = [];
@@ -8,6 +10,7 @@
   export let filterChange;
   export let gotopage;
   export let game;
+  export let addGame;
 
   export let pageData = 1;
 
@@ -20,17 +23,19 @@
 
     if ([40, 38].includes(keyCode)) {
       let element = currentTarget.querySelector(".active");
-      let index = items.findIndex((g) => g.Id === +element.id);
+      let index = Games.findIndex((g) => g.Id === +element.id);
       let next = keyCode === 40 ? index + 1 : index - 1;
 
-      if (next > -1 && next <= items.length - 1) {
+      if (next > -1 && next <= Games.length - 1) {
         setInfo({ detail: Games[next] || {} });
       }
     }
 
     if ([37, 39].includes(keyCode)) {
-      let nextPage = keyCode === 37 ? -1 : 1;
-      gotopage({ detail: +page + nextPage });
+      let detail = +pageData.page + (keyCode === 37 ? -1 : 1);
+      if (detail > 0 && detail < pageData.totalPages + 1) {
+        gotopage({ detail });
+      }
       e.preventDefault();
     }
   };
@@ -39,7 +44,9 @@
 <div class={`file-list col-6 ${pageData.totalPages === 1 ? "full-list" : ""}`} tabindex="-1">
   <slot name="first-tag" />
   <div class="controls">
-    <slot name="btn-controls" />
+    <span class="add-game" on:click={addGame}>
+      <Icons name="squareplus" />
+    </span>
     <div on:keydown|stopPropagation class="filter">
       <Filter on:filter={filterChange} {filter} excludes={[/ Free Download|\?|:/gi, ""]} />
     </div>
@@ -74,6 +81,16 @@
 <style>
   .file-list {
     position: relative;
+  }
+  .add-game {
+    margin-left: 2px;
+  }
+  .add-game :global(svg) {
+    top: 3px;
+    transform: scale(1.5);
+  }
+  .add-game:active :global(svg) {
+    transform: scale(1.6);
   }
   .filter {
     width: 100%;

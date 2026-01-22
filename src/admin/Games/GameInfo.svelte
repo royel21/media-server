@@ -24,7 +24,9 @@
   let files;
 
   const save = async () => {
-    if (!data.Id) return setMessage("Not Game Selected");
+    if (!data.Name) return setMessage({ msg: "Name Required", error: true });
+    if (!data.Codes) return setMessage({ msg: "Game Code Required", error: true });
+
     const result = await apiUtils.post("admin/games/update-game-info", data, "up-data");
     if (result.error) {
       return setMessage({ msg: result.error });
@@ -124,6 +126,8 @@
       : { ...def };
     getImage(data.Id);
   }
+
+  $: isNew = data.Id !== "new";
 </script>
 
 <div id="folder-data" class="file-list col-6">
@@ -169,8 +173,10 @@
   </div>
   {#if data.Id}
     <div class="info-controls">
-      <button class="btn" on:click={save}>Save Info</button>
-      <button class="btn danger" on:click={onRemove}>Remove Game</button>
+      <button class="btn" on:click={save}>{isNew ? "Update" : "Create"}</button>
+      {#if isNew}
+        <button class="btn danger" on:click={onRemove}>Remove Game</button>
+      {/if}
     </div>
   {/if}
 </div>
@@ -213,7 +219,6 @@
     border: 1px dashed #ccc;
     color: #888;
     font-size: 14px;
-    margin-bottom: 5px;
     cursor: pointer;
   }
   .info-cover input {

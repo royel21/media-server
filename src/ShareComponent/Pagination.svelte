@@ -45,7 +45,7 @@
 
   const handlerPage = (p) => {
     let pg = +p;
-    if (!isNaN(pg)) {
+    if (!isNaN(pg) && pg > 0 && pg < totalPages + 1) {
       pg = clamp(pg, 1, totalPages);
       dispatch("gotopage", pg);
     }
