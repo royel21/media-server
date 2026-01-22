@@ -39,8 +39,6 @@
   let showConfirm = false;
   let showBulkRename = false;
   let bgWorking = false;
-  let showConvertVideo;
-  let showVideoSubTract;
   let itemContainerRef;
   let height = 0;
 

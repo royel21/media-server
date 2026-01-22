@@ -1,20 +1,77 @@
 <script>
+  import { onMount } from "svelte";
   import GameInfo from "./GameInfo.svelte";
   import GameList from "./GameList.svelte";
+  import { calRows } from "../Utils";
+  import apiUtils from "src/apiUtils";
+  import { setMessage } from "../Store/MessageStore";
 
   let game = {};
+  let Games = [];
+  let pageData = {
+    page: 1,
+    totalPages: 0,
+    totalItems: 0,
+  };
   let filter = localStorage.getItem("gamelist-filter") || "";
+
+  const loadGames = async () => {
+    const data = await apiUtils.admin(["games", pageData.page, calRows(), filter], "g-list");
+
+    Games = data.items || [];
+    pageData.totalItems = data.totalItems || 0;
+    pageData.totalPages = data.totalPages || 0;
+    game = Games[0] || {};
+  };
+
+  const gotopage = async (newPage) => {
+    pageData.page = newPage.detail;
+    await loadGames();
+  };
+
+  const filterChange = async (e) => {
+    filter = e.detail;
+    pageData.page = 1;
+    await loadGames();
+  };
 
   const setInfo = ({ detail }) => {
     game = detail;
   };
+
+  const updateGame = (g) => {
+    let index = Games.findndex((g) => g.Id === game.Id);
+    Games[index] = Games;
+    Games = Games;
+  };
+
+  const removeGame = async (g2) => {
+    const index = Games.findIndex((g) => g.Id === g2.Id);
+    const data = {
+      Id: game.Id,
+      page: pageData.page,
+      filter,
+      rows: calRows(),
+    };
+    const result = await apiUtils.post("admin/games/remove-game", data, "up-data");
+
+    Games = result.items || [];
+    pageData.totalItems = result.totalItems || 0;
+    pageData.totalPages = result.totalPages || 0;
+
+    setMessage({ msg: `Game ${game.Name} was Removed`, error: true });
+    const size = Games.length - 1;
+    game = Games[index > size ? size : index];
+  };
+
+  onMount(loadGames);
   $: localStorage.setItem("gamelist-filter", filter);
 </script>
 
 <div class="admin-manager">
   <div class="rows">
-    <GameList {setInfo} bind:filter />
-    <GameInfo bind:game />
+    <GameList {Games} {game} {setInfo} {pageData} {filter} {gotopage} {filterChange} />
+    <GameInfo bind:game {updateGame} {removeGame} />
   </div>
 </div>
 

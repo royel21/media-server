@@ -2,6 +2,10 @@ import path from "path";
 import fs from "fs-extra";
 import { execSync } from "child_process";
 import { sendMessage } from "../utils.js";
+import { delay } from "#server/Downloader/utils";
+import os from "os";
+
+const homedir = os.homedir();
 
 let count = 0;
 
@@ -146,16 +150,25 @@ export const workVideos = async ({ folder, pass, text, padding }) => {
 };
 
 export const removeDFolder = async ({ Id, Name, Path }) => {
+  if (Path.includes("homedir")) {
+    Path = Path.replace("homedir", homedir);
+  }
+
   if (fs.existsSync(Path)) {
     try {
       fs.removeSync(Path);
-      await sendMessage({ msg: `Finish Removing ${Path}`, folder: { Id } }, "folder-remove");
+      await sendMessage({ msg: `Finish Removing "${Path}"`, folder: { Id } }, "folder-remove");
     } catch (error) {
       await sendMessage(
-        { error: error.toString(), msg: `Error Removing ${Path}`, folder: { Id, Name, Path } },
-        "folder-remove"
+        { error: error.toString(), msg: `Error Removing "${Path}"`, folder: { Id, Name, Path } },
+        "folder-remove",
       );
     }
+  } else {
+    await sendMessage(
+      { error: true, msg: `Path "${Path.replace(homedir, "homedir")}" doesn't exist`, folder: { Id } },
+      "folder-remove",
+    );
   }
 };
 

@@ -89,9 +89,9 @@ const scanGames = async (dir) => {
     let Codes = getCode(file.Name);
     const Name = file.Name.replace(Codes, "").trim();
 
-    if (list.find((g) => g.Name === Name && g.DirectoryId === dir.Id)) {
+    if (list.find((g) => g.Name === Name)) {
       console.log("dup:", file.Name);
-      continue;
+      // continue;
     }
 
     list.push({ Codes, Name, DirectoryId: dir.Id, Path: file.Path });
@@ -289,9 +289,7 @@ routes.post("/get-game-image", async (req, res) => {
   return res.send({ image });
 });
 
-routes.get("/:page/:rows/:search?", async (req, res) => {
-  const { page = 0, rows, search = "" } = req.params;
-
+const getGames = async (res, page, rows, search) => {
   const offset = (page - 1) * +rows;
   let filters = getFilters(search.includes("&") ? "&" : "|", search);
 
@@ -326,6 +324,20 @@ routes.get("/:page/:rows/:search?", async (req, res) => {
     totalItems: games.count,
     totalPages: Math.ceil(games.count / rows),
   });
+};
+
+routes.post("/remove-game", async (req, res) => {
+  const { Id, page, filter, rows } = req.body;
+  let game = await db.Game.findOne({ where: { Id } });
+  await game.destroy();
+
+  return await getGames(res, page, rows, filter || "");
+});
+
+routes.get("/:page/:rows/:search?", async (req, res) => {
+  const { page = 0, rows, search = "" } = req.params;
+
+  return await getGames(res, page, rows, search);
 });
 
 export default routes;

@@ -2,9 +2,13 @@
   import apiUtils from "src/apiUtils";
   import { setMessage } from "../Store/MessageStore";
   import { getImageFromNav } from "../Component/util";
-  import Games from "../Store/GameStore";
+  import { getContext, onDestroy } from "svelte";
 
   export let game = {};
+  export let updateGame;
+  export let removeGame;
+
+  const socket = getContext("socket");
 
   let def = {
     Name: "",
@@ -15,6 +19,7 @@
     Image: {},
   };
   let data = { ...def };
+  let removing = false;
 
   let files;
 
@@ -37,11 +42,7 @@
     game.Info.Company = result.Company;
     game.Info.AltName = result.AltName;
     game.Info.Description = result.Description;
-
-    const games = { ...$Games };
-    let index = games.findndex((g) => g.Id === game.Id);
-    games[index] = game;
-    Games.set(games);
+    updateGame(game);
 
     setMessage({ msg: "Game info saved." });
   };
@@ -81,6 +82,32 @@
       }
     } catch (error) {}
   };
+
+  const onRemove = () => {
+    if (removing) {
+      return setMessage({ msg: `Game ${game.Name} is being Removed please wait until is finish`, error: true });
+    }
+    removing = true;
+    setMessage({ msg: `removing ${game.Name} Please Wait`, error: true });
+    socket.emit("file-work", { action: "removeDFolder", data: game });
+  };
+
+  const onRemoved = async (data) => {
+    if (data.folder.Id === game.Id) {
+      removing = false;
+      if (data.error) {
+        return setMessage(data);
+      }
+
+      await removeGame(data.folder);
+    }
+  };
+  socket.off("folder-remove", onRemoved);
+  socket.on("folder-remove", onRemoved);
+
+  onDestroy(() => {
+    socket.off("folder-remove", onRemoved);
+  });
 
   $: if (game.Id !== data.Id) {
     data = game.Id
@@ -143,6 +170,7 @@
   {#if data.Id}
     <div class="info-controls">
       <button class="btn" on:click={save}>Save Info</button>
+      <button class="btn danger" on:click={onRemove}>Remove Game</button>
     </div>
   {/if}
 </div>
@@ -235,10 +263,16 @@
   .info-desc {
     min-height: 60px;
   }
-
+  .info-controls button {
+    margin-right: 25px;
+  }
   .info-path {
     flex-grow: 0;
     height: 65px;
+  }
+
+  .danger {
+    background-image: linear-gradient(-120deg, #ff5b5b, #ff0000, #ed6161);
   }
 
   textarea {

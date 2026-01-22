@@ -1,43 +1,18 @@
 <script>
-  import apiUtils from "src/apiUtils";
   import Filter from "src/ShareComponent/Filter.svelte";
   import Pagination from "src/ShareComponent/Pagination.svelte";
-  import { onMount } from "svelte";
-  import { calRows } from "../Utils";
-  import Games from "../Store/GameStore";
 
   export let setInfo = () => {};
+  export let Games = [];
   export let filter = "";
+  export let filterChange;
+  export let gotopage;
+  export let game;
 
-  let page = 1;
-  let totalPages = 0;
-  let totalItems = 0;
-  let GameId = "";
-
-  const loadGames = async () => {
-    const data = await apiUtils.admin(["games", page, calRows(), filter], "g-list");
-
-    Games.set(data.items || []);
-    totalItems = data.totalItems || 0;
-    totalPages = data.totalPages || 0;
-    setInfo({ detail: $Games[0] || {} });
-    GameId = $Games[0]?.Id || "";
-  };
-
-  const gotopage = async (newPage) => {
-    page = newPage.detail;
-    await loadGames();
-  };
-
-  const filterChange = async (e) => {
-    filter = e.detail;
-    page = 1;
-    await loadGames();
-  };
+  export let pageData = 1;
 
   const selectItem = (Id) => {
-    GameId = Id;
-    setInfo({ detail: $Games.find((g) => g.Id === Id) || {} });
+    setInfo({ detail: Games.find((g) => g.Id === Id) || {} });
   };
 
   const handlerKeydown = (e) => {
@@ -49,8 +24,7 @@
       let next = keyCode === 40 ? index + 1 : index - 1;
 
       if (next > -1 && next <= items.length - 1) {
-        GameId = $Games[next]?.Id;
-        setInfo({ detail: $Games[next] || {} });
+        setInfo({ detail: Games[next] || {} });
       }
     }
 
@@ -60,29 +34,28 @@
       e.preventDefault();
     }
   };
-  onMount(loadGames);
 </script>
 
-<div class={`file-list col-6 ${totalPages === 1 ? "full-list" : ""}`} tabindex="-1">
+<div class={`file-list col-6 ${pageData.totalPages === 1 ? "full-list" : ""}`} tabindex="-1">
   <slot name="first-tag" />
   <div class="controls">
     <slot name="btn-controls" />
     <div on:keydown|stopPropagation class="filter">
       <Filter on:filter={filterChange} {filter} excludes={[/ Free Download|\?|:/gi, ""]} />
     </div>
-    <h4 class="text-center usn">{totalItems} <strong>- Games</strong></h4>
+    <h4 class="text-center usn">{pageData.totalItems} <strong>- Games</strong></h4>
     <slot name="btn-ctr-last" />
   </div>
   <div class="list-container" on:keydown={handlerKeydown}>
     <ul class="list-group text-dark">
-      {#if $Games.length < 1}
+      {#if Games.length < 1}
         <li class="list-group-item empty-list">{`Not Game Found`}</li>
       {:else}
-        {#each $Games as { Id, Name }}
+        {#each Games as { Id, Name }}
           <li
             id={Id}
             class="list-group-item"
-            class:active={+GameId === Id}
+            class:active={game.Id === Id}
             on:click={() => selectItem(Id)}
             tabindex="-1"
           >
@@ -94,7 +67,7 @@
   </div>
   <div class="list-controls">
     <slot name="bottom-ctr" />
-    <Pagination {page} {totalPages} on:gotopage={gotopage} />
+    <Pagination page={pageData.page} totalPages={pageData.totalPages} on:gotopage={gotopage} />
   </div>
 </div>
 
