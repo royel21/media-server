@@ -220,7 +220,7 @@ routes.post("/update-game-info", async (req, res) => {
       .replace(/:|\?|<|>|"/g, "");
   }
 
-  if (data.Path !== game.Path && !fs.existsSync(data.Path)) {
+  if (data.Path !== game.Path && !fs.existsSync(data.Path) && game.Path) {
     return res.send({ error: "Game Path does not exist." });
   }
 
@@ -248,7 +248,7 @@ routes.post("/update-game-info", async (req, res) => {
     }
   }
 
-  if (game.Name !== data.Name) {
+  if (game.Path && game.Name !== data.Name) {
     game.Name = data.Name.replace(data.Codes, "")
       .replace(/\.(zip|rar|7z|apk)$/, "")
       .trim();
