@@ -71,12 +71,11 @@ const worker = async () => {
 const addLangs = async () => {
   const infos = await db.Info.findAll();
   for (let info of infos) {
-    if (/english/.test(infos.Description)) {
+    if (/english/gi.test(info.Description)) {
+      console.log("English");
       info.Lang = "English";
       await info.save();
-      await info.reload();
     }
-    console.log(info.Lang);
   }
   console.log("finish");
   process.exit(0);

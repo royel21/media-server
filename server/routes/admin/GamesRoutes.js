@@ -204,7 +204,7 @@ const createGame = async (data, res) => {
     Codes: data.Codes,
     AltName: data.AltName?.trim(),
     Company: data.Company?.trim(),
-    Lang: data.Lang,
+    Lang: data.Lang?.trim() || "Japanese",
     Description: data.Description?.trim(),
   };
   game.Info = await db.Info.create(info);
@@ -250,7 +250,7 @@ routes.post("/update-game-info", async (req, res) => {
     Codes: data.Codes,
     AltName: data.AltName?.trim(),
     Company: data.Company?.trim(),
-    Lang: data.Lang,
+    Lang: data.Lang?.trim() || "Japanese",
     Description: data.Description?.trim(),
   };
 
