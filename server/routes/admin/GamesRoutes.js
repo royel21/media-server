@@ -94,7 +94,7 @@ const scanGames = async (dir) => {
       // continue;
     }
 
-    const found = db.Game.findOne({ Codes, Name });
+    const found = await db.Game.findOne({ where: { Codes, Name } });
 
     if (found && !found.Path) {
       found.Path = file.Path;
