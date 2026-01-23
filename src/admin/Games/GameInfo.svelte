@@ -42,7 +42,7 @@
     game.Codes = result.Codes;
     game.Info.Company = result.Company;
     game.Info.AltName = result.AltName;
-    game.Info.Description = result.Description;
+    (game.Info.Lang = result.Lang), (game.Info.Description = result.Description);
     updateGame(game);
 
     setMessage({ msg: "Game info saved." });
@@ -123,6 +123,7 @@
           Codes: game.Codes || "",
           Company: game.Info?.Company || "",
           AltName: game.Info?.AltName || "",
+          Lang: game.Lang,
           Description: game.Info?.Description || "",
           Image: {},
         }

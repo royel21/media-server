@@ -73,7 +73,10 @@ const addLangs = async () => {
   for (let info of infos) {
     if (/english/.test(infos.Description)) {
       info.Lang = "English";
+      await info.save();
+      await info.reload();
     }
+    console.log(info.Lang);
   }
   console.log("finish");
   process.exit(0);
