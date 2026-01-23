@@ -29,13 +29,12 @@
 
     const result = await apiUtils.post("admin/games/update-game-info", data, "up-data");
     if (result.error) {
-      return setMessage({ msg: result.error });
+      return setMessage({ msg: result.error, error: true });
     }
 
     if (!game.Info) {
       game.Info = {};
     }
-
     data = { ...result, Image: data.Image };
 
     game.Name = result.Name;
@@ -90,6 +89,10 @@
       return setMessage({ msg: `Game ${game.Name} is being Removed please wait until is finish`, error: true });
     }
     removing = true;
+    if (!game.Path) {
+      removing = false;
+      return removeGame(game);
+    }
     setMessage({ msg: `removing ${game.Name} Please Wait`, error: true });
     socket.emit("file-work", { action: "removeDFolder", data: game });
   };

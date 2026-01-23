@@ -207,6 +207,11 @@ routes.post("/update-game-info", async (req, res) => {
   let game = {};
 
   if (data.Id === "new") {
+    const found = await db.Game.findOne({ where: { Codes: data.Codes } });
+    if (found) {
+      return res.send({ error: "Game Exist: " + data.Codes });
+    }
+
     delete data.Id;
     return await createGame(data, res);
   } else {
@@ -248,34 +253,43 @@ routes.post("/update-game-info", async (req, res) => {
     }
   }
 
-  if (game.Path && game.Name !== data.Name) {
+  if (game.Name !== data.Name) {
     game.Name = data.Name.replace(data.Codes, "")
       .replace(/\.(zip|rar|7z|apk)$/, "")
       .trim();
 
-    const basePath = path.dirname(game.Path);
+    if (game.Path) {
+      const basePath = path.dirname(game.Path);
 
-    let ex = "";
-    if (/\.[a-z0-9]{3,4}$/i.test(ex)) {
-      ex = game.Path.split(/\.[a-z0-9]{3,4}/i).pop();
-    }
+      let ex = "";
+      if (/\.[a-z0-9]{3,4}$/i.test(ex)) {
+        ex = game.Path.split(/\.[a-z0-9]{3,4}/i).pop();
+      }
 
-    data.Path = path
-      .join(basePath, game.Name + " " + data.Codes + ex)
-      .replace(/( )+/g, " ")
-      .trim();
+      data.Path = path
+        .join(basePath, game.Name + " " + data.Codes + ex)
+        .replace(/( )+/g, " ")
+        .trim();
 
-    try {
-      fs.renameSync(game.Path, data.Path);
-    } catch (error) {
-      console.log(error);
+      try {
+        fs.renameSync(game.Path, data.Path);
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 
-  game.Path = data.Path;
+  if (data.Path) {
+    game.Path = data.Path;
+  }
 
-  await game.save();
-  await game.reload();
+  try {
+    await game.save();
+    await game.reload();
+  } catch (error) {
+    console.log(error);
+  }
+
   return res.send({ ...game.dataValues, ...info });
 });
 
