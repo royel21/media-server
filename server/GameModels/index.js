@@ -32,7 +32,10 @@ db.Game.hasOne(db.Info, {
 
 db.Info.belongsTo(db.Game, { foreignKey: "Codes", targetKey: "Codes", constraints: false });
 
-db.init = async (force = false) => {
+db.init = async (force) => {
+  try {
+    await db.sqlze.query("ALTER TABLE Infos ADD Lang VARCHAR(40) NULL DEFAULT 'Japanese';");
+  } catch (error) {}
   await sequelize.sync({ force });
 };
 

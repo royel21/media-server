@@ -166,6 +166,10 @@
     <span>Alt Name</span>
     <textarea class="form-control" rows="3" bind:value={data.AltName}></textarea>
   </div>
+  <div>
+    <span>Lang</span>
+    <input class="form-control" bind:value={data.Lang} />
+  </div>
   <div class="info-item info-desc">
     <span>Description</span>
     <textarea class="form-control" bind:value={data.Description}></textarea>

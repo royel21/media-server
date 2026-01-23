@@ -66,4 +66,17 @@ const worker = async () => {
   await browser.close();
 };
 //sudo certbot certonly --nginx
-worker();
+// worker();
+
+const addLangs = async () => {
+  const infos = await db.Info.findAll();
+  for (let info of infos) {
+    if (/english/.test(infos.Description)) {
+      info.Lang = "English";
+    }
+  }
+  console.log("finish");
+  process.exit(0);
+};
+
+addLangs();

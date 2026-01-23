@@ -35,7 +35,7 @@ const getFilters = (splt, filter) => {
         "$Info.Company$": {
           [Op.like]: "%" + s.trim() + "%",
         },
-        "$Info.ReleaseDate$": {
+        "$Info.Lang$": {
           [Op.like]: "%" + s.trim() + "%",
         },
       },
@@ -204,6 +204,7 @@ const createGame = async (data, res) => {
     Codes: data.Codes,
     AltName: data.AltName?.trim(),
     Company: data.Company?.trim(),
+    Lang: data.Lang,
     Description: data.Description?.trim(),
   };
   game.Info = await db.Info.create(info);
@@ -249,7 +250,7 @@ routes.post("/update-game-info", async (req, res) => {
     Codes: data.Codes,
     AltName: data.AltName?.trim(),
     Company: data.Company?.trim(),
-    ReleaseDate: data.ReleaseDate,
+    Lang: data.Lang,
     Description: data.Description?.trim(),
   };
 
