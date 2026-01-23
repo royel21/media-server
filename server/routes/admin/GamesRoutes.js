@@ -94,7 +94,17 @@ const scanGames = async (dir) => {
       // continue;
     }
 
-    list.push({ Codes, Name, DirectoryId: dir.Id, Path: file.Path });
+    const found = db.Game.findOne({ Codes, Name });
+
+    if (found && !found.Path) {
+      found.Path = file.Path;
+      found.DirectoryId = dir.Id;
+      try {
+        await found.save();
+      } catch (error) {}
+    } else {
+      list.push({ Codes, Name, DirectoryId: dir.Id, Path: file.Path });
+    }
   }
   const result = await db.Game.bulkCreate(list);
   return result;
