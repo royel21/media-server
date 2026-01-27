@@ -40,6 +40,8 @@
       return setMessage({ msg: result.error });
     }
 
+    console.log(result.dubs);
+
     const index = directories.findIndex((d) => d.Id === Id);
     if (index !== -1) {
       directories[index].Count = result.count;

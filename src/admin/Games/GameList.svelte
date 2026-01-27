@@ -1,7 +1,6 @@
 <script>
   import Filter from "src/ShareComponent/Filter.svelte";
   import Pagination from "src/ShareComponent/Pagination.svelte";
-  import { ConsoleStore } from "../Store/ConsoleStore";
   import Icons from "src/icons/Icons.svelte";
 
   export let setInfo = () => {};

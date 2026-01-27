@@ -5,6 +5,7 @@ import fs from "fs-extra";
 import path from "path";
 import os from "os";
 import sharp from "sharp";
+import { clamp } from "../utils.js";
 
 const homeDir = os.homedir();
 
@@ -84,14 +85,14 @@ const scanGames = async (dir) => {
 
   const files = ListFiles(dir.Path);
   let list = [];
+  const dubs = [];
 
   for (const file of files) {
     let Codes = getCode(file.Name);
     const Name = file.Name.replace(Codes, "").trim();
 
     if (list.find((g) => g.Name === Name)) {
-      console.log("dup:", file.Name);
-      // continue;
+      dubs.push(file.Name);
     }
 
     const found = await db.Game.findOne({ where: { Codes, Name } });
@@ -106,8 +107,8 @@ const scanGames = async (dir) => {
       list.push({ Codes, Name, DirectoryId: dir.Id, Path: file.Path });
     }
   }
-  const result = await db.Game.bulkCreate(list);
-  return result;
+  const games = await db.Game.bulkCreate(list);
+  return { games, dubs };
 };
 
 const getDirectories = async () => {
@@ -152,9 +153,9 @@ routes.post("/add-directory", async (req, res) => {
   const Name = name.replace(Codes, "").trim();
   const result = await db.Directory.create({ Path, Name });
 
-  await scanGames(result);
+  const { dubs } = await scanGames(result);
 
-  return res.send(await getDirectories());
+  return res.send({ dirs: await getDirectories(), dubs });
 });
 
 routes.post("/remove-directory", async (req, res) => {
@@ -175,7 +176,7 @@ routes.post("/reload", async (req, res) => {
 
   const result = await scanGames(existing);
 
-  return res.send({ count: result.length });
+  return res.send({ count: result.games.length, dubs: result.dubs });
 });
 
 routes.post("/update-directory", async (req, res) => {
@@ -341,18 +342,15 @@ routes.post("/get-game-image", async (req, res) => {
 });
 
 const getGames = async (res, page, rows, search) => {
-  const offset = (page - 1) * +rows;
   let filters = getFilters(search.includes("&") ? "&" : "|", search);
 
   const sortByName = db.sqlze.literal(`REPLACE(REPLACE(REPLACE(Games.Name, "@", "#"), "-", "#"), "[","#") ASC`);
 
   let games = [];
   try {
-    games = await db.Game.findAndCountAll({
+    const query = {
       where: filters,
       order: [sortByName],
-      offset,
-      limit: rows,
       include: [
         {
           model: db.Info,
@@ -362,19 +360,37 @@ const getGames = async (res, page, rows, search) => {
           },
         },
       ],
+    };
+
+    const count = await db.Game.count(query);
+
+    const totalPages = Math.ceil(count / rows);
+    page = clamp(page, 1, totalPages);
+
+    query.offset = (page - 1) * +rows;
+    query.limit = +rows;
+
+    games = await db.Game.findAndCountAll(query);
+
+    return res.send({
+      items: games.rows.map((g) => ({
+        ...g.dataValues,
+        Path: g.Path.replace(homeDir, "homedir"),
+      })),
+      page,
+      totalItems: count,
+      totalPages: Math.ceil(count / rows),
     });
   } catch (error) {
     console.log(error);
   }
 
-  return res.send({
-    items: games.rows.map((g) => ({
-      ...g.dataValues,
-      Path: g.Path.replace(homeDir, "homedir"),
-    })),
-    totalItems: games.count,
-    totalPages: Math.ceil(games.count / rows),
-  });
+  return {
+    items: [],
+    page: 1,
+    totalPages: 0,
+    totalItems: 0,
+  };
 };
 
 routes.post("/remove-game", async (req, res) => {

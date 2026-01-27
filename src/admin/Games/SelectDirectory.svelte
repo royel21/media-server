@@ -29,8 +29,8 @@
       errors = [result.errors];
       return;
     }
-
-    acept(result);
+    console.log(result.dubs);
+    acept(result.dirs);
   };
 
   const loadDirs = async (dir, next, back) => {

@@ -21,6 +21,7 @@
     Games = data.items || [];
     pageData.totalItems = data.totalItems || 0;
     pageData.totalPages = data.totalPages || 0;
+    pageData.page = data.page;
     game = Games[0] || {};
   };
 
@@ -62,10 +63,11 @@
     Games = result.items || [];
     pageData.totalItems = result.totalItems || 0;
     pageData.totalPages = result.totalPages || 0;
+    pageData.page = result.page || 1;
 
     setMessage({ msg: `Game ${game.Name} was Removed`, error: true });
     const size = Games.length - 1;
-    game = Games[index > size ? size : index];
+    game = Games[index > size ? size : index] || {};
   };
 
   const addGame = () => {
