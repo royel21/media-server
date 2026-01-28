@@ -175,7 +175,7 @@
   <div class="name-img">
     {#if data.Id}
       <div class="info-cover">
-        <div class={`${data.Image.data ? "" : "info-load-img"}`} on:click={() => (showImage = true)}>
+        <div class={`c-img ${data.Image.data ? "" : "info-load-img"}`} on:click={() => (showImage = true)}>
           {#if data.Image?.data}
             <img src={`data:img/jpeg;base64, ${data.Image.data || ""}`} alt="" />
           {:else}
@@ -221,6 +221,7 @@
         <span>Animated</span>
         <span>Chikan</span>
         <span>Harem</span>
+        <span>Incest</span>
         <span>School</span>
         <span>Loli</span>
         <span>NTR</span>
@@ -280,9 +281,10 @@
   .info-cover {
     position: relative;
     max-width: 50%;
+    min-width: 130px;
     margin: 0 4px;
   }
-  .info-cover label {
+  .info-cover .c-img {
     width: 100%;
   }
   .info-cover img {
