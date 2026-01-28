@@ -44,6 +44,7 @@
     game.Info.Company = result.Company;
     game.Info.AltName = result.AltName;
     game.Info.Lang = result.Lang;
+    game.Info.Genres = result.Genres;
     game.Info.Description = result.Description;
     updateGame(game);
 
@@ -149,7 +150,8 @@
           Codes: game.Codes || "",
           Company: game.Info?.Company || "",
           AltName: game.Info?.AltName || "",
-          Lang: game.Info?.Lang,
+          Lang: game.Info?.Lang || "",
+          Genres: game.Info?.Genres || "",
           Description: game.Info?.Description || "",
           Image: {},
         }
@@ -244,7 +246,7 @@
     width: 50%;
     height: 100%;
     overflow: auto;
-    min-width: 400px;
+    min-width: 330px;
     padding: 0 5px;
   }
   .name-img {
@@ -374,5 +376,10 @@
   }
   .g-list span:hover {
     background-color: rgba(0, 0, 0, 0.1);
+  }
+  @media screen and (max-width: 640px) {
+    #folder-data {
+      min-width: 400px;
+    }
   }
 </style>

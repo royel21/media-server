@@ -44,7 +44,7 @@
     if (g.Id === "new") {
       return loadGames();
     }
-    console.log("gs", Games);
+
     let index = Games.findIndex((g) => g.Id === game.Id);
     Games[index] = g;
     Games = Games;

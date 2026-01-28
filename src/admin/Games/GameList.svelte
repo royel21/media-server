@@ -149,7 +149,7 @@
     pointer-events: none;
   }
 
-  @media screen and (max-width: 700px) {
+  @media screen and (max-width: 640px) {
     .controls h4 strong {
       display: none;
     }
