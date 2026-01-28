@@ -328,7 +328,7 @@ routes.post("/upload-game-image", async (req, res) => {
 
   if (imageBuffer && game?.Codes) {
     const imgPath = path.join(imgDir, `${game.Codes}.jpg`);
-    await sharp(imageBuffer).resize(300).jpeg().toFile(imgPath);
+    await sharp(imageBuffer).resize(450).jpeg().toFile(imgPath);
   }
 
   return res.send({ msg: "Image uploaded." });

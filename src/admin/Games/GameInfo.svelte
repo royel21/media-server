@@ -3,6 +3,8 @@
   import { setMessage } from "../Store/MessageStore";
   import { getImageFromNav } from "../Component/util";
   import { getContext, onDestroy, onMount } from "svelte";
+  import Icons from "src/icons/Icons.svelte";
+  import Dialog from "src/ShareComponent/Dialog.svelte";
 
   export let game = {};
   export let updateGame;
@@ -23,6 +25,7 @@
   let showGList = false;
   let files;
   let listRef;
+  let showImage = false;
 
   const save = async () => {
     if (!data.Name) return setMessage({ msg: "Name Required", error: true });
@@ -162,17 +165,26 @@
   $: isNew = data.Id !== "new";
 </script>
 
+{#if showImage && data.Image.data}
+  <Dialog id="c-img" canDrag={true} btnCancer="" btnOk="" cancel={() => (showImage = false)}>
+    <img src={`data:img/jpeg;base64, ${data.Image.data || ""}`} alt="" />
+  </Dialog>
+{/if}
+
 <div id="folder-data" class="file-list col-6">
   <div class="name-img">
     {#if data.Id}
       <div class="info-cover">
-        <label class={`${data.Image.data ? "" : "info-load-img"}`} on:contextmenu={handlerImg}>
+        <div class={`${data.Image.data ? "" : "info-load-img"}`} on:click={() => (showImage = true)}>
           {#if data.Image?.data}
             <img src={`data:img/jpeg;base64, ${data.Image.data || ""}`} alt="" />
           {:else}
-            <p>Left click to select image</p>
-            <p>Right click to paste image</p>
+            <p>Image Placeholder</p>
           {/if}
+        </div>
+        <span class="paste" on:click={handlerImg}><Icons name="paste" /></span>
+        <label class="upload">
+          <Icons name="upload" />
           <input id="single" type="file" accept="image/*" bind:files on:change={onImageLoaded} />
         </label>
       </div>
@@ -216,7 +228,9 @@
         <span>RENPY</span>
         <span>Unity</span>
         <span>RPG</span>
+        <span>Simulation</span>
         <span>SLG</span>
+        <span>VN</span>
       </div>
     {/if}
   </div>
@@ -253,14 +267,25 @@
     display: flex;
     flex-direction: row;
   }
+  :global(#c-img) {
+    width: initial;
+    height: initial;
+  }
+  :global(#c-img .modal-body) {
+    padding: 2px;
+  }
+  :global(#c-img) img {
+    max-height: 450px;
+  }
   .info-cover {
+    position: relative;
     max-width: 50%;
-    margin: 5px;
+    margin: 0 4px;
   }
   .info-cover label {
     width: 100%;
   }
-  img {
+  .info-cover img {
     max-height: 250px;
     max-width: 100%;
     object-fit: contain;
@@ -376,6 +401,29 @@
   }
   .g-list span:hover {
     background-color: rgba(0, 0, 0, 0.1);
+  }
+  .paste,
+  .upload {
+    display: none;
+    max-width: 30px;
+    text-align: center;
+    border-radius: 0.25rem;
+    position: absolute;
+    bottom: 2px;
+    background-color: #888;
+    z-index: 9;
+    left: 2px;
+  }
+  .info-cover:hover .paste,
+  .info-cover:hover .upload {
+    display: inline-block;
+  }
+  .upload {
+    left: 33px;
+  }
+  .info-cover :global(svg) {
+    top: 3px;
+    left: 3px;
   }
   @media screen and (max-width: 640px) {
     #folder-data {
