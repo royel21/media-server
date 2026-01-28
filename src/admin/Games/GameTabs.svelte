@@ -67,7 +67,7 @@
 
     setMessage({ msg: `Game ${game.Name} was Removed`, error: true });
     const size = Games.length - 1;
-    game = Games[index > size ? size : index] || {};
+    game = Games[map(index, 0, size)] || {};
   };
 
   const addGame = () => {
