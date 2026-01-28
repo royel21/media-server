@@ -39,6 +39,9 @@ const getFilters = (splt, filter) => {
         "$Info.Lang$": {
           [Op.like]: "%" + s.trim() + "%",
         },
+        "$Info.Genres$": {
+          [Op.like]: "%" + s.trim() + "%",
+        },
       },
     })),
   };
@@ -211,6 +214,7 @@ const createGame = async (data, res) => {
     AltName: data.AltName?.trim(),
     Company: data.Company?.trim(),
     Lang: data.Lang?.trim() || "Japanese",
+    Genres: data.Genres?.trim() || "",
     Description: data.Description?.trim(),
   };
   game.Info = await db.Info.create(info);
@@ -254,6 +258,7 @@ routes.post("/update-game-info", async (req, res) => {
     AltName: data.AltName?.trim(),
     Company: data.Company?.trim(),
     Lang: data.Lang?.trim() || "Japanese",
+    Genres: data.Genres?.trim(),
     Description: data.Description?.trim(),
   };
 

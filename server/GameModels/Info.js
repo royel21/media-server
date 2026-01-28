@@ -4,6 +4,7 @@ export default (sequelize, { DATE, STRING, TEXT }) => {
     AltName: { type: TEXT },
     Company: { type: STRING },
     Lang: { type: STRING(40) },
+    Genres: { type: STRING(100) },
     ReleaseDate: { type: DATE },
     Description: { type: TEXT },
   });

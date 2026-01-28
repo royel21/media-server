@@ -2,7 +2,7 @@
   import apiUtils from "src/apiUtils";
   import { setMessage } from "../Store/MessageStore";
   import { getImageFromNav } from "../Component/util";
-  import { getContext, onDestroy } from "svelte";
+  import { getContext, onDestroy, onMount } from "svelte";
 
   export let game = {};
   export let updateGame;
@@ -20,8 +20,9 @@
   };
   let data = { ...def };
   let removing = false;
-
+  let showGList = false;
   let files;
+  let listRef;
 
   const save = async () => {
     if (!data.Name) return setMessage({ msg: "Name Required", error: true });
@@ -111,8 +112,32 @@
   socket.off("folder-remove", onRemoved);
   socket.on("folder-remove", onRemoved);
 
+  const onShowGList = (e) => {
+    showGList = !showGList;
+
+    e.stopPropagation();
+  };
+
+  const onGSelect = (e) => {
+    const genres = new Set((data.Genres || "").split(", ").filter((f) => f));
+    genres.add(e.target.textContent);
+
+    data.Genres = [...genres].sort().join(", ");
+    e.stopPropagation();
+  };
+
+  const onHandlerGList = ({ target }) => {
+    if (listRef !== target) {
+      showGList = false;
+    }
+  };
+
   onDestroy(() => {
     socket.off("folder-remove", onRemoved);
+    document.removeEventListener("click", onHandlerGList);
+  });
+  onMount(() => {
+    document.addEventListener("click", onHandlerGList);
   });
 
   $: if (game.Id !== data.Id) {
@@ -171,6 +196,27 @@
   <div>
     <span>Lang</span>
     <input class="form-control" bind:value={data.Lang} />
+  </div>
+  <div class="gen" bind:this={listRef}>
+    <span>Genres</span>
+    <span class="show-gen-list" on:click={onShowGList}>:</span>
+    <input class="form-control" bind:value={data.Genres} />
+    {#if showGList}
+      <div class="g-list" on:click={onGSelect}>
+        <span>3D</span>
+        <span>Animated</span>
+        <span>Chikan</span>
+        <span>Harem</span>
+        <span>School</span>
+        <span>Loli</span>
+        <span>NTR</span>
+        <span>Romance</span>
+        <span>RENPY</span>
+        <span>Unity</span>
+        <span>RPG</span>
+        <span>SLG</span>
+      </div>
+    {/if}
   </div>
   <div class="info-item info-desc">
     <span>Description</span>
@@ -291,5 +337,42 @@
 
   textarea {
     line-height: 1.14;
+  }
+  .gen {
+    position: relative;
+  }
+  .show-gen-list {
+    display: inline-block;
+    height: 20px;
+    line-height: 1;
+    position: absolute;
+    top: 2px;
+    right: 5px;
+    padding: 0px 4px;
+    border-radius: 0.25rem;
+    background-color: aqua;
+    color: black;
+    cursor: pointer;
+    user-select: none;
+  }
+  .show-gen-list:active {
+    transform: scale(1.1);
+  }
+  .g-list {
+    position: absolute;
+    right: 18px;
+    bottom: 35px;
+    z-index: 9;
+    display: flex;
+    flex-direction: column;
+    background-color: #888;
+    border-radius: 0.25rem;
+  }
+  .g-list span {
+    padding: 0 5px;
+    cursor: pointer;
+  }
+  .g-list span:hover {
+    background-color: rgba(0, 0, 0, 0.1);
   }
 </style>
