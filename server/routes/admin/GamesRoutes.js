@@ -89,7 +89,7 @@ const scanGames = async (dir) => {
 
   for (const file of files) {
     let Codes = getCode(file.Name);
-    const Name = file.Name.replace(Codes, "").trim();
+    const Name = file.Name.replace(" " + Codes, "").trim();
 
     if (list.find((g) => g.Name === Name)) {
       dubs.push(file.Name);
@@ -188,9 +188,14 @@ routes.post("/update-directory", async (req, res) => {
     return res.send({ message: "Directory does not exist." });
   }
 
-  const dir = await db.Directory.findOne({ where: { Id } });
+  const dir = await db.Directory.findOne({ where: { Id: id } });
 
   await dir.update({ Path: p });
+
+  await db.Game.update(
+    { Path: db.sqlze.literal(`REPLACE(Path, ${dir.Path}, ${Path})`) },
+    { where: { DirectoryId: dir.Id } },
+  );
 
   return res.send({ message: "Directory updated." });
 });
@@ -213,6 +218,8 @@ const createGame = async (data, res) => {
   res.send({ ...game.dataValues, ...info });
 };
 
+const extRegx = /\.([a-z0-9]{2,4})$/i;
+
 routes.post("/update-game-info", async (req, res) => {
   const data = req.body;
 
@@ -230,6 +237,7 @@ routes.post("/update-game-info", async (req, res) => {
     game = await db.Game.findOne({ where: { Id: data.Id } });
   }
 
+  //Clean Name
   if (/:|\?|\*|<|>|\/|\\|"/gi.test(data.Name)) {
     data.Name = data.Name.replace("/", " ")
       .replace("*", "x")
@@ -237,15 +245,9 @@ routes.post("/update-game-info", async (req, res) => {
       .replace(/:|\?|<|>|"/g, "");
   }
 
-  if (data.Path !== game.Path && !fs.existsSync(data.Path) && game.Path) {
-    return res.send({ error: "Game Path does not exist." });
-  }
-
   if (!data.Codes) {
-    data.Codes = getCode(data.Name) || getCode(game.Name);
+    data.Codes = (getCode(data.Name) || getCode(game.Name)).tim();
   }
-
-  game.Codes = data.Codes;
 
   const info = {
     Codes: data.Codes,
@@ -258,41 +260,42 @@ routes.post("/update-game-info", async (req, res) => {
   game.Info = await db.Info.findOne({ where: { Codes: info.Codes } });
 
   if (info.Codes) {
-    if (game.Info == null) {
+    if (game.Info === null) {
       game.Info = await db.Info.create(info);
     } else {
       await game.Info?.update(info);
     }
   }
 
-  if (game.Name !== data.Name) {
-    game.Name = data.Name.replace(data.Codes, "")
-      .replace(/\.(zip|rar|7z|apk)$/, "")
-      .trim();
-
-    if (game.Path) {
-      const basePath = path.dirname(game.Path);
-
-      let ex = "";
-      if (/\.[a-z0-9]{3,4}$/i.test(ex)) {
-        ex = game.Path.split(/\.[a-z0-9]{3,4}/i).pop();
-      }
-
-      data.Path = path
-        .join(basePath, game.Name + " " + data.Codes + ex)
-        .replace(/( )+/g, " ")
-        .trim();
-
-      try {
-        fs.renameSync(game.Path, data.Path);
-      } catch (error) {
-        console.log(error);
-      }
+  if (game.Codes !== data.Codes) {
+    const oldImg = path.join(imgDir, `${game.Codes}.jpg`);
+    if (fs.existsSync(oldImg)) {
+      fs.moveSync(oldImg, path.join(imgDir, `${data.Codes}.jpg`));
     }
   }
 
-  if (data.Path) {
-    game.Path = data.Path;
+  if (game.Path && (game.Name !== data.Name || game.Codes !== data.Codes)) {
+    const basePath = path.dirname(game.Path);
+    let ex = game.Path.match(extRegx) || "";
+
+    if (ex) ex = ex[0];
+
+    data.Path = path.join(basePath, `${data.Name.replace(ex, "")} ${data.Codes}${ex}`).replace(/( )+/g, " ");
+
+    if (fs.existsSync(game.Path)) {
+      try {
+        fs.renameSync(game.Path, data.Path);
+        game.Path = data.Path;
+
+        if (game.Name !== data.Name) {
+          game.Name = data.Name.replace(data.Codes, "").replace(extRegx, "").trim();
+        }
+        game.Codes = data.Codes;
+      } catch (error) {
+        console.log(error);
+        return res.send({ error: "Game Path does not exist." });
+      }
+    }
   }
 
   try {
@@ -319,7 +322,7 @@ routes.post("/upload-game-image", async (req, res) => {
   }
 
   if (imageBuffer && game?.Codes) {
-    const imgPath = path.join(homeDir, "images", "games", `${game.Codes}.jpg`);
+    const imgPath = path.join(imgDir, `${game.Codes}.jpg`);
     await sharp(imageBuffer).resize(300).jpeg().toFile(imgPath);
   }
 
@@ -332,7 +335,7 @@ routes.post("/get-game-image", async (req, res) => {
   if (Id) {
     let game = await db.Game.findOne({ where: { Id } });
     if (game) {
-      let imgPath = path.join(homeDir, "images", "games", `${game.Codes}.jpg`);
+      let imgPath = path.join(imgDir, `${game.Codes}.jpg`);
       if (fs.existsSync(imgPath)) {
         image = fs.readFileSync(imgPath, { encoding: "base64" });
       }
