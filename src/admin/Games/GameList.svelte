@@ -47,7 +47,7 @@
       <Icons name="squareplus" />
     </span>
     <div on:keydown|stopPropagation class="filter">
-      <Filter on:filter={filterChange} {filter} excludes={[/ Free Download|\?|:/gi, ""]} />
+      <Filter on:filter={filterChange} {filter} excludes={[/ Free Download|\?|:/gi, "[ENG] "]} />
     </div>
     <h4 class="text-center usn">{pageData.totalItems} <strong>- Games</strong></h4>
     <slot name="btn-ctr-last" />

@@ -163,6 +163,7 @@
   }
 
   $: isNew = data.Id !== "new";
+  $: data.AltName = data.AltName.replace("–", "-").replace(/\?|\:/g, "").replace(/( )+/g, " ");
 </script>
 
 {#if showImage && data.Image.data}
