@@ -278,7 +278,6 @@ routes.post("/update-game-info", async (req, res) => {
       fs.moveSync(oldImg, path.join(imgDir, `${data.Codes}.jpg`));
     }
   }
-
   if (game.Path && (game.Name !== data.Name || game.Codes !== data.Codes)) {
     const basePath = path.dirname(game.Path);
     let ex = game.Path.match(extRegx) || "";
@@ -301,6 +300,9 @@ routes.post("/update-game-info", async (req, res) => {
         return res.send({ error: "Game Path does not exist." });
       }
     }
+  } else if (!game.Path) {
+    game.Name = data.Name.replace(data.Codes, "").replace(extRegx, "").trim();
+    game.Codes = data.Codes;
   }
 
   try {
