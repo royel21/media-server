@@ -136,6 +136,13 @@
     }
   };
 
+  const handlerPaste = async ({ currentTarget: { id } }) => {
+    let text = await navigator.clipboard?.readText();
+    if (text && id) {
+      data[id] = text.trim();
+    }
+  };
+
   onDestroy(() => {
     socket.off("folder-remove", onRemoved);
     document.removeEventListener("click", onHandlerGList);
@@ -163,7 +170,9 @@
   }
 
   $: isNew = data.Id !== "new";
-  $: data.AltName = data.AltName.replace("–", "-").replace(/\?|\:/g, "").replace(/( )+/g, " ");
+  $: if (data.AltName) {
+    data.AltName = data.AltName?.replace("–", "-").replace(/\?|\:/g, "").replace(/( )+/g, " ");
+  }
 </script>
 
 {#if showImage && data.Image.data}
@@ -191,25 +200,25 @@
       </div>
     {/if}
     <div class="info-item info-name">
-      <span>Name</span>
+      <span><span id="Name" on:click={handlerPaste}><Icons name="paste" /></span>Name</span>
       <textarea class="form-control" bind:value={data.Name}></textarea>
     </div>
   </div>
 
   <div>
-    <span>Codes</span>
+    <span><span id="Codes" on:click={handlerPaste}><Icons name="paste" /></span>Codes</span>
     <input class="form-control" bind:value={data.Codes} />
   </div>
   <div>
-    <span>Publisher/Dev</span>
+    <span><span id="Company" on:click={handlerPaste}><Icons name="paste" /></span>Publisher/Dev</span>
     <input class="form-control" bind:value={data.Company} />
   </div>
   <div class="info-item info-altname">
-    <span>Alt Name</span>
+    <span><span id="AltName" on:click={handlerPaste}><Icons name="paste" /></span>Alt Name</span>
     <textarea class="form-control" rows="3" bind:value={data.AltName}></textarea>
   </div>
   <div>
-    <span>Lang</span>
+    <span><span id="Lang" on:click={handlerPaste}><Icons name="paste" /></span>Lang</span>
     <input class="form-control" bind:value={data.Lang} />
   </div>
   <div class="gen" bind:this={listRef}>
@@ -278,6 +287,7 @@
   }
   :global(#c-img) img {
     max-height: 450px;
+    max-width: 100%;
   }
   .info-cover {
     position: relative;
