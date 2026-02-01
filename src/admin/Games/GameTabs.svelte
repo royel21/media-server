@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import GameInfo from "./GameInfo.svelte";
   import GameList from "./GameList.svelte";
-  import { calRows } from "../Utils";
+  import { calRows, map } from "../Utils";
   import apiUtils from "src/apiUtils";
   import { setMessage } from "../Store/MessageStore";
 

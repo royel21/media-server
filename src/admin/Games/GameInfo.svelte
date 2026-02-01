@@ -182,76 +182,81 @@
 {/if}
 
 <div id="folder-data" class="file-list col-6">
-  <div class="name-img">
-    {#if data.Id}
-      <div class="info-cover">
-        <div class={`c-img ${data.Image.data ? "" : "info-load-img"}`} on:click={() => (showImage = true)}>
-          {#if data.Image?.data}
-            <img src={`data:img/jpeg;base64, ${data.Image.data || ""}`} alt="" />
-          {:else}
-            <p>Image Placeholder</p>
-          {/if}
+  <div class="g-info-controls">
+    <div class="name-img">
+      {#if data.Id}
+        <div class="info-cover">
+          <div class={`c-img ${data.Image.data ? "" : "info-load-img"}`} on:click={() => (showImage = true)}>
+            {#if data.Image?.data}
+              <img src={`data:img/jpeg;base64, ${data.Image.data || ""}`} alt="" />
+            {:else}
+              <p>Image Placeholder</p>
+            {/if}
+          </div>
+          <span class="paste" on:click={handlerImg}><Icons name="paste" /></span>
+          <label class="upload">
+            <Icons name="upload" />
+            <input id="single" type="file" accept="image/*" bind:files on:change={onImageLoaded} />
+          </label>
         </div>
-        <span class="paste" on:click={handlerImg}><Icons name="paste" /></span>
-        <label class="upload">
-          <Icons name="upload" />
-          <input id="single" type="file" accept="image/*" bind:files on:change={onImageLoaded} />
-        </label>
+      {/if}
+      <div class="info-item info-name">
+        <span><span id="Name" on:click={handlerPaste}><Icons name="paste" /></span>Name</span>
+        <textarea class="form-control" bind:value={data.Name}></textarea>
       </div>
-    {/if}
-    <div class="info-item info-name">
-      <span><span id="Name" on:click={handlerPaste}><Icons name="paste" /></span>Name</span>
-      <textarea class="form-control" bind:value={data.Name}></textarea>
     </div>
-  </div>
 
-  <div>
-    <span><span id="Codes" on:click={handlerPaste}><Icons name="paste" /></span>Codes</span>
-    <input class="form-control" bind:value={data.Codes} />
-  </div>
-  <div>
-    <span><span id="Company" on:click={handlerPaste}><Icons name="paste" /></span>Publisher/Dev</span>
-    <input class="form-control" bind:value={data.Company} />
-  </div>
-  <div class="info-item info-altname">
-    <span><span id="AltName" on:click={handlerPaste}><Icons name="paste" /></span>Alt Name</span>
-    <textarea class="form-control" rows="3" bind:value={data.AltName}></textarea>
-  </div>
-  <div>
-    <span><span id="Lang" on:click={handlerPaste}><Icons name="paste" /></span>Lang</span>
-    <input class="form-control" bind:value={data.Lang} />
-  </div>
-  <div class="gen" bind:this={listRef}>
-    <span>Genres</span>
-    <span class="show-gen-list" on:click={onShowGList}>:</span>
-    <input class="form-control" bind:value={data.Genres} />
-    {#if showGList}
-      <div class="g-list" on:click={onGSelect}>
-        <span>3D</span>
-        <span>Animated</span>
-        <span>Chikan</span>
-        <span>Harem</span>
-        <span>Incest</span>
-        <span>School</span>
-        <span>Loli</span>
-        <span>NTR</span>
-        <span>Romance</span>
-        <span>RENPY</span>
-        <span>Unity</span>
-        <span>RPG</span>
-        <span>Simulation</span>
-        <span>SLG</span>
-        <span>VN</span>
-      </div>
-    {/if}
-  </div>
-  <div class="info-item info-desc">
-    <span>Description</span>
-    <textarea class="form-control" bind:value={data.Description}></textarea>
-  </div>
-  <div class="info-item info-path">
-    <span>Path</span>
-    <textarea class="form-control" rows="2" bind:value={data.Path}></textarea>
+    <div>
+      <span><span id="Codes" on:click={handlerPaste}><Icons name="paste" /></span>Codes</span>
+      <input class="form-control" bind:value={data.Codes} />
+    </div>
+    <div>
+      <span><span id="Company" on:click={handlerPaste}><Icons name="paste" /></span>Publisher/Dev</span>
+      <input class="form-control" bind:value={data.Company} />
+    </div>
+    <div class="info-item info-altname">
+      <span><span id="AltName" on:click={handlerPaste}><Icons name="paste" /></span>Alt Name</span>
+      <textarea class="form-control" rows="3" bind:value={data.AltName}></textarea>
+    </div>
+    <div>
+      <span><span id="Lang" on:click={handlerPaste}><Icons name="paste" /></span>Lang</span>
+      <input class="form-control" bind:value={data.Lang} />
+    </div>
+    <div class="gen" bind:this={listRef}>
+      <span class="show-gen-list" on:click={onShowGList}>:</span>
+      {#if showGList}
+        <div class="g-list" on:click={onGSelect}>
+          <span>3D</span>
+          <span>Animated</span>
+          <span>Chikan</span>
+          <span>Harem</span>
+          <span>Incest</span>
+          <span>School</span>
+          <span>Loli</span>
+          <span>NTR</span>
+          <span>Romance</span>
+          <span>RENPY</span>
+          <span>Unity</span>
+          <span>Rape</span>
+          <span>RPG</span>
+          <span>Simulation</span>
+          <span>Sleep Sex</span>
+          <span>Touching</span>
+          <span>SLG</span>
+          <span>VN</span>
+        </div>
+      {/if}
+      <span>Genres</span>
+      <input class="form-control" bind:value={data.Genres} />
+    </div>
+    <div class="info-item info-desc">
+      <span>Description</span>
+      <textarea class="form-control" bind:value={data.Description}></textarea>
+    </div>
+    <div class="info-item info-path">
+      <span>Path</span>
+      <textarea class="form-control" rows="2" bind:value={data.Path}></textarea>
+    </div>
   </div>
   {#if data.Id}
     <div class="info-controls">
@@ -269,10 +274,14 @@
     position: relative;
     border-left: 1px solid;
     width: 50%;
-    height: 100%;
-    overflow: auto;
     min-width: 330px;
     padding: 0 5px;
+  }
+  .g-info-controls {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 40px);
+    overflow: auto;
   }
   .name-img {
     display: flex;
@@ -385,10 +394,9 @@
     display: inline-block;
     height: 20px;
     line-height: 1;
-    position: absolute;
-    top: 2px;
-    right: 5px;
-    padding: 0px 4px;
+    position: relative;
+    top: -2px;
+    padding: 0px 8px;
     border-radius: 0.25rem;
     background-color: aqua;
     color: black;
@@ -400,10 +408,13 @@
   }
   .g-list {
     position: absolute;
-    right: 18px;
-    bottom: 35px;
+    left: 22px;
+    bottom: 55px;
     z-index: 9;
     display: flex;
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
     flex-direction: column;
     background-color: #888;
     border-radius: 0.25rem;

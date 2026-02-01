@@ -92,7 +92,10 @@ const scanGames = async (dir) => {
 
   for (const file of files) {
     let Codes = getCode(file.Name);
-    const Name = file.Name.replace(" " + Codes, "").trim();
+    let Name = file.Name.trim();
+    if (Codes) {
+      Name = file.Name.replace(" " + Codes, "").trim();
+    }
 
     if (list.find((g) => g.Name === Name)) {
       dubs.push(file.Name);
@@ -406,7 +409,7 @@ const getGames = async (res, page, rows, search) => {
 routes.post("/remove-game", async (req, res) => {
   const { Id, page, filter, rows } = req.body;
   let game = await db.Game.findOne({ where: { Id } });
-  await game.destroy();
+  await game?.destroy();
 
   return await getGames(res, page, rows, filter || "");
 });
