@@ -123,6 +123,8 @@
   };
 
   const onGSelect = (e) => {
+    if (e.target.tagName !== "SPAN") return;
+
     const genres = new Set((data.Genres || "").split(", ").filter((f) => f));
     genres.add(e.target.textContent);
 
@@ -236,16 +238,19 @@
           <span>3D</span>
           <span>Animated</span>
           <span>Chikan</span>
+          <span>Drama</span>
           <span>Harem</span>
           <span>Incest</span>
           <span>School</span>
           <span>Loli</span>
+          <span>Mind Control</span>
           <span>NTR</span>
           <span>Romance</span>
           <span>RENPY</span>
           <span>Unity</span>
           <span>Rape</span>
           <span>RPG</span>
+          <span>Teacher</span>
           <span>Simulation</span>
           <span>Sleep Sex</span>
           <span>Touching</span>
