@@ -109,7 +109,7 @@
     <Input label="New Folder" key="NewFolder" {item} />
     <Input key="Filter" item={ditem} on:keydown={onKeydown} on:input={onFilter} onChange={onFilter} focus={true} />
     <TextAreaInput focus={true} label={props.label} key="Path" {item} disabled={true} paste={false}>
-      <span class="pre-paste" slot="btn-left" on:click={goBack} title="Copy Name">
+      <span class="pre-paste" slot="btn-left" on:click={goBack} title="Return to Previous Folder">
         <Icons name="reply" color="#045cba" />
       </span>
     </TextAreaInput>

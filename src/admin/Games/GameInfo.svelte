@@ -143,6 +143,12 @@
     }
   };
 
+  const copyName = () => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(game.Name + " " + game.Codes);
+    }
+  };
+
   onDestroy(() => {
     socket.off("folder-remove", onRemoved);
     document.removeEventListener("click", onHandlerGList);
@@ -203,6 +209,7 @@
       <div class="info-item info-name">
         <span><span id="Name" on:click={handlerPaste}><Icons name="paste" /></span>Name</span>
         <textarea class="form-control" bind:value={data.Name}></textarea>
+        <span class="gn-copy" on:click={copyName}><Icons name="paste" color="deepskyblue" /></span>
       </div>
     </div>
 
@@ -363,6 +370,7 @@
     padding-bottom: 5px;
   }
   .info-name {
+    position: relative;
     min-height: 100%;
   }
   .info-altname {
@@ -448,6 +456,11 @@
   .info-cover :global(svg) {
     top: 3px;
     left: 3px;
+  }
+  .gn-copy {
+    position: absolute;
+    top: 0px;
+    right: 0px;
   }
   @media screen and (max-width: 640px) {
     #folder-data {
