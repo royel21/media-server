@@ -5,7 +5,7 @@ const getController = (key) => {
   controller[key] = new AbortController();
 };
 
-export const post = async (route = "", data = [], key = "p-data") => {
+export const post = async (route = "", data, key = "p-data") => {
   getController(key);
 
   let body = new FormData();
@@ -16,12 +16,19 @@ export const post = async (route = "", data = [], key = "p-data") => {
     }
   }
 
+  const hasFile = Object.values(data).some((d) => d instanceof File);
+
   try {
     const url = `/api/${route}`.replace(/(\/)+/g, "/");
 
     return await fetch(url, {
       method: "POST",
-      body,
+      body: hasFile ? body : JSON.stringify(data),
+      headers: hasFile
+        ? {}
+        : {
+            "Content-Type": "application/json",
+          },
       signal: controller[key].signal,
     }).then((res) => res.json());
   } catch (error) {
