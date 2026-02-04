@@ -5,7 +5,26 @@ const getController = (key) => {
   controller[key] = new AbortController();
 };
 
-export const post = async (route = "", data, key = "p-data") => {
+export const post = async (route, params, key = "post") => {
+  controller[key]?.abort();
+  controller[key] = new AbortController();
+  try {
+    const url = `/api/${route}`.replace(/(\/)+/g, "/");
+
+    return await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(params),
+      signal: controller[key].signal,
+    }).then((res) => res.json());
+  } catch (error) {
+    return { error, valid: false };
+  }
+};
+
+export const postFile = async (route = "", data, key = "p-data") => {
   getController(key);
 
   let body = new FormData();
@@ -16,22 +35,15 @@ export const post = async (route = "", data, key = "p-data") => {
     }
   }
 
-  const hasFile = Object.values(data).some((d) => d instanceof File);
-
   try {
     const url = `/api/${route}`.replace(/(\/)+/g, "/");
-
     return await fetch(url, {
       method: "POST",
-      body: hasFile ? body : JSON.stringify(data),
-      headers: hasFile
-        ? {}
-        : {
-            "Content-Type": "application/json",
-          },
+      body,
       signal: controller[key].signal,
     }).then((res) => res.json());
   } catch (error) {
+    console.log(error);
     return { error, valid: false };
   }
 };
@@ -76,6 +88,7 @@ export const cancelQuery = (key) => {
 export default {
   get,
   post,
+  postFile,
   admin,
   files,
   postFav,

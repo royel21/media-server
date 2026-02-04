@@ -278,7 +278,7 @@ routes.post("/update-game-info", async (req, res) => {
   if (game.Codes !== data.Codes) {
     const oldImg = path.join(imgDir, `${game.Codes}.jpg`);
     if (fs.existsSync(oldImg)) {
-      fs.moveSync(oldImg, path.join(imgDir, `${data.Codes}.jpg`));
+      fs.moveSync(oldImg, path.join(imgDir, `${data.Codes}.jpg`), { overwrite: true });
     }
   }
   if (game.Path && (game.Name !== data.Name || game.Codes !== data.Codes)) {

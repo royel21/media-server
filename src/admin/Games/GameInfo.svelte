@@ -31,7 +31,7 @@
     if (!data.Name) return setMessage({ msg: "Name Required", error: true });
     if (!data.Codes) return setMessage({ msg: "Game Code Required", error: true });
 
-    const result = await apiUtils.post("admin/games/update-game-info", data, "up-data");
+    const result = await apiUtils.post("admin/games/update-game-info", { ...data, Image: "" }, "up-data");
     if (result.error) {
       return setMessage({ msg: result.error, error: true });
     }
@@ -65,7 +65,7 @@
     reader.onload = async (e) => {
       const base64 = e.target.result.split(",")[1];
       data.Image = { type: file.type, data: base64 };
-      await apiUtils.post("admin/games/upload-game-image", { file, Id: data.Id }, "u-img");
+      await apiUtils.postFile("admin/games/upload-game-image", { file, Id: data.Id }, "u-img");
     };
     reader.readAsDataURL(file);
   };
