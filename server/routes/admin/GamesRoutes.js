@@ -225,7 +225,7 @@ const createGame = async (data, res) => {
   res.send({ ...game.dataValues, ...info });
 };
 
-const extRegx = /\.([a-z0-9]{2,4})$/i;
+const extRegx = /\.(zip|7z|rar)$/i;
 
 routes.post("/update-game-info", async (req, res) => {
   const data = req.body;
