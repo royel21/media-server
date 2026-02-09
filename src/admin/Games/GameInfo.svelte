@@ -126,16 +126,30 @@
     if (e.target.tagName !== "SPAN") return;
     const g = e.target.textContent;
 
-    const glist = (data.Genres || "").split(", ").filter((f) => f);
+    let glist = (data.Genres || "").split(", ").filter((f) => f);
 
     if (glist.includes(g)) {
       data.Genres = glist.filter((f) => f !== g).join(", ");
       return e.stopPropagation();
     }
 
-    const genres = new Set(glist);
-    genres.add(e.target.textContent);
+    if (g === "HRSV") {
+      glist = ["Harem", "Romance", "School", "VN"];
+    }
 
+    if (g === "HSV") {
+      glist = ["Harem", "School", "VN"];
+    }
+
+    if (g === "RSV") {
+      glist = ["Romance", "School", "VN"];
+    }
+
+    const genres = new Set(glist);
+
+    if (!/HRSV|HSV|RSV/.test(g)) {
+      genres.add(g);
+    }
     data.Genres = [...genres].sort().join(", ");
     e.stopPropagation();
   };
@@ -251,25 +265,30 @@
             <span>Drama</span>
             <span>Harem</span>
             <span>Incest</span>
-            <span>School</span>
             <span>Loli</span>
             <span>Maid</span>
             <span>Mind Control</span>
             <span>NTR</span>
-            <span>Romance</span>
             <span>Pervert</span>
-            <span>Unity</span>
+            <span>Romance</span>
             <span>Rape</span>
             <span>RPG</span>
-            <span>Teacher</span>
-            <span>Simulation</span>
+            <span>School</span>
             <span>Sleep Sex</span>
-            <span>Touching</span>
             <span>SLG</span>
+            <span>Simulation</span>
+            <span>Teacher</span>
+            <span>Touching</span>
+            <span>Unity</span>
             <span>VN</span>
           </div>
         </div>
       {/if}
+      <div class="sub-g" on:click={onGSelect}>
+        <span title="Harem, Romance, School, VN">HRSV</span>
+        <span title="Harem, School, VN">HSV</span>
+        <span title="Romance, School, VN">RSV</span>
+      </div>
       <span>Genres</span>
       <input class="form-control" bind:value={data.Genres} />
     </div>
@@ -453,6 +472,18 @@
   }
   .g-list span:hover {
     background-color: rgba(0, 0, 0, 0.1);
+  }
+  .sub-g {
+    position: absolute;
+    top: -2px;
+    right: 10px;
+    color: aqua;
+  }
+  .sub-g span {
+    margin: 0 5px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
   }
   .paste,
   .upload {
