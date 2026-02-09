@@ -23,6 +23,7 @@
   let data = { ...def };
   let removing = false;
   let showGList = false;
+  let showGList2 = false;
   let files;
   let listRef;
   let showImage = false;
@@ -122,9 +123,16 @@
     e.stopPropagation();
   };
 
+  const onShowGList2 = (e) => {
+    showGList2 = !showGList2;
+
+    e.stopPropagation();
+  };
+
   const onGSelect = (e) => {
     if (e.target.tagName !== "SPAN") return;
     const g = e.target.textContent;
+    const isRange = e.target.parentElement.id === "range";
 
     let glist = (data.Genres || "").split(", ").filter((f) => f);
 
@@ -133,33 +141,13 @@
       return e.stopPropagation();
     }
 
-    if (g === "HRSV") {
-      glist = ["Harem", "Romance", "School", "VN"];
-    }
-
-    if (g === "HSV") {
-      glist = ["Harem", "School", "VN"];
-    }
-
-    if (g === "HRV") {
-      glist = ["Harem", "Romance", "VN"];
-    }
-
-    if (g === "NV") {
-      glist = ["NTR", "VN"];
-    }
-
-    if (g === "RV") {
-      glist = ["Romance", "VN"];
-    }
-
-    if (g === "RSV") {
-      glist = ["Romance", "School", "VN"];
+    if (isRange) {
+      glist = e.target.title.split(", ");
     }
 
     const genres = new Set(glist);
 
-    if (!/HRSV|HSV|RSV/.test(g)) {
+    if (!isRange) {
       genres.add(g);
     }
     data.Genres = [...genres].sort().join(", ");
@@ -169,6 +157,7 @@
   const onHandlerGList = ({ target }) => {
     if (listRef !== target) {
       showGList = false;
+      showGList2 = false;
     }
   };
 
@@ -271,6 +260,7 @@
         <div class="g-list-container">
           <div class="g-list" on:click={onGSelect}>
             <span>3D</span>
+            <span>Action</span>
             <span>Adventure</span>
             <span>Animated</span>
             <span>Chikan</span>
@@ -280,6 +270,7 @@
             <span>Loli</span>
             <span>Maid</span>
             <span>Mind Control</span>
+            <span>Mistery</span>
             <span>NTR</span>
             <span>Pervert</span>
             <span>Romance</span>
@@ -296,16 +287,27 @@
           </div>
         </div>
       {/if}
-      <div class="sub-g" on:click={onGSelect}>
-        <span title="Harem, Romance, School, VN">HRSV</span>
-        <span title="Harem, School, VN">HSV</span>
-        <span title="Harem, School, VN">HRV</span>
-        <span title="Harem, School, VN">HV</span>
-        <span title="Harem, School, VN">NV</span>
-        <span title="Harem, School, VN">RV</span>
-        <span title="Romance, School, VN">RSV</span>
-      </div>
       <span>Genres</span>
+      <span class="show-gen-list2" on:click={onShowGList2}>:</span>
+      {#if showGList2}
+        <div class="g-list-container g-list2">
+          <div id="range" class="g-list" on:click={onGSelect}>
+            <span title="Drama, School, VN">DSV</span>
+            <span title="Drama, VN">DV</span>
+            <span title="Harem, School, VN">HSV</span>
+            <span title="Harem, Romance, School, VN">HRSV</span>
+            <span title="Harem, School, VN">HSV</span>
+            <span title="Harem, Romance, VN">HRV</span>
+            <span title="Harem, VN">HV</span>
+            <span title="NTR, VN">NV</span>
+            <span title="Romance, VN">RV</span>
+            <span title="RPG, School">RS</span>
+            <span title="School, VN">SV</span>
+            <span title="Rape, School, VN">RapeSV</span>
+            <span title="Romance, School, VN">RSV</span>
+          </div>
+        </div>
+      {/if}
       <input class="form-control" bind:value={data.Genres} />
     </div>
     <div class="info-item info-desc">
@@ -450,6 +452,7 @@
   .gen {
     position: relative;
   }
+  .show-gen-list2,
   .show-gen-list {
     display: inline-block;
     height: 20px;
@@ -463,13 +466,16 @@
     cursor: pointer;
     user-select: none;
   }
+  .show-gen-list2:active,
   .show-gen-list:active {
     transform: scale(1.1);
   }
-  .g-list {
+  .show-gen-list2 {
     position: absolute;
-    left: 22px;
-    bottom: 55px;
+    top: 2px;
+    right: 2px;
+  }
+  .g-list {
     z-index: 9;
     display: flex;
     max-height: 300px;
@@ -480,7 +486,14 @@
     border-radius: 0.25rem;
   }
   .g-list-container {
+    position: absolute;
+    left: 22px;
+    bottom: 55px;
     overflow: hidden;
+  }
+  .g-list-container.g-list2 {
+    left: initial;
+    right: 24px;
   }
   .g-list span {
     padding: 0 5px;
@@ -494,12 +507,6 @@
     top: -2px;
     right: 10px;
     color: aqua;
-  }
-  .sub-g span {
-    margin: 0 4px;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: bold;
   }
   .paste,
   .upload {
@@ -532,12 +539,6 @@
   @media screen and (max-width: 640px) {
     #folder-data {
       min-width: 400px;
-    }
-  }
-
-  @media screen and (max-width: 780px) {
-    .sub-g span:nth-child(1) {
-      display: none;
     }
   }
 </style>
