@@ -119,13 +119,13 @@
 
   const onShowGList = (e) => {
     showGList = !showGList;
-
+    showGList2 = false;
     e.stopPropagation();
   };
 
   const onShowGList2 = (e) => {
     showGList2 = !showGList2;
-
+    showGList = false;
     e.stopPropagation();
   };
 
@@ -287,7 +287,6 @@
           </div>
         </div>
       {/if}
-      <span>Genres</span>
       <span class="show-gen-list2" on:click={onShowGList2}>:</span>
       {#if showGList2}
         <div class="g-list-container g-list2">
@@ -308,6 +307,7 @@
           </div>
         </div>
       {/if}
+      <span>Genres</span>
       <input class="form-control" bind:value={data.Genres} />
     </div>
     <div class="info-item info-desc">
@@ -466,19 +466,18 @@
     cursor: pointer;
     user-select: none;
   }
+  .show-gen-list2 {
+    background-color: rgb(0, 255, 55);
+    margin: 0 8px;
+  }
   .show-gen-list2:active,
   .show-gen-list:active {
     transform: scale(1.1);
   }
-  .show-gen-list2 {
-    position: absolute;
-    top: 2px;
-    right: 2px;
-  }
   .g-list {
     z-index: 9;
     display: flex;
-    max-height: 300px;
+    max-height: 340px;
     overflow-y: auto;
     overflow-x: hidden;
     flex-direction: column;
@@ -492,8 +491,7 @@
     overflow: hidden;
   }
   .g-list-container.g-list2 {
-    left: initial;
-    right: 24px;
+    left: 52px;
   }
   .g-list span {
     padding: 0 5px;
