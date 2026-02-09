@@ -141,6 +141,18 @@
       glist = ["Harem", "School", "VN"];
     }
 
+    if (g === "HRV") {
+      glist = ["Harem", "Romance", "VN"];
+    }
+
+    if (g === "NV") {
+      glist = ["NTR", "VN"];
+    }
+
+    if (g === "RV") {
+      glist = ["Romance", "VN"];
+    }
+
     if (g === "RSV") {
       glist = ["Romance", "School", "VN"];
     }
@@ -287,6 +299,10 @@
       <div class="sub-g" on:click={onGSelect}>
         <span title="Harem, Romance, School, VN">HRSV</span>
         <span title="Harem, School, VN">HSV</span>
+        <span title="Harem, School, VN">HRV</span>
+        <span title="Harem, School, VN">HV</span>
+        <span title="Harem, School, VN">NV</span>
+        <span title="Harem, School, VN">RV</span>
         <span title="Romance, School, VN">RSV</span>
       </div>
       <span>Genres</span>
@@ -480,9 +496,9 @@
     color: aqua;
   }
   .sub-g span {
-    margin: 0 5px;
+    margin: 0 4px;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: bold;
   }
   .paste,
@@ -516,6 +532,12 @@
   @media screen and (max-width: 640px) {
     #folder-data {
       min-width: 400px;
+    }
+  }
+
+  @media screen and (max-width: 780px) {
+    .sub-g span:nth-child(1) {
+      display: none;
     }
   }
 </style>
