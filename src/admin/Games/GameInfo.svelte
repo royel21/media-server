@@ -124,8 +124,16 @@
 
   const onGSelect = (e) => {
     if (e.target.tagName !== "SPAN") return;
+    const g = e.target.textContent;
 
-    const genres = new Set((data.Genres || "").split(", ").filter((f) => f));
+    const glist = (data.Genres || "").split(", ").filter((f) => f);
+
+    if (glist.includes(g)) {
+      data.Genres = glist.filter((f) => f !== g).join(", ");
+      return e.stopPropagation();
+    }
+
+    const genres = new Set(glist);
     genres.add(e.target.textContent);
 
     data.Genres = [...genres].sort().join(", ");
@@ -234,29 +242,32 @@
     <div class="gen" bind:this={listRef}>
       <span class="show-gen-list" on:click={onShowGList}>:</span>
       {#if showGList}
-        <div class="g-list" on:click={onGSelect}>
-          <span>3D</span>
-          <span>Animated</span>
-          <span>Chikan</span>
-          <span>Drama</span>
-          <span>Harem</span>
-          <span>Incest</span>
-          <span>School</span>
-          <span>Loli</span>
-          <span>Maid</span>
-          <span>Mind Control</span>
-          <span>NTR</span>
-          <span>Romance</span>
-          <span>RENPY</span>
-          <span>Unity</span>
-          <span>Rape</span>
-          <span>RPG</span>
-          <span>Teacher</span>
-          <span>Simulation</span>
-          <span>Sleep Sex</span>
-          <span>Touching</span>
-          <span>SLG</span>
-          <span>VN</span>
+        <div class="g-list-container">
+          <div class="g-list" on:click={onGSelect}>
+            <span>3D</span>
+            <span>Adventure</span>
+            <span>Animated</span>
+            <span>Chikan</span>
+            <span>Drama</span>
+            <span>Harem</span>
+            <span>Incest</span>
+            <span>School</span>
+            <span>Loli</span>
+            <span>Maid</span>
+            <span>Mind Control</span>
+            <span>NTR</span>
+            <span>Romance</span>
+            <span>Pervert</span>
+            <span>Unity</span>
+            <span>Rape</span>
+            <span>RPG</span>
+            <span>Teacher</span>
+            <span>Simulation</span>
+            <span>Sleep Sex</span>
+            <span>Touching</span>
+            <span>SLG</span>
+            <span>VN</span>
+          </div>
         </div>
       {/if}
       <span>Genres</span>
@@ -432,6 +443,9 @@
     flex-direction: column;
     background-color: #888;
     border-radius: 0.25rem;
+  }
+  .g-list-container {
+    overflow: hidden;
   }
   .g-list span {
     padding: 0 5px;
