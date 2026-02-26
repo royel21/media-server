@@ -202,7 +202,10 @@
 
   $: isNew = data.Id !== "new";
   $: if (data.AltName) {
-    data.AltName = data.AltName?.replace("–", "-").replace(/\?|\:/g, "").replace(/( )+/g, " ");
+    data.AltName = data.AltName?.replace("–", "-").replace(/\?|\:/g, "").replace(/( )+/g, " ").replaceAll("’", "'");
+  }
+  $: if (data.Codes && /^\d+/.test(data.Codes)) {
+    data.Codes = "ST" + data.Codes;
   }
 </script>
 
@@ -293,11 +296,16 @@
           <div id="range" class="g-list" on:click={onGSelect}>
             <span title="Drama, School, VN">DSV</span>
             <span title="Drama, VN">DV</span>
+            <span title="Drama, NTR, VN">DNV</span>
+            <span title="Drama, Harem, NTR, VN">DHNV</span>
+            <span title="Drama, Harem, School, VN">DHSV</span>
+            <span title="Harem, Loli, School, VN">HSV</span>
             <span title="Harem, School, VN">HSV</span>
             <span title="Harem, Romance, School, VN">HRSV</span>
             <span title="Harem, School, VN">HSV</span>
             <span title="Harem, Romance, VN">HRV</span>
             <span title="Harem, VN">HV</span>
+            <span title="Harem, NTR, VN">HNV</span>
             <span title="NTR, VN">NV</span>
             <span title="Romance, VN">RV</span>
             <span title="RPG, School">RS</span>
@@ -420,7 +428,7 @@
     font-family: "verdana", sans-serif;
   }
   .info-controls {
-    text-align: center;
+    text-align: left;
     padding-bottom: 5px;
   }
   .info-name {
@@ -435,7 +443,7 @@
     min-height: 60px;
   }
   .info-controls button {
-    margin-right: 25px;
+    margin-right: 10px;
   }
   .info-path {
     flex-grow: 0;
