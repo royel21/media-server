@@ -173,7 +173,15 @@
       navigator.clipboard.writeText(game.Name + " " + game.Codes);
     }
   };
-
+  const copyComp = (e) => {
+    const prevEl = e.currentTarget.previousElementSibling;
+    if (navigator?.clipboard?.writeText && prevEl) {
+      navigator.clipboard.writeText(prevEl.value);
+    }
+  };
+  const format = (str) => {
+    return str?.replace("–", "-").replace(/\?|\:/g, "").replace(/( )+/g, " ").replaceAll("’", "'") || "";
+  };
   onDestroy(() => {
     socket.off("folder-remove", onRemoved);
     document.removeEventListener("click", onHandlerGList);
@@ -201,9 +209,8 @@
   }
 
   $: isNew = data.Id !== "new";
-  $: if (data.AltName) {
-    data.AltName = data.AltName?.replace("–", "-").replace(/\?|\:/g, "").replace(/( )+/g, " ").replaceAll("’", "'");
-  }
+  $: data.AltName = format(data.AltName);
+  $: data.Name = format(data.Name);
   $: if (data.Codes && /^\d+/.test(data.Codes)) {
     data.Codes = "ST" + data.Codes;
   }
@@ -241,13 +248,15 @@
       </div>
     </div>
 
-    <div>
+    <div class="info-item">
       <span><span id="Codes" on:click={handlerPaste}><Icons name="paste" /></span>Codes</span>
       <input class="form-control" bind:value={data.Codes} />
+      <span class="gn-copy" on:click={copyComp}><Icons name="paste" color="deepskyblue" /></span>
     </div>
-    <div>
+    <div class="info-item">
       <span><span id="Company" on:click={handlerPaste}><Icons name="paste" /></span>Publisher/Dev</span>
       <input class="form-control" bind:value={data.Company} />
+      <span class="gn-copy" on:click={copyComp}><Icons name="paste" color="deepskyblue" /></span>
     </div>
     <div class="info-item info-altname">
       <span><span id="AltName" on:click={handlerPaste}><Icons name="paste" /></span>Alt Name</span>
@@ -294,11 +303,15 @@
       {#if showGList2}
         <div class="g-list-container g-list2">
           <div id="range" class="g-list" on:click={onGSelect}>
-            <span title="Drama, School, VN">DSV</span>
+            <span title="Chikan, VN">CV</span>
+            <span title="Chikan, Rape, VN">CRV</span>
+            <span title="Chikan, School, VN">CSV</span>
             <span title="Drama, VN">DV</span>
+            <span title="Drama, Harem, VN">DHV</span>
+            <span title="Drama, School, VN">DSV</span>
+            <span title="Drama, Harem, School, VN">DHSV</span>
             <span title="Drama, NTR, VN">DNV</span>
             <span title="Drama, Harem, NTR, VN">DHNV</span>
-            <span title="Drama, Harem, School, VN">DHSV</span>
             <span title="Harem, Loli, School, VN">HSV</span>
             <span title="Harem, School, VN">HSV</span>
             <span title="Harem, Romance, School, VN">HRSV</span>
@@ -308,10 +321,13 @@
             <span title="Harem, NTR, VN">HNV</span>
             <span title="NTR, VN">NV</span>
             <span title="Romance, VN">RV</span>
-            <span title="RPG, School">RS</span>
             <span title="School, VN">SV</span>
             <span title="Rape, School, VN">RapeSV</span>
             <span title="Romance, School, VN">RSV</span>
+            <span title="Adventure, RPG">AR</span>
+            <span title="RPG, School">RPGSch</span>
+            <span title="Rape, RPG">RapRPG</span>
+            <span title="Rape, RPG, School">RapRSch</span>
           </div>
         </div>
       {/if}
@@ -409,6 +425,7 @@
     flex-direction: column;
   }
   .info-item {
+    position: relative;
     display: flex;
     flex-direction: column;
     margin-bottom: 10px;
@@ -491,6 +508,7 @@
     flex-direction: column;
     background-color: #888;
     border-radius: 0.25rem;
+    user-select: none;
   }
   .g-list-container {
     position: absolute;
