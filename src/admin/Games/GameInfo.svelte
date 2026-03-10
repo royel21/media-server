@@ -168,6 +168,13 @@
     }
   };
 
+  const pasteAlt2 = async () => {
+    let text = await navigator.clipboard?.readText();
+    if (text) {
+      data.AltName += "\n" + text.trim();
+    }
+  };
+
   const copyName = () => {
     if (navigator?.clipboard?.writeText) {
       navigator.clipboard.writeText(game.Name + " " + game.Codes);
@@ -244,7 +251,7 @@
       <div class="info-item info-name">
         <span><span id="Name" on:click={handlerPaste}><Icons name="paste" /></span>Name</span>
         <textarea class="form-control" bind:value={data.Name}></textarea>
-        <span class="gn-copy" on:click={copyName}><Icons name="paste" color="deepskyblue" /></span>
+        <span class="gn-copy" on:click={copyName} title="Append"><Icons name="paste" color="deepskyblue" /></span>
       </div>
     </div>
 
@@ -261,6 +268,7 @@
     <div class="info-item info-altname">
       <span><span id="AltName" on:click={handlerPaste}><Icons name="paste" /></span>Alt Name</span>
       <textarea class="form-control" rows="3" bind:value={data.AltName}></textarea>
+      <span class="gn-copy" on:click={pasteAlt2}><Icons name="paste" color="green" /></span>
     </div>
     <div>
       <span><span id="Lang" on:click={handlerPaste}><Icons name="paste" /></span>Lang</span>
