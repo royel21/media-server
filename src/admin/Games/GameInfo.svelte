@@ -218,6 +218,7 @@
   $: isNew = data.Id !== "new";
   $: data.AltName = format(data.AltName);
   $: data.Name = format(data.Name);
+  $: data.Company = format(data.Company);
   $: if (data.Codes && /^\d+/.test(data.Codes)) {
     data.Codes = "ST" + data.Codes;
   }
