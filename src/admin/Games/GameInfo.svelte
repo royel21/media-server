@@ -24,6 +24,7 @@
   let removing = false;
   let showGList = false;
   let showGList2 = false;
+  let showGList3 = false;
   let files;
   let listRef;
   let showImage = false;
@@ -120,12 +121,7 @@
   const onShowGList = (e) => {
     showGList = !showGList;
     showGList2 = false;
-    e.stopPropagation();
-  };
-
-  const onShowGList2 = (e) => {
-    showGList2 = !showGList2;
-    showGList = false;
+    showGList3 = false;
     e.stopPropagation();
   };
 
@@ -154,10 +150,25 @@
     e.stopPropagation();
   };
 
+  const onShowGList2 = (e) => {
+    showGList2 = !showGList2;
+    showGList3 = false;
+    showGList = false;
+    e.stopPropagation();
+  };
+
+  const onShowGList3 = (e) => {
+    showGList3 = !showGList3;
+    showGList2 = false;
+    showGList = false;
+    e.stopPropagation();
+  };
+
   const onHandlerGList = ({ target }) => {
     if (listRef !== target) {
       showGList = false;
       showGList2 = false;
+      showGList3 = false;
     }
   };
 
@@ -325,6 +336,13 @@
             <span title="Harem, School, VN">HSV</span>
             <span title="Harem, Romance, School, VN">HRSV</span>
             <span title="Harem, School, VN">HSV</span>
+          </div>
+        </div>
+      {/if}
+      <span class="show-gen-list2" on:click={onShowGList3}>:</span>
+      {#if showGList3}
+        <div class="g-list-container g-list3">
+          <div id="range" class="g-list" on:click={onGSelect}>
             <span title="Harem, Romance, VN">HRV</span>
             <span title="Harem, VN">HV</span>
             <span title="Harem, NTR, VN">HNV</span>
@@ -486,6 +504,7 @@
   .gen {
     position: relative;
   }
+  .show-gen-list3,
   .show-gen-list2,
   .show-gen-list {
     display: inline-block;
@@ -504,6 +523,7 @@
     background-color: rgb(0, 255, 55);
     margin: 0 8px;
   }
+  .show-gen-list3:active,
   .show-gen-list2:active,
   .show-gen-list:active {
     transform: scale(1.1);
@@ -527,6 +547,9 @@
   }
   .g-list-container.g-list2 {
     left: 52px;
+  }
+  .g-list-container.g-list3 {
+    left: 90px;
   }
   .g-list span {
     padding: 0 5px;
