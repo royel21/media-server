@@ -175,6 +175,13 @@
   const handlerPaste = async ({ currentTarget: { id } }) => {
     let text = await navigator.clipboard?.readText();
     if (text && id) {
+      if (id === "AltName") {
+        text = text
+          .split(",")
+          .map((g) => g.trim())
+          .join("\n");
+      }
+
       data[id] = text.trim();
     }
   };
