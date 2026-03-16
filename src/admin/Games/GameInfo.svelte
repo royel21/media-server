@@ -273,7 +273,11 @@
         <span class="gn-copy" on:click={copyName} title="Append"><Icons name="paste" color="deepskyblue" /></span>
       </div>
     </div>
-
+    <div class="info-item info-altname">
+      <span><span id="AltName" on:click={handlerPaste}><Icons name="paste" /></span>Alt Name</span>
+      <textarea class="form-control" rows="3" bind:value={data.AltName}></textarea>
+      <span class="gn-copy" on:click={pasteAlt2}><Icons name="paste" color="green" /></span>
+    </div>
     <div class="info-item">
       <span><span id="Codes" on:click={handlerPaste}><Icons name="paste" /></span>Codes</span>
       <input class="form-control" bind:value={data.Codes} />
@@ -283,11 +287,6 @@
       <span><span id="Company" on:click={handlerPaste}><Icons name="paste" /></span>Publisher/Dev</span>
       <input class="form-control" bind:value={data.Company} />
       <span class="gn-copy" on:click={copyComp}><Icons name="paste" color="deepskyblue" /></span>
-    </div>
-    <div class="info-item info-altname">
-      <span><span id="AltName" on:click={handlerPaste}><Icons name="paste" /></span>Alt Name</span>
-      <textarea class="form-control" rows="3" bind:value={data.AltName}></textarea>
-      <span class="gn-copy" on:click={pasteAlt2}><Icons name="paste" color="green" /></span>
     </div>
     <div>
       <span><span id="Lang" on:click={handlerPaste}><Icons name="paste" /></span>Lang</span>
@@ -463,7 +462,6 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 10px;
-    flex-grow: 10;
   }
   .info-controls,
   #folder-data textarea,
@@ -485,9 +483,11 @@
   .info-name {
     position: relative;
     min-height: 100%;
+    flex-grow: 10;
   }
   .info-altname {
     max-height: 180px;
+    flex-grow: 10;
   }
   .info-altname,
   .info-desc {
