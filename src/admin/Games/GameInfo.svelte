@@ -29,6 +29,17 @@
   let listRef;
   let showImage = false;
 
+  function capitalizeWords(text) {
+    if (typeof text !== "string") {
+      throw new TypeError("Input must be a string.");
+    }
+
+    return text
+      .toLowerCase() // Normalize to lowercase first
+      .replace(/\b\p{L}/gu, (char) => char.toUpperCase());
+    // \b = word boundary, \p{L} = any letter (Unicode-aware)
+  }
+
   const save = async () => {
     if (!data.Name) return setMessage({ msg: "Name Required", error: true });
     if (!data.Codes) return setMessage({ msg: "Game Code Required", error: true });
@@ -205,7 +216,9 @@
     }
   };
   const format = (str) => {
-    return str?.replace("–", "-").replace(/\?|\:/g, "").replace(/( )+/g, " ").replaceAll("’", "'") || "";
+    return capitalizeWords(
+      str?.replace("–", "-").replace(/\?|\:/g, "").replace(/( )+/g, " ").replaceAll("’", "'") || "",
+    );
   };
   onDestroy(() => {
     socket.off("folder-remove", onRemoved);
