@@ -76,7 +76,6 @@
         Id: "new",
         Info: { Company: filter || "" },
       };
-      console.log(game);
     }
   };
 
