@@ -74,7 +74,7 @@
     if (!Games.find((g) => g.Id === "new")) {
       game = {
         Id: "new",
-        Info: { Company: filter || "" },
+        Info: { Company: decodeURIComponent(filter) || "" },
       };
     }
   };
