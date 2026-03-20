@@ -74,8 +74,9 @@
     if (!Games.find((g) => g.Id === "new")) {
       game = {
         Id: "new",
-        Company: filter || "",
+        Info: { Company: filter || "" },
       };
+      console.log(game);
     }
   };
 
