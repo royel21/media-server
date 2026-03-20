@@ -216,9 +216,7 @@
     }
   };
   const format = (str) => {
-    return capitalizeWords(
-      str?.replace("–", "-").replace(/\?|\:/g, "").replace(/( )+/g, " ").replaceAll("’", "'") || "",
-    );
+    return str?.replace("–", "-").replace(/\?|\:/g, "").replace(/( )+/g, " ").replaceAll("’", "'") || "";
   };
   onDestroy(() => {
     socket.off("folder-remove", onRemoved);
@@ -249,7 +247,7 @@
   $: isNew = data.Id !== "new";
   $: data.AltName = format(data.AltName);
   $: data.Name = format(data.Name);
-  $: data.Company = format(data.Company);
+  $: data.Company = capitalizeWords(format(data.Company));
   $: if (data.Codes && /^\d+/.test(data.Codes)) {
     data.Codes = "ST" + data.Codes;
   }
