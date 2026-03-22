@@ -46,8 +46,10 @@
     }
 
     let index = Games.findIndex((g) => g.Id === game.Id);
-    Games[index] = g;
-    Games = Games;
+    if (index < -1) {
+      Games[index] = g;
+      Games = Games;
+    }
   };
 
   const removeGame = async (g2) => {
