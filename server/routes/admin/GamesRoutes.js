@@ -78,6 +78,8 @@ const ListFiles = (dir) => {
   return tempFiles;
 };
 
+const codeRegx = / (v|r|RJ|RA|VO|ST|G|D|IT|VJ)\d+.*\d+$/g;
+
 const getCode = (name) => {
   const codeMatch = name.replace(/\.(rar|zip|7z|apk)/g, "").match(/ (v|r|RJ|RA|VO|ST|G|D|IT|VJ)\d+.*\d+$/g);
   return codeMatch ? codeMatch[0].trim() : "";
@@ -243,6 +245,9 @@ routes.post("/update-game-info", async (req, res) => {
       return res.send({ error: "Game Exist: " + data.Codes });
     }
 
+    if (codeRegx.test(data.Codes)) {
+      return res.send({ error: "No a Valid Game Code:" + data.Codes });
+    }
     delete data.Id;
     return await createGame(data, res);
   } else {
