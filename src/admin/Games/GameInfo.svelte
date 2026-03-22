@@ -200,7 +200,12 @@
   const pasteAlt2 = async () => {
     let text = await navigator.clipboard?.readText();
     if (text) {
-      data.AltName += "\n" + text.trim();
+      data.AltName +=
+        "\n" +
+        text
+          .split(",")
+          .map((g) => g.trim())
+          .join("\n");
     }
   };
 
