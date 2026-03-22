@@ -70,12 +70,41 @@
     game = Games[map(index, 0, size)] || {};
   };
 
-  const addGame = () => {
+  const addGame = async () => {
     if (!Games.find((g) => g.Id === "new")) {
-      game = {
+      let g = {
         Id: "new",
         Info: { Company: decodeURIComponent(filter) || "" },
       };
+      try {
+        let text = "";
+        if (navigator.clipboard) {
+          text = await navigator.clipboard?.readText();
+          if (text) {
+            const parts = text.split("\n");
+            for (let p of parts) {
+              if (/Japanese Title: /gi.test(p)) {
+                g.Info.AltName = p.replace("Japanese Title: ", "").trim();
+              }
+
+              if (/Romanji: /gi.test(p)) {
+                g.Name = p.replace("Romanji: ", "").trim();
+              }
+
+              if (/Developer: /gi.test(p)) {
+                g.Info.Company = p.replace("Developer: ", "").trim();
+              }
+
+              if (/VNDB: /gi.test(p)) {
+                g.Info.Codes = p.split("/").pop();
+                g.Codes = p.split("/").pop();
+                console.log(p.split("/").pop());
+              }
+            }
+          }
+        }
+        game = { ...g };
+      } catch (error) {}
     }
   };
 
