@@ -98,9 +98,7 @@
               }
 
               if (/VNDB: /gi.test(p)) {
-                g.Info.Codes = p.split("/").pop();
-                g.Codes = p.split("/").pop();
-                console.log(p.split("/").pop());
+                g.Codes = p.split("/").pop().trim();
               }
             }
           }

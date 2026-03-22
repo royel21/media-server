@@ -220,7 +220,12 @@ const createGame = async (data, res) => {
     Genres: data.Genres?.trim() || "",
     Description: data.Description?.trim(),
   };
-  game.Info = await db.Info.create(info);
+  const foundInfo = await db.Info.findOne({ where: { Codes: data.Codes } });
+  if (foundInfo) {
+    await foundInfo.update(info);
+  } else {
+    game.Info = await db.Info.create(info);
+  }
 
   res.send({ ...game.dataValues, ...info });
 };
