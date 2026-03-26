@@ -72,6 +72,8 @@
     game = Games[map(index, 0, size)] || {};
   };
 
+  const nameRegx = /Romanji: |Romaji: /gi;
+
   const addGame = async () => {
     if (!Games.find((g) => g.Id === "new")) {
       let g = {
@@ -89,8 +91,8 @@
                 g.Info.AltName = p.replace("Japanese Title: ", "").trim();
               }
 
-              if (/Romanji: /gi.test(p)) {
-                g.Name = p.replace("Romanji: ", "").trim();
+              if (nameRegx.test(p)) {
+                g.Name = p.replace(nameRegx, "").trim();
               }
 
               if (/Developer: /gi.test(p)) {
