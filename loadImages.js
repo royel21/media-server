@@ -8,13 +8,7 @@ import { downloadImg } from "#server/Downloader/ImageUtils";
 const homedir = os.homedir();
 
 const worker = async () => {
-  // const browser = await startBrowser({ headless: false });
-
-  // const page = await createPage(browser);
-  const games = await db.Game.findAll();
-
-  const imagePath = path.join(homedir, "images", "games");
-  const images = fs.readdirSync(imagePath);
+  const games = await db.Info.findAll();
 
   for (const game of games) {
     if (/windows 98|win98|win 98/i.test(game.Description)) {
@@ -26,9 +20,11 @@ const worker = async () => {
     if (/PC98/i.test(game.Description)) {
       game.OS = "PC98";
     }
+    if (/Windows XP| Win XP| WinXP/i.test(game.Description)) {
+      game.OS = "Windows XP";
+    }
   }
 
-  // for (let game of images) {
   //   if (!games.find((g) => g.Codes === game.replace(".jpg", ""))) {
   //     console.log(game);
   //   }
