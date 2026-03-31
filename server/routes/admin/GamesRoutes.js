@@ -42,6 +42,9 @@ const getFilters = (splt, filter) => {
         "$Info.Genres$": {
           [Op.like]: "%" + s.trim() + "%",
         },
+        "$Info.OS$": {
+          [Op.like]: "%" + s.trim() + "%",
+        },
       },
     })),
   };
