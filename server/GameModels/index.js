@@ -34,7 +34,7 @@ db.Info.belongsTo(db.Game, { foreignKey: "Codes", targetKey: "Codes", constraint
 
 db.init = async (force) => {
   try {
-    await db.sqlze.query("ALTER TABLE Infos OS Genres VARCHAR(255) NULL DEFAULT 'Windows 10';");
+    await db.sqlze.query("ALTER TABLE Infos ADD OS VARCHAR(255) NULL DEFAULT 'Windows 10';");
   } catch (error) {}
   await sequelize.sync({ force });
 };
