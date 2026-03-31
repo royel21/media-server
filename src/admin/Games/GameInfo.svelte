@@ -19,6 +19,7 @@
     AltName: "",
     Description: "",
     Image: {},
+    OS: "",
   };
   let data = { ...def };
   let removing = false;
@@ -244,6 +245,7 @@
           Genres: game.Info?.Genres || "",
           Description: game.Info?.Description || "",
           Image: {},
+          OS: game.Info.OS,
         }
       : { ...def };
     getImage(data.Id);
@@ -382,6 +384,10 @@
       {/if}
       <span>Genres</span>
       <input class="form-control" bind:value={data.Genres} />
+    </div>
+    <div>
+      <span><span id="OS" on:click={handlerPaste}><Icons name="paste" /></span>OS</span>
+      <input class="form-control" bind:value={data.OS} />
     </div>
     <div class="info-item info-desc">
       <span>Description</span>

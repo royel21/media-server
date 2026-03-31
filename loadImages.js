@@ -16,45 +16,57 @@ const worker = async () => {
   const imagePath = path.join(homedir, "images", "games");
   const images = fs.readdirSync(imagePath);
 
-  for (let game of images) {
-    if (!games.find((g) => g.Codes === game.replace(".jpg", ""))) {
-      console.log(game);
+  for (const game of games) {
+    if (/windows 98|win98|win 98/i.test(game.Description)) {
+      game.OS = "Windows 98";
     }
-
-    if (game.Codes !== undefined && /(r|v)\d+$/.test(game.Codes)) {
-      // const imgPath = path.join(homedir, "images", "games", `${game.Codes}.jpg`);
-      // console.log("https://vndb.org/" + game.Codes);
-      // await page.goto("https://vndb.org/" + game.Codes);
-      // const data = await page.evaluate(async () => {
-      //   const data = {};
-      //   let list = [...document.querySelectorAll(".vndetails td")];
-      //   let index = 0;
-      //   list.forEach((td, i) => {
-      //     if (td.textContent.includes("Developer")) {
-      //       index = i + 1;
-      //     }
-      //   });
-      //   if (index > 0) {
-      //     data.Company = list[index].textContent.trim();
-      //   }
-      //   data.Image = document.querySelector(".vnimg img")?.src;
-      //   return data;
-      // });
-      // if (data.Image && !fs.existsSync(imgPath)) {
-      //   let img = await downloadImg(data.Image, page);
-      //   if (!img.badImg) {
-      //     await img.resize({ width: 300 }).toFile(imgPath);
-      //   }
-      // }
-      // if (game.Info && !game.Info.Company) {
-      //   try {
-      //     game.Info.Company = data.Company;
-      //     await game.Info.save();
-      //   } catch (error) {}
-      // }
-      // await delay(3000);
+    if (/windows 7|win7|win 7/i.test(game.Description)) {
+      game.OS = "Windows 7";
+    }
+    if (/PC98/i.test(game.Description)) {
+      game.OS = "PC98";
     }
   }
+
+  // for (let game of images) {
+  //   if (!games.find((g) => g.Codes === game.replace(".jpg", ""))) {
+  //     console.log(game);
+  //   }
+
+  //   if (game.Codes !== undefined && /(r|v)\d+$/.test(game.Codes)) {
+  //     // const imgPath = path.join(homedir, "images", "games", `${game.Codes}.jpg`);
+  //     // console.log("https://vndb.org/" + game.Codes);
+  //     // await page.goto("https://vndb.org/" + game.Codes);
+  //     // const data = await page.evaluate(async () => {
+  //     //   const data = {};
+  //     //   let list = [...document.querySelectorAll(".vndetails td")];
+  //     //   let index = 0;
+  //     //   list.forEach((td, i) => {
+  //     //     if (td.textContent.includes("Developer")) {
+  //     //       index = i + 1;
+  //     //     }
+  //     //   });
+  //     //   if (index > 0) {
+  //     //     data.Company = list[index].textContent.trim();
+  //     //   }
+  //     //   data.Image = document.querySelector(".vnimg img")?.src;
+  //     //   return data;
+  //     // });
+  //     // if (data.Image && !fs.existsSync(imgPath)) {
+  //     //   let img = await downloadImg(data.Image, page);
+  //     //   if (!img.badImg) {
+  //     //     await img.resize({ width: 300 }).toFile(imgPath);
+  //     //   }
+  //     // }
+  //     // if (game.Info && !game.Info.Company) {
+  //     //   try {
+  //     //     game.Info.Company = data.Company;
+  //     //     await game.Info.save();
+  //     //   } catch (error) {}
+  //     // }
+  //     // await delay(3000);
+  //   }
+  // }
   // await page.close();
   // await browser.close();
   process.exit();
