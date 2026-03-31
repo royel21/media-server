@@ -26,6 +26,7 @@ const worker = async () => {
     if (/Windows XP| Win XP| WinXP/i.test(game.Description)) {
       game.OS = "Windows XP";
     }
+    await game.save();
   }
 
   //   if (!games.find((g) => g.Codes === game.replace(".jpg", ""))) {
