@@ -224,6 +224,7 @@ const createGame = async (data, res) => {
     Lang: data.Lang?.trim() || "Japanese",
     Genres: data.Genres?.trim() || "",
     Description: data.Description?.trim(),
+    OS: data.OS,
   };
   const foundInfo = await db.Info.findOne({ where: { Codes: data.Codes } });
   if (foundInfo) {
@@ -276,6 +277,7 @@ routes.post("/update-game-info", async (req, res) => {
     Lang: data.Lang?.trim() || "Japanese",
     Genres: data.Genres?.trim(),
     Description: data.Description?.trim(),
+    OS: data.OS,
   };
 
   game.Info = await db.Info.findOne({ where: { Codes: info.Codes } });
