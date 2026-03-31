@@ -10,7 +10,10 @@ const homedir = os.homedir();
 const worker = async () => {
   const games = await db.Info.findAll();
   for (const game of games) {
-    console.log(game.Description);
+    console.log(game.Codes + ": " + game.Description);
+    if (/windows 95|win95|win 95/i.test(game.Description)) {
+      game.OS = "Windows 95";
+    }
     if (/windows 98|win98|win 98/i.test(game.Description)) {
       game.OS = "Windows 98";
     }
