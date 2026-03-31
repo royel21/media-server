@@ -16,7 +16,10 @@
   let filter = localStorage.getItem("gamelist-filter") || "";
 
   const loadGames = async () => {
-    const data = await apiUtils.admin(["games", pageData.page, calRows(), filter], "g-list");
+    const data = await apiUtils.admin(
+      ["games", pageData.page, calRows(), filter],
+      "g-list",
+    );
 
     Games = data.items || [];
     pageData.totalItems = data.totalItems || 0;
@@ -60,7 +63,11 @@
       filter,
       rows: calRows(),
     };
-    const result = await apiUtils.post("admin/games/remove-game", data, "up-data");
+    const result = await apiUtils.post(
+      "admin/games/remove-game",
+      data,
+      "up-data",
+    );
 
     Games = result.items || [];
     pageData.totalItems = result.totalItems || 0;
@@ -71,6 +78,8 @@
     const size = Games.length - 1;
     game = Games[map(index, 0, size)] || {};
   };
+
+  const nameRegx = /Romanji: |Romaji: /gi;
 
   const addGame = async () => {
     if (!Games.find((g) => g.Id === "new")) {
@@ -89,8 +98,8 @@
                 g.Info.AltName = p.replace("Japanese Title: ", "").trim();
               }
 
-              if (/Romanji: /gi.test(p)) {
-                g.Name = p.replace("Romanji: ", "").trim();
+              if (nameRegx.test(p)) {
+                g.Name = p.replace(nameRegx, "").trim();
               }
 
               if (/Developer: /gi.test(p)) {
@@ -114,7 +123,16 @@
 
 <div class="admin-manager">
   <div class="rows">
-    <GameList {Games} {game} {setInfo} {pageData} {filter} {gotopage} {filterChange} {addGame} />
+    <GameList
+      {Games}
+      {game}
+      {setInfo}
+      {pageData}
+      {filter}
+      {gotopage}
+      {filterChange}
+      {addGame}
+    />
     <GameInfo bind:game {updateGame} {removeGame} />
   </div>
 </div>
