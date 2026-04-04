@@ -58,6 +58,8 @@ export const findOrCreateFolder = async (manga, IsAdult, isRaw) => {
 
       let directory = await db.directory.findOne(query);
 
+      Author = Author.split(/, |\n/g).map((t) => t.trim()).join(", ");
+      
       folder = await db.folder.create({
         Name,
         Path: path.join(directory.FullPath, Name),
