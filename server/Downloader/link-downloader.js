@@ -47,16 +47,6 @@ export const downloadLink = async ({ d, page, Server, folder, count, state }) =>
     query.waitUntil = "domcontentloaded";
   }
 
-  if (/mangas.ins/gi.test(d.url)) {
-    await page.goto(d.url + "?style=list", query);
-  } else {
-    await page.goto(d.url, query);
-  }
-
-  if (Server.Name.includes("mangaread") && (await page.$(".listing-chapters_wrap li a"))) {
-    return;
-  }
-
   let images = {};
 
   page.on("response", async (response) => {
@@ -70,6 +60,17 @@ export const downloadLink = async ({ d, page, Server, folder, count, state }) =>
       };
     }
   });
+  console.log(images);
+
+  if (/mangas.ins/gi.test(d.url)) {
+    await page.goto(d.url + "?style=list", query);
+  } else {
+    await page.goto(d.url, query);
+  }
+
+  if (Server.Name.includes("mangaread") && (await page.$(".listing-chapters_wrap li a"))) {
+    return;
+  }
 
   await page.waitForSelector(Server.Imgs);
 
