@@ -60,7 +60,6 @@ export const downloadLink = async ({ d, page, Server, folder, count, state }) =>
       };
     }
   });
-  console.log(images);
 
   if (/mangas.ins/gi.test(d.url)) {
     await page.goto(d.url + "?style=list", query);
