@@ -81,7 +81,7 @@ export const downloadLink = async ({ d, page, Server, folder, count, state }) =>
 
   const result = {};
   await downloadAllIMages(page, links, state, imgPath, folder.Name + "/" + d.name, destZip, images);
-
+  console.log("isValid: ", result);
   if (result.valid) {
     await createFile(destZip, folder.Id, result.count);
     sendMessage({ text: `Save: ${d.name}` });
