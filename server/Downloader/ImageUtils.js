@@ -64,7 +64,22 @@ const evalWorpressImage = async () => {
   }
 };
 
-export const downloadImg = async (url, page, name = "", isCover) => {
+export const imgFromBuffer = async (buff) => {
+  const img = await sharp(buff, { failOnError: false });
+  const meta = await img.metadata();
+
+  if (!isCover && meta.width < 200) {
+    return { badImg: true, width: meta.width };
+  }
+
+  if (meta.width > 1024) {
+    await img.resize({ width: 1024 });
+  }
+
+  return img;
+};
+
+export const downloadImg = async (url, page, name = "") => {
   if (url) {
     let buff = [];
     try {
@@ -99,18 +114,7 @@ export const downloadImg = async (url, page, name = "", isCover) => {
     await delay(100);
     if (buff?.length > 0 && !buff.includes("<html>")) {
       try {
-        const img = await sharp(buff, { failOnError: false });
-        const meta = await img.metadata();
-
-        if (!isCover && meta.width < 200) {
-          return { badImg: true, width: meta.width };
-        }
-
-        if (meta.width > 1024) {
-          await img.resize({ width: 1024 });
-        }
-
-        return img;
+        return await imgFromBuffer(buff);
       } catch (error) {
         console.log(error);
         sendMessage({ text: `${name} ResizeImage-Error: ${url}`, color: "red", error: error.toString(), url });
@@ -180,7 +184,7 @@ export const saveThumbnail = async (buff, thumbPath) => {
   }
 };
 
-export const downloadAllIMages = async (page, links, state, imgPath, folder, destZip) => {
+export const downloadAllIMages = async (page, links, state, imgPath, folder, destZip, images) => {
   var zip = new AdmZip();
 
   links = links.filter((link) => link?.startsWith("http"));
@@ -193,15 +197,22 @@ export const downloadAllIMages = async (page, links, state, imgPath, folder, des
   for (let i = 0; i < length; i++) {
     if (state.stopped) return result;
 
+    let url = links[i];
+
     if (skip > 1) {
-      sendMessage({ text: `Error Skip: ${links[i]}` });
+      sendMessage({ text: `Error Skip: ${url}` });
       // return result;
     }
 
     process.stdout.write(`IMG: ${getProgress(i + 1, length)}\r`);
+    let img;
+    if (images[url]?.buffer) {
+      img = await imgFromBuffer(images[url]?.buffer);
+    } else {
+      img = await downloadImg(links[i], page, folder);
+    }
 
-    const img = await downloadImg(links[i], page, folder);
-    if (img.badImg) {
+    if (img?.badImg) {
       length--;
       thumb++;
       skip++;

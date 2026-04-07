@@ -57,13 +57,28 @@ export const downloadLink = async ({ d, page, Server, folder, count, state }) =>
     return;
   }
 
+  let images = {};
+
+  page.on("response", async (response) => {
+    const url = response.url();
+    const header = response.headers();
+    if (header["content-type"] && /image/gi.test(header["content-type"])) {
+      const buffer = await response.buffer();
+      images[url] = {
+        type: header["content-type"],
+        buffer,
+      };
+    }
+  });
+
   await page.waitForSelector(Server.Imgs);
 
   const links = await page.evaluate(evaleLinks, Server.dataValues);
   sendMessage({ text: `Dwn: ${count} ch:${d.name} ~ img: ${links.length} ~ ${folder.Name}`, url: d.url });
 
   const imgPath = path.join(imgDir, d.name + ".zip.jpg");
-  const result = await downloadAllIMages(page, links, state, imgPath, folder.Name + "/" + d.name, destZip);
+
+  const result = await downloadAllIMages(page, links, state, imgPath, folder.Name + "/" + d.name, destZip, images);
 
   if (result.valid) {
     await createFile(destZip, folder.Id, result.count);
