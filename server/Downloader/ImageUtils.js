@@ -64,7 +64,7 @@ const evalWorpressImage = async () => {
   }
 };
 
-export const imgFromBuffer = async (buff) => {
+export const imgFromBuffer = async (buff, isCover) => {
   const img = await sharp(buff, { failOnError: false });
   const meta = await img.metadata();
 
@@ -79,7 +79,7 @@ export const imgFromBuffer = async (buff) => {
   return img;
 };
 
-export const downloadImg = async (url, page, name = "") => {
+export const downloadImg = async (url, page, name = "", isCover) => {
   if (url) {
     let buff = [];
     try {
@@ -114,7 +114,7 @@ export const downloadImg = async (url, page, name = "") => {
     await delay(100);
     if (buff?.length > 0 && !buff.includes("<html>")) {
       try {
-        return await imgFromBuffer(buff);
+        return await imgFromBuffer(buff, isCover);
       } catch (error) {
         console.log(error);
         sendMessage({ text: `${name} ResizeImage-Error: ${url}`, color: "red", error: error.toString(), url });
