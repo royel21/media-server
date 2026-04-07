@@ -64,11 +64,7 @@ export const downloadLink = async ({ d, page, Server, folder, count, state }) =>
     } catch (error) {}
   });
 
-  if (/mangas.ins/gi.test(d.url)) {
-    await page.goto(d.url + "?style=list", query);
-  } else {
-    await page.goto(d.url, query);
-  }
+  await page.goto(d.url, query);
 
   if (Server.Name.includes("mangaread") && (await page.$(".listing-chapters_wrap li a"))) {
     return;
@@ -78,7 +74,7 @@ export const downloadLink = async ({ d, page, Server, folder, count, state }) =>
 
   const links = await page.evaluate(evaleLinks, Server.dataValues);
   sendMessage({ text: `Dwn: ${count} ch:${d.name} ~ img: ${links.length} ~ ${folder.Name}`, url: d.url });
-  if (/manga18fx/.test(d.url)) {
+  if (/manga18fx|hiperdex/.test(d.url)) {
     await delay(3000);
   }
   const imgPath = path.join(imgDir, d.name + ".zip.jpg");
