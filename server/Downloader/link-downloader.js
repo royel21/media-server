@@ -63,8 +63,6 @@ export const downloadLink = async ({ d, page, Server, folder, count, state }) =>
     } catch (error) {}
   });
 
-  console.log(images);
-
   if (/mangas.ins/gi.test(d.url)) {
     await page.goto(d.url + "?style=list", query);
   } else {
@@ -77,6 +75,7 @@ export const downloadLink = async ({ d, page, Server, folder, count, state }) =>
 
   await page.waitForSelector(Server.Imgs);
 
+  console.log(images);
   const links = await page.evaluate(evaleLinks, Server.dataValues);
   sendMessage({ text: `Dwn: ${count} ch:${d.name} ~ img: ${links.length} ~ ${folder.Name}`, url: d.url });
 
