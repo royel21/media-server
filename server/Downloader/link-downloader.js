@@ -50,16 +50,20 @@ export const downloadLink = async ({ d, page, Server, folder, count, state }) =>
   let images = {};
 
   page.on("response", async (response) => {
-    const url = response.url();
-    const header = response.headers();
-    if (header && header["content-type"] && /image/gi.test(header["content-type"])) {
-      const buffer = await response.buffer();
-      images[url] = {
-        type: header["content-type"],
-        buffer,
-      };
-    }
+    try {
+      const url = response.url();
+      const header = response.headers();
+      if (header && header["content-type"] && /image/gi.test(header["content-type"])) {
+        const buffer = await response.buffer();
+        images[url] = {
+          type: header["content-type"],
+          buffer,
+        };
+      }
+    } catch (error) {}
   });
+
+  console.log(images);
 
   if (/mangas.ins/gi.test(d.url)) {
     await page.goto(d.url + "?style=list", query);
@@ -78,7 +82,7 @@ export const downloadLink = async ({ d, page, Server, folder, count, state }) =>
 
   const imgPath = path.join(imgDir, d.name + ".zip.jpg");
 
-  const result = await downloadAllIMages(page, links, state, imgPath, folder.Name + "/" + d.name, destZip, images);
+  const result = {}; //await downloadAllIMages(page, links, state, imgPath, folder.Name + "/" + d.name, destZip, images);
 
   if (result.valid) {
     await createFile(destZip, folder.Id, result.count);
