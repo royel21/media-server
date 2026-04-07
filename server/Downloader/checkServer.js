@@ -143,7 +143,6 @@ export const downloadFromPage = async (state) => {
         for (let { Name, chaps, Url, Raw } of data) {
           Name = Name.replace(" Raw");
           let tname = await db.NameList.findOne({ where: { Name } });
-          console.log(Url, tname?.AltName || Name || "", Raw, Server.Id);
 
           const query = {
             where: { [db.Op.or]: { Url: Url || "", Name: tname?.AltName || Name || "" }, Raw, ServerId: Server.Id },
