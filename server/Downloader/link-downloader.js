@@ -52,7 +52,7 @@ export const downloadLink = async ({ d, page, Server, folder, count, state }) =>
   page.on("response", async (response) => {
     const url = response.url();
     const header = response.headers();
-    if (header["content-type"] && /image/gi.test(header["content-type"])) {
+    if (header && header["content-type"] && /image/gi.test(header["content-type"])) {
       const buffer = await response.buffer();
       images[url] = {
         type: header["content-type"],
