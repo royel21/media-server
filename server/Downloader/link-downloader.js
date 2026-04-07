@@ -8,6 +8,7 @@ import { evaleLinks } from "./evaluator.js";
 import { downloadAllIMages } from "./ImageUtils.js";
 import { findRaw, sendMessage, createDir } from "./utils.js";
 import defaultConfig from "../default-config.js";
+import { delay } from "./Crawler.js";
 
 createDir(defaultConfig.ImagesDir);
 
