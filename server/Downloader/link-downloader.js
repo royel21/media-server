@@ -75,13 +75,12 @@ export const downloadLink = async ({ d, page, Server, folder, count, state }) =>
 
   await page.waitForSelector(Server.Imgs);
 
-  console.log(images);
   const links = await page.evaluate(evaleLinks, Server.dataValues);
   sendMessage({ text: `Dwn: ${count} ch:${d.name} ~ img: ${links.length} ~ ${folder.Name}`, url: d.url });
 
   const imgPath = path.join(imgDir, d.name + ".zip.jpg");
 
-  const result = {}; //await downloadAllIMages(page, links, state, imgPath, folder.Name + "/" + d.name, destZip, images);
+  const result = await downloadAllIMages(page, links, state, imgPath, folder.Name + "/" + d.name, destZip, images);
 
   if (result.valid) {
     await createFile(destZip, folder.Id, result.count);
