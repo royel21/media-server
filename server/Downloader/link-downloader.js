@@ -79,12 +79,12 @@ export const downloadLink = async ({ d, page, Server, folder, count, state }) =>
   const links = await page.evaluate(evaleLinks, Server.dataValues);
   sendMessage({ text: `Dwn: ${count} ch:${d.name} ~ img: ${links.length} ~ ${folder.Name}`, url: d.url });
   if (/manga18fx/.test(d.url)) {
-    await delay(2000);
+    await delay(3000);
   }
   const imgPath = path.join(imgDir, d.name + ".zip.jpg");
-  console.log(links);
-  console.log(Object.keys(images));
-  const result = {}; //await downloadAllIMages(page, links, state, imgPath, folder.Name + "/" + d.name, destZip, images);
+
+  const result = {};
+  await downloadAllIMages(page, links, state, imgPath, folder.Name + "/" + d.name, destZip, images);
 
   if (result.valid) {
     await createFile(destZip, folder.Id, result.count);
