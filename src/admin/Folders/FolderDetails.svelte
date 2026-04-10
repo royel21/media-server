@@ -9,6 +9,8 @@
   import { isDiff, getSize3 } from "../Utils";
   import { setMessage } from "../Store/MessageStore";
   import { capitalize, validAltName, validateAuthor, validGenres } from "@share/utils";
+  import { getImageFromNav } from "../Component/util";
+  import Dialog from "src/ShareComponent/Dialog.svelte";
 
   export let folderId;
   let hasChanges = false;
@@ -24,6 +26,8 @@
   let isModified;
   let blurImg = true;
   let time = new Date().getTime();
+  let files;
+  let showImage = false;
 
   const regx = /:|\?/g;
 
@@ -143,6 +147,31 @@
     hasChanges = isDiff(old, folder);
   };
 
+  const pasteImage = async () => {
+    const image = await getImageFromNav();
+
+    if (image) {
+      setMessage({ msg: "Sending File Please Wait: " + image.type });
+      socket.emit("file-work", { action: "createFolderThumb", data: { folderId, file: image } });
+    }
+
+    let text = await navigator.clipboard?.readText();
+
+    if (/^http/.test(text)) {
+      setMessage({ msg: "Updatng Cover Please Wait" });
+      socket.emit("download-server", {
+        action: "Create-Cover",
+        datas: { Id: folderId, imgUrl: text },
+      });
+    }
+
+    if (files && files[0]) {
+      setMessage({ msg: "Sending File Please Wait: " + files[0].type });
+      socket.emit("file-work", { action: "createFolderThumb", data: { folderId, file: files[0] } });
+      files = null;
+    }
+  };
+
   const save = async () => {
     if (hasChanges) {
       if (!folder.Name) {
@@ -153,19 +182,6 @@
       old = { ...folder };
       transfer = false;
     }
-    if (/^http/.test(imageData.Url)) {
-      setMessage({ msg: "Updatng Cover Please Wait" });
-      socket.emit("download-server", {
-        action: "Create-Cover",
-        datas: { Id: folderId, imgUrl: imageData.Url },
-      });
-    }
-
-    if (imageData.file) {
-      const { file } = imageData;
-      setMessage({ msg: "Sending File Please Wait: " + imageData.file.type });
-      socket.emit("file-work", { action: "createFolderThumb", data: { folderId, file } });
-    }
   };
 
   const unBlur = () => {
@@ -174,21 +190,30 @@
 
   $: loadDetails(folderId);
   $: isModified = hasChanges || imageData.Url || imageData.file;
+  $: imageUrl = encodeURI(`/Folder/${folder.FilesType}/${folder.Name}.jpg?v=${time}`);
 </script>
+
+{#if showImage && folderId}
+  <Dialog id="c-img" canDrag={true} btnCancer="" btnOk="" cancel={() => (showImage = false)}>
+    <img src={imageUrl} alt="" />
+  </Dialog>
+{/if}
 
 <div class="detail">
   <div class="error">{error || ""}</div>
   <div class="file-header">
-    <TextAreaInput file={folder} key="Name" style="margin-bottom: 5px" rows="3" {onChange}>
-      <span class="pre-paste" slot="btn-left" on:click={copyName} title="Copy Name">
-        <Icons name="copy" color="#045cba" />
-      </span>
-    </TextAreaInput>
     <div class="header">
       <div class="f-image" class:blur={blurImg && folder.IsAdult} on:click={unBlur}>
-        <div>
-          <img src={`${encodeURI(`/Folder/${folder.FilesType}/${folder.Name}.jpg?v=${time}`)}`} alt="Not Found" />
+        <div on:click={() => (showImage = true)}>
+          <img src={imageUrl} alt="Not Found" />
         </div>
+        {#if folderId}
+          <span class="paste" on:click={pasteImage}><Icons name="paste" /></span>
+          <label class="upload">
+            <Icons name="upload" />
+            <input id="single" type="file" accept="image/*" bind:files on:change={pasteImage} />
+          </label>
+        {/if}
       </div>
       <div class="f-count" on:click={loadFromDisk}>
         <span class="ccount"><strong>Size:</strong> <span>{getSize3(folder)}</span></span>
@@ -213,6 +238,11 @@
     </div>
   </div>
   <div class="d-content">
+    <TextAreaInput file={folder} key="Name" style="margin-bottom: 5px" rows="3" {onChange}>
+      <span class="pre-paste" slot="btn-left" on:click={copyName} title="Copy Name">
+        <Icons name="copy" color="#045cba" />
+      </span>
+    </TextAreaInput>
     <Input label="Emission Date" type="date" key="EmissionDate" item={folder} {onChange} paste={true} />
     <TextAreaInput file={folder} key="AltName" style="margin-bottom: 5px" sept="; " rows="3" {onChange}>
       <span class="pre-paste" slot="btn-left" on:click={prePaste} title="Paste To The Left">
@@ -237,7 +267,6 @@
     {#if transfer}
       <Select label="Directories" key="DirectoryId" {options} item={folder} {onChange} />
     {/if}
-    <Input key="Url" item={imageData} onChange={onUrl} />
   </div>
 </div>
 
@@ -294,6 +323,7 @@
     z-index: 9;
   }
   .f-image {
+    position: relative;
     min-width: 175px;
     padding: 4px;
   }
@@ -308,6 +338,32 @@
   }
   .f-image {
     object-fit: contain;
+  }
+  .paste,
+  .upload {
+    display: none;
+    max-width: 30px;
+    text-align: center;
+    border-radius: 0.25rem;
+    position: absolute;
+    bottom: 2px;
+    background-color: #888;
+    z-index: 9;
+    left: 2px;
+  }
+  .f-image:hover .paste,
+  .f-image:hover .upload {
+    display: inline-block;
+  }
+  .f-image :global(svg) {
+    top: 3px;
+    left: 3px;
+  }
+  input[type="file"] {
+    display: none;
+  }
+  .upload {
+    left: 33px;
   }
   .f-count {
     display: flex;

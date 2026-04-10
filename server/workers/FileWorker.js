@@ -187,6 +187,7 @@ const removeFolder = async ({ Id, Del }) => {
 
 const createFolderThumb = async ({ folderId, file }) => {
   const folder = await db.folder.findOne({ where: { Id: folderId } });
+  const appConfig = await db.AppConfig.findOne();
   try {
     if (folder) {
       const posterPath = path.join(folder.Path, "Cover.jpg");
@@ -196,9 +197,9 @@ const createFolderThumb = async ({ folderId, file }) => {
       const img = Sharp(Buffer.from(file.data));
       await img.jpeg().toFile(posterPath);
 
-      let Cover = path.join(defaultConfig.ImagesDir, "Folder", folder.FilesType, folder.Name + ".jpg");
+      let Cover = path.join(appConfig.ImagesPath, "Folder", folder.FilesType, folder.Name + ".jpg");
 
-      createDir(path.join(defaultConfig.ImagesDir, "Folder", folder.FilesType));
+      createDir(path.join(appConfig.ImagesPath, "Folder", folder.FilesType));
 
       await img.toFormat("jpg").resize({ width: 340 }).toFile(Cover);
       console.log(Cover);
