@@ -44,7 +44,7 @@
     border-radius: 0.25rem;
   }
   #c-menu div {
-    padding: 8px;
+    padding: 6px;
     user-select: none;
   }
   #c-menu .b-border {

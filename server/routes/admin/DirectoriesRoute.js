@@ -147,6 +147,17 @@ routes.post("/create-path", async (req, res) => {
   return res.send({ Path });
 });
 
+routes.post("/file-upload", async (req, res) => {
+  const { Path, Name } = req.body;
+  const dest = path.join(Path, Name);
+  try {
+    await fs.writeFile(dest, Buffer.from(req.files.file.data));
+  } catch (error) {
+    console.log(error);
+  }
+  res.send({ success: true, msg: `File ${Name} uploaded successfully` });
+});
+
 routes.get("/video/:path?", async (req, res) => {
   let { path } = req.params;
   if (path && fs.existsSync(path)) {

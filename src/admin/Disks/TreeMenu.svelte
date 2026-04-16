@@ -5,6 +5,7 @@
   import Menu from "./Menu.svelte";
   import RenameModal from "./RenameModal.svelte";
   import { setMessage } from "../Store/MessageStore";
+  import apiUtils from "src/apiUtils";
 
   export let showMenu = false;
   export let scanDir;
@@ -12,7 +13,8 @@
   const menuItems1 = [
     { Id: "addToWatcher", Name: "Add to Watcher" },
     { Id: "scanDir", Name: "Add to Directories" },
-    { Id: "onCalculateSize", Name: "Directory Size", BBorder: true },
+    { Id: "onCalculateSize", Name: "Directory Size" },
+    { Id: "uploadFile", Name: "Upload File", BBorder: true },
     { Id: "copyName", Name: "Copy Name" },
     { Id: "createDir", Name: "Create Folder" },
     { Id: "zipImgFolders", Name: "Zip Img Folders" },
@@ -75,6 +77,28 @@
     }
   };
 
+  const uploadFile = (item) => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.onchange = async (e) => {
+      const file = e.target.files[0];
+
+      if (file) {
+        const result = await apiUtils.postFile("admin/directories/file-upload", {
+          Path: item.Path,
+          file,
+          Name: file.name,
+        });
+        if (result.success) {
+          setMessage({ msg: `File "${file.name}" Uploaded Successfully` });
+        } else {
+          setMessage({ msg: `Error Uploading File "${file.name}"`, type: "error" });
+        }
+      }
+    };
+    input.click();
+  };
+
   const menuActions = (event, id) => {
     const item = showMenu.file;
 
@@ -87,6 +111,7 @@
       removeDFolder: () => (showConfirm = item),
       renameFolder: () => (showRename = item),
       copyName,
+      uploadFile,
     };
     return actions[id] && actions[id](item);
   };
