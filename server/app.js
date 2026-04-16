@@ -37,9 +37,9 @@ const passport = passportConfig();
 
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: false, limit: "50mb" }));
+app.use(express.urlencoded({ extended: false, limit: "400mb" }));
 app.use(cookieParser());
-app.use(fileUpload({ limits: { fileSize: 400 * 1024 * 1024 } }));
+app.use(fileUpload({ limits: { fileSize: 6e8 } }));
 
 app.use(
   compression({
