@@ -50,6 +50,9 @@ export const downloadLink = async ({ d, page, Server, folder, count, state }) =>
 
   let images = {};
 
+  const client = await page.target().createCDPSession();
+  await client.send("Network.clearBrowserCache");
+
   page.on("response", async (response) => {
     try {
       const url = response.url();
