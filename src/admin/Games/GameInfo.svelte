@@ -566,12 +566,11 @@
   textarea {
     line-height: 1.14;
   }
+
   .gen > span {
     position: relative;
   }
-  .gen > span:active {
-    transform: scale(1.1);
-  }
+
   .show-gen-list {
     display: inline-block;
     height: 20px;
@@ -590,7 +589,8 @@
   .g-list {
     z-index: 9;
     display: flex;
-    max-height: 340px;
+    max-height: 300px;
+    min-width: 70px;
     overflow-y: auto;
     overflow-x: hidden;
     flex-direction: column;
@@ -601,11 +601,11 @@
   .g-list-container {
     position: absolute;
     left: 22px;
-    bottom: 20px;
+    bottom: 24px;
     overflow: hidden;
   }
   .g-list span {
-    padding: 0 5px;
+    padding: 2px 6px;
     cursor: pointer;
   }
   .g-list span:hover {
