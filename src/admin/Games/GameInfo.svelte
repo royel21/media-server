@@ -23,9 +23,7 @@
   };
   let data = { ...def };
   let removing = false;
-  let showGList = false;
-  let showGList2 = false;
-  let showGList3 = false;
+  let lists = {};
   let files;
   let listRef;
   let showImage = false;
@@ -133,11 +131,15 @@
   };
   socket.off("folder-remove", onRemoved);
   socket.on("folder-remove", onRemoved);
+  const hideLists = () => {
+    for (let key in lists) {
+      lists[key] = false;
+    }
+  };
 
   const onShowGList = (e) => {
-    showGList = !showGList;
-    showGList2 = false;
-    showGList3 = false;
+    hideLists();
+    lists[e.target.id] = !lists[e.target.id];
     e.stopPropagation();
   };
 
@@ -166,26 +168,8 @@
     e.stopPropagation();
   };
 
-  const onShowGList2 = (e) => {
-    showGList2 = !showGList2;
-    showGList3 = false;
-    showGList = false;
-    e.stopPropagation();
-  };
-
-  const onShowGList3 = (e) => {
-    showGList3 = !showGList3;
-    showGList2 = false;
-    showGList = false;
-    e.stopPropagation();
-  };
-
   const onHandlerGList = ({ target }) => {
-    if (listRef !== target) {
-      showGList = false;
-      showGList2 = false;
-      showGList3 = false;
-    }
+    if (listRef !== target) hideLists();
   };
 
   const handlerPaste = async ({ currentTarget: { id } }) => {
@@ -328,78 +312,113 @@
       <input class="form-control" bind:value={data.Lang} />
     </div>
     <div class="gen" bind:this={listRef}>
-      <span class="show-gen-list" on:click={onShowGList}>:</span>
-      {#if showGList}
-        <div class="g-list-container">
-          <div class="g-list" on:click={onGSelect}>
-            <span>3D</span>
-            <span>Action</span>
-            <span>Adventure</span>
-            <span>Animated</span>
-            <span>Chikan</span>
-            <span>Drama</span>
-            <span>Harem</span>
-            <span>Incest</span>
-            <span>Loli</span>
-            <span>Maid</span>
-            <span>Mind Control</span>
-            <span>Mistery</span>
-            <span>NTR</span>
-            <span>Pervert</span>
-            <span>Romance</span>
-            <span>Rape</span>
-            <span>RPG</span>
-            <span>School</span>
-            <span>Sleep Sex</span>
-            <span>SLG</span>
-            <span>Simulation</span>
-            <span>Teacher</span>
-            <span>Touching</span>
-            <span>Unity</span>
-            <span>VN</span>
+      <Icons name="paste" /><span>Genres</span>
+      <span id="glist1" class="show-gen-list" on:click={onShowGList}
+        >:
+        {#if lists.glist1}
+          <div class="g-list-container">
+            <div class="g-list" on:click={onGSelect}>
+              <span>3D</span>
+              <span>Action</span>
+              <span>Adventure</span>
+              <span>Animated</span>
+              <span>Chikan</span>
+              <span>Drama</span>
+              <span>Harem</span>
+              <span>Incest</span>
+              <span>Idol</span>
+              <span>Loli</span>
+              <span>Magic</span>
+              <span>Maid</span>
+              <span>Mind Control</span>
+              <span>Mistery</span>
+              <span>NTR</span>
+              <span>Pervert</span>
+              <span>Romance</span>
+              <span>Rape</span>
+              <span>RPG</span>
+              <span>School</span>
+              <span>Sleep Sex</span>
+              <span>SLG</span>
+              <span>Simulation</span>
+              <span>Teacher</span>
+              <span>Touching</span>
+              <span>VN</span>
+            </div>
           </div>
-        </div>
-      {/if}
-      <span class="show-gen-list2" on:click={onShowGList2}>:</span>
-      {#if showGList2}
-        <div class="g-list-container g-list2">
-          <div id="range" class="g-list" on:click={onGSelect}>
-            <span title="Chikan, VN">CV</span>
-            <span title="Chikan, Rape, VN">CRV</span>
-            <span title="Chikan, School, VN">CSV</span>
-            <span title="Drama, VN">DV</span>
-            <span title="Drama, Harem, VN">DHV</span>
-            <span title="Drama, School, VN">DSV</span>
-            <span title="Drama, Harem, School, VN">DHSV</span>
-            <span title="Drama, NTR, VN">DNV</span>
-            <span title="Drama, Harem, NTR, VN">DHNV</span>
-            <span title="Harem, Loli, School, VN">HSV</span>
-            <span title="Harem, School, VN">HSV</span>
-            <span title="Harem, Romance, School, VN">HRSV</span>
-            <span title="Harem, School, VN">HSV</span>
+        {/if}
+      </span>
+      <span id="glist2" class="show-gen-list" on:click={onShowGList}>
+        :
+        {#if lists.glist2}
+          <div class="g-list-container g-list2">
+            <div id="range" class="g-list" on:click={onGSelect}>
+              <span title="Chikan, VN">CV</span>
+              <span title="Chikan, Rape, VN">CRV</span>
+              <span title="Chikan, School, VN">CSV</span>
+              <span title="Chikan, Rape, School, VN">CRSV</span>
+              <span title="Drama, VN">DV</span>
+              <span title="Drama, Harem, VN">DHV</span>
+              <span title="Drama, School, VN">DSV</span>
+              <span title="Drama, Harem, School, VN">DHSV</span>
+              <span title="Drama, NTR, VN">DNV</span>
+              <span title="Drama, Harem, NTR, VN">DHNV</span>
+            </div>
           </div>
-        </div>
-      {/if}
-      <span class="show-gen-list2" on:click={onShowGList3}>:</span>
-      {#if showGList3}
-        <div class="g-list-container g-list3">
-          <div id="range" class="g-list" on:click={onGSelect}>
-            <span title="Harem, Romance, VN">HRV</span>
-            <span title="Harem, VN">HV</span>
-            <span title="Harem, NTR, VN">HNV</span>
-            <span title="NTR, VN">NV</span>
-            <span title="Romance, VN">RV</span>
-            <span title="School, VN">SV</span>
-            <span title="Rape, School, VN">RapeSV</span>
-            <span title="Romance, School, VN">RSV</span>
-            <span title="Adventure, RPG">AR</span>
-            <span title="RPG, School">RPGSch</span>
-            <span title="Rape, RPG">RapRPG</span>
-            <span title="Rape, RPG, School">RapRSch</span>
+        {/if}</span
+      >
+      <span id="glist3" class="show-gen-list" on:click={onShowGList}
+        >:
+        {#if lists.glist3}
+          <div class="g-list-container g-list3">
+            <div id="range" class="g-list" on:click={onGSelect}>
+              <span title="Harem, Loli, School, VN">HLSV</span>
+              <span title="Harem, School, VN">HSV</span>
+              <span title="Harem, Romance, School, VN">HRSV</span>
+              <span title="Harem, Romance, VN">HRV</span>
+              <span title="Harem, VN">HV</span>
+              <span title="Harem, NTR, VN">HNV</span>
+              <span title="NTR, VN">NV</span>
+              <span title="NTR, Rape, VN">NRV</span>
+              <span title="NTR, School, VN">NSV</span>
+              <span title="NTR, Rape, School, VN">NRSV</span>
+            </div>
           </div>
-        </div>
-      {/if}
-      <span>Genres</span>
+        {/if}</span
+      >
+      <span id="glist4" class="show-gen-list" on:click={onShowGList}
+        >:
+        {#if lists.glist4}
+          <div class="g-list-container">
+            <div id="range" class="g-list" on:click={onGSelect}>
+              <span title="Romance, VN">RV</span>
+              <span title="School, VN">SV</span>
+              <span title="Rape, School, VN">RSV</span>
+              <span title="Romance, School, VN">RSV</span>
+            </div>
+          </div>
+        {/if}</span
+      >
+      <span id="glist5" class="show-gen-list" on:click={onShowGList}>
+        :
+        {#if lists.glist5}
+          <div class="g-list-container g-list4">
+            <div id="range" class="g-list" on:click={onGSelect}>
+              <span title="Adventure, RPG">AR</span>
+              <span title="Loli, RPG">LR</span>
+              <span title="Loli, School, RPG">LSR</span>
+              <span title="Harem, RPG">HR</span>
+              <span title="Harem, Loli, RPG">HLR</span>
+              <span title="NTR, RPG">NR</span>
+              <span title="NTR, School, RPG">NSR</span>
+              <span title="NTR, Rape, RPG">NRR</span>
+              <span title="RPG, School">RS</span>
+              <span title="Rape, RPG">RR</span>
+              <span title="Rape, RPG, School">RRS</span>
+            </div>
+          </div>
+        {/if}</span
+      >
       <input class="form-control" bind:value={data.Genres} />
     </div>
     <div>
@@ -547,11 +566,12 @@
   textarea {
     line-height: 1.14;
   }
-  .gen {
+  .gen > span {
     position: relative;
   }
-  .show-gen-list3,
-  .show-gen-list2,
+  .gen > span:active {
+    transform: scale(1.1);
+  }
   .show-gen-list {
     display: inline-block;
     height: 20px;
@@ -561,19 +581,12 @@
     padding: 0px 8px;
     border-radius: 0.25rem;
     background-color: aqua;
+    margin: 0 4px;
     color: black;
     cursor: pointer;
     user-select: none;
   }
-  .show-gen-list2 {
-    background-color: rgb(0, 255, 55);
-    margin: 0 8px;
-  }
-  .show-gen-list3:active,
-  .show-gen-list2:active,
-  .show-gen-list:active {
-    transform: scale(1.1);
-  }
+
   .g-list {
     z-index: 9;
     display: flex;
@@ -588,14 +601,8 @@
   .g-list-container {
     position: absolute;
     left: 22px;
-    bottom: 55px;
+    bottom: 20px;
     overflow: hidden;
-  }
-  .g-list-container.g-list2 {
-    left: 52px;
-  }
-  .g-list-container.g-list3 {
-    left: 90px;
   }
   .g-list span {
     padding: 0 5px;
