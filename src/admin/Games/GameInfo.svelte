@@ -410,6 +410,7 @@
               <span title="Harem, RPG">HR</span>
               <span title="Harem, Loli, RPG">HLR</span>
               <span title="NTR, RPG">NR</span>
+              <span title="NTR, Harem, RPG">NHR</span>
               <span title="NTR, School, RPG">NSR</span>
               <span title="NTR, Rape, RPG">NRR</span>
               <span title="RPG, School">RS</span>
