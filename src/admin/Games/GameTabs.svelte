@@ -81,8 +81,8 @@
         Id: "new",
         Info: { Company: d.trim() },
       };
-      if (/^(v|RJ|)\d+$/.test(filter)) {
-        g.Codes = filter.trim();
+      if (/^(v|RJ|)\d+$/.test(d)) {
+        g.Codes = /~\d+$/.test(d) ? d : "ST" + d;
         d.Company = "";
       }
       try {
