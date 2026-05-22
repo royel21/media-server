@@ -72,7 +72,7 @@
     game = Games[map(index, 0, size)] || {};
   };
 
-  const nameRegx = /Romanji: |Romaji: /gi;
+  const nameRegx = /Title: |Romanji: |Romaji: /gi;
 
   const addGame = async () => {
     const d = decodeURIComponent(filter) || "";
@@ -81,10 +81,12 @@
         Id: "new",
         Info: { Company: d.trim() },
       };
+      console.log(d);
       if (/^(v|RJ|)\d+$/.test(d)) {
-        g.Codes = /~\d+$/.test(d) ? d : "ST" + d;
-        d.Company = "";
+        g.Codes = /^\d+$/.test(d) ? "ST" + d : d;
+        g.Info.Company = "";
       }
+
       try {
         let text = "";
         if (navigator.clipboard) {
@@ -92,8 +94,9 @@
           if (text) {
             const parts = text.split("\n");
             for (let p of parts) {
-              if (/Japanese Title: /gi.test(p)) {
-                g.Info.AltName = p.replace("Japanese Title: ", "").trim();
+              let titleRegx = /^Japanese Title| Original Title/i;
+              if (titleRegx.test(p)) {
+                g.Info.AltName = p.replace(titleRegx, "").trim();
               }
 
               if (nameRegx.test(p)) {
@@ -106,6 +109,13 @@
 
               if (/VNDB: /gi.test(p)) {
                 g.Codes = p.split("/").pop().trim();
+              }
+
+              if (/Language: /gi.test(p)) {
+                g.Lang = p.split(":").pop().trim();
+              }
+              if (/https:/.test(p)) {
+                g.Codes = p.match(/(v|RJ)\d+/i)?.[0];
               }
             }
           }
