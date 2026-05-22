@@ -81,7 +81,7 @@
         Id: "new",
         Info: { Company: d.trim() },
       };
-      console.log(d);
+
       if (/^(v|RJ|)\d+$/.test(d)) {
         g.Codes = /^\d+$/.test(d) ? "ST" + d : d;
         g.Info.Company = "";
@@ -94,28 +94,37 @@
           if (text) {
             const parts = text.split("\n");
             for (let p of parts) {
-              let titleRegx = /^Japanese Title| Original Title/i;
-              if (titleRegx.test(p)) {
-                g.Info.AltName = p.replace(titleRegx, "").trim();
+              console.log(p.raplace("Title : ", "").split(", ")[0]);
+
+              if (/Title : /.test(p)) {
+                g.Name = p;
+              }
+
+              let altNameRegx = /^Japanese Title|^Original Title/i;
+              if (altNameRegx.test(p)) {
+                g.Info.AltName = p.replace(altNameRegx, "").trim();
               }
 
               if (nameRegx.test(p)) {
                 g.Name = p.replace(nameRegx, "").trim();
               }
 
-              if (/Developer: /gi.test(p)) {
-                g.Info.Company = p.replace("Developer: ", "").trim();
+              if (/^Developer(:|) /gi.test(p)) {
+                g.Info.Company = p.replace(/^Developer(:|) /, "").trim();
               }
 
               if (/VNDB: /gi.test(p)) {
                 g.Codes = p.split("/").pop().trim();
               }
 
-              if (/Language: /gi.test(p)) {
-                g.Lang = p.split(":").pop().trim();
+              if (/^Language(:|) /gi.test(p)) {
+                g.Lang = p.match(/Language(:|) /)?.[0];
               }
-              if (/https:/.test(p)) {
+              if (/^https:/.test(p)) {
                 g.Codes = p.match(/(v|RJ)\d+/i)?.[0];
+              }
+              if (/steampowered/) {
+                g.Codes = p.match(/\d+/)?.[0];
               }
             }
           }
