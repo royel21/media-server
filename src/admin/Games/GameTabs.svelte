@@ -110,17 +110,20 @@
 
               if (altNameRegx.test(p)) {
                 g.Info.AltName = p.replace(altNameRegx, "").trim();
-                g.Info.AltName +=
-                  "\n" +
-                  Title.replace(g.Name, "")
-                    .split(", ")
-                    .map((n) => n.trim())
-                    .filter((n) => n)
-                    .join(", ");
+                if (Title.trim()) {
+                  g.Info.AltName +=
+                    "\n" +
+                    Title.replace(g.Name, "")
+                      .split(", ")
+                      .map((n) => n.trim())
+                      .filter((n) => n)
+                      .join(", ")
+                      .trim();
+                }
               }
-
-              if (/Developer( :|) /gi.test(p)) {
-                g.Info.Company = p.replace("Developer: ", "").trim();
+              let devRegex = /^Developer( :|) /;
+              if (devRegex.test(p)) {
+                g.Info.Company = p.replace(devRegex, "").trim();
               }
 
               if (/VNDB: /gi.test(p)) {
@@ -131,7 +134,10 @@
                 g.Info.Lang = p.split(":").pop().trim();
               }
               if (/https:/.test(p) && !g.Codes) {
-                g.Codes = p.match(/(v|RJ)\d+/i)?.[0];
+                g.Codes = p.match(/(v|RJ|r)\d+/i)?.[0];
+                if (/steampowered\.com/.test(p)) {
+                  g.Codes = p.match(/app\/\d+/i)?.[0].replace("app/", "ST");
+                }
               }
             }
           }
