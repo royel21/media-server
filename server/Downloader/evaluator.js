@@ -100,7 +100,7 @@ export const evaluetePage = async (query) => {
           .replace(/:|\t|\n|\r/gi, "")
           .replace(/Alternative/i, "")
           .replaceAll(/’/g, "'")
-          .trim()
+          .trim(),
       );
     }
     if (authorRegex.test(text) && !/updating|Desconocido/i.test(text)) {
@@ -116,7 +116,7 @@ export const evaluetePage = async (query) => {
 
   data = data.filter((d) => d);
 
-  if (query.Name.includes("likemanga.in")) {
+  if (query.Name.includes("mangayy")) {
     Status = false;
   }
   return { Name, data, poster, AltName, Description, Genres, Status, Author, maxNum };
@@ -206,7 +206,7 @@ export const adultEvalPage = async (query) => {
         .replaceAll(/’/g, "'")
         .replace(/ ; |( |)\/( |) /g, "; ")
         .replace(/',|’,/g, "'")
-        .trim()
+        .trim(),
     );
   };
 
@@ -299,7 +299,7 @@ export const adultEvalPage = async (query) => {
       .trim()
       .replace(
         /^ |vol.\d+ |volume \d+ |season \d+|(chapter|chap|ch|Capítulo|Episodio|episode|part|oneshot)( | - |-|\.)|\||\/|:|\?|\^|"|\*|<|>|\t|\n/gi,
-        ""
+        "",
       )
       .replaceAll("🌟", "")
       .replace(/(\.)+$/, "")
