@@ -16,7 +16,10 @@
   let filter = localStorage.getItem("gamelist-filter") || "";
 
   const loadGames = async () => {
-    const data = await apiUtils.admin(["games", pageData.page, calRows(), filter], "g-list");
+    const data = await apiUtils.admin(
+      ["games", pageData.page, calRows(), filter],
+      "g-list",
+    );
 
     Games = data.items || [];
     pageData.totalItems = data.totalItems || 0;
@@ -60,7 +63,11 @@
       filter,
       rows: calRows(),
     };
-    const result = await apiUtils.post("admin/games/remove-game", data, "up-data");
+    const result = await apiUtils.post(
+      "admin/games/remove-game",
+      data,
+      "up-data",
+    );
 
     Games = result.items || [];
     pageData.totalItems = result.totalItems || 0;
@@ -72,7 +79,7 @@
     game = Games[map(index, 0, size)] || {};
   };
 
-  const nameRegx = /Title: |Romanji: |Romaji: /gi;
+  const nameRegx = /^Title(:| :|) |Romanji: |Romaji: /gi;
 
   const addGame = async () => {
     const d = decodeURIComponent(filter) || "";
@@ -81,12 +88,12 @@
         Id: "new",
         Info: { Company: d.trim() },
       };
-
+      console.log(d);
       if (/^(v|RJ|)\d+$/.test(d)) {
         g.Codes = /^\d+$/.test(d) ? "ST" + d : d;
         g.Info.Company = "";
       }
-
+      let Title = "";
       try {
         let text = "";
         if (navigator.clipboard) {
@@ -94,43 +101,51 @@
           if (text) {
             const parts = text.split("\n");
             for (let p of parts) {
-              console.log(p.raplace("Title : ", "").split(", ")[0]);
-
-              if (/Title : /.test(p)) {
-                g.Name = p;
-              }
-
-              let altNameRegx = /^Japanese Title|^Original Title/i;
-              if (altNameRegx.test(p)) {
-                g.Info.AltName = p.replace(altNameRegx, "").trim();
-              }
+              let altNameRegx = /^(Japanese|Original) Title(:| :|) /i;
 
               if (nameRegx.test(p)) {
-                g.Name = p.replace(nameRegx, "").trim();
+                Title = p.replace(nameRegx, "");
+                g.Name = Title.split(", ")[0].trim();
               }
 
-              if (/^Developer(:|) /gi.test(p)) {
-                g.Info.Company = p.replace(/^Developer(:|) /, "").trim();
+              if (altNameRegx.test(p)) {
+                g.Info.AltName = p.replace(altNameRegx, "").trim();
+                if (Title.trim()) {
+                  g.Info.AltName +=
+                    "\n" +
+                    Title.replace(g.Name, "")
+                      .split(", ")
+                      .map((n) => n.trim())
+                      .filter((n) => n)
+                      .join(", ")
+                      .trim();
+                }
+              }
+              let devRegex = /^Developer( :|) /;
+              if (devRegex.test(p)) {
+                g.Info.Company = p.replace(devRegex, "").trim();
               }
 
               if (/VNDB: /gi.test(p)) {
                 g.Codes = p.split("/").pop().trim();
               }
 
-              if (/^Language(:|) /gi.test(p)) {
-                g.Lang = p.match(/Language(:|) /)?.[0];
+              if (/Language( :|) /gi.test(p)) {
+                g.Info.Lang = p.split(":").pop().trim();
               }
-              if (/^https:/.test(p)) {
-                g.Codes = p.match(/(v|RJ)\d+/i)?.[0];
-              }
-              if (/steampowered/) {
-                g.Codes = p.match(/\d+/)?.[0];
+              if (/https:/.test(p) && !g.Codes) {
+                g.Codes = p.match(/(v|RJ|r)\d+/i)?.[0];
+                if (/steampowered\.com/.test(p)) {
+                  g.Codes = p.match(/app\/\d+/i)?.[0].replace("app/", "ST");
+                }
               }
             }
           }
         }
         game = { ...g };
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -140,7 +155,16 @@
 
 <div class="admin-manager">
   <div class="rows">
-    <GameList {Games} {game} {setInfo} {pageData} {filter} {gotopage} {filterChange} {addGame} />
+    <GameList
+      {Games}
+      {game}
+      {setInfo}
+      {pageData}
+      {filter}
+      {gotopage}
+      {filterChange}
+      {addGame}
+    />
     <GameInfo bind:game {updateGame} {removeGame} />
   </div>
 </div>
