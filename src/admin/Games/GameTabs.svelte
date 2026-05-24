@@ -123,7 +123,7 @@
               }
               let devRegex = /^Developer( :|) /;
               if (devRegex.test(p)) {
-                g.Info.Company = p.replace(devRegex, "").trim();
+                g.Info.Company = p.replace(devRegex, "").split(", ")[0].trim();
               }
 
               if (/VNDB: /gi.test(p)) {
@@ -131,7 +131,11 @@
               }
 
               if (/Language( :|) /gi.test(p)) {
-                g.Info.Lang = p.split(":").pop().trim();
+                g.Info.Lang = p
+                  .split(":")
+                  .pop()
+                  .replace(/ \(Official\)/gi, "")
+                  .trim();
               }
               if (/https:/.test(p) && !g.Codes) {
                 g.Codes = p.match(/(v|RJ|r)\d+/i)?.[0];

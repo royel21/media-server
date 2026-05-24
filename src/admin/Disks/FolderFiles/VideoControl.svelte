@@ -25,12 +25,18 @@
 
   const confirmMerge = () => {
     bgWorking = true;
-    socket.emit("bg-work", { action: "mergeVideos", data: { files: selectedList } });
+    socket.emit("bg-work", {
+      action: "mergeVideos",
+      data: { files: selectedList },
+    });
   };
 
   const confirmVideoFix = () => {
     bgWorking = true;
-    socket.emit("bg-work", { action: "fixVideo", data: { files: selectedList } });
+    socket.emit("bg-work", {
+      action: "fixVideo",
+      data: { files: selectedList },
+    });
   };
 
   const onVideoFix = () => {
@@ -78,7 +84,12 @@
 {/if}
 
 {#if showVideoSubTract}
-  <SubVideoExtration bind:showVideoSubTract bind:bgWorking {socket} {selectedList} />
+  <SubVideoExtration
+    bind:showVideoSubTract
+    bind:bgWorking
+    {socket}
+    {selectedList}
+  />
 {/if}
 
 {#if show}
