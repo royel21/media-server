@@ -474,6 +474,8 @@
               <span title="Harem, Rape, RPG">HRR</span>
               <span title="Harem, NTR, RPG">HNR</span>
               <span title="Harem, NTR, Rape, RPG">HNRR</span>
+              <span title="Harem, RPG , School">HRS</span>
+              <span title="Harem, Rape, RPG, School">HRRS</span>
               <span title="NTR, RPG">NR</span>
               <span title="NTR, Harem, RPG">NHR</span>
               <span title="NTR, School, RPG">NSR</span>
@@ -481,6 +483,8 @@
               <span title="RPG, School">RS</span>
               <span title="Rape, RPG">RR</span>
               <span title="Rape, RPG, School">RRS</span>
+              <span title="Pervert, RPG">PR</span>
+              <span title="Pervert, RPG, School">PRS</span>
             </div>
           </div>
         {/if}</span
