@@ -41,14 +41,9 @@
 
   const save = async () => {
     if (!data.Name) return setMessage({ msg: "Name Required", error: true });
-    if (!data.Codes)
-      return setMessage({ msg: "Game Code Required", error: true });
+    if (!data.Codes) return setMessage({ msg: "Game Code Required", error: true });
 
-    const result = await apiUtils.post(
-      "admin/games/update-game-info",
-      { ...data, Image: "" },
-      "up-data",
-    );
+    const result = await apiUtils.post("admin/games/update-game-info", { ...data, Image: "" }, "up-data");
     if (result.error) {
       return setMessage({ msg: result.error, error: true });
     }
@@ -73,11 +68,7 @@
   };
 
   const getImage = async (Id) => {
-    const result = await apiUtils.post(
-      "admin/games/get-game-image",
-      { Id },
-      "g-img",
-    );
+    const result = await apiUtils.post("admin/games/get-game-image", { Id }, "g-img");
 
     data.Image.data = result.image || "";
   };
@@ -87,11 +78,7 @@
     reader.onload = async (e) => {
       const base64 = e.target.result.split(",")[1];
       data.Image = { type: file.type, data: base64 };
-      await apiUtils.postFile(
-        "admin/games/upload-game-image",
-        { file, Id: data.Id },
-        "u-img",
-      );
+      await apiUtils.postFile("admin/games/upload-game-image", { file, Id: data.Id }, "u-img");
     };
     reader.readAsDataURL(file);
   };
@@ -223,13 +210,7 @@
     }
   };
   const format = (str) => {
-    return (
-      str
-        ?.replace("–", "-")
-        .replace(/\?|\:/g, "")
-        .replace(/( )+/g, " ")
-        .replaceAll("’", "'") || ""
-    );
+    return str?.replace("–", "-").replace(/\?|\:/g, "").replace(/( )+/g, " ").replaceAll("’", "'") || "";
   };
 
   const sortGenres = (gen) => {
@@ -281,13 +262,7 @@
 </script>
 
 {#if showImage && data.Image.data}
-  <Dialog
-    id="c-img"
-    canDrag={true}
-    btnCancer=""
-    btnOk=""
-    cancel={() => (showImage = false)}
-  >
+  <Dialog id="c-img" canDrag={true} btnCancer="" btnOk="" cancel={() => (showImage = false)}>
     <img src={`data:img/jpeg;base64, ${data.Image.data || ""}`} alt="" />
   </Dialog>
 {/if}
@@ -297,80 +272,43 @@
     <div class="name-img">
       {#if data.Id}
         <div class="info-cover">
-          <div
-            class={`c-img ${data.Image.data ? "" : "info-load-img"}`}
-            on:click={() => (showImage = true)}
-          >
+          <div class={`c-img ${data.Image.data ? "" : "info-load-img"}`} on:click={() => (showImage = true)}>
             {#if data.Image?.data}
-              <img
-                src={`data:img/jpeg;base64, ${data.Image.data || ""}`}
-                alt=""
-              />
+              <img src={`data:img/jpeg;base64, ${data.Image.data || ""}`} alt="" />
             {:else}
               <p>Image Placeholder</p>
             {/if}
           </div>
-          <span class="paste" on:click={handlerImg}><Icons name="paste" /></span
-          >
+          <span class="paste" on:click={handlerImg}><Icons name="paste" /></span>
           <label class="upload">
             <Icons name="upload" />
-            <input
-              id="single"
-              type="file"
-              accept="image/*"
-              bind:files
-              on:change={onImageLoaded}
-            />
+            <input id="single" type="file" accept="image/*" bind:files on:change={onImageLoaded} />
           </label>
         </div>
       {/if}
       <div class="info-item info-name">
-        <span
-          ><span id="Name" on:click={handlerPaste}><Icons name="paste" /></span
-          >Name</span
-        >
+        <span><span id="Name" on:click={handlerPaste}><Icons name="paste" /></span>Name</span>
         <textarea class="form-control" bind:value={data.Name}></textarea>
-        <span class="gn-copy" on:click={copyName} title="Append"
-          ><Icons name="paste" color="deepskyblue" /></span
-        >
+        <span class="gn-copy" on:click={copyName} title="Append"><Icons name="paste" color="deepskyblue" /></span>
       </div>
     </div>
     <div class="info-item info-altname">
-      <span
-        ><span id="AltName" on:click={handlerPaste}><Icons name="paste" /></span
-        >Alt Name</span
-      >
-      <textarea class="form-control" rows="3" bind:value={data.AltName}
-      ></textarea>
-      <span class="gn-copy" on:click={pasteAlt2}
-        ><Icons name="paste" color="green" /></span
-      >
+      <span><span id="AltName" on:click={handlerPaste}><Icons name="paste" /></span>Alt Name</span>
+      <textarea class="form-control" rows="3" bind:value={data.AltName}></textarea>
+      <span class="gn-copy" on:click={pasteAlt2}><Icons name="paste" color="green" /></span>
     </div>
     <div class="info-item">
-      <span
-        ><span id="Codes" on:click={handlerPaste}><Icons name="paste" /></span
-        >Codes</span
-      >
+      <span><span id="Codes" on:click={handlerPaste}><Icons name="paste" /></span>Codes</span>
       <input class="form-control" bind:value={data.Codes} />
-      <span class="gn-copy" on:click={copyComp}
-        ><Icons name="paste" color="deepskyblue" /></span
-      >
+      <span class="gn-copy" on:click={copyComp}><Icons name="paste" color="deepskyblue" /></span>
     </div>
     <div class="info-item">
-      <span
-        ><span id="Company" on:click={handlerPaste}><Icons name="paste" /></span
-        >Publisher/Dev</span
-      >
+      <span><span id="Company" on:click={handlerPaste}><Icons name="paste" /></span>Publisher/Dev</span>
       <input class="form-control" bind:value={data.Company} />
-      <span class="gn-copy" on:click={copyComp}
-        ><Icons name="paste" color="deepskyblue" /></span
-      >
+      <span class="gn-copy" on:click={copyComp}><Icons name="paste" color="deepskyblue" /></span>
     </div>
     <div>
-      <span
-        ><span id="Lang" on:click={handlerPaste}><Icons name="paste" /></span
-        >Lang</span
-      >
+      <span><span id="Lang" on:click={handlerPaste}><Icons name="paste" /></span>Lang</span>
       <input class="form-control" bind:value={data.Lang} />
     </div>
     <div class="gen" bind:this={listRef}>
@@ -403,6 +341,7 @@
               <span>Sleep Sex</span>
               <span>SLG</span>
               <span>Simulation</span>
+              <span>Shotacon</span>
               <span>Teacher</span>
               <span>Touching</span>
               <span>VN</span>
@@ -437,26 +376,18 @@
               <span title="Harem, Loli, School, VN">HLSV</span>
               <span title="Harem, School, VN">HSV</span>
               <span title="Harem, Romance, School, VN">HRSV</span>
-              <span title="Harem, Romance, VN">HRV</span>
+              <span title="Harem, Romance, VN">HRoV</span>
               <span title="Harem, VN">HV</span>
               <span title="Harem, NTR, VN">HNV</span>
               <span title="NTR, VN">NV</span>
-              <span title="NTR, Rape, VN">NRV</span>
+              <span title="NTR, Rape, VN">NRaV</span>
               <span title="NTR, School, VN">NSV</span>
-              <span title="NTR, Rape, School, VN">NRSV</span>
-            </div>
-          </div>
-        {/if}</span
-      >
-      <span id="glist4" class="show-gen-list" on:click={onShowGList}
-        >:
-        {#if lists.glist4}
-          <div class="g-list-container">
-            <div id="range" class="g-list" on:click={onGSelect}>
-              <span title="Romance, VN">RV</span>
+              <span title="NTR, Rape, School, VN">NRaSV</span>
+              <span title="Rape, V">RaV</span>
+              <span title="Rape, School, VN">RaSV</span>
+              <span title="Romance, VN">RoV</span>
+              <span title="Romance, School, VN">RoSV</span>
               <span title="School, VN">SV</span>
-              <span title="Rape, School, VN">RSV</span>
-              <span title="Romance, School, VN">RSV</span>
             </div>
           </div>
         {/if}</span
@@ -485,6 +416,7 @@
               <span title="Rape, RPG, School">RRS</span>
               <span title="Pervert, RPG">PR</span>
               <span title="Pervert, RPG, School">PRS</span>
+              <span title="RPG, School">RS</span>
             </div>
           </div>
         {/if}</span
@@ -492,10 +424,7 @@
       <input class="form-control" bind:value={data.Genres} />
     </div>
     <div>
-      <span
-        ><span id="OS" on:click={handlerPaste}><Icons name="paste" /></span
-        >OS</span
-      >
+      <span><span id="OS" on:click={handlerPaste}><Icons name="paste" /></span>OS</span>
       <input class="form-control" bind:value={data.OS} />
     </div>
     <div class="info-item info-desc">

@@ -13,6 +13,11 @@
 
   export let pageData = 1;
 
+  let searchTitle = `Use Field=term to search for text in field
+  Use Field==term to search exact term in field
+  Use a|b to search for a or b in all fields
+  Use a&b search a and b in all fields`;
+
   const selectItem = (Id) => {
     setInfo({ detail: Games.find((g) => g.Id === Id) || {} });
   };
@@ -46,11 +51,7 @@
     <span class="add-game" on:click={addGame}>
       <Icons name="squareplus" />
     </span>
-    <div
-      on:keydown|stopPropagation
-      class="filter"
-      title="Use Field=term to search exact field, Use Field==term to search exact term in field, use | to separate multiple keywords, use & search multitple keyword"
-    >
+    <div on:keydown|stopPropagation class="filter" title={searchTitle}>
       <Filter id="game-filter" on:filter={filterChange} {filter} excludes={[/ Free Download|\?|:/gi, "[ENG] "]} />
     </div>
     <h4 class="text-center usn">{pageData.totalItems} <strong>- Games</strong></h4>
