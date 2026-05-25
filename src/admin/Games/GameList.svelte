@@ -40,14 +40,18 @@
   };
 </script>
 
-<div class={`file-list col-6 ${pageData.totalPages === 1 ? "full-list" : ""}`} tabindex="-1">
+<div class={`file-list game-list col-6 ${pageData.totalPages === 1 ? "full-list" : ""}`} tabindex="-1">
   <slot name="first-tag" />
   <div class="controls">
     <span class="add-game" on:click={addGame}>
       <Icons name="squareplus" />
     </span>
-    <div on:keydown|stopPropagation class="filter">
-      <Filter on:filter={filterChange} {filter} excludes={[/ Free Download|\?|:/gi, "[ENG] "]} />
+    <div
+      on:keydown|stopPropagation
+      class="filter"
+      title="Use Field=term to search exact field, Use Field==term to search exact term in field, use | to separate multiple keywords, use & search multitple keyword"
+    >
+      <Filter id="game-filter" on:filter={filterChange} {filter} excludes={[/ Free Download|\?|:/gi, "[ENG] "]} />
     </div>
     <h4 class="text-center usn">{pageData.totalItems} <strong>- Games</strong></h4>
     <slot name="btn-ctr-last" />
@@ -86,6 +90,7 @@
   }
   .add-game :global(svg) {
     top: 3px;
+    left: 3px;
     transform: scale(1.5);
   }
   .add-game:active :global(svg) {
@@ -94,6 +99,10 @@
   .filter {
     width: 100%;
     flex-shrink: 1;
+  }
+  .game-list :global(#game-filter) {
+    min-width: 99%;
+    margin: 0 6px;
   }
   li {
     position: relative;
@@ -113,12 +122,14 @@
     position: initial;
     display: flex;
     align-items: center;
-    padding: 5px 0;
+    padding: 5px 4px;
     border: none;
     height: 45px;
+    margin: 0;
   }
   .controls h4 {
-    width: 100%;
+    margin-left: 8px;
+    min-width: max-content;
   }
   .col-6 {
     flex-grow: 1;
@@ -148,11 +159,12 @@
   li :global(svg) {
     pointer-events: none;
   }
-
-  @media screen and (max-width: 640px) {
+  @media screen and (max-width: 740px) {
     .controls h4 strong {
       display: none;
     }
+  }
+  @media screen and (max-width: 640px) {
     .controls h4 {
       width: 60px;
       margin: 0 6px;

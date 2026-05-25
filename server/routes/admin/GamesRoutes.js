@@ -17,9 +17,41 @@ if (!fs.existsSync(imgDir)) {
 
 const routes = Router();
 
-const getFilters = (splt, filter) => {
+let columns = {
+  Name: "Name",
+  Codes: "Codes",
+  Path: "Path",
+  AltName: "$Info.AltName$",
+  Company: "$Info.Company$",
+  Lang: "$Info.Lang$",
+  Genres: "$Info.Genres$",
+  OS: "$Info.OS$",
+};
+
+const getFilters = (filter) => {
+  let spltType = filter.includes("&") ? Op.and : Op.or;
+  let splt = filter.match(/\&|\|/)?.[0] || "&";
+
+  if (filter.includes("=")) {
+    let [key, value] = filter.split(/==|=/);
+    const column = columns[key];
+    if (filter.includes("==")) {
+      return { [column]: value };
+    }
+
+    if (!value) {
+      return { [column]: { [Op.or]: [{ [Op.is]: null }, { [Op.eq]: "" }] } };
+    }
+
+    if (filter.includes("==")) {
+      return { [column]: value };
+    }
+
+    return { [column]: { [Op.like]: "%" + value.trim() + "%" } };
+  }
+
   return {
-    [splt === "&" ? Op.and : Op.or]: filter.split(splt).map((s) => ({
+    [spltType]: filter.split(splt).map((s) => ({
       [Op.or]: {
         Codes: {
           [Op.like]: "%" + s.trim() + "%",
@@ -370,7 +402,7 @@ routes.post("/get-game-image", async (req, res) => {
 });
 
 const getGames = async (res, page, rows, search) => {
-  let filters = getFilters(search.includes("&") ? "&" : "|", search);
+  let filters = getFilters(search);
 
   const sortByName = db.sqlze.literal(`REPLACE(REPLACE(REPLACE(Games.Name, "@", "#"), "-", "#"), "[","#") ASC`);
 
