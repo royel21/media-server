@@ -192,8 +192,8 @@ export const filterExclude = (exclude) => (f) => {
       return +num1[0] > +num2[0];
     }
 
-    if (num1 && /^\d+=/.test(ex.Name)) {
-      return +num1[0] === +num2[0];
+    if (/^!/.test(f.name) && f.name.includes(ex.Name.replace(/^!/, ""))) {
+      return false;
     }
 
     return f.name.includes(ex.Name);
