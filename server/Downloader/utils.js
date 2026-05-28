@@ -181,15 +181,21 @@ export const fixAltName = (AltName) => {
 export const filterExclude = (exclude) => (f) => {
   let num2 = f.name.match(/\d+/);
 
-  return (
-    !exclude.find((ex) => {
-      let num1 = ex.Name.match(/\d+/);
+  return !exclude.find((ex) => {
+    let num1 = ex.Name.match(/\d+/);
 
-      if (num1 && /^\d+</.test(ex.Name)) {
-        return +num1[0] > +num2[0];
-      }
+    if (num1 && /^\d+</.test(ex.Name)) {
+      return +num1[0] > +num2[0];
+    }
 
-      return f.name.includes(ex.Name);
-    }) || /( |\[)end(\]|)$/i.test(f.name)
-  );
+    if (num1 && /^\d+>/.test(ex.Name)) {
+      return +num1[0] > +num2[0];
+    }
+
+    if (num1 && /^\d+=/.test(ex.Name)) {
+      return +num1[0] === +num2[0];
+    }
+
+    return f.name.includes(ex.Name);
+  });
 };
