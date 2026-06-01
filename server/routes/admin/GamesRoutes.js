@@ -119,7 +119,20 @@ const getCode = (name) => {
   const codeMatch = name.replace(/\.(rar|zip|7z|apk)/g, "").match(/ (v|r|RJ|RA|VO|ST|G|D|IT|VJ)\d+.*\d+$/g);
   return codeMatch ? codeMatch[0].trim() : "";
 };
+const findDuplicatesByProperty = (arr, property) => {
+  const seen = new Set();
+  const duplicates = [];
 
+  for (const obj of arr) {
+    const value = obj[property];
+    if (seen.has(value)) {
+      duplicates.push(obj); // Add duplicate
+    } else {
+      seen.add(value);      // Track first occurrence
+    }
+  }
+  return duplicates;
+};
 const scanGames = async (dir) => {
   await db.Game.destroy({ where: { DirectoryId: dir.Id } });
 
@@ -131,14 +144,15 @@ const scanGames = async (dir) => {
     let Codes = getCode(file.Name);
     let Name = file.Name.trim();
     if (Codes) {
-      Name = file.Name.replace(" " + Codes, "").trim();
+      Name = file.Name.replace(/\.(zip|rar|7z)$/, "").replace(" " + Codes, "").trim();
     }
 
-    if (list.find((g) => g.Name === Name)) {
+    if (list.find((g) => g.Name === Name && g.Codes === Codes)) {
       dubs.push(file.Name);
+      continue;
     }
 
-    const found = await db.Game.findOne({ where: { Codes } });
+    const found = await db.Game.findOne({ where: { Codes, Name } });
 
     if (found && !found.Path) {
       found.Path = file.Path;
