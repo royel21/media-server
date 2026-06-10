@@ -91,18 +91,9 @@ export const evaluetePage = async (query) => {
   let img = document.querySelector(query.Cover);
   let poster = img && (img.dataset.src || img.dataset.lazySrc || img.dataset.srcset || img.src);
 
-  let Genres =
-    document
-      .querySelector(query.Genres)
-      ?.textContent.split("\n")
-      .map((d) => d.trim())
-      .filter((d) => d !== "" && d !== ",")
-      .join(", ") || "";
+  let Genres = "";
+  const genreRegex = /genre((\(|)(s|)(\)|( |):(\n|)|))|Género(( |):|)/gi;
 
-  const genres = Genres.replace("Live Action", "")
-    .split(",")
-    .filter((g) => g)
-    .map((d) => d.trim());
   //Statuc check
   let Status = [...document.querySelectorAll(query.Status)].find((t) => /completed|finished/gi.test(t?.textContent))
     ? 1
@@ -135,6 +126,10 @@ export const evaluetePage = async (query) => {
     } else if (/manga/i.test(text)) {
       Genres = formatGenres(Genres, ["Manga"]);
     }
+  }
+
+  if (Genres === "") {
+    Genres = formatGenres(document.querySelector(query.Genres)?.textContent.replace(genreRegex, "").trim() || "");
   }
 
   Genres = genres.sort().join(",");
