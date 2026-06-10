@@ -1,25 +1,6 @@
 export const evaluetePage = async (query) => {
   const cleanNameRegx = /18\+|\nEND| Webtoon|ONGOING|ON-GOING|NEW|HOT\n|^Hot /g;
 
-  const formatGenres = (text, extra = []) => {
-    if (text === "N/A" || !text) return text || "";
-    let genres = new Set(extra);
-    const raw = / raw/i.test(title) || query.link.Raw ? "Raw" : "";
-    let parts = [];
-
-    if (/\/|,|\n/g.test(text)) {
-      parts = text.replace(/\/|\n/g, ",").split(/,/g);
-    } else {
-      parts = text.split(/(  )+/g);
-    }
-    [raw, ...parts].forEach((d) => {
-      if (d.trim() && !/Adulto|Full Color/i.test(d)) {
-        genres.add(d.replace(/\((W|M|G|B|ML|Kid)\)/, "").trim());
-      }
-    });
-    return window.capitalize([...genres].sort().join(", "));
-  };
-
   let originalName = document.querySelector(query.Title).textContent.replace(cleanNameRegx, "").trim();
 
   let Name = originalName
@@ -52,6 +33,25 @@ export const evaluetePage = async (query) => {
   const padding = maxNum > 950 ? 4 : 3;
 
   const nameRegex = new RegExp(` - ${Name}`, "i");
+
+  const formatGenres = (text, extra = []) => {
+    if (text === "N/A" || !text) return text || "";
+    let genres = new Set(extra);
+    const raw = / raw/i.test(originalName) || query.link.Raw ? "Raw" : "";
+    let parts = [];
+
+    if (/\/|,|\n/g.test(text)) {
+      parts = text.replace(/\/|\n/g, ",").split(/,/g);
+    } else {
+      parts = text.split(/(  )+/g);
+    }
+    [raw, ...parts].forEach((d) => {
+      if (d.trim() && !/Adulto|Full Color/i.test(d)) {
+        genres.add(d.replace(/\((W|M|G|B|ML|Kid)\)/, "").trim());
+      }
+    });
+    return window.capitalize([...genres].sort().join(", "));
+  };
 
   let data = as
     .map((a) => {
