@@ -1,6 +1,25 @@
 export const evaluetePage = async (query) => {
   const cleanNameRegx = /18\+|\nEND| Webtoon|ONGOING|ON-GOING|NEW|HOT\n|^Hot /g;
 
+  const formatGenres = (text, extra = []) => {
+    if (text === "N/A" || !text) return text || "";
+    let genres = new Set(extra);
+    const raw = / raw/i.test(title) || query.link.Raw ? "Raw" : "";
+    let parts = [];
+
+    if (/\/|,|\n/g.test(text)) {
+      parts = text.replace(/\/|\n/g, ",").split(/,/g);
+    } else {
+      parts = text.split(/(  )+/g);
+    }
+    [raw, ...parts].forEach((d) => {
+      if (d.trim() && !/Adulto|Full Color/i.test(d)) {
+        genres.add(d.replace(/\((W|M|G|B|ML|Kid)\)/, "").trim());
+      }
+    });
+    return window.capitalize([...genres].sort().join(", "));
+  };
+
   let originalName = document.querySelector(query.Title).textContent.replace(cleanNameRegx, "").trim();
 
   let Name = originalName
@@ -97,7 +116,7 @@ export const evaluetePage = async (query) => {
     if (text && /Alternative/i.test(text)) {
       AltName = window.capitalize(
         text
-          .replace(/:|\t|\n|\r/gi, "")
+          .replace(/:|\t|\n|\r|\|/gi, "")
           .replace(/Alternative/i, "")
           .replaceAll(/’/g, "'")
           .trim(),
@@ -107,8 +126,14 @@ export const evaluetePage = async (query) => {
       Author = text.replace(authorRegex, "").replace("Type ", "").trim();
     }
 
+    if (genreRegex.test(text)) {
+      Genres = formatGenres(text.replace(genreRegex, "").trim());
+    }
+
     if (/manhwa|manhua/i.test(text)) {
-      genres.push("Manhwa");
+      Genres = formatGenres(Genres, ["Manhwa"]);
+    } else if (/manga/i.test(text)) {
+      Genres = formatGenres(Genres, ["Manga"]);
     }
   }
 
@@ -201,7 +226,7 @@ export const adultEvalPage = async (query) => {
       .join("; ");
     return window.capitalize(
       text
-        .replace(/:|\t|\n|\r/gi, "")
+        .replace(/:|\t|\n|\r|\|/gi, "")
         .replace(/(Alternative|Other name|Nombres)( |)(:|)/i, "")
         .replaceAll(/’/g, "'")
         .replace(/ ; |( |)\/( |) /g, "; ")
@@ -248,24 +273,22 @@ export const adultEvalPage = async (query) => {
           Genres = formatGenres(text.replace(genreRegex, "").trim());
         }
 
+        if (/manhwa|manhua/i.test(text)) {
+          Genres = formatGenres(Genres, ["Manhwa"]);
+        } else if (/manga/i.test(text)) {
+          Genres = formatGenres(Genres, ["Manga"]);
+        }
+
         if (year.test(text)) {
           const found = text.replace(year, "").trim();
           if (/^\d+$/.test(found)) {
             EmissionDate = `1/1/${+found}`;
           }
         }
-
-        if (/manhwa|manhua/i.test(text)) {
-          Genres = formatGenres(Genres, ["Manhwa"]);
-        }
       }
     }
   } else {
     AltName = getAltName(items[0]?.textContent || "");
-  }
-
-  if (query.Name.includes("bato")) {
-    AltName = getAltName(document.querySelector(".alias-set")?.textContent || "");
   }
 
   if (Genres === "") {
@@ -307,8 +330,6 @@ export const adultEvalPage = async (query) => {
       .replace(/( )+/g, " ")
       .replace(/^-( |)/, "")
       .trim();
-
-    if (location.href.includes("bato.to") && /R15|Prologue/i.test(fileName)) return;
 
     if (/^Tales Of Demons/i.test(Name)) {
       fileName = fileName.replace("-6", "-5");
