@@ -46,6 +46,12 @@
         <TextAreaInput key="Name" file={link} />
         <TextAreaInput key="Url" file={link} />
         <TextAreaInput key="AltName" file={link} />
+        <Select
+          label="Type"
+          key="Type"
+          item={link}
+          options={[{ Name: "Manga" }, { Name: "Manhwa" }, { Name: "Webtoon" }]}
+        />
         <CheckBox label="Is Adult" key="IsAdult" item={link} />
         <CheckBox label="Is Raw" key="Raw" item={link} />
       {:else}
