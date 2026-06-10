@@ -68,7 +68,7 @@
     padding: 0 6px;
   }
 
-  :global(#new-link .type .input-label) {
+  :global(#new-link .Type .input-label) {
     min-width: 80px;
   }
   :global(#new-link .check-box .input-label) {
