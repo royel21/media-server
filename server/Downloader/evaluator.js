@@ -130,7 +130,9 @@ export const evaluetePage = async (query) => {
   }
 
   if (query.Type) {
-    Genres = formatGenres(Genres, [query.Type]);
+    Genres = [...Genres.split(", ").filter((g) => !/Manga|Manhwa|Manhua|Webtoon/i.test(g)), query.Type]
+      .sort()
+      .join(", ");
   }
 
   data = data.filter((d) => d);
