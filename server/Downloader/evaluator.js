@@ -133,7 +133,7 @@ export const evaluetePage = async (query) => {
     Genres = formatGenres(Genres, [query.Type]);
   }
 
-  Genres = genres.sort().join(",");
+  Genres = Genres.sort().join(",");
 
   data = data.filter((d) => d);
 
