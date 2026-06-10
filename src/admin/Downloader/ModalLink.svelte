@@ -5,7 +5,7 @@
   import apiUtils from "src/apiUtils";
   import Dialog from "../../ShareComponent/Dialog.svelte";
   import Icons from "src/icons/Icons.svelte";
-  import Select2 from "../Component/Select2.svelte";
+  import Select from "../Component/Select.svelte";
 
   export let hide;
 
@@ -50,7 +50,12 @@
       </span>
     </TextAreaInput>
     <TextAreaInput key="AltName" sept="; " file={link} />
-    <Select2 label="Type" key="Type" item={link} options={["Manga", "Manhwa", "Webtoon"]} />
+    <Select
+      label="Type"
+      key="Type"
+      item={link}
+      options={[{ Name: "Manga" }, { Name: "Manhwa" }, { Name: "Webtoon" }]}
+    />
     <CheckBox label="Is Adult" key="IsAdult" item={link} />
     <CheckBox label="Is Raw" key="Raw" item={link} />
   </svelte:fragment>
