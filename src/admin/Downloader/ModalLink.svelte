@@ -67,6 +67,10 @@
     left: 5px;
     padding: 0 6px;
   }
+
+  :global(#new-link .type .input-label) {
+    min-width: 80px;
+  }
   :global(#new-link .check-box .input-label) {
     min-width: 80px;
   }
