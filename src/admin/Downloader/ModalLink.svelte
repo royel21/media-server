@@ -5,7 +5,7 @@
   import apiUtils from "src/apiUtils";
   import Dialog from "../../ShareComponent/Dialog.svelte";
   import Icons from "src/icons/Icons.svelte";
-  import Select from "../Component/Select.svelte";
+  import Select from "../../ShareComponent/Select.svelte";
 
   export let hide;
 
