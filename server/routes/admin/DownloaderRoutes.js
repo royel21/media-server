@@ -121,7 +121,7 @@ const validRegex =
   /\/\/(aquamanga.com|bato.to)|\/(manga|manga-hentai|hentai|manhua|comic|manhwa(-raw|)|webtoon|bato|\/series\/\d+\/)\//;
 
 const createLink = async (Url, body, result) => {
-  const { IsAdult, Name, AltName, Raw } = body;
+  const { IsAdult, Name, AltName, Raw, Type } = body;
   if (validRegex.test(Url) || !/=/.test(Url)) {
     const { url, serverName } = formatLink(Url);
 
@@ -137,6 +137,7 @@ const createLink = async (Url, body, result) => {
         IsAdult: adult,
         Date: new Date(),
         Raw,
+        Type,
       });
       result.valid = true;
       result.ServerId = server.Id;

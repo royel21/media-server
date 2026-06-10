@@ -47,6 +47,10 @@ export default (sequelize) => {
       IsAdult: { type: BOOLEAN, defaultValue: false, allowNull: false },
       Raw: { type: BOOLEAN, defaultValue: false, allowNull: false },
       IsDownloading: { type: BOOLEAN, defaultValue: false, allowNull: false },
+      Type: {
+        type: STRING(20),
+        defaultValue: "Manga",
+      },
     },
     {
       uniqueKeys: {
@@ -54,7 +58,7 @@ export default (sequelize) => {
           fields: ["Url", "ServerId"],
         },
       },
-    }
+    },
   );
   return Link;
 };

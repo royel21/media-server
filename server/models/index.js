@@ -21,14 +21,14 @@ import NameLists from "./NameLists.js";
 import Excludes from "./Excludes.js";
 import DownloadingList from "./DownloadingList.js";
 import Downloading from "./Downloading.js";
-import Genres from "./Genres.js"
+import Genres from "./Genres.js";
 
 import dbconfig from "./config.js";
 import { config as configEnv } from "dotenv";
 import defaultConfig from "../default-config.js";
 import AppConfig from "./AppConfig.js";
 
-import tags from "../data/tags.json" with {type: "json"};
+import tags from "../data/tags.json" with { type: "json" };
 import { defHotkeys, defSortTabs } from "../defaultHotkeys.js";
 
 configEnv();
@@ -103,9 +103,7 @@ db.Link.belongsTo(db.Server, { foreignKey: "ServerId" });
 db.DownloadingList.hasMany(db.Downloading, { onDelete: "CASCADE" });
 db.Downloading.belongsTo(db.Link, { foreignKey: "LinkId", onDelete: "CASCADE" });
 // "ALTER TABLE AppConfigs ADD AdultPath VARCHAR(255) NOT NULL DEFAULT '';"
-const queries = [
- "ALTER TABLE AppConfigs ADD RemoveInName VARCHAR(512) DEFAULT 'Manhwa|Webtoon(s|)';"
-];
+const queries = ["ALTER TABLE Links ADD Type VARCHAR(20) DEFAULT 'Manga';"];
 
 db.init = async (force) => {
   for (const q of queries) {
@@ -142,15 +140,15 @@ db.init = async (force) => {
             SortTabs: defSortTabs,
             Hotkeys: defHotkeys,
           },
-          { encript: true }
+          { encript: true },
         );
       }
     }
 
-    const founds = await db.Genres.findAll({order: ["Name"]});
-    const genres = tags.filter(g1=> !founds.find(g2=> g2.Name === g1)).map(g=> ({Name: g}));
-    if(genres){
-      await db.Genres.bulkCreate(genres, {updateOnDuplicate: ["Name"]})
+    const founds = await db.Genres.findAll({ order: ["Name"] });
+    const genres = tags.filter((g1) => !founds.find((g2) => g2.Name === g1)).map((g) => ({ Name: g }));
+    if (genres) {
+      await db.Genres.bulkCreate(genres, { updateOnDuplicate: ["Name"] });
     }
   } catch (error) {}
 };

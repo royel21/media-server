@@ -114,22 +114,23 @@ export const evaluetePage = async (query) => {
       );
     }
     if (authorRegex.test(text) && !/updating|Desconocido/i.test(text)) {
-      Author = text.replace(authorRegex, "").replace("Type ", "").trim();
+      Author = text
+        .replace(authorRegex, "")
+        .replace(/^Type |,$/, "")
+        .trim();
     }
 
     if (genreRegex.test(text)) {
       Genres = formatGenres(text.replace(genreRegex, "").trim());
     }
-
-    if (/manhwa|manhua/i.test(text)) {
-      Genres = formatGenres(Genres, ["Manhwa"]);
-    } else if (/manga/i.test(text)) {
-      Genres = formatGenres(Genres, ["Manga"]);
-    }
   }
 
   if (Genres === "") {
     Genres = formatGenres(document.querySelector(query.Genres)?.textContent.replace(genreRegex, "").trim() || "");
+  }
+
+  if (query.Type) {
+    Genres = formatGenres(Genres, [query.Type]);
   }
 
   Genres = genres.sort().join(",");
@@ -268,12 +269,6 @@ export const adultEvalPage = async (query) => {
           Genres = formatGenres(text.replace(genreRegex, "").trim());
         }
 
-        if (/manhwa|manhua/i.test(text)) {
-          Genres = formatGenres(Genres, ["Manhwa"]);
-        } else if (/manga/i.test(text)) {
-          Genres = formatGenres(Genres, ["Manga"]);
-        }
-
         if (year.test(text)) {
           const found = text.replace(year, "").trim();
           if (/^\d+$/.test(found)) {
@@ -301,6 +296,10 @@ export const adultEvalPage = async (query) => {
       }
     } catch (error) {}
   });
+
+  if (query.Type) {
+    Genres = formatGenres(Genres, [query.Type]);
+  }
 
   const padding = maxNum > 950 ? 4 : 3;
 
