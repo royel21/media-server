@@ -133,8 +133,6 @@ export const evaluetePage = async (query) => {
     Genres = formatGenres(Genres, [query.Type]);
   }
 
-  Genres = Genres.sort().join(",");
-
   data = data.filter((d) => d);
 
   if (query.Name.includes("mangayy")) {
