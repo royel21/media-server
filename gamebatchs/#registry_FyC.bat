@@ -8,7 +8,7 @@ if "%folder:~-1%"=="\" set "folder=%folder:~0,-1%"
 
 set "CompanyKey=HKCU\SOFTWARE\F&C\ADWin32\RAINBOW"
 
-rem Add the "Directory" string value (1)
+rem Add the "Directory" string value
 reg add "%CompanyKey%" /v "Directory" /t REG_SZ /d "%folder%" /f
 
 rem Add the "Execute" string value
