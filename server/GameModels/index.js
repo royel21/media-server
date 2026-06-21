@@ -8,7 +8,7 @@ const DataTypes = Sequelize.DataTypes;
 const sequelize = new Sequelize(null, null, null, {
   logging: false,
   dialect: "sqlite",
-  storage: "server/gamelist.db",
+  storage: "/mnt/Downloads/DB/gamelist.db",
   define: {
     timestamps: false,
   },

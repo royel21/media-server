@@ -28,6 +28,11 @@ import { config as configEnv } from "dotenv";
 import defaultConfig from "../default-config.js";
 import AppConfig from "./AppConfig.js";
 
+import { DataTypes } from "sequelize";
+import GameDirectory from "./GameDirectory.js";
+import Games from "./Games.js";
+import Info from "./Info.js";
+
 import tags from "../data/tags.json" with { type: "json" };
 import { defHotkeys, defSortTabs } from "../defaultHotkeys.js";
 
@@ -102,6 +107,20 @@ db.Link.belongsTo(db.Server, { foreignKey: "ServerId" });
 
 db.DownloadingList.hasMany(db.Downloading, { onDelete: "CASCADE" });
 db.Downloading.belongsTo(db.Link, { foreignKey: "LinkId", onDelete: "CASCADE" });
+
+db.GameDirectory = GameDirectory(sequelize, DataTypes);
+db.Game = Games(sequelize, DataTypes);
+db.Info = Info(sequelize, DataTypes);
+
+db.GameDirectory.hasMany(db.Game, { onDelete: "CASCADE" });
+
+db.Game.hasOne(db.Info, {
+  foreignKey: "Codes",
+  constraints: false,
+});
+
+db.Info.belongsTo(db.Game, { foreignKey: "Codes", targetKey: "Codes", constraints: false });
+
 // "ALTER TABLE AppConfigs ADD AdultPath VARCHAR(255) NOT NULL DEFAULT '';"
 const queries = ["ALTER TABLE Links ADD Type VARCHAR(20) DEFAULT 'Manga';"];
 

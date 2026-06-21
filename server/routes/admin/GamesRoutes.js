@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { db } from "../../GameModels/index.js";
+import db from "../../models/index.js";
 import { Op } from "sequelize";
 import fs from "fs-extra";
 import path from "path";
@@ -134,7 +134,7 @@ const findDuplicatesByProperty = (arr, property) => {
   return duplicates;
 };
 const scanGames = async (dir) => {
-  await db.Game.destroy({ where: { DirectoryId: dir.Id } });
+  await db.Game.destroy({ where: { GameDirectoryId: dir.Id } });
 
   const files = ListFiles(dir.Path);
   let list = [];
@@ -156,12 +156,12 @@ const scanGames = async (dir) => {
 
     if (found && !found.Path) {
       found.Path = file.Path;
-      found.DirectoryId = dir.Id;
+      found.GameDirectoryId = dir.Id;
       try {
         await found.save();
       } catch (error) {}
     } else {
-      list.push({ Codes, Name, DirectoryId: dir.Id, Path: file.Path });
+      list.push({ Codes, Name, GameDirectoryId: dir.Id, Path: file.Path });
     }
   }
   const games = await db.Game.bulkCreate(list);
@@ -170,14 +170,14 @@ const scanGames = async (dir) => {
 
 const getDirectories = async () => {
   let directories = [];
-  const sortByName = db.sqlze.literal(`REPLACE(REPLACE(REPLACE(Directories.Path, "@", "#"), "-", "#"), "[","#") ASC`);
+  const sortByName = db.sqlze.literal(`REPLACE(REPLACE(REPLACE(GameDirectories.Path, "@", "#"), "-", "#"), "[","#") ASC`);
   try {
-    directories = await db.Directory.findAll({
+    directories = await db.GameDirectory.findAll({
       attributes: [
         "Id",
         "Name",
         "Path",
-        [db.sqlze.literal(`(SELECT COUNT(*) FROM Games WHERE Games.DirectoryId = Directories.Id)`), "Count"],
+        [db.sqlze.literal(`(SELECT COUNT(*) FROM Games WHERE Games.GameDirectoryId = GameDirectories.Id)`), "Count"],
       ],
       order: [sortByName, ["Name", "ASC"]],
     });
@@ -200,7 +200,7 @@ routes.post("/add-directory", async (req, res) => {
     return res.send({ error: "Directory does not exist." });
   }
 
-  const existing = await db.Directory.findOne({ where: { Path } });
+  const existing = await db.GameDirectory.findOne({ where: { Path } });
   if (existing) {
     return res.send({ errors: "Directory already Added" });
   }
@@ -208,7 +208,7 @@ routes.post("/add-directory", async (req, res) => {
   const name = path.basename(Path);
   let Codes = getCode(name);
   const Name = name.replace(Codes, "").trim();
-  const result = await db.Directory.create({ Path, Name });
+  const result = await db.GameDirectory.create({ Path, Name });
 
   const { dubs } = await scanGames(result);
 
@@ -218,14 +218,14 @@ routes.post("/add-directory", async (req, res) => {
 routes.post("/remove-directory", async (req, res) => {
   const { Id } = req.body;
 
-  await db.Directory.destroy({ where: { Id } });
+  await db.GameDirectory.destroy({ where: { Id } });
 
   return res.send({ message: "Directory updated." });
 });
 
 routes.post("/reload", async (req, res) => {
   const { Id } = req.body;
-  const existing = await db.Directory.findOne({ where: { Id } });
+  const existing = await db.GameDirectory.findOne({ where: { Id } });
 
   if (!fs.existsSync(existing.Path)) {
     return res.send({ error: "Directory does not exist." });
@@ -245,13 +245,13 @@ routes.post("/update-directory", async (req, res) => {
     return res.send({ message: "Directory does not exist." });
   }
 
-  const dir = await db.Directory.findOne({ where: { Id: id } });
+  const dir = await db.GameDirectory.findOne({ where: { Id: id } });
 
   await dir.update({ Path: p });
 
   await db.Game.update(
     { Path: db.sqlze.literal(`REPLACE(Path, ${dir.Path}, ${Path})`) },
-    { where: { DirectoryId: dir.Id } },
+    { where: { GameDirectoryId: dir.Id } },
   );
 
   return res.send({ message: "Directory updated." });
