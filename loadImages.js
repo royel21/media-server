@@ -30,9 +30,9 @@ const worker = async () => {
     // await game.reload();
     // game.Codes = game.Codes.trim();
 
-    if (game.Path && !fs.existsSync(game.Path) && /18TBHDD\/Temp\/Games\/VN/.test(game.Path)) {
-      console.log(game.Codes + " - " + game.Name);
-      // await game.destroy();
+    if (game.Path && !fs.existsSync(game.Path)) {
+      console.log(game.Codes + "-" + game.Path.split("/")[2] + " - " + game.Name);
+      await game.destroy();
     }
 
     // let dups = games.filter((g) => g.Codes === game.Codes);
