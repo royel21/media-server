@@ -26,6 +26,7 @@ const worker = async () => {
 
   const page = await createPage(browser);
   for (const game of games) {
+    await game.reload();
     game.Codes = game.Codes.trim();
 
     if (game.Codes.includes(" ")) continue;
@@ -63,12 +64,13 @@ const worker = async () => {
       }
 
       if (!game.OS) {
-        game.OS = "Windows";
+        data.OS = "Windows";
       }
 
       if (!game.Lang) {
-        game.Lang = "Japanese";
+        data.Lang = "Japanese";
       }
+      db.Games.update(data, { where: { Codes: game.Codes } });
       await delay(4000);
     }
 
