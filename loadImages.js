@@ -38,7 +38,7 @@ const worker = async () => {
 
         return data;
       });
-
+      console.log(data);
       try {
         if (!game.Company) {
           game.Company = data.Company;
@@ -58,13 +58,16 @@ const worker = async () => {
         if (!game.Lang) {
           game.Lang = "Japanese";
         }
-        await game.save();
       } catch (error) {
         console.log("save failed", error);
       }
 
       await delay(4000);
     }
+
+    if (!game.OS || game.OS === "Windows 10") game.OS = "Windows";
+
+    await game.save();
   }
   await page.close();
   await browser.close();
