@@ -59,15 +59,15 @@ const worker = async () => {
           game.Info.Lang = "Japanese";
         }
         await game.Info.save();
-      } catch (error) {}
+      } catch (error) {
+        console.log("save failed", error);
+      }
 
       await delay(4000);
     }
   }
   await page.close();
   await browser.close();
-
-  process.exit();
 };
 
 worker();
