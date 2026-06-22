@@ -35,7 +35,7 @@ const worker = async () => {
         continue;
       }
       console.log("https://vndb.org/" + game.Codes);
-      await page.goto("https://vndb.org/" + game.Codes);
+      await page.goto("https://vndb.org/v100");
       const data = await page.evaluate(async () => {
         const data = {};
         let list = [...document.querySelectorAll("table td")];
@@ -61,6 +61,7 @@ const worker = async () => {
           } else {
             game.AltName = data.AltName;
           }
+          console.log("AltName updated", game.AltName);
         }
 
         if (!game.OS) {
@@ -73,7 +74,7 @@ const worker = async () => {
       } catch (error) {
         console.log("save failed", error);
       }
-
+      break;
       await delay(4000);
     }
 
