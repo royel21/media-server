@@ -19,37 +19,40 @@ function capitalizeWords(text) {
 }
 
 const worker = async () => {
-  const games = await db.Info.findAll({ includes: db.Games, required: true });
+  // const games = await db.Info.findAll({ includes: db.Games, required: true });
+  const games = await db.Game.findAll();
 
-  const containAssianChar = /[\u3400-\u9FBF]|[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g;
-  const browser = await startBrowser({ headless: false });
+  // const containAssianChar = /[\u3400-\u9FBF]|[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g;
+  // const browser = await startBrowser({ headless: false });
 
-  const page = await createPage(browser);
+  // const page = await createPage(browser);
   for (const game of games) {
     // await game.reload();
     // game.Codes = game.Codes.trim();
 
-    // if (game.Codes.includes(" ")) continue;
-
-    let dups = games.filter((g) => g.Codes === game.Codes);
-    if (dups.length > 1) {
-      for (const d of dups) {
-        if (d.AltName) {
-          for (const g of dups) {
-            d.AltName = d.AltName;
-            d.Company = d.Company;
-            d.Lang = d.Lang;
-            d.Genres = d.Genres;
-            d.ReleaseDate = d.ReleaseDate;
-            d.Description = d.Description;
-            d.OS = d.OS;
-            await g.save();
-          }
-        }
-      }
+    if (game.Path && !fs.existsSync(game.Path)) {
+      await game.destroy();
     }
 
-    console.log("Codes: " + game.Codes);
+    // let dups = games.filter((g) => g.Codes === game.Codes);
+    // if (dups.length > 1) {
+    //   for (const d of dups) {
+    //     if (d.AltName) {
+    //       for (const g of dups) {
+    //         d.AltName = d.AltName;
+    //         d.Company = d.Company;
+    //         d.Lang = d.Lang;
+    //         d.Genres = d.Genres;
+    //         d.ReleaseDate = d.ReleaseDate;
+    //         d.Description = d.Description;
+    //         d.OS = d.OS;
+    //         await g.save();
+    //       }
+    //     }
+    //   }
+    // }
+
+    // console.log("Codes: " + game.Codes);
     // if (/^v\d+$/.test(game.Codes || "")) {
     //   if (containAssianChar.test(game.AltName || "")) {
     //     continue;
@@ -100,8 +103,8 @@ const worker = async () => {
       console.log("save failed", error);
     }
   }
-  await page.close();
-  await browser.close();
+  // await page.close();
+  // await browser.close();
   process.exit();
 };
 
