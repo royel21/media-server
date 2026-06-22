@@ -51,35 +51,31 @@ const worker = async () => {
         return data;
       });
       console.log(data);
-      try {
-        if (data.Company && !game.Company) {
-          game.Company = capitalizeWords(data.Company || "");
-        }
-        if (data.AltName && !game.AltName.includes(data.AltName)) {
-          if (game.AltName) {
-            game.AltName = data.AltName + "\n" + game.AltName;
-          } else {
-            game.AltName = data.AltName;
-          }
-        }
-
-        if (!game.OS) {
-          game.OS = "Windows";
-        }
-
-        if (!game.Lang) {
-          game.Lang = "Japanese";
-        }
-      } catch (error) {
-        console.log("save failed", error);
+      if (data.Company && !game.Company) {
+        game.Company = capitalizeWords(data.Company || "");
       }
+      if (data.AltName && !game.AltName.includes(data.AltName)) {
+        if (game.AltName) {
+          game.AltName = data.AltName + "\n" + game.AltName;
+        } else {
+          game.AltName = data.AltName;
+        }
+      }
+
+      if (!game.OS) {
+        game.OS = "Windows";
+      }
+
+      if (!game.Lang) {
+        game.Lang = "Japanese";
+      }
+      await delay(4000);
     }
 
     if (!game.OS || game.OS === "Windows 10") game.OS = "Windows";
 
     try {
       await game.save();
-      await delay(4000);
     } catch (error) {
       console.log("save failed", error);
     }
