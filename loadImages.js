@@ -69,7 +69,7 @@ const worker = async () => {
       if (!game.Lang) {
         data.Lang = "Japanese";
       }
-      db.Games.update(data, { where: { Codes: game.Codes } });
+
       await delay(4000);
     }
 
