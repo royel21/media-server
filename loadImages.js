@@ -19,10 +19,10 @@ function capitalizeWords(text) {
 }
 
 const worker = async () => {
-  const games = await db.Info.findAll({ includes: db.Games, required: true });
+  const games = await db.Info.findAll({ where: { Codes: { [db.Op.like]: "v%" } }, includes: db.Games, required: true });
   // const games = await db.Game.findAll();
 
-  const containAssianChar = /[\u3400-\u9FBF]|[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g;
+  const containAssianChar = /[\u3400-\u9FBF]|[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/u;
   const browser = await startBrowser({ headless: false });
 
   const page = await createPage(browser);
@@ -31,13 +31,13 @@ const worker = async () => {
     await game.reload();
     game.Codes = game.Codes.trim();
 
-    console.log(
-      `${++i}/${games.length}`.padStart(9, "0") + ": " + "Codes: " + game.Codes + " - " + game.Game?.Name || "",
-    );
+    console.log(`${++i}/${games.length}`.padStart(9, "0") + ": " + "Codes: " + game.Codes + " - ");
+
     if (/^v\d+$/.test(game.Codes || "")) {
       if (containAssianChar.test(game.AltName || "")) {
         continue;
       }
+
       await page.goto("https://vndb.org/" + game.Codes);
       const data = await page.evaluate(async () => {
         const data = {};
@@ -54,13 +54,12 @@ const worker = async () => {
         return data;
       });
 
-      console.log(game.Codes, data, game.AltName);
+      console.log(game.Codes, data);
 
       if (data.Company && !game.Company) {
         game.Company = capitalizeWords(data.Company || "");
       }
 
-      console.log("includes: ", !game.AltName?.includes(data.AltName));
       if (data.AltName && !game.AltName?.includes(data.AltName)) {
         if (game.AltName) {
           game.AltName = data.AltName + "\n" + game.AltName;
