@@ -32,6 +32,9 @@ const worker = async () => {
   // if (!games.find((g) => g.Codes === game.replace(".jpg", ""))) {
   //   console.log(game);
   // }
+  const browser = await startBrowser({ headless: false });
+
+  const page = await createPage(browser);
   for (const game of games) {
     if (game.Codes !== undefined && /(r|v)\d+$/.test(game.Codes)) {
       console.log("https://vndb.org/" + game.Codes);
