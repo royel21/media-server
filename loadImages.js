@@ -38,16 +38,13 @@ const worker = async () => {
       await page.goto("https://vndb.org/" + game.Codes);
       const data = await page.evaluate(async () => {
         const data = {};
-        let list = [...document.querySelectorAll(".vndetails td")];
+        let list = [...document.querySelectorAll("table td")];
         let index = 0;
-        list.forEach((td, i) => {
-          if (td.textContent.includes("Developer")) {
-            index = i + 1;
+        data.Company.forEach((td, i) => {
+          if ((!data.Company && td.textContent.includes("Developer")) || td.textContent.includes("Publisher")) {
+            data.Company = list[index + 1].textContent.split("&")[0].trim();
           }
         });
-        if (index > 0) {
-          data.Company = list[index].textContent.trim();
-        }
 
         data.altName = document.querySelector(".alttitle")?.textContent.trim();
 
