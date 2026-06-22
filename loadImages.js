@@ -30,8 +30,6 @@ const worker = async () => {
 
     if (game.Codes.includes(" ")) continue;
 
-    if (game.Codes !== "v100") continue;
-
     if (/^v\d+$/.test(game.Codes || "")) {
       if (containAssianChar.test(game.AltName || "")) {
         continue;
@@ -43,7 +41,7 @@ const worker = async () => {
         let list = [...document.querySelectorAll("table td")];
         let index = 0;
         list.forEach((td, i) => {
-          if ((!data.Company && td.textContent.includes("Developer")) || td.textContent.includes("Publisher")) {
+          if ((!data.Company && td.textContent.includes("Publisher")) || td.textContent.includes("Developer")) {
             data.Company = list[i + 1].textContent.split("&")[0].trim();
           }
         });
@@ -80,7 +78,6 @@ const worker = async () => {
     if (!game.OS || game.OS === "Windows 10") game.OS = "Windows";
 
     try {
-      console.log(game);
       await game.save();
       break;
       await delay(4000);
