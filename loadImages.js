@@ -26,53 +26,71 @@ const worker = async () => {
 
   const page = await createPage(browser);
   for (const game of games) {
-    await game.reload();
-    game.Codes = game.Codes.trim();
+    // await game.reload();
+    // game.Codes = game.Codes.trim();
 
-    if (game.Codes.includes(" ")) continue;
+    // if (game.Codes.includes(" ")) continue;
 
-    console.log("Codes: " + game.Codes);
-    if (/^v\d+$/.test(game.Codes || "")) {
-      if (containAssianChar.test(game.AltName || "")) {
-        continue;
-      }
-      await page.goto("https://vndb.org/" + game.Codes);
-      const data = await page.evaluate(async () => {
-        const data = {};
-        let list = [...document.querySelectorAll("table td")];
-        let index = 0;
-        list.forEach((td, i) => {
-          if ((!data.Company && td.textContent.includes("Publisher")) || td.textContent.includes("Developer")) {
-            data.Company = list[i + 1].textContent.split("&")[0].trim();
+    let dups = games.filter((g) => g.Codes === game.Codes);
+    if (dups.length > 1) {
+      for (const d of dups) {
+        if (d.AltName) {
+          for (const g of dups) {
+            d.AltName = d.AltName;
+            d.Company = d.Company;
+            d.Lang = d.Lang;
+            d.Genres = d.Genres;
+            d.ReleaseDate = d.ReleaseDate;
+            d.Description = d.Description;
+            d.OS = d.OS;
+            await g.save();
           }
-        });
-
-        data.AltName = document.querySelector(".alttitle")?.textContent.trim();
-
-        return data;
-      });
-      console.log(data);
-      if (data.Company && !game.Company) {
-        game.Company = capitalizeWords(data.Company || "");
-      }
-      if (data.AltName && !game.AltName?.includes(data.AltName)) {
-        if (game.AltName) {
-          game.AltName = data.AltName + "\n" + game.AltName;
-        } else {
-          game.AltName = data.AltName;
         }
       }
-
-      if (!game.OS) {
-        data.OS = "Windows";
-      }
-
-      if (!game.Lang) {
-        data.Lang = "Japanese";
-      }
-      db.Games.update(data, { where: { Codes: game.Codes } });
-      await delay(4000);
     }
+
+    console.log("Codes: " + game.Codes);
+    // if (/^v\d+$/.test(game.Codes || "")) {
+    //   if (containAssianChar.test(game.AltName || "")) {
+    //     continue;
+    //   }
+    //   await page.goto("https://vndb.org/" + game.Codes);
+    //   const data = await page.evaluate(async () => {
+    //     const data = {};
+    //     let list = [...document.querySelectorAll("table td")];
+    //     let index = 0;
+    //     list.forEach((td, i) => {
+    //       if ((!data.Company && td.textContent.includes("Publisher")) || td.textContent.includes("Developer")) {
+    //         data.Company = list[i + 1].textContent.split("&")[0].trim();
+    //       }
+    //     });
+
+    //     data.AltName = document.querySelector(".alttitle")?.textContent.trim();
+
+    //     return data;
+    //   });
+    //   console.log(data);
+    //   if (data.Company && !game.Company) {
+    //     game.Company = capitalizeWords(data.Company || "");
+    //   }
+    //   if (data.AltName && !game.AltName?.includes(data.AltName)) {
+    //     if (game.AltName) {
+    //       game.AltName = data.AltName + "\n" + game.AltName;
+    //     } else {
+    //       game.AltName = data.AltName;
+    //     }
+    //   }
+
+    //   if (!game.OS) {
+    //     data.OS = "Windows";
+    //   }
+
+    //   if (!game.Lang) {
+    //     data.Lang = "Japanese";
+    //   }
+    //   db.Games.update(data, { where: { Codes: game.Codes } });
+    //   await delay(4000);
+    // }
 
     if (!game.OS || game.OS === "Windows 10") game.OS = "Windows";
 

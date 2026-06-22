@@ -9,6 +9,7 @@
   export let game = {};
   export let updateGame;
   export let removeGame;
+  export let updateInfo = 0;
 
   const socket = getContext("socket");
 
@@ -27,6 +28,7 @@
   let files;
   let listRef;
   let showImage = false;
+  let lastInfo = 0;
 
   function capitalizeWords(text) {
     if (typeof text !== "string") {
@@ -231,7 +233,8 @@
   });
 
   $: if (game.Id !== data.Id) {
-    if (game.Codes === data.Codes) {
+    if (game.Codes === data.Codes && lastInfo !== updateInfo) {
+      lastInfo = updateInfo;
       data.Company = game.Info?.Company || "";
       data.AltName = game.Info?.AltName || "";
       data.Lang = game.Info?.Lang || "";
