@@ -32,11 +32,15 @@ const worker = async () => {
   // if (!games.find((g) => g.Codes === game.replace(".jpg", ""))) {
   //   console.log(game);
   // }
+  const containAssianChar = /[\u3400-\u9FBF]|[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g;
   const browser = await startBrowser({ headless: false });
 
   const page = await createPage(browser);
   for (const game of games) {
     if (game.Codes !== undefined && /(r|v)\d+$/.test(game.Codes)) {
+      if (game.Info && containAssianChar.test(game.Info.AltName)) {
+        continue;
+      }
       console.log("https://vndb.org/" + game.Codes);
       await page.goto("https://vndb.org/" + game.Codes);
       const data = await page.evaluate(async () => {
