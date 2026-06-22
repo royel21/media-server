@@ -19,7 +19,7 @@ function capitalizeWords(text) {
 }
 
 const worker = async () => {
-  const games = await db.Info.findAll();
+  const games = await db.Info.findAll({ includes: db.Games, required: true });
 
   const containAssianChar = /[\u3400-\u9FBF]|[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g;
   const browser = await startBrowser({ headless: false });
