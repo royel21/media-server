@@ -63,7 +63,6 @@ const worker = async () => {
           } else {
             game.AltName = data.AltName;
           }
-          console.log("AltName updated", game.AltName);
         }
 
         if (!game.OS) {
@@ -76,14 +75,15 @@ const worker = async () => {
       } catch (error) {
         console.log("save failed", error);
       }
-      break;
-      await delay(4000);
     }
 
     if (!game.OS || game.OS === "Windows 10") game.OS = "Windows";
 
     try {
+      console.log(game);
       await game.save();
+      break;
+      await delay(4000);
     } catch (error) {
       console.log("save failed", error);
     }
