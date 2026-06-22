@@ -1,11 +1,22 @@
 import { createPage, delay, startBrowser } from "#server/Downloader/Crawler";
 import path from "node:path";
-import { db } from "./server/GameModels/index.js";
+import db from "./server/models/index.js";
 import os from "os";
 import fs from "fs-extra";
 import { downloadImg } from "#server/Downloader/ImageUtils";
 
 const homedir = os.homedir();
+
+function capitalizeWords(text) {
+  if (typeof text !== "string") {
+    throw new TypeError("Input must be a string.");
+  }
+
+  return text
+    .toLowerCase() // Normalize to lowercase first
+    .replace(/\b\p{L}/gu, (char) => char.toUpperCase());
+  // \b = word boundary, \p{L} = any letter (Unicode-aware)
+}
 
 const worker = async () => {
   const games = await db.Info.findAll();
@@ -41,7 +52,7 @@ const worker = async () => {
       console.log(data);
       try {
         if (!game.Company) {
-          game.Company = data.Company;
+          game.Company = capitalizeWords(data.Company || "");
         }
         if (!game.AltName.includes(data.AltName)) {
           if (game.AltName) {
@@ -71,6 +82,7 @@ const worker = async () => {
   }
   await page.close();
   await browser.close();
+  process.exit();
 };
 
 worker();
