@@ -32,7 +32,7 @@ const worker = async () => {
 
     if (game.Path && !fs.existsSync(game.Path)) {
       console.log(game.Codes + " - " + game.Name);
-      await game.destroy();
+      // await game.destroy();
     }
 
     // let dups = games.filter((g) => g.Codes === game.Codes);
