@@ -46,7 +46,7 @@ const worker = async () => {
           }
         });
 
-        data.altName = document.querySelector(".alttitle")?.textContent.trim();
+        data.AltName = document.querySelector(".alttitle")?.textContent.trim();
 
         return data;
       });
