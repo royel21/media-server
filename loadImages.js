@@ -8,7 +8,7 @@ import { downloadImg } from "#server/Downloader/ImageUtils";
 const homedir = os.homedir();
 
 const worker = async () => {
-  const games = await db.findAll();
+  const games = await db.Info.findAll();
 
   const containAssianChar = /[\u3400-\u9FBF]|[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g;
   const browser = await startBrowser({ headless: false });
