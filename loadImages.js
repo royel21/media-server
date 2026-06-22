@@ -8,15 +8,15 @@ import { downloadImg } from "#server/Downloader/ImageUtils";
 const homedir = os.homedir();
 
 const worker = async () => {
-  const games = await db.Info.findAll();
+  const games = await db.findAll();
 
   const containAssianChar = /[\u3400-\u9FBF]|[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g;
   const browser = await startBrowser({ headless: false });
 
   const page = await createPage(browser);
   for (const game of games) {
-    if (game.Info && game.Codes !== undefined && /(r|v)\d+$/.test(game.Codes)) {
-      if (game.Info && containAssianChar.test(game.Info.AltName || "")) {
+    if (game && /(r|v)\d+$/.test(game.Codes || "")) {
+      if (game && containAssianChar.test(game.AltName || "")) {
         continue;
       }
       console.log("https://vndb.org/" + game.Codes);
@@ -40,25 +40,25 @@ const worker = async () => {
       });
 
       try {
-        if (!game.Info.Company) {
-          game.Info.Company = data.Company;
+        if (!game.Company) {
+          game.Company = data.Company;
         }
-        if (!game.Info.AltName.includes(data.AltName)) {
-          if (game.Info.AltName) {
-            game.Info.AltName = data.AltName + "\n" + game.Info.AltName;
+        if (!game.AltName.includes(data.AltName)) {
+          if (game.AltName) {
+            game.AltName = data.AltName + "\n" + game.AltName;
           } else {
-            game.Info.AltName = data.AltName;
+            game.AltName = data.AltName;
           }
         }
 
-        if (!game.Info.OS) {
-          game.Info.OS = "Windows";
+        if (!game.OS) {
+          game.OS = "Windows";
         }
 
-        if (!game.Info.Lang) {
-          game.Info.Lang = "Japanese";
+        if (!game.Lang) {
+          game.Lang = "Japanese";
         }
-        await game.Info.save();
+        await game.save();
       } catch (error) {
         console.log("save failed", error);
       }
