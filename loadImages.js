@@ -31,6 +31,7 @@ const worker = async () => {
     // game.Codes = game.Codes.trim();
 
     if (game.Path && !fs.existsSync(game.Path)) {
+      console.log(game.Codes + " - " + game.Name);
       await game.destroy();
     }
 
