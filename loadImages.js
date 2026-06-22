@@ -26,11 +26,12 @@ const worker = async () => {
   const browser = await startBrowser({ headless: false });
 
   const page = await createPage(browser);
+  let i = 0;
   for (const game of games) {
     await game.reload();
     game.Codes = game.Codes.trim();
 
-    console.log("Codes: " + game.Codes);
+    console.log(`${i + 1}/${games.length}`.padStart(10) + ": " + "Codes: " + game.Codes);
     if (/^v\d+$/.test(game.Codes || "")) {
       if (containAssianChar.test(game.AltName || "")) {
         continue;
