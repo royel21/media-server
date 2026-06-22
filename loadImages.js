@@ -30,7 +30,7 @@ const worker = async () => {
     // await game.reload();
     // game.Codes = game.Codes.trim();
 
-    if (game.Path && !fs.existsSync(game.Path)) {
+    if (game.Path && !fs.existsSync(game.Path) && /18TBHDD\/Temp\/Games\/VN/.test(game.Path)) {
       console.log(game.Codes + " - " + game.Name);
       // await game.destroy();
     }
