@@ -63,6 +63,7 @@ const worker = async () => {
         } else {
           game.AltName = data.AltName;
         }
+        console.log("AltName-update: ", game.AltName);
       }
 
       if (!game.OS) {
