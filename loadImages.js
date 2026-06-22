@@ -32,7 +32,7 @@ const worker = async () => {
     game.Codes = game.Codes.trim();
 
     console.log(
-      `${i + 1}/${games.length}`.padStart(10) + ": " + "Codes: " + game.Codes + " - " + game.Game?.Name || "",
+      `${i++ + 1}/${games.length}`.padStart(10) + ": " + "Codes: " + game.Codes + " - " + game.Game?.Name || "",
     );
     if (/^v\d+$/.test(game.Codes || "")) {
       if (containAssianChar.test(game.AltName || "")) {
