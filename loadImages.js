@@ -26,8 +26,12 @@ const worker = async () => {
 
   const page = await createPage(browser);
   for (const game of games) {
-    if (game && /(r|v)\d+$/.test(game.Codes || "")) {
-      if (game && containAssianChar.test(game.AltName || "")) {
+    game.Codes = game.Codes.trim();
+
+    if (game.Codes.includes(" ")) continue;
+
+    if (/(r|v)\d+$/.test(game.Codes || "")) {
+      if (containAssianChar.test(game.AltName || "")) {
         continue;
       }
       console.log("https://vndb.org/" + game.Codes);
