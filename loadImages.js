@@ -48,18 +48,26 @@ const worker = async () => {
         if (index > 0) {
           data.Company = list[index].textContent.trim();
         }
-        data.Image = document.querySelector(".vnimg img")?.src;
+
+        data.altName = document.querySelector(".alttitle")?.textContent.trim();
+
         return data;
       });
-      if (data.Image && !fs.existsSync(imgPath)) {
-        let img = await downloadImg(data.Image, page);
-        if (!img.badImg) {
-          await img.resize({ width: 300 }).toFile(imgPath);
-        }
-      }
-      if (game.Info && !game.Info.Company) {
+
+      if (game.Info) {
         try {
-          game.Info.Company = data.Company;
+          if (game.Info) {
+            if (!game.Info.Company) {
+              game.Info.Company = data.Company;
+            }
+            if (!game.Info.AltName.includes(data.AltName)) {
+              if (game.Info.AltName) {
+                game.Info.AltName = data.AltName + "\n" + game.Info.AltName;
+              } else {
+                game.Info.AltName = data.AltName;
+              }
+            }
+          }
           await game.Info.save();
         } catch (error) {}
       }
