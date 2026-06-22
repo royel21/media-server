@@ -79,7 +79,6 @@ const worker = async () => {
 
     try {
       await game.save();
-      break;
       await delay(4000);
     } catch (error) {
       console.log("save failed", error);
