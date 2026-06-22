@@ -32,13 +32,12 @@ const worker = async () => {
     game.Codes = game.Codes.trim();
 
     console.log(
-      `${i++ + 1}/${games.length}`.padStart(9, "0") + ": " + "Codes: " + game.Codes + " - " + game.Game?.Name || "",
+      `${++i}/${games.length}`.padStart(9, "0") + ": " + "Codes: " + game.Codes + " - " + game.Game?.Name || "",
     );
     if (/^v\d+$/.test(game.Codes || "")) {
       if (containAssianChar.test(game.AltName || "")) {
         continue;
       }
-      console.log("AltName: ", game.AltName);
       await page.goto("https://vndb.org/" + game.Codes);
       const data = await page.evaluate(async () => {
         const data = {};
@@ -54,7 +53,7 @@ const worker = async () => {
 
         return data;
       });
-      console.log(game.Codes, data);
+      console.log(game.Codes, data, game.AltName);
       if (data.Company && !game.Company) {
         game.Company = capitalizeWords(data.Company || "");
       }
