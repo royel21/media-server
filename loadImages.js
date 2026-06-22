@@ -54,7 +54,7 @@ const worker = async () => {
       if (data.Company && !game.Company) {
         game.Company = capitalizeWords(data.Company || "");
       }
-      if (data.AltName && !game.AltName.includes(data.AltName)) {
+      if (data.AltName && !game.AltName?.includes(data.AltName)) {
         if (game.AltName) {
           game.AltName = data.AltName + "\n" + game.AltName;
         } else {
