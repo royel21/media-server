@@ -40,7 +40,7 @@ const worker = async () => {
         const data = {};
         let list = [...document.querySelectorAll("table td")];
         let index = 0;
-        data.Company.forEach((td, i) => {
+        list.forEach((td, i) => {
           if ((!data.Company && td.textContent.includes("Developer")) || td.textContent.includes("Publisher")) {
             data.Company = list[index + 1].textContent.split("&")[0].trim();
           }
