@@ -9,36 +9,14 @@ const homedir = os.homedir();
 
 const worker = async () => {
   const games = await db.Info.findAll();
-  // for (const game of games) {
-  //   console.log(game.Codes + ": " + game.Description);
-  //   if (/windows 95|win95|win 95/i.test(game.Description)) {
-  //     game.OS = "Windows 95";
-  //   }
-  //   if (/windows 98|win98|win 98/i.test(game.Description)) {
-  //     game.OS = "Windows 98";
-  //   }
-  //   if (/windows 7|win7|win 7/i.test(game.Description)) {
-  //     game.OS = "Windows 7";
-  //   }
-  //   if (/PC98/i.test(game.Description)) {
-  //     game.OS = "PC98";
-  //   }
-  //   if (/Windows XP| Win XP| WinXP/i.test(game.Description)) {
-  //     game.OS = "Windows XP";
-  //   }
-  //   await game.save();
-  // }
 
-  // if (!games.find((g) => g.Codes === game.replace(".jpg", ""))) {
-  //   console.log(game);
-  // }
   const containAssianChar = /[\u3400-\u9FBF]|[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g;
   const browser = await startBrowser({ headless: false });
 
   const page = await createPage(browser);
   for (const game of games) {
-    if (game.Codes !== undefined && /(r|v)\d+$/.test(game.Codes)) {
-      if (game.Info && containAssianChar.test(game.Info.AltName)) {
+    if (game.Info && game.Codes !== undefined && /(r|v)\d+$/.test(game.Codes)) {
+      if (game.Info && containAssianChar.test(game.Info.AltName || "")) {
         continue;
       }
       console.log("https://vndb.org/" + game.Codes);
@@ -61,76 +39,35 @@ const worker = async () => {
         return data;
       });
 
-      if (game.Info) {
-        try {
-          if (game.Info) {
-            if (!game.Info.Company) {
-              game.Info.Company = data.Company;
-            }
-            if (!game.Info.AltName.includes(data.AltName)) {
-              if (game.Info.AltName) {
-                game.Info.AltName = data.AltName + "\n" + game.Info.AltName;
-              } else {
-                game.Info.AltName = data.AltName;
-              }
-            }
+      try {
+        if (!game.Info.Company) {
+          game.Info.Company = data.Company;
+        }
+        if (!game.Info.AltName.includes(data.AltName)) {
+          if (game.Info.AltName) {
+            game.Info.AltName = data.AltName + "\n" + game.Info.AltName;
+          } else {
+            game.Info.AltName = data.AltName;
           }
-          await game.Info.save();
-        } catch (error) {}
-      }
+        }
+
+        if (!game.Info.OS) {
+          game.Info.OS = "Windows";
+        }
+
+        if (!game.Info.Lang) {
+          game.Info.Lang = "Japanese";
+        }
+        await game.Info.save();
+      } catch (error) {}
+
       await delay(4000);
     }
   }
   await page.close();
   await browser.close();
 
-  // const browser = await startBrowser({ headless: false });
-
-  // const page = await createPage(browser);
-
-  // let images = {};
-
-  // page.on("response", async (response) => {
-  //   const url = response.url();
-  //   const header = response.headers();
-  //   if (header["content-type"] && /image/gi.test(header["content-type"])) {
-  //     const buffer = await response.buffer();
-  //     images[url] = {
-  //       type: header["content-type"],
-  //       buffer,
-  //     };
-  //   }
-  // });
-
-  // await page.goto("https://mui.com/material-ui/react-image-list/");
-
-  // // const data = await page.evaluate(async () => {
-  // //   let imgs = document.querySelectorAll(".MuiImageList-root .MuiImageListItem-img");
-  // //   return [...imgs].map((g) => g.src);
-  // // });
-
-  // for (let d in images) {
-  //   console.log(d, images[d].type, images[d].buffer.length);
-  // }
-
-  await page.close();
-  await browser.close();
   process.exit();
 };
-//sudo certbot certonly --nginx
+
 worker();
-
-// const addLangs = async () => {
-//   const infos = await db.Info.findAll();
-//   for (let info of infos) {
-//     if (/english/gi.test(info.Description)) {
-//       console.log("English");
-//       info.Lang = "English";
-//       await info.save();
-//     }
-//   }
-//   console.log("finish");
-//   process.exit(0);
-// };
-
-// addLangs();
