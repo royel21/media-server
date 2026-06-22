@@ -30,11 +30,11 @@ const worker = async () => {
 
     if (game.Codes.includes(" ")) continue;
 
+    console.log("Codes: " + game.Codes);
     if (/^v\d+$/.test(game.Codes || "")) {
       if (containAssianChar.test(game.AltName || "")) {
         continue;
       }
-      console.log("https://vndb.org/" + game.Codes);
       await page.goto("https://vndb.org/" + game.Codes);
       const data = await page.evaluate(async () => {
         const data = {};
