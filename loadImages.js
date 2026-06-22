@@ -82,7 +82,11 @@ const worker = async () => {
 
     if (!game.OS || game.OS === "Windows 10") game.OS = "Windows";
 
-    await game.save();
+    try {
+      await game.save();
+    } catch (error) {
+      console.log("save failed", error);
+    }
   }
   await page.close();
   await browser.close();
