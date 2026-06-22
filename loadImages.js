@@ -38,6 +38,7 @@ const worker = async () => {
       if (containAssianChar.test(game.AltName || "")) {
         continue;
       }
+      console.log("AltName: ", game.AltName);
       await page.goto("https://vndb.org/" + game.Codes);
       const data = await page.evaluate(async () => {
         const data = {};
