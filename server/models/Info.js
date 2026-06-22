@@ -7,7 +7,7 @@ export default (sequelize, { DATE, STRING, TEXT }) => {
     Genres: { type: STRING(100) },
     ReleaseDate: { type: DATE },
     Description: { type: TEXT },
-    OS: { type: STRING, defaulValue: "Windows 10" },
+    OS: { type: STRING, defaulValue: "Windows" },
   });
   return Info;
 };

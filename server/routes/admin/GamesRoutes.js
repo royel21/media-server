@@ -128,7 +128,7 @@ const findDuplicatesByProperty = (arr, property) => {
     if (seen.has(value)) {
       duplicates.push(obj); // Add duplicate
     } else {
-      seen.add(value);      // Track first occurrence
+      seen.add(value); // Track first occurrence
     }
   }
   return duplicates;
@@ -144,7 +144,9 @@ const scanGames = async (dir) => {
     let Codes = getCode(file.Name);
     let Name = file.Name.trim();
     if (Codes) {
-      Name = file.Name.replace(/\.(zip|rar|7z)$/, "").replace(" " + Codes, "").trim();
+      Name = file.Name.replace(/\.(zip|rar|7z)$/, "")
+        .replace(" " + Codes, "")
+        .trim();
     }
 
     if (list.find((g) => g.Name === Name && g.Codes === Codes)) {
@@ -170,7 +172,9 @@ const scanGames = async (dir) => {
 
 const getDirectories = async () => {
   let directories = [];
-  const sortByName = db.sqlze.literal(`REPLACE(REPLACE(REPLACE(GameDirectories.Path, "@", "#"), "-", "#"), "[","#") ASC`);
+  const sortByName = db.sqlze.literal(
+    `REPLACE(REPLACE(REPLACE(GameDirectories.Path, "@", "#"), "-", "#"), "[","#") ASC`,
+  );
   try {
     directories = await db.GameDirectory.findAll({
       attributes: [
@@ -270,7 +274,7 @@ const createGame = async (data, res) => {
     Lang: data.Lang?.trim() || "Japanese",
     Genres: data.Genres?.trim() || "",
     Description: data.Description?.trim(),
-    OS: data.OS || "Windows 10",
+    OS: data.OS || "Windows",
   };
   const foundInfo = await db.Info.findOne({ where: { Codes: data.Codes } });
   if (foundInfo) {
@@ -323,7 +327,7 @@ routes.post("/update-game-info", async (req, res) => {
     Lang: data.Lang?.trim() || "Japanese",
     Genres: data.Genres?.trim(),
     Description: data.Description?.trim(),
-    OS: data.OS || "Windows 10",
+    OS: data.OS || "Windows",
   };
 
   game.Info = await db.Info.findOne({ where: { Codes: info.Codes } });
