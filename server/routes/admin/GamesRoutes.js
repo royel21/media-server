@@ -270,7 +270,7 @@ const createGame = async (data, res) => {
     Lang: data.Lang?.trim() || "Japanese",
     Genres: data.Genres?.trim() || "",
     Description: data.Description?.trim(),
-    OS: data.OS,
+    OS: data.OS || "Windows 10",
   };
   const foundInfo = await db.Info.findOne({ where: { Codes: data.Codes } });
   if (foundInfo) {
@@ -323,7 +323,7 @@ routes.post("/update-game-info", async (req, res) => {
     Lang: data.Lang?.trim() || "Japanese",
     Genres: data.Genres?.trim(),
     Description: data.Description?.trim(),
-    OS: data.OS,
+    OS: data.OS || "Windows 10",
   };
 
   game.Info = await db.Info.findOne({ where: { Codes: info.Codes } });

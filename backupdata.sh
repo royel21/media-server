@@ -18,7 +18,6 @@ if [ -d "/mnt/5TBHDD" ]; then
     rsync -avu --delete /mnt/5TBHDD/Movies\ And\ Ovas /mnt/18TBHDD/5TBHDD
 fi
 
-if [ -d "/mnt/5TBHDD2" ]; then
-    rsync -avu --delete /mnt/5TBHDD2/R18 /mnt/18TBHDD/5TBHDD2
-    rsync -avu --delete /mnt/5TBHDD2/Games /mnt/18TBHDD/5TBHDD2
+if [ -d "/mnt/4TBHDD" ]; then
+    rsync -avu --delete /mnt/4TBHDD/R18 /mnt/18TBHDD/4TBHDD
 fi
