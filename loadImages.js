@@ -8,7 +8,7 @@ import { downloadImg } from "#server/Downloader/ImageUtils";
 const homedir = os.homedir();
 
 const worker = async () => {
-  // const games = await db.Info.findAll();
+  const games = await db.Info.findAll();
   // for (const game of games) {
   //   console.log(game.Codes + ": " + game.Description);
   //   if (/windows 95|win95|win 95/i.test(game.Description)) {
@@ -29,75 +29,74 @@ const worker = async () => {
   //   await game.save();
   // }
 
-  //   if (!games.find((g) => g.Codes === game.replace(".jpg", ""))) {
-  //     console.log(game);
-  //   }
-
-  //   if (game.Codes !== undefined && /(r|v)\d+$/.test(game.Codes)) {
-  //     // const imgPath = path.join(homedir, "images", "games", `${game.Codes}.jpg`);
-  //     // console.log("https://vndb.org/" + game.Codes);
-  //     // await page.goto("https://vndb.org/" + game.Codes);
-  //     // const data = await page.evaluate(async () => {
-  //     //   const data = {};
-  //     //   let list = [...document.querySelectorAll(".vndetails td")];
-  //     //   let index = 0;
-  //     //   list.forEach((td, i) => {
-  //     //     if (td.textContent.includes("Developer")) {
-  //     //       index = i + 1;
-  //     //     }
-  //     //   });
-  //     //   if (index > 0) {
-  //     //     data.Company = list[index].textContent.trim();
-  //     //   }
-  //     //   data.Image = document.querySelector(".vnimg img")?.src;
-  //     //   return data;
-  //     // });
-  //     // if (data.Image && !fs.existsSync(imgPath)) {
-  //     //   let img = await downloadImg(data.Image, page);
-  //     //   if (!img.badImg) {
-  //     //     await img.resize({ width: 300 }).toFile(imgPath);
-  //     //   }
-  //     // }
-  //     // if (game.Info && !game.Info.Company) {
-  //     //   try {
-  //     //     game.Info.Company = data.Company;
-  //     //     await game.Info.save();
-  //     //   } catch (error) {}
-  //     // }
-  //     // await delay(3000);
-  //   }
+  // if (!games.find((g) => g.Codes === game.replace(".jpg", ""))) {
+  //   console.log(game);
   // }
-  // await page.close();
-  // await browser.close();
-
-  const browser = await startBrowser({ headless: false });
-
-  const page = await createPage(browser);
-
-  let images = {};
-
-  page.on("response", async (response) => {
-    const url = response.url();
-    const header = response.headers();
-    if (header["content-type"] && /image/gi.test(header["content-type"])) {
-      const buffer = await response.buffer();
-      images[url] = {
-        type: header["content-type"],
-        buffer,
-      };
+  for (const game of games) {
+    if (game.Codes !== undefined && /(r|v)\d+$/.test(game.Codes)) {
+      console.log("https://vndb.org/" + game.Codes);
+      await page.goto("https://vndb.org/" + game.Codes);
+      const data = await page.evaluate(async () => {
+        const data = {};
+        let list = [...document.querySelectorAll(".vndetails td")];
+        let index = 0;
+        list.forEach((td, i) => {
+          if (td.textContent.includes("Developer")) {
+            index = i + 1;
+          }
+        });
+        if (index > 0) {
+          data.Company = list[index].textContent.trim();
+        }
+        data.Image = document.querySelector(".vnimg img")?.src;
+        return data;
+      });
+      if (data.Image && !fs.existsSync(imgPath)) {
+        let img = await downloadImg(data.Image, page);
+        if (!img.badImg) {
+          await img.resize({ width: 300 }).toFile(imgPath);
+        }
+      }
+      if (game.Info && !game.Info.Company) {
+        try {
+          game.Info.Company = data.Company;
+          await game.Info.save();
+        } catch (error) {}
+      }
+      await delay(4000);
     }
-  });
+  }
+  await page.close();
+  await browser.close();
 
-  await page.goto("https://mui.com/material-ui/react-image-list/");
+  // const browser = await startBrowser({ headless: false });
 
-  // const data = await page.evaluate(async () => {
-  //   let imgs = document.querySelectorAll(".MuiImageList-root .MuiImageListItem-img");
-  //   return [...imgs].map((g) => g.src);
+  // const page = await createPage(browser);
+
+  // let images = {};
+
+  // page.on("response", async (response) => {
+  //   const url = response.url();
+  //   const header = response.headers();
+  //   if (header["content-type"] && /image/gi.test(header["content-type"])) {
+  //     const buffer = await response.buffer();
+  //     images[url] = {
+  //       type: header["content-type"],
+  //       buffer,
+  //     };
+  //   }
   // });
 
-  for (let d in images) {
-    console.log(d, images[d].type, images[d].buffer.length);
-  }
+  // await page.goto("https://mui.com/material-ui/react-image-list/");
+
+  // // const data = await page.evaluate(async () => {
+  // //   let imgs = document.querySelectorAll(".MuiImageList-root .MuiImageListItem-img");
+  // //   return [...imgs].map((g) => g.src);
+  // // });
+
+  // for (let d in images) {
+  //   console.log(d, images[d].type, images[d].buffer.length);
+  // }
 
   await page.close();
   await browser.close();
