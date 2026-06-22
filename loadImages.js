@@ -42,7 +42,7 @@ const worker = async () => {
         let index = 0;
         list.forEach((td, i) => {
           if ((!data.Company && td.textContent.includes("Developer")) || td.textContent.includes("Publisher")) {
-            data.Company = list[index + 1].textContent.split("&")[0].trim();
+            data.Company = list[i + 1].textContent.split("&")[0].trim();
           }
         });
 
