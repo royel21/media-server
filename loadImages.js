@@ -51,7 +51,7 @@ const worker = async () => {
 
         return data;
       });
-      console.log(data);
+      console.log(game.Codes, data);
       if (data.Company && !game.Company) {
         game.Company = capitalizeWords(data.Company || "");
       }
