@@ -30,7 +30,7 @@ const worker = async () => {
 
     if (game.Codes.includes(" ")) continue;
 
-    if (/(r|v)\d+$/.test(game.Codes || "")) {
+    if (/^(r|v)\d+$/.test(game.Codes || "")) {
       if (containAssianChar.test(game.AltName || "")) {
         continue;
       }
