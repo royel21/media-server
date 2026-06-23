@@ -38,14 +38,23 @@ const format = (str) => {
 const codeList = fs.readJSONSync("./code-list.json");
 
 const worker = async () => {
-  const games = await db.Info.findAll({ where: { Codes: { [db.Op.like]: "v%" } }, includes: db.Games, required: true });
+  const games = await db.Info.findAll({ includes: db.Games, required: true });
   // const games = await db.Game.findAll();
 
   const browser = await startBrowser({ headless: false });
 
+  // for (let game of games) {
+  //   if (game.AltName) {
+  //     game.AltName = format(game.AltName);
+  //   }
+  // }
+
   const page = await createPage(browser);
   let i = 0;
-  let gamesFiltered = games.filter((g) => !containAssianChar.test(g.AltName) && g.AltName !== "N/A");
+
+  let gamesFiltered = games.filter(
+    (g) => /^v\d+$/.test(g.Codes) && !containAssianChar.test(g.AltName) && g.AltName !== "N/A",
+  );
 
   for (const game of gamesFiltered) {
     await game.reload();
@@ -108,9 +117,11 @@ const worker = async () => {
         console.log("AltName-update: ", game.AltName);
       }
 
-      game.AltName.replace("undefined", "");
-      if (data.Aliase) {
-        game.AltName.replace(data.Aliase.trim(), "");
+      game.AltName?.replace("undefined", "");
+
+      if (data.Aliase && game.AltName) {
+        game.AltName.replace(data.Aliase?.trim(), "");
+
         for (let a of data.Aliase.split(", ")) {
           let atemp = a.trim();
           if (atemp.trim()) {
@@ -120,8 +131,6 @@ const worker = async () => {
         }
         console.log("- aliase added -");
       }
-
-      game.AltName = format(game.AltName);
 
       if (!game.OS) {
         data.OS = "Windows";
