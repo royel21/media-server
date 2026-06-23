@@ -39,12 +39,12 @@ const format = (str) => {
 const codeList = fs.readJSONSync("./code-list.json");
 
 const formatAltNames = async () => {
-  const games = await db.Game.findAll({ include: { model: db.Info } });
+  const games = await db.Game.findAll({ include: { model: db.Info }, required: true });
   console.log("formatingAltNames: ", games.length);
-  for (let { Info, Name } of games) {
-    console.log(Name + "\n");
+  for (let { Info, Name, Codes } of games) {
+    console.log(Codes, Name + "\n");
 
-    if (Info.AltName) {
+    if (Info?.AltName) {
       Info.AltName = format(Info.AltName);
       Info.AltName = Info.AltName.replace(Name, "").trim();
       if (!Info.AltName) {
