@@ -42,7 +42,7 @@ const formatAltNames = async () => {
   const games = await db.Game.findAll({
     include: {
       model: db.Info,
-      required: true,
+      required: false,
       on: {
         "$Games.Codes$": { [db.Op.eq]: db.sqlze.col("Info.Codes") },
       },
