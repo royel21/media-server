@@ -108,9 +108,9 @@ const worker = async () => {
         console.log("AltName-update: ", game.AltName);
       }
 
-      game.AltName.replace(data.Aliase.trim(), "");
       game.AltName.replace("undefined", "");
       if (data.Aliase) {
+        game.AltName.replace(data.Aliase.trim(), "");
         for (let a of data.Aliase.split(", ")) {
           let atemp = a.trim();
           if (atemp.trim()) {
