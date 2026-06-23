@@ -60,10 +60,12 @@ const formatAltNames = async () => {
     }
 
     if (!Info) {
-      await db.Info.create({
-        Codes,
-        Lang: "Japanese",
-      });
+      try {
+        await db.Info.create({
+          Codes,
+          Lang: "Japanese",
+        });
+      } catch (error) {}
     }
   }
 
