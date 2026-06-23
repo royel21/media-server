@@ -21,9 +21,11 @@ function capitalizeWords(text) {
 const containAssianChar = /[\u3400-\u9FBF]|[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/u;
 
 const format = (str) => {
+  if (!str) return "";
+
   let text = str?.replace("–", "-").replace(/\?|\:/g, "").replace(/( )+/g, " ").replaceAll("’", "'") || "";
 
-  text = text.split("\n").sort((a, b) => {
+  return text.split("\n").sort((a, b) => {
     if (containAssianChar.test(a)) return 1;
 
     a.localeCompare(b);
