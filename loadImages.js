@@ -52,6 +52,11 @@ const formatAltNames = async () => {
       }
       console.log(`-- ${Info.Codes} ----`);
       console.log(Info.AltName + "\n");
+    } else {
+      await db.Info.create({
+        Codes,
+        Lang: "Japanese",
+      });
     }
     await Info.save();
   }
