@@ -25,8 +25,9 @@ const format = (str) => {
 
   let text = str?.replace("–", "-").replace(/\?|\:/g, "").replace(/( )+/g, " ").replaceAll("’", "'") || "";
 
+  text = [...new Set(text.split("\n"))];
+
   return text
-    .split("\n")
     .sort((a, b) => {
       if (containAssianChar.test(a)) return 1;
 
@@ -43,11 +44,18 @@ const worker = async () => {
 
   const browser = await startBrowser({ headless: false });
 
-  // for (let game of games) {
-  //   if (game.AltName) {
-  //     game.AltName = format(game.AltName);
-  //   }
-  // }
+  for (let game of games) {
+    if (game.AltName) {
+      game.AltName = format(game.AltName);
+      console.log({
+        Code: game.Codes,
+        AltName: game.AltName,
+      });
+    }
+    await game.save();
+  }
+
+  return exit(0);
 
   const page = await createPage(browser);
   let i = 0;
