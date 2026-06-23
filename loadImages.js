@@ -89,10 +89,12 @@ const worker = async () => {
         } else {
           game.AltName = data.AltName;
         }
-        if (data.Aliase) {
-          game.AltName = game.AltName + "\n" + data.Aliase.split(", ").join("\n");
-        }
         console.log("AltName-update: ", game.AltName);
+      }
+
+      if (data.Aliase) {
+        game.AltName = game.AltName + "\n" + data.Aliase.split(", ").join("\n");
+        console.log("- aliase added -");
       }
 
       if (!game.OS) {
