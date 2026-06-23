@@ -46,6 +46,7 @@ const worker = async () => {
         continue;
       }
 
+      const imgPath = path.join(homedir, "images", "games", `${game.Codes}.jpg`);
       await page.goto("https://vndb.org/" + game.Codes);
       const data = await page.evaluate(async () => {
         const data = {};
@@ -84,6 +85,8 @@ const worker = async () => {
           game.AltName = data.AltName + "\n" + game.AltName;
         } else {
           game.AltName = data.AltName;
+        }
+        if (data.Aliase) {
         }
         console.log("AltName-update: ", game.AltName);
       }
