@@ -132,9 +132,9 @@ const worker = async () => {
 
         for (let a of data.Aliase.split(", ")) {
           let atemp = a.trim();
-          if (atemp.trim()) {
-            game.AltName.replace(atemp.trim(), "");
-            game.AltName = game.AltName + "\n" + atemp.trim();
+          if (atemp && !game.AltName.includes(atemp)) {
+            game.AltName.replace(atemp, "");
+            game.AltName = game.AltName + "\n" + atemp;
           }
         }
         console.log("- aliase added -");
@@ -160,6 +160,7 @@ const worker = async () => {
     }
     fs.writeJSONSync("./code-list.json", codeList);
   }
+  formatAltNames();
   await page.close();
   await browser.close();
   process.exit();
