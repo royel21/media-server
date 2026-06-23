@@ -27,7 +27,7 @@ const worker = async () => {
 
   const page = await createPage(browser);
   let i = 0;
-  for (const game of games) {
+  for (const game of games.filter(g=> !containAssianChar.test(game.AltName || "") && g.AltName !== "N/A")) {
     await game.reload();
     game.Codes = game.Codes.trim();
 

@@ -8,7 +8,6 @@
 
   let game = {};
   let Games = [];
-  let updateInfo = 0;
   let pageData = {
     page: 1,
     totalPages: 0,
@@ -17,7 +16,10 @@
   let filter = localStorage.getItem("gamelist-filter") || "";
 
   const loadGames = async () => {
-    const data = await apiUtils.admin(["games", pageData.page, calRows(), filter], "g-list");
+    const data = await apiUtils.admin(
+      ["games", pageData.page, calRows(), filter],
+      "g-list",
+    );
 
     Games = data.items || [];
     pageData.totalItems = data.totalItems || 0;
@@ -61,7 +63,11 @@
       filter,
       rows: calRows(),
     };
-    const result = await apiUtils.post("admin/games/remove-game", data, "up-data");
+    const result = await apiUtils.post(
+      "admin/games/remove-game",
+      data,
+      "up-data",
+    );
 
     Games = result.items || [];
     pageData.totalItems = result.totalItems || 0;
@@ -115,7 +121,7 @@
                       .trim();
                 }
 
-                if (g.Info.AltName === "-") {
+                if (g.Info.AltName === "–\n") {
                   g.Info.AltName = "N/A";
                 }
               }
@@ -140,12 +146,15 @@
                 if (/steampowered\.com/.test(p)) {
                   g.Codes = p.match(/app\/\d+/i)?.[0].replace("app/", "ST");
                 }
+
+                if (/dmm\.co/.test(p)) {
+                  g.Codes = p.match(/d_\d+/i)?.[0].replace("d_", "D");
+                }
               }
             }
           }
         }
         game = { ...g };
-        updateInfo++;
       } catch (error) {
         console.log(error);
       }
@@ -158,7 +167,16 @@
 
 <div class="admin-manager">
   <div class="rows">
-    <GameList {Games} {game} {setInfo} {pageData} {filter} {gotopage} {filterChange} {addGame} />
+    <GameList
+      {Games}
+      {game}
+      {setInfo}
+      {pageData}
+      {filter}
+      {gotopage}
+      {filterChange}
+      {addGame}
+    />
     <GameInfo bind:game {updateGame} {removeGame} />
   </div>
 </div>
