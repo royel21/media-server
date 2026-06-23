@@ -61,7 +61,7 @@ const formatAltNames = async () => {
       console.log(`-- ${Info.Codes} ----`);
       console.log(Info.AltName + "\n");
     } else {
-      awaitdb.Info.create({
+      await db.Info.create({
         Codes,
         Lang: "Japanese",
       });
