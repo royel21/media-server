@@ -70,10 +70,10 @@ const worker = async () => {
 
     console.log(`${++i}/${gamesFiltered.length}`.padStart(9, "0") + ": " + "Codes: " + game.Codes + " - ");
 
-    if (codeList.includes(game.Codes)) {
-      i++;
-      continue;
-    }
+    // if (codeList.includes(game.Codes)) {
+    //   i++;
+    //   continue;
+    // }
 
     codeList.push(game.Codes);
 
@@ -134,11 +134,13 @@ const worker = async () => {
           let atemp = a.trim();
           if (atemp && !game.AltName?.includes(atemp)) {
             game.AltName?.replace(atemp, "");
-            game.AltName = game.AltName + "\n" + atemp;
+            game.AltName = `${game.AltName}\n${atemp}`.trim();
           }
         }
         console.log("- aliase added -");
       }
+
+      game.AltName = game.AltName?.trim() || "";
 
       if (!game.OS) {
         data.OS = "Windows";
