@@ -127,13 +127,13 @@ const worker = async () => {
 
       game.AltName?.replace("undefined", "");
 
-      if (data.Aliase && game.AltName) {
-        game.AltName.replace(data.Aliase?.trim(), "");
+      if (data.Aliase) {
+        game.AltName?.replace(data.Aliase?.trim(), "");
 
         for (let a of data.Aliase.split(", ")) {
           let atemp = a.trim();
-          if (atemp && !game.AltName.includes(atemp)) {
-            game.AltName.replace(atemp, "");
+          if (atemp && !game.AltName?.includes(atemp)) {
+            game.AltName?.replace(atemp, "");
             game.AltName = game.AltName + "\n" + atemp;
           }
         }
