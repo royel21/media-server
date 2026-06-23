@@ -40,7 +40,7 @@ const codeList = fs.readJSONSync("./code-list.json");
 
 const formatAltNames = async () => {
   const games = await db.Game.findAll({ include: { model: db.Info } });
-
+  console.log("formatingAltNames: ", game.length);
   for (let { Info, Name } of games) {
     console.log(Name + "\n");
 
