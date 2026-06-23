@@ -74,8 +74,6 @@ const formatAltNames = async () => {
 };
 
 const worker = async () => {
-  return formatAltNames();
-
   const games = await db.Info.findAll({ where: { AltName: "" } });
 
   const browser = await startBrowser({ headless: false });
@@ -186,6 +184,7 @@ const worker = async () => {
     fs.writeJSONSync("./code-list.json", codeList);
   }
 
+  formatAltNames();
   await page.close();
   await browser.close();
   process.exit();
