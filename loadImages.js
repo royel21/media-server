@@ -39,7 +39,15 @@ const format = (str) => {
 const codeList = fs.readJSONSync("./code-list.json");
 
 const formatAltNames = async () => {
-  const games = await db.Game.findAll({ include: { model: db.Info }, required: true });
+  const games = await db.Game.findAll({
+    include: {
+      model: db.Info,
+      required: true,
+      on: {
+        "$Games.Codes$": { [db.Op.eq]: db.sqlze.col("Info.Codes") },
+      },
+    },
+  });
   console.log("formatingAltNames: ", games.length);
   for (let { Info, Name, Codes } of games) {
     console.log(Codes, Name + "\n");
@@ -53,7 +61,7 @@ const formatAltNames = async () => {
       console.log(`-- ${Info.Codes} ----`);
       console.log(Info.AltName + "\n");
     } else {
-      await db.Info.create({
+      awaitdb.Info.create({
         Codes,
         Lang: "Japanese",
       });
