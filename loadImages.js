@@ -50,7 +50,7 @@ const formatAltNames = async () => {
       if (!Info.AltName) {
         Info.AltName = "N/A";
       }
-      console.log(`-- ${game.Codes} ----`);
+      console.log(`-- ${Info.Codes} ----`);
       console.log(Info.AltName + "\n");
     }
     await Info.save();
