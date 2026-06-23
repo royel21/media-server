@@ -50,16 +50,12 @@ const formatAltNames = async () => {
   });
   console.log("formatingAltNames: ", games.length);
   for (let { Info, Name, Codes } of games) {
-    console.log(Codes, Name + "\n");
-
     if (Info?.AltName) {
       Info.AltName = format(Info.AltName);
       Info.AltName = Info.AltName.replace(Name, "").trim();
       if (!Info.AltName) {
         Info.AltName = "N/A";
       }
-      console.log(`-- ${Info.Codes} ----`);
-      console.log(Info.AltName + "\n");
     }
 
     if (!Info) {
