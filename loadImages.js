@@ -39,20 +39,27 @@ const format = (str) => {
 const codeList = fs.readJSONSync("./code-list.json");
 
 const formatAltNames = async () => {
-  const games = await db.Info.findAll();
-  for (let game of games) {
-    if (game.AltName) {
-      game.AltName = format(game.AltName);
+  const games = await db.Game.findAll({ include: { model: db.Info } });
+
+  for (let { Info, Name } of games) {
+    if (Info.AltName) {
+      Info.AltName = format(Info.AltName);
+      Info.AltName = Info.AltName.replace(Name, "").trim();
+      if (!Info.AltName) {
+        Info.AltName = "N/A";
+      }
       console.log(`-- ${game.Codes} ----`);
-      console.log(game.AltName + "\n");
+      console.log(Info.AltName + "\n");
     }
-    await game.save();
+    await Info.save();
   }
 
   return process.exit(0);
 };
 
 const worker = async () => {
+  return formatAltNames();
+
   const games = await db.Info.findAll({ where: { AltName: "" } });
 
   const browser = await startBrowser({ headless: false });
@@ -162,7 +169,7 @@ const worker = async () => {
     }
     fs.writeJSONSync("./code-list.json", codeList);
   }
-  formatAltNames();
+
   await page.close();
   await browser.close();
   process.exit();
