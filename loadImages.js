@@ -25,11 +25,14 @@ const format = (str) => {
 
   let text = str?.replace("–", "-").replace(/\?|\:/g, "").replace(/( )+/g, " ").replaceAll("’", "'") || "";
 
-  return text.split("\n").sort((a, b) => {
-    if (containAssianChar.test(a)) return 1;
+  return text
+    .split("\n")
+    .sort((a, b) => {
+      if (containAssianChar.test(a)) return 1;
 
-    a.localeCompare(b);
-  });
+      a.localeCompare(b);
+    })
+    .join("\n");
 };
 
 const codeList = fs.readJSONSync("./code-list.json");
