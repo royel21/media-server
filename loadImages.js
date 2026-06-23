@@ -60,6 +60,7 @@ const formatAltNames = async () => {
     }
 
     if (!Info) {
+      console.log(Codes);
       try {
         await db.Info.create({
           Codes,
