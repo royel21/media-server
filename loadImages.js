@@ -53,7 +53,7 @@ const formatAltNames = async () => {
 };
 
 const worker = async () => {
-  const games = await db.Game.findAll();
+  const games = await db.Info.findAll({ where: { AltName: "" } });
 
   const browser = await startBrowser({ headless: false });
 
