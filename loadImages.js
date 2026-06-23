@@ -55,14 +55,25 @@ const worker = async () => {
           if ((!data.Company && td.textContent.includes("Publisher")) || td.textContent.includes("Developer")) {
             data.Company = list[i + 1].textContent.split("&")[0].trim();
           }
+          if (td.textContent.includes("Aliases")) {
+            data.Aliase = list[i + 1].textContent.trim();
+          }
         });
 
         data.AltName = document.querySelector(".alttitle")?.textContent.trim();
 
+        data.Image = document.querySelector(".vnimg img")?.src;
         return data;
       });
 
       console.log(game.Codes, data);
+
+      if (data.Image && !fs.existsSync(imgPath)) {
+        let img = await downloadImg(data.Image, page);
+        if (!img.badImg) {
+          await img.resize({ width: 450 }).toFile(imgPath);
+        }
+      }
 
       if (data.Company && !game.Company) {
         game.Company = capitalizeWords(data.Company || "");
