@@ -56,6 +56,7 @@ const formatAltNames = async () => {
       if (!Info.AltName) {
         Info.AltName = "N/A";
       }
+      await Info.save();
     }
 
     if (!Info) {
@@ -64,7 +65,6 @@ const formatAltNames = async () => {
         Lang: "Japanese",
       });
     }
-    await Info.save();
   }
 
   return process.exit(0);
