@@ -18,13 +18,24 @@ function capitalizeWords(text) {
   // \b = word boundary, \p{L} = any letter (Unicode-aware)
 }
 
+const containAssianChar = /[\u3400-\u9FBF]|[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/u;
+
+const format = (str) => {
+  let text = str?.replace("–", "-").replace(/\?|\:/g, "").replace(/( )+/g, " ").replaceAll("’", "'") || "";
+
+  text = text.split("\n").sort((a, b) => {
+    if (containAssianChar.test(a)) return 1;
+
+    a.localeCompare(b);
+  });
+};
+
 const codeList = fs.readJSONSync("./code-list.json");
 
 const worker = async () => {
   const games = await db.Info.findAll({ where: { Codes: { [db.Op.like]: "v%" } }, includes: db.Games, required: true });
   // const games = await db.Game.findAll();
 
-  const containAssianChar = /[\u3400-\u9FBF]|[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/u;
   const browser = await startBrowser({ headless: false });
 
   const page = await createPage(browser);
@@ -93,9 +104,17 @@ const worker = async () => {
       }
 
       if (data.Aliase) {
-        game.AltName = game.AltName + "\n" + data.Aliase.split(", ").join("\n");
+        for (let a of data.Aliase.split(", ")) {
+          let atemp = a.trim();
+          if (atemp.trim()) {
+            game.AltName.replace(atemp.trim());
+            game.AltName = game.AltName + "\n" + atemp.trim();
+          }
+        }
         console.log("- aliase added -");
       }
+
+      game.AltName = format(game.AltName);
 
       if (!game.OS) {
         data.OS = "Windows";
