@@ -109,10 +109,11 @@ const worker = async () => {
       }
 
       if (data.Aliase) {
+        game.AltName.replace(data.Aliase.trim(), "");
         for (let a of data.Aliase.split(", ")) {
           let atemp = a.trim();
           if (atemp.trim()) {
-            game.AltName.replace(atemp.trim());
+            game.AltName.replace(atemp.trim(), "");
             game.AltName = game.AltName + "\n" + atemp.trim();
           }
         }
