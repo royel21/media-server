@@ -85,11 +85,11 @@ const worker = async () => {
     (g) => /^v\d+$/.test(g.Codes) && !containAssianChar.test(g.AltName) && g.AltName !== "N/A",
   );
 
-  for (const game of gamesFiltered) {
+  for (const game of games) {
     await game.reload();
     game.Codes = game.Codes.trim();
 
-    console.log(`${++i}/${gamesFiltered.length}`.padStart(9, "0") + ": " + "Codes: " + game.Codes + " - ");
+    console.log(`${++i}/${games.length}`.padStart(9, "0") + ": " + "Codes: " + game.Codes + " - ");
 
     // if (codeList.includes(game.Codes)) {
     //   i++;
