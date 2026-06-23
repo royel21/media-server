@@ -42,6 +42,8 @@ const formatAltNames = async () => {
   const games = await db.Game.findAll({ include: { model: db.Info } });
 
   for (let { Info, Name } of games) {
+    console.log(Name + "\n");
+
     if (Info.AltName) {
       Info.AltName = format(Info.AltName);
       Info.AltName = Info.AltName.replace(Name, "").trim();
