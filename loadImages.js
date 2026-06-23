@@ -18,6 +18,8 @@ function capitalizeWords(text) {
   // \b = word boundary, \p{L} = any letter (Unicode-aware)
 }
 
+const codeList = fs.readJSONSync("./code-list.json");
+
 const worker = async () => {
   const games = await db.Info.findAll({ where: { Codes: { [db.Op.like]: "v%" } }, includes: db.Games, required: true });
   // const games = await db.Game.findAll();
@@ -27,11 +29,17 @@ const worker = async () => {
 
   const page = await createPage(browser);
   let i = 0;
-  for (const game of games.filter(g=> !containAssianChar.test(game.AltName || "") && g.AltName !== "N/A")) {
+  for (const game of games.filter((g) => !containAssianChar.test(game.AltName || "") && g.AltName !== "N/A")) {
     await game.reload();
     game.Codes = game.Codes.trim();
 
     console.log(`${++i}/${games.length}`.padStart(9, "0") + ": " + "Codes: " + game.Codes + " - ");
+    if (codeList.includes(game.Codes)) {
+      i++;
+      continue;
+    }
+
+    codeList.push(game.Codes);
 
     if (/^v\d+$/.test(game.Codes || "")) {
       if (containAssianChar.test(game.AltName || "")) {
@@ -87,6 +95,7 @@ const worker = async () => {
     } catch (error) {
       console.log("save failed", error);
     }
+    fs.writeJSONSync("./code-list.json", codeList);
   }
   await page.close();
   await browser.close();
