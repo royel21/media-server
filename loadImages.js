@@ -38,12 +38,8 @@ const format = (str) => {
 
 const codeList = fs.readJSONSync("./code-list.json");
 
-const worker = async () => {
-  const games = await db.Info.findAll({ includes: db.Games, required: true });
-  // const games = await db.Game.findAll();
-
-  const browser = await startBrowser({ headless: false });
-
+const formatAltNames = async () => {
+  const games = await db.Info.findAll();
   for (let game of games) {
     if (game.AltName) {
       game.AltName = format(game.AltName);
@@ -54,6 +50,12 @@ const worker = async () => {
   }
 
   return process.exit(0);
+};
+
+const worker = async () => {
+  const games = await db.Game.findAll();
+
+  const browser = await startBrowser({ headless: false });
 
   const page = await createPage(browser);
   let i = 0;
