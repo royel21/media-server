@@ -16,10 +16,7 @@
   let filter = localStorage.getItem("gamelist-filter") || "";
 
   const loadGames = async () => {
-    const data = await apiUtils.admin(
-      ["games", pageData.page, calRows(), filter],
-      "g-list",
-    );
+    const data = await apiUtils.admin(["games", pageData.page, calRows(), filter], "g-list");
 
     Games = data.items || [];
     pageData.totalItems = data.totalItems || 0;
@@ -63,11 +60,7 @@
       filter,
       rows: calRows(),
     };
-    const result = await apiUtils.post(
-      "admin/games/remove-game",
-      data,
-      "up-data",
-    );
+    const result = await apiUtils.post("admin/games/remove-game", data, "up-data");
 
     Games = result.items || [];
     pageData.totalItems = result.totalItems || 0;
@@ -125,7 +118,7 @@
                   g.Info.AltName = "N/A";
                 }
               }
-              let devRegex = /^Developer( :|) /;
+              let devRegex = /^Developer( :|:|) /;
               if (devRegex.test(p)) {
                 g.Info.Company = p.replace(devRegex, "").split(", ")[0].trim();
               }
@@ -134,7 +127,7 @@
                 g.Codes = p.split("/").pop().trim();
               }
 
-              if (/Language( :|) /gi.test(p)) {
+              if (/Language( :|:|) /gi.test(p)) {
                 g.Info.Lang = p
                   .split(":")
                   .pop()
@@ -167,16 +160,7 @@
 
 <div class="admin-manager">
   <div class="rows">
-    <GameList
-      {Games}
-      {game}
-      {setInfo}
-      {pageData}
-      {filter}
-      {gotopage}
-      {filterChange}
-      {addGame}
-    />
+    <GameList {Games} {game} {setInfo} {pageData} {filter} {gotopage} {filterChange} {addGame} />
     <GameInfo bind:game {updateGame} {removeGame} />
   </div>
 </div>
