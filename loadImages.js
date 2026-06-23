@@ -29,17 +29,20 @@ const worker = async () => {
 
   const page = await createPage(browser);
   let i = 0;
-  for (const game of games.filter((g) => !containAssianChar.test(g.AltName || "") && g.AltName !== "N/A")) {
+  let gamesFiltered = games.filter((g) => !containAssianChar.test(g.AltName) && g.AltName !== "N/A");
+
+  for (const game of gamesFiltered) {
     await game.reload();
     game.Codes = game.Codes.trim();
 
-    console.log(`${++i}/${games.length}`.padStart(9, "0") + ": " + "Codes: " + game.Codes + " - ");
-    if (codeList.includes(game.Codes)) {
-      i++;
-      continue;
-    }
+    console.log(`${++i}/${gamesFiltered.length}`.padStart(9, "0") + ": " + "Codes: " + game.Codes + " - ");
 
-    codeList.push(game.Codes);
+    // if (codeList.includes(game.Codes)) {
+    //   i++;
+    //   continue;
+    // }
+
+    // codeList.push(game.Codes);
 
     if (/^v\d+$/.test(game.Codes || "")) {
       if (containAssianChar.test(game.AltName || "")) {
