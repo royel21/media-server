@@ -91,10 +91,10 @@ const worker = async () => {
 
     console.log(`${++i}/${games.length}`.padStart(9, "0") + ": " + "Codes: " + game.Codes + " - ");
 
-    // if (codeList.includes(game.Codes)) {
-    //   i++;
-    //   continue;
-    // }
+    if (codeList.includes(game.Codes)) {
+      i++;
+      continue;
+    }
 
     codeList.push(game.Codes);
 
