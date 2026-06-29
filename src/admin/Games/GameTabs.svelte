@@ -104,7 +104,8 @@
 
             let result = getInfo(text, g.Info, g.Name);
             g.Info = result;
-            g.Codes = result.Codes;
+            g.Codes = result.Codes || g.Codes;
+            g.Info = result.Company || g.Info.Company;
           }
         }
         game = { ...g };
