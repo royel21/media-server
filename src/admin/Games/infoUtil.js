@@ -23,7 +23,7 @@ export const getInfo = (text = "", info = {}, Name = "") => {
       if (Title.trim() && !/ –\r| –\n/.test(Title)) {
         let title = Title.split(", ")
           .map((n) => n.trim())
-          .filter((n) => n && a !== Name)
+          .filter((n) => n && n !== Name)
           .join("\n")
           .trim();
         if (title) {
