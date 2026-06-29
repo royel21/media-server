@@ -19,17 +19,16 @@ export const getInfo = (text = "", info = {}, Name = "") => {
     let altNameRegx = /^(Japanese|Original) Title(:| :|) /i;
     if (altNameRegx.test(p)) {
       info.AltName = p.replace(altNameRegx, "").replace(/–\r|–\n/, "N/A");
-
-      if (Title.trim() && /–\r|–\n/.test(Title)) {
+      console.log(Title);
+      if (Title.trim() && !/ –\r| –\n/.test(Title)) {
         let title = Title.split(", ")
           .map((n) => n.trim())
-          .filter((n) => n)
+          .filter((n) => n && a !== Name)
           .join("\n")
           .trim();
-        info.AltName = `${info.AltName !== "N/A" ? info.AltName + "\n" : ""}${title}`;
-        info.AltName = info.AltName.split("\n")
-          .filter((a) => a !== Name)
-          .join("\n");
+        if (title) {
+          info.AltName = `${info.AltName !== "N/A" ? info.AltName + "\n" : ""}${title}`;
+        }
       }
     }
 
