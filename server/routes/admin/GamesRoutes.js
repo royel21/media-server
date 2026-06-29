@@ -261,21 +261,12 @@ routes.post("/update-directory", async (req, res) => {
   return res.send({ message: "Directory updated." });
 });
 
-const createGame = async (data, res) => {
+const createGame = async (data, res, info) => {
   const game = await db.Game.create({
     Name: data.Name.trim(),
     Codes: data.Codes.trim(),
     Path: data.Path?.trim() || "",
   });
-  const info = {
-    Codes: data.Codes,
-    AltName: data.AltName?.trim(),
-    Company: data.Company?.trim(),
-    Lang: data.Lang?.trim() || "Japanese",
-    Genres: data.Genres?.trim() || "",
-    Description: data.Description?.trim(),
-    OS: data.OS || "Windows",
-  };
   const foundInfo = await db.Info.findOne({ where: { Codes: data.Codes } });
   if (foundInfo) {
     await foundInfo.update(info);
@@ -293,6 +284,17 @@ routes.post("/update-game-info", async (req, res) => {
 
   let game = {};
 
+  const info = {
+    Codes: data.Codes,
+    AltName: data.AltName?.trim(),
+    Company: data.Company?.trim(),
+    Lang: data.Lang?.trim() || "Japanese",
+    Genres: data.Genres?.trim(),
+    Description: data.Description?.trim(),
+    ReleaseDate: data.ReleaseDate,
+    OS: data.OS || "Windows",
+  };
+
   if (data.Id === "new") {
     const found = await db.Game.findOne({ where: { Codes: data.Codes } });
     if (found) {
@@ -303,7 +305,7 @@ routes.post("/update-game-info", async (req, res) => {
       return res.send({ error: "No a Valid Game Code:" + data.Codes });
     }
     delete data.Id;
-    return await createGame(data, res);
+    return await createGame(data, res, info);
   } else {
     game = await db.Game.findOne({ where: { Id: data.Id } });
   }
@@ -319,16 +321,6 @@ routes.post("/update-game-info", async (req, res) => {
   if (!data.Codes) {
     data.Codes = (getCode(data.Name) || getCode(game.Name)).tim();
   }
-
-  const info = {
-    Codes: data.Codes,
-    AltName: data.AltName?.trim(),
-    Company: data.Company?.trim(),
-    Lang: data.Lang?.trim() || "Japanese",
-    Genres: data.Genres?.trim(),
-    Description: data.Description?.trim(),
-    OS: data.OS || "Windows",
-  };
 
   game.Info = await db.Info.findOne({ where: { Codes: info.Codes } });
 

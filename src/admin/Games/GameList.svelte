@@ -16,7 +16,16 @@
   let searchTitle = `Use Field=term to search for text in field
   Use Field==term to search exact term in field
   Use a|b to search for a or b in all fields
-  Use a&b search a and b in all fields`;
+  Use a&b search a and b in all fields
+  Field List:
+  Name
+  AltName
+  Codes
+  Company=Publisher/Dev
+  Lang
+  Genres
+  ReleaseDate
+  OS`;
 
   const selectItem = (Id) => {
     setInfo({ detail: Games.find((g) => g.Id === Id) || {} });
@@ -45,22 +54,14 @@
   };
 </script>
 
-<div
-  class={`file-list game-list col-6 ${pageData.totalPages === 1 ? "full-list" : ""}`}
-  tabindex="-1"
->
+<div class={`file-list game-list col-6 ${pageData.totalPages === 1 ? "full-list" : ""}`} tabindex="-1">
   <slot name="first-tag" />
   <div class="controls">
     <span class="add-game" on:click={addGame}>
       <Icons name="squareplus" />
     </span>
     <div on:keydown|stopPropagation class="filter" title={searchTitle}>
-      <Filter
-        id="game-filter"
-        on:filter={filterChange}
-        {filter}
-        excludes={[/ Free Download|\?|:|RY-/gi, "[ENG] "]}
-      />
+      <Filter id="game-filter" on:filter={filterChange} {filter} excludes={[/ Free Download|\?|:|RY-/gi, "[ENG] "]} />
     </div>
     <h4 class="text-center usn">
       {pageData.totalItems} <strong>- Games</strong>
@@ -88,11 +89,7 @@
   </div>
   <div class="list-controls">
     <slot name="bottom-ctr" />
-    <Pagination
-      page={pageData.page}
-      totalPages={pageData.totalPages}
-      on:gotopage={gotopage}
-    />
+    <Pagination page={pageData.page} totalPages={pageData.totalPages} on:gotopage={gotopage} />
   </div>
 </div>
 

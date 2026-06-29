@@ -5,10 +5,12 @@
   import { getContext, onDestroy, onMount } from "svelte";
   import Icons from "src/icons/Icons.svelte";
   import Dialog from "src/ShareComponent/Dialog.svelte";
+  import { getInfo } from "./infoUtil";
 
   export let game = {};
   export let updateGame;
   export let removeGame;
+  const options = { year: "numeric", month: "long", day: "numeric" };
 
   const socket = getContext("socket");
 
@@ -61,6 +63,7 @@
     game.Info.Lang = result.Lang;
     game.Info.Genres = result.Genres;
     game.Info.Description = result.Description;
+    game.Info.ReleaseDate = result.ReleaseDate;
     game.Info.Os = result.OS;
     updateGame(game);
 
@@ -93,6 +96,12 @@
   const handlerImg = async (e) => {
     if (!game.Codes) {
       return setMessage({ msg: "Error: Set Code First" });
+    }
+
+    if (navigator.clipboard) {
+      let text = await navigator.clipboard?.readText();
+      let result = getInfo(text, data, data.Name);
+      data = { ...data, ...result };
     }
 
     try {
@@ -235,6 +244,7 @@
       data.Company = game.Info?.Company || "";
       data.AltName = game.Info?.AltName || "";
       data.Lang = game.Info?.Lang || "";
+      data.ReleaseDate = game.Info.Date || "";
       game.Id = data.Id;
     } else {
       data = game.Id
@@ -248,6 +258,7 @@
             Lang: game.Info?.Lang || "",
             Genres: game.Info?.Genres || "",
             Description: game.Info?.Description || "",
+            ReleaseDate: game.Info?.Date,
             Image: {},
             OS: game.Info?.OS,
           }
@@ -288,6 +299,9 @@
             <Icons name="upload" />
             <input id="single" type="file" accept="image/*" bind:files on:change={onImageLoaded} />
           </label>
+          <span class="rdate">
+            {data.ReleaseDate ? new Date(data.ReleaseDate).toLocaleDateString("en-US", options) : ""}
+          </span>
         </div>
       {/if}
       <div class="info-item info-name">
@@ -454,6 +468,15 @@
 </div>
 
 <style>
+  .rdate {
+    position: absolute;
+    font-size: 13px;
+    right: 1px;
+    bottom: 2px;
+    background-color: rgba(17, 128, 122, 0.685);
+    padding: 2px 4px 0 4px;
+    border-top-left-radius: 0.25rem;
+  }
   #folder-data {
     flex-grow: 1;
     position: relative;

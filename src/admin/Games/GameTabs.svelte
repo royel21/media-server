@@ -5,6 +5,7 @@
   import { calRows, map } from "../Utils";
   import apiUtils from "src/apiUtils";
   import { setMessage } from "../Store/MessageStore";
+  import { getInfo } from "./infoUtil";
 
   let game = {};
   let Games = [];
@@ -75,17 +76,18 @@
   const nameRegx = /^Title(:| :|) |Romanji: |Romaji: /gi;
 
   const addGame = async () => {
-    const d = decodeURIComponent(filter) || "";
+    const d = decodeURIComponent(filter)?.trim() || "";
     if (!Games.find((g) => g.Id === "new")) {
       let g = {
         Id: "new",
-        Info: { Company: d.trim() },
+        Info: { Company: d },
       };
 
       if (/^(v|RJ|)\d+$/.test(d)) {
         g.Codes = /^\d+$/.test(d) ? "ST" + d : d;
         g.Info.Company = "";
       }
+
       let Title = "";
       try {
         let text = "";
@@ -93,58 +95,16 @@
           text = await navigator.clipboard?.readText();
           if (text) {
             const parts = text.split("\n");
-            for (let p of parts) {
-              let altNameRegx = /^(Japanese|Original) Title(:| :|) /i;
-
+            parts.forEach((p) => {
               if (nameRegx.test(p)) {
                 Title = p.replace(nameRegx, "");
-                g.Name = Title.split(", ")[0].trim();
+                g.Name = Title.split(/ ~| ,/)[0].trim();
               }
+            });
 
-              if (altNameRegx.test(p)) {
-                g.Info.AltName = p.replace(altNameRegx, "").trim();
-                if (Title.trim()) {
-                  g.Info.AltName +=
-                    "\n" +
-                    Title.replace(g.Name, "")
-                      .split(", ")
-                      .map((n) => n.trim())
-                      .filter((n) => n)
-                      .join(", ")
-                      .trim();
-                }
-
-                if (g.Info.AltName === "–\n") {
-                  g.Info.AltName = "N/A";
-                }
-              }
-              let devRegex = /^Developer( :|:|) /;
-              if (devRegex.test(p)) {
-                g.Info.Company = p.replace(devRegex, "").split(", ")[0].trim();
-              }
-
-              if (/VNDB: /gi.test(p)) {
-                g.Codes = p.split("/").pop().trim();
-              }
-
-              if (/Language( :|:|) /gi.test(p)) {
-                g.Info.Lang = p
-                  .split(":")
-                  .pop()
-                  .replace(/ \(Official\)/gi, "")
-                  .trim();
-              }
-              if (/https:/.test(p) && !g.Codes) {
-                g.Codes = p.match(/(v|RJ|r)\d+/i)?.[0];
-                if (/steampowered\.com/.test(p)) {
-                  g.Codes = p.match(/app\/\d+/i)?.[0].replace("app/", "ST");
-                }
-
-                if (/dmm\.co/.test(p)) {
-                  g.Codes = p.match(/d_\d+/i)?.[0].replace("d_", "D");
-                }
-              }
-            }
+            let result = getInfo(text, g.Info, g.Name);
+            g.Info = result;
+            g.Codes = result.Codes;
           }
         }
         game = { ...g };
