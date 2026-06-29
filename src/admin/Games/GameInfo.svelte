@@ -255,12 +255,12 @@
             Codes: game.Codes || "",
             Company: game.Info?.Company || "",
             AltName: game.Info?.AltName || "",
-            Lang: game.Info?.Lang || "",
+            Lang: game.Info?.Lang || "Japanese",
             Genres: game.Info?.Genres || "",
             Description: game.Info?.Description || "",
             ReleaseDate: game.Info?.Date,
             Image: {},
-            OS: game.Info?.OS,
+            OS: game.Info?.OS || "Windows",
           }
         : { ...def };
       getImage(data.Id);

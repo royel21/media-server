@@ -19,7 +19,7 @@ export const getInfo = (text = "", info = {}, Name = "") => {
     let altNameRegx = /^(Japanese|Original) Title(:| :|) /i;
     if (altNameRegx.test(p)) {
       info.AltName = p.replace(altNameRegx, "").trim();
-      if (/^-/.test(info.AltName)) info.AltName = "N/A";
+      if (/^ -/.test(info.AltName)) info.AltName = "N/A";
 
       if (Title.trim()) {
         let title = Title.split(", ")
@@ -42,7 +42,7 @@ export const getInfo = (text = "", info = {}, Name = "") => {
         .trim();
     }
     let devRegex = /^Developer( :|:|) /;
-    if (devRegex.test(p)) {
+    if (devRegex.test(p) && !info.Company) {
       info.Company = p.replace(devRegex, "").split(", ")[0].trim();
     }
 
