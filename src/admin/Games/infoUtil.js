@@ -18,8 +18,7 @@ export const getInfo = (text = "", info = {}, Name = "") => {
 
     let altNameRegx = /^(Japanese|Original) Title(:| :|) /i;
     if (altNameRegx.test(p)) {
-      info.AltName = p.replace(altNameRegx, "").replace(/–\r|–\n/, "N/A");
-      console.log(Title);
+      info.AltName = p.replace(altNameRegx, "").replace(/–\r|–\n|^ –|^ -/, "N/A");
       if (Title.trim() && !/ –\r| –\n/.test(Title)) {
         let title = Title.split(", ")
           .map((n) => n.trim())
