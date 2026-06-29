@@ -244,7 +244,7 @@
       data.Company = game.Info?.Company || "";
       data.AltName = game.Info?.AltName || "";
       data.Lang = game.Info?.Lang || "";
-      data.ReleaseDate = game.Info.Date || "";
+      data.ReleaseDate = game.Info.ReleaseDate || "";
       game.Id = data.Id;
     } else {
       data = game.Id
@@ -258,7 +258,7 @@
             Lang: game.Info?.Lang || "Japanese",
             Genres: game.Info?.Genres || "",
             Description: game.Info?.Description || "",
-            ReleaseDate: game.Info?.Date,
+            ReleaseDate: game.Info?.ReleaseDate,
             Image: {},
             OS: game.Info?.OS || "Windows",
           }
