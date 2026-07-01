@@ -209,7 +209,7 @@
 
   const copyName = () => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(`${game.Name || ""} ${game.Codes || ""}`.trim());
+      navigator.clipboard.writeText(`${data.Name || ""} ${data.Codes || ""}`.trim());
     }
   };
   const copyComp = (e) => {
