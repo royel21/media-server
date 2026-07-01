@@ -446,10 +446,6 @@ const getGames = async (res, page, rows, search) => {
       items: games.rows.map((g) => ({
         ...g.dataValues,
         Path: g.Path.replace(homeDir, "homedir"),
-        Info: {
-          ...g.Info?.dataValues,
-          ReleaseDate: dayjs() || null,
-        },
       })),
       page,
       totalItems: count,
