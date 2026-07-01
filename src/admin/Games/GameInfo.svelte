@@ -209,12 +209,12 @@
 
   const copyName = () => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(game.Name + " " + game.Codes);
+      navigator.clipboard.writeText(`${game.Name || ""} ${game.Codes || ""}`.trim());
     }
   };
   const copyComp = (e) => {
     const prevEl = e.currentTarget.previousElementSibling;
-    if (navigator?.clipboard?.writeText && prevEl) {
+    if (navigator?.clipboard?.writeText && prevEl?.value) {
       navigator.clipboard.writeText(prevEl.value);
     }
   };
