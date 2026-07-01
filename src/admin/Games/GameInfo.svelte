@@ -10,7 +10,7 @@
   export let game = {};
   export let updateGame;
   export let removeGame;
-  const options = { year: "numeric", month: "long", day: "numeric" };
+  const options = { timeZone: "UTC", year: "numeric", month: "long", day: "numeric" };
 
   const socket = getContext("socket");
 
