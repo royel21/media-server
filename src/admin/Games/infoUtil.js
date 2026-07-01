@@ -57,6 +57,6 @@ export const getInfo = (text = "", info = {}, Name = "") => {
       }
     }
   }
-  console.log(info);
+
   return info;
 };
