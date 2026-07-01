@@ -14,6 +14,7 @@ export default {
     dialectOptions: {
       useUTC: false,
     },
+    timezone: "-04:00",
   },
   sqlite: {
     logging: false,
