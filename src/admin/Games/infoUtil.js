@@ -51,7 +51,7 @@ export const getInfo = (text = "", info = {}, Name = "") => {
       if (Code) {
         if (!info.Codes) {
           info.Codes = Code;
-        } else {
+        } else if (info.Codes !== Code) {
           info.AltName += " " + Code;
         }
       }
