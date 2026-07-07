@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "moduleResolution": "Node",
+    "moduleResolution": "nodenext",
     "target": "ESNext",
-    "module": "ESNext",
+    "module": "nodenext",
     /**
      * svelte-preprocess cannot figure out whether you have
      * a value or a type, so tell TypeScript to enforce using
@@ -18,7 +18,9 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
+    "paths": {
+      "*": ["."]
+    }
     /**
      * Typecheck JS in `.svelte` and `.js` files by default.
      * Disable this if you'd like to use dynamic types.
