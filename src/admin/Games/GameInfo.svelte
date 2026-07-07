@@ -203,18 +203,18 @@
         .filter((l) => l),
     );
 
-    if (items.has(OS)) {
-      items.delete(OS);
+    if (items.has(item)) {
+      items.delete(item);
     } else {
-      items.add(OS);
+      items.add(item);
     }
 
     data[key] = [...items].sort().join(", ");
   };
 
-  const addOS = ({ target }) => addItem({ target, key: "OS" });
+  const addOS = ({ target }) => addItem(target.title, "OS");
 
-  const addLang = ({ target }) => addItem({ target, key: "Lang" });
+  const addLang = ({ target }) => addItem(target.title, "Lang");
 
   const pasteAlt2 = async () => {
     let text = await navigator.clipboard?.readText();
