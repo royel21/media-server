@@ -6,12 +6,12 @@
   import Icons from "src/icons/Icons.svelte";
   import Dialog from "src/ShareComponent/Dialog.svelte";
   import { getInfo } from "./infoUtil";
+  import { sortAsianFirst } from "../Utils.js";
 
   export let game = {};
   export let updateGame;
   export let removeGame;
   const options = { timeZone: "UTC", year: "numeric", month: "long", day: "numeric" };
-  const containAssianChar = /[\u3400-\u9FBF]|[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/u;
 
   const socket = getContext("socket");
 
@@ -214,11 +214,6 @@
 
   const addLang = ({ target }) => addItem(target.title, "Lang");
 
-  const sortAltNames = (a, b) => {
-    if (containAssianChar.test(a)) return 1;
-    a.localeCompare(b);
-  };
-
   const pasteAltName = async () => {
     let text = await navigator.clipboard?.readText();
     const names = new Set([
@@ -230,7 +225,7 @@
         .map((g) => g.trim())
         .filter((g) => g),
     ]);
-    data.AltName = format([...names].sort(sortAltNames).join("\n"));
+    data.AltName = sortAsianFirst([...names]).join("\n");
   };
 
   const copyName = () => {

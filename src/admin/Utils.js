@@ -88,3 +88,24 @@ export const mapFilePath = (f) => {
   let Path = `${f.Path}${/^\//.test(f.Path) ? "/" : "\\"}${f.Name}`;
   return { ...f, Path };
 };
+
+function hasAsianChar(str) {
+  // Unicode ranges for CJK Unified Ideographs, Hiragana, Katakana, Hangul
+  const asianRegex = /[\u4E00-\u9FFF\u3040-\u30FF\uAC00-\uD7AF]/;
+  return asianRegex.test(str);
+}
+
+// Custom sort function
+export function sortAsianFirst(arr) {
+  return arr.slice().sort((a, b) => {
+    const aAsian = hasAsianChar(a);
+    const bAsian = hasAsianChar(b);
+
+    // Asian chars first
+    if (aAsian && !bAsian) return -1;
+    if (!aAsian && bAsian) return 1;
+
+    // If both same type, use localeCompare for proper alphabetical order
+    return a.localeCompare(b, "zh-Hans", { sensitivity: "base" });
+  });
+}
