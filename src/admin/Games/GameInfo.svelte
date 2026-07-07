@@ -195,6 +195,23 @@
     }
   };
 
+  const addLang = ({ target }) => {
+    const lang = target.title;
+
+    let langs = new Set(
+      data.Lang.split(",")
+        .map((l) => l.trim())
+        .filter((l) => l),
+    );
+
+    if (!data.Lang.includes(lang)) {
+      langs.add(lang);
+    } else {
+      langs.delete(lang);
+    }
+    data.Lang = [...langs].sort().join(", ");
+  };
+
   const pasteAlt2 = async () => {
     let text = await navigator.clipboard?.readText();
     if (text) {
@@ -325,8 +342,13 @@
       <input class="form-control" bind:value={data.Company} />
       <span class="gn-copy" on:click={copyComp}><Icons name="paste" color="deepskyblue" /></span>
     </div>
-    <div>
+    <div class="lang-list">
       <span><span id="Lang" on:click={handlerPaste}><Icons name="paste" /></span>Lang</span>
+      <span class="lang-ul" on:click={addLang}>
+        <span title="Chinese">CN</span>
+        <span title="English">EN</span>
+        <span title="Japanese">JP</span>
+      </span>
       <input class="form-control" bind:value={data.Lang} />
     </div>
     <div class="gen" bind:this={listRef}>
@@ -614,6 +636,19 @@
     background-color: aqua;
     margin: 0 4px;
     color: black;
+    cursor: pointer;
+    user-select: none;
+  }
+  .lang-ul span {
+    display: inline-block;
+    border-radius: 0.25rem;
+    background-color: aqua;
+    color: black;
+    margin: 0 4px;
+    padding: 2px;
+    width: max-content;
+    text-align: center;
+    line-height: 1.2;
     cursor: pointer;
     user-select: none;
   }
