@@ -11,6 +11,7 @@
   export let updateGame;
   export let removeGame;
   const options = { timeZone: "UTC", year: "numeric", month: "long", day: "numeric" };
+  const containAssianChar = /[\u3400-\u9FBF]|[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/u;
 
   const socket = getContext("socket");
 
@@ -68,6 +69,10 @@
     updateGame(game);
 
     setMessage({ msg: "Game info saved." });
+  };
+
+  const format = (str) => {
+    return str?.replace("–", "-").replace(/\?|\:/g, "").replace(/( )+/g, " ").replaceAll("’", "'") || "";
   };
 
   const getImage = async (Id) => {
@@ -184,21 +189,14 @@
   const handlerPaste = async ({ currentTarget: { id } }) => {
     let text = await navigator.clipboard?.readText();
     if (text && id) {
-      if (id === "AltName") {
-        text = text
-          .split(",")
-          .map((g) => g.trim())
-          .join("\n");
-      }
-
-      data[id] = text.trim();
+      data[id] = format(text.trim());
     }
   };
 
-  const addItem = (item, key) => {
+  const addItem = (item, key, sept = ", ") => {
     let items = new Set(
       data[key]
-        .split(",")
+        .split(sept)
         .map((l) => l.trim())
         .filter((l) => l),
     );
@@ -209,23 +207,30 @@
       items.add(item);
     }
 
-    data[key] = [...items].sort().join(", ");
+    data[key] = [...items].sort().join(sept);
   };
 
   const addOS = ({ target }) => addItem(target.title, "OS");
 
   const addLang = ({ target }) => addItem(target.title, "Lang");
 
-  const pasteAlt2 = async () => {
+  const sortAltNames = (a, b) => {
+    if (containAssianChar.test(a)) return 1;
+    a.localeCompare(b);
+  };
+
+  const pasteAltName = async () => {
     let text = await navigator.clipboard?.readText();
-    if (text) {
-      data.AltName +=
-        "\n" +
-        text
-          .split(",")
-          .map((g) => g.trim())
-          .join("\n");
-    }
+    const names = new Set([
+      ...data.AltName.split("\n")
+        .map((g) => g.trim())
+        .filter((g) => g),
+      ...text
+        .split(",")
+        .map((g) => g.trim())
+        .filter((g) => g),
+    ]);
+    data.AltName = format([...names].sort(sortAltNames).join("\n"));
   };
 
   const copyName = () => {
@@ -238,9 +243,6 @@
     if (navigator?.clipboard?.writeText && prevEl?.value) {
       navigator.clipboard.writeText(prevEl.value);
     }
-  };
-  const format = (str) => {
-    return str?.replace("–", "-").replace(/\?|\:/g, "").replace(/( )+/g, " ").replaceAll("’", "'") || "";
   };
 
   const sortGenres = () => {
@@ -289,8 +291,6 @@
   }
 
   $: isNew = data.Id !== "new";
-  $: data.AltName = format(data.AltName);
-  $: data.Name = format(data.Name);
   $: data.Company = capitalizeWords(format(data.Company));
   $: if (data.Codes && /^\d+/.test(data.Codes)) {
     data.Codes = "ST" + data.Codes;
@@ -332,9 +332,8 @@
       </div>
     </div>
     <div class="info-item info-altname">
-      <span><span id="AltName" on:click={handlerPaste}><Icons name="paste" /></span>Alt Name</span>
+      <span><span id="AltName" on:click={pasteAltName}><Icons name="paste" /></span>Alt Name</span>
       <textarea class="form-control" rows="3" bind:value={data.AltName}></textarea>
-      <span class="gn-copy" on:click={pasteAlt2}><Icons name="paste" color="green" /></span>
     </div>
     <div class="info-item">
       <span><span id="Codes" on:click={handlerPaste}><Icons name="paste" /></span>Codes</span>
