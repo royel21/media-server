@@ -195,27 +195,26 @@
     }
   };
 
-  const addOS = ({ target }) => {
-    const OS = target.title;
-    data.OS = OS;
-  };
-
-  const addLang = ({ target }) => {
-    const lang = target.title;
-
-    let langs = new Set(
-      data.Lang.split(",")
+  const addItem = (item, key) => {
+    let items = new Set(
+      data[key]
+        .split(",")
         .map((l) => l.trim())
         .filter((l) => l),
     );
 
-    if (!data.Lang.includes(lang)) {
-      langs.add(lang);
+    if (items.has(OS)) {
+      items.delete(OS);
     } else {
-      langs.delete(lang);
+      items.add(OS);
     }
-    data.Lang = [...langs].sort().join(", ");
+
+    data[key] = [...items].sort().join(", ");
   };
+
+  const addOS = ({ target }) => addItem({ target, key: "OS" });
+
+  const addLang = ({ target }) => addItem({ target, key: "Lang" });
 
   const pasteAlt2 = async () => {
     let text = await navigator.clipboard?.readText();
