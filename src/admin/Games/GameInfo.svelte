@@ -195,6 +195,11 @@
     }
   };
 
+  const addOS = ({ target }) => {
+    const OS = target.title;
+    data.OS = OS;
+  };
+
   const addLang = ({ target }) => {
     const lang = target.title;
 
@@ -466,8 +471,17 @@
       >
       <input class="form-control" bind:value={data.Genres} on:blur={sortGenres} />
     </div>
-    <div>
+    <div class="lang-list">
       <span><span id="OS" on:click={handlerPaste}><Icons name="paste" /></span>OS</span>
+      <span class="lang-ul oses" on:click={addOS}>
+        <span title="Android/Tyranor">A/T</span>
+        <span title="Android/JoiPlay">A/J</span>
+        <span title="Android/Winlator">A/W</span>
+        <span title="Windows">Win</span>
+        <span title="Windows 98 SE">W98</span>
+        <span title="Windows 7">W7</span>
+        <span title="PC98">PC98</span>
+      </span>
       <input class="form-control" bind:value={data.OS} />
     </div>
     <div class="info-item info-desc">
@@ -651,6 +665,16 @@
     line-height: 1.2;
     cursor: pointer;
     user-select: none;
+  }
+  .oses {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 250px;
+    height: 30px;
+  }
+  .oses span {
+    font-size: 12px;
   }
 
   .g-list {
