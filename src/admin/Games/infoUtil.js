@@ -16,7 +16,7 @@ export const getInfo = (text = "", info = {}, Name = "") => {
       Title = p.replace(nameRegx, "");
     }
 
-    let altNameRegx = /^(Japanese|Original) Title(:| :|) /i;
+    let altNameRegx = /^(Japanese|Original) Title(:| :|) |Aliases(\t| |)/i;
     if (altNameRegx.test(p)) {
       info.AltName = p.replace(altNameRegx, "").replace(/^(( |)(–|-)(\r|–\n| ))/, "N/A");
       if (Title.trim() && !/ –\r| –\n/.test(Title)) {
@@ -45,7 +45,7 @@ export const getInfo = (text = "", info = {}, Name = "") => {
 
     if (/https:/.test(p)) {
       let Code = p
-        .match(/(v|RJ|r|d_|app\/)\d+/i)?.[0]
+        .match(/(v|IG|RJ|r|d_|app\/)\d+/i)?.[0]
         .replace(/app\//, "ST")
         .replace("d_", "D");
       if (Code) {

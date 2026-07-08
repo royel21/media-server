@@ -113,10 +113,10 @@ const ListFiles = (dir) => {
   return tempFiles;
 };
 
-const codeRegx = / (v|r|RJ|RA|VO|ST|G|D|IT|VJ)\d+.*\d+$/g;
+const codeRegx = / (v|r|IG|RJ|RA|VO|ST|G|D|IT|VJ)\d+.*\d+$/g;
 
 const getCode = (name) => {
-  const codeMatch = name.replace(/\.(rar|zip|7z|apk)/g, "").match(/ (v|r|RJ|RA|VO|ST|G|D|IT|VJ)\d+.*\d+$/g);
+  const codeMatch = name.replace(/\.(rar|zip|7z|apk)/g, "").match(/ (v|r|IG|RJ|RA|VO|ST|G|D|IT|VJ)\d+.*\d+$/g);
   return codeMatch ? codeMatch[0].trim() : "";
 };
 const findDuplicatesByProperty = (arr, property) => {
