@@ -96,6 +96,7 @@ export function sortAsianFirst(arr) {
 
 const worker = async () => {
   const games = await db.Info.findAll({
+    attributes: ["Name", "AltName", "Codes"],
     where: { Codes: { [db.Op.like]: "v%" } },
     include: [{ model: db.Game, required: true, attributes: ["Name"] }],
   });
