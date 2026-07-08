@@ -113,6 +113,8 @@ const worker = async () => {
     try {
       if (game.Game) {
         console.log("Processing game:", count++, game.Codes, game.Game?.Name);
+        if (game.AltName === "N/A" || !game.AltName) continue;
+
         const altNames = game.AltName?.split("\n");
 
         for (let i = 0; i < altNames.length; i++) {
