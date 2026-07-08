@@ -97,7 +97,7 @@ export function sortAsianFirst(arr) {
 const worker = async () => {
   const games = await db.Info.findAll({
     where: { Codes: { [db.Op.like]: "v%" } },
-    include: [{ model: db.Game, required: true }],
+    include: [{ model: db.Game, required: true, attributes: ["Name"] }],
   });
 
   // const browser = await startBrowser({ headless: false });
