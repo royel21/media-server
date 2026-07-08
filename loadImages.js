@@ -108,6 +108,7 @@ const worker = async () => {
 
   for (const game of games) {
     try {
+      console.log("Processing game:", game.Codes, game.Game?.Name);
       const altNames = game.AltName?.split("\n");
 
       for (let i = 0; i < altNames.length; i++) {
