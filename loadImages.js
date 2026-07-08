@@ -108,11 +108,11 @@ const worker = async () => {
   // let gamesFiltered = games.filter(
   //   (g) => /^v\d+$/.test(g.Codes) && !containAssianChar.test(g.AltName) && g.AltName !== "N/A",
   // );
-
+  let count = 0;
   for (const game of games) {
     try {
       if (game.Game) {
-        console.log("Processing game:", game.Codes, game.Game?.Name);
+        console.log("Processing game:", count++, game.Codes, game.Game?.Name);
         const altNames = game.AltName?.split("\n");
 
         for (let i = 0; i < altNames.length; i++) {
