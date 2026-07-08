@@ -95,7 +95,10 @@ export function sortAsianFirst(arr) {
 }
 
 const worker = async () => {
-  const games = await db.Info.findAll({ where: { Codes: { [db.Op.like]: "v%" } }, include: [{ model: db.Game }] });
+  const games = await db.Info.findAll({
+    where: { Codes: { [db.Op.like]: "v%" } },
+    include: [{ model: db.Game, required: true }],
+  });
 
   // const browser = await startBrowser({ headless: false });
 
@@ -108,17 +111,19 @@ const worker = async () => {
 
   for (const game of games) {
     try {
-      console.log("Processing game:", game.Codes, game.Game?.Name);
-      const altNames = game.AltName?.split("\n");
+      if (game.Game) {
+        console.log("Processing game:", game.Codes, game.Game?.Name);
+        const altNames = game.AltName?.split("\n");
 
-      for (let i = 0; i < altNames.length; i++) {
-        if (game.Game && /^(~|-)/.test(altNames[i].trim())) {
-          altNames[i] = game.Game.Name + altNames[i];
+        for (let i = 0; i < altNames.length; i++) {
+          if (game.Game && /^(~|-)/.test(altNames[i].trim())) {
+            altNames[i] = game.Game.Name + altNames[i];
+          }
         }
-      }
-      game.AltName = sortAsianFirst(altNames).join("\n").trim();
+        game.AltName = sortAsianFirst(altNames).join("\n").trim();
 
-      await game.save();
+        await game.save();
+      }
     } catch (error) {
       console.log("Error saving game:", game.Codes, error);
     }
