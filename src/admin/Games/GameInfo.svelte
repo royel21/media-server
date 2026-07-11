@@ -51,6 +51,9 @@
     if (!data.Name) return setMessage({ msg: "Name Required", error: true });
     if (!data.Codes)
       return setMessage({ msg: "Game Code Required", error: true });
+    if (data.ReleaseDate && isNaN(new Date(data.ReleaseDate).getTime())) {
+      data.ReleaseDate = null;
+    }
 
     const result = await apiUtils.post(
       "admin/games/update-game-info",
@@ -689,7 +692,7 @@
   }
   .info-altname,
   .info-desc {
-    min-height: 60px;
+    min-height: 105px;
   }
   .info-controls button {
     margin-right: 10px;
