@@ -126,10 +126,6 @@
   };
 
   const handlerImg = async (e) => {
-    if (!game.Codes) {
-      return setMessage({ msg: "Error: Set Code First" });
-    }
-
     if (navigator.clipboard) {
       let text = await navigator.clipboard?.readText();
       let result = getInfo(text, data, data.Name);
@@ -139,6 +135,9 @@
     try {
       const image = await getImageFromNav();
       if (image !== undefined) {
+        if (!game.Codes) {
+          return setMessage({ msg: "Error: Set Code First" });
+        }
         uploadFile(image);
       }
     } catch (error) {}
