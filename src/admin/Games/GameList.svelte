@@ -54,14 +54,22 @@
   };
 </script>
 
-<div class={`file-list game-list col-6 ${pageData.totalPages === 1 ? "full-list" : ""}`} tabindex="-1">
+<div
+  class={`file-list game-list col-6 ${pageData.totalPages === 1 ? "full-list" : ""}`}
+  tabindex="-1"
+>
   <slot name="first-tag" />
   <div class="controls">
     <span class="add-game" on:click={addGame}>
       <Icons name="squareplus" />
     </span>
     <div on:keydown|stopPropagation class="filter" title={searchTitle}>
-      <Filter id="game-filter" on:filter={filterChange} {filter} excludes={[/ Free Download|\?|:|RY-/gi, "[ENG] "]} />
+      <Filter
+        id="game-filter"
+        on:filter={filterChange}
+        {filter}
+        excludes={[/ Free Download|\?|:|RY-/gi, "[ENG] "]}
+      />
     </div>
     <h4 class="text-center usn">
       {pageData.totalItems} <strong>- Games</strong>
@@ -89,7 +97,11 @@
   </div>
   <div class="list-controls">
     <slot name="bottom-ctr" />
-    <Pagination page={pageData.page} totalPages={pageData.totalPages} on:gotopage={gotopage} />
+    <Pagination
+      page={pageData.page}
+      totalPages={pageData.totalPages}
+      on:gotopage={gotopage}
+    />
   </div>
 </div>
 
@@ -176,7 +188,7 @@
       display: none;
     }
   }
-  @media screen and (max-width: 640px) {
+  @media screen and (max-width: 600px) {
     .controls h4 {
       width: 60px;
       margin: 0 6px;

@@ -9,7 +9,6 @@
   let directories = [];
 
   let showSelectDir = false;
-  let showEditPath = false;
   let showConfirmDelete = false;
 
   const addDir = (dirs) => {
@@ -35,7 +34,11 @@
 
   const reloadGames = async ({ target }) => {
     const Id = +target.closest("tr").id;
-    const result = await apiUtils.post("admin/games/reload", { Id }, "reload games");
+    const result = await apiUtils.post(
+      "admin/games/reload",
+      { Id },
+      "reload games",
+    );
     if (result.error) {
       return setMessage({ msg: result.error });
     }
@@ -60,12 +63,19 @@
 {/if}
 
 {#if showConfirmDelete}
-  <Confirm data={showConfirmDelete} text="remove this directory?" cancel={hideConfirm} acept={removeDir} />
+  <Confirm
+    data={showConfirmDelete}
+    text="remove this directory?"
+    cancel={hideConfirm}
+    acept={removeDir}
+  />
 {/if}
 
 <div class="game-directories">
   <h4>Directory List ~ Total {totalGames}</h4>
-  <span class="add-dir" on:click={() => (showSelectDir = true)}><Icons name="squareplus" /></span>
+  <span class="add-dir" on:click={() => (showSelectDir = true)}
+    ><Icons name="squareplus" /></span
+  >
   <div class="g-dirs">
     <table class="table table-dark table-hover table-bordered">
       <thead>

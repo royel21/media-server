@@ -328,7 +328,17 @@ routes.post("/update-game-info", async (req, res) => {
     if (game.Info === null) {
       game.Info = await db.Info.create(info);
     } else {
-      await game.Info?.update(info);
+      if(info.ReleaseDate === "" && info.ReleaseDate?.toString().includes("Invalid")) {
+        info.ReleaseDate = null;
+      }
+      try {
+        await game.Info.update(info);
+      } catch (error) {
+        console.log(error);
+        console.log(info);
+        return { error: "Error updating game info."}
+      }
+      
     }
   }
 

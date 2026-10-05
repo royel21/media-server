@@ -422,6 +422,10 @@ export const evaleLinks = async (query) => {
     });
   };
 
+   if (/hiperdex/i.test(query.Name)) {
+      await delay(3000);
+    }
+
   if (query.Name.includes("kaliscan")) {
     for (let index = 0; index < 3; index++) {
       await delay(2000);

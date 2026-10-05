@@ -1,4 +1,10 @@
+import { setMessage } from "../Store/MessageStore.js";
+
 const nameRegx = /^Title(:| :|) |Romanji: |Romaji: /gi;
+
+const matchDate = /(\d{4}(-|年|\/)\d{2}(-|月|\/)\d{2})|(\d{2}(-|年|\/)\d{2}(-|月|\/)\d{4})/i
+
+export const isDate = matchDate.test
 
 export const getInfo = (text = "", info = {}, Name = "") => {
   if (!text) return;
@@ -7,8 +13,8 @@ export const getInfo = (text = "", info = {}, Name = "") => {
   let Title = "";
 
   for (let p of parts) {
-    const date = new Date(p.match(/(\d+-\d+-\d+)|\d+\/\d+\/\d+/)?.[0]);
-    if (date && date.toString() !== "Invalid Date") {
+    const date = new Date(p.match(matchDate)?.[0].replace(/年|月/g,"-"));
+    if (date && date.toString() !== "Invalid Date" && date.getFullYear() > 1980) {
       info.ReleaseDate = date;
     }
 

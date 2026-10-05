@@ -126,7 +126,7 @@
   $: localStorage.setItem("gamelist-filter", filter);
 </script>
 
-<div class="admin-manager">
+<div class="games admin-manager">
   <div class="rows">
     <GameList
       {Games}
@@ -155,5 +155,16 @@
     display: flex;
     flex-direction: row;
     height: 100%;
+  }
+
+  @media screen and (max-width: 620px) {
+    .games :global(.col-6) {
+      min-width: 48%;
+    }
+  }
+  @media screen and (max-width: 600px) {
+    .games :global(.col-6) {
+      min-width: 100%;
+    }
   }
 </style>

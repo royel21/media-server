@@ -16,7 +16,13 @@
 
 <div class="card bg-dark admin-manager has-files">
   <div class="rows has-files">
-    <FolderList on:folderid={folderid} page={parseInt(page) || 1} {dirid} {folderId} {filter} />
+    <FolderList
+      on:folderid={folderid}
+      page={parseInt(page) || 1}
+      {dirid}
+      {folderId}
+      {filter}
+    />
     <FolderData {folderId} {Path} />
   </div>
 </div>
@@ -37,7 +43,7 @@
     width: 100%;
   }
   .card.has-files {
-    min-width: 950px;
+    min-width: 700px;
   }
   @media screen and (max-height: 600px) {
     .card.has-files {

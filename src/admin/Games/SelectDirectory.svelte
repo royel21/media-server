@@ -24,7 +24,9 @@
   let diskData = [];
 
   const onConfirm = async () => {
-    const result = await apiUtils.post("admin/games/add-directory", { Path: item.Path });
+    const result = await apiUtils.post("admin/games/add-directory", {
+      Path: item.Path,
+    });
     if (result.errors) {
       errors = [result.errors];
       return;
@@ -34,7 +36,11 @@
   };
 
   const loadDirs = async (dir, next, back) => {
-    const result = await apiUtils.post("admin/directories/get-dirs", { dir, next, back });
+    const result = await apiUtils.post("admin/directories/get-dirs", {
+      dir,
+      next,
+      back,
+    });
 
     if (result.dirs) {
       item.Path = result.Path;
@@ -86,13 +92,44 @@
   });
 </script>
 
-<Dialog cancel={hide} confirm={onConfirm} {errors} canDrag={true} btnOk="Add Directory">
+<Dialog
+  cancel={hide}
+  confirm={onConfirm}
+  {errors}
+  canDrag={true}
+  btnOk="Add Directory"
+>
   <h4 slot="modal-header">Add Game Directory</h4>
   <div class="dir-list" slot="modal-body">
-    <Select item={ditem} label="Root" key="Path" options={diskData.map((d) => ({ ...d, Id: d.Path }))} {onChange} />
-    <Input key="Filter" item={ditem} on:keydown={onKeydown} on:input={onFilter} onChange={onFilter} focus={true} />
-    <TextAreaInput focus={true} label="Current Path" key="Path" {item} disabled={true} paste={false}>
-      <span class="pre-paste" slot="btn-left" on:click={goBack} title="Copy Name">
+    <Select
+      item={ditem}
+      label="Root"
+      key="Path"
+      options={diskData.map((d) => ({ ...d, Id: d.Path }))}
+      {onChange}
+    />
+    <Input
+      key="Filter"
+      item={ditem}
+      on:keydown={onKeydown}
+      on:input={onFilter}
+      onChange={onFilter}
+      focus={true}
+    />
+    <TextAreaInput
+      focus={true}
+      label="Current Path"
+      key="Path"
+      {item}
+      disabled={true}
+      paste={false}
+    >
+      <span
+        class="pre-paste"
+        slot="btn-left"
+        on:click={goBack}
+        title="Copy Name"
+      >
         <Icons name="reply" color="#045cba" />
       </span>
     </TextAreaInput>
