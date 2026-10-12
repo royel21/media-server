@@ -24,7 +24,7 @@ export const getInfo = (text = "", info = {}, Name = "") => {
 
     let altNameRegx = /^(Japanese |Original )Title( : |: )|Aliases(\t|:| ) /gi;
     if (altNameRegx.test(p)) {
-      info.AltName = p.replace(altNameRegx, "").replace(/:|\?/, "").replace(/^(( |)(–|-)(\r|–\n| ))/, "N/A");
+      info.AltName = p.replace(altNameRegx, "").replace(/\:|\?/, "").replace(/^(( |)(–|-)(\r|–\n| ))/, "N/A");
       if (Title.trim() && !/ –\r| –\n/.test(Title)) {
         let title = Title.replace(/\?|"|`|:/g, "").split(/, | \\ /g)
           .map((n) => n.trim())
