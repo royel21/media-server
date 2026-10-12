@@ -105,7 +105,7 @@
             parts.forEach((p) => {
               if (nameRegx.test(p)) {
                 Title = p.replace(nameRegx, "");
-                g.Name = Title.split(/ ~|, /)[0].trim();
+                g.Name = Title.split(/ ~|, | \\/)[0].trim();
               }
             });
 

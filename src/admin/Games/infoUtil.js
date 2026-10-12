@@ -2,7 +2,7 @@ import { setMessage } from "../Store/MessageStore.js";
 
 const nameRegx = /^Title(:| :|) |Romanji: |Romaji: /gi;
 
-const matchDate = /(\d{4}(-|年|\/)\d{2}(-|月|\/)\d{2})|(\d{2}(-|年|\/)\d{2}(-|月|\/)\d{4})/i
+const matchDate = /(\d{4}(-|年|\/)\d{2}(-|月|\/)\d{2})|(\d{2}(-|年|\/)\d{2}(-|月|\/)\d{4})|(\d{4}\.\d{2}\.\d{2})/i
 
 export const isDate = matchDate.test
 
@@ -22,11 +22,11 @@ export const getInfo = (text = "", info = {}, Name = "") => {
       Title = p.replace(nameRegx, "");
     }
 
-    let altNameRegx = /^(Japanese|Original) Title(:| :|) |Aliases(\t| |)/i;
+    let altNameRegx = /^(Japanese |Original )Title( : |: )|Aliases(\t|:| ) /gi;
     if (altNameRegx.test(p)) {
-      info.AltName = p.replace(altNameRegx, "").replace(/^(( |)(–|-)(\r|–\n| ))/, "N/A");
+      info.AltName = p.replace(altNameRegx, "").replace(/:|\?/, "").replace(/^(( |)(–|-)(\r|–\n| ))/, "N/A");
       if (Title.trim() && !/ –\r| –\n/.test(Title)) {
-        let title = Title.split(", ")
+        let title = Title.replace(/\?|"|`|:/g, "").split(/, | \\ /g)
           .map((n) => n.trim())
           .filter((n) => n && n !== Name)
           .join("\n")
@@ -37,14 +37,14 @@ export const getInfo = (text = "", info = {}, Name = "") => {
       }
     }
 
-    if (/Language( :|:|) /gi.test(p)) {
+    if (/^(Language|Lang)( :|:|) /gi.test(p)) {
       info.Lang = p
         .split(":")
         .pop()
         .replace(/ \(Official\)/gi, "")
         .trim();
     }
-    let devRegex = /^Developer( :|:|) /;
+    let devRegex = /^(Developer|Company|Brand)( :|:|) /;
     if (devRegex.test(p) && !info.Company) {
       info.Company = p.replace(devRegex, "").split(", ")[0].trim();
     }
