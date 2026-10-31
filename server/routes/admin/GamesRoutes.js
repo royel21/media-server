@@ -261,6 +261,16 @@ routes.post("/update-directory", async (req, res) => {
   return res.send({ message: "Directory updated." });
 });
 
+// returns a valid Date or null for empty/invalid/out of range values
+const parseReleaseDate = (value) => {
+  if (!value) return null;
+  const date = new Date(value);
+  if (isNaN(date.getTime())) return null;
+  const year = date.getFullYear();
+  if (year < 1970 || year > new Date().getFullYear() + 5) return null;
+  return date;
+};
+
 const createGame = async (data, res, info) => {
   const game = await db.Game.create({
     Name: data.Name.trim(),
@@ -291,11 +301,15 @@ routes.post("/update-game-info", async (req, res) => {
     Lang: data.Lang?.trim() || "Japanese",
     Genres: data.Genres?.trim(),
     Description: data.Description?.trim(),
-    ReleaseDate: data.ReleaseDate,
+    ReleaseDate: parseReleaseDate(data.ReleaseDate),
     OS: data.OS || "Windows",
   };
 
   if (data.Id === "new") {
+    if (!data.Name?.trim() || !data.Codes?.trim()) {
+      return res.send({ error: "Name and Code are required" });
+    }
+
     const found = await db.Game.findOne({ where: { Codes: data.Codes } });
     if (found) {
       return res.send({ error: "Game Exist: " + data.Codes });
@@ -305,7 +319,12 @@ routes.post("/update-game-info", async (req, res) => {
       return res.send({ error: "No a Valid Game Code:" + data.Codes });
     }
     delete data.Id;
-    return await createGame(data, res, info);
+    try {
+      return await createGame(data, res, info);
+    } catch (error) {
+      console.log(error);
+      return res.send({ error: "Error creating game: " + data.Codes });
+    }
   } else {
     game = await db.Game.findOne({ where: { Id: data.Id } });
   }
@@ -328,15 +347,12 @@ routes.post("/update-game-info", async (req, res) => {
     if (game.Info === null) {
       game.Info = await db.Info.create(info);
     } else {
-      if(info.ReleaseDate === "" && info.ReleaseDate?.toString().includes("Invalid")) {
-        info.ReleaseDate = null;
-      }
       try {
         await game.Info.update(info);
       } catch (error) {
         console.log(error);
         console.log(info);
-        return { error: "Error updating game info."}
+        return res.send({ error: "Error updating game info." });
       }
       
     }

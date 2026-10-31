@@ -52,43 +52,54 @@ export const downloadLink = async ({ d, page, Server, folder, count, state }) =>
 
   const client = await page.target().createCDPSession();
   await client.send("Network.clearBrowserCache");
+  await client.detach().catch(() => {});
 
-  page.on("response", async (response) => {
+  const onResponse = async (response) => {
     try {
+      const status = response.status();
+      // redirects and empty responses have no body, buffer() would throw or hang
+      if (status < 200 || status >= 300 || status === 204) return;
+
+      const type = response.headers()["content-type"];
+      if (!type || !/^image\//i.test(type)) return;
+
       const url = response.url();
-      const header = response.headers();
-      if (header && header["content-type"] && /image/gi.test(header["content-type"])) {
-        const buffer = await response.buffer();
-        images[url] = {
-          type: header["content-type"],
-          buffer,
-        };
-      }
+      if (url.startsWith("data:") || images[url]) return;
+
+      images[url] = { type, buffer: await response.buffer() };
     } catch (error) {}
-  });
+  };
 
-  await page.goto(d.url, query);
+  // page is reused for every chapter, so the listener must be removed when done
+  page.on("response", onResponse);
 
-  if (Server.Name.includes("mangaread") && (await page.$(".listing-chapters_wrap li a"))) {
-    return;
-  }
+  try {
+    await page.goto(d.url, query);
 
-  await page.waitForSelector(Server.Imgs);
+    if (Server.Name.includes("mangaread") && (await page.$(".listing-chapters_wrap li a"))) {
+      return;
+    }
 
-  const links = await page.evaluate(evaleLinks, Server.dataValues);
-  sendMessage({ text: `Dwn: ${count} ch:${d.name} ~ img: ${links.length} ~ ${folder.Name}`, url: d.url });
-  if (/manga18fx|hiperdex/.test(d.url)) {
-    await delay(3000);
-  }
-  const imgPath = path.join(imgDir, d.name + ".zip.jpg");
+    await page.waitForSelector(Server.Imgs);
 
-  const result = await downloadAllIMages(page, links, state, imgPath, folder.Name + "/" + d.name, destZip, images);
+    const links = await page.evaluate(evaleLinks, Server.dataValues);
+    sendMessage({ text: `Dwn: ${count} ch:${d.name} ~ img: ${links.length} ~ ${folder.Name}`, url: d.url });
+    if (/manga18fx|hiperdex/.test(d.url)) {
+      await delay(3000);
+    }
+    const imgPath = path.join(imgDir, d.name + ".zip.jpg");
 
-  if (result.valid) {
-    await createFile(destZip, folder.Id, result.count);
-    sendMessage({ text: `Save: ${d.name}` });
-    return true;
-  } else {
-    sendMessage({ text: `Some Images Pendding for: ${d.name}`, color: "red", url: d.url });
+    const result = await downloadAllIMages(page, links, state, imgPath, folder.Name + "/" + d.name, destZip, images);
+
+    if (result.valid) {
+      await createFile(destZip, folder.Id, result.count);
+      sendMessage({ text: `Save: ${d.name}` });
+      return true;
+    } else {
+      sendMessage({ text: `Some Images Pendding for: ${d.name}`, color: "red", url: d.url });
+    }
+  } finally {
+    page.off("response", onResponse);
+    images = null;
   }
 };

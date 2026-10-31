@@ -362,7 +362,7 @@
             />
           </label>
           <span class="rdate">
-            {data.ReleaseDate
+            {data.ReleaseDate && !isNaN(new Date(data.ReleaseDate))
               ? new Date(data.ReleaseDate).toLocaleDateString("en-US", options)
               : ""}
           </span>
